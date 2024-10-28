@@ -1,51 +1,97 @@
-using BookHub.Server.Data;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-
 namespace BookHub.Server
 {
+    using System.Text;
+
+    using BookHub.Server.Data;
+    using BookHub.Server.Data.Models;
+    using BookHub.Server.Infrastructure;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.IdentityModel.Tokens;
+
     public class Program
     {
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
-            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+            var connectionString = builder
+                .Configuration
+                .GetConnectionString("DefaultConnection")
+                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-            builder.Services.AddControllersWithViews();
+            builder
+                .Services
+                .AddDbContext<BookHubDbContext>(options => options.UseSqlServer(connectionString));
+
+            builder
+                 .Services
+                 .AddIdentity<User, IdentityRole>(opt => 
+                 {
+                     opt.Password.RequireUppercase = false;
+                     opt.Password.RequireLowercase = false;
+                     opt.Password.RequireNonAlphanumeric = false;
+                     opt.Password.RequireDigit = false;
+                 })
+                 .AddEntityFrameworkStores<BookHubDbContext>();
+
+            var appSettingsConfiguration = builder.Configuration.GetSection("AppSettings");
+            builder
+                .Services
+                .Configure<AppSettings>(appSettingsConfiguration);
+
+            var appSettings = appSettingsConfiguration
+                .Get<AppSettings>()
+                ?? throw new InvalidOperationException("AppSettings not found.");
+
+            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+
+            builder
+                .Services
+                .AddAuthentication(opt =>
+                {
+                    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(opt =>
+                {
+                    opt.RequireHttpsMetadata = false;
+                    opt.SaveToken = true;
+                    opt.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                    };
+                });
+
+            if (builder.Environment.IsDevelopment())
+            {
+                builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+            }
+
+            builder.Services.AddControllers();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseMigrationsEndPoint();
             }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseCors(opt =>
+            {
+                opt.AllowAnyOrigin();
+                opt.AllowAnyHeader();
+                opt.AllowAnyMethod();
 
+            });
             app.UseAuthorization();
-
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
-            app.MapRazorPages();
-
+            app.MapControllers();
+            app.ApplyMigrations();
             app.Run();
         }
     }
