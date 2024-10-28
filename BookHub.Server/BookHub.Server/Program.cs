@@ -89,6 +89,7 @@ namespace BookHub.Server
                 opt.AllowAnyMethod();
 
             });
+
             app.UseAuthorization();
             app.MapControllers();
             app.ApplyMigrations();
