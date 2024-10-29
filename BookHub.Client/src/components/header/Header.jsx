@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
     MDBNavbar,
     MDBNavbarNav,
     MDBNavbarItem,
-    MDBNavbarLink,
     MDBNavbarToggler,
     MDBContainer,
     MDBIcon,
@@ -20,26 +20,37 @@ export default function Header() {
                     <MDBNavbarToggler
                         onClick={() => setShowBasic(prev => !prev)}
                         aria-controls='navbarExample01'
-                        aria-expanded={showBasic} // Updated for accessibility
+                        aria-expanded={showBasic}
                         aria-label='Toggle navigation'
                     >
                         <MDBIcon fas icon='bars' />
                     </MDBNavbarToggler>
-                    <MDBCollapse navbar show={showBasic ? true : undefined}> {/* Pass undefined if false */}
+                    <MDBCollapse navbar show={showBasic ? true : undefined}>
                         <MDBNavbarNav right className='mb-2 mb-lg-0'>
                             <MDBNavbarItem active>
-                                <MDBNavbarLink aria-current='page' href='#'>
+                                <Link className="nav-link" to="/">
                                     Home
-                                </MDBNavbarLink>
+                                </Link>
                             </MDBNavbarItem>
                             <MDBNavbarItem>
-                                <MDBNavbarLink href='#'>Features</MDBNavbarLink>
+                                <Link className="nav-link" to="/register">
+                                    Register
+                                </Link>
                             </MDBNavbarItem>
                             <MDBNavbarItem>
-                                <MDBNavbarLink href='#'>Pricing</MDBNavbarLink>
+                                <Link className="nav-link" to="/login">
+                                    Login
+                                </Link>
                             </MDBNavbarItem>
                             <MDBNavbarItem>
-                                <MDBNavbarLink href='#'>About</MDBNavbarLink>
+                                <Link className="nav-link" to="/books">
+                                    Books
+                                </Link>
+                            </MDBNavbarItem>
+                            <MDBNavbarItem>
+                                <Link className="nav-link" to="/books/create">
+                                    Create Book
+                                </Link>
                             </MDBNavbarItem>
                         </MDBNavbarNav>
                     </MDBCollapse>
