@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace BookHub.Server.Data.Migrations
+namespace BookHub.Server.Migrations
 {
     [DbContext(typeof(BookHubDbContext))]
-    [Migration("20241029142456_AddBookConstraints")]
-    partial class AddBookConstraints
+    [Migration("20241029201708_AddBookTitle")]
+    partial class AddBookTitle
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,15 +60,19 @@ namespace BookHub.Server.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("Title")
                         .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Book");
+                    b.ToTable("Books");
                 });
 
             modelBuilder.Entity("BookHub.Server.Data.Models.User", b =>
@@ -285,9 +289,7 @@ namespace BookHub.Server.Data.Migrations
                 {
                     b.HasOne("BookHub.Server.Data.Models.User", "User")
                         .WithMany("Books")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });

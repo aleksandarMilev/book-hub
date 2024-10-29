@@ -11,6 +11,10 @@
         public string Author { get; set; } = null!;
 
         [Required]
+        [MaxLength(TitleMaxLength)]
+        public string Title { get; init; } = null!;
+
+        [Required]
         [MaxLength(DescriptionMaxLength)]
         public string Description { get; set; } = null!;
 
@@ -18,7 +22,6 @@
         [MaxLength(ImageUrlMaxLength)]
         public string ImageUrl { get; set; } = null!;
 
-        [Required]
-        public string UserId { get; set; } = null!;
+        public string? UserId { get; set; }
     }
 }

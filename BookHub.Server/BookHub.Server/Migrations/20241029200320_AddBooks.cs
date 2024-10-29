@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace BookHub.Server.Data.Migrations
+namespace BookHub.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class AddBookDbSet : Migration
+    public partial class AddBooks : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

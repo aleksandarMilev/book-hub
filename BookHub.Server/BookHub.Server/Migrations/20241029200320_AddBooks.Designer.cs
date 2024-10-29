@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace BookHub.Server.Data.Migrations
+namespace BookHub.Server.Migrations
 {
     [DbContext(typeof(BookHubDbContext))]
-    [Migration("20241029145323_AddBookDbSet")]
-    partial class AddBookDbSet
+    [Migration("20241029200320_AddBooks")]
+    partial class AddBooks
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

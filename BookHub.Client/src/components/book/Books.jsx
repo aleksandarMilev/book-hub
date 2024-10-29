@@ -1,38 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { MDBContainer, MDBListGroup, MDBListGroupItem, MDBCardTitle, MDBCardText, MDBIcon } from 'mdb-react-ui-kit';
-
 import { getAllAsync } from '../../api/bookAPI';
 
-const books = [
-    {
-        id: 1,
-        title: "To Kill a Mockingbird",
-        author: "Harper Lee",
-        description: "A novel about the serious issues of rape and racial inequality.",
-    },
-    {
-        id: 2,
-        title: "1984",
-        author: "George Orwell",
-        description: "A dystopian social science fiction novel and cautionary tale about the dangers of totalitarianism.",
-    },
-    {
-        id: 3,
-        title: "Pride and Prejudice",
-        author: "Jane Austen",
-        description: "A romantic novel that charts the emotional development of the protagonist, Elizabeth Bennet.",
-    }
-];
-
 export default function Books() {
-    // [books, setBooks] = useState([])
+    const [books, setBooks] = useState([]); 
+    const [loading, setLoading] = useState(true); 
 
-    // useEffect(() => {
-    //     (async () => {
-    //         let books = await getAllAsync()
-    //         setBooks(books)
-    //     })()
-    // }, [])
+    useEffect(() => {
+        (async () => {
+            try {
+                const data = await getAllAsync();
+                setBooks(data); 
+            } catch (error) {
+                console.error("Failed to fetch books:", error);
+            } finally {
+                setLoading(false); 
+            }
+        })();
+    }, []);
+
+    if (loading) {
+        return <MDBContainer className="mt-5"><h2 className="text-center mb-4">Loading...</h2></MDBContainer>; // Loading state
+    }
 
     return (
         <MDBContainer className="mt-5">

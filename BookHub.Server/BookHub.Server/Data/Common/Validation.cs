@@ -12,6 +12,9 @@
 
             public const int ImageUrlMinLength = 10;
             public const int ImageUrlMaxLength = 2_000;
+
+            public const int TitleMinLength = 2;
+            public const int TitleMaxLength = 200;
         }
     }
 }

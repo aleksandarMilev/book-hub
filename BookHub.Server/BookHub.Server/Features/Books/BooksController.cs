@@ -10,10 +10,17 @@
 
         public BooksController(IBookService bookService) => this.bookService = bookService;
 
-        [HttpPost]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<BookListResponseModel>>> All()
+        {
+            var model = await this.bookService.GetAllAsync();
+            return this.Ok(model);
+        }                          
+
+        [HttpPost("create")]
         public async Task<ActionResult<int>> Create(BookFormModel model)
         {
-            var id = await this.bookService.CreateAsync(model.Author, model.Description, model.ImageUrl, this.User.GetId());        
+            var id = await this.bookService.CreateAsync(model.Author, model.Description, model.ImageUrl, model.Title, this.User.GetId());        
             return this.Created(nameof(this.Create), id);
         }
     }

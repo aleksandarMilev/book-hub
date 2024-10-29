@@ -14,6 +14,11 @@ async function requester(url, data, method = httpCodes.get){
     }
 
     const response = await fetch(url, options)
+
+    if(!response.ok){
+        return `${response.status}, ${response.statusText}`
+    }
+
     return await response.json()
 } 
 

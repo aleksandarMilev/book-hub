@@ -23,7 +23,7 @@
         }
 
         [AllowAnonymous]
-        [HttpPost(nameof(Register))]
+        [HttpPost("register")]
         public async Task<ActionResult> Register(RegisterRequestModel model)
         {
             var user = new User()
@@ -43,7 +43,7 @@
         }
 
         [AllowAnonymous]
-        [HttpPost(nameof(Login))]
+        [HttpPost("login")]
         public async Task<ActionResult<LoginResponseModel>> Login(LoginRequestModel model)
         {
             var user = await this.userManager.FindByNameAsync(model.Username);
