@@ -1,8 +1,6 @@
 namespace BookHub.Server
 {
-    using BookHub.Server.Data;
     using BookHub.Server.Infrastructure;
-    using Microsoft.EntityFrameworkCore;
 
     public class Program
     {
@@ -12,12 +10,11 @@ namespace BookHub.Server
             var appSettings = builder.Services.GetAppSettings(builder.Configuration);
 
             builder.Services
-                .AddDbContext<BookHubDbContext>(options =>
-                {
-                    options.UseSqlServer(builder.Configuration.GetDefaultConnectionString());
-                })
+                .AddDatabase(builder.Configuration)
                 .AddIdentity()
                 .AddJwtAuthentication(appSettings)
+                .AddServices()
+                .AddSwagger()
                 .AddControllers();
 
             if (builder.Environment.IsDevelopment())
@@ -26,6 +23,11 @@ namespace BookHub.Server
             }
 
             var app = builder.Build();
+
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
 
             app
                 .UseRouting()
@@ -39,6 +41,7 @@ namespace BookHub.Server
                 .UseAuthorization()
                 .UseAuthorization()
                 .UseEndpoints(e => e.MapControllers())
+                .UseSwaggerUI()
                 .ApplyMigrations();
 
             app.Run();

@@ -1,4 +1,4 @@
-﻿namespace BookHub.Server.Controllers.Base
+﻿namespace BookHub.Server.Features
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
