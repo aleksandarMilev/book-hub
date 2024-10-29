@@ -12,6 +12,8 @@
         {
         }
 
+        public DbSet<Book> Books { get; set; }
+
         public override int SaveChanges()
         {
             this.UpdateAuditInfo();

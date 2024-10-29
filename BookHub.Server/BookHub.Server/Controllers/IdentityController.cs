@@ -7,6 +7,7 @@
     using BookHub.Server.Controllers.Base;
     using BookHub.Server.Data.Models;
     using BookHub.Server.Models.Identity;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Options;
@@ -23,6 +24,7 @@
             this.appSettings = appSettings.Value;
         }
 
+        [AllowAnonymous]
         [HttpPost(nameof(Register))]
         public async Task<ActionResult> Register(RegisterRequestModel model) 
         {
@@ -42,6 +44,7 @@
             return this.BadRequest();
         }
 
+        [AllowAnonymous]
         [HttpPost(nameof(Login))]
         public async Task<ActionResult<object>> Login(LoginRequestModel model)
         {
@@ -66,7 +69,8 @@
             {
                 Subject = new ClaimsIdentity(new[]
                 { 
-                    new Claim(ClaimTypes.Name, user.Id.ToString()) 
+                    new Claim(ClaimTypes.NameIdentifier, user.Id),
+                    new Claim(ClaimTypes.Name, user.UserName!),
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
