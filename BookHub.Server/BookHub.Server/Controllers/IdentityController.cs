@@ -43,7 +43,7 @@
         }
 
         [HttpPost(nameof(Login))]
-        public async Task<ActionResult<string>> Login(LoginRequestModel model)
+        public async Task<ActionResult<object>> Login(LoginRequestModel model)
         {
             var user = await this.userManager.FindByNameAsync(model.Username);
 
@@ -73,7 +73,12 @@
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            var encryptedToken = tokenHandler.WriteToken(token);
+
+            return new
+            {
+                Token = encryptedToken
+            };
         }
     }
 }
