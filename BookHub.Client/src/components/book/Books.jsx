@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { MDBContainer, MDBListGroup, MDBListGroupItem, MDBCardTitle, MDBCardText, MDBIcon } from 'mdb-react-ui-kit';
 
-let books = [
+import { getAllAsync } from '../../api/bookAPI';
+
+const books = [
     {
         id: 1,
         title: "To Kill a Mockingbird",
@@ -23,6 +25,15 @@ let books = [
 ];
 
 export default function Books() {
+    // [books, setBooks] = useState([])
+
+    // useEffect(() => {
+    //     (async () => {
+    //         let books = await getAllAsync()
+    //         setBooks(books)
+    //     })()
+    // }, [])
+
     return (
         <MDBContainer className="mt-5">
             <h2 className="text-center mb-4">📚 Book List</h2>
