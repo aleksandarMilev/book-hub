@@ -7,7 +7,7 @@ export const httpCodes = {
     delete: 'DELETE',
 };
 
-export const routes = {
+export const apiRoutes = {
     home: '/',
     register: '/register',
     login: '/login',

@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  MDBCard,
-  MDBCardImage,
-  MDBCardBody,
-  MDBCardTitle,
-  MDBCardText,
-  MDBCardGroup
-} from 'mdb-react-ui-kit';
+import { MDBCard, MDBCardImage, MDBCardBody, MDBCardTitle, MDBCardText, MDBCardGroup } from 'mdb-react-ui-kit';
 
 export default function Card() {
   return (
@@ -24,7 +17,6 @@ export default function Card() {
           </MDBCardText>
         </MDBCardBody>
       </MDBCard>
-
       <MDBCard>
         <MDBCardImage src='https://mdbootstrap.com/img/new/standard/city/042.webp' alt='...' position='top' />
         <MDBCardBody>
@@ -37,7 +29,6 @@ export default function Card() {
           </MDBCardText>
         </MDBCardBody>
       </MDBCard>
-
       <MDBCard>
         <MDBCardImage src='https://mdbootstrap.com/img/new/standard/city/043.webp' alt='...' position='top' />
         <MDBCardBody>
@@ -52,5 +43,5 @@ export default function Card() {
         </MDBCardBody>
       </MDBCard>
     </MDBCardGroup>
-  );
+  )
 }

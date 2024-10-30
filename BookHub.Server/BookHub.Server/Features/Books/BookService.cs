@@ -3,7 +3,6 @@
     using BookHub.Server.Data;
     using BookHub.Server.Data.Models;
     using Microsoft.EntityFrameworkCore;
-    using System.Collections.Generic;
 
     public class BookService : IBookService
     {

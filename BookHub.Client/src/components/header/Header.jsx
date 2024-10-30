@@ -1,14 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import {
-    MDBNavbar,
-    MDBNavbarNav,
-    MDBNavbarItem,
-    MDBNavbarToggler,
-    MDBContainer,
-    MDBIcon,
-    MDBCollapse
-} from 'mdb-react-ui-kit';
+import { MDBNavbar, MDBNavbarNav, MDBNavbarItem, MDBNavbarToggler, MDBContainer, MDBIcon, MDBCollapse } from 'mdb-react-ui-kit';
 
 export default function Header() {
     const [showBasic, setShowBasic] = useState(false);
@@ -57,5 +49,5 @@ export default function Header() {
                 </MDBContainer>
             </MDBNavbar>
         </header>
-    );
+    )
 }

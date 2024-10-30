@@ -46,5 +46,5 @@ export default function BookForm() {
                 </Col>
             </Row>
         </Container>
-    );
+    )
 }

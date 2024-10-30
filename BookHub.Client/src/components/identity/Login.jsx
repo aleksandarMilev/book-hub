@@ -2,7 +2,6 @@ import React from 'react';
 import {MDBContainer, MDBCol, MDBRow, MDBBtn, MDBIcon, MDBInput, MDBCheckbox } from 'mdb-react-ui-kit';
 
 export default function Login() {
-
   return (
     <MDBContainer fluid className="p-3 my-5 h-custom">
       <MDBRow>
@@ -44,5 +43,5 @@ export default function Login() {
         </MDBCol>
       </MDBRow>
     </MDBContainer>
-  );
+  )
 }

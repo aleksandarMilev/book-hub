@@ -17,7 +17,7 @@
             return this.Ok(model);
         }                          
 
-        [HttpPost("create")]
+        [HttpPost(nameof(Create))]
         public async Task<ActionResult<int>> Create(BookFormModel model)
         {
             var id = await this.bookService.CreateAsync(model.Author, model.Description, model.ImageUrl, model.Title, this.User.GetId());        

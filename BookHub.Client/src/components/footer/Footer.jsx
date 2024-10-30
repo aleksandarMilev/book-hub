@@ -29,7 +29,6 @@ export default function Footer() {
           </a>
         </div>
       </section>
-
       <section className=''>
         <MDBContainer className='text-center text-md-start mt-5'>
           <MDBRow className='mt-3'>
@@ -43,7 +42,6 @@ export default function Footer() {
                 consectetur adipisicing elit.
               </p>
             </MDBCol>
-
             <MDBCol md="2" lg="2" xl="2" className='mx-auto mb-4'>
               <h6 className='text-uppercase fw-bold mb-4'>Products</h6>
               <p>
@@ -67,7 +65,6 @@ export default function Footer() {
                 </a>
               </p>
             </MDBCol>
-
             <MDBCol md="3" lg="2" xl="2" className='mx-auto mb-4'>
               <h6 className='text-uppercase fw-bold mb-4'>Useful links</h6>
               <p>
@@ -91,7 +88,6 @@ export default function Footer() {
                 </a>
               </p>
             </MDBCol>
-
             <MDBCol md="4" lg="3" xl="3" className='mx-auto mb-md-0 mb-4'>
               <h6 className='text-uppercase fw-bold mb-4'>Contact</h6>
               <p>
@@ -112,7 +108,6 @@ export default function Footer() {
           </MDBRow>
         </MDBContainer>
       </section>
-
       <div className='text-center p-4' style={{ backgroundColor: 'rgba(0, 0, 0, 0.05)' }}>
         © 2021 Copyright:
         <a className='text-reset fw-bold' href='https://mdbootstrap.com/'>
@@ -120,5 +115,5 @@ export default function Footer() {
         </a>
       </div>
     </MDBFooter>
-  );
+  )
 }
