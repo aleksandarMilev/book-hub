@@ -11,9 +11,8 @@
 
         public BookService(BookHubDbContext data) => this.data = data;
 
-        public async Task<IEnumerable<BookListServiceModel>> GetAllAsync()
-        {
-            return await this.data
+        public async Task<IEnumerable<BookListServiceModel>> GetAllAsync() 
+            => await this.data
                 .Books
                 .Select(b => new BookListServiceModel()
                 {
@@ -23,11 +22,9 @@
                     Author = b.Author,
                 })
                 .ToListAsync();
-        }
 
-        public async Task<BookDetailsServiceModel?> GetDetailsAsync(int id)
-        {
-            return await this.data
+        public async Task<BookDetailsServiceModel?> GetDetailsAsync(int id) 
+            => await this.data
               .Books
               .Where(b => b.Id == id)
               .Select(b => new BookDetailsServiceModel()
@@ -39,7 +36,6 @@
                   Description = b.Description
               })
               .FirstOrDefaultAsync();
-        }
 
         public async Task<int> CreateAsync(string author, string description, string imageUrl, string title, string userId)
         {

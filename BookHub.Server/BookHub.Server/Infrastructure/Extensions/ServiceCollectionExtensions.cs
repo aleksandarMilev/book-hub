@@ -7,9 +7,9 @@
     using BookHub.Server.Features.Books;
     using BookHub.Server.Features.Identity;
     using BookHub.Server.Infrastructure.Filters;
+    using BookHub.Server.Infrastructure.Services;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
@@ -18,10 +18,11 @@
     {
         public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<BookHubDbContext>(options =>
-            {
-                options.UseSqlServer(configuration.GetDefaultConnectionString());
-            });
+            services
+                .AddDbContext<BookHubDbContext>(options =>
+                {
+                    options.UseSqlServer(configuration.GetDefaultConnectionString());
+                });
 
             return services;
         }
@@ -29,14 +30,14 @@
         public static IServiceCollection AddIdentity(this IServiceCollection services)
         {
             services
-            .AddIdentity<User, IdentityRole>(opt =>
-            {
-                opt.Password.RequireUppercase = false;
-                opt.Password.RequireLowercase = false;
-                opt.Password.RequireNonAlphanumeric = false;
-                opt.Password.RequireDigit = false;
-            })
-            .AddEntityFrameworkStores<BookHubDbContext>();
+                .AddIdentity<User, IdentityRole>(opt =>
+                {
+                    opt.Password.RequireUppercase = false;
+                    opt.Password.RequireLowercase = false;
+                    opt.Password.RequireNonAlphanumeric = false;
+                    opt.Password.RequireDigit = false;
+                })
+                .AddEntityFrameworkStores<BookHubDbContext>();
 
             return services;
         }
@@ -46,23 +47,23 @@
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
 
             services
-            .AddAuthentication(opt =>
-            {
-                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(opt =>
-            {
-                opt.RequireHttpsMetadata = false;
-                opt.SaveToken = true;
-                opt.TokenValidationParameters = new TokenValidationParameters()
+                .AddAuthentication(opt =>
                 {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                };
-            });
+                    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(opt =>
+                {
+                    opt.RequireHttpsMetadata = false;
+                    opt.SaveToken = true;
+                    opt.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                    };
+                });
 
             return services;
         }
@@ -82,6 +83,7 @@
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             services
+                .AddScoped<ICurrentUserService, CurrentUserService>()
                 .AddTransient<IIdentityService, IdentityService>()
                 .AddTransient<IBookService, BookService>();
 
@@ -90,10 +92,12 @@
 
         public static IServiceCollection AddApiControllers(this IServiceCollection services)
         {
-            services.AddControllers(opt =>
-            {
-                opt.Filters.Add<ModelOrNotFoundActionFilter>();
-            });
+            services
+                .AddControllers(opt =>
+                {
+                    opt.Filters.Add<ModelOrNotFoundActionFilter>();
+                });
+
             return services;
         }
 
@@ -102,8 +106,9 @@
             var appSettingsConfiguration = configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsConfiguration);
 
-            return appSettingsConfiguration.Get<AppSettings>()
-                ?? throw new InvalidOperationException("AppSettings not found.");
+            return appSettingsConfiguration
+                    .Get<AppSettings>()
+                    ?? throw new InvalidOperationException("AppSettings not found.");
         }
     }
 }

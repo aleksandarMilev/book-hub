@@ -12,15 +12,13 @@
             data?.Database.Migrate();
         }
 
-        public static IApplicationBuilder UseSwaggerUI(this IApplicationBuilder app)
-        {
-            return app
+        public static IApplicationBuilder UseSwaggerUI(this IApplicationBuilder app) 
+            => app
                 .UseSwagger()
                 .UseSwaggerUI(opt =>
                 {
                     opt.SwaggerEndpoint("swagger/v1/swagger.json", "My BookHub API");
                     opt.RoutePrefix = string.Empty;
                 });
-        }
     }
 }

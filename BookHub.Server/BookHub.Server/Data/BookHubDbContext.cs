@@ -1,79 +1,96 @@
 ﻿namespace BookHub.Server.Data
 {
+    using System.Linq.Expressions;
+
     using BookHub.Server.Data.Models;
     using BookHub.Server.Data.Models.Base;
+    using BookHub.Server.Infrastructure.Services;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
 
     public class BookHubDbContext : IdentityDbContext<User>
     {
-        public BookHubDbContext(DbContextOptions<BookHubDbContext> options)
+        private readonly ICurrentUserService userService;
+
+        public BookHubDbContext(DbContextOptions<BookHubDbContext> options, ICurrentUserService userService)
             : base(options)
-        {
-        }
+            => this.userService = userService;
 
         public DbSet<Book> Books { get; set; }
 
-        public override int SaveChanges()
+        public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
-            this.UpdateAuditInfo();
-            return base.SaveChanges();
+            this.ApplyAuditInfo();
+            return base.SaveChanges(acceptAllChangesOnSuccess);
         }
 
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
-            this.UpdateAuditInfo();
-            return await base.SaveChangesAsync(cancellationToken);
+            this.ApplyAuditInfo();
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
 
-        public void SoftDelete<TEntity>(TEntity entity)
-            where TEntity : class, IDeletableEntity
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            this.ApplySoftDeletionState(entity, true, DateTime.UtcNow.Date);
-        }
+            base.OnModelCreating(modelBuilder);
 
-        public void Restore<TEntity>(TEntity entity)
-            where TEntity : class, IDeletableEntity
-        {
-            this.ApplySoftDeletionState(entity, false, null);
-        }
-
-        private void ApplySoftDeletionState<TEntity>(TEntity entity, bool isDeleted, DateTime? deletedOn)
-            where TEntity : class, IDeletableEntity
-        {
-            var entry = this.Entry(entity);
-
-            if (entry.State == EntityState.Detached)
-            {
-                this.Set<TEntity>().Attach(entity);
-            }
-
-            entry.State = EntityState.Modified;
-            entity.IsDeleted = isDeleted;
-            entity.DeletedOn = deletedOn;
-        }
-
-        private void UpdateAuditInfo()
-        {
-            var changedEntries = this.ChangeTracker
-                .Entries()
+            var deletableEntities = modelBuilder
+                .Model
+                .GetEntityTypes()
                 .Where(e =>
-                    e.Entity is IAuditInfo &&
-                    (e.State == EntityState.Added || e.State == EntityState.Modified));
+                {
+                    return typeof(IDeletableEntity).IsAssignableFrom(e.ClrType);
+                });
 
-            foreach (var entry in changedEntries)
+            foreach (var e in deletableEntities)
             {
-                var entity = (IAuditInfo)entry.Entity;
-
-                if (entry.State == EntityState.Added && entity.CreatedOn == default)
-                {
-                    entity.CreatedOn = DateTime.UtcNow;
-                }
-                else
-                {
-                    entity.ModifiedOn = DateTime.UtcNow;
-                }
+                modelBuilder
+                    .Entity(e.ClrType)
+                    .HasQueryFilter(MakeFilterExpression(e.ClrType));
             }
+        }
+
+        private void ApplyAuditInfo() 
+            => this.ChangeTracker
+                .Entries()
+                .ToList()
+                .ForEach(e =>
+                {
+                    var utcNow = DateTime.UtcNow;
+                    var username = this.userService.GetUsername();
+
+                    if (e.State == EntityState.Deleted && e.Entity is IDeletableEntity deletableEntity)
+                    {
+                        deletableEntity.DeletedOn = utcNow;
+                        deletableEntity.DeletedBy = username;
+                        deletableEntity.IsDeleted = true;
+
+                        e.State = EntityState.Modified;
+                        return;
+                    }
+
+                    if (e.Entity is IEntity entity)
+                    {
+                        if (e.State == EntityState.Added)
+                        {
+                            entity.CreatedOn = utcNow;
+                            entity.CreatedBy = username!;
+                        }
+                        else if (e.State == EntityState.Modified)
+                        {
+                            entity.ModifiedOn = utcNow;
+                            entity.ModifiedBy = username;
+                        }
+                    }
+                });
+
+        private static LambdaExpression MakeFilterExpression(Type entityType)
+        {
+            var parameter = Expression.Parameter(entityType, "e");
+            var isDeletedProperty = Expression.Property(parameter, nameof(IDeletableEntity.IsDeleted));
+            var isDeletedFalse = Expression.Equal(isDeletedProperty, Expression.Constant(false));
+
+            return Expression.Lambda(isDeletedFalse, parameter);
         }
     }
 }
