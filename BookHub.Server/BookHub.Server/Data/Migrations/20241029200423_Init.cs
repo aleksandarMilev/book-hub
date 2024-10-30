@@ -1,5 +1,5 @@
 ﻿#nullable disable
-namespace BookHub.Server.Migrations
+namespace BookHub.Server.Data.Migrations
 {
     using Microsoft.EntityFrameworkCore.Migrations;
 

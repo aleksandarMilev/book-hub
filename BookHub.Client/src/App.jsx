@@ -9,6 +9,7 @@ import Login from './components/identity/Login'
 import Register from './components/identity/Register'
 import CreateBook from './components/book/CreateBook'
 import BookList from "./components/book/BookList";
+import BookDetails from "./components/book/BookDetails";
 
 export default function App(){
     return(
@@ -20,6 +21,7 @@ export default function App(){
                 <Route path={apiRoutes.register} element={<Register />} />
                 <Route path={apiRoutes.books} element={<BookList />} />
                 <Route path={apiRoutes.createBook} element={<CreateBook />} />
+                <Route path={apiRoutes.bookDetails} element={<BookDetails />} />
             </Routes>
             <Footer />
         </>

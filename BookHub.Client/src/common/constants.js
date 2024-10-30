@@ -13,4 +13,5 @@ export const apiRoutes = {
     login: '/login',
     books: '/books',
     createBook: '/books/new',
+    bookDetails: '/books/:id',
 };

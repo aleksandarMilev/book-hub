@@ -1,13 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-
-#nullable disable
-
-namespace BookHub.Server.Migrations
+﻿#nullable disable
+namespace BookHub.Server.Data.Migrations
 {
-    /// <inheritdoc />
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class BookUserIdIsNullable : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
@@ -30,7 +27,6 @@ namespace BookHub.Server.Migrations
                 principalColumn: "Id");
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(

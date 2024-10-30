@@ -1,6 +1,9 @@
+import { Link } from 'react-router-dom';
 import { MDBListGroupItem, MDBCardTitle, MDBCardText, MDBIcon } from 'mdb-react-ui-kit';
 
-export default function BookListItem({ title, author, description }){
+import { apiRoutes } from '../../common/constants'
+
+export default function BookListItem({ id, title, author, description }){
     return(
         <MDBListGroupItem className="d-flex flex-column bg-light p-4 mb-2">
             <div className="d-flex align-items-center mb-2">
@@ -9,6 +12,11 @@ export default function BookListItem({ title, author, description }){
             </div>
             <h6 className="text-muted mb-3">by {author}</h6>
             <MDBCardText>{description}</MDBCardText>
+            <div className="mt-3">
+            <Link to={`${apiRoutes.books}/${id}`} className="btn btn-primary">
+                View Details
+            </Link>
+            </div>
         </MDBListGroupItem>
     )
 }

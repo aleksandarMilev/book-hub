@@ -13,13 +13,7 @@ async function requester(url, data, method = httpCodes.get){
         options.body = JSON.stringify(data)
     }
 
-    const response = await fetch(url, options)
-
-    if(!response.ok){
-        throw new Error(`${response.status}, ${response.statusText}`)
-    }
-
-    return await response.json()
+    return await fetch(url, options)
 } 
 
 export const getAsync = requester.bind(null)

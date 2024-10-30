@@ -11,7 +11,7 @@ export default function BookList() {
 
     useEffect(() => {
         (async () => {
-            setBooks( await getAllAsync())
+            setBooks(await getAllAsync())
         })()
     }, [])
 
