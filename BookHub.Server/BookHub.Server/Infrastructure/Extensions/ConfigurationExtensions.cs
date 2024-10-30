@@ -1,4 +1,4 @@
-﻿namespace BookHub.Server.Infrastructure
+﻿namespace BookHub.Server.Infrastructure.Extensions
 {
     public static class ConfigurationExtensions
     {

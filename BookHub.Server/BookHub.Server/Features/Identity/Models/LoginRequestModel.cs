@@ -1,4 +1,4 @@
-﻿namespace BookHub.Server.Features.Identity
+﻿namespace BookHub.Server.Features.Identity.Models
 {
     using System.ComponentModel.DataAnnotations;
 

@@ -1,4 +1,4 @@
-﻿namespace BookHub.Server.Infrastructure
+﻿namespace BookHub.Server.Infrastructure.Extensions
 {
     using System.Text;
 
@@ -6,8 +6,10 @@
     using BookHub.Server.Data.Models;
     using BookHub.Server.Features.Books;
     using BookHub.Server.Features.Identity;
+    using BookHub.Server.Infrastructure.Filters;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
@@ -26,15 +28,15 @@
 
         public static IServiceCollection AddIdentity(this IServiceCollection services)
         {
-               services
-               .AddIdentity<User, IdentityRole>(opt =>
-               {
-                   opt.Password.RequireUppercase = false;
-                   opt.Password.RequireLowercase = false;
-                   opt.Password.RequireNonAlphanumeric = false;
-                   opt.Password.RequireDigit = false;
-               })
-               .AddEntityFrameworkStores<BookHubDbContext>();
+            services
+            .AddIdentity<User, IdentityRole>(opt =>
+            {
+                opt.Password.RequireUppercase = false;
+                opt.Password.RequireLowercase = false;
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequireDigit = false;
+            })
+            .AddEntityFrameworkStores<BookHubDbContext>();
 
             return services;
         }
@@ -67,10 +69,10 @@
 
         public static IServiceCollection AddSwagger(this IServiceCollection services)
         {
-            var apiInfo = new OpenApiInfo() 
-            { 
+            var apiInfo = new OpenApiInfo()
+            {
                 Title = "My BookHub API",
-                Version = "v1" 
+                Version = "v1"
             };
 
             services.AddSwaggerGen(c => c.SwaggerDoc("v1", apiInfo));
@@ -83,6 +85,15 @@
                 .AddTransient<IIdentityService, IdentityService>()
                 .AddTransient<IBookService, BookService>();
 
+            return services;
+        }
+
+        public static IServiceCollection AddApiControllers(this IServiceCollection services)
+        {
+            services.AddControllers(opt =>
+            {
+                opt.Filters.Add<ModelOrNotFoundActionFilter>();
+            });
             return services;
         }
 

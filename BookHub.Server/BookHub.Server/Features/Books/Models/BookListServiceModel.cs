@@ -1,6 +1,6 @@
-﻿namespace BookHub.Server.Features.Books
+﻿namespace BookHub.Server.Features.Books.Models
 {
-    public class BookListResponseModel
+    public class BookListServiceModel
     {
         public int Id { get; init; }
 

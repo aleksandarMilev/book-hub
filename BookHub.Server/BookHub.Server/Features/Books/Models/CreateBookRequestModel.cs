@@ -1,10 +1,10 @@
-﻿namespace BookHub.Server.Features.Books
+﻿namespace BookHub.Server.Features.Books.Models
 {
     using System.ComponentModel.DataAnnotations;
 
     using static BookHub.Server.Data.Common.Validation.Book;
 
-    public class BookFormModel
+    public class CreateBookRequestModel
     {
         [Required]
         [MaxLength(AuthorMaxLength)]

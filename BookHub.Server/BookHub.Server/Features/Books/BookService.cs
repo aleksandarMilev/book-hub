@@ -2,6 +2,7 @@
 {
     using BookHub.Server.Data;
     using BookHub.Server.Data.Models;
+    using BookHub.Server.Features.Books.Models;
     using Microsoft.EntityFrameworkCore;
 
     public class BookService : IBookService
@@ -10,11 +11,11 @@
 
         public BookService(BookHubDbContext data) => this.data = data;
 
-        public async Task<IEnumerable<BookListResponseModel>> GetAllAsync()
+        public async Task<IEnumerable<BookListServiceModel>> GetAllAsync()
         {
             return await this.data
                 .Books
-                .Select(b => new BookListResponseModel()
+                .Select(b => new BookListServiceModel()
                 {
                     Id = b.Id,
                     Title = b.Title,
@@ -22,6 +23,22 @@
                     Author = b.Author,
                 })
                 .ToListAsync();
+        }
+
+        public async Task<BookDetailsServiceModel?> GetDetailsAsync(int id)
+        {
+            return await this.data
+              .Books
+              .Where(b => b.Id == id)
+              .Select(b => new BookDetailsServiceModel()
+              {
+                  Id = b.Id,
+                  Title = b.Title,
+                  ImageUrl = b.ImageUrl,
+                  Author = b.Author,
+                  Description = b.Description
+              })
+              .FirstOrDefaultAsync();
         }
 
         public async Task<int> CreateAsync(string author, string description, string imageUrl, string title, string userId)

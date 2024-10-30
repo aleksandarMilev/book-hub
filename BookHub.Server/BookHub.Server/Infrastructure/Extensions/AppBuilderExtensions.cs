@@ -1,4 +1,4 @@
-﻿namespace BookHub.Server.Infrastructure
+﻿namespace BookHub.Server.Infrastructure.Extensions
 {
     using BookHub.Server.Data;
     using Microsoft.EntityFrameworkCore;
@@ -16,7 +16,7 @@
         {
             return app
                 .UseSwagger()
-                .UseSwaggerUI(opt => 
+                .UseSwaggerUI(opt =>
                 {
                     opt.SwaggerEndpoint("swagger/v1/swagger.json", "My BookHub API");
                     opt.RoutePrefix = string.Empty;

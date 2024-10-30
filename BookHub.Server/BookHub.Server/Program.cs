@@ -1,6 +1,6 @@
 namespace BookHub.Server
 {
-    using BookHub.Server.Infrastructure;
+    using BookHub.Server.Infrastructure.Extensions;
 
     public class Program
     {
@@ -15,7 +15,7 @@ namespace BookHub.Server
                 .AddJwtAuthentication(appSettings)
                 .AddServices()
                 .AddSwagger()
-                .AddControllers();
+                .AddApiControllers();
 
             if (builder.Environment.IsDevelopment())
             {

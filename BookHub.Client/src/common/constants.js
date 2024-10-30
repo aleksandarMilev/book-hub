@@ -12,5 +12,5 @@ export const apiRoutes = {
     register: '/register',
     login: '/login',
     books: '/books',
-    createBook: '/books/create',
+    createBook: '/books/new',
 };

@@ -2,7 +2,7 @@
 {
     using BookHub.Server.Data.Models;
     using BookHub.Server.Features;
-    using Microsoft.AspNetCore.Authorization;
+    using BookHub.Server.Features.Identity.Models;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
@@ -22,7 +22,6 @@
             this.appSettings = appSettings;
         }
 
-        [AllowAnonymous]
         [HttpPost(nameof(Register))]
         public async Task<ActionResult> Register(RegisterRequestModel model)
         {
@@ -42,7 +41,6 @@
             return this.BadRequest();
         }
 
-        [AllowAnonymous]
         [HttpPost(nameof(Login))]
         public async Task<ActionResult<LoginResponseModel>> Login(LoginRequestModel model)
         {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MDBNavbar, MDBNavbarNav, MDBNavbarItem, MDBNavbarToggler, MDBContainer, MDBIcon, MDBCollapse } from 'mdb-react-ui-kit';
+import { apiRoutes } from '../../common/constants';
 
 export default function Header() {
     const [showBasic, setShowBasic] = useState(false);
@@ -20,27 +21,27 @@ export default function Header() {
                     <MDBCollapse navbar show={showBasic ? true : undefined}>
                         <MDBNavbarNav right className='mb-2 mb-lg-0'>
                             <MDBNavbarItem active>
-                                <Link className="nav-link" to="/">
+                                <Link className="nav-link" to={apiRoutes.home}>
                                     Home
                                 </Link>
                             </MDBNavbarItem>
                             <MDBNavbarItem>
-                                <Link className="nav-link" to="/register">
+                                <Link className="nav-link" to={apiRoutes.register}>
                                     Register
                                 </Link>
                             </MDBNavbarItem>
                             <MDBNavbarItem>
-                                <Link className="nav-link" to="/login">
+                                <Link className="nav-link" to={apiRoutes.login}>
                                     Login
                                 </Link>
                             </MDBNavbarItem>
                             <MDBNavbarItem>
-                                <Link className="nav-link" to="/books">
+                                <Link className="nav-link" to={apiRoutes.books}>
                                     Books
                                 </Link>
                             </MDBNavbarItem>
                             <MDBNavbarItem>
-                                <Link className="nav-link" to="/books/create">
+                                <Link className="nav-link" to={apiRoutes.createBook}>
                                     Create Book
                                 </Link>
                             </MDBNavbarItem>
