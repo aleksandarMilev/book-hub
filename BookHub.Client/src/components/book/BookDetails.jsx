@@ -1,17 +1,11 @@
-import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom";
 
+import useFetch from '../../hooks/useFetch'
 import { getDetailsAsync } from '../../api/bookAPI';
 
 export default function BookDetails(){
     const { id } = useParams()
-    const [book, setBook] = useState({})
-
-    useEffect(() => {
-        (async() => {
-            setBook(await getDetailsAsync(id))
-        })()
-    }, [])
+    const { data: book } = useFetch(() => getDetailsAsync(id), {})
 
     return( 
         book 

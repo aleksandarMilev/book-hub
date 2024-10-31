@@ -14,7 +14,7 @@ import BookDetails from "./components/book/BookDetails";
 export default function App(){
     return(
         <>
-            <Header />
+             <Header />
             <Routes>
                 <Route path={apiRoutes.home} element={<Home />} />
                 <Route path={apiRoutes.login} element={<Login />} />
@@ -23,7 +23,7 @@ export default function App(){
                 <Route path={apiRoutes.createBook} element={<CreateBook />} />
                 <Route path={apiRoutes.bookDetails} element={<BookDetails />} />
             </Routes>
-            <Footer />
+            <Footer /> 
         </>
     );
 }
