@@ -4,10 +4,11 @@ import useFetch from '../../hooks/useFetch'
 import { getDetailsAsync } from '../../api/bookAPI';
 
 import DefaultSpinner from '../common/DefaultSpinner'
+import { useGetBookDetails } from "../../hooks/useBooks";
 
 export default function BookDetails() {
-    const { id } = useParams();
-    const { data: book, isFetching } = useFetch((signal) => getDetailsAsync(id, signal), {});
+    const { id } = useParams()
+    const { book, isFetching } = useGetBookDetails(id)
 
     return (
         !isFetching ? (

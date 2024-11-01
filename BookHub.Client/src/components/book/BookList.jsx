@@ -1,13 +1,12 @@
 import { MDBContainer, MDBListGroup } from 'mdb-react-ui-kit';
 
-import useFetch from '../../hooks/useFetch';
-import { getAllAsync } from '../../api/bookAPI';
+import { useGetAllBooks } from '../../hooks/useBooks';
 
 import BookListItem from './BooksListItem';
 import DefaultSpinner from '../common/DefaultSpinner'
 
 export default function BookList() {
-    const{ data: books, isFetching } = useFetch(getAllAsync, [])
+    const { books, isFetching } = useGetAllBooks()
 
     return (
         <MDBContainer className="mt-5">

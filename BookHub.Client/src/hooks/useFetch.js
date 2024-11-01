@@ -1,19 +1,21 @@
 import { useEffect, useState } from 'react';
 
-export default function useFetch(useEffectCallback, initState, dependencies = []){
+export default function useFetch(serviceFunction, initState, dependencies = []){
     const [data, setData] = useState(initState)
-    const [isFetching, setIsFetching] = useState(true)
-
-    const controller = new AbortController()
-    const { signal } = controller
+    const [isFetching, setIsFetching] = useState(false)
 
     useEffect(() => {
-        (async () => {
-            setData(await useEffectCallback(signal))
-            setIsFetching(false)
-        })()
+        const abortController = new AbortController();
 
-        return () => controller.abort()
+        const fetchData = async () => {
+            setIsFetching(old => !old)
+            const result = await serviceFunction(abortController.signal)
+            setData(result)
+            setIsFetching(old => !old)
+        }
+
+        fetchData()
+        return () => abortController.abort()
     }, dependencies)
 
     return { data, isFetching }
