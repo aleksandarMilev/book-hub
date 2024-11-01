@@ -1,12 +1,13 @@
 import { baseUrl, apiRoutes } from '../common/constants'
-import * as requester from './requester'
 
-export async function getAllAsync(){
-    const response =  await requester.getAsync(baseUrl + apiRoutes.books)
-    return response.ok ? response.json() : null
+export async function getAllAsync(signal = null){
+    const response = await fetch(baseUrl + apiRoutes.books, signal)
+    const data = response.ok ? await response.json() : null
+    return data
 }
 
-export async function getDetailsAsync(id){
-    const response = await requester.getAsync(baseUrl + apiRoutes.books + `/${id}`)
-    return response.ok ? response.json() : null
+export async function getDetailsAsync(id, signal = null){
+    const response = await fetch(baseUrl + apiRoutes.books + `/${id}`, signal)
+    const data = response.ok ? await response.json() : null
+    return data
 }

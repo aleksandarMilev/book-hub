@@ -19,6 +19,7 @@
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BookListServiceModel>>> All()
         {
+            Thread.Sleep(3_000);
             var model = await this.bookService.GetAllAsync();
             return this.Ok(model);
         }
@@ -26,6 +27,7 @@
         [HttpGet("{id}")]
         public async Task<ActionResult<BookDetailsServiceModel>> Details(int id)
         {
+            Thread.Sleep(3_000);
             var model = await this.bookService.GetDetailsAsync(id);
             return this.Ok(model);
         }

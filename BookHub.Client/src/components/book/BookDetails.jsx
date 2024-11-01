@@ -3,13 +3,15 @@ import { useParams } from "react-router-dom";
 import useFetch from '../../hooks/useFetch'
 import { getDetailsAsync } from '../../api/bookAPI';
 
-export default function BookDetails(){
-    const { id } = useParams()
-    const { data: book } = useFetch(() => getDetailsAsync(id), {})
+import DefaultSpinner from '../common/DefaultSpinner'
 
-    return( 
-        book 
-            ? (
+export default function BookDetails() {
+    const { id } = useParams();
+    const { data: book, isFetching } = useFetch((signal) => getDetailsAsync(id, signal), {});
+
+    return (
+        !isFetching ? (
+            book ? (
                 <div className="container mt-5">
                     <div className="card shadow-lg p-4">
                         <div className="row g-0">
@@ -37,8 +39,7 @@ export default function BookDetails(){
                         </div>
                     </div>
                 </div>
-            )
-            : (
+            ) : (
                 <div className="container mt-5">
                     <div className="alert alert-danger text-center" role="alert">
                         <h4 className="alert-heading">Oops!</h4>
@@ -46,5 +47,11 @@ export default function BookDetails(){
                     </div>
                 </div>
             )
-    )
+        ) : (
+            <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '50vh' }}>
+                <DefaultSpinner />
+            </div>
+        )
+    );
 }
+
