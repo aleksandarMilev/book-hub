@@ -9,8 +9,8 @@ export const httpCodes = {
 
 export const apiRoutes = {
     home: '/',
-    register: '/register',
-    login: '/login',
+    register: '/identity/register',
+    login: '/identity/login',
     books: '/books',
     createBook: '/books/new',
     bookDetails: '/books/:id',

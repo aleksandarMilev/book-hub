@@ -5,6 +5,7 @@
     using BookHub.Server.Features.Identity.Models;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Options;
 
     public class IdentityController : ApiController
     {
@@ -15,11 +16,11 @@
         public IdentityController(
             IIdentityService identityService,
             UserManager<User> userManager,
-            AppSettings appSettings)
+            IOptions<AppSettings> appSettings)
         {
             this.identityService = identityService;
             this.userManager = userManager;
-            this.appSettings = appSettings;
+            this.appSettings = appSettings.Value;
         }
 
         [HttpPost(nameof(Register))]

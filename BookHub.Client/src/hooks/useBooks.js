@@ -37,7 +37,7 @@ export function useGetBookDetails(id){
 
         fetchData()
         return () => abortController.abort()
-    }, [])
+    }, [id])
 
     return { book, isFetching }
 }
