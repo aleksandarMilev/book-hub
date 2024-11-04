@@ -1,12 +1,12 @@
-import { MDBContainer, MDBListGroup } from 'mdb-react-ui-kit';
+import { MDBContainer, MDBListGroup } from 'mdb-react-ui-kit'
 
-import { useGetAllBooks } from '../../hooks/useBooks';
+import * as useBook from '../../hooks/useBook'
 
-import BookListItem from './BooksListItem';
+import BookListItem from './BooksListItem'
 import DefaultSpinner from '../common/DefaultSpinner'
 
 export default function BookList() {
-    const { books, isFetching } = useGetAllBooks()
+    const { books, isFetching } = useBook.useGetAll()
 
     return (
         <MDBContainer className="mt-5">

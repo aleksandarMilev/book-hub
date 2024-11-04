@@ -7,10 +7,9 @@ export default function useFetch(serviceFunction, initState, dependencies = []){
     useEffect(() => {
         const abortController = new AbortController();
 
-        const fetchData = async () => {
+        async function fetchData(){
             setIsFetching(old => !old)
-            const result = await serviceFunction(abortController.signal)
-            setData(result)
+            setData(await serviceFunction(abortController.signal))
             setIsFetching(old => !old)
         }
 

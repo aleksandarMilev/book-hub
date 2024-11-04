@@ -1,33 +1,43 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { MDBBtn, MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBCardImage, MDBInput, MDBIcon, MDBCheckbox } from 'mdb-react-ui-kit';
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import * as Yup from 'yup'
+import { useFormik } from 'formik'
+import { MDBBtn, MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBCardImage, MDBInput, MDBIcon, MDBCheckbox } 
+from 'mdb-react-ui-kit'
 
-import { apiRoutes } from '../../common/constants';
-import { useForm } from '../../hooks/useForm';
-import { register } from '../../api/identityApi.js';
+import { routes } from '../../common/constants/api'
+import { useRegister } from '../../hooks/useIdentity'
 
 export default function Register() {
     const navigate = useNavigate()
+    const onRegister = useRegister()
 
-    const initValues = {
-        username: '',
-        email: '',
-        password: '',
-        confirmPassword: ''
-    }
+    const validationSchema = Yup.object({
+        username: Yup.string().required('Username is required'),
+        email: Yup.string().email('Invalid email format').required('Email is required'),
+        password: Yup.string().required('Password is required'),
+        confirmPassword: Yup.string()
+            .oneOf([Yup.ref('password'), null], 'Passwords must match')
+            .required('Please confirm your password')
+    })
 
-    async function onRegister() {
-        const user = { 
-            username: values.username,
-            email: values.email,
-            password: values.password
+    const formik = useFormik({
+        initialValues: {
+            username: '',
+            email: '',
+            password: '',
+            confirmPassword: ''
+        },
+        validationSchema,
+        onSubmit: async (values, { setErrors }) => {
+            try {
+                await onRegister(values.username, values.email, values.password)
+                navigate(routes.home);
+            } catch (error) {
+                setErrors({ email: error.message || 'An error occurred' })
+            }
         }
-
-        await register({...user})
-        navigate(apiRoutes.home)
-    }
-
-    const { values, onChange, onSubmit } = useForm(initValues, onRegister)
+    })
 
     return (
         <MDBContainer fluid>
@@ -36,55 +46,76 @@ export default function Register() {
                     <MDBRow>
                         <MDBCol md='10' lg='6' className='order-2 order-lg-1 d-flex flex-column align-items-center'>
                             <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
-                            <div className="d-flex flex-row align-items-center mb-4 ">
-                                <MDBIcon fas icon="user me-3" size='lg'/>
-                                <MDBInput 
-                                    label='Your Name' 
-                                    id='form1' 
-                                    type='text' 
-                                    name="username"
-                                    value={values.username} 
-                                    onChange={onChange} 
-                                    className='w-100'
-                                />
-                            </div>
-                            <div className="d-flex flex-row align-items-center mb-4">
-                                <MDBIcon fas icon="envelope me-3" size='lg'/>
-                                <MDBInput 
-                                    label='Your Email' 
-                                    id='form2' 
-                                    type='email' 
-                                    name="email" 
-                                    value={values.email} 
-                                    onChange={onChange}
-                                />
-                            </div>
-                            <div className="d-flex flex-row align-items-center mb-4">
-                                <MDBIcon fas icon="lock me-3" size='lg'/>
-                                <MDBInput 
-                                    label='Password' 
-                                    id='form3' 
-                                    type='password' 
-                                    name="password" 
-                                    value={values.password} 
-                                    onChange={onChange}
-                                />
-                            </div>
-                            <div className="d-flex flex-row align-items-center mb-4">
-                                <MDBIcon fas icon="key me-3" size='lg'/>
-                                <MDBInput 
-                                    label='Repeat your password' 
-                                    id='form4' 
-                                    type='password' 
-                                    name="confirmPassword" 
-                                    value={values.confirmPassword} 
-                                    onChange={onChange}
-                                />
-                            </div>
-                            <div className='mb-4'>
-                                <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='Subscribe to our newsletter' />
-                            </div>
-                            <MDBBtn className='mb-4' size='lg' onClick={onSubmit}>Register</MDBBtn>
+                            <form onSubmit={formik.handleSubmit} className="w-100">
+                                <div className="d-flex flex-row align-items-center mb-4 ">
+                                    <MDBIcon fas icon="user me-3" size='lg'/>
+                                    <MDBInput 
+                                        label='Your Name' 
+                                        id='username' 
+                                        type='text' 
+                                        name="username"
+                                        value={formik.values.username}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur} 
+                                        className='w-100'
+                                    />
+                                    {formik.touched.username && formik.errors.username && (
+                                        <div className="text-danger">{formik.errors.username}</div>
+                                    )}
+                                </div>
+                                <div className="d-flex flex-row align-items-center mb-4">
+                                    <MDBIcon fas icon="envelope me-3" size='lg'/>
+                                    <MDBInput 
+                                        label='Your Email' 
+                                        id='email' 
+                                        type='email' 
+                                        name="email" 
+                                        value={formik.values.email} 
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        className='w-100'
+                                    />
+                                    {formik.touched.email && formik.errors.email && (
+                                        <div className="text-danger">{formik.errors.email}</div>
+                                    )}
+                                </div>
+                                <div className="d-flex flex-row align-items-center mb-4">
+                                    <MDBIcon fas icon="lock me-3" size='lg'/>
+                                    <MDBInput 
+                                        label='Password' 
+                                        id='password' 
+                                        type='password' 
+                                        name="password" 
+                                        value={formik.values.password} 
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        className='w-100'
+                                    />
+                                    {formik.touched.password && formik.errors.password && (
+                                        <div className="text-danger">{formik.errors.password}</div>
+                                    )}
+                                </div>
+                                <div className="d-flex flex-row align-items-center mb-4">
+                                    <MDBIcon fas icon="key me-3" size='lg'/>
+                                    <MDBInput 
+                                        label='Repeat your password' 
+                                        id='confirmPassword' 
+                                        type='password' 
+                                        name="confirmPassword" 
+                                        value={formik.values.confirmPassword} 
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        className='w-100'
+                                    />
+                                    {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+                                        <div className="text-danger">{formik.errors.confirmPassword}</div>
+                                    )}
+                                </div>
+                                <div className='mb-4'>
+                                    <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='Subscribe to our newsletter' />
+                                </div>
+                                <MDBBtn className='mb-4' size='lg' type="submit">Register</MDBBtn>
+                            </form>
                         </MDBCol>
                         <MDBCol md='10' lg='6' className='order-1 order-lg-2 d-flex align-items-center'>
                             <MDBCardImage src='https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp' fluid/>

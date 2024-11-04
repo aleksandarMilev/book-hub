@@ -1,5 +1,5 @@
-import React from 'react';
-import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap';
+import React from 'react'
+import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap'
 
 export default function BookForm() {
     return (

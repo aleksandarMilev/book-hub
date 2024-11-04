@@ -1,7 +1,7 @@
-import { Link } from 'react-router-dom';
-import { MDBListGroupItem, MDBCardTitle, MDBCardText, MDBIcon } from 'mdb-react-ui-kit';
+import { Link } from 'react-router-dom'
+import { MDBListGroupItem, MDBCardTitle, MDBCardText, MDBIcon } from 'mdb-react-ui-kit'
 
-import { apiRoutes } from '../../common/constants'
+import { routes } from '../../common/constants/api'
 
 export default function BookListItem({ id, title, author, description }){
     return(
@@ -13,7 +13,7 @@ export default function BookListItem({ id, title, author, description }){
             <h6 className="text-muted mb-3">by {author}</h6>
             <MDBCardText>{description}</MDBCardText>
             <div className="mt-3">
-            <Link to={`${apiRoutes.books}/${id}`} className="btn btn-primary">
+            <Link to={`${routes.books}/${id}`} className="btn btn-primary">
                 View Details
             </Link>
             </div>

@@ -1,14 +1,12 @@
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom"
 
-import useFetch from '../../hooks/useFetch'
-import { getDetailsAsync } from '../../api/bookAPI';
+import * as useBook from '../../hooks/useBook'
 
 import DefaultSpinner from '../common/DefaultSpinner'
-import { useGetBookDetails } from "../../hooks/useBooks";
 
 export default function BookDetails() {
     const { id } = useParams()
-    const { book, isFetching } = useGetBookDetails(id)
+    const { book, isFetching } = useBook.useGetDetails(id)
 
     return (
         !isFetching ? (
@@ -53,6 +51,5 @@ export default function BookDetails() {
                 <DefaultSpinner />
             </div>
         )
-    );
+    )
 }
-

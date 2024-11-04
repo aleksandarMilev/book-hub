@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
-import { getAllAsync, getDetailsAsync } from '.././api/bookAPI'
+import * as bookApi from '../api/bookAPI'
 
-export function useGetAllBooks(){
+export function useGetAll(){
     const [books, setBooks] = useState([])
     const [isFetching, setIsFetching] = useState(false)
 
@@ -11,7 +11,7 @@ export function useGetAllBooks(){
 
         async function fetchData() {
             setIsFetching(old => !old)
-            setBooks(await getAllAsync(abortController.signal))
+            setBooks(await bookApi.getAllAsync(abortController.signal))
             setIsFetching(old => !old)
         };
 
@@ -22,7 +22,7 @@ export function useGetAllBooks(){
     return { books, isFetching }
 }
 
-export function useGetBookDetails(id){
+export function useGetDetails(id){
     const [book, setBook] = useState({})
     const [isFetching, setIsFetching] = useState(false)
 
@@ -31,7 +31,7 @@ export function useGetBookDetails(id){
 
         async function fetchData() {
             setIsFetching(old => !old)
-            setBook(await getDetailsAsync(id, abortController.signal))
+            setBook(await bookApi.getDetailsAsync(id, abortController.signal))
             setIsFetching(old => !old)
         };
 
