@@ -7,13 +7,13 @@ export function useGetAll(){
     const [isFetching, setIsFetching] = useState(false)
 
     useEffect(() => {
-        const abortController = new AbortController();
+        const abortController = new AbortController()
 
         async function fetchData() {
             setIsFetching(old => !old)
             setBooks(await bookApi.getAllAsync(abortController.signal))
             setIsFetching(old => !old)
-        };
+        }
 
         fetchData()
         return () => abortController.abort()
@@ -27,13 +27,13 @@ export function useGetDetails(id){
     const [isFetching, setIsFetching] = useState(false)
 
     useEffect(() => {
-        const abortController = new AbortController();
+        const abortController = new AbortController()
 
         async function fetchData() {
             setIsFetching(old => !old)
             setBook(await bookApi.getDetailsAsync(id, abortController.signal))
             setIsFetching(old => !old)
-        };
+        }
 
         fetchData()
         return () => abortController.abort()

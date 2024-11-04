@@ -6,17 +6,18 @@ import { MDBBtn, MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBCardImag
 from 'mdb-react-ui-kit'
 
 import { routes } from '../../common/constants/api'
-import { useRegister } from '../../hooks/useIdentity'
+import * as useIdentity from '../../hooks/useIdentity'
 
 export default function Register() {
     const navigate = useNavigate()
-    const onRegister = useRegister()
+    const onRegister = useIdentity.useRegister()
 
     const validationSchema = Yup.object({
         username: Yup.string().required('Username is required'),
         email: Yup.string().email('Invalid email format').required('Email is required'),
         password: Yup.string().required('Password is required'),
-        confirmPassword: Yup.string()
+        confirmPassword: Yup
+            .string()
             .oneOf([Yup.ref('password'), null], 'Passwords must match')
             .required('Please confirm your password')
     })
@@ -47,7 +48,7 @@ export default function Register() {
                         <MDBCol md='10' lg='6' className='order-2 order-lg-1 d-flex flex-column align-items-center'>
                             <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
                             <form onSubmit={formik.handleSubmit} className="w-100">
-                                <div className="d-flex flex-row align-items-center mb-4 ">
+                                <div className="d-flex flex-row align-items-center mb-4">
                                     <MDBIcon fas icon="user me-3" size='lg'/>
                                     <MDBInput 
                                         label='Your Name' 
@@ -59,10 +60,11 @@ export default function Register() {
                                         onBlur={formik.handleBlur} 
                                         className='w-100'
                                     />
-                                    {formik.touched.username && formik.errors.username && (
-                                        <div className="text-danger">{formik.errors.username}</div>
-                                    )}
                                 </div>
+                                {formik.touched.username && formik.errors.username && (
+                                    <div className="text-danger mb-3">{formik.errors.username}</div>
+                                )}
+
                                 <div className="d-flex flex-row align-items-center mb-4">
                                     <MDBIcon fas icon="envelope me-3" size='lg'/>
                                     <MDBInput 
@@ -75,10 +77,11 @@ export default function Register() {
                                         onBlur={formik.handleBlur}
                                         className='w-100'
                                     />
-                                    {formik.touched.email && formik.errors.email && (
-                                        <div className="text-danger">{formik.errors.email}</div>
-                                    )}
                                 </div>
+                                {formik.touched.email && formik.errors.email && (
+                                    <div className="text-danger mb-3">{formik.errors.email}</div>
+                                )}
+
                                 <div className="d-flex flex-row align-items-center mb-4">
                                     <MDBIcon fas icon="lock me-3" size='lg'/>
                                     <MDBInput 
@@ -91,10 +94,11 @@ export default function Register() {
                                         onBlur={formik.handleBlur}
                                         className='w-100'
                                     />
-                                    {formik.touched.password && formik.errors.password && (
-                                        <div className="text-danger">{formik.errors.password}</div>
-                                    )}
                                 </div>
+                                {formik.touched.password && formik.errors.password && (
+                                    <div className="text-danger mb-3">{formik.errors.password}</div>
+                                )}
+
                                 <div className="d-flex flex-row align-items-center mb-4">
                                     <MDBIcon fas icon="key me-3" size='lg'/>
                                     <MDBInput 
@@ -107,10 +111,11 @@ export default function Register() {
                                         onBlur={formik.handleBlur}
                                         className='w-100'
                                     />
-                                    {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-                                        <div className="text-danger">{formik.errors.confirmPassword}</div>
-                                    )}
                                 </div>
+                                {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+                                    <div className="text-danger mb-3">{formik.errors.confirmPassword}</div>
+                                )}
+
                                 <div className='mb-4'>
                                     <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='Subscribe to our newsletter' />
                                 </div>
@@ -124,5 +129,5 @@ export default function Register() {
                 </MDBCardBody>
             </MDBCard>
         </MDBContainer>
-    );
+    )
 }

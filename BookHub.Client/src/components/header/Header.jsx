@@ -1,55 +1,67 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { MDBNavbar, MDBNavbarNav, MDBNavbarItem, MDBNavbarToggler, MDBContainer, MDBIcon, MDBCollapse } from 'mdb-react-ui-kit'
+import React, { useContext, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Navbar, Nav, Container } from 'react-bootstrap';
 
-import { routes } from '../../common/constants/api'
+import { routes } from '../../common/constants/api';
+import { UserContext } from '../../contexts/userContext';
 
 export default function Header() {
-    const [showBasic, setShowBasic] = useState(false)
+    const [expanded, setExpanded] = useState(false);
+    const { isAuthenticated, username } = useContext(UserContext);
+
+    const handleToggle = () => {
+        setExpanded(prev => !prev);
+    };
 
     return (
         <header>
-            <MDBNavbar expand='lg' light bgColor='white'>
-                <MDBContainer fluid>
-                    <MDBNavbarToggler
-                        onClick={() => setShowBasic(prev => !prev)}
-                        aria-controls='navbarExample01'
-                        aria-expanded={showBasic}
-                        aria-label='Toggle navigation'
-                    >
-                        <MDBIcon fas icon='bars' />
-                    </MDBNavbarToggler>
-                    <MDBCollapse navbar show={showBasic ? true : undefined}>
-                        <MDBNavbarNav right className='mb-2 mb-lg-0'>
-                            <MDBNavbarItem active>
-                                <Link className="nav-link" to={routes.home}>
-                                    Home
-                                </Link>
-                            </MDBNavbarItem>
-                            <MDBNavbarItem>
-                                <Link className="nav-link" to={routes.register}>
-                                    Register
-                                </Link>
-                            </MDBNavbarItem>
-                            <MDBNavbarItem>
-                                <Link className="nav-link" to={routes.login}>
-                                    Login
-                                </Link>
-                            </MDBNavbarItem>
-                            <MDBNavbarItem>
-                                <Link className="nav-link" to={routes.books}>
-                                    Books
-                                </Link>
-                            </MDBNavbarItem>
-                            <MDBNavbarItem>
-                                <Link className="nav-link" to={routes.createBook}>
-                                    Create Book
-                                </Link>
-                            </MDBNavbarItem>
-                        </MDBNavbarNav>
-                    </MDBCollapse>
-                </MDBContainer>
-            </MDBNavbar>
+            <Navbar expand='lg' bg='light' variant='light' expanded={expanded}>
+                <Container fluid>
+                    <Navbar.Toggle aria-controls='responsive-navbar-nav' onClick={handleToggle} />
+                    <Navbar.Collapse id='responsive-navbar-nav'>
+                        <Nav className='me-auto'>
+                            <Nav.Link as={Link} to={routes.home}>
+                                Home
+                            </Nav.Link>
+                            <Nav.Link as={Link} to={routes.books}>
+                                Books
+                            </Nav.Link>
+                            <Nav.Link as={Link} to={routes.createBook}>
+                                Create Book
+                            </Nav.Link>
+                        </Nav>
+
+                        <Nav className='ms-auto'>
+                            {isAuthenticated ? (
+                                <>
+                                    <Nav.Item>
+                                    <span 
+                                        className="nav-link fw-bold" 
+                                        style={{ 
+                                            fontSize: '1.2em', 
+                                            fontStyle: 'italic', 
+                                            color: 'black'}}>
+                                                Hello, {username}!
+                                    </span>
+                                    </Nav.Item>
+                                    <Nav.Link as={Link} to={routes.logout}>
+                                        Logout
+                                    </Nav.Link>
+                                </>
+                            ) : (
+                                <>
+                                    <Nav.Link as={Link} to={routes.register}>
+                                        Register
+                                    </Nav.Link>
+                                    <Nav.Link as={Link} to={routes.login}>
+                                        Login
+                                    </Nav.Link>
+                                </>
+                            )}
+                        </Nav>
+                    </Navbar.Collapse>
+                </Container>
+            </Navbar>
         </header>
-    )
+    );
 }

@@ -6,42 +6,44 @@ export async function registerAsync(username, email, password) {
         username,
         email,
         password
-    };
+    }
 
     const options = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(user)
-    };
-
-    const url = baseUrl + routes.register;
-
-    try {
-        const response = await fetch(url, options);
-
-        if (!response.ok) {
-            const errorData = await response.json(); 
-            throw new Error(errorData.errorMessage || 'Registration failed');
-        }
-
-        return await response.json(); 
-    } catch (error) {
-        throw new Error(error.message || 'An unexpected error occurred');
     }
+
+    const url = baseUrl + routes.register
+    const response = await fetch(url, options)
+
+    if (response.ok) {
+        return await response.json()
+    }
+
+    const errorData = await response.json()
+    throw new Error(errorData.errorMessage || 'Registration failed')
 }
 
 export async function loginAsync(username, password) {
-    const user = { 
+    const user = {
         username,
-        password 
+        password
     }
 
-    const options =  {
+    const options = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(user)
-    } 
+    }
 
     const url = baseUrl + routes.login
-    return await fetch(url, options)
+    const response = await fetch(url, options)
+
+    if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.errorMessage || 'Login failed')
+    }
+
+    return await response.json() 
 }

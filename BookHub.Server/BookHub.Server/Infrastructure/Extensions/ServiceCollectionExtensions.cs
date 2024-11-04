@@ -4,8 +4,8 @@
 
     using BookHub.Server.Data;
     using BookHub.Server.Data.Models;
-    using BookHub.Server.Features.Books;
-    using BookHub.Server.Features.Identity;
+    using BookHub.Server.Features.Books.Service;
+    using BookHub.Server.Features.Identity.Service;
     using BookHub.Server.Infrastructure.Filters;
     using BookHub.Server.Infrastructure.Services;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
