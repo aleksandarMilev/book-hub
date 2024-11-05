@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import * as bookApi from '../api/bookAPI'
+import { UserContext } from '../contexts/userContext';
 
 export function useGetAll(){
     const [books, setBooks] = useState([])
@@ -43,6 +44,8 @@ export function useGetDetails(id){
 }
 
 export function useCreate(){
+    const { token } = useContext(UserContext) 
+
     const createHandler = async (title, author, description, imageUrl, userId) => {
         const book = {
             title,
@@ -53,7 +56,7 @@ export function useCreate(){
         }
 
         try {
-            const bookId = await bookApi.createAsync(book)
+            const bookId = await bookApi.createAsync(book, token)
             return bookId
         } catch (error) {
             throw new Error(error.message)

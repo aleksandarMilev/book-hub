@@ -4,6 +4,7 @@
     using BookHub.Server.Features.Books.Service;
     using BookHub.Server.Features.Books.Web.Models;
     using BookHub.Server.Infrastructure.Services;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     public class BooksController : ApiController
@@ -33,10 +34,12 @@
             return this.Ok(model);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> Create(CreateBookRequestModel model)
         {
-            var bookId = await this.bookService.CreateAsync(model.Author, model.Description, model.ImageUrl, model.Title);
+            var userId = this.userService.GetId();
+            var bookId = await this.bookService.CreateAsync(model.Author, model.Description, model.ImageUrl, model.Title, userId!);
             return this.Created(nameof(this.Create), bookId);
         }
     }

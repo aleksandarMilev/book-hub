@@ -22,7 +22,10 @@ export function UserContextProvider(props) {
 
     const changeAuthenticationState = (state) => setUser(state)
     
-    const logout = () => setUser({})
+    const logout = () => {
+        setUser({})
+        localStorage.removeItem('user')
+    }
 
     const userData = {
         userId: user.userId,

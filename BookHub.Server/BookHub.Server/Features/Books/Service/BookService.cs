@@ -37,14 +37,15 @@
               })
               .FirstOrDefaultAsync();
 
-        public async Task<int> CreateAsync(string author, string description, string imageUrl, string title)
+        public async Task<int> CreateAsync(string author, string description, string imageUrl, string title, string userId)
         {
             var book = new Book()
             {
                 Author = author,
                 Title = title,
                 Description = description,
-                ImageUrl = imageUrl
+                ImageUrl = imageUrl,
+                UserId = userId
             };
 
             this.data.Add(book);

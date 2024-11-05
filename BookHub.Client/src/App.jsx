@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom"
 
+import AuthenticatedRoute from './components/common/AuthenticatedRoute'
 import { routes } from "./common/constants/api"
 import { UserContextProvider } from "./contexts/userContext"
 
@@ -22,9 +23,9 @@ export default function App(){
                 <Route path={routes.login} element={<Login />} />
                 <Route path={routes.register} element={<Register />} />
                 <Route path={routes.logout} element={<Logout />} />
-                <Route path={routes.books} element={<BookList />} />
-                <Route path={routes.createBook} element={<CreateBook />} />
-                <Route path={routes.bookDetails} element={<BookDetails />} />
+                <Route path={routes.books} element={<AuthenticatedRoute element={<BookList />} />} />
+                <Route path={routes.createBook} element={<AuthenticatedRoute element={<CreateBook />} />} />
+                <Route path={routes.bookDetails} element={<AuthenticatedRoute element={<BookDetails />} />} />
             </Routes>
             <Footer /> 
         </UserContextProvider>

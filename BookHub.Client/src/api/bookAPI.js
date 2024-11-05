@@ -10,10 +10,11 @@ export async function getDetailsAsync(id, signal){
     return response.ok ? await response.json() : null
 }
 
-export async function createAsync(book){
+export async function createAsync(book, token){
     const options = {
         method: "POST",
         headers: {
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(book)
