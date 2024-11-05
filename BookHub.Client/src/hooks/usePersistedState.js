@@ -1,10 +1,10 @@
 import { useState } from "react";
 
-export default function usePersistedState(key, initState){
+export default function usePersistedState(localStorageKey, initState){
     const[state, setState] = useState(initState)
 
     function setPersistedState(value){
-        localStorage.setItem(key, JSON.stringify(value))
+        localStorage.setItem(localStorageKey, JSON.stringify(value))
         setState(value)
     }
 

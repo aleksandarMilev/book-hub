@@ -8,6 +8,7 @@ import Home from './components/home/Home'
 import Footer from './components/footer/Footer'
 import Login from './components/identity/Login'
 import Register from './components/identity/Register'
+import Logout from './components/identity/Logout'
 import CreateBook from './components/book/CreateBook'
 import BookList from "./components/book/BookList"
 import BookDetails from "./components/book/BookDetails"
@@ -20,6 +21,7 @@ export default function App(){
                 <Route path={routes.home} element={<Home />} />
                 <Route path={routes.login} element={<Login />} />
                 <Route path={routes.register} element={<Register />} />
+                <Route path={routes.logout} element={<Logout />} />
                 <Route path={routes.books} element={<BookList />} />
                 <Route path={routes.createBook} element={<CreateBook />} />
                 <Route path={routes.bookDetails} element={<BookDetails />} />

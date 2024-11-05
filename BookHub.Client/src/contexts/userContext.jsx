@@ -1,4 +1,4 @@
-import { createContext, useEffect } from "react"
+import { createContext } from "react"
 
 import usePersistedState from '../hooks/usePersistedState'
 
@@ -8,7 +8,8 @@ export const UserContext = createContext({
     email: '',
     token: '',
     isAuthenticated: false,
-    changeAuthenticationState: (st) => {}
+    changeAuthenticationState: (state) => {},
+    logout: () => {}
 })
 
 export function UserContextProvider(props) {
@@ -20,6 +21,8 @@ export function UserContextProvider(props) {
     const [user, setUser] = usePersistedState('user', getInitUser())
 
     const changeAuthenticationState = (state) => setUser(state)
+    
+    const logout = () => setUser({})
 
     const userData = {
         userId: user.userId,
@@ -27,7 +30,8 @@ export function UserContextProvider(props) {
         email: user.email,
         token: user.token,
         isAuthenticated: !!user.username,
-        changeAuthenticationState
+        changeAuthenticationState,
+        logout
     }
 
     return (
