@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { Route, Navigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 
 import { UserContext } from '../../contexts/userContext'
 import { routes } from '../../common/constants/api'

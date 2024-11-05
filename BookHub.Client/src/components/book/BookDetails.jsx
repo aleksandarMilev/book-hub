@@ -3,41 +3,57 @@ import { useParams } from "react-router-dom"
 import * as useBook from '../../hooks/useBook'
 
 import DefaultSpinner from '../common/DefaultSpinner'
+import { useContext } from "react"
+import { UserContext } from "../../contexts/userContext"
 
 export default function BookDetails() {
     const { id } = useParams()
     const { book, isFetching } = useBook.useGetDetails(id)
 
+    const { userId } = useContext(UserContext)
+    const isCreator = userId === book.userId
+
     return (
         !isFetching ? (
             book ? (
                 <div className="container mt-5">
-                    <div className="card shadow-lg p-4">
-                        <div className="row g-0">
-                            <div className="col-md-4 d-flex align-items-center">
-                                <img
-                                    src={book.imageUrl}
-                                    alt="Book Cover"
-                                    className="img-fluid rounded shadow-sm"
-                                    style={{ maxHeight: '300px', objectFit: 'contain', width: '100%' }}
-                                />
-                            </div>
-                            <div className="col-md-8">
-                                <div className="card-body">
-                                    <h2 className="card-title fw-bold text-primary">{book.title}</h2>
-                                    <h5 className="card-subtitle mb-3 text-muted">by {book.author}</h5>
-                                    <p className="card-text text-secondary" style={{ lineHeight: '1.6' }}>
-                                        {book.description}
-                                    </p>
-                                    <div className="d-flex gap-2 mt-4">
-                                        <a href="#" className="btn btn-primary">Buy Now</a>
-                                        <a href="#" className="btn btn-outline-primary">Add to Wishlist</a>
-                                    </div>
+                <div className="card shadow-lg p-4">
+                    <div className="row g-0">
+                        <div className="col-md-4 d-flex align-items-center">
+                            <img
+                                src={book.imageUrl}
+                                alt="Book Cover"
+                                className="img-fluid rounded shadow-sm"
+                                style={{ maxHeight: '300px', objectFit: 'contain', width: '100%' }}
+                            />
+                        </div>
+                        <div className="col-md-8">
+                            <div className="card-body">
+                                <h2 className="card-title fw-bold text-primary">{book.title}</h2>
+                                <h5 className="card-subtitle mb-3 text-muted">by {book.author}</h5>
+                                <p className="card-text text-secondary" style={{ lineHeight: '1.6' }}>
+                                    {book.description}
+                                </p>
+                                <div className="d-flex gap-2 mt-4">
+                                    <a href="#" className="btn btn-primary">Buy Now</a>
+                                    <a href="#" className="btn btn-outline-primary">Add to Wishlist</a>
+                                    {isCreator && (
+                                    <>
+                                        <a href="#" className="btn btn-warning ms-2" onClick={() => null}>
+                                            Edit
+                                        </a>
+                                        <a href="#" className="btn btn-danger ms-2" onClick={() => null}>
+                                            Delete
+                                        </a>
+                                    </>
+                                    )}
+                                   
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
             ) : (
                 <div className="container mt-5">
                     <div className="alert alert-danger text-center" role="alert">

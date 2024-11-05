@@ -33,7 +33,8 @@
                   Title = b.Title,
                   ImageUrl = b.ImageUrl,
                   Author = b.Author,
-                  Description = b.Description
+                  Description = b.Description,
+                  UserId = b.UserId
               })
               .FirstOrDefaultAsync();
 
