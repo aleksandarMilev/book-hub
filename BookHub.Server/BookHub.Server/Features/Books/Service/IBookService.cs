@@ -8,6 +8,6 @@
 
         Task<BookDetailsServiceModel?> GetDetailsAsync(int id);
 
-        Task<int> CreateAsync(string author, string description, string imageUrl, string title, string userId);
+        Task<int> CreateAsync(string author, string description, string imageUrl, string title);
     }
 }

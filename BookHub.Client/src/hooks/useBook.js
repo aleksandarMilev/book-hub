@@ -41,3 +41,24 @@ export function useGetDetails(id){
 
     return { book, isFetching }
 }
+
+export function useCreate(){
+    const createHandler = async (title, author, description, imageUrl, userId) => {
+        const book = {
+            title,
+            author,
+            description,
+            imageUrl,
+            userId
+        }
+
+        try {
+            const bookId = await bookApi.createAsync(book)
+            return bookId
+        } catch (error) {
+            throw new Error(error.message)
+        }
+    }
+
+    return createHandler
+}

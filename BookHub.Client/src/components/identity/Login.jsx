@@ -3,15 +3,14 @@ import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
-import { MDBBtn, MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBCardImage, MDBInput, MDBIcon, MDBCheckbox } 
-from 'mdb-react-ui-kit'
+import { MDBBtn, MDBContainer, MDBRow, MDBCol, MDBInput, MDBIcon, MDBCheckbox } from 'mdb-react-ui-kit'
 
 import { routes } from '../../common/constants/api'
 import * as useIdentity from '../../hooks/useIdentity'
 
 export default function Login() {
     const navigate = useNavigate()
-    const onLogin = useIdentity.useLogin()
+    const loginHandler = useIdentity.useLogin()
 
     const validationSchema = Yup.object({
         username: Yup.string().required('Username is required'),
@@ -26,7 +25,7 @@ export default function Login() {
         validationSchema,
         onSubmit: async (values, { setErrors }) => {
             try {
-                await onLogin(values.username, values.password)
+                await loginHandler(values.username, values.password)
                 navigate(routes.home);
             } catch (error) {
                 setErrors({ username: error.message || 'An error occurred' })
