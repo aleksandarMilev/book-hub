@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 
-import * as bookApi from '../api/bookAPI'
+import * as bookApi from '../api/bookApi'
 import { UserContext } from '../contexts/userContext';
 
 export function useGetAll(){

@@ -29,3 +29,19 @@ export async function createAsync(book, token){
     const bookId = await response.json()
     return bookId
 }
+
+export async function deleteAsync(bookId, token){
+    const options = {
+        method: "DELETE",
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+
+    const url = baseUrl + routes.books + `/${bookId}`
+    const response = await fetch(url, options)
+
+    if(!response.ok){
+        throw new Error('Something went wrong, please try again!')
+    }
+}
