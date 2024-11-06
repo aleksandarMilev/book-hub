@@ -3,6 +3,7 @@
     using BookHub.Server.Features;
     using BookHub.Server.Features.Books.Service;
     using BookHub.Server.Features.Books.Web.Models;
+    using BookHub.Server.Infrastructure.Extensions;
     using BookHub.Server.Infrastructure.Services;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -42,12 +43,7 @@
             var userId = this.userService.GetId();
             var succeed = await this.bookService.EditAsync(id, model.Title, model.Author, model.ImageUrl, model.Description, userId!);
 
-            if (succeed)
-            {
-                return this.NoContent();
-            }
-
-            return this.BadRequest();
+            return this.NoContentOrBadRequest(succeed);
         }
 
         [HttpDelete("{id}")]
@@ -56,12 +52,7 @@
             var userId = this.userService.GetId();
             var succeed = await this.bookService.DeleteAsync(id, userId!);
 
-            if (succeed)
-            {
-                return this.NoContent();
-            }
-
-            return this.BadRequest();
+            return this.NoContentOrBadRequest(succeed);
         }
     }
 }
