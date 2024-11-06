@@ -20,5 +20,14 @@
                     opt.SwaggerEndpoint("swagger/v1/swagger.json", "My BookHub API");
                     opt.RoutePrefix = string.Empty;
                 });
+
+        public static IApplicationBuilder UseAllowedCors(this IApplicationBuilder app)
+            => app
+                .UseCors(opt =>
+                {
+                    opt.AllowAnyOrigin();
+                    opt.AllowAnyHeader();
+                    opt.AllowAnyMethod();
+                });
     }
 }

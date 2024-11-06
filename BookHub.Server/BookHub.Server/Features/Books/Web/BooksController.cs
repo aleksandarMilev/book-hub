@@ -18,14 +18,15 @@
         public async Task<ActionResult> All()
         {
             var model = await this.bookService.GetAllAsync();
+
             return this.Ok(model);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult> Details(int id)
         {
-            Thread.Sleep(1000);
             var model = await this.bookService.GetDetailsAsync(id);
+
             return this.Ok(model);
         }
 
@@ -34,6 +35,7 @@
         {
             var userId = this.userService.GetId();
             var bookId = await this.bookService.CreateAsync(model.Author, model.Description, model.ImageUrl, model.Title, userId!);
+
             return this.Created(nameof(this.Create), bookId);
         }
 

@@ -31,13 +31,7 @@ namespace BookHub.Server
 
             app
                 .UseRouting()
-                .UseCors(opt =>
-                {
-                    opt.AllowAnyOrigin();
-                    opt.AllowAnyHeader();
-                    opt.AllowAnyMethod();
-
-                })
+                .UseAllowedCors()
                 .UseAuthorization()
                 .UseAuthorization()
                 .UseEndpoints(e => e.MapControllers())
