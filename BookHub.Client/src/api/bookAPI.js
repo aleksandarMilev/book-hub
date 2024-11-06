@@ -1,12 +1,28 @@
 import { baseUrl, routes } from '../common/constants/api'
 
-export async function getAllAsync(signal){
-    const response = await fetch(baseUrl + routes.books, signal)
+export async function getAllAsync(token){
+    const options = {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+
+    const url = baseUrl + routes.books
+    const response = await fetch(url, options)
     return response.ok ? await response.json() : null
 }
 
-export async function getDetailsAsync(id, signal){
-    const response = await fetch(baseUrl + routes.books + `/${id}`, signal)
+export async function getDetailsAsync(id, token){
+    const options = {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+
+    const url = baseUrl + routes.books + `/${id}`
+    const response = await fetch(url, options)
     return response.ok ? await response.json() : null
 }
 
@@ -30,6 +46,20 @@ export async function createAsync(book, token){
     return bookId
 }
 
+export async function editAsync(bookId, book, token){
+    const options = {
+        method: "PUT",
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(book)
+    }
+
+    const url = baseUrl + routes.books + `/${bookId}`
+    await fetch(url, options)
+}
+
 export async function deleteAsync(bookId, token){
     const options = {
         method: "DELETE",
@@ -39,9 +69,5 @@ export async function deleteAsync(bookId, token){
     }
 
     const url = baseUrl + routes.books + `/${bookId}`
-    const response = await fetch(url, options)
-
-    if(!response.ok){
-        throw new Error('Something went wrong, please try again!')
-    }
+    await fetch(url, options)
 }

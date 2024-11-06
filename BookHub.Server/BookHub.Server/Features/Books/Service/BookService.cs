@@ -52,6 +52,31 @@
             return book.Id;
         }
 
+        public async Task<bool> EditAsync(int id, string title, string author, string imageUrl, string description, string userId)
+        {
+            var book = await this.data
+                .Books
+                .FirstOrDefaultAsync(b => b.Id == id);
+
+            if (book is null)
+            {
+                return false;
+            }
+
+            if (book.UserId != userId)
+            {
+                return false;
+            }
+
+            book.Title = title;
+            book.Author = author;
+            book.ImageUrl = imageUrl;
+            book.Description = description;
+
+            await this.data.SaveChangesAsync();
+            return true;
+        }
+
         public async Task<bool> DeleteAsync(int id, string userId)
         {
             var book = await this.data

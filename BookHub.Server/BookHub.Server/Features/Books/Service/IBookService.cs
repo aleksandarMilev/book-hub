@@ -10,6 +10,8 @@
 
         Task<int> CreateAsync(string author, string description, string imageUrl, string title, string userId);
 
+        Task<bool> EditAsync(int id, string title, string author, string imageUrl, string description, string userId);
+
         Task<bool> DeleteAsync(int id, string userId);
     }
 }

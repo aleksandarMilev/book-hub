@@ -30,7 +30,6 @@ export default function Header() {
                                 Create Book
                             </Nav.Link>
                         </Nav>
-
                         <Nav className='ms-auto'>
                             {isAuthenticated ? (
                                 <>

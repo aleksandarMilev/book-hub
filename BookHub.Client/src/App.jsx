@@ -10,9 +10,10 @@ import Footer from './components/footer/Footer'
 import Login from './components/identity/Login'
 import Register from './components/identity/Register'
 import Logout from './components/identity/Logout'
-import CreateBook from './components/book/CreateBook'
 import BookList from "./components/book/BookList"
 import BookDetails from "./components/book/BookDetails"
+import CreateBook from './components/book/CreateBook'
+import EditBook from './components/book/EditBook'
 
 export default function App(){
     return(
@@ -26,6 +27,7 @@ export default function App(){
                 <Route path={routes.books} element={<AuthenticatedRoute element={<BookList />} />} />
                 <Route path={routes.createBook} element={<AuthenticatedRoute element={<CreateBook />} />} />
                 <Route path={routes.bookDetails} element={<AuthenticatedRoute element={<BookDetails />} />} />
+                <Route path={routes.editBook} element={<AuthenticatedRoute element={<EditBook />} />} />
             </Routes>
             <Footer /> 
         </UserContextProvider>

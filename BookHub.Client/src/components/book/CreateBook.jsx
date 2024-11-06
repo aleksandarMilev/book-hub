@@ -1,17 +1,14 @@
-import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap'
 
 import * as useBook from '../../hooks/useBook'
-import { UserContext } from '../../contexts/userContext' 
 import { routes } from '../../common/constants/api'
 
 export default function CreateBook() {
     const navigate = useNavigate()
     const createHandler = useBook.useCreate()
-    const { userId } = useContext(UserContext)
 
     const validationSchema = Yup.object({
         title: Yup.string().required('Title is required!'),
@@ -30,7 +27,7 @@ export default function CreateBook() {
         validationSchema,
         onSubmit: async (values, { setErrors }) => {
             try {
-                const bookId = await createHandler(values.title, values.author, values.description, values.imageUrl, userId)
+                const bookId = await createHandler(values.title, values.author, values.description, values.imageUrl)
                 navigate(routes.books + `/${bookId}`)
             } catch (error) {
                 setErrors({ title: error.message })
