@@ -8,9 +8,9 @@
 
         Task<BookDetailsServiceModel?> GetDetailsAsync(int id);
 
-        Task<int> CreateAsync(string author, string description, string imageUrl, string title, string userId);
+        Task<int> CreateAsync(CreateBookServiceModel model, string userId);
 
-        Task<bool> EditAsync(int id, string title, string author, string imageUrl, string description, string userId);
+        Task<bool> EditAsync(int id, CreateBookServiceModel model, string userId);
 
         Task<bool> DeleteAsync(int id, string userId);
     }

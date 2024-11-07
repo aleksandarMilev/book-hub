@@ -5,7 +5,7 @@
 
     using BookHub.Server.Data.Models.Base;
 
-    using static BookHub.Server.Data.Common.Validation.Book;
+    using static BookHub.Server.Common.Validation.Constants.Book;
 
     public class Book : DeletableEntity
     {

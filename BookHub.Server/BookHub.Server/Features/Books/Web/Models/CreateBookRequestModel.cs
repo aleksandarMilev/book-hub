@@ -2,24 +2,24 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    using static BookHub.Server.Data.Common.Validation.Book;
+    using static BookHub.Server.Common.Validation.Constants.Book;
 
     public class CreateBookRequestModel
     {
         [Required]
-        [MaxLength(AuthorMaxLength)]
+        [StringLength(AuthorMaxLength, MinimumLength = AuthorMinLength)]
         public string Author { get; set; } = null!;
 
         [Required]
-        [MaxLength(TitleMaxLength)]
-        public string Title { get; init; } = null!;
+        [StringLength(TitleMaxLength, MinimumLength = TitleMinLength)]
+        public string Title { get; set; } = null!;
 
         [Required]
-        [MaxLength(DescriptionMaxLength)]
+        [StringLength(DescriptionMaxLength, MinimumLength = DescriptionMinLength)]
         public string Description { get; set; } = null!;
 
         [Required]
-        [MaxLength(ImageUrlMaxLength)]
+        [StringLength(ImageUrlMaxLength, MinimumLength = ImageUrlMinLength)]
         public string ImageUrl { get; set; } = null!;
 
         public string? UserId { get; set; }

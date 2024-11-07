@@ -9,7 +9,10 @@ export default function Logout(){
     const navigate = useNavigate()
 
     useEffect(() => {
-        logout();
+        logout()
         navigate(routes.home)
+        
     }, [logout, navigate])
+
+    return null
 }

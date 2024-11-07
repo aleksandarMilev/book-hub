@@ -35,14 +35,14 @@
                 })
                 .FirstOrDefaultAsync(b => b.Id == id);
 
-        public async Task<int> CreateAsync(string author, string description, string imageUrl, string title, string userId)
+        public async Task<int> CreateAsync(CreateBookServiceModel model, string userId)
         {
             var book = new Book()
             {
-                Author = author,
-                Title = title,
-                Description = description,
-                ImageUrl = imageUrl,
+                Author = model.Author,
+                Title = model.Title,
+                Description = model.Description,
+                ImageUrl = model.ImageUrl,
                 UserId = userId
             };
 
@@ -52,28 +52,24 @@
             return book.Id;
         }
 
-        public async Task<bool> EditAsync(int id, string title, string author, string imageUrl, string description, string userId)
+        public async Task<bool> EditAsync(int id, CreateBookServiceModel model, string userId)
         {
             var book = await this.data
                 .Books
-                .FirstOrDefaultAsync(b => b.Id == id);
+                .FindAsync(id);
 
-            if (book is null)
+            if (book is null || book.UserId != userId)
             {
                 return false;
             }
 
-            if (book.UserId != userId)
-            {
-                return false;
-            }
-
-            book.Title = title;
-            book.Author = author;
-            book.ImageUrl = imageUrl;
-            book.Description = description;
+            book.Title = model.Title;
+            book.Author = model.Author;
+            book.ImageUrl = model.ImageUrl;
+            book.Description = model.Description;
 
             await this.data.SaveChangesAsync();
+
             return true;
         }
 

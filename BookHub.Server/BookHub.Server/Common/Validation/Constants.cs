@@ -1,8 +1,8 @@
-﻿namespace BookHub.Server.Data.Common
+﻿namespace BookHub.Server.Common.Validation
 {
-    public static class Validation
+    public static class Constants
     {
-        public static class Book 
+        public static class Book
         {
             public const int DescriptionMinLength = 10;
             public const int DescriptionMaxLength = 2_000;

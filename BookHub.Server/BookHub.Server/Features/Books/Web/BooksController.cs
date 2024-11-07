@@ -2,6 +2,7 @@
 {
     using BookHub.Server.Features;
     using BookHub.Server.Features.Books.Service;
+    using BookHub.Server.Features.Books.Service.Models;
     using BookHub.Server.Features.Books.Web.Models;
     using BookHub.Server.Infrastructure.Extensions;
     using BookHub.Server.Infrastructure.Services;
@@ -15,11 +16,11 @@
         private readonly ICurrentUserService userService = userService;
 
         [HttpGet]
-        public async Task<ActionResult> All()
+        public async Task<ActionResult<IEnumerable<BookListServiceModel>>> All()
         {
-            var model = await this.bookService.GetAllAsync();
+            var models = await this.bookService.GetAllAsync();
 
-            return this.Ok(model);
+            return this.Ok(models);
         }
 
         [HttpGet("{id}")]
@@ -31,19 +32,35 @@
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(CreateBookRequestModel model)
+        public async Task<ActionResult> Create(CreateBookRequestModel webModel)
         {
             var userId = this.userService.GetId();
-            var bookId = await this.bookService.CreateAsync(model.Author, model.Description, model.ImageUrl, model.Title, userId!);
+            var serviceModel = new CreateBookServiceModel()
+            {
+                Title = webModel.Title,
+                Author = webModel.Author,
+                ImageUrl = webModel.ImageUrl,
+                Description = webModel.Description
+            };
+
+            var bookId = await this.bookService.CreateAsync(serviceModel, userId!);
 
             return this.Created(nameof(this.Create), bookId);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Edit(int id, CreateBookRequestModel model)
+        public async Task<ActionResult> Edit(int id, CreateBookRequestModel webModel)
         {
             var userId = this.userService.GetId();
-            var succeed = await this.bookService.EditAsync(id, model.Title, model.Author, model.ImageUrl, model.Description, userId!);
+            var serviceModel = new CreateBookServiceModel()
+            {
+                Title = webModel.Title,
+                Author = webModel.Author,
+                ImageUrl = webModel.ImageUrl,
+                Description = webModel.Description
+            };
+
+            var succeed = await this.bookService.EditAsync(id, serviceModel, userId!);
 
             return this.NoContentOrBadRequest(succeed);
         }
