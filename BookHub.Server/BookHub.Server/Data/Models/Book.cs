@@ -5,31 +5,42 @@
 
     using BookHub.Server.Data.Models.Base;
 
-    using static BookHub.Server.Common.Validation.Constants.Book;
+    using static BookHub.Server.Common.Validation.Constants.BookValidation;
 
     public class Book : DeletableEntity
     {
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(AuthorMaxLength)]
-        public string Author { get; set; } = null!;
-
-        [Required]
         [MaxLength(TitleMaxLength)]
         public string Title { get; set; } = null!;
 
         [Required]
-        [MaxLength(DescriptionMaxLength)]
-        public string Description { get; set; } = null!;
+        [MaxLength(ShortDescriptionMaxLength)]
+        public string ShortDescription { get; set; } = null!;
+
+        [Required]
+        [MaxLength(LongDescriptionMaxLength)]
+        public string LongDescription { get; set; } = null!;
+
+        public double Rating { get; set; }
 
         [Required]
         [MaxLength(ImageUrlMaxLength)]
         public string ImageUrl { get; set; } = null!;
 
-        [ForeignKey(nameof(User))]
-        public string? UserId { get; set; } 
+        [ForeignKey(nameof(Author))]
+        public int AuthorId { get; set; }
 
-        public User? User { get; set; } 
+        public Author Author { get; set; } = null!;
+
+        [ForeignKey(nameof(User))]
+        public string? CreatorId { get; set; }
+
+        public User? Creator { get; set; }
+
+        public ICollection<Genre> Genres { get; } = new HashSet<Genre>();
+
+        public ICollection<Review> Reviews { get; } = new HashSet<Review>();  
     }
 }

@@ -2,7 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    using static BookHub.Server.Common.Validation.Constants.Book;
+    using static BookHub.Server.Common.Validation.Constants.BookValidation;
 
     public class CreateBookRequestModel
     {
@@ -15,7 +15,7 @@
         public string Title { get; set; } = null!;
 
         [Required]
-        [StringLength(DescriptionMaxLength, MinimumLength = DescriptionMinLength)]
+        //[StringLength(DescriptionMaxLength, MinimumLength = DescriptionMinLength)]
         public string Description { get; set; } = null!;
 
         [Required]

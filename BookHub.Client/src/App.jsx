@@ -26,8 +26,8 @@ export default function App(){
                 <Route path={routes.logout} element={<Logout />} />
                 <Route path={routes.books} element={<AuthenticatedRoute element={<BookList />} />} />
                 <Route path={routes.createBook} element={<AuthenticatedRoute element={<CreateBook />} />} />
-                <Route path={routes.bookDetails} element={<AuthenticatedRoute element={<BookDetails />} />} />
-                <Route path={routes.editBook} element={<AuthenticatedRoute element={<EditBook />} />} />
+                <Route path={routes.books + '/:id'} element={<AuthenticatedRoute element={<BookDetails />} />} />
+                <Route path={routes.editBook + '/:id'} element={<AuthenticatedRoute element={<EditBook />} />} />
             </Routes>
             <Footer /> 
         </UserContextProvider>

@@ -16,8 +16,7 @@
                 {
                     Id = b.Id,
                     Title = b.Title,
-                    ImageUrl = b.ImageUrl,
-                    Author = b.Author,
+                    ImageUrl = b.ImageUrl
                 })
                 .ToListAsync();
 
@@ -29,9 +28,7 @@
                     Id = b.Id,
                     Title = b.Title,
                     ImageUrl = b.ImageUrl,
-                    Author = b.Author,
-                    Description = b.Description,
-                    UserId = b.UserId
+                    UserId = b.CreatorId
                 })
                 .FirstOrDefaultAsync(b => b.Id == id);
 
@@ -39,11 +36,11 @@
         {
             var book = new Book()
             {
-                Author = model.Author,
-                Title = model.Title,
-                Description = model.Description,
-                ImageUrl = model.ImageUrl,
-                UserId = userId
+                //Author = model.Author,
+                //Title = model.Title,
+                //Description = model.Description,
+                //ImageUrl = model.ImageUrl,
+                //UserId = userId
             };
 
             this.data.Add(book);
@@ -58,15 +55,15 @@
                 .Books
                 .FindAsync(id);
 
-            if (book is null || book.UserId != userId)
+            if (book is null || book.CreatorId != userId)
             {
                 return false;
             }
 
-            book.Title = model.Title;
-            book.Author = model.Author;
-            book.ImageUrl = model.ImageUrl;
-            book.Description = model.Description;
+            //book.Title = model.Title;
+            //book.Author = model.Author;
+            //book.ImageUrl = model.ImageUrl;
+            //book.Description = model.Description;
 
             await this.data.SaveChangesAsync();
 
@@ -79,7 +76,7 @@
               .Books
               .FindAsync(id);
 
-            if (book is null || book.UserId != userId)
+            if (book is null || book.CreatorId != userId)
             {
                 return false;
             }

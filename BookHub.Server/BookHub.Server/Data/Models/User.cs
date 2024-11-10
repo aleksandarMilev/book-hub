@@ -19,6 +19,12 @@
 
         public string? DeletedBy { get; set; }
 
-        public IEnumerable<Book> Books { get; } = new List<Book>();
+        public ICollection<Book> Books { get; } = new HashSet<Book>();
+
+        public ICollection<Author> Authors { get; } = new HashSet<Author>();
+
+        public ICollection<Reply> Replies { get; } = new HashSet<Reply>();
+
+        public ICollection<Review> Reviews { get; } = new HashSet<Review>();
     }
 }

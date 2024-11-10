@@ -16,6 +16,14 @@
 
         public DbSet<Book> Books { get; set; }
 
+        public DbSet<Genre> Genres { get; set; }
+
+        public DbSet<Author> Authors { get; set; }
+
+        public DbSet<Review> Reviews { get; set; }
+
+        public DbSet<Reply> Replies { get; set; }
+
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
             this.ApplyAuditInfo();
@@ -70,22 +78,20 @@
                 });
 
         private static void FilterDeletedModels(ModelBuilder modelBuilder)
-        {
-            var deletableEntities = modelBuilder
-               .Model
-               .GetEntityTypes()
-               .Where(e =>
-               {
-                   return typeof(IDeletableEntity).IsAssignableFrom(e.ClrType);
-               });
-
-            foreach (var e in deletableEntities)
-            {
-                modelBuilder
-                    .Entity(e.ClrType)
-                    .HasQueryFilter(DeletableFilterExpression(e.ClrType));
-            }
-        }
+            => modelBuilder
+                .Model
+                .GetEntityTypes()
+                .Where(e =>
+                {
+                    return typeof(IDeletableEntity).IsAssignableFrom(e.ClrType);
+                })
+                .ToList()
+                .ForEach(e =>
+                {
+                    modelBuilder
+                        .Entity(e.ClrType)
+                        .HasQueryFilter(DeletableFilterExpression(e.ClrType));
+                });
 
         private static LambdaExpression DeletableFilterExpression(Type entityType)
         {

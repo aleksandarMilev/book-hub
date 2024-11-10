@@ -49,7 +49,7 @@ export default function BookDetails() {
                                     {isCreator && (
                                     <>
                                         <Link 
-                                            to={routes.books + `/edit/${id}`}
+                                            to={routes.editBook + `/${id}`}
                                             className="btn btn-warning ms-2">
                                                 Edit
                                         </Link>
