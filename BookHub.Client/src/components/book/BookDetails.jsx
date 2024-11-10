@@ -18,7 +18,7 @@ export default function BookDetails() {
         await bookApi.deleteAsync(id, token)
         navigate(routes.books)
     }
-  
+
     const bookUserId = book ? book.userId : null
     const isCreator = userId === bookUserId
 

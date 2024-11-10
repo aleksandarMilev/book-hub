@@ -1,13 +1,13 @@
 import Hero from "./Hero"
-import Table from "./Table"
-import Card from "./Card"
+import TopAuthors from "./TopAuthors"
+import TopBooks from "./TopBooks"
 
 export default function Home(){
     return(
         <>
             <Hero/>
-            <Table/>
-            <Card />
+            <TopAuthors/>
+            <TopBooks />
         </>
     )
 }

@@ -39,9 +39,13 @@ export default function Header() {
                                         style={{ 
                                             fontSize: '1.2em', 
                                             fontStyle: 'italic', 
-                                            color: 'black'}}>
-                                                Hello, {username}!
+                                            color: 'black',
+                                            fontFamily: 'Edu AU VIC WA NT Pre, cursive' 
+                                        }}
+                                    >
+                                        Hello, {username}!
                                     </span>
+
                                     </Nav.Item>
                                     <Nav.Link as={Link} to={routes.logout}>
                                         Logout

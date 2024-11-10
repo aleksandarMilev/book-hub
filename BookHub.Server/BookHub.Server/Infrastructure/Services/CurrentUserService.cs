@@ -4,12 +4,9 @@
 
     using BookHub.Server.Infrastructure.Extensions;
 
-    public class CurrentUserService : ICurrentUserService
+    public class CurrentUserService(IHttpContextAccessor httpContext) : ICurrentUserService
     {
-        private readonly ClaimsPrincipal user;
-
-        public CurrentUserService(IHttpContextAccessor httpContext)
-            => this.user = httpContext.HttpContext?.User!;
+        private readonly ClaimsPrincipal user = httpContext.HttpContext?.User!;
 
         public string? GetUsername()
             => this.user?.Identity?.Name;

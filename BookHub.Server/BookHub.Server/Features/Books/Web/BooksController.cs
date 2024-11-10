@@ -10,7 +10,9 @@
     using Microsoft.AspNetCore.Mvc;
 
     [Authorize]
-    public class BooksController(IBookService bookService, ICurrentUserService userService) : ApiController
+    public class BooksController(
+        IBookService bookService,
+        ICurrentUserService userService) : ApiController
     {
         private readonly IBookService bookService = bookService;
         private readonly ICurrentUserService userService = userService;

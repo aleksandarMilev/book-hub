@@ -1,23 +1,13 @@
 ﻿namespace BookHub.Server.Features.Identity.Web.Models
 {
-    public class LoginResponseModel
+    public class LoginResponseModel(string username, string email, string userId, string token)
     {
-        public LoginResponseModel() { }
+        public string Username { get; init; } = username;
 
-        public LoginResponseModel(string username, string email, string userId, string token)
-        {
-            this.Username = username;
-            this.Email = email;
-            this.UserId = userId;
-            this.Token = token;
-        }
+        public string Email { get; init; } = email;
 
-        public string Username { get; init; } = null!;
+        public string UserId { get; init; } = userId;
 
-        public string Email { get; init; } = null!;
-
-        public string UserId { get; init; } = null!;
-
-        public string Token { get; init; } = null!;
+        public string Token { get; init; } = token;
     }
 }

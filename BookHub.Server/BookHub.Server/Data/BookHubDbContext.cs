@@ -8,13 +8,11 @@
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
 
-    public class BookHubDbContext : IdentityDbContext<User>
+    public class BookHubDbContext(
+        DbContextOptions<BookHubDbContext> options, 
+        ICurrentUserService userService) : IdentityDbContext<User>(options)
     {
-        private readonly ICurrentUserService userService;
-
-        public BookHubDbContext(DbContextOptions<BookHubDbContext> options, ICurrentUserService userService)
-            : base(options)
-            => this.userService = userService;
+        private readonly ICurrentUserService userService = userService;
 
         public DbSet<Book> Books { get; set; }
 
@@ -33,21 +31,7 @@
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            var deletableEntities = modelBuilder
-                .Model
-                .GetEntityTypes()
-                .Where(e =>
-                {
-                    return typeof(IDeletableEntity).IsAssignableFrom(e.ClrType);
-                });
-
-            foreach (var e in deletableEntities)
-            {
-                modelBuilder
-                    .Entity(e.ClrType)
-                    .HasQueryFilter(MakeFilterExpression(e.ClrType));
-            }
+            FilterDeletedModels(modelBuilder);
         }
 
         private void ApplyAuditInfo() 
@@ -66,6 +50,7 @@
                         deletableEntity.IsDeleted = true;
 
                         e.State = EntityState.Modified;
+
                         return;
                     }
 
@@ -84,7 +69,25 @@
                     }
                 });
 
-        private static LambdaExpression MakeFilterExpression(Type entityType)
+        private static void FilterDeletedModels(ModelBuilder modelBuilder)
+        {
+            var deletableEntities = modelBuilder
+               .Model
+               .GetEntityTypes()
+               .Where(e =>
+               {
+                   return typeof(IDeletableEntity).IsAssignableFrom(e.ClrType);
+               });
+
+            foreach (var e in deletableEntities)
+            {
+                modelBuilder
+                    .Entity(e.ClrType)
+                    .HasQueryFilter(DeletableFilterExpression(e.ClrType));
+            }
+        }
+
+        private static LambdaExpression DeletableFilterExpression(Type entityType)
         {
             var parameter = Expression.Parameter(entityType, "e");
             var isDeletedProperty = Expression.Property(parameter, nameof(IDeletableEntity.IsDeleted));
