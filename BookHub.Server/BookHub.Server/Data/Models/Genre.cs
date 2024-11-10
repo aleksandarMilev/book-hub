@@ -4,7 +4,7 @@
 
     using BookHub.Server.Data.Models.Base;
 
-    using static BookHub.Server.Common.Validation.Constants.GenreValidation;
+    using static BookHub.Server.Common.Validation.Validation.GenreValidation;
 
     public class Genre : DeletableEntity
     {

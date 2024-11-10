@@ -2,7 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    using static BookHub.Server.Common.Validation.Constants.BookValidation;
+    using static BookHub.Server.Common.Validation.Validation.BookValidation;
 
     public class CreateBookRequestModel
     {

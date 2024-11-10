@@ -8,6 +8,8 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Options;
 
+    using static BookHub.Server.Common.Messages.Error.Identity;
+
     public class IdentityController(
         IIdentityService identityService,
         UserManager<User> userManager,
@@ -35,7 +37,10 @@
                 return this.Ok(new LoginResponseModel(user.UserName!, user.Email!, user.Id, token));
             }
 
-            var errorMessage = result.Errors.Select(e => e.Description).ToList();
+            var errorMessage = result
+                .Errors
+                .Select(e => e.Description)
+                .ToList();
 
             return this.Unauthorized(new { errorMessage });
         }
@@ -48,7 +53,7 @@
 
             if (user == null)
             {
-                return this.Unauthorized(new { errorMessage = "Invalid log in attempt" });
+                return this.Unauthorized(new { errorMessage = InvalidLoginAttempt });
             }
 
             var passwordIsValid = await this.userManager.CheckPasswordAsync(user, model.Password);
@@ -60,7 +65,7 @@
                 return this.Ok(new LoginResponseModel(user.UserName!, user.Email!, user.Id, token));
             }
 
-            return this.Unauthorized(new { errorMessage = "Invalid log in attempt" });
+            return this.Unauthorized(new { errorMessage = InvalidLoginAttempt });
         }
     }
 }

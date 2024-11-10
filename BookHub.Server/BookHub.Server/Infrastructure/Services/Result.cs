@@ -15,6 +15,7 @@
 
         public string? ErrorMessage { get; init; }
 
+
         public static implicit operator Result(bool succeeded)
             => new(succeeded);
 
