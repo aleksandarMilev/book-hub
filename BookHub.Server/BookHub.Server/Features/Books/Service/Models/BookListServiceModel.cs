@@ -6,8 +6,14 @@
 
         public string Title { get; init; } = null!;
 
-        public string Author { get; set; } = null!;
+        public string AuthorName { get; init; } = null!;
 
-        public string ImageUrl { get; set; } = null!;
+        public string ImageUrl { get; init; } = null!;
+
+        public string ShortDescription { get; init; } = null!;
+
+        public double Rating { get; init; } 
+
+        public ICollection<string> Genres { get; init; } = new HashSet<string>();
     }
 }

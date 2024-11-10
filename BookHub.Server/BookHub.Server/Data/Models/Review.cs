@@ -5,7 +5,7 @@
 
     using BookHub.Server.Data.Models.Base;
 
-    using static BookHub.Server.Common.Validation.Validation.ReviewValidation;
+    using static BookHub.Server.Common.Constants.Validation.Review;
 
     public class Review : DeletableEntity
     {

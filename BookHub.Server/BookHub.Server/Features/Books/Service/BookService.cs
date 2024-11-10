@@ -15,11 +15,19 @@
         public async Task<IEnumerable<BookListServiceModel>> GetAllAsync()
             => await this.data
                 .Books
+                .Include(b => b.Author)
+                .Include(b => b.Genres)
                 .Select(b => new BookListServiceModel()
                 {
                     Id = b.Id,
                     Title = b.Title,
-                    ImageUrl = b.ImageUrl
+                    ImageUrl = b.ImageUrl,
+                    ShortDescription = b.ShortDescription,
+                    Rating = b.Rating,
+                    Genres = b.Genres
+                        .Select(g => g.Name)
+                        .ToList(),
+                    AuthorName = b.Author.Name
                 })
                 .ToListAsync();
 

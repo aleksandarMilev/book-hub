@@ -40,9 +40,7 @@
             var serviceModel = new CreateBookServiceModel()
             {
                 Title = webModel.Title,
-                Author = webModel.Author,
                 ImageUrl = webModel.ImageUrl,
-                Description = webModel.Description
             };
 
             var bookId = await this.bookService.CreateAsync(serviceModel, userId!);
@@ -57,23 +55,21 @@
             var serviceModel = new CreateBookServiceModel()
             {
                 Title = webModel.Title,
-                Author = webModel.Author,
                 ImageUrl = webModel.ImageUrl,
-                Description = webModel.Description
             };
 
-            var succeed = await this.bookService.EditAsync(id, serviceModel, userId!);
+            var result = await this.bookService.EditAsync(id, serviceModel, userId!);
 
-            return this.NoContentOrBadRequest(succeed);
+            return this.NoContentOrBadRequest(result);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
             var userId = this.userService.GetId();
-            var succeed = await this.bookService.DeleteAsync(id, userId!);
+            var result = await this.bookService.DeleteAsync(id, userId!);
 
-            return this.NoContentOrBadRequest(succeed);
+            return this.NoContentOrBadRequest(result);
         }
     }
 }

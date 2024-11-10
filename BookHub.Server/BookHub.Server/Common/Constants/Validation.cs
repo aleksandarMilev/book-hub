@@ -18,6 +18,9 @@
 
             public const int TitleMinLength = 2;
             public const int TitleMaxLength = 200;
+
+            public const double RatingMinValue = 1.0;
+            public const double RatingMaxValue = 5.0;
         }
 
         public static class Author

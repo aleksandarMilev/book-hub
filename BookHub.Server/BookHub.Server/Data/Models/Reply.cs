@@ -6,7 +6,7 @@
     using BookHub.Server.Data.Models.Base;
     using Microsoft.EntityFrameworkCore;
 
-    using static BookHub.Server.Common.Validation.Validation.ReplyValidation;
+    using static BookHub.Server.Common.Constants.Validation.Reply;
 
     public class Reply : DeletableEntity
     {

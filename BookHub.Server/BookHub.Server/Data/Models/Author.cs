@@ -5,7 +5,7 @@
     using BookHub.Server.Data.Models.Base;
     using BookHub.Server.Data.Models.Enums;
 
-    using static BookHub.Server.Common.Validation.Validation.AuthorValidation;
+    using static BookHub.Server.Common.Constants.Validation.Author;
 
     public class Author : DeletableEntity
     {
