@@ -7,5 +7,8 @@ export const routes = {
     logout: '/identity/logout',
     books: '/books',
     createBook: '/books/new',
-    editBook: '/books/edit'
+    editBook: '/books/edit',
+    author: '/author',
+    authorNationalities: '/author/nationalities',
+    createAuthor: '/auhtor/new'
 }

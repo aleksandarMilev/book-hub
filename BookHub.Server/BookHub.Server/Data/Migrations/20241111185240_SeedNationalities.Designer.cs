@@ -4,6 +4,7 @@ using BookHub.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookHub.Server.Data.Migrations
 {
     [DbContext(typeof(BookHubDbContext))]
-    partial class BookHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241111185240_SeedNationalities")]
+    partial class SeedNationalities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1347,59 +1350,53 @@ namespace BookHub.Server.Data.Migrations
                         {
                             Id = 183,
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Unknown"
+                            Name = "Uruguay"
                         },
                         new
                         {
                             Id = 184,
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Uruguay"
+                            Name = "Uzbekistan"
                         },
                         new
                         {
                             Id = 185,
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Uzbekistan"
+                            Name = "Vanuatu"
                         },
                         new
                         {
                             Id = 186,
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Vanuatu"
+                            Name = "Vatican City"
                         },
                         new
                         {
                             Id = 187,
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Vatican City"
+                            Name = "Venezuela"
                         },
                         new
                         {
                             Id = 188,
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Venezuela"
+                            Name = "Vietnam"
                         },
                         new
                         {
                             Id = 189,
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Vietnam"
+                            Name = "Yemen"
                         },
                         new
                         {
                             Id = 190,
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Yemen"
-                        },
-                        new
-                        {
-                            Id = 191,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Zambia"
                         },
                         new
                         {
-                            Id = 192,
+                            Id = 191,
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Zimbabwe"
                         });

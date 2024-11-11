@@ -1,7 +1,5 @@
 ﻿namespace BookHub.Server.Features.Authors.Service.Models
 {
-    using Common;
-
     public class AuthorDetailsServiceModel
     {
         public int Id { get; init; }
@@ -16,13 +14,13 @@
 
         public double Rating { get; init; }
 
-        public Nationality Nationality { get; init; }
+        public string Nationality { get; init; } = null!;
 
-        public Gender Gender { get; init; }
+        public string Gender { get; init; } = null!;
 
-        public DateTime? BornAt { get; init; }
+        public string? BornAt { get; init; }
 
-        public DateTime? DiedAt { get; init; }
+        public string? DiedAt { get; init; }
 
         public string? CreatorId { get; set; }
     }

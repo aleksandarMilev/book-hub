@@ -29,7 +29,10 @@
 
         public double Rating { get; set; }
 
-        public Nationality Nationality { get; set; }
+        [ForeignKey(nameof(Nationality))]
+        public int NationalityId { get; set; }
+
+        public Nationality Nationality { get; set; } = null!;
 
         public Gender Gender { get; set; }
 

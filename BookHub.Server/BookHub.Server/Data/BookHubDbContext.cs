@@ -2,11 +2,12 @@
 {
     using System.Linq.Expressions;
 
-    using Models;
-    using Models.Base;
     using Infrastructure.Services;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
+    using Models;
+    using Models.Base;
+    using Seed;
 
     public class BookHubDbContext(
         DbContextOptions<BookHubDbContext> options, 
@@ -19,6 +20,8 @@
         public DbSet<Genre> Genres { get; set; }
 
         public DbSet<Author> Authors { get; set; }
+
+        public DbSet<Nationality> Nationalities { get; set; }
 
         public DbSet<Review> Reviews { get; set; }
 
@@ -41,6 +44,11 @@
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder
+                .Entity<Nationality>()
+                .HasData(NationalitiesSeeder.Seed());
+
             FilterDeletedModels(modelBuilder);
         }
 

@@ -2,8 +2,6 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    using Common;
-
     using static Server.Common.Constants.Validation.Author;
 
     public class CreateAuthorWebModel
@@ -12,9 +10,8 @@
         [StringLength(NameMaxLength, MinimumLength = NameMinLength)]
         public string Name { get; init; } = null!;
 
-        [Required]
         [StringLength(ImageUrlMaxLength, MinimumLength = ImageUrlMinLength)]
-        public string ImageUrl { get; init; } = null!;
+        public string? ImageUrl { get; init; }
 
         [Required]
         [StringLength(BiographyMaxLength, MinimumLength = BiographyMinLength)]
@@ -25,12 +22,12 @@
 
         public double Rating { get; init; }
 
-        public Nationality Nationality { get; init; }
+        public string Nationality { get; init; } = null!;
 
-        public Gender Gender { get; init; }
+        public string Gender { get; init; } = null!;
 
-        public DateTime? BornAt { get; init; }
+        public string? BornAt { get; init; }
 
-        public DateTime? DiedAt { get; init; }
+        public string? DiedAt { get; init; }
     }
 }

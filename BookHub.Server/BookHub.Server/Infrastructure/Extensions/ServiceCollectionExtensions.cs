@@ -1,7 +1,8 @@
 ﻿namespace BookHub.Server.Infrastructure.Extensions
 {
     using System.Text;
-
+    using System.Text.Json;
+    using System.Text.Json.Serialization;
     using Data;
     using Data.Models;
     using Features.Authors.Service;

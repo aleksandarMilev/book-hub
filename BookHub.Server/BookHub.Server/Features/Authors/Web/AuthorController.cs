@@ -18,6 +18,13 @@
         private readonly ICurrentUserService userService = userService;
         private readonly IMapper mapper = mapper;
 
+        [HttpGet("[action]")]
+        public ActionResult Nationalities()
+        {
+            var nationalities = this.authorService.GetNationalities();
+            return this.Ok(nationalities);
+        }
+
         [HttpPost]
         public async Task<ActionResult> Create(CreateAuthorWebModel webModel)
         {

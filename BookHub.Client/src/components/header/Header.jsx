@@ -29,6 +29,9 @@ export default function Header() {
                             <Nav.Link as={Link} to={routes.createBook}>
                                 Create Book
                             </Nav.Link>
+                            <Nav.Link as={Link} to={routes.createAuthor}>
+                                Create Author
+                            </Nav.Link>
                         </Nav>
                         <Nav className='ms-auto'>
                             {isAuthenticated ? (

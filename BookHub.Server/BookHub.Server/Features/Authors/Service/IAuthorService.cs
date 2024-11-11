@@ -4,6 +4,8 @@
 
     public interface IAuthorService
     {
+        List<string> GetNationalities();
+
         Task<int> CreateAsync(AuthorDetailsServiceModel model);
     }
 }
