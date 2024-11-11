@@ -1,6 +1,7 @@
 ﻿namespace BookHub.Server.Data.Models
 {
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     using Base;
     using Enums;
@@ -35,6 +36,11 @@
         public DateTime? BornAt { get; set; }
 
         public DateTime? DiedAt { get; set; }
+
+        [ForeignKey(nameof(User))]
+        public string? CreatorId { get; set; }
+
+        public User? Creator { get; set; }
 
         public ICollection<Book> Books { get; } = new HashSet<Book>();
     }

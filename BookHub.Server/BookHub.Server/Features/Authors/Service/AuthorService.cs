@@ -1,11 +1,25 @@
 ﻿namespace BookHub.Server.Features.Authors.Service
 {
-    public class AuthorService : IAuthorService
+    using AutoMapper;
+    using Data;
+    using Data.Models;
+    using Models;
+
+    public class AuthorService(
+        BookHubDbContext data,
+        IMapper mapper) : IAuthorService
     {
-        public async Task<int> Create()
+        private readonly BookHubDbContext data = data;
+        private readonly IMapper mapper = mapper;
+
+        public async Task<int> CreateAsync(AuthorDetailsServiceModel model)
         {
-            await Task.Delay(1_000);
-            return 1;
+            var author = this.mapper.Map<Author>(model);
+
+            this.data.Add(author);
+            await this.data.SaveChangesAsync();
+
+            return author.Id;
         }
     }
 }

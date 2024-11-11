@@ -4,6 +4,7 @@
 
     using Data;
     using Data.Models;
+    using Features.Authors.Service;
     using Features.Books.Service;
     using Features.Identity.Service;
     using Filters;
@@ -80,7 +81,8 @@
             => services
                 .AddScoped<ICurrentUserService, CurrentUserService>()
                 .AddTransient<IIdentityService, IdentityService>()
-                .AddTransient<IBookService, BookService>();
+                .AddTransient<IBookService, BookService>()
+                .AddTransient<IAuthorService, AuthorService>();
 
         public static IServiceCollection AddApiControllers(this IServiceCollection services)
         {
