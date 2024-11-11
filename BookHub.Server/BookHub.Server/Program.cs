@@ -13,9 +13,10 @@ namespace BookHub.Server
                 .AddDatabase(builder.Configuration)
                 .AddIdentity()
                 .AddJwtAuthentication(appSettings)
+                .AddApiControllers()
                 .AddServices()
-                .AddSwagger()
-                .AddApiControllers();
+                .AddAutoMapper()
+                .AddSwagger();
 
             if (builder.Environment.IsDevelopment())
             {

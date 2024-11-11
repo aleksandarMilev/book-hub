@@ -17,15 +17,11 @@
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
-        {
-            services
+            => services
                 .AddDbContext<BookHubDbContext>(options =>
                 {
                     options.UseSqlServer(configuration.GetDefaultConnectionString());
                 });
-
-            return services;
-        }
 
         public static IServiceCollection AddIdentity(this IServiceCollection services)
         {
@@ -81,14 +77,10 @@
         }
 
         public static IServiceCollection AddServices(this IServiceCollection services)
-        {
-            services
+            => services
                 .AddScoped<ICurrentUserService, CurrentUserService>()
                 .AddTransient<IIdentityService, IdentityService>()
                 .AddTransient<IBookService, BookService>();
-
-            return services;
-        }
 
         public static IServiceCollection AddApiControllers(this IServiceCollection services)
         {
@@ -110,5 +102,8 @@
                     .Get<AppSettings>()
                     ?? throw new InvalidOperationException("AppSettings not found.");
         }
+
+        public static IServiceCollection AddAutoMapper(this IServiceCollection services)
+            => services.AddAutoMapper(typeof(Program).Assembly);
     }
 }
