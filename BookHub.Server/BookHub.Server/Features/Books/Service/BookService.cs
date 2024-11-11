@@ -23,7 +23,7 @@
                     Title = b.Title,
                     ImageUrl = b.ImageUrl,
                     ShortDescription = b.ShortDescription,
-                    Rating = b.Rating,
+                    AverageRating = b.AverageRating,
                     Genres = b.Genres
                         .Select(g => g.Name)
                         .ToList(),
@@ -39,7 +39,16 @@
                     Id = b.Id,
                     Title = b.Title,
                     ImageUrl = b.ImageUrl,
-                    UserId = b.CreatorId
+                    ShortDescription = b.ShortDescription,
+                    LongDescription = b.LongDescription,
+                    RatingsCount = b.RatingsCount,
+                    AverageRating = b.AverageRating,
+                    Genres = b.Genres
+                        .Select(g => g.Name)
+                        .ToList(),
+                    AuthorName = b.Author.Name,
+                    AuthorId = b.AuthorId,
+                    CreatorId = b.CreatorId
                 })
                 .FirstOrDefaultAsync(b => b.Id == id);
 

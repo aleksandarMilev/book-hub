@@ -23,7 +23,9 @@
         [MaxLength(LongDescriptionMaxLength)]
         public string LongDescription { get; set; } = null!;
 
-        public double Rating { get; set; }
+        public double AverageRating { get; set; }
+
+        public int RatingsCount { get; set; }
 
         [Required]
         [MaxLength(ImageUrlMaxLength)]

@@ -2,8 +2,14 @@
 {
     public class BookDetailsServiceModel : BookListServiceModel
     {
-        public string? UserId { get; set; }
+        public int RatingsCount { get; init; }
+        public string LongDescription { get; init; } = null!;
 
-        public string Description { get; init; } = null!;
+        public int AuthorId { get; init; }
+
+        public string? CreatorId { get; init; }
+
+
+        //public ICollection<Review> Reviews { get; } = new HashSet<Review>();
     }
 }

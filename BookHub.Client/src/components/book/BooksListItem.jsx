@@ -4,7 +4,7 @@ import { FaBook, FaUser, FaTag } from 'react-icons/fa'
 import renderStars from '../../common/functions/renderStars'
 import { routes } from '../../common/constants/api'
 
-export default function BookListItem({ id, imageUrl, title, authorName, shortDescription, rating, genres }) {
+export default function BookListItem({ id, imageUrl, title, authorName, shortDescription, averageRating, genres }) {
     return (
         <div className="row p-3 bg-light border rounded mb-3 shadow-sm" style={{ fontSize: '1rem', backgroundColor: '#f8f9fa' }}>
             <div className="col-md-3 col-4 mt-1 d-flex justify-content-center align-items-center">
@@ -21,7 +21,7 @@ export default function BookListItem({ id, imageUrl, title, authorName, shortDes
                     <FaUser className="me-2" />By {authorName}
                 </h6>
                 <div className="d-flex flex-row mb-2" style={{ fontSize: '1rem' }}>
-                    {renderStars(rating)}
+                    {renderStars(averageRating)}
                 </div>
                 <div className="mt-1 mb-2" style={{ fontSize: '1.1em' }}>
                     <FaTag className="me-2" />

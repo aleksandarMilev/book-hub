@@ -12,7 +12,7 @@
 
         public string ShortDescription { get; init; } = null!;
 
-        public double Rating { get; init; } 
+        public double AverageRating { get; init; } 
 
         public ICollection<string> Genres { get; init; } = new HashSet<string>();
     }

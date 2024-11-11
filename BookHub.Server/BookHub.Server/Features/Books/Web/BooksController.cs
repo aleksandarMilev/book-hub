@@ -25,6 +25,7 @@
             return this.Ok(models);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult> Details(int id)
         {

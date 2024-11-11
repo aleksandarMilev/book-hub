@@ -23,7 +23,7 @@ export function useGetAll(){
 
 export function useGetDetails(id){
     const { token } = useContext(UserContext)
-    const [book, setBook] = useState({})
+    const [book, setBook] = useState(null)
     const [isFetching, setIsFetching] = useState(false)
 
     useEffect(() => {
