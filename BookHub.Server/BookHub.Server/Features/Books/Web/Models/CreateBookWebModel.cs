@@ -2,9 +2,9 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    using static BookHub.Server.Common.Constants.Validation.Book;
+    using static Common.Constants.Validation.Book;
 
-    public class CreateBookRequestModel
+    public class CreateBookWebModel
     {
         [Required]
         [StringLength(TitleMaxLength, MinimumLength = TitleMinLength)]

@@ -2,9 +2,9 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    using BookHub.Server.Data.Models.Base;
+    using Base;
 
-    using static BookHub.Server.Common.Constants.Validation.Genre;
+    using static Common.Constants.Validation.Genre;
 
     public class Genre : DeletableEntity
     {

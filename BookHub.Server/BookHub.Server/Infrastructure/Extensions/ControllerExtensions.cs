@@ -1,7 +1,7 @@
 ﻿namespace BookHub.Server.Infrastructure.Extensions
 {
-    using BookHub.Server.Features;
-    using BookHub.Server.Infrastructure.Services;
+    using Features;
+    using Services;
     using Microsoft.AspNetCore.Mvc;
 
     public static class ControllerExtensions

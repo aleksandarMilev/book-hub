@@ -2,10 +2,10 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    using BookHub.Server.Data.Models.Base;
-    using BookHub.Server.Data.Models.Enums;
+    using Base;
+    using Enums;
 
-    using static BookHub.Server.Common.Constants.Validation.Author;
+    using static Common.Constants.Validation.Author;
 
     public class Author : DeletableEntity
     {

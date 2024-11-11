@@ -2,9 +2,9 @@
 {
     using System.Linq.Expressions;
 
-    using BookHub.Server.Data.Models;
-    using BookHub.Server.Data.Models.Base;
-    using BookHub.Server.Infrastructure.Services;
+    using Models;
+    using Models.Base;
+    using Infrastructure.Services;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
 

@@ -3,10 +3,10 @@
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    using BookHub.Server.Data.Models.Base;
+    using Base;
     using Microsoft.EntityFrameworkCore;
 
-    using static BookHub.Server.Common.Constants.Validation.Reply;
+    using static Common.Constants.Validation.Reply;
 
     public class Reply : DeletableEntity
     {

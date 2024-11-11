@@ -2,7 +2,7 @@
 {
     using System.Security.Claims;
 
-    using BookHub.Server.Infrastructure.Extensions;
+    using Extensions;
 
     public class CurrentUserService(IHttpContextAccessor httpContext) : ICurrentUserService
     {

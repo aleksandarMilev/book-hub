@@ -1,6 +1,6 @@
 ﻿namespace BookHub.Server.Data.Models
 {
-    using BookHub.Server.Data.Models.Base;
+    using Base;
     using Microsoft.AspNetCore.Identity;
 
     public class User : IdentityUser, IDeletableEntity

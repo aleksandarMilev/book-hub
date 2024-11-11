@@ -2,17 +2,17 @@
 {
     using System.Text;
 
-    using BookHub.Server.Data;
-    using BookHub.Server.Data.Models;
-    using BookHub.Server.Features.Books.Service;
-    using BookHub.Server.Features.Identity.Service;
-    using BookHub.Server.Infrastructure.Filters;
-    using BookHub.Server.Infrastructure.Services;
+    using Data;
+    using Data.Models;
+    using Features.Books.Service;
+    using Features.Identity.Service;
+    using Filters;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
+    using Services;
 
     public static class ServiceCollectionExtensions
     {

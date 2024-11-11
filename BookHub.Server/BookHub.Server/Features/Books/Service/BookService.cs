@@ -1,10 +1,10 @@
 ﻿namespace BookHub.Server.Features.Books.Service
 {
-    using BookHub.Server.Data;
-    using BookHub.Server.Data.Models;
-    using BookHub.Server.Features.Books.Service.Models;
-    using BookHub.Server.Infrastructure.Services;
+    using Data;
+    using Data.Models;
+    using Infrastructure.Services;
     using Microsoft.EntityFrameworkCore;
+    using Models;
 
     using static BookHub.Server.Common.Messages.Error.Book;
 

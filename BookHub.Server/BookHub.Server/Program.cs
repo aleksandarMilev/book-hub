@@ -1,6 +1,6 @@
 namespace BookHub.Server
 {
-    using BookHub.Server.Infrastructure.Extensions;
+    using Infrastructure.Extensions;
 
     public class Program
     {

@@ -1,6 +1,6 @@
 ﻿namespace BookHub.Server.Infrastructure.Extensions
 {
-    using BookHub.Server.Data;
+    using Data;
     using Microsoft.EntityFrameworkCore;
 
     public static class AppBuilderExtensions

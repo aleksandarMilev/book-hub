@@ -1,12 +1,11 @@
 ﻿namespace BookHub.Server.Features.Identity.Web
 {
-    using BookHub.Server.Data.Models;
-    using BookHub.Server.Features;
-    using BookHub.Server.Features.Identity.Service;
-    using BookHub.Server.Features.Identity.Web.Models;
+    using Data.Models;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Options;
+    using Models;
+    using Service;
 
     using static BookHub.Server.Common.Messages.Error.Identity;
 

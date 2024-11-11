@@ -1,7 +1,7 @@
 ﻿namespace BookHub.Server.Features.Books.Service
 {
-    using BookHub.Server.Features.Books.Service.Models;
-    using BookHub.Server.Infrastructure.Services;
+    using Models;
+    using Infrastructure.Services;
 
     public interface IBookService
     {

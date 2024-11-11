@@ -1,13 +1,12 @@
 ﻿namespace BookHub.Server.Features.Books.Web
 {
-    using BookHub.Server.Features;
-    using BookHub.Server.Features.Books.Service;
-    using BookHub.Server.Features.Books.Service.Models;
-    using BookHub.Server.Features.Books.Web.Models;
-    using BookHub.Server.Infrastructure.Extensions;
-    using BookHub.Server.Infrastructure.Services;
+    using Infrastructure.Extensions;
+    using Infrastructure.Services;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Models;
+    using Service;
+    using Service.Models;
 
     [Authorize]
     public class BooksController(
@@ -25,7 +24,6 @@
             return this.Ok(models);
         }
 
-        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult> Details(int id)
         {
@@ -35,7 +33,7 @@
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(CreateBookRequestModel webModel)
+        public async Task<ActionResult> Create(CreateBookWebModel webModel)
         {
             var userId = this.userService.GetId();
             var serviceModel = new CreateBookServiceModel()
@@ -50,7 +48,7 @@
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Edit(int id, CreateBookRequestModel webModel)
+        public async Task<ActionResult> Edit(int id, CreateBookWebModel webModel)
         {
             var userId = this.userService.GetId();
             var serviceModel = new CreateBookServiceModel()
