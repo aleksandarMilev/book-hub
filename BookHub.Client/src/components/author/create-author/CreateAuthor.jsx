@@ -9,15 +9,15 @@ import {
     MDBCardImage,
     MDBRow,
     MDBCol,
-    MDBInput,
-    MDBRadio
+    MDBInput
 } from 'mdb-react-ui-kit'
 
-import { routes } from '../../common/constants/api'
-import * as useAuthor from '../../hooks/useAuthor'
+import { routes } from '../../../common/constants/api'
+import * as useAuthor from '../../../hooks/useAuthor'
 
-import image from '../../assets/images/createAuthor.jpg'
+import image from '../../../assets/images/createAuthor.jpg'
 import NationalitySearch from './NationalitySearch'
+import GenderRadio from './GenderRadio'
 
 export default function CreateAuthor() {
     const navigate = useNavigate()
@@ -72,10 +72,10 @@ export default function CreateAuthor() {
         validationSchema,
         onSubmit: async (values, { setErrors }) => {
             try {
-                const authorId = await createHandler(values);
-                navigate(routes.home);
+                const authorId = await createHandler(values)
+                navigate(routes.home)
             } catch (error) {
-                setErrors({ submit: error.message });
+                setErrors({ submit: error.message })
             }
         }
     })
@@ -86,7 +86,6 @@ export default function CreateAuthor() {
                 <MDBCol>
                     <MDBCard className="my-4">
                         <MDBRow className="g-0">
-                            {/* Section 1: Image */}
                             <MDBCol md="6" className="d-none d-md-block">
                                 <MDBCardImage src={image} alt="Sample photo" className="rounded-start" fluid />
                             </MDBCol>
@@ -126,6 +125,9 @@ export default function CreateAuthor() {
                                         </MDBRow>
                                         <MDBRow>
                                             <MDBCol md="12">
+                                                {formik.touched.imageUrl && formik.errors.imageUrl && (
+                                                    <div className="text-danger">{formik.errors.imageUrl}</div>
+                                                )}
                                                 <MDBInput
                                                     wrapperClass="mb-4"
                                                     label="Image URL"
@@ -137,9 +139,6 @@ export default function CreateAuthor() {
                                                         formik.touched.imageUrl && formik.errors.imageUrl ? 'is-invalid' : ''
                                                     }
                                                 />
-                                                {formik.touched.imageUrl && formik.errors.imageUrl && (
-                                                    <div className="text-danger">{formik.errors.imageUrl}</div>
-                                                )}
                                             </MDBCol>
                                         </MDBRow>
                                         <MDBRow>
@@ -156,6 +155,9 @@ export default function CreateAuthor() {
                                         </MDBRow>
                                         <MDBRow>
                                             <MDBCol md="12">
+                                                {formik.touched.diedAt && formik.errors.diedAt && (
+                                                    <div className="text-danger">{formik.errors.diedAt}</div>
+                                                )}
                                                 <MDBInput
                                                     wrapperClass="mb-4"
                                                     label="Date of Death (if applicable)"
@@ -167,86 +169,54 @@ export default function CreateAuthor() {
                                                         formik.touched.diedAt && formik.errors.diedAt ? 'is-invalid' : ''
                                                     }
                                                 />
-                                                {formik.touched.diedAt && formik.errors.diedAt && (
-                                                    <div className="text-danger">{formik.errors.diedAt}</div>
-                                                )}
                                             </MDBCol>
                                         </MDBRow>
-                                        <div className="d-md-flex justify-content-start align-items-center mb-4">
-                                            <h6 className="fw-bold mb-0 me-4">Gender: *</h6>
-                                            <MDBRadio
-                                                name="gender"
-                                                id="genderMale"
-                                                value="male"
-                                                label="Male"
-                                                inline
-                                                onChange={formik.handleChange}
-                                                checked={formik.values.gender === 'male'}
-                                            />
-                                            <MDBRadio
-                                                name="gender"
-                                                id="genderFemale"
-                                                value="female"
-                                                label="Female"
-                                                inline
-                                                onChange={formik.handleChange}
-                                                checked={formik.values.gender === 'female'}
-                                            />
-                                            <MDBRadio
-                                                name="gender"
-                                                id="genderOther"
-                                                value="other"
-                                                label="Other"
-                                                inline
-                                                onChange={formik.handleChange}
-                                                checked={formik.values.gender === 'other'}
-                                            />
-                                            {formik.touched.gender && formik.errors.gender && (
-                                                <div className="text-danger">{formik.errors.gender}</div>
-                                            )}
-                                        </div>
+                                        <GenderRadio formik={formik} />
                                         <NationalitySearch 
                                             nationalities={nationalities}
                                             loading={loading}
                                             formik={formik}
                                         />
+                                        <MDBRow>
+                                            <MDBCol md="12">
+                                                {formik.touched.biography && formik.errors.biography && (
+                                                    <div className="text-danger">{formik.errors.biography}</div>
+                                                )}
+                                                <textarea
+                                                    id="biography"
+                                                    rows="12"
+                                                    {...formik.getFieldProps('biography')}
+                                                    className={
+                                                        formik.touched.biography && formik.errors.biography ? 'is-invalid' : ''
+                                                    }
+                                                    style={{
+                                                        width: '100%',
+                                                        resize: 'vertical', 
+                                                        minHeight: '200px',
+                                                        padding: '10px',
+                                                        borderColor: '#ced4da', 
+                                                        borderRadius: '5px',
+                                                        lineHeight: '1.5',
+                                                    }}
+                                                    wrap="soft"  
+                                                    placeholder="Write the author's biography here..."
+                                                />
+                                            </MDBCol>
+                                        </MDBRow>
+
+                                        <p className="text-danger fw-bold">Fields marked with * are required</p>
+                                        <div className="d-flex justify-content-end pt-3">
+                                            <MDBBtn color="light" size="lg" onClick={formik.handleReset}>
+                                                Reset All
+                                            </MDBBtn>
+                                            <MDBBtn className="ms-2" color="warning" size="lg" type="submit">
+                                                Submit Form
+                                            </MDBBtn>
+                                        </div>
                                     </form>
                                 </MDBCardBody>
                             </MDBCol>
                         </MDBRow>
-                        <MDBRow>
-                            <MDBCol md="12">
-                                <MDBCardBody className="text-black">
-                                <MDBInput
-                                    wrapperClass="mb-4"
-                                    label="Biography *"
-                                    size="lg"
-                                    id="biography"
-                                    type="textarea"
-                                    rows="12"
-                                    {...formik.getFieldProps('biography')}
-                                    className={
-                                        formik.touched.biography && formik.errors.biography ? 'is-invalid' : ''
-                                    }
-                                    style={{ height: 'auto', minHeight: '200px' }}  // Control height directly
-                                />
-                                    {formik.touched.biography && formik.errors.biography && (
-                                        <div className="text-danger">{formik.errors.biography}</div>
-                                    )}
-                                </MDBCardBody>
-                            </MDBCol>
-                        </MDBRow>
-                        <MDBCardBody className="text-black">
-                            <p className="text-danger fw-bold">Fields marked with * are required</p>
-                            <div className="d-flex justify-content-end pt-3">
-                                <MDBBtn color="light" size="lg" onClick={formik.handleReset}>
-                                    Reset All
-                                </MDBBtn>
-                                <MDBBtn className="ms-2" color="warning" size="lg" type="submit">
-                                    Submit Form
-                                </MDBBtn>
-                            </div>
-                        </MDBCardBody>
                     </MDBCard>
                 </MDBCol>
             </MDBRow>

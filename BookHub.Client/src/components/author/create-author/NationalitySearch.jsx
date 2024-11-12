@@ -1,6 +1,6 @@
 import React from 'react'
-
-import useSearchNationalities from '../../hooks/useAuthor'
+``
+import useSearchNationalities from '../../../hooks/useAuthor'
 
 export default function NationalitySearch({ nationalities, loading, formik }) {
     const {
@@ -14,7 +14,7 @@ export default function NationalitySearch({ nationalities, loading, formik }) {
 
     return (
         <div className="mb-4">
-            <h6 className="fw-bold mb-2">Nationality: *</h6>
+            <h6 className="fw-bold mb-2">{"Nationality: * (select the 'unknown' option if you are not sure)"}</h6>
             <input
                 type="text"
                 id="nationality"

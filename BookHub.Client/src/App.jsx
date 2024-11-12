@@ -14,7 +14,7 @@ import BookList from "./components/book/BookList"
 import BookDetails from "./components/book/BookDetails"
 import CreateBook from './components/book/CreateBook'
 import EditBook from './components/book/EditBook'
-import CreateAuthor from "./components/author/CreateAuthor"
+import CreateAuthor from "./components/author/create-author/CreateAuthor"
 
 export default function App(){
     return(

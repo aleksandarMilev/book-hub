@@ -1,17 +1,17 @@
-import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Navbar, Nav, Container } from 'react-bootstrap';
+import React, { useContext, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { Navbar, Nav, Container } from 'react-bootstrap'
 
-import { routes } from '../../common/constants/api';
-import { UserContext } from '../../contexts/userContext';
+import { routes } from '../../common/constants/api'
+import { UserContext } from '../../contexts/userContext'
 
 export default function Header() {
-    const [expanded, setExpanded] = useState(false);
-    const { isAuthenticated, username } = useContext(UserContext);
+    const [expanded, setExpanded] = useState(false)
+    const { isAuthenticated, username } = useContext(UserContext)
 
     const handleToggle = () => {
-        setExpanded(prev => !prev);
-    };
+        setExpanded(prev => !prev)
+    }
 
     return (
         <header>
@@ -69,5 +69,5 @@ export default function Header() {
                 </Container>
             </Navbar>
         </header>
-    );
+    )
 }
