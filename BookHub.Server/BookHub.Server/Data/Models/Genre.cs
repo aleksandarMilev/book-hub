@@ -12,8 +12,8 @@
 
         [Required]
         [MaxLength(NameMaxLength)]
-        public string Name { get; set; } = null!; 
+        public string Name { get; set; } = null!;
 
-        public ICollection<Book> Books { get; } = new HashSet<Book>();
+        public ICollection<BookGenre> BooksGenres { get; } = new HashSet<BookGenre>();
     }
 }

@@ -1,12 +1,13 @@
 ﻿namespace BookHub.Server.Features.Books.Service
 {
+    using Authors.Service.Models;
     using Data;
     using Data.Models;
     using Infrastructure.Services;
     using Microsoft.EntityFrameworkCore;
     using Models;
 
-    using static BookHub.Server.Common.Messages.Error.Book;
+    using static Common.Messages.Error.Book;
 
     public class BookService(BookHubDbContext data) : IBookService
     {
@@ -15,8 +16,6 @@
         public async Task<IEnumerable<BookListServiceModel>> GetAllAsync()
             => await this.data
                 .Books
-                .Include(b => b.Author)
-                .Include(b => b.Genres)
                 .Select(b => new BookListServiceModel()
                 {
                     Id = b.Id,
@@ -24,8 +23,10 @@
                     ImageUrl = b.ImageUrl,
                     ShortDescription = b.ShortDescription,
                     AverageRating = b.AverageRating,
-                    Genres = b.Genres
-                        .Select(g => g.Name)
+                    Genres = this.data
+                        .BooksGenres
+                        .Where(bg => bg.BookId == b.Id)
+                        .Select(bg => bg.Genre.Name)
                         .ToList(),
                     AuthorName = b.Author.Name
                 })
@@ -43,11 +44,20 @@
                     LongDescription = b.LongDescription,
                     RatingsCount = b.RatingsCount,
                     AverageRating = b.AverageRating,
-                    Genres = b.Genres
-                        .Select(g => g.Name)
+                    Genres = this.data
+                        .BooksGenres
+                        .Where(bg => bg.BookId == b.Id)
+                        .Select(bg => bg.Genre.Name)
                         .ToList(),
                     AuthorName = b.Author.Name,
-                    AuthorId = b.AuthorId,
+                    Author = new AuthorServiceModel()
+                    {
+                        Id = b.AuthorId,
+                        Name = b.Author.Name,
+                        ImageUrl = b.Author.ImageUrl,
+                        Biography = b.Author.Biography,
+                        BooksCount = b.Author.Books.Count()
+                    },
                     CreatorId = b.CreatorId
                 })
                 .FirstOrDefaultAsync(b => b.Id == id);

@@ -21,7 +21,7 @@ export function useGetAll(){
     return { books, isFetching }
 }
 
-export function useGetDetails(id){
+export function useGetFullInfo(id){
     const { token } = useContext(UserContext)
     const [book, setBook] = useState(null)
     const [isFetching, setIsFetching] = useState(false)

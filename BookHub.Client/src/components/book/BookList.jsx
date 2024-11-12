@@ -5,7 +5,8 @@ import DefaultSpinner from '../common/DefaultSpinner'
 
 export default function BookList() {
     const { books, isFetching } = useBook.useGetAll()
-
+    console.log(books);
+    
     return (
             <div className="container mt-5 mb-5">
                 <div className="d-flex justify-content-center row">

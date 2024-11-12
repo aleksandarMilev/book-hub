@@ -41,7 +41,7 @@
 
         public User? Creator { get; set; }
 
-        public ICollection<Genre> Genres { get; } = new HashSet<Genre>();
+        public ICollection<BookGenre> BooksGenres { get; } = new HashSet<BookGenre>();
 
         public ICollection<Review> Reviews { get; } = new HashSet<Review>();  
     }

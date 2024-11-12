@@ -16,6 +16,7 @@
         private readonly IBookService bookService = bookService;
         private readonly ICurrentUserService userService = userService;
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BookListServiceModel>>> All()
         {

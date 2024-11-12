@@ -37,7 +37,7 @@
                     RatingsCount = 0,
                     ImageUrl = "https://librerialaberintopr.com/cdn/shop/products/hallows_459x.jpg?v=1616596206",
                     AuthorId = 2,
-                    CreatorId = "user2Id"
+                    CreatorId = "user2Id",
                 },
                 new()
                 {

@@ -1,15 +1,7 @@
 ﻿namespace BookHub.Server.Features.Authors.Service.Models
 {
-    public class AuthorDetailsServiceModel
+    public class AuthorDetailsServiceModel : AuthorServiceModel
     {
-        public int Id { get; init; }
-
-        public string Name { get; init; } = null!;
-
-        public string ImageUrl { get; init; } = null!;
-
-        public string Biography { get; init; } = null!;
-
         public string? PenName { get; init; }
 
         public double Rating { get; init; }
