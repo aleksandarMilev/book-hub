@@ -22,8 +22,8 @@ export default function BookDetails() {
         navigate(routes.books)
     }
 
-    const bookUserId = book ? book.userId : null
-    const isCreator = userId === bookUserId
+    const creatorId = book ? book.creatorId : null
+    const isCreator = userId === creatorId
 
     const previewTextLength = 200
     const descriptionPreview = book?.longDescription?.slice(0, previewTextLength)
@@ -32,9 +32,7 @@ export default function BookDetails() {
         !isFetching ? (
           book ? (
             <div className="container mt-5">
-                {/* Book and Author Wrapper */}
                 <div className="card shadow-lg p-4" style={{ backgroundColor: '#f9f9f9' }}>
-                    {/* Book Full Info */}
                     <BookFullInfo
                         book={book}
                         descriptionPreview={descriptionPreview}
@@ -44,8 +42,6 @@ export default function BookDetails() {
                         deleteHandler={deleteHandler}
                         id={id}
                     />
-
-                    {/* Author Introduction */}
                     <AuthorIntroduction author={book.author} />
                 </div>
             </div>

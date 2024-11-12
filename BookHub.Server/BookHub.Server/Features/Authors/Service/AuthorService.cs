@@ -1,6 +1,7 @@
 ﻿namespace BookHub.Server.Features.Authors.Service
 {
     using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using Data;
     using Data.Models;
     using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,12 @@
     {
         private readonly BookHubDbContext data = data;
         private readonly IMapper mapper = mapper;
+
+        public async Task<AuthorDetailsServiceModel?> GetDetailsAsync(int id)
+            => await this.data
+                .Authors
+                .ProjectTo<AuthorDetailsServiceModel>(this.mapper.ConfigurationProvider)    
+                .FirstOrDefaultAsync(a => a.Id == id);
 
         public List<string> GetNationalities()
             => this.data

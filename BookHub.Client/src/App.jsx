@@ -15,6 +15,7 @@ import BookDetails from "./components/book/book-details/BookDetails"
 import CreateBook from './components/book/CreateBook'
 import EditBook from './components/book/EditBook'
 import CreateAuthor from "./components/author/create-author/CreateAuthor"
+import AuthorDetails from "./components/author/AuthorDetails"
 
 export default function App(){
     return(
@@ -30,6 +31,7 @@ export default function App(){
                 <Route path={routes.createBook} element={<AuthenticatedRoute element={<CreateBook />} />} />
                 <Route path={routes.editBook + '/:id'} element={<AuthenticatedRoute element={<EditBook />} />} />
                 <Route path={routes.createAuthor} element={<AuthenticatedRoute element={<CreateAuthor />} />} />
+                <Route path={routes.author + '/:id'} element={<AuthenticatedRoute element={<AuthorDetails />} />} />
             </Routes>
             <Footer /> 
         </UserContextProvider>

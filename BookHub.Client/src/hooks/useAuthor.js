@@ -21,32 +21,6 @@ export function useNationalities() {
     return { nationalities, isFetching }
 }
 
-export function useCreate(){
-    const { token } = useContext(UserContext) 
-
-    const createHandler = async ({ name, penName, imageUrl, gender, biography, nationality, bornAt, diedAt }) => {
-        const author = {
-            name,
-            penName : penName || null,
-            imageUrl : imageUrl || null,
-            gender,
-            biography,
-            nationality,
-            bornAt,
-            diedAt
-        }
-
-        try {
-            const authorId = await authorApi.createAsync(author, token)
-            return authorId
-        } catch (error) {
-            throw new Error(error.message)
-        }
-    }
-
-    return createHandler
-}
-
 export default function useSearchNationalities(nationalities) {
     const [searchTerm, setSearchTerm] = useState('')
     const [filteredNationalities, setFilteredNationalities] = useState([])
@@ -84,4 +58,50 @@ export default function useSearchNationalities(nationalities) {
         selectNationality,
         showDropdownOnFocus
     }
+}
+
+export function useCreate(){
+    const { token } = useContext(UserContext) 
+
+    const createHandler = async ({ name, penName, imageUrl, gender, biography, nationality, bornAt, diedAt }) => {
+        const author = {
+            name,
+            penName : penName || null,
+            imageUrl : imageUrl || null,
+            gender,
+            biography,
+            nationality,
+            bornAt,
+            diedAt
+        }
+
+        try {
+            const authorId = await authorApi.createAsync(author, token)
+            return authorId
+        } catch (error) {
+            throw new Error(error.message)
+        }
+    }
+
+    return createHandler
+}
+
+export function useGetDetails(id){
+    const { token } = useContext(UserContext)
+    const [author, setAuthor] = useState(null)
+    const [isFetching, setIsFetching] = useState(false)
+
+    useEffect(() => {
+        async function fetchData() {
+            setIsFetching(old => !old)
+            let result = await authorApi.getDetailsAsync(id, token)
+            setAuthor(result)
+            console.log(result)
+            setIsFetching(old => !old)
+        }
+
+        fetchData()
+    }, [id])
+
+    return { author, isFetching }
 }

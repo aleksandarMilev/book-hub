@@ -37,3 +37,22 @@ export async function getNationalitiesAsync(token){
     const nationalities = await response.json()
     return nationalities
 }
+
+export async function getDetailsAsync(id, token) {
+    const options = {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+
+    const url = baseUrl + routes.author + `/${id}`
+    const response = await fetch(url, options)
+
+    if(!response.ok){
+        throw new Error('Something went wrong, please try again!')
+    }
+
+    const author = await response.json()
+    return author
+}

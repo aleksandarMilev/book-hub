@@ -6,6 +6,8 @@
     {
         List<string> GetNationalities();
 
+        Task<AuthorDetailsServiceModel?> GetDetailsAsync(int id);
+
         Task<int> CreateAsync(AuthorDetailsServiceModel model);
     }
 }
