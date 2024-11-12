@@ -7,7 +7,6 @@
     using Microsoft.EntityFrameworkCore;
     using Models;
     using Models.Base;
-    using Seed;
 
     public class BookHubDbContext(
         DbContextOptions<BookHubDbContext> options, 
@@ -18,6 +17,8 @@
         public DbSet<Book> Books { get; set; }
 
         public DbSet<Genre> Genres { get; set; }
+
+        public DbSet<BookGenre> BooksGenres { get; set; }
 
         public DbSet<Author> Authors { get; set; }
 
@@ -45,10 +46,7 @@
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder
-                .Entity<Nationality>()
-                .HasData(NationalitiesSeeder.Seed());
-
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(BookHubDbContext).Assembly);
             FilterDeletedModels(modelBuilder);
         }
 

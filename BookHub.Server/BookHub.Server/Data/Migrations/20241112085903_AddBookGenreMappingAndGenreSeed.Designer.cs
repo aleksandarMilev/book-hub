@@ -4,6 +4,7 @@ using BookHub.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookHub.Server.Data.Migrations
 {
     [DbContext(typeof(BookHubDbContext))]
-    partial class BookHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241112085903_AddBookGenreMappingAndGenreSeed")]
+    partial class AddBookGenreMappingAndGenreSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -271,21 +274,6 @@ namespace BookHub.Server.Data.Migrations
                             ShortDescription = "The Lord of the Rings is an epic fantasy novel by the English author J. R. R. Tolkien.",
                             Title = "Lord of the Rings"
                         });
-                });
-
-            modelBuilder.Entity("BookHub.Server.Data.Models.BookGenre", b =>
-                {
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("GenreId")
-                        .HasColumnType("int");
-
-                    b.HasKey("BookId", "GenreId");
-
-                    b.HasIndex("GenreId");
-
-                    b.ToTable("BooksGenres");
                 });
 
             modelBuilder.Entity("BookHub.Server.Data.Models.Genre", b =>
@@ -1837,14 +1825,14 @@ namespace BookHub.Server.Data.Migrations
                         {
                             Id = "user1Id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "7a651890-b48f-4045-b005-85ca8a012ea1",
+                            ConcurrencyStamp = "5fb95543-20a1-4f7b-a97f-799717ffa6b7",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user1@mail.com",
                             EmailConfirmed = false,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "da6095bc-8bf8-4a9d-883f-5e936466c6df",
+                            SecurityStamp = "4e2e5652-3cfd-46dd-b3c2-718df8a97668",
                             TwoFactorEnabled = false,
                             UserName = "user1name"
                         },
@@ -1852,14 +1840,14 @@ namespace BookHub.Server.Data.Migrations
                         {
                             Id = "user2Id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "fc0edfc4-611d-4fbe-8d6a-835c136f7896",
+                            ConcurrencyStamp = "3151399b-e705-4edd-8453-655245b51c24",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user2@mail.com",
                             EmailConfirmed = false,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "7ce232d1-44b6-490d-b91d-f9a4de08ba2d",
+                            SecurityStamp = "8718ae95-c520-40ee-9eec-942635fad259",
                             TwoFactorEnabled = false,
                             UserName = "user2name"
                         },
@@ -1867,14 +1855,14 @@ namespace BookHub.Server.Data.Migrations
                         {
                             Id = "user3Id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "8ae9f590-189a-47d3-8583-f0f8b6dbf888",
+                            ConcurrencyStamp = "b873f398-d45e-43e6-a2a9-fb9c65e26d98",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user3@mail.com",
                             EmailConfirmed = false,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "0e96bc6e-9395-4c09-ad6b-f306d8dcc2a1",
+                            SecurityStamp = "cdc0c881-67c1-43cd-bc64-d8d0f3e97937",
                             TwoFactorEnabled = false,
                             UserName = "user3name"
                         });
@@ -2060,25 +2048,6 @@ namespace BookHub.Server.Data.Migrations
                     b.Navigation("Author");
 
                     b.Navigation("Creator");
-                });
-
-            modelBuilder.Entity("BookHub.Server.Data.Models.BookGenre", b =>
-                {
-                    b.HasOne("BookHub.Server.Data.Models.Book", "Book")
-                        .WithMany()
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BookHub.Server.Data.Models.Genre", "Genre")
-                        .WithMany()
-                        .HasForeignKey("GenreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Book");
-
-                    b.Navigation("Genre");
                 });
 
             modelBuilder.Entity("BookHub.Server.Data.Models.Reply", b =>
