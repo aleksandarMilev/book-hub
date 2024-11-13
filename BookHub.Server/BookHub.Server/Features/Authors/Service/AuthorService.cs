@@ -2,12 +2,13 @@
 {
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
-    using BookHub.Server.Features.Books.Service.Models;
+    using Infrastructure.Services;
     using Data;
     using Data.Models;
     using Microsoft.EntityFrameworkCore;
     using Models;
 
+    using static Common.Messages.Error.Author;
     using static Common.Constants.DefaultValues;
 
     public class AuthorService(
@@ -65,5 +66,27 @@
               .OrderByDescending(a => a.Rating)
               .Take(3)
               .ToListAsync();
+
+        public async Task<Result> EditAsync(int id, CreateAuthorServiceModel model)
+        {
+            var author = await this.data
+                 .Authors
+                 .FindAsync(id);
+
+            if (author is null)
+            {
+                return AuthorNotFound;
+            }
+
+            if (author.CreatorId != model.CreatorId)
+            {
+                return UnauthorizedAuthorEdit;
+            }
+
+            this.mapper.Map(model, author);
+            await this.data.SaveChangesAsync();
+
+            return true;
+        }
     }
 }

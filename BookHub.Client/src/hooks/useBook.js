@@ -63,15 +63,14 @@ export function useCreate(){
 }
 
 export function useEdit(){
-    const { token, userId } = useContext(UserContext) 
+    const { token } = useContext(UserContext) 
 
-    const editHandler = async (bookId, title, author, imageUrl ,description) => {
+    const editHandler = async (bookId, title, author, imageUrl, description) => {
         const book = {
             title,
             author,
             description,
-            imageUrl,
-            userId
+            imageUrl
         }
 
         try {

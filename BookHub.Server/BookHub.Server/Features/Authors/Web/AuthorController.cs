@@ -1,6 +1,8 @@
-﻿namespace BookHub.Server.Features.Authors.Web
+﻿#pragma warning disable ASP0023 
+namespace BookHub.Server.Features.Authors.Web
 {
     using AutoMapper;
+    using Infrastructure.Extensions;
     using Infrastructure.Services;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -30,7 +32,6 @@
         [HttpGet("{id}")]
         public async Task<ActionResult> Details(int id)
         {
-            Thread.Sleep(1_000);
             var author = await this.authorService.GetDetailsAsync(id);
 
             return this.Ok(author);
@@ -46,13 +47,23 @@
         [HttpPost]
         public async Task<ActionResult> Create(CreateAuthorWebModel webModel)
         {
-            var userId = this.userService.GetId();
             var serviceModel = this.mapper.Map<CreateAuthorServiceModel>(webModel);
-            serviceModel.CreatorId = userId;
+            serviceModel.CreatorId = this.userService.GetId();
 
             var authorId = await this.authorService.CreateAsync(serviceModel);
 
             return this.Created(nameof(this.Create), authorId);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Edit(int id, CreateAuthorWebModel webModel)
+        {
+            var serviceModel = this.mapper.Map<CreateAuthorServiceModel>(webModel);
+            serviceModel.CreatorId = this.userService.GetId();
+
+            var result = await this.authorService.EditAsync(id, serviceModel);
+
+            return this.NoContentOrBadRequest(result);
         }
     }
 }

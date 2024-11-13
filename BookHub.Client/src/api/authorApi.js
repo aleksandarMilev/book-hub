@@ -77,3 +77,19 @@ export async function getTopThreeAsync(token) {
     const authors = await response.json()
     return authors
 }
+
+export async function editAsync(authorId, author, token){
+    const options = {
+        method: "PUT",
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(author)
+    }
+
+    console.log(author)
+
+    const url = baseUrl + routes.author + `/${authorId}`
+    await fetch(url, options)
+}

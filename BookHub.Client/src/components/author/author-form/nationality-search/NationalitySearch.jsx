@@ -1,6 +1,4 @@
-import React from 'react'
-
-import useSearchNationalities from '../../../../hooks/useAuthor'
+import { useSearchNationalities } from '../../../../hooks/useAuthor'
 
 export default function NationalitySearch({ nationalities, loading, formik }) {
     const {

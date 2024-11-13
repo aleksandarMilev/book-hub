@@ -11,6 +11,7 @@ export const routes = {
     editBook: '/books/edit',
     author: '/author',
     topThreeAuthors: '/author/topThree',
-    authorNationalities: '/author/nationalities',
-    createAuthor: '/auhtor/new'
+    createAuthor: '/auhtor/new',
+    editAuthor: '/auhtor/edit',
+    authorNationalities: '/author/nationalities'
 }

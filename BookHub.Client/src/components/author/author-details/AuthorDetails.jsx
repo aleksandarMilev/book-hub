@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useContext } from 'react'
 import { useParams } from 'react-router-dom'
 import { format } from 'date-fns'
@@ -16,6 +17,7 @@ import {
 import * as useAuthor from '../../../hooks/useAuthor'
 import renderStars from '../../../common/functions/renderStars'
 import { UserContext } from '../../../contexts/userContext'
+import { routes } from '../../../common/constants/api'
 
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner'
 
@@ -27,6 +29,8 @@ export default function AuthorDetails() {
 
     const { userId } = useContext(UserContext)
     const isCreator = author?.creatorId === userId
+
+    const deleteHandler = () => null
 
     if (isFetching) {
         return <DefaultSpinner />
@@ -60,9 +64,11 @@ export default function AuthorDetails() {
 
                                     {isCreator && (
                                         <div className="author-actions">
-                                            <MDBBtn outline color="warning" className="me-2" size="sm">
-                                                <FaEdit className="me-1" /> Edit
-                                            </MDBBtn>
+                                            <Link to={`${routes.editAuthor}/${author.id}`} className="me-2">
+                                                <MDBBtn outline color="warning" size="sm">
+                                                    <FaEdit className="me-1" /> Edit
+                                                </MDBBtn>
+                                            </Link>
                                             <MDBBtn outline color="danger" size="sm">
                                                 <FaTrashAlt className="me-1" /> Delete
                                             </MDBBtn>
