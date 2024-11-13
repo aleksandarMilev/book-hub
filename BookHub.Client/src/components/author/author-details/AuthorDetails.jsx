@@ -1,0 +1,118 @@
+import { useContext } from 'react'
+import { useParams } from 'react-router-dom'
+import { format } from 'date-fns'
+import { FaEdit, FaTrashAlt } from 'react-icons/fa' 
+import { 
+    MDBCol, 
+    MDBContainer,
+    MDBRow, 
+    MDBCard, 
+    MDBCardText, 
+    MDBCardBody, 
+    MDBCardImage, 
+    MDBTypography, 
+    MDBBtn } from 'mdb-react-ui-kit' 
+
+import * as useAuthor from '../../../hooks/useAuthor'
+import renderStars from '../../../common/functions/renderStars'
+import { UserContext } from '../../../contexts/userContext'
+
+import DefaultSpinner from '../../common/default-spinner/DefaultSpinner'
+
+import './AuthorDetails.css';
+
+export default function AuthorDetails() {
+    const { id } = useParams()
+    const { author, isFetching } = useAuthor.useGetDetails(id)
+
+    const { userId } = useContext(UserContext)
+    const isCreator = author?.creatorId === userId
+
+    if (isFetching) {
+        return <DefaultSpinner />
+    }
+
+    return (
+        author ? (
+            <div className="author-details-wrapper">
+                <MDBContainer className="py-5 h-100">
+                    <MDBRow className="justify-content-center align-items-center h-100">
+                        <MDBCol lg="10">
+                            <MDBCard className="author-card">
+                                <MDBCardBody>
+                                    <div className="author-header">
+                                        <MDBCardImage 
+                                            src={author.imageUrl}
+                                            alt={`${author.name}'s image`} 
+                                            className="author-image"
+                                            fluid 
+                                        />
+                                        <div>
+                                            <MDBTypography tag="h2" className="author-name">
+                                                {author.name}
+                                            </MDBTypography>
+                                            <MDBCardText className="author-nationality">{author.nationality}</MDBCardText>
+                                            <MDBCardText className="author-penname">
+                                                {author.penName ? `Pen Name: ${author.penName}` : "No Pen Name"}
+                                            </MDBCardText>
+                                        </div>
+                                    </div>
+
+                                    {isCreator && (
+                                        <div className="author-actions">
+                                            <MDBBtn outline color="warning" className="me-2" size="sm">
+                                                <FaEdit className="me-1" /> Edit
+                                            </MDBBtn>
+                                            <MDBBtn outline color="danger" size="sm">
+                                                <FaTrashAlt className="me-1" /> Delete
+                                            </MDBBtn>
+                                        </div>
+                                    )}
+
+                                    <section className="author-about">
+                                        <MDBTypography tag="h4" className="section-title">About</MDBTypography>
+                                        <MDBCardText className="author-biography">{author.biography}</MDBCardText>
+                                        <MDBCardText className="author-birthdate">
+                                            <strong>Born:</strong> {author.bornAt ? format(new Date(author.bornAt), 'MMM dd, yyyy') : "Unknown"} 
+                                            {author.bornAt && !author.diedAt ? ` (${new Date().getFullYear() - new Date(author.bornAt).getFullYear()} years old)` : ""}
+                                        </MDBCardText>
+                                        <MDBCardText className="author-deathdate">
+                                            {author.diedAt && (
+                                                <>
+                                                    <strong>Died: </strong> 
+                                                    {author.diedAt ? format(new Date(author.diedAt), 'MMM dd, yyyy') : "Unknown"}
+                                                    {author.diedAt && author.bornAt && ` (${new Date(author.diedAt).getFullYear() - new Date(author.bornAt).getFullYear()} years old)`}
+                                                </>
+                                            )}
+                                        </MDBCardText>
+                                    </section>
+
+                                    <section className="author-statistics">
+                                        <MDBTypography tag="h4" className="section-title">Statistics</MDBTypography>
+                                        <MDBRow className="text-center mt-3">
+                                            <MDBCol className="d-flex flex-column align-items-center">
+                                                <MDBCardText className="author-rating">{renderStars(author.rating)}</MDBCardText>
+                                                <MDBCardText className="author-rating-text">Average Rating</MDBCardText>
+                                            </MDBCol>
+                                            <MDBCol className="d-flex flex-column align-items-center">
+                                                <MDBCardText className="author-books-count">{author.booksCount}</MDBCardText>
+                                                <MDBCardText className="author-books-text">Books Published</MDBCardText>
+                                            </MDBCol>
+                                        </MDBRow>
+                                    </section>
+                                </MDBCardBody>
+                            </MDBCard>
+                        </MDBCol>
+                    </MDBRow>
+                </MDBContainer>
+            </div>
+        ) : (
+            <div className="container mt-5">
+                <div className="alert alert-danger text-center" role="alert">
+                    <h4 className="alert-heading">Oops!</h4>
+                    <p>The author you are looking for was not found.</p>
+                </div>
+            </div>
+        )
+    )
+}

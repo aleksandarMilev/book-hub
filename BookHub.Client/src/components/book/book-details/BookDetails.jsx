@@ -6,9 +6,11 @@ import * as useBook from '../../../hooks/useBook'
 import { routes } from "../../../common/constants/api"
 import { UserContext } from "../../../contexts/userContext"
 
-import BookFullInfo from './BookFullInfo'
-import AuthorIntroduction from './AuthorIntroduction'
-import DefaultSpinner from '../../common/DefaultSpinner'
+import BookFullInfo from './book-full-info/BookFullInfo'
+import AuthorIntroduction from './author-introduction/AuthorIntroduction'
+import DefaultSpinner from '../../common/default-spinner/DefaultSpinner'
+
+import './BookDetails.css'
 
 export default function BookDetails() {
     const { id } = useParams()
@@ -17,7 +19,7 @@ export default function BookDetails() {
     const [showFullDescription, setShowFullDescription] = useState(false)
     const navigate = useNavigate()
 
-    async function deleteHandler(){
+    async function deleteHandler() {
         await bookApi.deleteAsync(id, token)
         navigate(routes.books)
     }
@@ -30,33 +32,33 @@ export default function BookDetails() {
 
     return (
         !isFetching ? (
-          book ? (
-            <div className="container mt-5">
-                <div className="card shadow-lg p-4" style={{ backgroundColor: '#f9f9f9' }}>
-                    <BookFullInfo
-                        book={book}
-                        descriptionPreview={descriptionPreview}
-                        showFullDescription={showFullDescription}
-                        setShowFullDescription={setShowFullDescription}
-                        isCreator={isCreator}
-                        deleteHandler={deleteHandler}
-                        id={id}
-                    />
-                    <AuthorIntroduction author={book.author} />
+            book ? (
+                <div className="book-details-container mt-5">
+                    <div className="book-details-card shadow-lg p-4">
+                        <BookFullInfo
+                            book={book}
+                            descriptionPreview={descriptionPreview}
+                            showFullDescription={showFullDescription}
+                            setShowFullDescription={setShowFullDescription}
+                            isCreator={isCreator}
+                            deleteHandler={deleteHandler}
+                            id={id}
+                        />
+                        <AuthorIntroduction author={book.author} />
+                    </div>
                 </div>
-            </div>
-          ) : (
-            <div className="container mt-5">
-              <div className="alert alert-danger text-center" role="alert">
-                <h4 className="alert-heading">Oops!</h4>
-                <p>The book you are looking for was not found.</p>
-              </div>
-            </div>
-          )
+            ) : (
+                <div className="book-not-found mt-5">
+                    <div className="alert alert-danger text-center" role="alert">
+                        <h4 className="alert-heading">Oops!</h4>
+                        <p>The book you are looking for was not found.</p>
+                    </div>
+                </div>
+            )
         ) : (
-          <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '50vh' }}>
-            <DefaultSpinner />
-          </div>
+            <div className="spinner-container d-flex justify-content-center align-items-center">
+                <DefaultSpinner />
+            </div>
         )
     )
 }

@@ -1,0 +1,15 @@
+.book-details-container {
+    margin-top: 50px;
+}
+
+.book-details-card {
+    background-color: #f9f9f9;
+}
+
+.book-not-found {
+    margin-top: 50px;
+}
+
+.spinner-container {
+    min-height: 50vh;
+}

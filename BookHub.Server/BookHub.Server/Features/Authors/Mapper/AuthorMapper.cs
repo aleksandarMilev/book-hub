@@ -1,20 +1,21 @@
 ﻿namespace BookHub.Server.Features.Authors.Mapper
 {
     using AutoMapper;
+    using Books.Service.Models;
     using Data.Models;
     using Service.Models;
     using Web.Models;
-
-    using static Common.Constants.DefaultValues;
 
     public class AuthorMapper : Profile
     {
         public AuthorMapper()
         {
-            this.CreateMap<CreateAuthorWebModel, AuthorDetailsServiceModel>()
-                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl ?? DefaultAuthorImageUrl));
+            this.CreateMap<Book, BookListServiceModel>()
+                .ForMember(dest => dest.Genres, opt => opt.MapFrom(src => src.BooksGenres.Select(bg => bg.Genre.Name).ToList()));
 
-            this.CreateMap<AuthorDetailsServiceModel, Author>()
+            this.CreateMap<CreateAuthorWebModel, CreateAuthorServiceModel>();
+
+            this.CreateMap<CreateAuthorServiceModel, Author>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.Nationality, opt => opt.Ignore())
                 .ForMember(dest => dest.Gender,
@@ -22,13 +23,17 @@
                 .ForMember(dest => dest.BornAt,
                            opt => opt.MapFrom(src => MapperHelper.ParseDateTime(src.BornAt)))
                 .ForMember(dest => dest.DiedAt,
-                           opt => opt.MapFrom(src => MapperHelper.ParseDateTime(src.DiedAt)))
-                .ReverseMap()
-                    .ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name))
-                    .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender.ToString()))
-                    .ForMember(dest => dest.DiedAt, opt => opt.MapFrom(src => src.BornAt != null ? src.DiedAt.ToString() : null))
-                    .ForMember(dest => dest.DiedAt, opt => opt.MapFrom(src => src.DiedAt != null ? src.DiedAt.ToString() : null))
-                    .ForMember(dest => dest.BooksCount, opt => opt.MapFrom(src => src.Books.Count()));
+                           opt => opt.MapFrom(src => MapperHelper.ParseDateTime(src.DiedAt)));
+
+            this.CreateMap<Author, AuthorDetailsServiceModel>()
+                .ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name))
+                .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender.ToString()))
+                .ForMember(dest => dest.BornAt, opt => opt.MapFrom(src => src.BornAt != null ? src.BornAt.ToString() : null))
+                .ForMember(dest => dest.DiedAt, opt => opt.MapFrom(src => src.DiedAt != null ? src.DiedAt.ToString() : null))
+                .ForMember(dest => dest.BooksCount, opt => opt.MapFrom(src => src.Books.Count()))
+                .ForMember(dest => dest.TopBooks, opt => opt.MapFrom(src => src.Books.Take(3)));
+                   
+            this.CreateMap<CreateAuthorWebModel, CreateAuthorServiceModel>();
         }
     }
 }

@@ -122,5 +122,27 @@
 
             return true;
         }
+
+        public async Task<IEnumerable<BookListServiceModel>> GetTopThreeAsync()
+             => await this.data
+                .Books
+                .Select(b => new BookListServiceModel()
+                {
+                    Id = b.Id,
+                    Title = b.Title,
+                    ImageUrl = b.ImageUrl,
+                    ShortDescription = b.ShortDescription,
+                    AverageRating = b.AverageRating,
+                    Genres = this.data
+                        .BooksGenres
+                        .Where(bg => bg.BookId == b.Id)
+                        .Select(bg => bg.Genre.Name)
+                        .ToList(),
+                    AuthorName = b.Author.Name
+                })
+                .OrderByDescending(b => b.AverageRating)
+                .Take(3)
+                .ToListAsync();
+
     }
 }

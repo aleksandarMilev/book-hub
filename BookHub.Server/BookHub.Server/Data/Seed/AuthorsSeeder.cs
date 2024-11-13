@@ -56,6 +56,7 @@
                     NationalityId = 181,
                     Gender = Gender.Male,
                     BornAt = new DateTime(1892, 01, 03),
+                    DiedAt = new DateTime(1973, 09, 02),
                     CreatorId = "user3Id"
                 }
             };

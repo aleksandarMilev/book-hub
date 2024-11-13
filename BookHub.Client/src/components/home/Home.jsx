@@ -1,12 +1,12 @@
-import Hero from "./Hero"
-import TopAuthors from "./TopAuthors"
-import TopBooks from "./TopBooks"
+import Hero from "./hero/Hero"
+import TopAuthors from "./top-authors/TopAuthors"
+import TopBooks from "./top-books/TopBooks"
 
 export default function Home(){
     return(
         <>
-            <Hero/>
-            <TopAuthors/>
+            <Hero />
+            <TopAuthors />
             <TopBooks />
         </>
     )

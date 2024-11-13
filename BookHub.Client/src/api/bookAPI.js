@@ -71,3 +71,16 @@ export async function deleteAsync(bookId, token){
     const url = baseUrl + routes.books + `/${bookId}`
     await fetch(url, options)
 }
+
+export async function getTopThreeAsync(token){
+    const options = {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+
+    const url = baseUrl + routes.topThreeBooks
+    const response = await fetch(url, options)
+    return response.ok ? await response.json() : null
+}

@@ -1848,14 +1848,14 @@ namespace BookHub.Server.Data.Migrations
                         {
                             Id = "user1Id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "fa1d8adc-3722-4925-b26c-9c40ed5f9cc8",
+                            ConcurrencyStamp = "264e1551-cc13-489f-94bf-72be73e7e32a",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user1@mail.com",
                             EmailConfirmed = false,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "6271be02-beba-41ab-89a0-2db0d2b8aebf",
+                            SecurityStamp = "62619753-ff98-4e04-853b-162438ef8636",
                             TwoFactorEnabled = false,
                             UserName = "user1name"
                         },
@@ -1863,14 +1863,14 @@ namespace BookHub.Server.Data.Migrations
                         {
                             Id = "user2Id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "652597be-eefe-4975-b240-0f3652aac2af",
+                            ConcurrencyStamp = "e83ad2d9-68c1-4209-97bb-53ed0f837203",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user2@mail.com",
                             EmailConfirmed = false,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "41e9a484-61ca-4b93-9b55-f35a8acd2606",
+                            SecurityStamp = "25142386-5470-4f55-a2f6-2e81866a5ebf",
                             TwoFactorEnabled = false,
                             UserName = "user2name"
                         },
@@ -1878,14 +1878,14 @@ namespace BookHub.Server.Data.Migrations
                         {
                             Id = "user3Id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "74b12400-71d5-4f0c-8694-ceebf94446d0",
+                            ConcurrencyStamp = "e32c2d39-9fac-413d-bdfd-6a6ef881b84f",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user3@mail.com",
                             EmailConfirmed = false,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "7ae7ef28-e5b5-41ca-99fe-05a7a2f55307",
+                            SecurityStamp = "6105e913-f145-4de3-b4a8-28f0e60ace74",
                             TwoFactorEnabled = false,
                             UserName = "user3name"
                         });

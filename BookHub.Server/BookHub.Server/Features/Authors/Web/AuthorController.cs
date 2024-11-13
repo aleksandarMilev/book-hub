@@ -39,7 +39,7 @@
         public async Task<ActionResult> Create(CreateAuthorWebModel webModel)
         {
             var userId = this.userService.GetId();
-            var serviceModel = this.mapper.Map<AuthorDetailsServiceModel>(webModel);
+            var serviceModel = this.mapper.Map<CreateAuthorServiceModel>(webModel);
             serviceModel.CreatorId = userId;
 
             var authorId = await this.authorService.CreateAsync(serviceModel);

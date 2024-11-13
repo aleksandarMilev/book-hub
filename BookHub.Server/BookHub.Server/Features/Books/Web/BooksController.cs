@@ -16,12 +16,9 @@
         private readonly IBookService bookService = bookService;
         private readonly ICurrentUserService userService = userService;
 
-        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BookListServiceModel>>> All()
         {
-            Thread.Sleep(1_000);
-
             var models = await this.bookService.GetAllAsync();
 
             return this.Ok(models);
@@ -30,9 +27,16 @@
         [HttpGet("{id}")]
         public async Task<ActionResult> Details(int id)
         {
-            Thread.Sleep(1_000);
-
             var model = await this.bookService.GetDetailsAsync(id);
+
+            return this.Ok(model);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+        public async Task<ActionResult> TopThree()
+        {
+            var model = await this.bookService.GetTopThreeAsync();
 
             return this.Ok(model);
         }

@@ -8,6 +8,6 @@
 
         Task<AuthorDetailsServiceModel?> GetDetailsAsync(int id);
 
-        Task<int> CreateAsync(AuthorDetailsServiceModel model);
+        Task<int> CreateAsync(CreateAuthorServiceModel model);
     }
 }

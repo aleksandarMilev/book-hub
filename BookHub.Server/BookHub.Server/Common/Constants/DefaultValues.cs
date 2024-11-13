@@ -2,7 +2,7 @@
 {
     public static class DefaultValues
     {
-        public const string DefaultAuthorImageUrl = "https://uploads2.wikiart.org/images/gustave-caillebotte/portrait-of-a-man-writing-in-his-study.jpg!Large.jpg";
+        public const string DefaultAuthorImageUrl = "https://famouswritingroutines.com/wp-content/uploads/2022/06/daily-word-counts-of-famous-authors-1140x761.jpg";
 
         public const string UnknownNationalityName = "Unknown";
     }

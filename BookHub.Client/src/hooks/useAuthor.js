@@ -94,9 +94,7 @@ export function useGetDetails(id){
     useEffect(() => {
         async function fetchData() {
             setIsFetching(old => !old)
-            let result = await authorApi.getDetailsAsync(id, token)
-            setAuthor(result)
-            console.log(result)
+            setAuthor(await authorApi.getDetailsAsync(id, token))
             setIsFetching(old => !old)
         }
 

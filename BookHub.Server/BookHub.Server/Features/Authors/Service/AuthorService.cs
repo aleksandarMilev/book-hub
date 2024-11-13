@@ -19,7 +19,7 @@
         public async Task<AuthorDetailsServiceModel?> GetDetailsAsync(int id)
             => await this.data
                 .Authors
-                .ProjectTo<AuthorDetailsServiceModel>(this.mapper.ConfigurationProvider)    
+                .ProjectTo<AuthorDetailsServiceModel>(this.mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(a => a.Id == id);
 
         public List<string> GetNationalities()
@@ -28,10 +28,11 @@
                 .Select(n => n.Name)
                 .ToList();
 
-        public async Task<int> CreateAsync(AuthorDetailsServiceModel model)
+        public async Task<int> CreateAsync(CreateAuthorServiceModel model)
         {
             var author = this.mapper.Map<Author>(model);
-            author.NationalityId = await GetNationalityByNameAsync(model);
+            author.NationalityId = await GetNationalityByNameAsync(model.Nationality);
+            author.ImageUrl ??= DefaultAuthorImageUrl;
 
             this.data.Add(author);
             await this.data.SaveChangesAsync();
@@ -39,11 +40,11 @@
             return author.Id;
         }
 
-        private async Task<int> GetNationalityByNameAsync(AuthorDetailsServiceModel model)
+        private async Task<int> GetNationalityByNameAsync(string name)
         {
             int? nationalityId = await this.data
                 .Nationalities
-                .Where(n => n.Name == model.Nationality)
+                .Where(n => n.Name == name)
                 .Select(n => n.Id)
                 .FirstOrDefaultAsync();
 

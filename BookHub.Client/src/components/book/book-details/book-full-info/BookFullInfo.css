@@ -1,0 +1,65 @@
+.book-info-card {
+    background-color: #f9f9f9;
+}
+
+.book-info-image-container {
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 80px;
+    max-width: 250px; /* Reduce the width of the image container */
+    flex: 0 0 auto; /* Prevent the container from expanding further */
+    margin-right: 20px; /* Adds some spacing between the image and the text */
+}
+
+.book-info-image {
+    max-height: 300px;
+    object-fit: contain;
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.book-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.book-author {
+    font-size: 1.2rem;
+    color: #6c757d;
+}
+
+.genres {
+    margin-bottom: 1rem;
+}
+
+.book-description {
+    line-height: 1.6;
+}
+
+.show-more-button {
+    font-weight: bold;
+    padding: 0;
+    font-size: 1.1rem;
+}
+
+.show-more-button:hover {
+    text-decoration: underline;
+}
+
+.d-flex .gap-2 {
+    gap: 10px;
+}
+
+@media (min-width: 768px) {
+    .book-info-card {
+        display: flex;
+        gap: 2rem;
+    }
+
+    .book-info-body {
+        flex: 2;
+    }
+}

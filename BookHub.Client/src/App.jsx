@@ -1,21 +1,24 @@
 import { Route, Routes } from "react-router-dom"
 
-import AuthenticatedRoute from './components/common/AuthenticatedRoute'
+import AuthenticatedRoute from './components/common/authenticated-route/AuthenticatedRoute'
 import { routes } from "./common/constants/api"
 import { UserContextProvider } from "./contexts/userContext"
 
-import Header from './components/header/Header'
+import Header from './components/common/header/Header'
+import Footer from './components/common/footer/Footer'
 import Home from './components/home/Home'
-import Footer from './components/footer/Footer'
-import Login from './components/identity/Login'
-import Register from './components/identity/Register'
-import Logout from './components/identity/Logout'
-import BookList from "./components/book/BookList"
+
+import Login from './components/identity/login/Login'
+import Register from './components/identity/register/Register'
+import Logout from './components/identity/logout/Logout'
+
+import BookList from "./components/book/book-list/BookList"
 import BookDetails from "./components/book/book-details/BookDetails"
-import CreateBook from './components/book/CreateBook'
-import EditBook from './components/book/EditBook'
+import CreateBook from './components/book/create-book/CreateBook'
+import EditBook from './components/book/edit-book/EditBook'
+
 import CreateAuthor from "./components/author/create-author/CreateAuthor"
-import AuthorDetails from "./components/author/AuthorDetails"
+import AuthorDetails from "./components/author/author-details/AuthorDetails"
 
 export default function App(){
     return(

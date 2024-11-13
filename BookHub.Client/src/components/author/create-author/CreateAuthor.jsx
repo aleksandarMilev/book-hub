@@ -16,8 +16,10 @@ import { routes } from '../../../common/constants/api'
 import * as useAuthor from '../../../hooks/useAuthor'
 
 import image from '../../../assets/images/createAuthor.jpg'
-import NationalitySearch from './NationalitySearch'
-import GenderRadio from './GenderRadio'
+import NationalitySearch from './nationality-search/NationalitySearch'
+import GenderRadio from './gender-radio/GenderRadio'
+
+import './CreateAuthor.css';
 
 export default function CreateAuthor() {
     const navigate = useNavigate()
@@ -73,7 +75,7 @@ export default function CreateAuthor() {
         onSubmit: async (values, { setErrors }) => {
             try {
                 const authorId = await createHandler(values)
-                navigate(routes.home)
+                navigate(routes.author + `/${authorId}`)
             } catch (error) {
                 setErrors({ submit: error.message })
             }
@@ -81,13 +83,13 @@ export default function CreateAuthor() {
     })
 
     return (
-        <MDBContainer fluid className="bg-dark">
+        <MDBContainer fluid className="create-author-container">
             <MDBRow className="d-flex justify-content-center align-items-center h-100">
                 <MDBCol>
-                    <MDBCard className="my-4">
+                    <MDBCard className="my-4 create-author-card">
                         <MDBRow className="g-0">
                             <MDBCol md="6" className="d-none d-md-block">
-                                <MDBCardImage src={image} alt="Sample photo" className="rounded-start" fluid />
+                                <MDBCardImage src={image} alt="Sample photo" className="create-author-image" fluid />
                             </MDBCol>
                             <MDBCol md="6">
                                 <MDBCardBody className="text-black d-flex flex-column justify-content-center">
@@ -105,9 +107,7 @@ export default function CreateAuthor() {
                                                     id="name"
                                                     type="text"
                                                     {...formik.getFieldProps('name')}
-                                                    className={
-                                                        formik.touched.name && formik.errors.name ? 'is-invalid' : ''
-                                                    }
+                                                    className={formik.touched.name && formik.errors.name ? 'is-invalid' : ''}
                                                 />
                                             </MDBCol>
                                         </MDBRow>
@@ -135,9 +135,7 @@ export default function CreateAuthor() {
                                                     id="imageUrl"
                                                     type="text"
                                                     {...formik.getFieldProps('imageUrl')}
-                                                    className={
-                                                        formik.touched.imageUrl && formik.errors.imageUrl ? 'is-invalid' : ''
-                                                    }
+                                                    className={formik.touched.imageUrl && formik.errors.imageUrl ? 'is-invalid' : ''}
                                                 />
                                             </MDBCol>
                                         </MDBRow>
@@ -165,9 +163,7 @@ export default function CreateAuthor() {
                                                     id="diedAt"
                                                     type="date"
                                                     {...formik.getFieldProps('diedAt')}
-                                                    className={
-                                                        formik.touched.diedAt && formik.errors.diedAt ? 'is-invalid' : ''
-                                                    }
+                                                    className={formik.touched.diedAt && formik.errors.diedAt ? 'is-invalid' : ''}
                                                 />
                                             </MDBCol>
                                         </MDBRow>
@@ -186,19 +182,7 @@ export default function CreateAuthor() {
                                                     id="biography"
                                                     rows="12"
                                                     {...formik.getFieldProps('biography')}
-                                                    className={
-                                                        formik.touched.biography && formik.errors.biography ? 'is-invalid' : ''
-                                                    }
-                                                    style={{
-                                                        width: '100%',
-                                                        resize: 'vertical', 
-                                                        minHeight: '200px',
-                                                        padding: '10px',
-                                                        borderColor: '#ced4da', 
-                                                        borderRadius: '5px',
-                                                        lineHeight: '1.5',
-                                                    }}
-                                                    wrap="soft"  
+                                                    className={formik.touched.biography && formik.errors.biography ? 'is-invalid biography-textarea' : 'biography-textarea'}
                                                     placeholder="Write the author's biography here..."
                                                 />
                                             </MDBCol>

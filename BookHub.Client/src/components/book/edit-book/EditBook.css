@@ -1,0 +1,46 @@
+/* EditBook.css */
+.edit-book-container {
+    margin-top: 3rem; /* .mt-5 */
+}
+
+.edit-book-spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 50vh;
+}
+
+.edit-book-card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.edit-book-title {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.edit-book-form-label {
+    font-weight: bold;
+}
+
+.edit-book-error {
+    color: red;
+    margin-bottom: 1rem;
+}
+
+.edit-book-submit-button {
+    text-align: center;
+}
+
+.edit-book-alert-container {
+    margin-top: 3rem;
+}
+
+.edit-book-alert {
+    text-align: center;
+}
+
+.edit-book-alert-heading {
+    font-size: 1.5rem;
+    font-weight: bold;
+}

@@ -7,6 +7,8 @@
     {
         Task<IEnumerable<BookListServiceModel>> GetAllAsync();
 
+        Task<IEnumerable<BookListServiceModel>> GetTopThreeAsync();
+
         Task<BookDetailsServiceModel?> GetDetailsAsync(int id);
 
         Task<int> CreateAsync(CreateBookServiceModel model, string userId);

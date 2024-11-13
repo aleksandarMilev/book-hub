@@ -10,9 +10,11 @@ export async function createAsync(author, token){
         body: JSON.stringify(author)
     }
 
+    console.log(JSON.stringify(author))
     const response = await fetch(baseUrl + routes.author, options)
-
+    
     if(!response.ok){
+        console.log(await response.json())
         throw new Error('Something went wrong, please try again!')
     }
 

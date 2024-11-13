@@ -1,0 +1,34 @@
+.hero-container {
+    padding: 5rem;
+    text-align: center;
+    background-image: url('../../../assets/images/hero.jpg');
+    height: 400px;
+}
+
+.hero-mask {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.hero-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.hero-text {
+    color: white;
+}
+
+.hero-title {
+    margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+    margin-bottom: 1rem;
+}
+
+.hero-button {
+    outline: true;
+    font-size: 1.25rem; 
+}

@@ -83,3 +83,21 @@ export function useEdit(){
 
     return editHandler
 }
+
+export function useGetTopThree(){
+    const { token } = useContext(UserContext)
+    const [books, setBooks] = useState([])
+    const [isFetching, setIsFetching] = useState(false)
+
+    useEffect(() => {
+        async function fetchData() {
+            setIsFetching(old => !old)
+            setBooks(await bookApi.getTopThreeAsync(token))
+            setIsFetching(old => !old)
+        }
+
+        fetchData()
+    }, [])
+
+    return { books, isFetching }
+}
