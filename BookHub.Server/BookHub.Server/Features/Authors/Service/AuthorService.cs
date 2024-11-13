@@ -88,5 +88,27 @@
 
             return true;
         }
+
+        public async Task<Result> DeleteAsync(int id, string userId)
+        {
+            var author = await this.data
+                 .Authors
+                 .FindAsync(id);
+
+            if (author is null)
+            {
+                return AuthorNotFound;
+            }
+
+            if (author.CreatorId != userId)
+            {
+                return UnauthorizedAuthorDelete;
+            }
+
+            this.data.Remove(author);
+            await this.data.SaveChangesAsync();
+
+            return true;
+        }
     }
 }

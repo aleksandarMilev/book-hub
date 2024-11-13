@@ -1,6 +1,5 @@
-import { Link } from 'react-router-dom'
 import { useContext } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
 import { FaEdit, FaTrashAlt } from 'react-icons/fa' 
 import { 
@@ -14,6 +13,7 @@ import {
     MDBTypography, 
     MDBBtn } from 'mdb-react-ui-kit' 
 
+import * as authorApi from '../../../api/authorApi'
 import * as useAuthor from '../../../hooks/useAuthor'
 import renderStars from '../../../common/functions/renderStars'
 import { UserContext } from '../../../contexts/userContext'
@@ -26,11 +26,15 @@ import './AuthorDetails.css';
 export default function AuthorDetails() {
     const { id } = useParams()
     const { author, isFetching } = useAuthor.useGetDetails(id)
+    const navigate = useNavigate()
 
-    const { userId } = useContext(UserContext)
+    const { userId, token } = useContext(UserContext)
     const isCreator = author?.creatorId === userId
 
-    const deleteHandler = () => null
+    async function deleteHandler() {
+        await authorApi.deleteAsync(id, token)
+        navigate(routes.books)
+    }
 
     if (isFetching) {
         return <DefaultSpinner />
@@ -69,12 +73,16 @@ export default function AuthorDetails() {
                                                     <FaEdit className="me-1" /> Edit
                                                 </MDBBtn>
                                             </Link>
-                                            <MDBBtn outline color="danger" size="sm">
+                                            <MDBBtn 
+                                                outline 
+                                                color="danger" 
+                                                size="sm" 
+                                                onClick={() => deleteHandler(author.id)}
+                                            >
                                                 <FaTrashAlt className="me-1" /> Delete
                                             </MDBBtn>
                                         </div>
                                     )}
-
                                     <section className="author-about">
                                         <MDBTypography tag="h4" className="section-title">About</MDBTypography>
                                         <MDBCardText className="author-biography">{author.biography}</MDBCardText>

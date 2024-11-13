@@ -31,10 +31,10 @@ export default function AuthorForm({ authorData = null, isEditMode = false }) {
         name: Yup.string().min(2).max(200).required('Name is required!'),
         penName: Yup.string().min(2).max(200),
         imageUrl: Yup.string().url().min(10).max(2000),
-        bornAt: Yup.date().max(new Date(), 'Date of birth must be in the past').required('Date of birth is required'),
+        bornAt: Yup.date().max(new Date(), 'Date of birth must be in the past'),
         diedAt: Yup
             .date()
-            .max(new Date(), 'Date of birth must be in the past').required('Date of birth is required')
+            .max(new Date(), 'Date of birth must be in the past')
             .min(Yup.ref('bornAt'), 'Date of death cannot be earlier than date of birth'),
         gender: Yup.string().required('Gender is required!'),
         nationality: Yup.string().required('Nationality is required!'),

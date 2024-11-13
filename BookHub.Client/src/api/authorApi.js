@@ -93,3 +93,15 @@ export async function editAsync(authorId, author, token){
     const url = baseUrl + routes.author + `/${authorId}`
     await fetch(url, options)
 }
+
+export async function deleteAsync(id, token){
+    const options = {
+        method: "DELETE",
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+
+    const url = baseUrl + routes.author + `/${id}`
+    await fetch(url, options)
+}

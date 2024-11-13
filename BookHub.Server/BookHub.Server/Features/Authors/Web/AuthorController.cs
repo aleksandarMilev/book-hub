@@ -65,5 +65,13 @@ namespace BookHub.Server.Features.Authors.Web
 
             return this.NoContentOrBadRequest(result);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var result = await this.authorService.DeleteAsync(id, this.userService.GetId()!);
+
+            return this.NoContentOrBadRequest(result);
+        }
     }
 }
