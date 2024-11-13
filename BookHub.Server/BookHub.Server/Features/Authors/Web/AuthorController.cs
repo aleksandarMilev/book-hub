@@ -21,33 +21,20 @@ namespace BookHub.Server.Features.Authors.Web
         private readonly IMapper mapper = mapper;
 
         [HttpGet("[action]")]
-        public ActionResult Nationalities()
-        {
-            var nationalities = this.authorService.GetNationalities();
-
-            return this.Ok(nationalities);
-        }
-
+        public ActionResult<IEnumerable<string>> Nationalities() 
+            => this.Ok(this.authorService.GetNationalities());
 
         [AllowAnonymous]
         [HttpGet("[action]")]
-        public async Task<ActionResult> TopThree()
-        {
-            var model = await this.authorService.GetTopThreeAsync();
-
-            return this.Ok(model);
-        }
+        public async Task<ActionResult<IEnumerable<AuthorServiceModel>>> TopThree()
+            => this.Ok(await this.authorService.GetTopThreeAsync());
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> Details(int id)
-        {
-            var author = await this.authorService.GetDetailsAsync(id);
-
-            return this.Ok(author);
-        }
+        public async Task<ActionResult<AuthorDetailsServiceModel>> Details(int id) 
+            => this.Ok(await this.authorService.GetDetailsAsync(id));
 
         [HttpPost]
-        public async Task<ActionResult> Create(CreateAuthorWebModel webModel)
+        public async Task<ActionResult<int>> Create(CreateAuthorWebModel webModel)
         {
             var serviceModel = this.mapper.Map<CreateAuthorServiceModel>(webModel);
             serviceModel.CreatorId = this.userService.GetId();

@@ -1,6 +1,7 @@
 ﻿namespace BookHub.Server.Features.Books.Service
 {
-    using Authors.Service.Models;
+    using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using Data;
     using Data.Models;
     using Infrastructure.Services;
@@ -9,67 +10,43 @@
 
     using static Common.Messages.Error.Book;
 
-    public class BookService(BookHubDbContext data) : IBookService
+    public class BookService(
+        BookHubDbContext data,
+        IMapper mapper) : IBookService
     {
         private readonly BookHubDbContext data = data;
+        private readonly IMapper mapper = mapper;
 
         public async Task<IEnumerable<BookListServiceModel>> GetAllAsync()
             => await this.data
                 .Books
-                .Select(b => new BookListServiceModel()
-                {
-                    Id = b.Id,
-                    Title = b.Title,
-                    ImageUrl = b.ImageUrl,
-                    ShortDescription = b.ShortDescription,
-                    AverageRating = b.AverageRating,
-                    Genres = this.data
-                        .BooksGenres
-                        .Where(bg => bg.BookId == b.Id)
-                        .Select(bg => bg.Genre.Name)
-                        .ToList(),
-                    AuthorName = b.Author.Name
-                })
+                .ProjectTo<BookListServiceModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
+
+        public async Task<IEnumerable<BookListServiceModel>> GetTopThreeAsync()
+            => await this.data
+               .Books
+               .ProjectTo<BookListServiceModel>(this.mapper.ConfigurationProvider)
+               .OrderByDescending(b => b.AverageRating)
+               .Take(3)
+               .ToListAsync();
+
 
         public async Task<BookDetailsServiceModel?> GetDetailsAsync(int id)
             => await this.data
                 .Books
-                .Select(b => new BookDetailsServiceModel()
-                {
-                    Id = b.Id,
-                    Title = b.Title,
-                    ImageUrl = b.ImageUrl,
-                    ShortDescription = b.ShortDescription,
-                    LongDescription = b.LongDescription,
-                    RatingsCount = b.RatingsCount,
-                    AverageRating = b.AverageRating,
-                    Genres = this.data
-                        .BooksGenres
-                        .Where(bg => bg.BookId == b.Id)
-                        .Select(bg => bg.Genre.Name)
-                        .ToList(),
-                    AuthorName = b.Author.Name,
-                    Author = new AuthorServiceModel()
-                    {
-                        Id = b.AuthorId,
-                        Name = b.Author.Name,
-                        ImageUrl = b.Author.ImageUrl,
-                        Biography = b.Author.Biography,
-                        BooksCount = b.Author.Books.Count()
-                    },
-                    CreatorId = b.CreatorId
-                })
+                .ProjectTo<BookDetailsServiceModel>(this.mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(b => b.Id == id);
 
-        public async Task<int> CreateAsync(CreateBookServiceModel model, string userId)
+        public async Task<int> CreateAsync(CreateBookServiceModel model)
         {
-            var book = new Book()
+            var book = this.mapper.Map<Book>(model);
+            var authorId = await this.GetAuthorIdByNameAsync(model.AuthorName);
+
+            if (authorId != 0)
             {
-                Title = model.Title,
-                ImageUrl = model.ImageUrl,
-                CreatorId = userId
-            };
+                book.AuthorId = authorId;
+            }
 
             this.data.Add(book);
             await this.data.SaveChangesAsync();
@@ -77,24 +54,30 @@
             return book.Id;
         }
 
-        public async Task<Result> EditAsync(int id, CreateBookServiceModel model, string userId)
+        public async Task<Result> EditAsync(int id, CreateBookServiceModel model)
         {
             var book = await this.data
-                .Books
-                .FindAsync(id);
+                 .Books
+                 .FindAsync(id);
 
             if (book is null)
             {
                 return BookNotFound;
             }
 
-            if (book.CreatorId != userId)
+            if (book.CreatorId != model.CreatorId)
             {
                 return UnauthorizedBookEdit;
             }
 
-            book.Title = model.Title;
-            book.ImageUrl = model.ImageUrl;
+            this.mapper.Map(model, book);
+
+            var authorId = await this.GetAuthorIdByNameAsync(model.AuthorName);
+
+            if (authorId != 0)
+            {
+                book.AuthorId = authorId;
+            }
 
             await this.data.SaveChangesAsync();
 
@@ -104,8 +87,8 @@
         public async Task<Result> DeleteAsync(int id, string userId)
         {
             var book = await this.data
-              .Books
-              .FindAsync(id);
+                 .Books
+                 .FindAsync(id);
 
             if (book is null)
             {
@@ -123,26 +106,11 @@
             return true;
         }
 
-        public async Task<IEnumerable<BookListServiceModel>> GetTopThreeAsync()
-             => await this.data
-                .Books
-                .Select(b => new BookListServiceModel()
-                {
-                    Id = b.Id,
-                    Title = b.Title,
-                    ImageUrl = b.ImageUrl,
-                    ShortDescription = b.ShortDescription,
-                    AverageRating = b.AverageRating,
-                    Genres = this.data
-                        .BooksGenres
-                        .Where(bg => bg.BookId == b.Id)
-                        .Select(bg => bg.Genre.Name)
-                        .ToList(),
-                    AuthorName = b.Author.Name
-                })
-                .OrderByDescending(b => b.AverageRating)
-                .Take(3)
-                .ToListAsync();
-
+        private async Task<int> GetAuthorIdByNameAsync(string? name)
+            => await this.data
+                .Authors
+                .Where(a => a.Name == name)
+                .Select(a => a.Id)
+                .FirstOrDefaultAsync();
     }
 }

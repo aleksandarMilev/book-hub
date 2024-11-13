@@ -8,25 +8,20 @@
     {
         [Required]
         [StringLength(TitleMaxLength, MinimumLength = TitleMinLength)]
-        public string Title { get; set; } = null!;
+        public string Title { get; init; } = null!;
 
         [Required]
         [StringLength(ShortDescriptionMaxLength, MinimumLength = ShortDescriptionMinLength)]
-        public string ShortDescription { get; set; } = null!;
+        public string ShortDescription { get; init; } = null!;
 
         [Required]
         [StringLength(LongDescriptionMaxLength, MinimumLength = LongDescriptionMinLength)]
-        public string LongDescription { get; set; } = null!;
-
-        [Range(RatingMinValue, RatingMaxValue)]
-        public double Rating { get; set; }
+        public string LongDescription { get; init; } = null!;
 
         [Required]
         [StringLength(ImageUrlMaxLength, MinimumLength = ImageUrlMinLength)]
-        public string ImageUrl { get; set; } = null!;
+        public string ImageUrl { get; init; } = null!;
 
-        public int AuthorId { get; set; }
-
-        public string? CreatorId { get; set; }
+        public int AuthorName { get; init; }
     }
 }

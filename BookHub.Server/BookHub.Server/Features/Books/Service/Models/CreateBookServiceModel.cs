@@ -4,10 +4,14 @@
     {
         public string Title { get; init; } = null!;
 
-        public string Author { get; set; } = null!;
+        public string ShortDescription { get; init; } = null!;
 
-        public string ImageUrl { get; set; } = null!;
+        public string LongDescription { get; init; } = null!;
 
-        public string Description { get; set; } = null!;
+        public string ImageUrl { get; init; } = null!;
+
+        public string? AuthorName { get; init; }
+
+        public string CreatorId { get; set; } = null!;
     }
 }

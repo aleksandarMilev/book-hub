@@ -1,5 +1,6 @@
 ﻿namespace BookHub.Server.Features.Books.Web
 {
+    using AutoMapper;
     using Infrastructure.Extensions;
     using Infrastructure.Services;
     using Microsoft.AspNetCore.Authorization;
@@ -11,47 +12,33 @@
     [Authorize]
     public class BooksController(
         IBookService bookService,
-        ICurrentUserService userService) : ApiController
+        ICurrentUserService userService,
+        IMapper mapper) : ApiController
     {
         private readonly IBookService bookService = bookService;
         private readonly ICurrentUserService userService = userService;
+        private readonly IMapper mapper = mapper;
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BookListServiceModel>>> All()
-        {
-            var models = await this.bookService.GetAllAsync();
-
-            return this.Ok(models);
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult> Details(int id)
-        {
-            var model = await this.bookService.GetDetailsAsync(id);
-
-            return this.Ok(model);
-        }
+            => this.Ok(await this.bookService.GetAllAsync());
 
         [AllowAnonymous]
         [HttpGet("[action]")]
-        public async Task<ActionResult> TopThree()
-        {
-            var model = await this.bookService.GetTopThreeAsync();
+        public async Task<ActionResult<IEnumerable<BookListServiceModel>>> TopThree()
+           => this.Ok(await this.bookService.GetTopThreeAsync());
 
-            return this.Ok(model);
-        }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<BookDetailsServiceModel>> Details(int id)
+            => this.Ok(await this.bookService.GetDetailsAsync(id));
 
         [HttpPost]
-        public async Task<ActionResult> Create(CreateBookWebModel webModel)
+        public async Task<ActionResult<int>> Create(CreateBookWebModel webModel)
         {
-            var userId = this.userService.GetId();
-            var serviceModel = new CreateBookServiceModel()
-            {
-                Title = webModel.Title,
-                ImageUrl = webModel.ImageUrl,
-            };
+            var serviceModel = this.mapper.Map<CreateBookServiceModel>(webModel);
+            serviceModel.CreatorId = this.userService.GetId()!;
 
-            var bookId = await this.bookService.CreateAsync(serviceModel, userId!);
+            var bookId = await this.bookService.CreateAsync(serviceModel);
 
             return this.Created(nameof(this.Create), bookId);
         }
@@ -59,14 +46,10 @@
         [HttpPut("{id}")]
         public async Task<ActionResult> Edit(int id, CreateBookWebModel webModel)
         {
-            var userId = this.userService.GetId();
-            var serviceModel = new CreateBookServiceModel()
-            {
-                Title = webModel.Title,
-                ImageUrl = webModel.ImageUrl,
-            };
+            var serviceModel = this.mapper.Map<CreateBookServiceModel>(webModel);
+            serviceModel.CreatorId = this.userService.GetId()!;
 
-            var result = await this.bookService.EditAsync(id, serviceModel, userId!);
+            var result = await this.bookService.EditAsync(id, serviceModel);
 
             return this.NoContentOrBadRequest(result);
         }
@@ -74,8 +57,7 @@
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var userId = this.userService.GetId();
-            var result = await this.bookService.DeleteAsync(id, userId!);
+            var result = await this.bookService.DeleteAsync(id, this.userService.GetId()!);
 
             return this.NoContentOrBadRequest(result);
         }

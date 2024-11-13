@@ -32,9 +32,9 @@
         public string ImageUrl { get; set; } = null!;
 
         [ForeignKey(nameof(Author))]
-        public int AuthorId { get; set; }
+        public int? AuthorId { get; set; }
 
-        public Author Author { get; set; } = null!;
+        public Author? Author { get; set; }
 
         [ForeignKey(nameof(User))]
         public string? CreatorId { get; set; }

@@ -7,7 +7,7 @@
     using Models;
     using Service;
 
-    using static BookHub.Server.Common.Messages.Error.Identity;
+    using static Common.Messages.Error.Identity;
 
     public class IdentityController(
         IIdentityService identityService,
