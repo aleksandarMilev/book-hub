@@ -34,6 +34,8 @@
                 .ForMember(dest => dest.TopBooks, opt => opt.MapFrom(src => src.Books.Take(3)));
                    
             this.CreateMap<CreateAuthorWebModel, CreateAuthorServiceModel>();
+
+            this.CreateMap<Author, AuthorServiceModel>();
         }
     }
 }

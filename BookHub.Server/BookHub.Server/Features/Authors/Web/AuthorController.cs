@@ -19,6 +19,14 @@
         private readonly IMapper mapper = mapper;
 
         [AllowAnonymous]
+        [HttpGet("[action]")]
+        public async Task<ActionResult> TopThree()
+        {
+            var model = await this.authorService.GetTopThreeAsync();
+
+            return this.Ok(model);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult> Details(int id)
         {

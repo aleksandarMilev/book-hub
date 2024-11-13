@@ -11,5 +11,7 @@
         public string Biography { get; init; } = null!;
 
         public int BooksCount { get; init; }
+
+        public double Rating { get; init; }
     }
 }

@@ -6,8 +6,6 @@
     {
         public string? PenName { get; init; }
 
-        public double Rating { get; init; }
-
         public string Nationality { get; init; } = null!;
 
         public string Gender { get; init; } = null!;

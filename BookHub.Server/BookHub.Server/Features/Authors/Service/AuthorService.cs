@@ -2,6 +2,7 @@
 {
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
+    using BookHub.Server.Features.Books.Service.Models;
     using Data;
     using Data.Models;
     using Microsoft.EntityFrameworkCore;
@@ -56,5 +57,13 @@
 
             return nationalityId.Value;
         }
+
+        public async Task<ICollection<AuthorServiceModel>> GetTopThreeAsync()
+           => await this.data
+              .Authors
+              .ProjectTo<AuthorServiceModel>(this.mapper.ConfigurationProvider)
+              .OrderByDescending(a => a.Rating)
+              .Take(3)
+              .ToListAsync();
     }
 }

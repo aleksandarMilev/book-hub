@@ -103,3 +103,22 @@ export function useGetDetails(id){
 
     return { author, isFetching }
 }
+
+export function useGetTopThree(){
+    const { token } = useContext(UserContext)
+    const [authors, setAuthor] = useState([])
+    const [isFetching, setIsFetching] = useState(false)
+
+    useEffect(() => {
+        async function fetchData() {
+            setIsFetching(old => !old)
+            setAuthor(await authorApi.getTopThreeAsync(token))
+            setIsFetching(old => !old)
+        }
+
+        fetchData()
+    }, [])
+
+    return { authors, isFetching }
+}
+

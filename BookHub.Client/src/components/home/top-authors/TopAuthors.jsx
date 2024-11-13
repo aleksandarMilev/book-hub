@@ -1,35 +1,20 @@
 import { Link } from 'react-router-dom'
-import { MDBBadge, MDBBtn, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit'
+import { MDBBtn, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit'
 
+import * as useAuthors from '../../../hooks/useAuthor'
 import renderStars from '../../../common/functions/renderStars'
 import { routes } from '../../../common/constants/api'
+
+import DefaultSpinner from '../../common/default-spinner/DefaultSpinner'
 
 import './TopAuthors.css'  
 
 export default function TopAuthors() {
-    const authors = [
-        {
-            image: 'https://upload.wikimedia.org/wikipedia/commons/6/6f/Tolkien-color.png',
-            name: 'J.R.R. Tolkien',
-            genres: ['Fantasy'],
-            totalBooks: 12,
-            rating: 4.49
-        },
-        {
-            image: 'https://hips.hearstapps.com/hmg-prod/images/gettyimages-1061157246.jpg',
-            name: 'J.K. Rowling',
-            genres: ['Fantasy'],
-            totalBooks: 10,
-            rating: 4.65
-        },
-        {
-            image: 'https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/926_v9_bc.jpg',
-            name: 'Stephen King',
-            genres: ['Horror', 'Thriller', 'Sci-Fi'],
-            totalBooks: 112,
-            rating: 4.96
-        }
-    ]
+    const { authors, isFetching } = useAuthors.useGetTopThree()
+
+    if(isFetching){
+        return <DefaultSpinner/ >
+    }
 
     return (
         <>
@@ -40,42 +25,34 @@ export default function TopAuthors() {
                 <MDBTableHead>
                     <tr className="table-header">
                         <th scope="col">Author</th>
-                        <th scope="col">Genres</th>
                         <th scope="col">Total Books</th>
                         <th scope="col">Rating</th>
                         <th scope="col"></th>
                     </tr>
                 </MDBTableHead>
                 <MDBTableBody>
-                    {authors.map((author, index) => (
-                        <tr key={index} className="author-row">
+                    {authors.map(a => (
+                        <tr key={a.id} className="author-row">
                             <td>
                                 <div className="d-flex align-items-center">
                                     <img
-                                        src={author.image}
-                                        alt={author.name}
+                                        src={a.imageUrl}
+                                        alt={a.name}
                                         className="author-image"
                                     />
                                     <div>
                                         <p className="author-name mb-1">
-                                            {author.name}
+                                            {a.name}
                                         </p>
                                     </div>
                                 </div>
                             </td>
-                            <td>
-                                {author.genres.map((genre, i) => (
-                                    <MDBBadge key={i} color="primary" pill className="me-2 genre-badge">
-                                        {genre}
-                                    </MDBBadge>
-                                ))}
-                            </td>
-                            <td>{author.totalBooks}</td>
-                            <td>{renderStars(author.rating)}</td>
+                            <td>{a.booksCount}</td>
+                            <td>{renderStars(a.rating)}</td>
                             <td>
                                 <MDBBtn 
                                     tag={Link} 
-                                    to={routes.author} 
+                                    to={routes.author + `/${a.id}`} 
                                     color="dark" 
                                     rounded 
                                     size="lg" 

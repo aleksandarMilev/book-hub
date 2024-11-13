@@ -10,6 +10,7 @@ export const routes = {
     createBook: '/books/new',
     editBook: '/books/edit',
     author: '/author',
+    topThreeAuthors: '/author/topThree',
     authorNationalities: '/author/nationalities',
     createAuthor: '/auhtor/new'
 }

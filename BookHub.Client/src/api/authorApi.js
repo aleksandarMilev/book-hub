@@ -58,3 +58,22 @@ export async function getDetailsAsync(id, token) {
     const author = await response.json()
     return author
 }
+
+export async function getTopThreeAsync(token) {
+    const options = {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+
+    const url = baseUrl + routes.topThreeAuthors
+    const response = await fetch(url, options)
+
+    if(!response.ok){
+        throw new Error('Something went wrong, please try again!')
+    }
+
+    const authors = await response.json()
+    return authors
+}
