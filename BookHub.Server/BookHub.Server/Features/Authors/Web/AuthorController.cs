@@ -20,6 +20,15 @@ namespace BookHub.Server.Features.Authors.Web
         private readonly ICurrentUserService userService = userService;
         private readonly IMapper mapper = mapper;
 
+        [HttpGet("[action]")]
+        public ActionResult Nationalities()
+        {
+            var nationalities = this.authorService.GetNationalities();
+
+            return this.Ok(nationalities);
+        }
+
+
         [AllowAnonymous]
         [HttpGet("[action]")]
         public async Task<ActionResult> TopThree()
@@ -35,13 +44,6 @@ namespace BookHub.Server.Features.Authors.Web
             var author = await this.authorService.GetDetailsAsync(id);
 
             return this.Ok(author);
-        }
-
-        [HttpGet("[action]")]
-        public ActionResult Nationalities()
-        {
-            var nationalities = this.authorService.GetNationalities();
-            return this.Ok(nationalities);
         }
 
         [HttpPost]

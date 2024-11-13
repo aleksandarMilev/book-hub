@@ -2,14 +2,14 @@
 {
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
-    using Infrastructure.Services;
     using Data;
     using Data.Models;
+    using Infrastructure.Services;
     using Microsoft.EntityFrameworkCore;
     using Models;
 
-    using static Common.Messages.Error.Author;
     using static Common.Constants.DefaultValues;
+    using static Common.Messages.Error.Author;
 
     public class AuthorService(
         BookHubDbContext data,
@@ -18,17 +18,25 @@
         private readonly BookHubDbContext data = data;
         private readonly IMapper mapper = mapper;
 
+        public List<string> GetNationalities()
+           => this.data
+               .Nationalities
+               .Select(n => n.Name)
+               .ToList();
+
+        public async Task<ICollection<AuthorServiceModel>> GetTopThreeAsync()
+            => await this.data
+                .Authors
+                .ProjectTo<AuthorServiceModel>(this.mapper.ConfigurationProvider)
+                .OrderByDescending(a => a.Rating)
+                .Take(3)
+                .ToListAsync();
+
         public async Task<AuthorDetailsServiceModel?> GetDetailsAsync(int id)
             => await this.data
                 .Authors
                 .ProjectTo<AuthorDetailsServiceModel>(this.mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(a => a.Id == id);
-
-        public List<string> GetNationalities()
-            => this.data
-                .Nationalities
-                .Select(n => n.Name)
-                .ToList();
 
         public async Task<int> CreateAsync(CreateAuthorServiceModel model)
         {
@@ -41,31 +49,6 @@
 
             return author.Id;
         }
-
-        private async Task<int> GetNationalityByNameAsync(string name)
-        {
-            int? nationalityId = await this.data
-                .Nationalities
-                .Where(n => n.Name == name)
-                .Select(n => n.Id)
-                .FirstOrDefaultAsync();
-
-            nationalityId ??= await this.data
-                .Nationalities
-                .Where(n => n.Name == UnknownNationalityName)
-                .Select(n => n.Id)
-                .FirstOrDefaultAsync();
-
-            return nationalityId.Value;
-        }
-
-        public async Task<ICollection<AuthorServiceModel>> GetTopThreeAsync()
-           => await this.data
-              .Authors
-              .ProjectTo<AuthorServiceModel>(this.mapper.ConfigurationProvider)
-              .OrderByDescending(a => a.Rating)
-              .Take(3)
-              .ToListAsync();
 
         public async Task<Result> EditAsync(int id, CreateAuthorServiceModel model)
         {
@@ -109,6 +92,23 @@
             await this.data.SaveChangesAsync();
 
             return true;
+        }
+
+        private async Task<int> GetNationalityByNameAsync(string name)
+        {
+            int? nationalityId = await this.data
+                .Nationalities
+                .Where(n => n.Name == name)
+                .Select(n => n.Id)
+                .FirstOrDefaultAsync();
+
+            nationalityId ??= await this.data
+                .Nationalities
+                .Where(n => n.Name == UnknownNationalityName)
+                .Select(n => n.Id)
+                .FirstOrDefaultAsync();
+
+            return nationalityId.Value;
         }
     }
 }
