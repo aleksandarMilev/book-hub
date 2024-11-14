@@ -65,12 +65,12 @@ export function useCreate(){
 export function useEdit(){
     const { token } = useContext(UserContext) 
 
-    const editHandler = async (bookId, title, author, imageUrl, description) => {
+    const editHandler = async (bookId, bookData) => {
         const book = {
-            title,
-            author,
-            description,
-            imageUrl
+            ...bookData,
+            imageUrl: bookData.imageUrl || null,
+            authorName: bookData.authorName || null,
+            publishedDate: bookData.publishedDate || null
         }
 
         try {
@@ -82,6 +82,7 @@ export function useEdit(){
 
     return editHandler
 }
+
 
 export function useGetTopThree(){
     const { token } = useContext(UserContext)

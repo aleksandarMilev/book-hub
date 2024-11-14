@@ -92,6 +92,8 @@
 
             await this.data.SaveChangesAsync();
 
+            await this.MapBookAndGenreAsync(book.Id, model.Genres);
+
             return true;
         }
 
