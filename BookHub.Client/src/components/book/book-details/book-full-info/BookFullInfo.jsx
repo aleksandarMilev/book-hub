@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { FaEdit, FaTrash } from 'react-icons/fa'
+import { format } from 'date-fns'
 
 import renderStars from '../../../../common/functions/renderStars'
 import { routes } from "../../../../common/constants/api"
@@ -15,6 +16,14 @@ export default function BookFullInfo({
     deleteHandler,
     id
 }) {
+
+    console.log(book);
+    
+
+    const formattedDate = book.publishedDate 
+        ? format(new Date(book.publishedDate), 'MMMM dd, yyyy')
+        : 'Publication date unknown';
+
     return (
         <div className="book-info-card shadow-lg p-4">
             <div className="row g-0">
@@ -48,7 +57,9 @@ export default function BookFullInfo({
                         >
                             {showFullDescription ? "Show Less" : "Show More"}
                         </button>
-
+                        <p className="book-published-date text-muted mt-3">
+                            Published: {formattedDate}
+                        </p>
                         <div className="d-flex gap-2 mt-4">
                             {isCreator && (
                                 <>

@@ -16,7 +16,8 @@
 
             this.CreateMap<Book, BookDetailsServiceModel>()
                 .IncludeBase<Book, BookListServiceModel>()
-                .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.Author));
+                .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.Author))
+                .ForMember(dest => dest.PublishedDate, opt => opt.MapFrom(src => src.PublishedDate.ToString()));
 
             this.CreateMap<Author, AuthorServiceModel>()
                 .ForMember(dest => dest.BooksCount, opt => opt.MapFrom(src => src.Books.Count()));

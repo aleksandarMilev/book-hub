@@ -4,6 +4,8 @@
 
     public class BookDetailsServiceModel : BookListServiceModel
     {
+        public string? PublishedDate { get; init; }
+
         public int RatingsCount { get; init; }
 
         public string LongDescription { get; init; } = null!;
