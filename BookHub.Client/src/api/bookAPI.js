@@ -1,3 +1,4 @@
+import { logDOM } from '@testing-library/react'
 import { baseUrl, routes } from '../common/constants/api'
 
 export async function getAllAsync(token){
@@ -35,6 +36,8 @@ export async function createAsync(book, token){
         },
         body: JSON.stringify(book)
     }
+
+    console.log(JSON.stringify(book))
 
     const response = await fetch(baseUrl + routes.books, options)
 

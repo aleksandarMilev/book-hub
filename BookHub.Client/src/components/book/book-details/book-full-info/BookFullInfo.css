@@ -1,5 +1,10 @@
 .book-info-card {
     background-color: #f9f9f9;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 100%;
 }
 
 .book-info-image-container {
@@ -7,11 +12,12 @@
     align-items: center;
     position: sticky;
     top: 80px;
-    max-width: 250px; /* Reduce the width of the image container */
-    flex: 0 0 auto; /* Prevent the container from expanding further */
-    margin-right: 20px; /* Adds some spacing between the image and the text */
+    max-width: 250px;
+    flex: 0 0 auto;
+    margin-right: 20px;
 }
 
+/* Book image styling */
 .book-info-image {
     max-height: 300px;
     object-fit: contain;
@@ -31,12 +37,17 @@
     color: #6c757d;
 }
 
+/* Genres badge styling */
 .genres {
     margin-bottom: 1rem;
 }
 
 .book-description {
+    white-space: normal;
     line-height: 1.6;
+    max-height: 250px; 
+    overflow-y: auto; 
+    padding-right: 5px; 
 }
 
 .show-more-button {
@@ -58,7 +69,7 @@
         display: flex;
         gap: 2rem;
     }
-
+    
     .book-info-body {
         flex: 2;
     }

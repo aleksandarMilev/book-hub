@@ -41,15 +41,14 @@ export function useGetFullInfo(id){
 }
 
 export function useCreate(){
-    const { token, userId } = useContext(UserContext) 
+    const { token } = useContext(UserContext) 
 
-    const createHandler = async (title, author, description, imageUrl) => {
+    const createHandler = async (bookData) => {
         const book = {
-            title,
-            author,
-            description,
-            imageUrl,
-            userId
+            ...bookData,
+            imageUrl: bookData.imageUrl || null,
+            authorName: bookData.authorName || null,
+            publishedDate: bookData.publishedDate || null
         }
 
         try {

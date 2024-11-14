@@ -6,7 +6,7 @@
 
         public string? AuthorName { get; init; }
 
-        public string ImageUrl { get; init; } = null!;
+        public string? ImageUrl { get; init; }
 
         public string ShortDescription { get; init; } = null!;
 
@@ -15,5 +15,7 @@
         public string? PublishedDate { get; init; }
 
         public string CreatorId { get; set; } = null!;
+
+        public IEnumerable<string> Genres { get; init; } = new HashSet<string>();
     }
 }

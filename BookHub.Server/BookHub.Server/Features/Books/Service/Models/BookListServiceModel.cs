@@ -6,7 +6,7 @@
 
         public string Title { get; init; } = null!;
 
-        public string AuthorName { get; init; } = null!;
+        public string? AuthorName { get; init; }
 
         public string ImageUrl { get; init; } = null!;
 

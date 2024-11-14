@@ -28,7 +28,7 @@ export default function BookFullInfo({
                 <div className="col-md-8">
                     <div className="card-body">
                         <h2 className="book-title fw-bold">{book.title}</h2>
-                        <h5 className="book-author mb-3 text-muted">by {book.authorName}</h5>
+                        <h5 className="book-author mb-3 text-muted">by {book.authorName || 'Unknown author'}</h5>
                         <div className="d-flex align-items-center mb-3">
                             {renderStars(book.averageRating)}
                             <span className="ms-2 text-muted">({book.ratingsCount} ratings)</span>

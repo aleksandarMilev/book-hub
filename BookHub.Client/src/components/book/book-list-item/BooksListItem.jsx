@@ -19,7 +19,7 @@ export default function BookListItem({ id, imageUrl, title, authorName, shortDes
                     <FaBook className="me-2" />{title}
                 </h5>
                 <h6 className="text-muted mb-2 book-list-item-author">
-                    <FaUser className="me-2" />By {authorName}
+                    <FaUser className="me-2" />By {authorName || 'Unknown Author'}
                 </h6>
                 <div className="d-flex flex-row mb-2 book-list-item-rating">
                     {renderStars(averageRating)}

@@ -8,6 +8,7 @@
     using Microsoft.EntityFrameworkCore;
     using Models;
 
+    using static Common.Constants.DefaultValues;
     using static Common.Messages.Error.Book;
 
     public class BookService(
@@ -47,6 +48,8 @@
         public async Task<int> CreateAsync(CreateBookServiceModel model)
         {
             var book = this.mapper.Map<Book>(model);
+            book.ImageUrl ??= DefaultBookImageUrl;
+
             var authorId = await this.GetAuthorIdByNameAsync(model.AuthorName);
 
             if (authorId != 0)
@@ -56,6 +59,8 @@
 
             this.data.Add(book);
             await this.data.SaveChangesAsync();
+
+            await this.MapBookAndGenreAsync(book.Id, model.Genres);
 
             return book.Id;
         }
@@ -117,6 +122,34 @@
                 .Authors
                 .Where(a => a.Name == name)
                 .Select(a => a.Id)
+                .FirstOrDefaultAsync();
+
+        private async Task MapBookAndGenreAsync(int bookId, IEnumerable<string> genreNames)
+        {
+            foreach (var name in genreNames)
+            {
+                var genreId = await this.GetGenreIdByNameAsync(name);
+
+                if (genreId != 0)
+                {
+                    var bookGenre = new BookGenre()
+                    {
+                        BookId = bookId,
+                        GenreId = genreId
+                    };
+
+                    this.data.Add(bookGenre);
+                }
+            }
+
+            await this.data.SaveChangesAsync();
+        }
+
+        private async Task<int> GetGenreIdByNameAsync(string name)
+            => await this.data
+                .Genres
+                .Where(g => g.Name == name)
+                .Select(g => g.Id)
                 .FirstOrDefaultAsync();
     }
 }

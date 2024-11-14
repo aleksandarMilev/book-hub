@@ -20,7 +20,6 @@ namespace BookHub.Server.Features.Books.Web
         private readonly ICurrentUserService userService = userService;
         private readonly IMapper mapper = mapper;
 
-        [AllowAnonymous]
         [HttpGet("[action]")]
         public async Task<ActionResult<IEnumerable<BookListServiceModel>>> Genres()
            => this.Ok(await this.bookService.GetGenreNamesAsync());
