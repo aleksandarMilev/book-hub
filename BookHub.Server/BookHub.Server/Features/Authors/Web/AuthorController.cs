@@ -20,10 +20,6 @@ namespace BookHub.Server.Features.Authors.Web
         private readonly ICurrentUserService userService = userService;
         private readonly IMapper mapper = mapper;
 
-        [HttpGet("[action]")]
-        public async Task<ActionResult<IEnumerable<string>>> Nationalities() 
-            => this.Ok(await this.authorService.GetNationalitiesAsync());
-
         [AllowAnonymous]
         [HttpGet("[action]")]
         public async Task<ActionResult<IEnumerable<string>>> Names()

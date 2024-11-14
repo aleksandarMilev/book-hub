@@ -1,13 +1,14 @@
 ﻿namespace BookHub.Server.Infrastructure.Extensions
 {
     using System.Text;
-    using System.Text.Json;
-    using System.Text.Json.Serialization;
+
     using Data;
     using Data.Models;
     using Features.Authors.Service;
     using Features.Books.Service;
+    using Features.Genre.Service;
     using Features.Identity.Service;
+    using Features.Nationality.Service;
     using Filters;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Identity;
@@ -83,7 +84,9 @@
                 .AddScoped<ICurrentUserService, CurrentUserService>()
                 .AddTransient<IIdentityService, IdentityService>()
                 .AddTransient<IBookService, BookService>()
-                .AddTransient<IAuthorService, AuthorService>();
+                .AddTransient<IAuthorService, AuthorService>()
+                .AddTransient<IGenreService, GenreService>()
+                .AddTransient<INationalityService, NationalityService>();
 
         public static IServiceCollection AddApiControllers(this IServiceCollection services)
         {

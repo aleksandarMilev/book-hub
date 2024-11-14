@@ -13,7 +13,7 @@ export const routes = {
     topThreeAuthors: '/author/topThree',
     createAuthor: '/auhtor/new',
     editAuthor: '/auhtor/edit',
-    authorNationalities: '/author/nationalities',
+    authorNationalities: '/nationality',
     authorNames: '/author/names',
-    genres: '/books/genres'
+    genres: '/genre'
 }

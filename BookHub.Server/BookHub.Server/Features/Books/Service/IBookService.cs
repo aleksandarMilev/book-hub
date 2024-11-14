@@ -7,8 +7,6 @@
     {
         Task<IEnumerable<BookListServiceModel>> GetAllAsync();
 
-        Task<IEnumerable<string>> GetGenreNamesAsync();
-
         Task<IEnumerable<BookListServiceModel>> GetTopThreeAsync();
 
         Task<BookDetailsServiceModel?> GetDetailsAsync(int id);

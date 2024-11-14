@@ -10,11 +10,11 @@
     using static Common.Messages.Error.Identity;
 
     public class IdentityController(
-        IIdentityService identityService,
+        IIdentityService service,
         UserManager<User> userManager,
         IOptions<AppSettings> appSettings) : ApiController
     {
-        private readonly IIdentityService identityService = identityService;
+        private readonly IIdentityService service = service;
         private readonly UserManager<User> userManager = userManager;
         private readonly AppSettings appSettings = appSettings.Value;
 
@@ -31,7 +31,7 @@
 
             if (result.Succeeded)
             {
-                var token = this.identityService.GenerateJwtToken(this.appSettings.Secret, user.Id, user.UserName!);
+                var token = this.service.GenerateJwtToken(this.appSettings.Secret, user.Id, user.UserName!);
 
                 return this.Ok(new LoginResponseModel(user.UserName!, user.Email!, user.Id, token));
             }
@@ -59,7 +59,7 @@
 
             if (passwordIsValid)
             {
-                var token = this.identityService.GenerateJwtToken(this.appSettings.Secret, user.Id, user.UserName!);
+                var token = this.service.GenerateJwtToken(this.appSettings.Secret, user.Id, user.UserName!);
 
                 return this.Ok(new LoginResponseModel(user.UserName!, user.Email!, user.Id, token));
             }

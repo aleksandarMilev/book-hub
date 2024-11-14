@@ -5,8 +5,6 @@
 
     public interface IAuthorService
     {
-        Task<IEnumerable<string>> GetNationalitiesAsync();
-
         Task<IEnumerable<string>> GetNamesAsync();
 
         Task<IEnumerable<AuthorServiceModel>> GetTopThreeAsync();
