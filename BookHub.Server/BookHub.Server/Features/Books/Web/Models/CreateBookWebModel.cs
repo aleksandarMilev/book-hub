@@ -10,6 +10,13 @@
         [StringLength(TitleMaxLength, MinimumLength = TitleMinLength)]
         public string Title { get; init; } = null!;
 
+        [StringLength(AuthorNameMaxLength, MinimumLength = AuthorNameMinLength)]
+        public string? AuthorName { get; init; }
+
+        [Required]
+        [StringLength(ImageUrlMaxLength, MinimumLength = ImageUrlMinLength)]
+        public string ImageUrl { get; init; } = null!;
+
         [Required]
         [StringLength(ShortDescriptionMaxLength, MinimumLength = ShortDescriptionMinLength)]
         public string ShortDescription { get; init; } = null!;
@@ -18,10 +25,6 @@
         [StringLength(LongDescriptionMaxLength, MinimumLength = LongDescriptionMinLength)]
         public string LongDescription { get; init; } = null!;
 
-        [Required]
-        [StringLength(ImageUrlMaxLength, MinimumLength = ImageUrlMinLength)]
-        public string ImageUrl { get; init; } = null!;
-
-        public int AuthorName { get; init; }
+        public string? PublishedDate { get; init; }
     }
 }

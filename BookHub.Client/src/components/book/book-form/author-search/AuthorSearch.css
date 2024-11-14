@@ -1,0 +1,10 @@
+.dropdown-list {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.dropdown-item {
+    cursor: pointer;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}

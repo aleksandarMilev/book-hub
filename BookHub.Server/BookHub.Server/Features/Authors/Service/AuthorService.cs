@@ -18,11 +18,17 @@
         private readonly BookHubDbContext data = data;
         private readonly IMapper mapper = mapper;
 
-        public IEnumerable<string> GetNationalities()
-           => this.data
+        public async Task<IEnumerable<string>> GetNationalitiesAsync()
+           => await this.data
                .Nationalities
                .Select(n => n.Name)
-               .ToList();
+               .ToListAsync();
+
+        public async Task<IEnumerable<string>> GetNamesAsync()
+          => await this.data
+              .Authors
+              .Select(n => n.Name)
+              .ToListAsync();
 
         public async Task<IEnumerable<AuthorServiceModel>> GetTopThreeAsync()
             => await this.data

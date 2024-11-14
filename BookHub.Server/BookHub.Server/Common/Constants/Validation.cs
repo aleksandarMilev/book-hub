@@ -10,8 +10,8 @@
             public const int LongDescriptionMinLength = 100;
             public const int LongDescriptionMaxLength = 5_000;
 
-            public const int AuthorMinLength = 2;
-            public const int AuthorMaxLength = 100;
+            public const int AuthorNameMinLength = 2;
+            public const int AuthorNameMaxLength = 100;
 
             public const int ImageUrlMinLength = 10;
             public const int ImageUrlMaxLength = 2_000;

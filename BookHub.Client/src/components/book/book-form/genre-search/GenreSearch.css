@@ -1,0 +1,14 @@
+.genre-list {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.genre-item {
+    cursor: pointer;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.selected-genres .badge-close {
+    cursor: pointer;
+}

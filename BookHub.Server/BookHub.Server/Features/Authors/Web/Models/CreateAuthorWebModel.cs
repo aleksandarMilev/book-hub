@@ -2,7 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    using static Server.Common.Constants.Validation.Author;
+    using static Common.Constants.Validation.Author;
 
     public class CreateAuthorWebModel
     {

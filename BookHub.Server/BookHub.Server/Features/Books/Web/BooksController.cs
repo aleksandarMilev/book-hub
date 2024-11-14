@@ -1,4 +1,5 @@
-﻿namespace BookHub.Server.Features.Books.Web
+﻿#pragma warning disable ASP0023 
+namespace BookHub.Server.Features.Books.Web
 {
     using AutoMapper;
     using Infrastructure.Extensions;
@@ -18,6 +19,11 @@
         private readonly IBookService bookService = bookService;
         private readonly ICurrentUserService userService = userService;
         private readonly IMapper mapper = mapper;
+
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+        public async Task<ActionResult<IEnumerable<BookListServiceModel>>> Genres()
+           => this.Ok(await this.bookService.GetGenreNamesAsync());
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BookListServiceModel>>> All()

@@ -22,6 +22,24 @@ export async function createAsync(author, token){
     return authorId
 }
 
+export async function getAuthorNamesAsync(token){
+    const options = {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+
+    const response = await fetch(baseUrl + routes.authorNames, options)
+
+    if(!response.ok){
+        throw new Error('Something went wrong, please try again!')
+    }
+
+    const authorNames = await response.json()
+    return authorNames
+}
+
 export async function getNationalitiesAsync(token){
     const options = {
         method: "GET",

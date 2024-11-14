@@ -17,6 +17,12 @@
         private readonly BookHubDbContext data = data;
         private readonly IMapper mapper = mapper;
 
+        public async Task<IEnumerable<string>> GetGenreNamesAsync()
+           => await this.data
+               .Genres
+               .Select(g => g.Name)
+               .ToListAsync();
+
         public async Task<IEnumerable<BookListServiceModel>> GetAllAsync()
             => await this.data
                 .Books

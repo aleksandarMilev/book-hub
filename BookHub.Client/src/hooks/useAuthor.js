@@ -146,3 +146,60 @@ export function useEdit(){
 
     return editHandler
 }
+
+export function useNames() {
+    const { token } = useContext(UserContext) 
+    const [authors, setAuthors] = useState([])
+    const [isFetching, setIsFetching] = useState(false)
+
+    useEffect(() => {
+        async function fetchData() {
+            setIsFetching(old => !old)
+            setAuthors(await authorApi.getAuthorNamesAsync(token))
+            setIsFetching(old => !old)
+        }
+
+        fetchData()
+    }, [])
+
+    return { authors, isFetching }
+}
+
+export function useSearchAuthors(authors) {
+    const [searchTerm, setSearchTerm] = useState('')
+    const [filteredAuthors, setFilteredAuthors] = useState([])
+    const [showDropdown, setShowDropdown] = useState(false)
+
+    useEffect(() => {
+        if (searchTerm === '') {
+            setFilteredAuthors([])
+        } else {
+            const filtered = authors.filter(a =>
+                a.toLowerCase().includes(searchTerm.toLowerCase())
+            )
+
+            setFilteredAuthors(filtered)
+        }
+    }, [searchTerm, authors])
+
+    const updateSearchTerm = (term) => {
+        setSearchTerm(term)
+        setShowDropdown(true)
+    }
+
+    const selectAuthor = (author) => {
+        setSearchTerm(author)
+        setShowDropdown(false)
+    }
+
+    const showDropdownOnFocus = () => setShowDropdown(true)
+
+    return {
+        searchTerm,
+        filteredAuthors,
+        showDropdown,
+        updateSearchTerm,
+        selectAuthor,
+        showDropdownOnFocus
+    }
+}

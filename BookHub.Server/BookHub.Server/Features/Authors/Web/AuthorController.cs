@@ -21,8 +21,13 @@ namespace BookHub.Server.Features.Authors.Web
         private readonly IMapper mapper = mapper;
 
         [HttpGet("[action]")]
-        public ActionResult<IEnumerable<string>> Nationalities() 
-            => this.Ok(this.authorService.GetNationalities());
+        public async Task<ActionResult<IEnumerable<string>>> Nationalities() 
+            => this.Ok(await this.authorService.GetNationalitiesAsync());
+
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+        public async Task<ActionResult<IEnumerable<string>>> Names()
+            => this.Ok(await this.authorService.GetNamesAsync());
 
         [AllowAnonymous]
         [HttpGet("[action]")]

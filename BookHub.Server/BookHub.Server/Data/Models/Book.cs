@@ -27,6 +27,8 @@
 
         public int RatingsCount { get; set; }
 
+        public DateTime? PublishedDate { get; set; }
+
         [Required]
         [MaxLength(ImageUrlMaxLength)]
         public string ImageUrl { get; set; } = null!;
