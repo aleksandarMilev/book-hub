@@ -16,6 +16,6 @@
 
         public string? CreatorId { get; set; }
 
-        public ICollection<BookListServiceModel> TopBooks { get; set; } = new List<BookListServiceModel>();
+        public ICollection<BookServiceModel> TopBooks { get; set; } = new List<BookServiceModel>();
     }
 }

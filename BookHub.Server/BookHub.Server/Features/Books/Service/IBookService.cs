@@ -5,9 +5,9 @@
 
     public interface IBookService
     {
-        Task<IEnumerable<BookListServiceModel>> GetAllAsync();
+        Task<IEnumerable<BookServiceModel>> GetAllAsync();
 
-        Task<IEnumerable<BookListServiceModel>> GetTopThreeAsync();
+        Task<IEnumerable<BookServiceModel>> GetTopThreeAsync();
 
         Task<BookDetailsServiceModel?> GetDetailsAsync(int id);
 

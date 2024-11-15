@@ -21,12 +21,12 @@ namespace BookHub.Server.Features.Books.Web
         private readonly IMapper mapper = mapper;
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BookListServiceModel>>> All()
+        public async Task<ActionResult<IEnumerable<BookServiceModel>>> All()
             => this.Ok(await this.bookService.GetAllAsync());
 
         [AllowAnonymous]
         [HttpGet("[action]")]
-        public async Task<ActionResult<IEnumerable<BookListServiceModel>>> TopThree()
+        public async Task<ActionResult<IEnumerable<BookServiceModel>>> TopThree()
            => this.Ok(await this.bookService.GetTopThreeAsync());
 
         [HttpGet("{id}")]

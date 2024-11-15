@@ -18,16 +18,16 @@
         private readonly BookHubDbContext data = data;
         private readonly IMapper mapper = mapper;
 
-        public async Task<IEnumerable<BookListServiceModel>> GetAllAsync()
+        public async Task<IEnumerable<BookServiceModel>> GetAllAsync()
             => await this.data
                 .Books
-                .ProjectTo<BookListServiceModel>(this.mapper.ConfigurationProvider)
+                .ProjectTo<BookServiceModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 
-        public async Task<IEnumerable<BookListServiceModel>> GetTopThreeAsync()
+        public async Task<IEnumerable<BookServiceModel>> GetTopThreeAsync()
             => await this.data
                .Books
-               .ProjectTo<BookListServiceModel>(this.mapper.ConfigurationProvider)
+               .ProjectTo<BookServiceModel>(this.mapper.ConfigurationProvider)
                .OrderByDescending(b => b.AverageRating)
                .Take(3)
                .ToListAsync();

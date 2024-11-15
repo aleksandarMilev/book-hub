@@ -9,6 +9,7 @@
     using Features.Genre.Service;
     using Features.Identity.Service;
     using Features.Nationality.Service;
+    using Features.Search.Service;
     using Filters;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Identity;
@@ -86,7 +87,8 @@
                 .AddTransient<IBookService, BookService>()
                 .AddTransient<IAuthorService, AuthorService>()
                 .AddTransient<IGenreService, GenreService>()
-                .AddTransient<INationalityService, NationalityService>();
+                .AddTransient<INationalityService, NationalityService>()
+                .AddTransient<ISearchService, SearchService>();
 
         public static IServiceCollection AddApiControllers(this IServiceCollection services)
         {

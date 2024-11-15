@@ -2,7 +2,7 @@
 {
     using Authors.Service.Models;
 
-    public class BookDetailsServiceModel : BookListServiceModel
+    public class BookDetailsServiceModel : BookServiceModel
     {
         public string? PublishedDate { get; init; }
 

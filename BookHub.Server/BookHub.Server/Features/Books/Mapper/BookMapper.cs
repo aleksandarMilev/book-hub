@@ -10,12 +10,12 @@
     {
         public BookMapper()
         {
-            this.CreateMap<Book, BookListServiceModel>()
+            this.CreateMap<Book, BookServiceModel>()
                .ForMember(dest => dest.Genres, opt => opt.MapFrom(src => src.BooksGenres.Select(bg => bg.Genre.Name).ToList()))
                .ForMember(dest => dest.AuthorName, opt => opt.MapFrom(src => src.Author == null ? null : src.Author.Name));
 
             this.CreateMap<Book, BookDetailsServiceModel>()
-                .IncludeBase<Book, BookListServiceModel>()
+                .IncludeBase<Book, BookServiceModel>()
                 .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.Author))
                 .ForMember(dest => dest.PublishedDate, opt => opt.MapFrom(src => src.PublishedDate.ToString()));
 

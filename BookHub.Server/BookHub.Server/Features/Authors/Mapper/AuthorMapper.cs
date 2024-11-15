@@ -10,7 +10,7 @@
     {
         public AuthorMapper()
         {
-            this.CreateMap<Book, BookListServiceModel>()
+            this.CreateMap<Book, BookServiceModel>()
                 .ForMember(dest => dest.Genres, opt => opt.MapFrom(src => src.BooksGenres.Select(bg => bg.Genre.Name).ToList()));
 
             this.CreateMap<CreateAuthorWebModel, CreateAuthorServiceModel>();
