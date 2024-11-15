@@ -40,9 +40,8 @@
 
         public async Task<int> CreateAsync(CreateAuthorServiceModel model)
         {
+            model.ImageUrl ??= DefaultAuthorImageUrl;
             var author = this.mapper.Map<Author>(model);
-            author.NationalityId = await GetNationalityByNameAsync(model.Nationality);
-            author.ImageUrl ??= DefaultAuthorImageUrl;
 
             this.data.Add(author);
             await this.data.SaveChangesAsync();
@@ -65,6 +64,8 @@
             {
                 return UnauthorizedAuthorEdit;
             }
+
+            model.ImageUrl ??= DefaultAuthorImageUrl;
 
             this.mapper.Map(model, author);
             await this.data.SaveChangesAsync();
@@ -92,23 +93,6 @@
             await this.data.SaveChangesAsync();
 
             return true;
-        }
-
-        private async Task<int> GetNationalityByNameAsync(string name)
-        {
-            int? nationalityId = await this.data
-                .Nationalities
-                .Where(n => n.Name == name)
-                .Select(n => n.Id)
-                .FirstOrDefaultAsync();
-
-            nationalityId ??= await this.data
-                .Nationalities
-                .Where(n => n.Name == UnknownNationalityName)
-                .Select(n => n.Id)
-                .FirstOrDefaultAsync();
-
-            return nationalityId.Value;
         }
     }
 }

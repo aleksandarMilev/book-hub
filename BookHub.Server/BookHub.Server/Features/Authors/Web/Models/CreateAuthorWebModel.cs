@@ -22,7 +22,7 @@
 
         public double Rating { get; init; }
 
-        public string Nationality { get; init; } = null!;
+        public int NationalityId { get; init; }
 
         public string Gender { get; init; } = null!;
 

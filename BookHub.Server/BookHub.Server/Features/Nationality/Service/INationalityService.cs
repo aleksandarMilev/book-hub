@@ -1,7 +1,9 @@
 ﻿namespace BookHub.Server.Features.Nationality.Service
 {
+    using Models;
+
     public interface INationalityService
     {
-        Task<IEnumerable<string>> GetNamesAsync();
+        Task<IEnumerable<NationalityServiceModel>> GetNamesAsync();
     }
 }

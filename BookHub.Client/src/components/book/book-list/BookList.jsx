@@ -42,8 +42,8 @@ export default function BookList() {
                     {isFetching
                         ? <DefaultSpinner /> 
                         : books.length > 0
-                            ? books.map((book) => (
-                                <BookListItem key={book.id} {...book} /> 
+                            ? books.map(b => (
+                                <BookListItem key={b.id} {...b} /> 
                             ))
                             : <p className="text-center mt-4 text-muted">No books found!</p> 
                     }

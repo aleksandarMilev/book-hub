@@ -16,14 +16,9 @@
             this.CreateMap<CreateAuthorWebModel, CreateAuthorServiceModel>();
 
             this.CreateMap<CreateAuthorServiceModel, Author>()
-                .ForMember(dest => dest.Id, opt => opt.Ignore())
-                .ForMember(dest => dest.Nationality, opt => opt.Ignore())
-                .ForMember(dest => dest.Gender,
-                           opt => opt.MapFrom(src => MapperHelper.ParseGender(src.Gender)))
-                .ForMember(dest => dest.BornAt,
-                           opt => opt.MapFrom(src => MapperHelper.ParseDateTime(src.BornAt)))
-                .ForMember(dest => dest.DiedAt,
-                           opt => opt.MapFrom(src => MapperHelper.ParseDateTime(src.DiedAt)));
+                .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => MapperHelper.ParseGender(src.Gender)))
+                .ForMember(dest => dest.BornAt, opt => opt.MapFrom(src => MapperHelper.ParseDateTime(src.BornAt)))
+                .ForMember(dest => dest.DiedAt, opt => opt.MapFrom(src => MapperHelper.ParseDateTime(src.DiedAt)));
 
             this.CreateMap<Author, AuthorDetailsServiceModel>()
                 .ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name))
@@ -33,8 +28,6 @@
                 .ForMember(dest => dest.BooksCount, opt => opt.MapFrom(src => src.Books.Count()))
                 .ForMember(dest => dest.TopBooks, opt => opt.MapFrom(src => src.Books.Take(3)));
                    
-            this.CreateMap<CreateAuthorWebModel, CreateAuthorServiceModel>();
-
             this.CreateMap<Author, AuthorServiceModel>();
         }
     }

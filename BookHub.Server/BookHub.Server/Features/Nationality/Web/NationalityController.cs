@@ -3,6 +3,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Service;
+    using Service.Models;
 
     [Authorize]
     public class NationalityController(INationalityService service) : ApiController
@@ -10,7 +11,7 @@
         private readonly INationalityService service = service;
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<string>>> Names()
+        public async Task<ActionResult<IEnumerable<NationalityServiceModel>>> Names()
            => this.Ok(await this.service.GetNamesAsync());
     }
 }

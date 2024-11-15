@@ -12,7 +12,7 @@ export default function NationalitySearch({ nationalities, loading, formik }) {
 
     return (
         <div className="mb-4">
-            <h6 className="fw-bold mb-2">{"Nationality: * (select the 'unknown' option if you are not sure)"}</h6>
+            <h6 className="fw-bold mb-2">{"Nationality: * (select 'unknown' if you are not sure)"}</h6>
             <input
                 type="text"
                 id="nationality"
@@ -20,7 +20,7 @@ export default function NationalitySearch({ nationalities, loading, formik }) {
                 placeholder="Search for a nationality..."
                 value={searchTerm}
                 onChange={(e) => updateSearchTerm(e.target.value)} 
-                onFocus={showDropdownOnFocus} 
+                onFocus={showDropdownOnFocus}
             />
             {loading ? (
                 <div className="mt-2">Loading...</div>
@@ -30,17 +30,17 @@ export default function NationalitySearch({ nationalities, loading, formik }) {
                         {filteredNationalities.length === 0 ? (
                             <li className="list-group-item">No matches found</li>
                         ) : (
-                            filteredNationalities.map((nationality, index) => (
+                            filteredNationalities.map(n => (
                                 <li
-                                    key={index}
+                                    key={n.id}
                                     className="list-group-item"
                                     onClick={() => {
-                                        formik.setFieldValue('nationality', nationality)
-                                        selectNationality(nationality)
+                                        formik.setFieldValue('nationality', n.id)
+                                        selectNationality(n.name)
                                     }}
                                     style={{ cursor: 'pointer', padding: '10px', borderBottom: '1px solid #ddd' }}
                                 >
-                                    {nationality}
+                                    {n.name}
                                 </li>
                             ))
                         )}
@@ -53,3 +53,4 @@ export default function NationalitySearch({ nationalities, loading, formik }) {
         </div>
     )
 }
+

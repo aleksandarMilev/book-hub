@@ -16,10 +16,6 @@ export default function BookFullInfo({
     deleteHandler,
     id
 }) {
-
-    console.log(book);
-    
-
     const formattedDate = book.publishedDate 
         ? format(new Date(book.publishedDate), 'MMMM dd, yyyy')
         : 'Publication date unknown';

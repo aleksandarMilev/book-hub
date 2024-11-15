@@ -10,7 +10,6 @@ export async function createAsync(author, token){
         body: JSON.stringify(author)
     }
 
-    console.log(JSON.stringify(author))
     const response = await fetch(baseUrl + routes.author, options)
     
     if(!response.ok){
@@ -106,7 +105,7 @@ export async function editAsync(authorId, author, token){
         body: JSON.stringify(author)
     }
 
-    console.log(author)
+    console.log(JSON.stringify(author))
 
     const url = baseUrl + routes.author + `/${authorId}`
     await fetch(url, options)

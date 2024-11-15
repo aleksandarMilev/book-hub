@@ -4,7 +4,7 @@
     {
         public string Name { get; init; } = null!;
 
-        public string ImageUrl { get; init; } = null!;
+        public string? ImageUrl { get; set; }
 
         public string Biography { get; init; } = null!;
 
@@ -12,7 +12,7 @@
 
         public double Rating { get; init; }
 
-        public string Nationality { get; init; } = null!;
+        public int NationalityId { get; init; }
 
         public string Gender { get; init; } = null!;
 

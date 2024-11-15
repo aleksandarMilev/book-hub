@@ -2,15 +2,20 @@
 {
     using Data;
     using Microsoft.EntityFrameworkCore;
+    using Models;
 
     public class NationalityService(BookHubDbContext data) : INationalityService
     {
         private readonly BookHubDbContext data = data;
 
-        public async Task<IEnumerable<string>> GetNamesAsync()
+        public async Task<IEnumerable<NationalityServiceModel>> GetNamesAsync()
            => await this.data
                 .Nationalities
-                .Select(n => n.Name)
+                .Select(n => new NationalityServiceModel() 
+                {
+                    Id = n.Id,
+                    Name = n.Name
+                })
                 .ToListAsync();
     }
 }

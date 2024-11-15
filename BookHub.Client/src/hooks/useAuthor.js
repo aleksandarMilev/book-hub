@@ -31,7 +31,7 @@ export function useSearchNationalities(nationalities) {
             setFilteredNationalities([])
         } else {
             const filtered = nationalities.filter(n =>
-                n.toLowerCase().includes(searchTerm.toLowerCase())
+                n.name.toLowerCase().includes(searchTerm.toLowerCase())
             )
 
             setFilteredNationalities(filtered)
@@ -106,7 +106,7 @@ export function useCreate(){
             imageUrl : imageUrl || null,
             gender,
             biography,
-            nationality,
+            nationalityId: nationality,
             bornAt,
             diedAt
         }
@@ -132,7 +132,7 @@ export function useEdit(){
             imageUrl : imageUrl || null,
             gender,
             biography,
-            nationality,
+            nationalityId: nationality,
             bornAt,
             diedAt
         }
