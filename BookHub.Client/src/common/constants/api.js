@@ -15,5 +15,6 @@ export const routes = {
     editAuthor: '/auhtor/edit',
     authorNationalities: '/nationality',
     authorNames: '/author/names',
-    genres: '/genre'
+    genres: '/genre',
+    searchBooks: '/search/books'
 }

@@ -13,14 +13,22 @@
         private readonly BookHubDbContext data = data;
         private readonly IMapper mapper = mapper;
 
-        public async Task<IEnumerable<SearchBookServiceModel>> GetBooksAsync(string searchTerm)
-            => await this.data
+        public async Task<IEnumerable<SearchBookServiceModel>> GetBooksAsync(string? searchTerm)
+        {
+            var books = this.data
                 .Books
-                .Where(b => 
+                .ProjectTo<SearchBookServiceModel>(this.mapper.ConfigurationProvider);
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                books = books.Where(b =>
                     b.Title.ToLower().Contains(searchTerm.ToLower()) ||
-                    b.ShortDescription.ToLower().Contains(searchTerm.ToLower()
-                ))
-                .ProjectTo<SearchBookServiceModel>(this.mapper.ConfigurationProvider)
-                .ToListAsync();
+                    b.ShortDescription.ToLower().Contains(searchTerm.ToLower()) ||
+                    b.AuthorName != null && b.AuthorName.ToLower().Contains(searchTerm.ToLower())
+                );
+            }
+
+            return await books.ToListAsync();
+        }
     }
 }

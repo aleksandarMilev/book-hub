@@ -11,7 +11,7 @@
         private readonly ISearchService service = service;
 
         [HttpGet("[action]")]
-        public async Task<ActionResult<IEnumerable<SearchBookServiceModel>>> Books(string searchTerm)
+        public async Task<ActionResult<IEnumerable<SearchBookServiceModel>>> Books(string? searchTerm)
             => this.Ok(await this.service.GetBooksAsync(searchTerm));
     }
 }

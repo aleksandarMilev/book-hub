@@ -4,6 +4,6 @@
 
     public interface ISearchService
     {
-        Task<IEnumerable<SearchBookServiceModel>> GetBooksAsync(string searchTerm);
+        Task<IEnumerable<SearchBookServiceModel>> GetBooksAsync(string? searchTerm);
     }
 }

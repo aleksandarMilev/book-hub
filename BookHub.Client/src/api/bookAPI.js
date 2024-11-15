@@ -1,4 +1,3 @@
-import { logDOM } from '@testing-library/react'
 import { baseUrl, routes } from '../common/constants/api'
 
 export async function getAllAsync(token){
