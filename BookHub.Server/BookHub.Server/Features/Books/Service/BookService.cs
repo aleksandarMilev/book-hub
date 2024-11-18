@@ -42,6 +42,7 @@
         public async Task<int> CreateAsync(CreateBookServiceModel model)
         {
             model.ImageUrl ??= DefaultBookImageUrl;
+
             var book = this.mapper.Map<Book>(model);
 
             var authorId = await this.data

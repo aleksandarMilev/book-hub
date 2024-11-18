@@ -1,22 +1,31 @@
 import { useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import * as authorApi from '../api/authorApi'
+import  { errors }  from '../common/constants/messages'
+import { routes } from '../common/constants/api'
 import { UserContext } from '../contexts/userContext'
 
 export function useNames() {
+    const navigate = useNavigate()
+
     const { token } = useContext(UserContext) 
     const [authors, setAuthors] = useState([])
     const [isFetching, setIsFetching] = useState(false)
 
     useEffect(() => {
-        async function fetchData() {
-            setIsFetching(old => !old)
-            setAuthors(await authorApi.getAuthorNamesAsync(token))
-            setIsFetching(old => !old)
+        const fetchData = async () => {
+            try {
+                setIsFetching(old => !old)
+                setAuthors(await authorApi.getAuthorNamesAsync(token))
+                setIsFetching(old => !old)
+            } catch {
+                navigate(routes.badRequest, { state: { message: errors.author.namesBadRequest} })
+            }
         }
 
         fetchData()
-    }, [])
+    }, [token, navigate])
 
     return { authors, isFetching }
 }
@@ -61,19 +70,25 @@ export function useSearchAuthors(authors) {
 }
 
 export function useGetDetails(id){
+    const navigate = useNavigate()
+
     const { token } = useContext(UserContext)
     const [author, setAuthor] = useState(null)
     const [isFetching, setIsFetching] = useState(false)
 
     useEffect(() => {
         async function fetchData() {
-            setIsFetching(old => !old)
-            setAuthor(await authorApi.getDetailsAsync(id, token))
-            setIsFetching(old => !old)
+            try {
+                setIsFetching(old => !old)
+                setAuthor(await authorApi.getDetailsAsync(id, token))
+                setIsFetching(old => !old)
+            } catch {
+                navigate(routes.notFound, { state: { message: errors.author.notfound} })
+            }
         }
 
         fetchData()
-    }, [id])
+    }, [id, token, navigate])
 
     return { author, isFetching }
 }
@@ -91,7 +106,7 @@ export function useGetTopThree(){
         }
 
         fetchData()
-    }, [])
+    }, [token])
 
     return { authors, isFetching }
 }
@@ -112,10 +127,9 @@ export function useCreate(){
         }
 
         try {
-            const authorId = await authorApi.createAsync(author, token)
-            return authorId
-        } catch (error) {
-            throw new Error(error.message)
+            return await authorApi.createAsync(author, token)
+        } catch  {
+            throw new Error(errors.author.createError)
         }
     }
 
@@ -139,8 +153,8 @@ export function useEdit(){
 
         try {
             await authorApi.editAsync(authorId, author, token)
-        } catch (error) {
-            throw new Error(error.message)
+        } catch {
+            throw new Error(errors.author.editError)
         }
     }
 

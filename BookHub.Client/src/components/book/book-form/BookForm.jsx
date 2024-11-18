@@ -88,7 +88,7 @@ export default function BookForm({ bookData = null, isEditMode = false }) {
                                         <MDBRow>
                                             <MDBCol md="12">
                                                 {formik.touched.title && formik.errors.title && (
-                                                    <div className="text-danger">{formik.errors.title}</div>
+                                                    <div className="text-danger mb-2">{formik.errors.title}</div>
                                                 )}
                                                 <MDBInput
                                                     wrapperClass="mb-4"
@@ -113,7 +113,7 @@ export default function BookForm({ bookData = null, isEditMode = false }) {
                                         <MDBRow>
                                             <MDBCol md="12">
                                                 {formik.touched.genres && formik.errors.genres && (
-                                                    <div className="text-danger">{formik.errors.genres}</div>
+                                                    <div className="text-danger mb-2">{formik.errors.genres}</div>
                                                 )}
                                                 <GenreSearch
                                                     genres={genres}
@@ -127,7 +127,7 @@ export default function BookForm({ bookData = null, isEditMode = false }) {
                                         <MDBRow>
                                             <MDBCol md="12">
                                                 {formik.touched.imageUrl && formik.errors.imageUrl && (
-                                                    <div className="text-danger">{formik.errors.imageUrl}</div>
+                                                    <div className="text-danger mb-2">{formik.errors.imageUrl}</div>
                                                 )}
                                                 <MDBInput
                                                     wrapperClass="mb-4"
@@ -143,7 +143,7 @@ export default function BookForm({ bookData = null, isEditMode = false }) {
                                         <MDBRow>
                                             <MDBCol md="12">
                                                 {formik.touched.publishedDate && formik.errors.publishedDate && (
-                                                    <div className="text-danger">{formik.errors.publishedDate}</div>
+                                                    <div className="text-danger mb-2">{formik.errors.publishedDate}</div>
                                                 )}
                                                 <MDBInput
                                                     wrapperClass="mb-4"
@@ -159,7 +159,7 @@ export default function BookForm({ bookData = null, isEditMode = false }) {
                                         <MDBRow>
                                             <MDBCol md="12">
                                                 {formik.touched.shortDescription && formik.errors.shortDescription && (
-                                                    <div className="text-danger">{formik.errors.shortDescription}</div>
+                                                    <div className="text-danger mb-2">{formik.errors.shortDescription}</div>
                                                 )}
                                                 <MDBInput
                                                     wrapperClass="mb-4"
@@ -175,7 +175,7 @@ export default function BookForm({ bookData = null, isEditMode = false }) {
                                         <MDBRow>
                                             <MDBCol md="12">
                                                 {formik.touched.longDescription && formik.errors.longDescription && (
-                                                    <div className="text-danger">{formik.errors.longDescription}</div>
+                                                    <div className="text-danger mb-2">{formik.errors.longDescription}</div>
                                                 )}
                                                 <textarea
                                                     id="longDescription"

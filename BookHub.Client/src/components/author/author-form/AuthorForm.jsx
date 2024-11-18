@@ -42,6 +42,14 @@ export default function AuthorForm({ authorData = null, isEditMode = false }) {
         biography: Yup.string().min(50).max(10000).required('Biography is required!')
     })
 
+    const initialNationality = isEditMode && authorData?.nationality
+        ? authorData.nationality.id
+        : '';
+
+    const initialNationalityName = isEditMode && authorData?.nationality
+        ? authorData.nationality.name
+        : '';
+
     const formik = useFormik({
         initialValues: {
             name: authorData?.name || '',
@@ -50,21 +58,25 @@ export default function AuthorForm({ authorData = null, isEditMode = false }) {
             bornAt: authorData?.bornAt || '',
             diedAt: authorData?.diedAt || '',
             gender: authorData?.gender || '',
-            nationality: authorData?.nationality || '',
+            nationality: initialNationality, 
+            nationalityName: initialNationalityName, 
             biography: authorData?.biography || ''
         },
         validationSchema,
         onSubmit: async (values, { setErrors }) => {
             try {
+                const finalValues = { ...values, nationality: values.nationality || initialNationality }
+                
                 if (isEditMode) {
-                    await editHandler(authorData.id, values)  
+                    await editHandler(authorData.id, finalValues)  
                     navigate(routes.author + `/${authorData.id}`)
                 } else {
-                    const authorId = await createHandler(values)  
+                    const authorId = await createHandler(finalValues)  
                     navigate(routes.author + `/${authorId}`)
                 }
             } catch (error) {
                 setErrors({ submit: error.message })
+                navigate(routes.badRequest, { state: { message: error.message } })
             }
         }
     })
@@ -87,7 +99,7 @@ export default function AuthorForm({ authorData = null, isEditMode = false }) {
                                         <MDBRow>
                                             <MDBCol md="12">
                                                 {formik.touched.name && formik.errors.name && (
-                                                    <div className="text-danger">{formik.errors.name}</div>
+                                                    <div className="text-danger mb-2">{formik.errors.name}</div>
                                                 )}
                                                 <MDBInput
                                                     wrapperClass="mb-4"
@@ -116,7 +128,7 @@ export default function AuthorForm({ authorData = null, isEditMode = false }) {
                                         <MDBRow>
                                             <MDBCol md="12">
                                                 {formik.touched.imageUrl && formik.errors.imageUrl && (
-                                                    <div className="text-danger">{formik.errors.imageUrl}</div>
+                                                    <div className="text-danger mb-2">{formik.errors.imageUrl}</div>
                                                 )}
                                                 <MDBInput
                                                     wrapperClass="mb-4"
@@ -131,6 +143,9 @@ export default function AuthorForm({ authorData = null, isEditMode = false }) {
                                         </MDBRow>
                                         <MDBRow>
                                             <MDBCol md="12">
+                                                {formik.touched.bornAt && formik.errors.bornAt && (
+                                                    <div className="text-danger mb-2">{formik.errors.bornAt}</div>
+                                                )}
                                                 <MDBInput
                                                     wrapperClass="mb-4"
                                                     label="Date of Birth"
@@ -145,7 +160,7 @@ export default function AuthorForm({ authorData = null, isEditMode = false }) {
                                         <MDBRow>
                                             <MDBCol md="12">
                                                 {formik.touched.diedAt && formik.errors.diedAt && (
-                                                    <div className="text-danger">{formik.errors.diedAt}</div>
+                                                    <div className="text-danger mb-2">{formik.errors.diedAt}</div>
                                                 )}
                                                 <MDBInput
                                                     wrapperClass="mb-4"
@@ -159,15 +174,16 @@ export default function AuthorForm({ authorData = null, isEditMode = false }) {
                                             </MDBCol>
                                         </MDBRow>
                                         <GenderRadio formik={formik} />
-                                        <NationalitySearch 
+                                        <NationalitySearch
                                             nationalities={nationalities}
                                             loading={loading}
                                             formik={formik}
+                                            selectedNationalityName={formik.values.nationalityName}
                                         />
                                         <MDBRow>
                                             <MDBCol md="12">
                                                 {formik.touched.biography && formik.errors.biography && (
-                                                    <div className="text-danger">{formik.errors.biography}</div>
+                                                    <div className="text-danger mb-2">{formik.errors.biography}</div>
                                                 )}
                                                 <textarea
                                                     id="biography"

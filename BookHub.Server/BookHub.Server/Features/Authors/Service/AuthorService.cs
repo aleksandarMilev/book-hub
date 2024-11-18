@@ -42,10 +42,14 @@
                 .ProjectTo<AuthorDetailsServiceModel>(this.mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(a => a.Id == id);
 
-        public async Task<int> CreateAsync(CreateAuthorServiceModel model)
+        public async Task<int> CreateAsync(CreateAuthorServiceModel model, string userId)
         {
             model.ImageUrl ??= DefaultAuthorImageUrl;
+
             var author = this.mapper.Map<Author>(model);
+
+            author.CreatorId = userId;
+            author.NationalityId = await this.MapNationalityToAuthor(model.NationalityId);
 
             this.data.Add(author);
             await this.data.SaveChangesAsync();
@@ -53,7 +57,7 @@
             return author.Id;
         }
 
-        public async Task<Result> EditAsync(int id, CreateAuthorServiceModel model)
+        public async Task<Result> EditAsync(int id, CreateAuthorServiceModel model, string userId)
         {
             var author = await this.data
                  .Authors
@@ -64,7 +68,7 @@
                 return AuthorNotFound;
             }
 
-            if (author.CreatorId != model.CreatorId)
+            if (author.CreatorId != userId)
             {
                 return UnauthorizedAuthorEdit;
             }
@@ -72,6 +76,9 @@
             model.ImageUrl ??= DefaultAuthorImageUrl;
 
             this.mapper.Map(model, author);
+
+            author.NationalityId = await this.MapNationalityToAuthor(model.NationalityId);
+
             await this.data.SaveChangesAsync();
 
             return true;
@@ -97,6 +104,25 @@
             await this.data.SaveChangesAsync();
 
             return true;
+        }
+
+        private async Task<int> MapNationalityToAuthor(int? id)
+        {
+            var nationalityId = await this.data
+               .Nationalities
+               .Select(n => n.Id)
+               .FirstOrDefaultAsync(n => n == id);
+
+            if (nationalityId == 0)
+            {
+                nationalityId = await this.data
+                   .Nationalities
+                   .Where(n => n.Name == UnknownNationalityName)
+                   .Select(n => n.Id)
+                   .FirstOrDefaultAsync();
+            }
+
+            return nationalityId;
         }
     }
 }

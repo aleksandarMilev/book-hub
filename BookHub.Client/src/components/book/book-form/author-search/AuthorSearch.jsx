@@ -15,6 +15,9 @@ export default function AuthorSearch({ authors, loading, formik }) {
     return (
         <div className="mb-4">
             <h6 className="fw-bold mb-2">{"Author Name: (Select known authors, or leave blank if unknown)"}</h6>
+            {formik.touched.authorName && formik.errors.authorName && (
+                <div className="text-danger">{formik.errors.authorName}</div>
+            )}
             <input
                 type="text"
                 id="authorName"
@@ -57,9 +60,6 @@ export default function AuthorSearch({ authors, loading, formik }) {
                         )}
                     </ul>
                 )
-            )}
-            {formik.touched.authorName && formik.errors.authorName && (
-                <div className="text-danger">{formik.errors.authorName}</div>
             )}
         </div>
     )

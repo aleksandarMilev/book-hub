@@ -1,4 +1,28 @@
 import { baseUrl, routes } from '../common/constants/api'
+import { errors } from '../common/constants/messages'
+
+export async function getAuthorNamesAsync(token){
+    const options = {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+
+    const url = baseUrl + routes.authorNames
+
+    try {
+        const response = await fetch(url, options)
+
+        if(response.ok){
+            return await response.json()
+        }
+
+        throw new Error()
+    } catch {
+        throw new Error()
+    }
+}
 
 export async function createAsync(author, token){
     const options = {
@@ -10,33 +34,19 @@ export async function createAsync(author, token){
         body: JSON.stringify(author)
     }
 
-    const response = await fetch(baseUrl + routes.author, options)
-    
-    if(!response.ok){
-        console.log(await response.json())
-        throw new Error('Something went wrong, please try again!')
-    }
+    const url = baseUrl + routes.author
 
-    const authorId = await response.json()
-    return authorId
-}
+    try {
+        const response = await fetch(url, options)
 
-export async function getAuthorNamesAsync(token){
-    const options = {
-        method: "GET",
-        headers: {
-            'Authorization': `Bearer ${token}`
+        if(response.ok){
+            return await response.json()
         }
+
+        throw new Error()
+    } catch {
+        throw new Error()
     }
-
-    const response = await fetch(baseUrl + routes.authorNames, options)
-
-    if(!response.ok){
-        throw new Error('Something went wrong, please try again!')
-    }
-
-    const authorNames = await response.json()
-    return authorNames
 }
 
 export async function getDetailsAsync(id, token) {
@@ -48,14 +58,18 @@ export async function getDetailsAsync(id, token) {
     }
 
     const url = baseUrl + routes.author + `/${id}`
-    const response = await fetch(url, options)
 
-    if(!response.ok){
-        throw new Error('Something went wrong, please try again!')
+    try {
+        const response = await fetch(url, options)
+
+        if(response.ok){
+            return await response.json()
+        }
+
+        throw new Error()
+    } catch {
+        throw new Error()
     }
-
-    const author = await response.json()
-    return author
 }
 
 export async function getTopThreeAsync(token) {
@@ -67,14 +81,18 @@ export async function getTopThreeAsync(token) {
     }
 
     const url = baseUrl + routes.topThreeAuthors
-    const response = await fetch(url, options)
 
-    if(!response.ok){
-        throw new Error('Something went wrong, please try again!')
+    try {
+        const response = await fetch(url, options)
+
+        if(response.ok){
+            return await response.json()
+        }
+
+        throw new Error()
+    } catch {
+        throw new Error()
     }
-
-    const authors = await response.json()
-    return authors
 }
 
 export async function editAsync(authorId, author, token){
@@ -88,7 +106,17 @@ export async function editAsync(authorId, author, token){
     }
 
     const url = baseUrl + routes.author + `/${authorId}`
-    await fetch(url, options)
+    
+    try {
+        const response = await fetch(url, options)
+
+        if(!response.ok){
+            throw new Error()
+        }
+
+    } catch {
+        throw new Error()
+    }
 }
 
 export async function deleteAsync(id, token){
@@ -100,5 +128,14 @@ export async function deleteAsync(id, token){
     }
 
     const url = baseUrl + routes.author + `/${id}`
-    await fetch(url, options)
+    try {
+        const response = await fetch(url, options)
+
+        if(!response.ok){
+            throw new Error(errors.author.editError)
+        }
+
+    } catch {
+        throw new Error(errors.author.deleteError)
+    }
 }

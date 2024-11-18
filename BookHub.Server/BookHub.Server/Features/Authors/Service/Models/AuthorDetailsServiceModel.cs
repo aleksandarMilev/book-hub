@@ -1,12 +1,13 @@
 ﻿namespace BookHub.Server.Features.Authors.Service.Models
 {
+    using Nationality.Service.Models;
     using Books.Service.Models;
 
     public class AuthorDetailsServiceModel : AuthorServiceModel
     {
         public string? PenName { get; init; }
 
-        public string Nationality { get; init; } = null!;
+        public NationalityServiceModel Nationality { get; init; } = null!;
 
         public string Gender { get; init; } = null!;
 

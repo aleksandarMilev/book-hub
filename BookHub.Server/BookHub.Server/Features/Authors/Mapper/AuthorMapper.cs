@@ -3,6 +3,7 @@
     using AutoMapper;
     using Books.Service.Models;
     using Data.Models;
+    using Nationality.Service.Models;
     using Service.Models;
     using Web.Models;
 
@@ -20,8 +21,9 @@
                 .ForMember(dest => dest.BornAt, opt => opt.MapFrom(src => MapperHelper.ParseDateTime(src.BornAt)))
                 .ForMember(dest => dest.DiedAt, opt => opt.MapFrom(src => MapperHelper.ParseDateTime(src.DiedAt)));
 
+            this.CreateMap<Nationality, NationalityServiceModel>();
+
             this.CreateMap<Author, AuthorDetailsServiceModel>()
-                .ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.Nationality.Name))
                 .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender.ToString()))
                 .ForMember(dest => dest.BornAt, opt => opt.MapFrom(src => src.BornAt != null ? src.BornAt.ToString() : null))
                 .ForMember(dest => dest.DiedAt, opt => opt.MapFrom(src => src.DiedAt != null ? src.DiedAt.ToString() : null))

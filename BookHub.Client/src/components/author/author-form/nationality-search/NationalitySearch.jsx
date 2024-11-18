@@ -47,9 +47,6 @@ export default function NationalitySearch({ nationalities, loading, formik }) {
                     </ul>
                 )
             )}
-            {formik.touched.nationality && formik.errors.nationality && (
-                <div className="text-danger">{formik.errors.nationality}</div>
-            )}
         </div>
     )
 }

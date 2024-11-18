@@ -10,7 +10,6 @@ namespace BookHub.Server.Features.Authors.Web
     using Service;
     using Service.Models;
 
-    [Authorize]
     public class AuthorController(
         IAuthorService authorService,
         ICurrentUserService userService,
@@ -37,9 +36,7 @@ namespace BookHub.Server.Features.Authors.Web
         public async Task<ActionResult<int>> Create(CreateAuthorWebModel webModel)
         {
             var serviceModel = this.mapper.Map<CreateAuthorServiceModel>(webModel);
-            serviceModel.CreatorId = this.userService.GetId();
-
-            var authorId = await this.authorService.CreateAsync(serviceModel);
+            var authorId = await this.authorService.CreateAsync(serviceModel, this.userService.GetId()!);
 
             return this.Created(nameof(this.Create), authorId);
         }
@@ -48,9 +45,7 @@ namespace BookHub.Server.Features.Authors.Web
         public async Task<ActionResult> Edit(int id, CreateAuthorWebModel webModel)
         {
             var serviceModel = this.mapper.Map<CreateAuthorServiceModel>(webModel);
-            serviceModel.CreatorId = this.userService.GetId();
-
-            var result = await this.authorService.EditAsync(id, serviceModel);
+            var result = await this.authorService.EditAsync(id, serviceModel, this.userService.GetId()!);
 
             return this.NoContentOrBadRequest(result);
         }

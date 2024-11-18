@@ -16,5 +16,7 @@ export const routes = {
     authorNationalities: '/nationality',
     authorNames: '/author/names',
     genres: '/genre',
-    searchBooks: '/search/books'
+    searchBooks: '/search/books',
+    badRequest: '/error/bad-request',
+    notFound: '/error/not-found',
 }

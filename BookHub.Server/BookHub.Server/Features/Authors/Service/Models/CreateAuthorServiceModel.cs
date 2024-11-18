@@ -12,14 +12,12 @@
 
         public double Rating { get; init; }
 
-        public int NationalityId { get; init; }
+        public int? NationalityId { get; init; }
 
         public string Gender { get; init; } = null!;
 
         public string? BornAt { get; init; }
 
         public string? DiedAt { get; init; }
-
-        public string? CreatorId { get; set; }
     }
 }

@@ -75,9 +75,6 @@ export default function GenreSearch({ genres, loading, formik, selectedGenres, s
                     </div>
                 </div>
             )}
-            {formik.touched.genres && formik.errors.genres && (
-                <div className="text-danger">{formik.errors.genres}</div>
-            )}
         </div>
     )
 }

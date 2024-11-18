@@ -21,6 +21,9 @@ import AuthorDetails from "./components/author/author-details/AuthorDetails"
 import CreateAuthor from "./components/author/create-author/CreateAuthor"
 import EditAuthor from "./components/author/edit-author/EditAuthor"
 
+import BadRequest from "./components/common/error/BadRequest"
+import NotFound from "./components/common/error/NotFound"
+
 export default function App(){
     return(
         <UserContextProvider>
@@ -40,6 +43,9 @@ export default function App(){
                 <Route path={routes.author + '/:id'} element={<AuthenticatedRoute element={<AuthorDetails />} />} />
                 <Route path={routes.createAuthor} element={<AuthenticatedRoute element={<CreateAuthor />} />} />
                 <Route path={routes.editAuthor + '/:id'} element={<AuthenticatedRoute element={<EditAuthor />} />} />
+
+                <Route path={routes.badRequest} element={<BadRequest />} />
+                <Route path={routes.notFound} element={<NotFound />} />
             </Routes>
             <Footer /> 
         </UserContextProvider>
