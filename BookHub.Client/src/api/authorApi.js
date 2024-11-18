@@ -105,8 +105,6 @@ export async function editAsync(authorId, author, token){
         body: JSON.stringify(author)
     }
 
-    console.log(JSON.stringify(author))
-
     const url = baseUrl + routes.author + `/${authorId}`
     await fetch(url, options)
 }

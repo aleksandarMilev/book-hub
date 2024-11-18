@@ -21,7 +21,15 @@ export default function AuthorSearch({ authors, loading, formik }) {
                 className="form-control"
                 placeholder="Search for an author..."
                 value={searchTerm}
-                onChange={(e) => updateSearchTerm(e.target.value)}
+                onChange={(e) => {
+                    const value = e.target.value
+                    updateSearchTerm(value)
+                    
+                    if (!value) {
+                        formik.setFieldValue('authorId', '')
+                        formik.setFieldValue('authorName', '')
+                    }
+                }}
                 onFocus={showDropdownOnFocus}
             />
             {loading ? (
@@ -32,16 +40,18 @@ export default function AuthorSearch({ authors, loading, formik }) {
                         {filteredAuthors.length === 0 ? (
                             <li className="list-group-item">No matches found</li>
                         ) : (
-                            filteredAuthors.map((author, index) => (
+                            filteredAuthors.map(a => (
                                 <li
-                                    key={index}
+                                    key={a.id}
                                     className="list-group-item dropdown-item"
                                     onClick={() => {
-                                        formik.setFieldValue('authorName', author)
-                                        selectAuthor(author)
+                                        formik.setFieldValue('authorId', a.id);
+                                        formik.setFieldValue('authorName', a.name) 
+
+                                        selectAuthor(a.name)
                                     }}
                                 >
-                                    {author}
+                                    {a.name}
                                 </li>
                             ))
                         )}

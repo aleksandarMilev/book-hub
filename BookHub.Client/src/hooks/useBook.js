@@ -47,6 +47,7 @@ export function useCreate(){
         const book = {
             ...bookData,
             imageUrl: bookData.imageUrl || null,
+            authorId: bookData.authorId || null,
             authorName: bookData.authorName || null,
             publishedDate: bookData.publishedDate || null
         }
@@ -129,7 +130,7 @@ export function useSearchGenres(genres, selectedGenres) {
             setFilteredGenres([])
         } else {
             const filtered = genres.filter(
-                g => g.toLowerCase().includes(searchTerm.toLowerCase()) && !selectedGenres.includes(g)
+                g => g.name.toLowerCase().includes(searchTerm.toLowerCase()) && !selectedGenres.includes(g)
             )
             
             setFilteredGenres(filtered)

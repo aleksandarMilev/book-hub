@@ -175,7 +175,7 @@ export function useSearchAuthors(authors) {
             setFilteredAuthors([])
         } else {
             const filtered = authors.filter(a =>
-                a.toLowerCase().includes(searchTerm.toLowerCase())
+                a.name.toLowerCase().includes(searchTerm.toLowerCase())
             )
 
             setFilteredAuthors(filtered)
@@ -187,8 +187,8 @@ export function useSearchAuthors(authors) {
         setShowDropdown(true)
     }
 
-    const selectAuthor = (author) => {
-        setSearchTerm(author)
+    const selectAuthor = (name) => {
+        setSearchTerm(name)
         setShowDropdown(false)
     }
 

@@ -10,8 +10,7 @@
         [StringLength(TitleMaxLength, MinimumLength = TitleMinLength)]
         public string Title { get; init; } = null!;
 
-        [StringLength(AuthorNameMaxLength, MinimumLength = AuthorNameMinLength)]
-        public string? AuthorName { get; init; }
+        public int? AuthorId { get; init; }
 
         [StringLength(ImageUrlMaxLength, MinimumLength = ImageUrlMinLength)]
         public string? ImageUrl { get; init; }
@@ -26,6 +25,6 @@
 
         public string? PublishedDate { get; init; }
 
-        public IEnumerable<string> Genres { get; init; } = new HashSet<string>();
+        public IEnumerable<int> Genres { get; init; } = new HashSet<int>();
     }
 }

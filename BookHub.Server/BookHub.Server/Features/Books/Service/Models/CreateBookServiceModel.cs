@@ -4,9 +4,9 @@
     {
         public string Title { get; init; } = null!;
 
-        public string? AuthorName { get; init; }
+        public int? AuthorId { get; init; }
 
-        public string? ImageUrl { get; init; }
+        public string? ImageUrl { get; set; }
 
         public string ShortDescription { get; init; } = null!;
 
@@ -16,6 +16,6 @@
 
         public string CreatorId { get; set; } = null!;
 
-        public IEnumerable<string> Genres { get; init; } = new HashSet<string>();
+        public IEnumerable<int> Genres { get; init; } = new HashSet<int>();
     }
 }

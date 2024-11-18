@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { useSearchGenres } from '../../../../hooks/useBook'
 
 import './GenreSearch.css'
@@ -15,15 +13,15 @@ export default function GenreSearch({ genres, loading, formik, selectedGenres, s
         const newSelectedGenres = [...selectedGenres, genre]
         setSelectedGenres(newSelectedGenres) 
 
-        formik.setFieldValue('genres', newSelectedGenres) 
+        formik.setFieldValue('genres', newSelectedGenres.map(g => g.id)) 
         updateSearchTerm('')  
     }
 
     const removeGenre = (genre) => {
-        const newSelectedGenres = selectedGenres.filter(g => g !== genre)
+        const newSelectedGenres = selectedGenres.filter(g => g.id !== genre.id)
         setSelectedGenres(newSelectedGenres)
 
-        formik.setFieldValue('genres', newSelectedGenres)
+        formik.setFieldValue('genres', newSelectedGenres.map(g => g.id))
     }
 
     return (
@@ -46,13 +44,13 @@ export default function GenreSearch({ genres, loading, formik, selectedGenres, s
                             {filteredGenres.length === 0 ? (
                                 <li className="list-group-item">No matches found</li>
                             ) : (
-                                filteredGenres.map((g, i) => (
+                                filteredGenres.map(g => (
                                     <li
-                                        key={i}
+                                        key={g.id}
                                         className="list-group-item genre-item"
                                         onClick={() => selectGenre(g)} 
                                     >
-                                        {g}
+                                        {g.name}
                                     </li>
                                 ))
                             )}
@@ -61,9 +59,9 @@ export default function GenreSearch({ genres, loading, formik, selectedGenres, s
                     <div className="selected-genres mt-3">
                         {selectedGenres.length > 0 && (
                             <div className="d-flex flex-wrap">
-                                {selectedGenres.map((g, i) => (
-                                    <span key={i} className="badge badge-secondary m-1">
-                                        {g}
+                                {selectedGenres.map(g => (
+                                    <span key={g.id} className="badge badge-secondary m-1">
+                                        {g.name}
                                         <span
                                             className="badge-close"
                                             onClick={() => removeGenre(g)}

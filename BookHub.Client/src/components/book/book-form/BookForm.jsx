@@ -35,7 +35,7 @@ export default function BookForm({ bookData = null, isEditMode = false }) {
 
     const validationSchema = Yup.object({
         title: Yup.string().min(2).max(200).required('Title is required!'),
-        authorName: Yup.string().min(2).max(100),
+        authorId: Yup.number().nullable(),
         imageUrl: Yup.string().url().min(10).max(2000),
         shortDescription: Yup.string().min(10).max(100).required('You should provide some short description'),
         longDescription: Yup.string().min(100).max(5000).required('You should provide a long description!'),
@@ -46,21 +46,22 @@ export default function BookForm({ bookData = null, isEditMode = false }) {
     const formik = useFormik({
         initialValues: {
             title: bookData?.title || '',
-            authorName: bookData?.authorName || '',
+            //authorName: bookData?.authorName || '',
+            authorId: bookData?.authorId || '',
             imageUrl: bookData?.imageUrl || '',
             publishedDate: bookData?.publishedDate || '',
             shortDescription: bookData?.shortDescription || '',
             longDescription: bookData?.longDescription || '',
-            genres: selectedGenres 
+            genres: selectedGenres.map(g => g.id)
         },
         validationSchema,
         onSubmit: async (values, { setErrors }) => {
             try {
                 if (isEditMode) {
-                    await editHandler(bookData.id, { ...values, genres: selectedGenres }) 
+                    await editHandler(bookData.id, { ...values }) 
                     navigate(routes.books + `/${bookData.id}`)
                 } else {
-                    const bookId = await createHandler({ ...values, genres: selectedGenres }) 
+                    const bookId = await createHandler({ ...values }) 
                     navigate(routes.books + `/${bookId}`)
                 }
             } catch (error) {

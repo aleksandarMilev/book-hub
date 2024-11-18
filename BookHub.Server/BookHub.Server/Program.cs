@@ -7,6 +7,7 @@ namespace BookHub.Server
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
             var appSettings = builder.Services.GetAppSettings(builder.Configuration);
 
             builder.Services

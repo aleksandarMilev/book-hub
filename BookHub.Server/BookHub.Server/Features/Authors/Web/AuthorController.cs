@@ -22,7 +22,7 @@ namespace BookHub.Server.Features.Authors.Web
 
         [AllowAnonymous]
         [HttpGet("[action]")]
-        public async Task<ActionResult<IEnumerable<string>>> Names()
+        public async Task<ActionResult<IEnumerable<AuthorNamesServiceModel>>> Names()
             => this.Ok(await this.authorService.GetNamesAsync());
 
         [AllowAnonymous]

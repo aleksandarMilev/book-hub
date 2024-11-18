@@ -7,5 +7,7 @@
         public const string DefaultBookImageUrl = "https://images.alphacoders.com/115/1159192.jpg";
 
         public const string UnknownNationalityName = "Unknown";
+
+        public const string OtherGenreName = "Other";
     }
 }

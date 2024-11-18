@@ -41,10 +41,13 @@
 
         public async Task<int> CreateAsync(CreateBookServiceModel model)
         {
+            model.ImageUrl ??= DefaultBookImageUrl;
             var book = this.mapper.Map<Book>(model);
-            book.ImageUrl ??= DefaultBookImageUrl;
 
-            var authorId = await this.GetAuthorIdByNameAsync(model.AuthorName);
+            var authorId = await this.data
+                .Authors
+                .Select(a => a.Id)
+                .FirstOrDefaultAsync(id => id == model.AuthorId);
 
             if (authorId != 0)
             {
@@ -61,32 +64,32 @@
 
         public async Task<Result> EditAsync(int id, CreateBookServiceModel model)
         {
-            var book = await this.data
-                 .Books
-                 .FindAsync(id);
+            //var book = await this.data
+            //     .Books
+            //     .FindAsync(id);
 
-            if (book is null)
-            {
-                return BookNotFound;
-            }
+            //if (book is null)
+            //{
+            //    return BookNotFound;
+            //}
 
-            if (book.CreatorId != model.CreatorId)
-            {
-                return UnauthorizedBookEdit;
-            }
+            //if (book.CreatorId != model.CreatorId)
+            //{
+            //    return UnauthorizedBookEdit;
+            //}
 
-            this.mapper.Map(model, book);
+            //this.mapper.Map(model, book);
 
-            var authorId = await this.GetAuthorIdByNameAsync(model.AuthorName);
+            //var authorId = await this.GetAuthorIdByNameAsync(model.AuthorName);
 
-            if (authorId != 0)
-            {
-                book.AuthorId = authorId;
-            }
+            //if (authorId != 0)
+            //{
+            //    book.AuthorId = authorId;
+            //}
 
-            await this.data.SaveChangesAsync();
+            //await this.data.SaveChangesAsync();
 
-            await this.MapBookAndGenreAsync(book.Id, model.Genres);
+            //await this.MapBookAndGenreAsync(book.Id, model.Genres);
 
             return true;
         }
@@ -113,20 +116,11 @@
             return true;
         }
 
-        private async Task<int> GetAuthorIdByNameAsync(string? name)
-            => await this.data
-                .Authors
-                .Where(a => a.Name == name)
-                .Select(a => a.Id)
-                .FirstOrDefaultAsync();
-
-        private async Task MapBookAndGenreAsync(int bookId, IEnumerable<string> genreNames)
+        private async Task MapBookAndGenreAsync(int bookId, IEnumerable<int> genreIds)
         {
-            foreach (var name in genreNames)
+            if (genreIds.Any())
             {
-                var genreId = await this.GetGenreIdByNameAsync(name);
-
-                if (genreId != 0)
+                foreach (var genreId in genreIds)
                 {
                     var bookGenre = new BookGenre()
                     {
@@ -137,15 +131,22 @@
                     this.data.Add(bookGenre);
                 }
             }
+            else
+            {
+                var bookGenre = new BookGenre()
+                {
+                    BookId = bookId,
+                    GenreId = await this.data
+                        .Genres
+                        .Where(g => g.Name == OtherGenreName)
+                        .Select(g => g.Id)
+                        .FirstOrDefaultAsync()
+                };
+
+                this.data.Add(bookGenre);
+            }
 
             await this.data.SaveChangesAsync();
         }
-
-        private async Task<int> GetGenreIdByNameAsync(string name)
-            => await this.data
-                .Genres
-                .Where(g => g.Name == name)
-                .Select(g => g.Id)
-                .FirstOrDefaultAsync();
     }
 }
