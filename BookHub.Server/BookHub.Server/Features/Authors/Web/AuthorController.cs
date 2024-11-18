@@ -10,6 +10,7 @@ namespace BookHub.Server.Features.Authors.Web
     using Service;
     using Service.Models;
 
+    [Authorize]
     public class AuthorController(
         IAuthorService authorService,
         ICurrentUserService userService,
@@ -19,14 +20,14 @@ namespace BookHub.Server.Features.Authors.Web
         private readonly ICurrentUserService userService = userService;
         private readonly IMapper mapper = mapper;
 
-        [HttpGet("[action]")]
-        public async Task<ActionResult<IEnumerable<AuthorNamesServiceModel>>> Names()
-            => this.Ok(await this.authorService.GetNamesAsync());
-
         [AllowAnonymous]
         [HttpGet("[action]")]
         public async Task<ActionResult<IEnumerable<AuthorServiceModel>>> TopThree()
-            => this.Ok(await this.authorService.GetTopThreeAsync());
+           => this.Ok(await this.authorService.GetTopThreeAsync());
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult<IEnumerable<AuthorNamesServiceModel>>> Names()
+            => this.Ok(await this.authorService.GetNamesAsync());
 
         [HttpGet("{id}")]
         public async Task<ActionResult<AuthorDetailsServiceModel>> Details(int id) 

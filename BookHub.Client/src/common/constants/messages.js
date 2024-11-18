@@ -5,5 +5,8 @@ export const errors = {
         createError: 'We’re sorry, something went wrong while creating the author. Please try again later. If the issue persists, contact support for assistance.',
         editError: 'We’re sorry, something went wrong while updating the author’s details. Please try again later. If the issue persists, contact support for assistance.',
         deleteError: 'Oops! Something went wrong while trying to delete the author. Please try again later or contact support if the issue persists.'
+    },
+    genre:{
+        namesBadRequest: 'Apologies, we\'re experiencing issues and can\'t display genre names at the moment. Please try again later or contact us for assistance.'
     }
 }

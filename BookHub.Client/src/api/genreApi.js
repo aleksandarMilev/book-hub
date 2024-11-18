@@ -9,12 +9,16 @@ export async function getGenresAsync(token){
     }
 
     const url = baseUrl + routes.genres
-    const response = await fetch(url, options)
 
-    if(!response.ok){
-        throw new Error('Something went wrong, please try again!')
+    try {
+        const response = await fetch(url, options)
+
+        if(!response.ok){
+            throw new Error()
+        }
+
+        return await response.json()
+    } catch {
+        throw new Error()
     }
-
-    const genres = await response.json()
-    return genres
 }
