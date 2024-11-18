@@ -16,6 +16,7 @@ import {
 import { routes } from '../../../common/constants/api'
 import * as useBook from '../../../hooks/useBook'
 import * as useAuthor from '../../../hooks/useAuthor'
+import * as useGenre from '../../../hooks/useGenre'
 
 import AuthorSearch from './author-search/AuthorSearch'
 import GenreSearch from './genre-search/GenreSearch' 
@@ -29,7 +30,7 @@ export default function BookForm({ bookData = null, isEditMode = false }) {
     const createHandler = useBook.useCreate()
     const editHandler = useBook.useEdit()
     const { authors, loading: authorsLoading } = useAuthor.useNames()
-    const { genres, isFetching: genresLoading } = useBook.useGenres()
+    const { genres, isFetching: genresLoading } = useGenre.useGenres()
 
     const [selectedGenres, setSelectedGenres] = useState([])
 

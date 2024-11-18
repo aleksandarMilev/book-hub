@@ -1,4 +1,4 @@
-import { useSearchGenres } from '../../../../hooks/useBook'
+import { useSearchGenres } from '../../../../hooks/useGenre'
 
 import './GenreSearch.css'
 
