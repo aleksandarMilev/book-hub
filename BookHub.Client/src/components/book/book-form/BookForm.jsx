@@ -46,7 +46,6 @@ export default function BookForm({ bookData = null, isEditMode = false }) {
     const formik = useFormik({
         initialValues: {
             title: bookData?.title || '',
-            //authorName: bookData?.authorName || '',
             authorId: bookData?.authorId || '',
             imageUrl: bookData?.imageUrl || '',
             publishedDate: bookData?.publishedDate || '',

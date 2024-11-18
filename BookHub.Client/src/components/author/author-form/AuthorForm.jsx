@@ -14,6 +14,7 @@ import {
 
 import { routes } from '../../../common/constants/api'
 import * as useAuthor from '../../../hooks/useAuthor'
+import * as useNationality from '../../../hooks/useNationality'
 
 import image from '../../../assets/images/createAuthor.jpg'
 import NationalitySearch from './nationality-search/NationalitySearch'
@@ -25,7 +26,7 @@ export default function AuthorForm({ authorData = null, isEditMode = false }) {
     const navigate = useNavigate()
     const createHandler = useAuthor.useCreate()
     const editHandler = useAuthor.useEdit()  
-    const { nationalities, loading } = useAuthor.useNationalities()
+    const { nationalities, loading } = useNationality.useNationalities()
 
     const validationSchema = Yup.object({
         name: Yup.string().min(2).max(200).required('Name is required!'),

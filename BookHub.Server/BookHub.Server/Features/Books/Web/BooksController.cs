@@ -33,12 +33,11 @@ namespace BookHub.Server.Features.Books.Web
         public async Task<ActionResult<BookDetailsServiceModel>> Details(int id)
             => this.Ok(await this.bookService.GetDetailsAsync(id));
 
-        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<int>> Create(CreateBookWebModel webModel)
         {
             var serviceModel = this.mapper.Map<CreateBookServiceModel>(webModel);
-            //serviceModel.CreatorId = this.userService.GetId()!;
+            serviceModel.CreatorId = this.userService.GetId()!;
 
             var bookId = await this.bookService.CreateAsync(serviceModel);
 

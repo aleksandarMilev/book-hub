@@ -1,4 +1,4 @@
-import { useSearchNationalities } from '../../../../hooks/useAuthor'
+import { useSearchNationalities } from '../../../../hooks/useNationality'
 
 export default function NationalitySearch({ nationalities, loading, formik }) {
     const {

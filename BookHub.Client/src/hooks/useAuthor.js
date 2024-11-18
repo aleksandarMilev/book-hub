@@ -3,48 +3,48 @@ import { useContext, useEffect, useState } from 'react'
 import * as authorApi from '../api/authorApi'
 import { UserContext } from '../contexts/userContext'
 
-export function useNationalities() {
+export function useNames() {
     const { token } = useContext(UserContext) 
-    const [nationalities, setNationalities] = useState([])
+    const [authors, setAuthors] = useState([])
     const [isFetching, setIsFetching] = useState(false)
 
     useEffect(() => {
         async function fetchData() {
             setIsFetching(old => !old)
-            setNationalities(await authorApi.getNationalitiesAsync(token))
+            setAuthors(await authorApi.getAuthorNamesAsync(token))
             setIsFetching(old => !old)
         }
 
         fetchData()
     }, [])
 
-    return { nationalities, isFetching }
+    return { authors, isFetching }
 }
 
-export function useSearchNationalities(nationalities) {
+export function useSearchAuthors(authors) {
     const [searchTerm, setSearchTerm] = useState('')
-    const [filteredNationalities, setFilteredNationalities] = useState([])
+    const [filteredAuthors, setFilteredAuthors] = useState([])
     const [showDropdown, setShowDropdown] = useState(false)
 
     useEffect(() => {
         if (searchTerm === '') {
-            setFilteredNationalities([])
+            setFilteredAuthors([])
         } else {
-            const filtered = nationalities.filter(n =>
-                n.name.toLowerCase().includes(searchTerm.toLowerCase())
+            const filtered = authors.filter(a =>
+                a.name.toLowerCase().includes(searchTerm.toLowerCase())
             )
 
-            setFilteredNationalities(filtered)
+            setFilteredAuthors(filtered)
         }
-    }, [searchTerm, nationalities])
+    }, [searchTerm, authors])
 
     const updateSearchTerm = (term) => {
         setSearchTerm(term)
         setShowDropdown(true)
     }
 
-    const selectNationality = (nationality) => {
-        setSearchTerm(nationality)
+    const selectAuthor = (name) => {
+        setSearchTerm(name)
         setShowDropdown(false)
     }
 
@@ -52,10 +52,10 @@ export function useSearchNationalities(nationalities) {
 
     return {
         searchTerm,
-        filteredNationalities,
+        filteredAuthors,
         showDropdown,
         updateSearchTerm,
-        selectNationality,
+        selectAuthor,
         showDropdownOnFocus
     }
 }
@@ -145,61 +145,4 @@ export function useEdit(){
     }
 
     return editHandler
-}
-
-export function useNames() {
-    const { token } = useContext(UserContext) 
-    const [authors, setAuthors] = useState([])
-    const [isFetching, setIsFetching] = useState(false)
-
-    useEffect(() => {
-        async function fetchData() {
-            setIsFetching(old => !old)
-            setAuthors(await authorApi.getAuthorNamesAsync(token))
-            setIsFetching(old => !old)
-        }
-
-        fetchData()
-    }, [])
-
-    return { authors, isFetching }
-}
-
-export function useSearchAuthors(authors) {
-    const [searchTerm, setSearchTerm] = useState('')
-    const [filteredAuthors, setFilteredAuthors] = useState([])
-    const [showDropdown, setShowDropdown] = useState(false)
-
-    useEffect(() => {
-        if (searchTerm === '') {
-            setFilteredAuthors([])
-        } else {
-            const filtered = authors.filter(a =>
-                a.name.toLowerCase().includes(searchTerm.toLowerCase())
-            )
-
-            setFilteredAuthors(filtered)
-        }
-    }, [searchTerm, authors])
-
-    const updateSearchTerm = (term) => {
-        setSearchTerm(term)
-        setShowDropdown(true)
-    }
-
-    const selectAuthor = (name) => {
-        setSearchTerm(name)
-        setShowDropdown(false)
-    }
-
-    const showDropdownOnFocus = () => setShowDropdown(true)
-
-    return {
-        searchTerm,
-        filteredAuthors,
-        showDropdown,
-        updateSearchTerm,
-        selectAuthor,
-        showDropdownOnFocus
-    }
 }
