@@ -2,7 +2,17 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
-import { MDBBtn, MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBCardImage, MDBInput, MDBIcon, MDBCheckbox } 
+import { 
+    MDBBtn,
+    MDBContainer,
+    MDBRow,
+    MDBCol,
+    MDBCard,
+    MDBCardBody,
+    MDBCardImage,
+    MDBInput,
+    MDBIcon,
+    MDBCheckbox } 
 from 'mdb-react-ui-kit'
 
 import { routes } from '../../../common/constants/api'
@@ -35,7 +45,7 @@ export default function Register() {
                 await onRegister(values.username, values.email, values.password)
                 navigate(routes.home);
             } catch (error) {
-                setErrors({ email: error.message || 'An error occurred' })
+                setErrors({ username: error.message || 'An error occurred' })
             }
         }
     })
@@ -48,6 +58,9 @@ export default function Register() {
                         <MDBCol md='10' lg='6' className='order-2 order-lg-1 d-flex flex-column align-items-center'>
                             <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
                             <form onSubmit={formik.handleSubmit} className="w-100">
+                                {formik.touched.username && formik.errors.username && (
+                                    <div className="text-danger mb-3">{formik.errors.username}</div>
+                                )}
                                 <div className="d-flex flex-row align-items-center mb-4">
                                     <MDBIcon fas icon="user me-3" size='lg'/>
                                     <MDBInput 
@@ -61,10 +74,9 @@ export default function Register() {
                                         className='w-100'
                                     />
                                 </div>
-                                {formik.touched.username && formik.errors.username && (
-                                    <div className="text-danger mb-3">{formik.errors.username}</div>
+                                {formik.touched.email && formik.errors.email && (
+                                    <div className="text-danger mb-3">{formik.errors.email}</div>
                                 )}
-
                                 <div className="d-flex flex-row align-items-center mb-4">
                                     <MDBIcon fas icon="envelope me-3" size='lg'/>
                                     <MDBInput 
@@ -78,10 +90,9 @@ export default function Register() {
                                         className='w-100'
                                     />
                                 </div>
-                                {formik.touched.email && formik.errors.email && (
-                                    <div className="text-danger mb-3">{formik.errors.email}</div>
+                                {formik.touched.password && formik.errors.password && (
+                                    <div className="text-danger mb-3">{formik.errors.password}</div>
                                 )}
-
                                 <div className="d-flex flex-row align-items-center mb-4">
                                     <MDBIcon fas icon="lock me-3" size='lg'/>
                                     <MDBInput 
@@ -95,10 +106,9 @@ export default function Register() {
                                         className='w-100'
                                     />
                                 </div>
-                                {formik.touched.password && formik.errors.password && (
-                                    <div className="text-danger mb-3">{formik.errors.password}</div>
+                                {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+                                    <div className="text-danger mb-3">{formik.errors.confirmPassword}</div>
                                 )}
-
                                 <div className="d-flex flex-row align-items-center mb-4">
                                     <MDBIcon fas icon="key me-3" size='lg'/>
                                     <MDBInput 
@@ -112,10 +122,6 @@ export default function Register() {
                                         className='w-100'
                                     />
                                 </div>
-                                {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-                                    <div className="text-danger mb-3">{formik.errors.confirmPassword}</div>
-                                )}
-
                                 <div className='mb-4'>
                                     <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='Subscribe to our newsletter' />
                                 </div>

@@ -1,7 +1,8 @@
 import { useContext } from "react"
 
-import { UserContext } from "../contexts/userContext"
 import * as identityApi from "../api/identityApi"
+import { UserContext } from "../contexts/userContext"
+import { errors } from "../common/constants/messages"
 
 export function useLogin(){
     const { changeAuthenticationState } = useContext(UserContext)
@@ -11,7 +12,7 @@ export function useLogin(){
             const result = await identityApi.loginAsync(username, password)
             changeAuthenticationState(result)
         } catch (error) {
-            throw new Error(error.message || 'An unexpected error occurred')
+            throw error
         }
     }
 
@@ -25,8 +26,8 @@ export function useRegister() {
         try {
             const result = await identityApi.registerAsync(username, email, password)
             changeAuthenticationState(result)
-        } catch (error) {
-            throw new Error(error.message || 'An unexpected error occurred')
+        } catch(error)  {
+            throw error
         }
     }
 

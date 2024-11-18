@@ -6,7 +6,11 @@ export const errors = {
         editError: 'We’re sorry, something went wrong while updating the author’s details. Please try again later. If the issue persists, contact support for assistance.',
         deleteError: 'Oops! Something went wrong while trying to delete the author. Please try again later or contact support if the issue persists.'
     },
-    genre:{
+    genre: {
         namesBadRequest: 'Apologies, we\'re experiencing issues and can\'t display genre names at the moment. Please try again later or contact us for assistance.'
+    },
+    identity: {
+        register: 'Something went wrong while creating your account. Please try again later.',
+        login: 'Login failed. Please check your username and password and try again.',
     }
 }
