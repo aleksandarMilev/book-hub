@@ -41,17 +41,12 @@ export async function loginAsync(username, password) {
 
     const url = baseUrl + routes.login
 
-    try {
-        const response = await fetch(url, options)
-
-        if (response.ok) {
-            return await response.json() 
-        }
-
-        const errorData = await response.json()
-        throw new Error(errorData.errorMessage)
+    const response = await fetch(url, options)
     
-    } catch (error) {
-        throw new Error()
+    if (response.ok) {
+        return await response.json()
     }
+
+    const errorData = await response.json()
+    throw new Error(errorData?.errorMessage || errors.identity.login)
 }

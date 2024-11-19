@@ -2,7 +2,6 @@ import { useContext } from "react"
 
 import * as identityApi from "../api/identityApi"
 import { UserContext } from "../contexts/userContext"
-import { errors } from "../common/constants/messages"
 
 export function useLogin(){
     const { changeAuthenticationState } = useContext(UserContext)

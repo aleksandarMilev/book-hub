@@ -4,8 +4,8 @@ import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import { MDBBtn, MDBContainer, MDBRow, MDBCol, MDBInput, MDBIcon, MDBCheckbox } from 'mdb-react-ui-kit'
 
-import { routes } from '../../../common/constants/api'
 import * as useIdentity from '../../../hooks/useIdentity'
+import { routes } from '../../../common/constants/api'
 
 export default function Login() {
     const navigate = useNavigate()
@@ -59,34 +59,36 @@ export default function Login() {
                         <p className="text-center fw-bold mx-3 mb-0">Or</p>
                     </div>
                     <form onSubmit={formik.handleSubmit}>
-                        <MDBInput 
-                            wrapperClass='mb-4' 
-                            label='Username' 
-                            id='username' 
-                            type='text' 
-                            size="lg"
-                            name='username'
-                            value={formik.values.username}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                        />
-                        {formik.touched.username && formik.errors.username && (
-                            <div className="text-danger mb-3">{formik.errors.username}</div>
-                        )}
-                        <MDBInput 
-                            wrapperClass='mb-4'
-                            label='Password' 
-                            id='password' 
-                            type='password' 
-                            size="lg"
-                            name='password'
-                            value={formik.values.password}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                        />
-                        {formik.touched.password && formik.errors.password && (
-                            <div className="text-danger mb-3">{formik.errors.password}</div>
-                        )}
+                        <div className="mb-4">
+                            {formik.touched.username && formik.errors.username && (
+                                <div className="text-danger mb-2">{formik.errors.username}</div>
+                            )}
+                            <MDBInput 
+                                label='Username' 
+                                id='username' 
+                                type='text' 
+                                size="lg"
+                                name='username'
+                                value={formik.values.username}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                            />
+                        </div>
+                        <div className="mb-4">
+                            {formik.touched.password && formik.errors.password && (
+                                <div className="text-danger mb-2">{formik.errors.password}</div>
+                            )}
+                            <MDBInput 
+                                label='Password' 
+                                id='password' 
+                                type='password' 
+                                size="lg"
+                                name='password'
+                                value={formik.values.password}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                            />
+                        </div>
                         <div className="d-flex justify-content-between mb-4">
                             <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='Remember me' />
                             <a href="!#">Forgot password?</a>
