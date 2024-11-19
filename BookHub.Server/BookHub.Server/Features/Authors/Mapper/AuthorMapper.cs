@@ -32,7 +32,7 @@
                 .ForMember(dest => dest.DiedAt, opt => opt.MapFrom(src => src.DiedAt != null ? src.DiedAt.ToString() : null))
                 .ForMember(dest => dest.BooksCount, opt => opt.MapFrom(src => src.Books.Count()))
                 .ForMember(dest => dest.TopBooks, opt => opt.MapFrom(src => src.Books.Take(3)));
-                   
+
             this.CreateMap<Author, AuthorServiceModel>();
         }
     }

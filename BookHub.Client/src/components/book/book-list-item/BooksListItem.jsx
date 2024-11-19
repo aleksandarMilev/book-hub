@@ -7,8 +7,6 @@ import { routes } from '../../../common/constants/api'
 import './BookListItem.css' 
 
 export default function BookListItem({ id, imageUrl, title, authorName, shortDescription, averageRating, genres }) {
-    console.log(genres);
-    
     return (
         <div className="row p-3 bg-light border rounded mb-3 shadow-sm book-list-item">
             <div className="col-md-3 col-4 mt-1 d-flex justify-content-center align-items-center">

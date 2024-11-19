@@ -21,6 +21,7 @@ import { errors } from '../../../common/constants/messages'
 import { routes } from '../../../common/constants/api'
 import { UserContext } from '../../../contexts/userContext'
 
+import BookListItem from '../../book/book-list-item/BooksListItem'
 import DeleteModal from '../../common/delete-modal/DeleteModal'
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner'
 
@@ -52,7 +53,7 @@ export default function AuthorDetails() {
 
     if (isFetching || !author) {
         return <DefaultSpinner />
-    }
+    } 
 
     const isCreator = author?.creatorId === userId
 
@@ -64,12 +65,11 @@ export default function AuthorDetails() {
                         <MDBCard className="author-card">
                             <MDBCardBody>
                                 <div className="author-header">
-                                    <p>{author.gender}</p>
-                                    <MDBCardImage 
+                                    <MDBCardImage
                                         src={author.imageUrl}
-                                        alt={`${author.name}'s image`} 
+                                        alt={`${author.name}'s image`}
                                         className="author-image"
-                                        fluid 
+                                        fluid
                                     />
                                     <div>
                                         <MDBTypography tag="h2" className="author-name">
@@ -88,11 +88,11 @@ export default function AuthorDetails() {
                                                 <FaEdit className="me-1" /> Edit
                                             </MDBBtn>
                                         </Link>
-                                        <MDBBtn 
-                                            outline 
-                                            color="danger" 
-                                            size="sm" 
-                                            onClick={toggleModal} 
+                                        <MDBBtn
+                                            outline
+                                            color="danger"
+                                            size="sm"
+                                            onClick={toggleModal}
                                         >
                                             <FaTrashAlt className="me-1" /> Delete
                                         </MDBBtn>
@@ -102,15 +102,15 @@ export default function AuthorDetails() {
                                     <MDBTypography tag="h4" className="section-title">About</MDBTypography>
                                     <MDBCardText className="author-biography">{author.biography}</MDBCardText>
                                     <MDBCardText className="author-birthdate">
-                                        <strong>Born:</strong> {author.bornAt ? format(new Date(author.bornAt), 'MMM dd, yyyy') : "Unknown"} 
+                                        <strong>Born:</strong> {author.bornAt ? format(new Date(author.bornAt), 'MMM dd, yyyy') : "Unknown"}
                                         {author.bornAt && !author.diedAt ? ` (${new Date().getFullYear() - new Date(author.bornAt).getFullYear()} years old)` : ""}
                                     </MDBCardText>
                                     <MDBCardText className="author-deathdate">
                                         {author.diedAt && (
                                             <>
-                                                <strong>Died: </strong> 
-                                                {author.diedAt ? format(new Date(author.diedAt), 'MMM dd, yyyy') : "Unknown"}
-                                                {author.diedAt && author.bornAt && ` (${new Date(author.diedAt).getFullYear() - new Date(author.bornAt).getFullYear()} years old)`}
+                                                <strong>Died: </strong>
+                                                {format(new Date(author.diedAt), 'MMM dd, yyyy')}
+                                                {author.bornAt && ` (${new Date(author.diedAt).getFullYear() - new Date(author.bornAt).getFullYear()} years old)`}
                                             </>
                                         )}
                                     </MDBCardText>
@@ -128,15 +128,25 @@ export default function AuthorDetails() {
                                         </MDBCol>
                                     </MDBRow>
                                 </section>
+                                <section className="author-top-books">
+                                    <MDBTypography tag="h4" className="section-title">Top Books</MDBTypography>
+                                    {author.topBooks && author.topBooks.length > 0 ? (
+                                        author.topBooks.map(b => (
+                                            <BookListItem key={b.id} {...b} /> 
+                                        ))
+                                    ) : (
+                                        <MDBCardText>No books available for this author.</MDBCardText>
+                                    )}
+                                </section>
                             </MDBCardBody>
                         </MDBCard>
                     </MDBCol>
                 </MDBRow>
             </MDBContainer>
-            <DeleteModal 
-                showModal={showModal} 
-                toggleModal={toggleModal} 
-                deleteHandler={deleteHandler} 
+            <DeleteModal
+                showModal={showModal}
+                toggleModal={toggleModal}
+                deleteHandler={deleteHandler}
             />
         </div>
     )
