@@ -15,5 +15,8 @@ export const errors = {
     },
     nationality: {
         namesBadRequest: 'Apologies, we\'re experiencing issues and can\'t display nationality names at the moment. Please try again later or contact us for assistance.',
+    },
+    search: {
+        badRequest: 'We couldn’t complete your book search. Please try again, refresh the page, or check back later. If the issue persists, contact support. Thank you for your patience!'
     }
 }

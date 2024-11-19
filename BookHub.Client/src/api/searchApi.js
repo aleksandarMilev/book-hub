@@ -1,4 +1,5 @@
 import { baseUrl, routes } from '../common/constants/api'
+import { errors } from '../common/constants/messages'
 
 export async function searchBooksAsync(searchTerm, token){
     const options = {
@@ -15,5 +16,5 @@ export async function searchBooksAsync(searchTerm, token){
         return await response.json()
     }
 
-    throw new Error(`Something went wrong, please try again: ${response.status}`)
+    throw new Error(errors.search.badRequest)
 }

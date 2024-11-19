@@ -6,6 +6,8 @@ import * as useSearch from '../../../hooks/useSearch'
 import BookListItem from '../book-list-item/BooksListItem'
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner'
 
+import image from '../../../assets/images/no-books-found.png'
+
 import './BookList.css'
 
 export default function BookList() {
@@ -45,7 +47,20 @@ export default function BookList() {
                             ? books.map(b => (
                                 <BookListItem key={b.id} {...b} /> 
                             ))
-                            : <p className="text-center mt-4 text-muted">No books found!</p> 
+                            : (
+                                <div className="d-flex flex-column align-items-center justify-content-center mt-5">
+                                    <img 
+                                        src={image} 
+                                        alt="No books found" 
+                                        className="mb-4" 
+                                        style={{ maxWidth: '200px', opacity: 0.7 }}
+                                    />
+                                    <h5 className="text-muted">We couldn't find any books</h5>
+                                    <p className="text-muted text-center" style={{ maxWidth: '400px' }}>
+                                        Try adjusting your search terms or exploring our collection for more options.
+                                    </p>
+                                </div>
+                            )
                     }
                 </div>
             </div>
