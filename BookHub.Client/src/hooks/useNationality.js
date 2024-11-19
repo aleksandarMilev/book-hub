@@ -1,22 +1,30 @@
 import { useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import * as nationalityApi from '../api/nationalityApi'
+import { routes } from '../common/constants/api'
 import { UserContext } from '../contexts/userContext'
 
 export function useNationalities() {
     const { token } = useContext(UserContext) 
+    
+    const navigate = useNavigate()
     const [nationalities, setNationalities] = useState([])
     const [isFetching, setIsFetching] = useState(false)
 
     useEffect(() => {
         async function fetchData() {
-            setIsFetching(old => !old)
-            setNationalities(await nationalityApi.getNationalitiesAsync(token))
-            setIsFetching(old => !old)
+            try {
+                setIsFetching(old => !old)
+                setNationalities(await nationalityApi.getNationalitiesAsync(token))
+                setIsFetching(old => !old)
+            } catch (error) {
+                navigate(routes.badRequest, { state: { message: error.message } })
+            }
         }
 
         fetchData()
-    }, [])
+    }, [token, navigate])
 
     return { nationalities, isFetching }
 }

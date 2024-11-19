@@ -12,5 +12,8 @@ export const errors = {
     identity: {
         register: 'Something went wrong while creating your account. Please try again later.',
         login: 'Login failed. Please check your username and password and try again.',
+    },
+    nationality: {
+        namesBadRequest: 'Apologies, we\'re experiencing issues and can\'t display nationality names at the moment. Please try again later or contact us for assistance.',
     }
 }
