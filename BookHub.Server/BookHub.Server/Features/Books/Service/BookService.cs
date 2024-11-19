@@ -1,7 +1,8 @@
 ﻿namespace BookHub.Server.Features.Books.Service
 {
+    using Authors.Service.Models;
     using AutoMapper;
-    using AutoMapper.QueryableExtensions;
+    using Genre.Service.Models;
     using Data;
     using Data.Models;
     using Infrastructure.Services;
@@ -21,13 +22,47 @@
         public async Task<IEnumerable<BookServiceModel>> GetAllAsync()
             => await this.data
                 .Books
-                .ProjectTo<BookServiceModel>(this.mapper.ConfigurationProvider)
+                .Select(b => new BookServiceModel()
+                {
+                    Id = b.Id,
+                    Title = b.Title,
+                    AuthorName = b.Author == null ? null : b.Author.Name,
+                    ImageUrl = b.ImageUrl,
+                    ShortDescription = b.ShortDescription,
+                    AverageRating = b.Id,
+                    Genres = b
+                        .BooksGenres
+                    .Select(bg => new GenreNameServiceModel()
+                    {
+                        Id = bg.GenreId,
+                        Name = bg.Genre.Name
+                        })
+                        .ToHashSet()
+
+                    })
                 .ToListAsync();
 
         public async Task<IEnumerable<BookServiceModel>> GetTopThreeAsync()
             => await this.data
                .Books
-               .ProjectTo<BookServiceModel>(this.mapper.ConfigurationProvider)
+                .Select(b => new BookServiceModel()
+                {
+                    Id = b.Id,
+                    Title = b.Title,
+                    AuthorName = b.Author == null ? null : b.Author.Name,
+                    ImageUrl = b.ImageUrl,
+                    ShortDescription = b.ShortDescription,
+                    AverageRating = b.AverageRating,
+                    Genres = b
+                        .BooksGenres
+                        .Select(bg => new GenreNameServiceModel() 
+                        {
+                            Id = bg.GenreId,
+                            Name = bg.Genre.Name
+                        })
+                        .ToHashSet()
+                    
+                })
                .OrderByDescending(b => b.AverageRating)
                .Take(3)
                .ToListAsync();
@@ -35,62 +70,80 @@
 
         public async Task<BookDetailsServiceModel?> GetDetailsAsync(int id)
             => await this.data
-                .Books
-                .ProjectTo<BookDetailsServiceModel>(this.mapper.ConfigurationProvider)
+                  .Books
+                  .Select(b => new BookDetailsServiceModel()
+                  {
+                      Id = b.Id,
+                      Title = b.Title,
+                      AuthorName = b.Author == null ? null : b.Author.Name,
+                      ImageUrl = b.ImageUrl,
+                      ShortDescription = b.ShortDescription,
+                      AverageRating = b.AverageRating,
+                      Genres = b
+                        .BooksGenres
+                        .Select(bg => new GenreNameServiceModel()
+                        {
+                            Id = bg.GenreId,
+                            Name = bg.Genre.Name
+                        })
+                        .ToHashSet(),
+                      PublishedDate = b.PublishedDate == null ? null : b.PublishedDate.ToString(),
+                      RatingsCount = b.RatingsCount,
+                      LongDescription = b.LongDescription,
+                      CreatorId = b.CreatorId,
+                      Author = b.Author == null 
+                        ? null
+                        : new AuthorServiceModel()
+                          {
+                              Id = b.Author.Id,
+                              Name = b.Author.Name,
+                              ImageUrl = b.Author.ImageUrl,
+                              Biography = b.Author.Biography,
+                              BooksCount = b.Author.Books.Count(),
+                              Rating = b.Author.Rating,
+                          }
+                  })
                 .FirstOrDefaultAsync(b => b.Id == id);
 
-        public async Task<int> CreateAsync(CreateBookServiceModel model)
+        public async Task<int> CreateAsync(CreateBookServiceModel model, string userId)
         {
             model.ImageUrl ??= DefaultBookImageUrl;
 
             var book = this.mapper.Map<Book>(model);
-
-            var authorId = await this.data
-                .Authors
-                .Select(a => a.Id)
-                .FirstOrDefaultAsync(id => id == model.AuthorId);
-
-            if (authorId != 0)
-            {
-                book.AuthorId = authorId;
-            }
+            book.CreatorId = userId;
+            book.AuthorId = await this.MapAuthorToBookAsync(model.AuthorId);
 
             this.data.Add(book);
             await this.data.SaveChangesAsync();
 
-            await this.MapBookAndGenreAsync(book.Id, model.Genres);
+            await this.MapBookAndGenresAsync(book.Id, model.Genres);
 
             return book.Id;
         }
 
-        public async Task<Result> EditAsync(int id, CreateBookServiceModel model)
+        public async Task<Result> EditAsync(int id, CreateBookServiceModel model, string userId)
         {
-            //var book = await this.data
-            //     .Books
-            //     .FindAsync(id);
+            var book = await this.data
+                 .Books
+                 .FindAsync(id);
 
-            //if (book is null)
-            //{
-            //    return BookNotFound;
-            //}
+            if (book is null)
+            {
+                return BookNotFound;
+            }
 
-            //if (book.CreatorId != model.CreatorId)
-            //{
-            //    return UnauthorizedBookEdit;
-            //}
+            if (book.CreatorId != userId)
+            {
+                return UnauthorizedBookEdit;
+            }
 
-            //this.mapper.Map(model, book);
+            model.ImageUrl ??= DefaultBookImageUrl;
+            this.mapper.Map(model, book);
+            book.AuthorId = await this.MapAuthorToBookAsync(model.AuthorId);
 
-            //var authorId = await this.GetAuthorIdByNameAsync(model.AuthorName);
+            await this.data.SaveChangesAsync();
 
-            //if (authorId != 0)
-            //{
-            //    book.AuthorId = authorId;
-            //}
-
-            //await this.data.SaveChangesAsync();
-
-            //await this.MapBookAndGenreAsync(book.Id, model.Genres);
+            await this.MapBookAndGenresAsync(book.Id, model.Genres);
 
             return true;
         }
@@ -117,12 +170,34 @@
             return true;
         }
 
-        private async Task MapBookAndGenreAsync(int bookId, IEnumerable<int> genreIds)
+        private async Task<int?> MapAuthorToBookAsync(int? id) 
         {
+            var authorId = await this.data
+                .Authors
+                .Select(a => a.Id)
+                .FirstOrDefaultAsync(a => a == id);
+
+            if (authorId == 0)
+            {
+                return null;
+            }
+
+            return authorId;
+        }
+
+        private async Task MapBookAndGenresAsync(int bookId, IEnumerable<int> genreIds)
+        {
+            await this.RemoveExistingBookGenres(bookId);
+
             if (genreIds.Any())
             {
                 foreach (var genreId in genreIds)
                 {
+                    if (await this.BookGenreExistsAsync(bookId, genreId))
+                    {
+                        continue;
+                    }
+
                     var bookGenre = new BookGenre()
                     {
                         BookId = bookId,
@@ -134,19 +209,41 @@
             }
             else
             {
-                var bookGenre = new BookGenre()
-                {
-                    BookId = bookId,
-                    GenreId = await this.data
-                        .Genres
-                        .Where(g => g.Name == OtherGenreName)
-                        .Select(g => g.Id)
-                        .FirstOrDefaultAsync()
-                };
+                var otherGenreId = await this.data
+                    .Genres
+                    .Where(g => g.Name == OtherGenreName)
+                    .Select(g => g.Id)
+                    .FirstOrDefaultAsync();
 
-                this.data.Add(bookGenre);
+                if (!await this.BookGenreExistsAsync(bookId, otherGenreId))
+                {
+                    var bookGenre = new BookGenre()
+                    {
+                        BookId = bookId,
+                        GenreId = otherGenreId
+                    };
+
+                    this.data.Add(bookGenre);
+                }
             }
 
+            await this.data.SaveChangesAsync();
+        }
+
+        private async Task<bool> BookGenreExistsAsync(int bookId, int genreId)
+            => await this.data
+                .BooksGenres
+                .AsNoTracking()
+                .AnyAsync(bg => bg.BookId == bookId && bg.GenreId == genreId);
+
+        private async Task RemoveExistingBookGenres(int bookId) 
+        {
+            var existingMaps = await this.data
+               .BooksGenres
+               .Where(bg => bg.BookId == bookId)
+               .ToListAsync();
+
+            this.data.RemoveRange(existingMaps);
             await this.data.SaveChangesAsync();
         }
     }

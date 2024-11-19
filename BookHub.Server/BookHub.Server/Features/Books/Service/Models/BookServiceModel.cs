@@ -1,5 +1,7 @@
 ﻿namespace BookHub.Server.Features.Books.Service.Models
 {
+    using Genre.Service.Models;
+
     public class BookServiceModel
     {
         public int Id { get; init; }
@@ -14,6 +16,6 @@
 
         public double AverageRating { get; init; } 
 
-        public ICollection<string> Genres { get; init; } = new HashSet<string>();
+        public ICollection<GenreNameServiceModel> Genres { get; init; } = new HashSet<GenreNameServiceModel>();
     }
 }

@@ -47,7 +47,6 @@
             model.ImageUrl ??= DefaultAuthorImageUrl;
 
             var author = this.mapper.Map<Author>(model);
-
             author.CreatorId = userId;
             author.NationalityId = await this.MapNationalityToAuthor(model.NationalityId);
 

@@ -31,15 +31,13 @@ namespace BookHub.Server.Features.Books.Web
 
         [HttpGet("{id}")]
         public async Task<ActionResult<BookDetailsServiceModel>> Details(int id)
-            => this.Ok(await this.bookService.GetDetailsAsync(id));
+            => this.Ok(await this.bookService.GetDetailsAsync(id)); 
 
         [HttpPost]
         public async Task<ActionResult<int>> Create(CreateBookWebModel webModel)
         {
             var serviceModel = this.mapper.Map<CreateBookServiceModel>(webModel);
-            serviceModel.CreatorId = this.userService.GetId()!;
-
-            var bookId = await this.bookService.CreateAsync(serviceModel);
+            var bookId = await this.bookService.CreateAsync(serviceModel, this.userService.GetId()!);
 
             return this.Created(nameof(this.Create), bookId);
         }
@@ -48,9 +46,7 @@ namespace BookHub.Server.Features.Books.Web
         public async Task<ActionResult> Edit(int id, CreateBookWebModel webModel)
         {
             var serviceModel = this.mapper.Map<CreateBookServiceModel>(webModel);
-            serviceModel.CreatorId = this.userService.GetId()!;
-
-            var result = await this.bookService.EditAsync(id, serviceModel);
+            var result = await this.bookService.EditAsync(id, serviceModel, this.userService.GetId()!);
 
             return this.NoContentOrBadRequest(result);
         }

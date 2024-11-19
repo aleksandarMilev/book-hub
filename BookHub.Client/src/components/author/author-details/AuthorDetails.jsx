@@ -17,9 +17,11 @@ import {
 import * as authorApi from '../../../api/authorApi'
 import * as useAuthor from '../../../hooks/useAuthor'
 import renderStars from '../../../common/functions/renderStars'
+import { errors } from '../../../common/constants/messages'
 import { routes } from '../../../common/constants/api'
 import { UserContext } from '../../../contexts/userContext'
 
+import DeleteModal from '../../common/delete-modal/DeleteModal'
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner'
 
 import './AuthorDetails.css'
@@ -28,27 +30,31 @@ export default function AuthorDetails() {
     const { id } = useParams()
     const navigate = useNavigate()
     const [showModal, setShowModal] = useState(false)
-
+    
     const { author, isFetching } = useAuthor.useGetDetails(id)
     const { userId, token } = useContext(UserContext)
-    const isCreator = author?.creatorId === userId
+
+    const toggleModal = () => setShowModal(prev => !prev)
 
     async function deleteHandler() {
-        try {
-            await authorApi.deleteAsync(id, token)
-            navigate(routes.books)
-        } catch (error) {
-            navigate(routes.badRequest, { state: {message: error.message }})            
+        if (showModal) {
+            const success = await authorApi.deleteAsync(id, token)
+            
+            if(success){
+                navigate(routes.books)
+            } else {
+                navigate(routes.badRequest, { state: { message: errors.author.delete } })
+            }
+        } else {
+            toggleModal()  
         }
-    }
-
-    function toggleModal() {
-        setShowModal(!showModal)
     }
 
     if (isFetching || !author) {
         return <DefaultSpinner />
     }
+
+    const isCreator = author?.creatorId === userId
 
     return (
         <div className="author-details-wrapper">
@@ -58,6 +64,7 @@ export default function AuthorDetails() {
                         <MDBCard className="author-card">
                             <MDBCardBody>
                                 <div className="author-header">
+                                    <p>{author.gender}</p>
                                     <MDBCardImage 
                                         src={author.imageUrl}
                                         alt={`${author.name}'s image`} 
@@ -126,27 +133,11 @@ export default function AuthorDetails() {
                     </MDBCol>
                 </MDBRow>
             </MDBContainer>
-            <div className={`modal fade ${showModal ? 'show d-block' : ''}`} tabIndex="-1" aria-labelledby="deleteModalLabel" aria-hidden={!showModal}>
-                <div className="modal-dialog modal-dialog-centered">
-                    <div className="modal-content">
-                        <div className="modal-header bg-warning text-white">
-                            <h5 className="modal-title" id="deleteModalLabel">
-                                <FaExclamationTriangle className="me-2" /> Confirm Deletion
-                            </h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={toggleModal}></button>
-                        </div>
-                        <div className="modal-body">
-                            <p className="text-center">Are you sure you want to delete this author? This action cannot be undone.</p>
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={toggleModal}>Cancel</button>
-                            <button type="button" className="btn btn-danger" onClick={deleteHandler}>
-                                <FaTrashAlt className="me-2" /> Delete
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <DeleteModal 
+                showModal={showModal} 
+                toggleModal={toggleModal} 
+                deleteHandler={deleteHandler} 
+            />
         </div>
     )
 }

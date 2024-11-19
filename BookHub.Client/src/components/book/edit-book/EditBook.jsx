@@ -8,5 +8,10 @@ export default function EditAuthor() {
     const { id } = useParams()
     const { book } = useBook.useGetFullInfo(id)
 
+    if(book){
+        console.log(book);
+        
+    }
+
     return book ? <BookForm bookData={book} isEditMode={true} /> : <DefaultSpinner/ >
 }

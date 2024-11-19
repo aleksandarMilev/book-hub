@@ -1,6 +1,7 @@
 import { baseUrl, routes } from '../common/constants/api'
+import { errors } from '../common/constants/messages'
 
-export async function getAllAsync(token){
+export async function getTopThreeAsync(token){
     const options = {
         method: "GET",
         headers: {
@@ -8,9 +9,14 @@ export async function getAllAsync(token){
         }
     }
 
-    const url = baseUrl + routes.books
+    const url = baseUrl + routes.topThreeBooks
     const response = await fetch(url, options)
-    return response.ok ? await response.json() : null
+
+    if(response.ok){
+        return await response.json()
+    }
+
+    throw new Error(errors.book.topThree)
 }
 
 export async function getDetailsAsync(id, token){
@@ -23,7 +29,12 @@ export async function getDetailsAsync(id, token){
 
     const url = baseUrl + routes.books + `/${id}`
     const response = await fetch(url, options)
-    return response.ok ? await response.json() : null
+
+    if(response.ok){
+        return await response.json()
+    }
+
+    throw new Error(errors.book.notfound)
 }
 
 export async function createAsync(book, token){
@@ -36,16 +47,14 @@ export async function createAsync(book, token){
         body: JSON.stringify(book)
     }
 
-    console.log(JSON.stringify(book))
+    const url = baseUrl + routes.books
+    const response = await fetch(url, options)
 
-    const response = await fetch(baseUrl + routes.books, options)
-
-    if(!response.ok){
-        throw new Error('Something went wrong, please try again!')
+    if(response.ok){
+        return await response.json()
     }
 
-    const bookId = await response.json()
-    return bookId
+    throw new Error(errors.book.create)
 }
 
 export async function editAsync(bookId, book, token){
@@ -59,7 +68,13 @@ export async function editAsync(bookId, book, token){
     }
 
     const url = baseUrl + routes.books + `/${bookId}`
-    await fetch(url, options)
+    const response = await fetch(url, options)
+
+    if(response.ok){
+        return true
+    }
+
+    throw new Error(errors.book.edit)
 }
 
 export async function deleteAsync(bookId, token){
@@ -71,19 +86,12 @@ export async function deleteAsync(bookId, token){
     }
 
     const url = baseUrl + routes.books + `/${bookId}`
-    await fetch(url, options)
-}
+    const response = await fetch(url, options)
 
-export async function getTopThreeAsync(token){
-    const options = {
-        method: "GET",
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
+    if(response.ok){
+        return true 
     }
 
-    const url = baseUrl + routes.topThreeBooks
-    const response = await fetch(url, options)
-    return response.ok ? await response.json() : null
+    return false
 }
 

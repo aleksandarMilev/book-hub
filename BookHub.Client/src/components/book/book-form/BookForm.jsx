@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
@@ -32,7 +32,13 @@ export default function BookForm({ bookData = null, isEditMode = false }) {
     const { authors, loading: authorsLoading } = useAuthor.useNames()
     const { genres, isFetching: genresLoading } = useGenre.useGenres()
 
-    const [selectedGenres, setSelectedGenres] = useState([])
+    const [selectedGenres, setSelectedGenres] = useState([]);
+
+    useEffect(() => {
+        if (bookData && bookData.genres) {
+            setSelectedGenres(bookData.genres)
+        }
+    }, [bookData]);
 
     const validationSchema = Yup.object({
         title: Yup.string().min(2).max(200).required('Title is required!'),
@@ -58,14 +64,20 @@ export default function BookForm({ bookData = null, isEditMode = false }) {
         onSubmit: async (values, { setErrors }) => {
             try {
                 if (isEditMode) {
-                    await editHandler(bookData.id, { ...values }) 
-                    navigate(routes.books + `/${bookData.id}`)
+                    const isSuccessfullyEdited = await editHandler(bookData.id, { ...values }) 
+
+                    if(isSuccessfullyEdited){
+                        navigate(routes.books + `/${bookData.id}`)
+                    }
                 } else {
-                    const bookId = await createHandler({ ...values }) 
-                    navigate(routes.books + `/${bookId}`)
+                    const bookId = await createHandler(values)
+
+                    if (bookId) {
+                        navigate(routes.books + `/${bookId}`)
+                    }
                 }
             } catch (error) {
-                setErrors({ submit: error.message })
+                setErrors({ submit: 'my error message' })
             }
         }
     })

@@ -39,7 +39,8 @@ export function useSearchGenres(genres, selectedGenres) {
             setFilteredGenres([])
         } else {
             const filtered = genres.filter(g =>
-                g.name.toLowerCase().includes(searchTerm.toLowerCase()) && !selectedGenres.includes(g)
+                g.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+                !selectedGenres.some(selectedGenre => selectedGenre.id === g.id)
             )
             
             setFilteredGenres(filtered)

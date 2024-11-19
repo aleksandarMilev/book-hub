@@ -14,8 +14,6 @@
 
         public string? PublishedDate { get; init; }
 
-        public string CreatorId { get; set; } = null!;
-
         public IEnumerable<int> Genres { get; init; } = new HashSet<int>();
     }
 }

@@ -1,15 +1,39 @@
 import { useContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { json, useNavigate } from 'react-router-dom'
 
 import * as authorApi from '../api/authorApi'
-import  { errors }  from '../common/constants/messages'
 import { routes } from '../common/constants/api'
 import { UserContext } from '../contexts/userContext'
 
-export function useNames() {
-    const navigate = useNavigate()
+export function useGetTopThree(){
+    const { token } = useContext(UserContext)
 
+    const [authors, setAuthor] = useState([])
+    const [isFetching, setIsFetching] = useState(false)
+    const [error, setError] = useState(null) 
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                setIsFetching(true)
+                setAuthor(await authorApi.getTopThreeAsync(token))
+            } catch (error) {
+                setError(error.message)
+            } finally {
+                setIsFetching(false)
+            }
+        }
+
+        fetchData()
+    }, [token])
+
+    return { authors, isFetching, error }
+}
+
+export function useNames() {
     const { token } = useContext(UserContext) 
+    
+    const navigate = useNavigate()
     const [authors, setAuthors] = useState([])
     const [isFetching, setIsFetching] = useState(false)
 
@@ -19,8 +43,8 @@ export function useNames() {
                 setIsFetching(old => !old)
                 setAuthors(await authorApi.getAuthorNamesAsync(token))
                 setIsFetching(old => !old)
-            } catch {
-                navigate(routes.badRequest, { state: { message: errors.author.namesBadRequest} })
+            } catch (error) {
+                navigate(routes.badRequest, { state: { message: error.message} })
             }
         }
 
@@ -70,9 +94,9 @@ export function useSearchAuthors(authors) {
 }
 
 export function useGetDetails(id){
-    const navigate = useNavigate()
-
     const { token } = useContext(UserContext)
+    
+    const navigate = useNavigate()
     const [author, setAuthor] = useState(null)
     const [isFetching, setIsFetching] = useState(false)
 
@@ -82,8 +106,8 @@ export function useGetDetails(id){
                 setIsFetching(old => !old)
                 setAuthor(await authorApi.getDetailsAsync(id, token))
                 setIsFetching(old => !old)
-            } catch {
-                navigate(routes.notFound, { state: { message: errors.author.notfound} })
+            } catch(error) {
+                navigate(routes.notFound, { state: { message: error.message} })
             }
         }
 
@@ -93,26 +117,10 @@ export function useGetDetails(id){
     return { author, isFetching }
 }
 
-export function useGetTopThree(){
-    const { token } = useContext(UserContext)
-    const [authors, setAuthor] = useState([])
-    const [isFetching, setIsFetching] = useState(false)
-
-    useEffect(() => {
-        async function fetchData() {
-            setIsFetching(old => !old)
-            setAuthor(await authorApi.getTopThreeAsync(token))
-            setIsFetching(old => !old)
-        }
-
-        fetchData()
-    }, [token])
-
-    return { authors, isFetching }
-}
-
 export function useCreate(){
     const { token } = useContext(UserContext) 
+
+    const navigate = useNavigate()
 
     const createHandler = async ({ name, penName, imageUrl, gender, biography, nationality, bornAt, diedAt }) => {
         const author = {
@@ -127,9 +135,10 @@ export function useCreate(){
         }
 
         try {
-            return await authorApi.createAsync(author, token)
-        } catch  {
-            throw new Error(errors.author.createError)
+            const authorId = await authorApi.createAsync(author, token)
+            return authorId
+        } catch (error) {
+            navigate(routes.badRequest, { state: { message: error.message } })
         }
     }
 
@@ -138,6 +147,8 @@ export function useCreate(){
 
 export function useEdit(){
     const { token } = useContext(UserContext) 
+
+    const navigate = useNavigate()
 
     const editHandler = async (authorId, { name, penName, imageUrl, gender, biography, nationality, bornAt, diedAt }) => {
         const author = {
@@ -152,9 +163,10 @@ export function useEdit(){
         }
 
         try {
-            await authorApi.editAsync(authorId, author, token)
-        } catch {
-            throw new Error(errors.author.editError)
+            const isSuccessful = await authorApi.editAsync(authorId, author, token)
+            return isSuccessful
+        } catch(error) {
+            navigate(routes.badRequest, { state: { message: error.message } })
         }
     }
 

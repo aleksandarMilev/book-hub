@@ -1,19 +1,31 @@
 import { Link } from 'react-router-dom'
 import { MDBBtn, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit'
+import { FaBookReader } from 'react-icons/fa'
 
 import * as useAuthors from '../../../hooks/useAuthor'
-import renderStars from '../../../common/functions/renderStars'
 import { routes } from '../../../common/constants/api'
+import renderStars from '../../../common/functions/renderStars'
 
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner'
 
 import './TopAuthors.css'  
 
 export default function TopAuthors() {
-    const { authors, isFetching } = useAuthors.useGetTopThree()
+    const { authors, isFetching, error } = useAuthors.useGetTopThree()
 
     if(isFetching){
-        return <DefaultSpinner/ >
+        return (<DefaultSpinner/ >)
+    }
+
+    if (error) {
+        return (
+            <div className="d-flex flex-column align-items-center justify-content-center vh-50">
+                <div className="text-center">
+                    <FaBookReader size={100} color="red" className="mb-3" />
+                    <p className="lead">{error}</p> 
+                </div>
+            </div>
+        )
     }
 
     return (

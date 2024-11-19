@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { MDBCard, MDBCardImage, MDBCardBody, MDBCardTitle, MDBCardText, MDBCardGroup, MDBBtn } from 'mdb-react-ui-kit'
-import { FaBook } from 'react-icons/fa'
+import { FaBook, FaBookReader } from 'react-icons/fa'
 
 import * as useBooks from '../../../hooks/useBook'
 import renderStars from '../../../common/functions/renderStars'
@@ -11,10 +11,21 @@ import DefaultSpinner from '../../common/default-spinner/DefaultSpinner'
 import './TopBooks.css' 
 
 export default function TopBooks() {
-    const { books, isFetching } = useBooks.useGetTopThree()
+    const { books, isFetching, error } = useBooks.useGetTopThree() 
 
-    if(isFetching){
-        return <DefaultSpinner/ >
+    if (isFetching) {
+        return (<DefaultSpinner />)
+    }
+
+    if (error) {
+        return (
+            <div className="d-flex flex-column align-items-center justify-content-center vh-50">
+                <div className="text-center">
+                    <FaBookReader size={100} color="red" className="mb-3" />
+                    <p className="lead">{error}</p> 
+                </div>
+            </div>
+        )
     }
 
     return (
@@ -42,9 +53,9 @@ export default function TopBooks() {
                             <MDBCardText>
                                 <strong>Genres:</strong> 
                                 {b.genres && b.genres.length > 0 ? (
-                                    b.genres.map((genre, index) => (
-                                        <span key={index} className="genre-item">
-                                            {genre}{index < b.genres.length - 1 ? ', ' : ''}
+                                    b.genres.map((g, i) => (
+                                        <span key={g.id} className="genre-item">
+                                            {g.name}{i < b.genres.length - 1 ? ', ' : ''}
                                         </span>
                                     ))
                                 ) : (

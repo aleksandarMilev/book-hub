@@ -12,6 +12,6 @@
 
         public string? CreatorId { get; init; }
 
-        public AuthorServiceModel Author { get; init; } = null!;
+        public AuthorServiceModel? Author { get; init; }
     }
 }

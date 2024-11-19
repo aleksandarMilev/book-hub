@@ -1,6 +1,7 @@
 ﻿namespace BookHub.Server.Features.Authors.Mapper
 {
     using AutoMapper;
+    using BookHub.Server.Features.Genre.Service.Models;
     using Books.Service.Models;
     using Data.Models;
     using Nationality.Service.Models;
@@ -11,8 +12,10 @@
     {
         public AuthorMapper()
         {
+            this.CreateMap<Genre, GenreNameServiceModel>();
+
             this.CreateMap<Book, BookServiceModel>()
-                .ForMember(dest => dest.Genres, opt => opt.MapFrom(src => src.BooksGenres.Select(bg => bg.Genre.Name).ToList()));
+                .ForMember(dest => dest.Genres, opt => opt.MapFrom(src => src.BooksGenres.Select(bg => bg.Genre)));
 
             this.CreateMap<CreateAuthorWebModel, CreateAuthorServiceModel>();
 

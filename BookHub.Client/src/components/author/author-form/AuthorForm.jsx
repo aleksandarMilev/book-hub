@@ -68,15 +68,20 @@ export default function AuthorForm({ authorData = null, isEditMode = false }) {
                 const finalValues = { ...values, nationality: values.nationality || initialNationality }
                 
                 if (isEditMode) {
-                    await editHandler(authorData.id, finalValues)  
-                    navigate(routes.author + `/${authorData.id}`)
+                    const isSuccessfullyEdited = await editHandler(authorData.id, finalValues)
+                      
+                    if(isSuccessfullyEdited){
+                        navigate(routes.author + `/${authorData.id}`)
+                    }
                 } else {
                     const authorId = await createHandler(finalValues)  
-                    navigate(routes.author + `/${authorId}`)
+
+                    if(authorId){
+                        navigate(routes.author + `/${authorId}`)
+                    }
                 }
             } catch (error) {
                 setErrors({ submit: error.message })
-                navigate(routes.badRequest, { state: { message: error.message } })
             }
         }
     })

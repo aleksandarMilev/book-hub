@@ -7,6 +7,8 @@ import { routes } from '../../../common/constants/api'
 import './BookListItem.css' 
 
 export default function BookListItem({ id, imageUrl, title, authorName, shortDescription, averageRating, genres }) {
+    console.log(genres);
+    
     return (
         <div className="row p-3 bg-light border rounded mb-3 shadow-sm book-list-item">
             <div className="col-md-3 col-4 mt-1 d-flex justify-content-center align-items-center">
@@ -26,8 +28,8 @@ export default function BookListItem({ id, imageUrl, title, authorName, shortDes
                 </div>
                 <div className="mt-1 mb-2 book-list-item-genres">
                     <FaTag className="me-2" />
-                    {genres.map((genre, index) => (
-                        <span key={index} className="badge bg-secondary me-1">{genre}</span>
+                    {genres.map(g => (
+                        <span key={g.id} className="badge bg-secondary me-1">{g.name}</span>
                     ))}
                 </div>
                 <p className="text-justify para mb-0 book-list-item-description">

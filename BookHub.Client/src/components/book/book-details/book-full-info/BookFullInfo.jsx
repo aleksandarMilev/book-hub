@@ -18,7 +18,7 @@ export default function BookFullInfo({
 }) {
     const formattedDate = book.publishedDate 
         ? format(new Date(book.publishedDate), 'MMMM dd, yyyy')
-        : 'Publication date unknown';
+        : 'Publication date unknown'
 
     return (
         <div className="book-info-card shadow-lg p-4">
@@ -40,8 +40,8 @@ export default function BookFullInfo({
                         </div>
                         <div className="genres mb-3">
                             <span className="fw-semibold text-muted me-1">Genres:</span>
-                            {book.genres.map((genre, index) => (
-                                <span key={index} className="badge bg-secondary me-1">{genre}</span>
+                            {book.genres.map(g => (
+                                <span key={g.id} className="badge bg-secondary me-1">{g.name}</span>
                             ))}
                         </div>
                         <p className="book-description card-text">

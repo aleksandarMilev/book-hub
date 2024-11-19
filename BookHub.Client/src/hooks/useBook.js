@@ -1,47 +1,64 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import * as bookApi from '../api/bookApi'
-import * as authorApi from '../api/authorApi'
-import { UserContext } from '../contexts/userContext';
+import { errors } from '../common/constants/messages'
+import { routes } from '../common/constants/api'
+import { UserContext } from '../contexts/userContext'
 
-export function useGetAll(){
+export function useGetTopThree() {
     const { token } = useContext(UserContext)
+
     const [books, setBooks] = useState([])
     const [isFetching, setIsFetching] = useState(false)
+    const [error, setError] = useState(null) 
 
     useEffect(() => {
         async function fetchData() {
-            setIsFetching(old => !old)
-            setBooks(await bookApi.getAllAsync(token))
-            setIsFetching(old => !old)
+            try {
+                setIsFetching(true)
+                setBooks(await bookApi.getTopThreeAsync(token))
+            } catch (error) {
+                setError(error.message)
+            } finally {
+                setIsFetching(false)
+            }
         }
 
         fetchData()
-    }, [])
+    }, [token])
 
-    return { books, isFetching }
+    return { books, isFetching, error } 
 }
 
 export function useGetFullInfo(id){
     const { token } = useContext(UserContext)
+    
+    const navigate = useNavigate()
     const [book, setBook] = useState(null)
     const [isFetching, setIsFetching] = useState(false)
 
     useEffect(() => {
         async function fetchData() {
-            setIsFetching(old => !old)
-            setBook(await bookApi.getDetailsAsync(id, token))
-            setIsFetching(old => !old)
+            try {
+                setIsFetching(old => !old)
+                setBook(await bookApi.getDetailsAsync(id, token))
+                setIsFetching(old => !old)
+            } catch (error) {
+                navigate(routes.notFound, { state: { message: errors.book.notfound } })
+            }
         }
 
         fetchData()
-    }, [id])
+    }, [id, token])
 
     return { book, isFetching }
 }
 
 export function useCreate(){
     const { token } = useContext(UserContext) 
+    
+    const navigate = useNavigate()
 
     const createHandler = async (bookData) => {
         const book = {
@@ -56,7 +73,7 @@ export function useCreate(){
             const bookId = await bookApi.createAsync(book, token)
             return bookId
         } catch (error) {
-            throw new Error(error.message)
+            navigate(routes.badRequest, { state: { message: error.message } })
         }
     }
 
@@ -66,40 +83,23 @@ export function useCreate(){
 export function useEdit(){
     const { token } = useContext(UserContext) 
 
+    const navigate = useNavigate()
+
     const editHandler = async (bookId, bookData) => {
         const book = {
             ...bookData,
             imageUrl: bookData.imageUrl || null,
-            authorName: bookData.authorName || null,
+            authorId: bookData.authorId || null,
             publishedDate: bookData.publishedDate || null
         }
 
         try {
-            await bookApi.editAsync(bookId, book, token)
+            const isSuccessful = await bookApi.editAsync(bookId, book, token)
+            return isSuccessful
         } catch (error) {
-            throw new Error(error.message)
+            navigate(routes.badRequest, { state: { message: error.message } })
         }
     }
 
     return editHandler
 }
-
-
-export function useGetTopThree(){
-    const { token } = useContext(UserContext)
-    const [books, setBooks] = useState([])
-    const [isFetching, setIsFetching] = useState(false)
-
-    useEffect(() => {
-        async function fetchData() {
-            setIsFetching(old => !old)
-            setBooks(await bookApi.getTopThreeAsync(token))
-            setIsFetching(old => !old)
-        }
-
-        fetchData()
-    }, [])
-
-    return { books, isFetching }
-}
-
