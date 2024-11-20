@@ -4,6 +4,7 @@ using BookHub.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookHub.Server.Data.Migrations
 {
     [DbContext(typeof(BookHubDbContext))]
-    partial class BookHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241120084024_FixReviewTypo")]
+    partial class FixReviewTypo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1717,7 +1720,7 @@ namespace BookHub.Server.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BookId")
+                    b.Property<int?>("BookId")
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
@@ -1858,14 +1861,14 @@ namespace BookHub.Server.Data.Migrations
                         {
                             Id = "user1Id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ec0ad510-99d8-4996-8ee0-753894ff1637",
+                            ConcurrencyStamp = "3193aed5-26b6-4aea-94f5-8a107e132f3d",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user1@mail.com",
                             EmailConfirmed = false,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "098bf3ff-8a9d-45e8-8acb-f80ce2caca1f",
+                            SecurityStamp = "70f71a7c-d027-40de-9ce0-0089806f771b",
                             TwoFactorEnabled = false,
                             UserName = "user1name"
                         },
@@ -1873,14 +1876,14 @@ namespace BookHub.Server.Data.Migrations
                         {
                             Id = "user2Id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "251b4e41-ac24-410f-8edb-cdaa48b54425",
+                            ConcurrencyStamp = "e3a73635-33e6-4185-b6a6-cc767d5637bd",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user2@mail.com",
                             EmailConfirmed = false,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "79351cf2-4174-4678-babd-20d4614087a3",
+                            SecurityStamp = "eea513dd-f7c1-4d67-8c5b-21b1e0534488",
                             TwoFactorEnabled = false,
                             UserName = "user2name"
                         },
@@ -1888,14 +1891,14 @@ namespace BookHub.Server.Data.Migrations
                         {
                             Id = "user3Id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "7d5069c8-4cf0-446c-9171-9d00cf58ef94",
+                            ConcurrencyStamp = "678441cf-45f3-4a56-b086-873cc4148c70",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user3@mail.com",
                             EmailConfirmed = false,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "a230c258-d83e-4a60-b630-35e9f536ab08",
+                            SecurityStamp = "b55f0866-a343-4ed4-b793-cbe63310f39a",
                             TwoFactorEnabled = false,
                             UserName = "user3name"
                         });
@@ -2106,19 +2109,15 @@ namespace BookHub.Server.Data.Migrations
 
             modelBuilder.Entity("BookHub.Server.Data.Models.Review", b =>
                 {
-                    b.HasOne("BookHub.Server.Data.Models.Book", "Book")
+                    b.HasOne("BookHub.Server.Data.Models.Book", null)
                         .WithMany("Reviews")
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BookId");
 
                     b.HasOne("BookHub.Server.Data.Models.User", "Creator")
                         .WithMany("Reviews")
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Book");
 
                     b.Navigation("Creator");
                 });

@@ -9,6 +9,7 @@ import { UserContext } from "../../../contexts/userContext"
 
 import BookFullInfo from './book-full-info/BookFullInfo'
 import AuthorIntroduction from './author-introduction/AuthorIntroduction'
+import ReviewForm from './review-form/ReviewForm'
 import DeleteModal from '../../common/delete-modal/DeleteModal'
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner'
 
@@ -66,6 +67,7 @@ export default function BookDetails() {
                         id={id}
                     />
                     <AuthorIntroduction author={book.author} />
+                    <ReviewForm />
                 </div>
                     <DeleteModal 
                         showModal={showModal} 
