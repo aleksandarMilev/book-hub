@@ -13,7 +13,7 @@
         private readonly BookHubDbContext data = data;
         private readonly IMapper mapper = mapper;
 
-        public async Task<IEnumerable<SearchBookServiceModel>> GetBooksAsync(string? searchTerm)
+        public async Task<PaginatedModel<SearchBookServiceModel>> GetBooksAsync(string? searchTerm, int page, int pageSize)
         {
             var books = this.data
                 .Books
@@ -28,7 +28,14 @@
                 );
             }
 
-            return await books.ToListAsync();
+            var totalBooks = await books.CountAsync();
+
+            var paginatedBooks = await books
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PaginatedModel<SearchBookServiceModel>(paginatedBooks, totalBooks, page, pageSize);
         }
     }
 }

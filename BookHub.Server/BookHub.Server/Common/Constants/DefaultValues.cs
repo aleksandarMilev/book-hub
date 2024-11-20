@@ -9,5 +9,9 @@
         public const string UnknownNationalityName = "Unknown";
 
         public const string OtherGenreName = "Other";
+
+        public const int DefaultPageIndex = 1;
+
+        public const int DefaultPageSize = 10;
     }
 }
