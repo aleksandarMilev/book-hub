@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import * as reviewApi from '../api/reviewApi'
 import { routes } from '../common/constants/api'
 import { UserContext } from '../contexts/userContext'
+import { errors } from '../common/constants/messages'
 
 export function useCreate() {
     const { token } = useContext(UserContext)
@@ -46,4 +47,38 @@ export function useEdit() {
     }
 
     return editHandler
+}
+
+export function useUpvote(){
+    const { token } = useContext(UserContext)
+    const navigate = useNavigate()
+
+    const upvoteHandler = async (id, setUpvoteCount) => {
+        const success = await reviewApi.upvoteAsync(id, token)
+
+        if(success){
+            setUpvoteCount(old => ++old)
+        } else {
+            navigate(routes.badRequest, { state: { message: errors.review.vote } })
+        }
+    }
+
+    return upvoteHandler
+}
+
+export function useDownvote(){
+    const { token } = useContext(UserContext)
+    const navigate = useNavigate()
+
+    const downvoteHandler = async (id, setDownvoteCount) => {
+        const success = await reviewApi.downvoteAsync(id, token)
+
+        if(success){
+            setDownvoteCount(old => ++old)
+        } else {
+            navigate(routes.badRequest, { state: { message: errors.review.vote } })
+        }
+    }
+
+    return downvoteHandler
 }

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { MDBIcon, MDBBtn } from 'mdb-react-ui-kit'
 
 import * as reviewApi from '../../../../api/reviewApi'
+import * as useReview from '../../../../hooks/useReview'
 import renderStars from '../../../../common/functions/renderStars'
 import { errors } from '../../../../common/constants/messages'
 import { routes } from '../../../../common/constants/api'
@@ -16,17 +17,23 @@ import './ReviewItem.css'
 export default function ReviewItem({ review, refreshReviews }) {
     const navigate = useNavigate()
 
+    const upvoteHandler = useReview.useUpvote()
+    const downvoteHandler = useReview.useDownvote()
+
     const { userId, token } = useContext(UserContext)
-    const { content, rating, creatorId, createdBy } = review
+    const { id, content, rating, creatorId, createdBy, upvotes, downvotes } = review
+
+    const [upvoteCount, setUpvoteCount] = useState(upvotes)
+    const [downvoteCount, setDownvoteCount] = useState(downvotes)
 
     const [showModal, setShowModal] = useState(false)
     const toggleModal = () => setShowModal(old => !old)
 
     async function deleteHandler() {
         if (showModal) {
-            const success = await reviewApi.deleteAsync(review.id, token)
+            const success = await reviewApi.deleteAsync(id, token)
 
-            if(success) {
+            if (success) {
                 refreshReviews()
                 toggleModal()
             } else {
@@ -50,12 +57,17 @@ export default function ReviewItem({ review, refreshReviews }) {
                 <div className="review-votes d-flex align-items-center">
                     <MDBIcon
                         icon="arrow-up"
-                        onClick={() => {}}
+                        className="vote-icon"
+                        onClick={() => upvoteHandler(id, setUpvoteCount)}
                     />
+                    <span>{upvoteCount}</span>
+
                     <MDBIcon
                         icon="arrow-down"
-                        onClick={() => {}}
+                        className="vote-icon ms-2"
+                        onClick={() => downvoteHandler(id, setDownvoteCount)}
                     />
+                    <span>{downvoteCount}</span>
                 </div>
                 {userId === creatorId && (
                     <div className="review-actions">

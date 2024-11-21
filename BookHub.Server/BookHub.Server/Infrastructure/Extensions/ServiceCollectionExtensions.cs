@@ -10,6 +10,7 @@
     using Features.Identity.Service;
     using Features.Nationality.Service;
     using Features.Review.Service;
+    using Features.Review.Votes.Service;
     using Features.Search.Service;
     using Filters;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -90,7 +91,8 @@
                 .AddTransient<IGenreService, GenreService>()
                 .AddTransient<INationalityService, NationalityService>()
                 .AddTransient<ISearchService, SearchService>()
-                .AddTransient<IReviewService, ReviewService>();
+                .AddTransient<IReviewService, ReviewService>()
+                .AddTransient<IVoteService, VoteService>();
 
         public static IServiceCollection AddApiControllers(this IServiceCollection services)
         {

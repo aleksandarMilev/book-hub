@@ -58,3 +58,49 @@ export async function deleteAsync(id, token){
 
     return false
 }
+
+export async function upvoteAsync(id, token){
+    const options = {
+        method: "POST",
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            reviewId: id,
+            isUpvote: true,
+        })
+    }
+
+    const url = baseUrl + routes.vote
+    const response = await fetch(url, options)
+
+    if(response.ok){
+        return true 
+    }
+
+    return false
+}
+
+export async function downvoteAsync(id, token){
+    const options = {
+        method: "POST",
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            reviewId: id,
+            isUpvote: false,
+        })
+    }
+
+    const url = baseUrl + routes.vote
+    const response = await fetch(url, options)
+
+    if(response.ok){
+        return true 
+    }
+
+    return false
+}

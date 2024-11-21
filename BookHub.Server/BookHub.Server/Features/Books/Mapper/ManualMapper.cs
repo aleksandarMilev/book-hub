@@ -51,14 +51,15 @@
                             Id = r.Id,
                             Content = r.Content,
                             Rating = r.Rating,
-                            Likes = r.Likes,
-                            Dislikes = r.Dislikes,
+                            Upvotes = r.Upvotes,
+                            Downvotes = r.Downvotes,
                             CreatorId = r.CreatorId,
                             BookId = r.BookId,
                             CreatedBy = r.CreatedBy!,
                             CreatedOn = r.CreatedOn.ToString(),
                             ModifiedOn = r.ModifiedOn == null ? null : r.ModifiedOn.ToString()
                         })
+                        .Take(5)
                         .ToHashSet()
                 });
 

@@ -31,6 +31,7 @@ export const errors = {
     review: {
         create: 'Oops! We couldn’t create your review. Please try again later or contact support if the issue persists.',
         edit: 'Oops! We couldn’t edit your review. Please try again later or contact support if the issue persists.',
-        delete: 'Oops! We couldn’t delete your review. Please try again later or contact support if the issue persists.'
+        delete: 'Oops! We couldn’t delete your review. Please try again later or contact support if the issue persists.',
+        vote: 'An error occurred while processing your vote. Please try again later.'
     }
 }

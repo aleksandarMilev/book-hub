@@ -8,9 +8,9 @@
 
         public int Rating { get; init; }
 
-        public int Likes { get; init; }
+        public int Upvotes { get; init; }
 
-        public int Dislikes { get; init; }
+        public int Downvotes { get; init; }
 
         public string CreatorId { get; init; } = null!;
 

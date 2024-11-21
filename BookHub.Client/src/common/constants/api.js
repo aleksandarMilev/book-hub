@@ -18,6 +18,7 @@ export const routes = {
     genres: '/genre',
     searchBooks: '/search/books',
     review: '/review',
+    vote: '/vote',
     badRequest: '/error/bad-request',
     notFound: '/error/not-found',
 }

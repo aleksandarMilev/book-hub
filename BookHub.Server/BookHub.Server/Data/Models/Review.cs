@@ -16,9 +16,9 @@
 
         public int Rating { get; set; }
 
-        public int Likes { get; set; }
+        public int Upvotes { get; set; }
 
-        public int Dislikes { get; set; }
+        public int Downvotes { get; set; }
 
         [Required]
         [ForeignKey(nameof(Creator))]
