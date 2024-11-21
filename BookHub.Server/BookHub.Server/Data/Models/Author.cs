@@ -27,7 +27,9 @@
         [MaxLength(PenNameMaxLength)]
         public string? PenName { get; set; }
 
-        public double Rating { get; set; }
+        public int RatingsCount { get; set; }
+
+        public double AverageRating { get; set; }
 
         [ForeignKey(nameof(Nationality))]
         public int NationalityId { get; set; }

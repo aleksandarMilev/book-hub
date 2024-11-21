@@ -1,15 +1,40 @@
-import { useContext, useState } from 'react'
-import { MDBIcon } from 'mdb-react-ui-kit'
+import React, { useContext, useState } from 'react'
+import ReactDOM from 'react-dom'
+import { useNavigate } from 'react-router-dom'
+import { MDBIcon, MDBBtn } from 'mdb-react-ui-kit'
 
+import * as reviewApi from '../../../../api/reviewApi'
 import renderStars from '../../../../common/functions/renderStars'
+import { errors } from '../../../../common/constants/messages'
+import { routes } from '../../../../common/constants/api'
 import { UserContext } from '../../../../contexts/userContext'
+
+import DeleteModal from '../../../common/delete-modal/DeleteModal'
 
 import './ReviewItem.css'
 
-export default function ReviewItem({ review }) {
-    const { userId } = useContext(UserContext)
+export default function ReviewItem({ review, refreshReviews }) {
+    const navigate = useNavigate()
 
+    const { userId, token } = useContext(UserContext)
     const { content, rating, creatorId, createdBy } = review
+
+    const [showModal, setShowModal] = useState(false)
+    const toggleModal = () => setShowModal(old => !old)
+
+    async function deleteHandler() {
+        if (showModal) {
+            const success = await reviewApi.deleteAsync(review.id, token)
+
+            if(success) {
+                refreshReviews()
+                toggleModal()
+            } else {
+                toggleModal()
+                navigate(routes.badRequest, { state: { message: errors.review.delete } })
+            }
+        }
+    }
 
     return (
         <div className="review-item card shadow-sm p-3 mb-4 review-card">
@@ -25,26 +50,30 @@ export default function ReviewItem({ review }) {
                 <div className="review-votes d-flex align-items-center">
                     <MDBIcon
                         icon="arrow-up"
-                        // className={`vote-icon ${userVote === 'upvote' ? 'active' : ''}`}
                         onClick={() => {}}
                     />
                     <MDBIcon
                         icon="arrow-down"
-                        //className={`vote-icon ${userVote === 'downvote' ? 'active' : ''}`}
                         onClick={() => {}}
                     />
                 </div>
                 {userId === creatorId && (
                     <div className="review-actions">
-                        <button className="btn btn-outline-primary btn-sm me-2" onClick={() => {}}>
-                            Edit
-                        </button>
-                        <button className="btn btn-outline-danger btn-sm" onClick={() => {}}>
+                        <MDBBtn color="danger" size="sm" onClick={toggleModal}>
                             Delete
-                        </button>
+                        </MDBBtn>
                     </div>
                 )}
             </div>
+            {showModal &&
+                ReactDOM.createPortal(
+                    <DeleteModal
+                        showModal={showModal}
+                        toggleModal={toggleModal}
+                        deleteHandler={deleteHandler}
+                    />,
+                    document.getElementById('modal-root') 
+                )}
         </div>
     )
 }

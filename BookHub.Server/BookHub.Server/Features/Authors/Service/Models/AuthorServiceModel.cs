@@ -12,6 +12,6 @@
 
         public int BooksCount { get; init; }
 
-        public double Rating { get; init; }
+        public double AverageRating { get; init; }
     }
 }

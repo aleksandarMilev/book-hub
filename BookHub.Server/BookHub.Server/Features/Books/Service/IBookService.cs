@@ -9,7 +9,7 @@
 
         Task<IEnumerable<BookServiceModel>> GetTopThreeAsync();
 
-        Task<BookDetailsServiceModel?> GetDetailsAsync(int id, string userId);
+        Task<BookDetailsServiceModel?> GetDetailsAsync(int id);
 
         Task<int> CreateAsync(CreateBookServiceModel model, string userId);
 

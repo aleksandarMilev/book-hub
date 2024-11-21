@@ -119,7 +119,7 @@ export default function AuthorDetails() {
                                     <MDBTypography tag="h4" className="section-title">Statistics</MDBTypography>
                                     <MDBRow className="text-center mt-3">
                                         <MDBCol className="d-flex flex-column align-items-center">
-                                            <MDBCardText className="author-rating">{renderStars(author.rating)}</MDBCardText>
+                                            <MDBCardText className="author-rating">{renderStars(author.averageRating)}</MDBCardText>
                                             <MDBCardText className="author-rating-text">Average Rating</MDBCardText>
                                         </MDBCol>
                                         <MDBCol className="d-flex flex-column align-items-center">

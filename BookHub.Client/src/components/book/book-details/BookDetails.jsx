@@ -27,6 +27,9 @@ export default function BookDetails() {
     const { userId, token } = useContext(UserContext)
     const { book, isFetching, refreshBook } = useBook.useGetFullInfo(id)
 
+    const [isReviewCreated, setIsReviewCreated] = useState(false)
+    const [isReviewEdited, setIsReviewEdited] = useState(false)
+
     const toggleModal = () => setShowModal(prev => !prev)
 
     async function deleteHandler() {
@@ -44,10 +47,13 @@ export default function BookDetails() {
     }
 
     useEffect(() => {
-        if (firstReviewRef.current) {
-            firstReviewRef.current.scrollIntoView({ behavior: 'smooth' });
+        if ((isReviewCreated || isReviewEdited) && firstReviewRef.current) {
+            firstReviewRef.current.scrollIntoView({ behavior: 'smooth' })
+
+            setIsReviewCreated(false)
+            setIsReviewEdited(false)
         }
-    }, [book?.reviews])
+    }, [isReviewCreated, isReviewEdited, book?.reviews])
 
     if(isFetching || !book){
         return(
@@ -81,10 +87,12 @@ export default function BookDetails() {
                     {!existingReview && <CreateReview 
                         bookId={id}
                         refreshReviews={refreshBook}
+                        setIsReviewCreated={setIsReviewCreated} 
                     />}
                     {existingReview && <EditReview 
                         bookId={id}
                         existingReview={existingReview}
+                        setIsReviewEdited={setIsReviewEdited} 
                         refreshReviews={refreshBook}
                     />}
                    <div className="reviews-section mt-4 text-center">
@@ -95,7 +103,7 @@ export default function BookDetails() {
                                     ref={index === 0 ? firstReviewRef : null}
                                     key={r.id}
                                 >
-                                    <ReviewItem review={r} />
+                                    <ReviewItem review={r} refreshReviews={refreshBook} />
                                 </div>
                             ))
                             ) : (

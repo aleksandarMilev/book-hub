@@ -32,7 +32,7 @@
             => await this.data
                 .Authors
                 .ProjectTo<AuthorServiceModel>(this.mapper.ConfigurationProvider)
-                .OrderByDescending(a => a.Rating)
+                .OrderByDescending(a => a.AverageRating)
                 .Take(3)
                 .ToListAsync();
 

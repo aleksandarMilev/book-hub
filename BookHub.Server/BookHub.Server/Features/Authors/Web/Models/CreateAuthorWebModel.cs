@@ -20,8 +20,6 @@
         [StringLength(PenNameMaxLength, MinimumLength = PenNameMinLength)]
         public string? PenName { get; init; }
 
-        public double Rating { get; init; }
-
         public int? NationalityId { get; init; }
 
         public string Gender { get; init; } = null!;

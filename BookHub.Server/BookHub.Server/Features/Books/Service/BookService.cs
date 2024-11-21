@@ -2,22 +2,24 @@
 {
     using Authors.Service.Models;
     using AutoMapper;
-    using Genre.Service.Models;
     using Data;
     using Data.Models;
+    using Genre.Service.Models;
     using Infrastructure.Services;
     using Microsoft.EntityFrameworkCore;
     using Models;
+    using Review.Service.Models;
 
     using static Common.Constants.DefaultValues;
     using static Common.Messages.Error.Book;
-    using BookHub.Server.Features.Review.Service.Models;
 
     public class BookService(
         BookHubDbContext data,
+        ICurrentUserService userService,
         IMapper mapper) : IBookService
     {
         private readonly BookHubDbContext data = data;
+        private readonly ICurrentUserService userService = userService;
         private readonly IMapper mapper = mapper;
 
         public async Task<IEnumerable<BookServiceModel>> GetAllAsync()
@@ -69,7 +71,7 @@
                .ToListAsync();
 
 
-        public async Task<BookDetailsServiceModel?> GetDetailsAsync(int id, string userId)
+        public async Task<BookDetailsServiceModel?> GetDetailsAsync(int id)
             => await this.data
                   .Books
                   .Select(b => new BookDetailsServiceModel()
@@ -101,12 +103,12 @@
                               ImageUrl = b.Author.ImageUrl,
                               Biography = b.Author.Biography,
                               BooksCount = b.Author.Books.Count(),
-                              Rating = b.Author.Rating,
+                              AverageRating = b.Author.AverageRating,
                           },
                       Reviews = b
                         .Reviews
-                        .OrderByDescending(r => r.CreatedBy == userId)
-                        .ThenByDescending(r => r.CreatedOn)
+                        .OrderByDescending(r => r.CreatedOn)
+                        .ThenBy(r => r.CreatedBy == this.userService.GetId()!)
                         .Select(r => new ReviewServiceModel() 
                         {
                             Id = r.Id,
@@ -117,6 +119,8 @@
                             CreatorId = r.CreatorId,
                             BookId = r.BookId,
                             CreatedBy = r.CreatedBy!,
+                            CreatedOn = r.CreatedOn.ToString(),
+                            ModifiedOn = r.ModifiedOn == null ? null : r.ModifiedOn.ToString()
                         })
                        .ToHashSet()
                   })

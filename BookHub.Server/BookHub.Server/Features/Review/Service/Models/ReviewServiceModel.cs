@@ -2,20 +2,24 @@
 {
     public class ReviewServiceModel
     {
-        public int Id { get; set; }
+        public int Id { get; init; }
 
-        public string Content { get; set; } = null!;
+        public string Content { get; init; } = null!;
 
-        public int Rating { get; set; }
+        public int Rating { get; init; }
 
-        public int Likes { get; set; }
+        public int Likes { get; init; }
 
-        public int Dislikes { get; set; }
+        public int Dislikes { get; init; }
 
-        public string CreatorId { get; set; } = null!;
+        public string CreatorId { get; init; } = null!;
 
-        public string CreatedBy { get; set; } = null!;
+        public string CreatedBy { get; init; } = null!;
 
-        public int BookId { get; set; }
+        public string CreatedOn { get; init; } = null!;
+
+        public string? ModifiedOn { get; init; }
+
+        public int BookId { get; init; }
     }
 }

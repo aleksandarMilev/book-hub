@@ -60,7 +60,7 @@ export default function TopAuthors() {
                                 </div>
                             </td>
                             <td>{a.booksCount}</td>
-                            <td>{renderStars(a.rating)}</td>
+                            <td>{renderStars(a.averageRating)}</td>
                             <td>
                                 <MDBBtn 
                                     tag={Link} 

@@ -19,7 +19,7 @@
                     "Though known primarily for his novels, he has written approximately 200 short stories, " +
                     "most of which have been published in collections.",
                     PenName = "Richard Bachman",
-                    Rating = 0,
+                    AverageRating = 0,
                     NationalityId = 182,
                     Gender = Gender.Male,
                     BornAt = new DateTime(1947, 09, 21),
@@ -38,7 +38,7 @@
                     "The Casual Vacancy (2012) was her first novel for adults. " +
                     "She writes Cormoran Strike, an ongoing crime fiction series, under the alias Robert Galbraith.",
                     PenName = "J. K. Rowling",
-                    Rating = 0,
+                    AverageRating = 0,
                     NationalityId = 181,
                     Gender = Gender.Female,
                     BornAt = new DateTime(1965, 07, 31),
@@ -52,7 +52,7 @@
                     Biography = "John Ronald Reuel Tolkien was an English writer and philologist. " +
                     "He was the author of the high fantasy works The Hobbit and The Lord of the Rings.",
                     PenName = "J.R.R Tolkien",
-                    Rating = 0,
+                    AverageRating = 0,
                     NationalityId = 181,
                     Gender = Gender.Male,
                     BornAt = new DateTime(1892, 01, 03),

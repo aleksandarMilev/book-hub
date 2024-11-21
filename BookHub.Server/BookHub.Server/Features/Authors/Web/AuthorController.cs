@@ -10,7 +10,7 @@ namespace BookHub.Server.Features.Authors.Web
     using Service;
     using Service.Models;
 
-    [Authorize]
+    //[Authorize]
     public class AuthorController(
         IAuthorService authorService,
         ICurrentUserService userService,

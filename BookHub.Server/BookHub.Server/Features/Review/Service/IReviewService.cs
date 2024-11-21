@@ -8,5 +8,7 @@
         Task<int> CreateAsync(CreateReviewServiceModel model);
 
         Task<Result> EditAsync(int id, CreateReviewServiceModel model);
+
+        Task<Result> DeleteAsync(int id);
     }
 }

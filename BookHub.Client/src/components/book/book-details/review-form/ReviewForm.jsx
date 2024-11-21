@@ -7,7 +7,7 @@ import * as useReview from '../../../../hooks/useReview'
 
 import './ReviewForm.css'
 
-export default function ReviewForm({ bookId, refreshReviews, existingReview = null }) {
+export default function ReviewForm({ bookId, refreshReviews, setIsReviewCreatedOrEdited, existingReview = null }) {
     const [rating, setRating] = useState(existingReview?.rating || 0)
 
     const createReviewHandler = useReview.useCreate()
@@ -38,6 +38,7 @@ export default function ReviewForm({ bookId, refreshReviews, existingReview = nu
                     const isSuccessfullyEdited = await editReviewHandler(existingReview.id, reviewData)
 
                     if (isSuccessfullyEdited) {
+                        setIsReviewCreatedOrEdited(true)
                         refreshReviews()
                         resetForm({ values: { content: '', rating: 0 } })
                         setRating(0)
@@ -46,6 +47,7 @@ export default function ReviewForm({ bookId, refreshReviews, existingReview = nu
                     const reviewId = await createReviewHandler(reviewData)
 
                     if (reviewId) {
+                        setIsReviewCreatedOrEdited(true)
                         refreshReviews()
                         resetForm({ values: { content: '', rating: 0 } })
                         setRating(0)

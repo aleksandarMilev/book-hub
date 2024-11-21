@@ -36,7 +36,7 @@ export default function BookFullInfo({
                         <h5 className="book-author mb-3 text-muted">by {book.authorName || 'Unknown author'}</h5>
                         <div className="d-flex align-items-center mb-3">
                             {renderStars(book.averageRating)}
-                            <span className="ms-2 text-muted">({book.ratingsCount} ratings)</span>
+                            <span className="ms-2 text-muted">({book.ratingsCount} {book.ratingsCount === 1 ? 'review' : 'reviews'})</span>
                         </div>
                         <div className="genres mb-3">
                             <span className="fw-semibold text-muted me-1">Genres:</span>

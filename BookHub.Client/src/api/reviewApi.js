@@ -40,3 +40,21 @@ export async function editAsync(reviewId, review, token) {
 
     throw new Error(errors.review.edit)
 }
+
+export async function deleteAsync(id, token){
+    const options = {
+        method: "DELETE",
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+
+    const url = baseUrl + routes.review + `/${id}`
+    const response = await fetch(url, options)
+
+    if(response.ok){
+        return true 
+    }
+
+    return false
+}
