@@ -27,5 +27,9 @@ export const errors = {
         create: 'Oops! We couldn’t create your book. Please try again later or contact support if the issue persists.',
         edit: 'Oops! We couldn’t edit your book. Please try again later or contact support if the issue persists.',
         delete: 'Oops! We couldn’t delete your book. Please try again later or contact support if the issue persists.'
+    },
+    review: {
+        create: 'Oops! We couldn’t create your review. Please try again later or contact support if the issue persists.',
+        edit: 'Oops! We couldn’t edit your review. Please try again later or contact support if the issue persists.'
     }
 }

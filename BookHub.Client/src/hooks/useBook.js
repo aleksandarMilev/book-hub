@@ -31,28 +31,30 @@ export function useGetTopThree() {
     return { books, isFetching, error } 
 }
 
-export function useGetFullInfo(id){
+export function useGetFullInfo(id) {
     const { token } = useContext(UserContext)
-    
+
     const navigate = useNavigate()
     const [book, setBook] = useState(null)
     const [isFetching, setIsFetching] = useState(false)
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                setIsFetching(old => !old)
-                setBook(await bookApi.getDetailsAsync(id, token))
-                setIsFetching(old => !old)
-            } catch (error) {
-                navigate(routes.notFound, { state: { message: errors.book.notfound } })
-            }
+    const fetchData = async () => {
+        try {
+            setIsFetching(true)
+            const fetchedBook = await bookApi.getDetailsAsync(id, token)
+            setBook(fetchedBook)
+        } catch (error) {
+            navigate(routes.notFound, { state: { message: errors.book.notfound } })
+        } finally {
+            setIsFetching(false)
         }
+    };
 
+    useEffect(() => {
         fetchData()
     }, [id, token])
 
-    return { book, isFetching }
+    return { book, isFetching, refreshBook: fetchData }
 }
 
 export function useCreate(){

@@ -1,6 +1,7 @@
 ﻿namespace BookHub.Server.Features.Books.Service.Models
 {
     using Authors.Service.Models;
+    using Review.Service.Models;
 
     public class BookDetailsServiceModel : BookServiceModel
     {
@@ -13,5 +14,7 @@
         public string? CreatorId { get; init; }
 
         public AuthorServiceModel? Author { get; init; }
+
+        public ICollection<ReviewServiceModel> Reviews { get; init; } = new HashSet<ReviewServiceModel>();
     }
 }

@@ -1,15 +1,33 @@
 .book-details-container {
-    margin-top: 50px;
+    margin-top: 50px
 }
 
 .book-details-card {
-    background-color: #f9f9f9;
+    background-color: #f9f9f9
 }
 
 .book-not-found {
-    margin-top: 50px;
+    margin-top: 50px
 }
 
 .spinner-container {
-    min-height: 50vh;
+    min-height: 50vh
+}
+
+.reviews-section {
+    max-width: 600px; 
+    margin: 0 auto
+}
+
+.reviews-title {
+    font-size: 1.75rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #333
+}
+
+.no-reviews-message {
+    font-size: 1.1rem;
+    color: #777; 
+    margin-top: 1rem
 }

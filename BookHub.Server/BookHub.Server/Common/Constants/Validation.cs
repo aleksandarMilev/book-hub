@@ -43,7 +43,7 @@
             public const int ContentMinLength = 5;
             public const int ContentMaxLength = 1_000;
 
-            public const double RatingMinValue = 0.0;
+            public const double RatingMinValue = 1.0;
             public const double RatingMaxValue = 5.0;
         }
 

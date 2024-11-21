@@ -4,10 +4,8 @@
     {
         public string Content { get; set; } = null!;
 
-        public double Rating { get; init; }
+        public int Rating { get; init; }
 
         public int BookId { get; init; }
-
-        public string CreatorId { get; set; } = null!;
     }
 }

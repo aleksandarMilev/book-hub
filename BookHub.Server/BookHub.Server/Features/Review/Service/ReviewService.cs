@@ -1,23 +1,34 @@
-﻿using AutoMapper;
-namespace BookHub.Server.Features.Review.Service
+﻿namespace BookHub.Server.Features.Review.Service
 {
-    using BookHub.Server.Infrastructure.Services;
+    using AutoMapper;
     using Data;
     using Data.Models;
+    using Infrastructure.Services;
     using Microsoft.EntityFrameworkCore;
     using Models;
 
     public class ReviewService(
         BookHubDbContext data,
+        ICurrentUserService userService,
         IMapper mapper) : IReviewService
     {
         private readonly BookHubDbContext data = data;
+        private readonly ICurrentUserService userService = userService;
         private readonly IMapper mapper = mapper;
 
         public async Task<int> CreateAsync(CreateReviewServiceModel model)
         {
+            var userId = this.userService.GetId()!;
+
+            if (await this.UserAlreadyReviewedTheBookAsync(userId, model.BookId))
+            {
+                throw new InvalidOperationException("This user has already written a review!");
+            }
+
             await this.ValidateBookId(model.BookId);
+
             var review = this.mapper.Map<Review>(model);
+            review.CreatorId = userId;
 
             this.data.Add(review);
             await this.data.SaveChangesAsync();
@@ -38,5 +49,10 @@ namespace BookHub.Server.Features.Review.Service
                 throw new InvalidOperationException("Book not found!");
             }
         }
+
+        private async Task<bool> UserAlreadyReviewedTheBookAsync(string userId, int bookId)
+            => await this.data
+                .Reviews
+                .AnyAsync(r => r.CreatorId == userId && r.BookId == bookId);
     }
 }

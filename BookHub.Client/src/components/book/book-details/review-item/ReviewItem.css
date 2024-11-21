@@ -1,0 +1,123 @@
+/* Review Card */
+.review-card {
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.review-item {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.review-item:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Review Header */
+.review-header {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.rating-container {
+    display: flex;
+}
+
+.rating-star {
+    color: #f0ad4e;
+    font-size: 18px;
+    margin-right: 4px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.rating-star.active {
+    color: #f39c12;
+}
+
+.creator-info {
+    font-size: 14px;
+    color: #888;
+}
+
+.creator-id {
+    font-weight: normal;
+}
+
+.user-icon {
+    color: #888;
+    font-size: 20px;
+}
+
+/* Review Content */
+.review-content {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 12px;
+}
+
+/* Vote Section */
+.review-votes {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.vote-icon {
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.vote-icon:hover {
+    color: #007bff;
+}
+
+.vote-icon.active {
+    color: #ff4500; /* Reddit-style highlight for active vote */
+}
+
+.vote-count {
+    font-size: 16px;
+    font-weight: bold;
+    color: #555;
+}
+
+/* Review Actions */
+.review-actions {
+    display: flex;
+    align-items: center;
+}
+
+.review-actions button {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.review-actions .btn-outline-primary {
+    border-color: #007bff;
+    color: #007bff;
+}
+
+.review-actions .btn-outline-primary:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.review-actions .btn-outline-danger {
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+.review-actions .btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: #fff;
+}

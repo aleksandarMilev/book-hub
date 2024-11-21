@@ -11,6 +11,7 @@
 
     using static Common.Constants.DefaultValues;
     using static Common.Messages.Error.Book;
+    using BookHub.Server.Features.Review.Service.Models;
 
     public class BookService(
         BookHubDbContext data,
@@ -68,7 +69,7 @@
                .ToListAsync();
 
 
-        public async Task<BookDetailsServiceModel?> GetDetailsAsync(int id)
+        public async Task<BookDetailsServiceModel?> GetDetailsAsync(int id, string userId)
             => await this.data
                   .Books
                   .Select(b => new BookDetailsServiceModel()
@@ -101,7 +102,23 @@
                               Biography = b.Author.Biography,
                               BooksCount = b.Author.Books.Count(),
                               Rating = b.Author.Rating,
-                          }
+                          },
+                      Reviews = b
+                        .Reviews
+                        .OrderByDescending(r => r.CreatedBy == userId)
+                        .ThenByDescending(r => r.CreatedOn)
+                        .Select(r => new ReviewServiceModel() 
+                        {
+                            Id = r.Id,
+                            Content = r.Content,
+                            Rating = r.Rating,
+                            Likes = r.Likes,
+                            Dislikes = r.Dislikes,
+                            CreatorId = r.CreatorId,
+                            BookId = r.BookId,
+                            CreatedBy = r.CreatedBy!,
+                        })
+                       .ToHashSet()
                   })
                 .FirstOrDefaultAsync(b => b.Id == id);
 

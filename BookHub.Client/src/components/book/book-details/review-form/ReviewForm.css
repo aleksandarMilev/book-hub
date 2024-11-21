@@ -41,6 +41,13 @@
 }
 
 .rating-star:hover {
-    color: #fb8c00; 
+    color: #fb8c00
+}
+
+.error-text {
+    color: red;
+    font-size: 0.875rem;
+    margin-top: -10px;
+    margin-bottom: 10px
 }
   

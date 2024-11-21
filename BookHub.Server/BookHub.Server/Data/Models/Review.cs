@@ -14,7 +14,7 @@
         [MaxLength(ContentMaxLength)]
         public string Content { get; set; } = null!;
 
-        public double Rating { get; set; }
+        public int Rating { get; set; }
 
         public int Likes { get; set; }
 

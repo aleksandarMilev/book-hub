@@ -10,7 +10,7 @@ namespace BookHub.Server.Features.Books.Web
     using Service;
     using Service.Models;
 
-    [Authorize]
+    //[Authorize]
     public class BooksController(
         IBookService bookService,
         ICurrentUserService userService,
@@ -31,7 +31,7 @@ namespace BookHub.Server.Features.Books.Web
 
         [HttpGet("{id}")]
         public async Task<ActionResult<BookDetailsServiceModel>> Details(int id)
-            => this.Ok(await this.bookService.GetDetailsAsync(id)); 
+            => this.Ok(await this.bookService.GetDetailsAsync(id, this.userService.GetId()!)); 
 
         [HttpPost]
         public async Task<ActionResult<int>> Create(CreateBookWebModel webModel)

@@ -11,7 +11,7 @@
         public string Content { get; set; } = null!;
 
         [Range(RatingMinValue, RatingMaxValue)]
-        public double Rating { get; init; }
+        public int Rating { get; init; }
 
         public int BookId { get; init; }
     }
