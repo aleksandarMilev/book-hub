@@ -13,9 +13,11 @@
 
     public class AuthorService(
         BookHubDbContext data,
+        ICurrentUserService userService,
         IMapper mapper) : IAuthorService
     {
         private readonly BookHubDbContext data = data;
+        private readonly ICurrentUserService userService = userService;
         private readonly IMapper mapper = mapper;
 
         public async Task<IEnumerable<AuthorNamesServiceModel>> GetNamesAsync()
@@ -42,12 +44,12 @@
                 .ProjectTo<AuthorDetailsServiceModel>(this.mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(a => a.Id == id);
 
-        public async Task<int> CreateAsync(CreateAuthorServiceModel model, string userId)
+        public async Task<int> CreateAsync(CreateAuthorServiceModel model)
         {
             model.ImageUrl ??= DefaultAuthorImageUrl;
 
             var author = this.mapper.Map<Author>(model);
-            author.CreatorId = userId;
+            author.CreatorId = this.userService.GetId()!;
             author.NationalityId = await this.MapNationalityToAuthor(model.NationalityId);
 
             this.data.Add(author);
@@ -56,7 +58,7 @@
             return author.Id;
         }
 
-        public async Task<Result> EditAsync(int id, CreateAuthorServiceModel model, string userId)
+        public async Task<Result> EditAsync(int id, CreateAuthorServiceModel model)
         {
             var author = await this.data
                  .Authors
@@ -67,7 +69,7 @@
                 return AuthorNotFound;
             }
 
-            if (author.CreatorId != userId)
+            if (author.CreatorId != this.userService.GetId()!)
             {
                 return UnauthorizedAuthorEdit;
             }
@@ -83,7 +85,7 @@
             return true;
         }
 
-        public async Task<Result> DeleteAsync(int id, string userId)
+        public async Task<Result> DeleteAsync(int id)
         {
             var author = await this.data
                  .Authors
@@ -94,7 +96,7 @@
                 return AuthorNotFound;
             }
 
-            if (author.CreatorId != userId)
+            if (author.CreatorId != this.userService.GetId()!)
             {
                 return UnauthorizedAuthorDelete;
             }

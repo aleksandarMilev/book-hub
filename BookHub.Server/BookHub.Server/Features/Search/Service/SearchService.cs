@@ -28,6 +28,8 @@
                 );
             }
 
+            books = books.OrderByDescending(b => b.AverageRating);
+
             var totalBooks = await books.CountAsync();
 
             var paginatedBooks = await books

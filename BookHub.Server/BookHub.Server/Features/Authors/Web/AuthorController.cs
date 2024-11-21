@@ -3,7 +3,6 @@ namespace BookHub.Server.Features.Authors.Web
 {
     using AutoMapper;
     using Infrastructure.Extensions;
-    using Infrastructure.Services;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Models;
@@ -13,11 +12,9 @@ namespace BookHub.Server.Features.Authors.Web
     //[Authorize]
     public class AuthorController(
         IAuthorService authorService,
-        ICurrentUserService userService,
         IMapper mapper) : ApiController
     {
         private readonly IAuthorService authorService = authorService;
-        private readonly ICurrentUserService userService = userService;
         private readonly IMapper mapper = mapper;
 
         [AllowAnonymous]
@@ -37,7 +34,7 @@ namespace BookHub.Server.Features.Authors.Web
         public async Task<ActionResult<int>> Create(CreateAuthorWebModel webModel)
         {
             var serviceModel = this.mapper.Map<CreateAuthorServiceModel>(webModel);
-            var authorId = await this.authorService.CreateAsync(serviceModel, this.userService.GetId()!);
+            var authorId = await this.authorService.CreateAsync(serviceModel);
 
             return this.Created(nameof(this.Create), authorId);
         }
@@ -46,7 +43,7 @@ namespace BookHub.Server.Features.Authors.Web
         public async Task<ActionResult> Edit(int id, CreateAuthorWebModel webModel)
         {
             var serviceModel = this.mapper.Map<CreateAuthorServiceModel>(webModel);
-            var result = await this.authorService.EditAsync(id, serviceModel, this.userService.GetId()!);
+            var result = await this.authorService.EditAsync(id, serviceModel);
 
             return this.NoContentOrBadRequest(result);
         }
@@ -54,7 +51,7 @@ namespace BookHub.Server.Features.Authors.Web
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var result = await this.authorService.DeleteAsync(id, this.userService.GetId()!);
+            var result = await this.authorService.DeleteAsync(id);
 
             return this.NoContentOrBadRequest(result);
         }

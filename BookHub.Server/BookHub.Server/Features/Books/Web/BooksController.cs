@@ -3,7 +3,6 @@ namespace BookHub.Server.Features.Books.Web
 {
     using AutoMapper;
     using Infrastructure.Extensions;
-    using Infrastructure.Services;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Models;
@@ -13,11 +12,9 @@ namespace BookHub.Server.Features.Books.Web
     //[Authorize]
     public class BooksController(
         IBookService bookService,
-        ICurrentUserService userService,
         IMapper mapper) : ApiController
     {
         private readonly IBookService bookService = bookService;
-        private readonly ICurrentUserService userService = userService;
         private readonly IMapper mapper = mapper;
 
         [HttpGet]
@@ -37,7 +34,7 @@ namespace BookHub.Server.Features.Books.Web
         public async Task<ActionResult<int>> Create(CreateBookWebModel webModel)
         {
             var serviceModel = this.mapper.Map<CreateBookServiceModel>(webModel);
-            var bookId = await this.bookService.CreateAsync(serviceModel, this.userService.GetId()!);
+            var bookId = await this.bookService.CreateAsync(serviceModel);
 
             return this.Created(nameof(this.Create), bookId);
         }
@@ -46,7 +43,7 @@ namespace BookHub.Server.Features.Books.Web
         public async Task<ActionResult> Edit(int id, CreateBookWebModel webModel)
         {
             var serviceModel = this.mapper.Map<CreateBookServiceModel>(webModel);
-            var result = await this.bookService.EditAsync(id, serviceModel, this.userService.GetId()!);
+            var result = await this.bookService.EditAsync(id, serviceModel);
 
             return this.NoContentOrBadRequest(result);
         }
@@ -54,7 +51,7 @@ namespace BookHub.Server.Features.Books.Web
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var result = await this.bookService.DeleteAsync(id, this.userService.GetId()!);
+            var result = await this.bookService.DeleteAsync(id);
 
             return this.NoContentOrBadRequest(result);
         }

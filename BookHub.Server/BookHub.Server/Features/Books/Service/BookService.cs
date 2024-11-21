@@ -126,12 +126,12 @@
                   })
                 .FirstOrDefaultAsync(b => b.Id == id);
 
-        public async Task<int> CreateAsync(CreateBookServiceModel model, string userId)
+        public async Task<int> CreateAsync(CreateBookServiceModel model)
         {
             model.ImageUrl ??= DefaultBookImageUrl;
 
             var book = this.mapper.Map<Book>(model);
-            book.CreatorId = userId;
+            book.CreatorId = this.userService.GetId()!;
             book.AuthorId = await this.MapAuthorToBookAsync(model.AuthorId);
 
             this.data.Add(book);
@@ -142,7 +142,7 @@
             return book.Id;
         }
 
-        public async Task<Result> EditAsync(int id, CreateBookServiceModel model, string userId)
+        public async Task<Result> EditAsync(int id, CreateBookServiceModel model)
         {
             var book = await this.data
                  .Books
@@ -153,7 +153,7 @@
                 return BookNotFound;
             }
 
-            if (book.CreatorId != userId)
+            if (book.CreatorId != this.userService.GetId()!)
             {
                 return UnauthorizedBookEdit;
             }
@@ -169,7 +169,7 @@
             return true;
         }
 
-        public async Task<Result> DeleteAsync(int id, string userId)
+        public async Task<Result> DeleteAsync(int id)
         {
             var book = await this.data
                  .Books
@@ -180,7 +180,7 @@
                 return BookNotFound;
             }
 
-            if (book.CreatorId != userId)
+            if (book.CreatorId != this.userService.GetId()!)
             {
                 return UnauthorizedBookDelete;
             }
