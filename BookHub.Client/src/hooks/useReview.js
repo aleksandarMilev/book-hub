@@ -34,8 +34,7 @@ export function useEdit() {
     const editHandler = async (reviewId, reviewData) => {
         const review = {
             ...reviewData,
-            rating: reviewData.rating || null,
-            message: reviewData.message || '',
+            bookId: reviewData.bookId
         }
 
         try {

@@ -7,6 +7,8 @@
     using Microsoft.EntityFrameworkCore;
     using Models;
 
+    using static Common.Messages.Error.Review;
+
     public class ReviewService(
         BookHubDbContext data,
         ICurrentUserService userService,
@@ -34,6 +36,31 @@
             await this.data.SaveChangesAsync();
 
             return review.Id;
+        }
+
+        public async Task<Result> EditAsync(int id, CreateReviewServiceModel model)
+        {
+            var review = await this.data
+               .Reviews
+               .FindAsync(id);
+
+            if (review is null)
+            {
+                return ReviewNotFound;
+            }
+
+            var userId = this.userService.GetId()!;
+
+            if (review.CreatorId != userId)
+            {
+                return UnauthorizedReviewEdit;
+            }
+
+            this.mapper.Map(model, review);
+
+            await this.data.SaveChangesAsync();
+
+            return true;
         }
 
         private async Task ValidateBookId(int bookId)

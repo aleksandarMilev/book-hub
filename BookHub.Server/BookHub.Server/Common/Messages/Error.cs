@@ -20,6 +20,15 @@
             public const string UnauthorizedAuthorDelete = "Current user can not delete this author!";
         }
 
+        public static class Review
+        {
+            public const string ReviewNotFound = "The review was not found!";
+
+            public const string UnauthorizedReviewEdit = "Current user can not edit this review!";
+
+            public const string UnauthorizedReviewDelete = "Current user can not delete this review!";
+        }
+
         public static class Identity
         {
             public const string InvalidLoginAttempt = "Invalid log in attempt!";

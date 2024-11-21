@@ -9,12 +9,13 @@ import { UserContext } from "../../../contexts/userContext"
 
 import BookFullInfo from './book-full-info/BookFullInfo'
 import AuthorIntroduction from './author-introduction/AuthorIntroduction'
+import CreateReview from "./create-review/CreateReview"
+import EditReview from "./edit-review/EditReview"
 import ReviewItem from './review-item/ReviewItem'
 import DeleteModal from '../../common/delete-modal/DeleteModal'
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner'
 
 import './BookDetails.css'
-import CreateReview from "./create-review/CreateReview"
 
 export default function BookDetails() {
     const { id } = useParams()
@@ -79,6 +80,11 @@ export default function BookDetails() {
                     <AuthorIntroduction author={book.author} />
                     {!existingReview && <CreateReview 
                         bookId={id}
+                        refreshReviews={refreshBook}
+                    />}
+                    {existingReview && <EditReview 
+                        bookId={id}
+                        existingReview={existingReview}
                         refreshReviews={refreshBook}
                     />}
                    <div className="reviews-section mt-4 text-center">
