@@ -16,9 +16,6 @@
 
         public int Rating { get; set; }
 
-        public int Upvotes { get; set; }
-
-        public int Downvotes { get; set; }
 
         [Required]
         [ForeignKey(nameof(Creator))]
@@ -30,6 +27,8 @@
         public int BookId { get; set; }
 
         public Book Book { get; set; } = null!;
+
+        public ICollection<Vote> Votes { get; set; } = new HashSet<Vote>(); 
 
         public ICollection<Reply> Replies { get; } = new HashSet<Reply>();
     }

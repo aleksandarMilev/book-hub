@@ -10,7 +10,6 @@
     using Features.Identity.Service;
     using Features.Nationality.Service;
     using Features.Review.Service;
-    using Features.Review.Votes.Service;
     using Features.Search.Service;
     using Filters;
     using Microsoft.AspNetCore.Authentication.JwtBearer;

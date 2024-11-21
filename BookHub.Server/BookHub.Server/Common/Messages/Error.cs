@@ -33,5 +33,10 @@
         {
             public const string InvalidLoginAttempt = "Invalid log in attempt!";
         }
+
+        public static class Vote
+        {
+            public const string VoteExists = "This user has already voted!";
+        }
     }
 }

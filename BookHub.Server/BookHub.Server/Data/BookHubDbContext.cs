@@ -26,6 +26,8 @@
 
         public DbSet<Review> Reviews { get; set; }
 
+        public DbSet<Vote> Votes { get; set; }
+
         public DbSet<Reply> Replies { get; set; }
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)

@@ -51,12 +51,12 @@
                             Id = r.Id,
                             Content = r.Content,
                             Rating = r.Rating,
-                            Upvotes = r.Upvotes,
-                            Downvotes = r.Downvotes,
                             CreatorId = r.CreatorId,
                             BookId = r.BookId,
                             CreatedBy = r.CreatedBy!,
                             CreatedOn = r.CreatedOn.ToString(),
+                            Upvotes = r.Votes.Where(v => v.IsUpvote).Count(),
+                            Downvotes = r.Votes.Where(v => !v.IsUpvote).Count(),
                             ModifiedOn = r.ModifiedOn == null ? null : r.ModifiedOn.ToString()
                         })
                         .Take(5)

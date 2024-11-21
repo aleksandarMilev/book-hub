@@ -51,15 +51,15 @@ export function useEdit() {
 
 export function useUpvote(){
     const { token } = useContext(UserContext)
-    const navigate = useNavigate()
 
-    const upvoteHandler = async (id, setUpvoteCount) => {
+    const upvoteHandler = async (id, setUpvoteCount, refreshReviews) => {
         const success = await reviewApi.upvoteAsync(id, token)
 
         if(success){
             setUpvoteCount(old => ++old)
+            refreshReviews()
         } else {
-            navigate(routes.badRequest, { state: { message: errors.review.vote } })
+            return
         }
     }
 
@@ -68,15 +68,15 @@ export function useUpvote(){
 
 export function useDownvote(){
     const { token } = useContext(UserContext)
-    const navigate = useNavigate()
 
-    const downvoteHandler = async (id, setDownvoteCount) => {
+    const downvoteHandler = async (id, setDownvoteCount, refreshReviews) => {
         const success = await reviewApi.downvoteAsync(id, token)
 
         if(success){
             setDownvoteCount(old => ++old)
+            refreshReviews()
         } else {
-            navigate(routes.badRequest, { state: { message: errors.review.vote } })
+            return
         }
     }
 

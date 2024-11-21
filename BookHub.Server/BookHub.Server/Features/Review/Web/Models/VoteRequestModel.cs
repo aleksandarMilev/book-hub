@@ -1,4 +1,4 @@
-﻿namespace BookHub.Server.Features.Review.Votes.Web.Models
+﻿namespace BookHub.Server.Features.Review.Web.Models
 {
     public class VoteRequestModel
     {

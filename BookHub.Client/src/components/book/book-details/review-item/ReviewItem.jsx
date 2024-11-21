@@ -58,14 +58,14 @@ export default function ReviewItem({ review, refreshReviews }) {
                     <MDBIcon
                         icon="arrow-up"
                         className="vote-icon"
-                        onClick={() => upvoteHandler(id, setUpvoteCount)}
+                        onClick={() => upvoteHandler(id, setUpvoteCount, refreshReviews)}
                     />
                     <span>{upvoteCount}</span>
 
                     <MDBIcon
                         icon="arrow-down"
                         className="vote-icon ms-2"
-                        onClick={() => downvoteHandler(id, setDownvoteCount)}
+                        onClick={() => downvoteHandler(id, setDownvoteCount ,refreshReviews)}
                     />
                     <span>{downvoteCount}</span>
                 </div>
