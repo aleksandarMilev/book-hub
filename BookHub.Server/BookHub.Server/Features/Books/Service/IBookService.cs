@@ -5,11 +5,11 @@
 
     public interface IBookService
     {
-        Task<IEnumerable<BookServiceModel>> GetAllAsync();
+        Task<IEnumerable<BookServiceModel>> AllAsync();
 
-        Task<IEnumerable<BookServiceModel>> GetTopThreeAsync();
+        Task<IEnumerable<BookServiceModel>> TopThreeAsync();
 
-        Task<BookDetailsServiceModel?> GetDetailsAsync(int id);
+        Task<BookDetailsServiceModel?> DetailsAsync(int id);
 
         Task<int> CreateAsync(CreateBookServiceModel model);
 

@@ -1,14 +1,12 @@
 ﻿namespace BookHub.Server.Features.Books.Service
 {
-    using Authors.Service.Models;
     using AutoMapper;
     using Data;
     using Data.Models;
-    using Genre.Service.Models;
     using Infrastructure.Services;
+    using Mapper;
     using Microsoft.EntityFrameworkCore;
     using Models;
-    using Review.Service.Models;
 
     using static Common.Constants.DefaultValues;
     using static Common.Messages.Error.Book;
@@ -22,109 +20,26 @@
         private readonly ICurrentUserService userService = userService;
         private readonly IMapper mapper = mapper;
 
-        public async Task<IEnumerable<BookServiceModel>> GetAllAsync()
+        public async Task<IEnumerable<BookServiceModel>> AllAsync()
             => await this.data
                 .Books
-                .Select(b => new BookServiceModel()
-                {
-                    Id = b.Id,
-                    Title = b.Title,
-                    AuthorName = b.Author == null ? null : b.Author.Name,
-                    ImageUrl = b.ImageUrl,
-                    ShortDescription = b.ShortDescription,
-                    AverageRating = b.Id,
-                    Genres = b
-                        .BooksGenres
-                    .Select(bg => new GenreNameServiceModel()
-                    {
-                        Id = bg.GenreId,
-                        Name = bg.Genre.Name
-                        })
-                        .ToHashSet()
-
-                    })
+                .MapToServiceModel()
                 .ToListAsync();
 
-        public async Task<IEnumerable<BookServiceModel>> GetTopThreeAsync()
+        public async Task<IEnumerable<BookServiceModel>> TopThreeAsync()
             => await this.data
                .Books
-                .Select(b => new BookServiceModel()
-                {
-                    Id = b.Id,
-                    Title = b.Title,
-                    AuthorName = b.Author == null ? null : b.Author.Name,
-                    ImageUrl = b.ImageUrl,
-                    ShortDescription = b.ShortDescription,
-                    AverageRating = b.AverageRating,
-                    Genres = b
-                        .BooksGenres
-                        .Select(bg => new GenreNameServiceModel() 
-                        {
-                            Id = bg.GenreId,
-                            Name = bg.Genre.Name
-                        })
-                        .ToHashSet()
-                    
-                })
+               .MapToServiceModel()
                .OrderByDescending(b => b.AverageRating)
                .Take(3)
                .ToListAsync();
 
 
-        public async Task<BookDetailsServiceModel?> GetDetailsAsync(int id)
+        public async Task<BookDetailsServiceModel?> DetailsAsync(int id)
             => await this.data
                   .Books
-                  .Select(b => new BookDetailsServiceModel()
-                  {
-                      Id = b.Id,
-                      Title = b.Title,
-                      AuthorName = b.Author == null ? null : b.Author.Name,
-                      ImageUrl = b.ImageUrl,
-                      ShortDescription = b.ShortDescription,
-                      AverageRating = b.AverageRating,
-                      Genres = b
-                        .BooksGenres
-                        .Select(bg => new GenreNameServiceModel()
-                        {
-                            Id = bg.GenreId,
-                            Name = bg.Genre.Name
-                        })
-                        .ToHashSet(),
-                      PublishedDate = b.PublishedDate == null ? null : b.PublishedDate.ToString(),
-                      RatingsCount = b.RatingsCount,
-                      LongDescription = b.LongDescription,
-                      CreatorId = b.CreatorId,
-                      Author = b.Author == null 
-                        ? null
-                        : new AuthorServiceModel()
-                          {
-                              Id = b.Author.Id,
-                              Name = b.Author.Name,
-                              ImageUrl = b.Author.ImageUrl,
-                              Biography = b.Author.Biography,
-                              BooksCount = b.Author.Books.Count(),
-                              AverageRating = b.Author.AverageRating,
-                          },
-                      Reviews = b
-                        .Reviews
-                        .OrderByDescending(r => r.CreatedOn)
-                        .ThenBy(r => r.CreatedBy == this.userService.GetId()!)
-                        .Select(r => new ReviewServiceModel() 
-                        {
-                            Id = r.Id,
-                            Content = r.Content,
-                            Rating = r.Rating,
-                            Likes = r.Likes,
-                            Dislikes = r.Dislikes,
-                            CreatorId = r.CreatorId,
-                            BookId = r.BookId,
-                            CreatedBy = r.CreatedBy!,
-                            CreatedOn = r.CreatedOn.ToString(),
-                            ModifiedOn = r.ModifiedOn == null ? null : r.ModifiedOn.ToString()
-                        })
-                       .ToHashSet()
-                  })
-                .FirstOrDefaultAsync(b => b.Id == id);
+                  .MapToDetailsModel(this.userService.GetId()!)
+                  .FirstOrDefaultAsync(b => b.Id == id);
 
         public async Task<int> CreateAsync(CreateBookServiceModel model)
         {

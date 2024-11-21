@@ -11,30 +11,30 @@ namespace BookHub.Server.Features.Books.Web
 
     //[Authorize]
     public class BooksController(
-        IBookService bookService,
+        IBookService service,
         IMapper mapper) : ApiController
     {
-        private readonly IBookService bookService = bookService;
+        private readonly IBookService service = service;
         private readonly IMapper mapper = mapper;
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BookServiceModel>>> All()
-            => this.Ok(await this.bookService.GetAllAsync());
+            => this.Ok(await this.service.AllAsync());
 
         [AllowAnonymous]
         [HttpGet("[action]")]
         public async Task<ActionResult<IEnumerable<BookServiceModel>>> TopThree()
-           => this.Ok(await this.bookService.GetTopThreeAsync());
+           => this.Ok(await this.service.TopThreeAsync());
 
         [HttpGet("{id}")]
         public async Task<ActionResult<BookDetailsServiceModel>> Details(int id)
-            => this.Ok(await this.bookService.GetDetailsAsync(id)); 
+            => this.Ok(await this.service.DetailsAsync(id)); 
 
         [HttpPost]
         public async Task<ActionResult<int>> Create(CreateBookWebModel webModel)
         {
             var serviceModel = this.mapper.Map<CreateBookServiceModel>(webModel);
-            var bookId = await this.bookService.CreateAsync(serviceModel);
+            var bookId = await this.service.CreateAsync(serviceModel);
 
             return this.Created(nameof(this.Create), bookId);
         }
@@ -43,7 +43,7 @@ namespace BookHub.Server.Features.Books.Web
         public async Task<ActionResult> Edit(int id, CreateBookWebModel webModel)
         {
             var serviceModel = this.mapper.Map<CreateBookServiceModel>(webModel);
-            var result = await this.bookService.EditAsync(id, serviceModel);
+            var result = await this.service.EditAsync(id, serviceModel);
 
             return this.NoContentOrBadRequest(result);
         }
@@ -51,7 +51,7 @@ namespace BookHub.Server.Features.Books.Web
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var result = await this.bookService.DeleteAsync(id);
+            var result = await this.service.DeleteAsync(id);
 
             return this.NoContentOrBadRequest(result);
         }

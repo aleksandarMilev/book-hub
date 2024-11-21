@@ -20,7 +20,7 @@
         private readonly ICurrentUserService userService = userService;
         private readonly IMapper mapper = mapper;
 
-        public async Task<IEnumerable<AuthorNamesServiceModel>> GetNamesAsync()
+        public async Task<IEnumerable<AuthorNamesServiceModel>> NamesAsync()
           => await this.data
               .Authors
               .Select(a => new AuthorNamesServiceModel() 
@@ -30,7 +30,7 @@
               })
               .ToListAsync();
 
-        public async Task<IEnumerable<AuthorServiceModel>> GetTopThreeAsync()
+        public async Task<IEnumerable<AuthorServiceModel>> TopThreeAsync()
             => await this.data
                 .Authors
                 .ProjectTo<AuthorServiceModel>(this.mapper.ConfigurationProvider)
@@ -38,7 +38,7 @@
                 .Take(3)
                 .ToListAsync();
 
-        public async Task<AuthorDetailsServiceModel?> GetDetailsAsync(int id)
+        public async Task<AuthorDetailsServiceModel?> DetailsAsync(int id)
             => await this.data
                 .Authors
                 .ProjectTo<AuthorDetailsServiceModel>(this.mapper.ConfigurationProvider)

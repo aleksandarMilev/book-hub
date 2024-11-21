@@ -5,11 +5,11 @@
 
     public interface IAuthorService
     {
-        Task<IEnumerable<AuthorNamesServiceModel>> GetNamesAsync();
+        Task<IEnumerable<AuthorNamesServiceModel>> NamesAsync();
 
-        Task<IEnumerable<AuthorServiceModel>> GetTopThreeAsync();
+        Task<IEnumerable<AuthorServiceModel>> TopThreeAsync();
 
-        Task<AuthorDetailsServiceModel?> GetDetailsAsync(int id);
+        Task<AuthorDetailsServiceModel?> DetailsAsync(int id);
 
         Task<int> CreateAsync(CreateAuthorServiceModel model);
 

@@ -4,6 +4,6 @@
 
     public interface ISearchService
     {
-        Task<PaginatedModel<SearchBookServiceModel>> GetBooksAsync(string? searchTerm, int page, int pageSize);
+        Task<PaginatedModel<SearchBookServiceModel>> BooksAsync(string? searchTerm, int page, int pageSize);
     }
 }

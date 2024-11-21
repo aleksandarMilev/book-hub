@@ -4,6 +4,6 @@
 
     public interface INationalityService
     {
-        Task<IEnumerable<NationalityServiceModel>> GetNamesAsync();
+        Task<IEnumerable<NationalityServiceModel>> NamesAsync();
     }
 }

@@ -17,6 +17,6 @@
             string? searchTerm,
             int page = DefaultPageIndex,
             int pageSize = DefaultPageSize)
-                => this.Ok(await this.service.GetBooksAsync(searchTerm, page, pageSize));
+                => this.Ok(await this.service.BooksAsync(searchTerm, page, pageSize));
     }
 }

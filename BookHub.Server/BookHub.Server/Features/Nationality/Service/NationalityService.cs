@@ -8,7 +8,7 @@
     {
         private readonly BookHubDbContext data = data;
 
-        public async Task<IEnumerable<NationalityServiceModel>> GetNamesAsync()
+        public async Task<IEnumerable<NationalityServiceModel>> NamesAsync()
            => await this.data
                 .Nationalities
                 .Select(n => new NationalityServiceModel() 

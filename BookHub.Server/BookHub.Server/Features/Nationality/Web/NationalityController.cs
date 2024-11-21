@@ -12,6 +12,6 @@
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<NationalityServiceModel>>> Names()
-           => this.Ok(await this.service.GetNamesAsync());
+           => this.Ok(await this.service.NamesAsync());
     }
 }

@@ -5,6 +5,6 @@
 
     public interface IGenreService
     {
-        Task<IEnumerable<GenreNameServiceModel>> GetNamesAsync();
+        Task<IEnumerable<GenreNameServiceModel>> NamesAsync();
     }
 }

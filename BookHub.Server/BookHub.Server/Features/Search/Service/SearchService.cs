@@ -13,7 +13,7 @@
         private readonly BookHubDbContext data = data;
         private readonly IMapper mapper = mapper;
 
-        public async Task<PaginatedModel<SearchBookServiceModel>> GetBooksAsync(string? searchTerm, int page, int pageSize)
+        public async Task<PaginatedModel<SearchBookServiceModel>> BooksAsync(string? searchTerm, int page, int pageSize)
         {
             var books = this.data
                 .Books
