@@ -8,7 +8,7 @@
     {
         [Required]
         [StringLength(ContentMaxLength, MinimumLength = ContentMinLength)]
-        public string Content { get; set; } = null!;
+        public string Content { get; init; } = null!;
 
         [Range(RatingMinValue, RatingMaxValue)]
         public int Rating { get; init; }

@@ -10,6 +10,7 @@
     {
         private readonly IVoteService service = service;
 
+        [HttpPost]
         public async Task<ActionResult<int>> Create(VoteRequestModel model) 
         {
             var voteId = await this.service.CreateAsync(model.ReviewId, model.IsUpvote);

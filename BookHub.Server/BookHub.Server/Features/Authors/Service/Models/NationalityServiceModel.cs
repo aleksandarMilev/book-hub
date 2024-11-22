@@ -1,4 +1,4 @@
-﻿namespace BookHub.Server.Features.Nationality.Service.Models
+﻿namespace BookHub.Server.Features.Authors.Service.Models
 {
     public class NationalityServiceModel
     {

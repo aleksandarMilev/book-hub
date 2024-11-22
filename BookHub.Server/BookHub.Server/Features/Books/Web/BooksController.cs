@@ -1,5 +1,4 @@
-﻿#pragma warning disable ASP0023 
-namespace BookHub.Server.Features.Books.Web
+﻿namespace BookHub.Server.Features.Books.Web
 {
     using AutoMapper;
     using Infrastructure.Extensions;
@@ -9,7 +8,7 @@ namespace BookHub.Server.Features.Books.Web
     using Service;
     using Service.Models;
 
-    //[Authorize]
+    [Authorize]
     public class BooksController(
         IBookService service,
         IMapper mapper) : ApiController
@@ -17,14 +16,14 @@ namespace BookHub.Server.Features.Books.Web
         private readonly IBookService service = service;
         private readonly IMapper mapper = mapper;
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<BookServiceModel>>> All()
-            => this.Ok(await this.service.AllAsync());
-
         [AllowAnonymous]
         [HttpGet("[action]")]
         public async Task<ActionResult<IEnumerable<BookServiceModel>>> TopThree()
-           => this.Ok(await this.service.TopThreeAsync());
+          => this.Ok(await this.service.TopThreeAsync());
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<BookServiceModel>>> All()
+            => this.Ok(await this.service.AllAsync());
 
         [HttpGet("{id}")]
         public async Task<ActionResult<BookDetailsServiceModel>> Details(int id)

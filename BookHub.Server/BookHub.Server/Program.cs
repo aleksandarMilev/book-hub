@@ -34,7 +34,7 @@ namespace BookHub.Server
             app
                 .UseRouting()
                 .UseAllowedCors()
-                .UseAuthorization()
+                .UseAuthentication()
                 .UseAuthorization()
                 .UseEndpoints(e => e.MapControllers())
                 .UseSwaggerUI()

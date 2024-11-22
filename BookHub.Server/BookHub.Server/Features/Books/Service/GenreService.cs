@@ -1,4 +1,4 @@
-﻿namespace BookHub.Server.Features.Genre.Service
+﻿namespace BookHub.Server.Features.Books.Service
 {
     using Data;
     using Microsoft.EntityFrameworkCore;
@@ -9,9 +9,9 @@
         private readonly BookHubDbContext data = data;
 
         public async Task<IEnumerable<GenreNameServiceModel>> NamesAsync()
-          => await this.data
+          => await data
               .Genres
-              .Select(g => new GenreNameServiceModel() 
+              .Select(g => new GenreNameServiceModel()
               {
                   Id = g.Id,
                   Name = g.Name

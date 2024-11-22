@@ -6,12 +6,12 @@
         int page,
         int pageSize)
     {
-        public IEnumerable<T> Items { get; set; } = items;
+        public IEnumerable<T> Items { get; init; } = items;
 
-        public int TotalItems { get; set; } = totalItems;
+        public int TotalItems { get; init; } = totalItems;
 
-        public int Page { get; set; } = page;
+        public int Page { get; init; } = page;
 
-        public int PageSize { get; set; } = pageSize;
+        public int PageSize { get; init; } = pageSize;
     }
 }

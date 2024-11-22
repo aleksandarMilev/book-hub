@@ -2,7 +2,6 @@
 {
     using Authors.Service.Models;
     using Data.Models;
-    using Genre.Service.Models;
     using Microsoft.EntityFrameworkCore;
     using Review.Service.Models;
     using Service.Models;

@@ -1,4 +1,4 @@
-﻿namespace BookHub.Server.Features.Nationality.Service
+﻿namespace BookHub.Server.Features.Authors.Service
 {
     using Data;
     using Microsoft.EntityFrameworkCore;
@@ -9,9 +9,9 @@
         private readonly BookHubDbContext data = data;
 
         public async Task<IEnumerable<NationalityServiceModel>> NamesAsync()
-           => await this.data
+           => await data
                 .Nationalities
-                .Select(n => new NationalityServiceModel() 
+                .Select(n => new NationalityServiceModel()
                 {
                     Id = n.Id,
                     Name = n.Name

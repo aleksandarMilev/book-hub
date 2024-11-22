@@ -1,6 +1,5 @@
-﻿namespace BookHub.Server.Features.Genre.Service
+﻿namespace BookHub.Server.Features.Books.Service
 {
-
     using Models;
 
     public interface IGenreService

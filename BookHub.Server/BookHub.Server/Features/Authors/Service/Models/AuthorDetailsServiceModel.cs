@@ -1,6 +1,5 @@
 ﻿namespace BookHub.Server.Features.Authors.Service.Models
 {
-    using Nationality.Service.Models;
     using Books.Service.Models;
 
     public class AuthorDetailsServiceModel : AuthorServiceModel

@@ -1,8 +1,8 @@
 ﻿namespace BookHub.Server.Features.Search.Mapper
 {
     using AutoMapper;
-    using Genre.Service.Models;
     using Data.Models;
+    using Features.Books.Service.Models;
     using Service.Models;
 
     public class SearchMapper : Profile

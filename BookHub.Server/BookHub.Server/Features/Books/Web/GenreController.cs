@@ -1,4 +1,4 @@
-﻿namespace BookHub.Server.Features.Genre.Web
+﻿namespace BookHub.Server.Features.Books.Web
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -12,6 +12,6 @@
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GenreNameServiceModel>>> Names()
-           => this.Ok(await this.service.NamesAsync());
+           => this.Ok(await service.NamesAsync());
     }
 }
