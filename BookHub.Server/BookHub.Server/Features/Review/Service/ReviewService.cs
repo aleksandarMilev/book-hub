@@ -24,6 +24,7 @@
             var reviews = this.data
                .Reviews
                .Where(r => r.BookId == bookId)
+               .OrderByDescending(r => r.Votes.Count())
                .ProjectTo<ReviewServiceModel>(this.mapper.ConfigurationProvider);
 
             var totalReviews = await reviews.CountAsync();

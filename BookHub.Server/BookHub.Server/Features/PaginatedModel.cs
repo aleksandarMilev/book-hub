@@ -10,7 +10,7 @@
 
         public int TotalItems { get; init; } = totalItems;
 
-        public int Page { get; init; } = page;
+        public int PageIndex { get; init; } = page;
 
         public int PageSize { get; init; } = pageSize;
     }

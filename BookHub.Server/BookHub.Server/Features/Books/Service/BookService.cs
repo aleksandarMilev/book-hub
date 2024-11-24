@@ -34,7 +34,6 @@
                .Take(3)
                .ToListAsync();
 
-
         public async Task<BookDetailsServiceModel?> DetailsAsync(int id)
             => await this.data
                   .Books

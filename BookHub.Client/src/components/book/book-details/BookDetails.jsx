@@ -113,13 +113,14 @@ export default function BookDetails() {
                             ) : (
                                 <p className="no-reviews-message">No reviews yet.</p>
                         )}
+                        {book.moreThanFiveReviews && 
                         <Link
-                            to={{
-                                pathname: `${routes.review}/${book.id}`
-                            }}
+                            className='reviews-button'
+                            to={`${routes.review}/${book.id}`}
+                            state={book.title}
                         >
-                            Reviews
-                        </Link>
+                            All Reviews
+                        </Link>}
                     </div>
                 </div>
                     <DeleteModal 

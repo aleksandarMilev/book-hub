@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react'
 
 export default function usePersistedState(localStorageKey, initState){
     const[state, setState] = useState(initState)

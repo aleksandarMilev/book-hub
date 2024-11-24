@@ -310,8 +310,6 @@ namespace BookHub.Server.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Content = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
                     Rating = table.Column<int>(type: "int", nullable: false),
-                    Likes = table.Column<int>(type: "int", nullable: false),
-                    Dislikes = table.Column<int>(type: "int", nullable: false),
                     CreatorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     BookId = table.Column<int>(type: "int", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -375,14 +373,45 @@ namespace BookHub.Server.Data.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Votes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IsUpvote = table.Column<bool>(type: "bit", nullable: false),
+                    ReviewId = table.Column<int>(type: "int", nullable: false),
+                    CreatorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Votes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Votes_AspNetUsers_CreatorId",
+                        column: x => x.CreatorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Votes_Reviews_ReviewId",
+                        column: x => x.ReviewId,
+                        principalTable: "Reviews",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "CreatedBy", "CreatedOn", "DeletedBy", "DeletedOn", "Email", "EmailConfirmed", "IsDeleted", "LockoutEnabled", "LockoutEnd", "ModifiedBy", "ModifiedOn", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "user1Id", 0, "da0479aa-7be8-48ec-a212-3a5322442938", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "user1@mail.com", false, false, false, null, null, null, null, null, null, null, false, "d72bffd0-c99c-4920-9db4-f90586f3f3cf", false, "user1name" },
-                    { "user2Id", 0, "b1ba3a64-1df8-4748-a6ad-747848900fdd", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "user2@mail.com", false, false, false, null, null, null, null, null, null, null, false, "906f1e55-093a-4f1d-8acd-5af84154f38a", false, "user2name" },
-                    { "user3Id", 0, "0bce96d8-d7c7-4e40-8bb2-3be60c702565", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "user3@mail.com", false, false, false, null, null, null, null, null, null, null, false, "9c9306fd-6d26-4b51-9161-b4118a033586", false, "user3name" }
+                    { "user1Id", 0, "9db19e39-efca-489a-8ceb-732b3a55d87d", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "user1@mail.com", false, false, false, null, null, null, null, null, null, null, false, "2f1fb0f8-0cd9-436d-aa6c-d403934e4242", false, "user1name" },
+                    { "user2Id", 0, "29306d93-a5a6-4b3d-a635-bc986c83ab8c", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "user2@mail.com", false, false, false, null, null, null, null, null, null, null, false, "1503aa1f-7b4e-4f9d-ba8f-e3e9e2f49e22", false, "user2name" },
+                    { "user3Id", 0, "2f5340a1-0a36-489a-b6d8-4dbfffe4cfb0", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "user3@mail.com", false, false, false, null, null, null, null, null, null, null, false, "d8828a30-9f95-4e29-a2ca-c83072be60db", false, "user3name" }
                 });
 
             migrationBuilder.InsertData(
@@ -406,7 +435,8 @@ namespace BookHub.Server.Data.Migrations
                     { 14, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, false, null, null, "Children's" },
                     { 15, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, false, null, null, "Young Adult" },
                     { 16, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, false, null, null, "Comedy" },
-                    { 17, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, false, null, null, "Graphic Novel" }
+                    { 17, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, false, null, null, "Graphic Novel" },
+                    { 18, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, false, null, null, "Other" }
                 });
 
             migrationBuilder.InsertData(
@@ -724,6 +754,16 @@ namespace BookHub.Server.Data.Migrations
                 name: "IX_Reviews_CreatorId",
                 table: "Reviews",
                 column: "CreatorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Votes_CreatorId",
+                table: "Votes",
+                column: "CreatorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Votes_ReviewId",
+                table: "Votes",
+                column: "ReviewId");
         }
 
         /// <inheritdoc />
@@ -749,6 +789,9 @@ namespace BookHub.Server.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Replies");
+
+            migrationBuilder.DropTable(
+                name: "Votes");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

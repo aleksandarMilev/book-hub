@@ -2,7 +2,6 @@
 {
     using AutoMapper;
     using Infrastructure.Extensions;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Models;
     using Service;
@@ -10,7 +9,7 @@
 
     using static Common.Constants.DefaultValues;
 
-    [Authorize]
+    //[Authorize]
     public class ReviewController(
         IReviewService service,
         IMapper mapper) : ApiController

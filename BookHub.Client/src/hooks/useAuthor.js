@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import { json, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import * as authorApi from '../api/authorApi'
 import { routes } from '../common/constants/api'
