@@ -7,10 +7,8 @@
 
     using static Common.Constants.Validation.Book;
 
-    public class Book : DeletableEntity
+    public class Book : DeletableEntity<int>
     {
-        public int Id { get; set; }
-
         [Required]
         [MaxLength(TitleMaxLength)]
         public string Title { get; set; } = null!;

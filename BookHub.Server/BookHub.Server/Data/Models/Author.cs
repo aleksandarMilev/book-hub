@@ -8,10 +8,8 @@
 
     using static Common.Constants.Validation.Author;
 
-    public class Author : DeletableEntity
+    public class Author : DeletableEntity<int>
     {
-        public int Id { get; set; }
-
         [Required]
         [MaxLength(NameMaxLength)]
         public string Name { get; set; } = null!;

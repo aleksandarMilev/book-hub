@@ -1,7 +1,9 @@
 ﻿namespace BookHub.Server.Data.Models.Base
 {
-    public abstract class Entity : IEntity
+    public abstract class Entity<TKey> : IEntity
     {
+        public TKey Id { get; set ; }
+
         public DateTime CreatedOn { get; set; }
 
         public string? CreatedBy { get; set; }

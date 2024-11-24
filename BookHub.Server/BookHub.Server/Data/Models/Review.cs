@@ -7,15 +7,12 @@
 
     using static Common.Constants.Validation.Review;
 
-    public class Review : DeletableEntity
+    public class Review : DeletableEntity<int>
     {
-        public int Id { get; set; }
-
         [MaxLength(ContentMaxLength)]
         public string Content { get; set; } = null!;
 
         public int Rating { get; set; }
-
 
         [Required]
         [ForeignKey(nameof(Creator))]

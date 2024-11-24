@@ -1,5 +1,5 @@
 ﻿#nullable disable
-#pragma warning disable CA1814 
+#pragma warning disable CA1814
 namespace BookHub.Server.Data.Migrations
 {
     using Microsoft.EntityFrameworkCore.Migrations;
@@ -409,9 +409,9 @@ namespace BookHub.Server.Data.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "CreatedBy", "CreatedOn", "DeletedBy", "DeletedOn", "Email", "EmailConfirmed", "IsDeleted", "LockoutEnabled", "LockoutEnd", "ModifiedBy", "ModifiedOn", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "user1Id", 0, "9db19e39-efca-489a-8ceb-732b3a55d87d", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "user1@mail.com", false, false, false, null, null, null, null, null, null, null, false, "2f1fb0f8-0cd9-436d-aa6c-d403934e4242", false, "user1name" },
-                    { "user2Id", 0, "29306d93-a5a6-4b3d-a635-bc986c83ab8c", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "user2@mail.com", false, false, false, null, null, null, null, null, null, null, false, "1503aa1f-7b4e-4f9d-ba8f-e3e9e2f49e22", false, "user2name" },
-                    { "user3Id", 0, "2f5340a1-0a36-489a-b6d8-4dbfffe4cfb0", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "user3@mail.com", false, false, false, null, null, null, null, null, null, null, false, "d8828a30-9f95-4e29-a2ca-c83072be60db", false, "user3name" }
+                    { "user1Id", 0, "1ef65e87-30fd-4ff1-a6a2-bd8771e3577c", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "user1@mail.com", false, false, false, null, null, null, null, null, null, null, false, "6fe3a58b-5e07-41bc-8d8d-822b09bcb203", false, "user1name" },
+                    { "user2Id", 0, "9cab1734-2234-4c37-9dea-19aefdc529d3", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "user2@mail.com", false, false, false, null, null, null, null, null, null, null, false, "784f8680-b4d5-4e94-9031-a47d1b158f30", false, "user2name" },
+                    { "user3Id", 0, "1595e319-e06c-4919-9fa2-24cb247c0836", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "user3@mail.com", false, false, false, null, null, null, null, null, null, null, false, "804bbb8e-8fe0-4ed8-b19c-2b3043ffe8ca", false, "user3name" }
                 });
 
             migrationBuilder.InsertData(

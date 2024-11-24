@@ -6,10 +6,8 @@
 
     using static Common.Constants.Validation.Genre;
 
-    public class Genre : DeletableEntity
+    public class Genre : DeletableEntity<int>
     {
-        public int Id { get; set; }
-
         [Required]
         [MaxLength(NameMaxLength)]
         public string Name { get; set; } = null!;

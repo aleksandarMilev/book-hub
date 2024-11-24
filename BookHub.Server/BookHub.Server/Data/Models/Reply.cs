@@ -8,10 +8,8 @@
 
     using static Common.Constants.Validation.Reply;
 
-    public class Reply : DeletableEntity
+    public class Reply : DeletableEntity<int>
     {
-        public int Id { get; set; }
-
         [MaxLength(ContentMaxLength)]
         public string Context { get; set; } = null!;
 

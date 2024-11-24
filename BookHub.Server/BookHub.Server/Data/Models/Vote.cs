@@ -5,10 +5,8 @@
     using Base;
     using Microsoft.EntityFrameworkCore;
 
-    public class Vote : Entity
+    public class Vote : Entity<int>
     {
-        public int Id { get; set; }
-
         public bool IsUpvote { get; set; }
 
         [ForeignKey(nameof(Review))]
