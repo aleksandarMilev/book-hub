@@ -23,7 +23,8 @@
                 new() { Id = 14, Name = "Children's" },
                 new() { Id = 15, Name = "Young Adult" },
                 new() { Id = 16, Name = "Comedy" },
-                new() { Id = 17, Name = "Graphic Novel" }
+                new() { Id = 17, Name = "Graphic Novel" },
+                new() { Id = 18, Name = "Other" }
             };
     }
 }

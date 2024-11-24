@@ -13,6 +13,8 @@
 
         public string? CreatorId { get; init; }
 
+        public bool MoreThanFiveReviews { get; init; }
+
         public AuthorServiceModel? Author { get; init; }
 
         public ICollection<ReviewServiceModel> Reviews { get; init; } = new HashSet<ReviewServiceModel>();

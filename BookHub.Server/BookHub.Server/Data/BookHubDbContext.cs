@@ -1,6 +1,7 @@
 ﻿namespace BookHub.Server.Data
 {
     using System.Linq.Expressions;
+    using System.Reflection;
 
     using Infrastructure.Services;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -48,7 +49,7 @@
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(BookHubDbContext).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             FilterDeletedModels(modelBuilder);
         }
 

@@ -1,5 +1,5 @@
 import { useContext, useState, useRef, useEffect } from "react"
-import { useParams, useNavigate } from "react-router-dom"
+import { useParams, useNavigate, Link } from "react-router-dom"
 
 import * as bookApi from '../../../api/bookApi'
 import * as useBook from '../../../hooks/useBook'
@@ -55,13 +55,17 @@ export default function BookDetails() {
         }
     }, [isReviewCreated, isReviewEdited, book?.reviews])
 
+    const refreshReviews = async () => {
+        await refreshBook()
+    }
+
     if(isFetching || !book){
         return(
             <div className="spinner-container d-flex justify-content-center align-items-center">
                 <DefaultSpinner />
             </div>
         )
-    }
+    } 
 
     const creatorId = book ? book.creatorId : null
     const isCreator = userId === creatorId
@@ -103,12 +107,19 @@ export default function BookDetails() {
                                     ref={index === 0 ? firstReviewRef : null}
                                     key={r.id}
                                 >
-                                    <ReviewItem review={r} refreshReviews={refreshBook} />
+                                    <ReviewItem review={r}  onVote={refreshReviews}/>
                                 </div>
                             ))
                             ) : (
                                 <p className="no-reviews-message">No reviews yet.</p>
                         )}
+                        <Link
+                            to={{
+                                pathname: `${routes.review}/${book.id}`
+                            }}
+                        >
+                            Reviews
+                        </Link>
                     </div>
                 </div>
                     <DeleteModal 

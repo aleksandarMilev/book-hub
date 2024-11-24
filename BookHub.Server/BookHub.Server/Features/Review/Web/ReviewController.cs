@@ -8,6 +8,8 @@
     using Service;
     using Service.Models;
 
+    using static Common.Constants.DefaultValues;
+
     [Authorize]
     public class ReviewController(
         IReviewService service,
@@ -15,6 +17,13 @@
     {
         private readonly IReviewService service = service;
         private readonly IMapper mapper = mapper;
+
+        [HttpGet("{bookId}")]
+        public async Task<ActionResult<PaginatedModel<ReviewServiceModel>>> AllForBook(
+            int bookId,
+            int pageIndex = DefaultPageIndex,
+            int pageSize = DefaultPageSize)
+            => this.Ok(await this.service.AllForBookAsync(bookId, pageIndex, pageSize));
 
         [HttpPost]
         public async Task<ActionResult<int>> Create(CreateReviewWebModel webModel)

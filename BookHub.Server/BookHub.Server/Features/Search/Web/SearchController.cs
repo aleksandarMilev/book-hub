@@ -13,7 +13,7 @@
         private readonly ISearchService service = service;
 
         [HttpGet("[action]")]
-        public async Task<ActionResult<IEnumerable<SearchBookServiceModel>>> Books(
+        public async Task<ActionResult<PaginatedModel<SearchBookServiceModel>>> Books(
             string? searchTerm,
             int page = DefaultPageIndex,
             int pageSize = DefaultPageSize)

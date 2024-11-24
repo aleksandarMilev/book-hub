@@ -59,7 +59,8 @@
                             ModifiedOn = r.ModifiedOn == null ? null : r.ModifiedOn.ToString()
                         })
                         .Take(5)
-                        .ToHashSet()
+                        .ToHashSet(),
+                    MoreThanFiveReviews = b.Reviews.Count() > 5
                 });
 
         public static IQueryable<BookServiceModel> MapToServiceModel(this DbSet<Book> books)

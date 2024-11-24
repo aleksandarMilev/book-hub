@@ -1,41 +1,47 @@
 import React, { useContext, useState } from 'react'
 import ReactDOM from 'react-dom'
-import { useNavigate } from 'react-router-dom'
 import { MDBIcon, MDBBtn } from 'mdb-react-ui-kit'
 
 import * as reviewApi from '../../../../api/reviewApi'
-import * as useReview from '../../../../hooks/useReview'
-import renderStars from '../../../../common/functions/renderStars'
 import { errors } from '../../../../common/constants/messages'
 import { routes } from '../../../../common/constants/api'
 import { UserContext } from '../../../../contexts/userContext'
+import renderStars from '../../../../common/functions/renderStars'
 
 import DeleteModal from '../../../common/delete-modal/DeleteModal'
 
-import './ReviewItem.css'
-
-export default function ReviewItem({ review, refreshReviews }) {
-    const navigate = useNavigate()
-
-    const upvoteHandler = useReview.useUpvote()
-    const downvoteHandler = useReview.useDownvote()
-
+export default function ReviewItem({ review, onVote }) {
     const { userId, token } = useContext(UserContext)
     const { id, content, rating, creatorId, createdBy, upvotes, downvotes } = review
 
     const [upvoteCount, setUpvoteCount] = useState(upvotes)
     const [downvoteCount, setDownvoteCount] = useState(downvotes)
-
     const [showModal, setShowModal] = useState(false)
-    const toggleModal = () => setShowModal(old => !old)
+
+    const toggleModal = () => setShowModal((old) => !old)
+
+    async function upvoteHandler() {
+        const success = await reviewApi.upvoteAsync(id, token)
+        if (success) {
+            setUpvoteCount(prev => ++prev)
+            onVote() 
+        }
+    }
+
+    async function downvoteHandler() {
+        const success = await reviewApi.downvoteAsync(id, token)
+        if (success) {
+            setDownvoteCount(prev => ++prev)
+            onVote() 
+        }
+    }
 
     async function deleteHandler() {
         if (showModal) {
             const success = await reviewApi.deleteAsync(id, token)
-
             if (success) {
-                refreshReviews()
                 toggleModal()
+                onVote() 
             } else {
                 toggleModal()
                 navigate(routes.badRequest, { state: { message: errors.review.delete } })
@@ -58,14 +64,14 @@ export default function ReviewItem({ review, refreshReviews }) {
                     <MDBIcon
                         icon="arrow-up"
                         className="vote-icon"
-                        onClick={() => upvoteHandler(id, setUpvoteCount, refreshReviews)}
+                        onClick={upvoteHandler}
                     />
                     <span>{upvoteCount}</span>
 
                     <MDBIcon
                         icon="arrow-down"
                         className="vote-icon ms-2"
-                        onClick={() => downvoteHandler(id, setDownvoteCount ,refreshReviews)}
+                        onClick={downvoteHandler}
                     />
                     <span>{downvoteCount}</span>
                 </div>
@@ -84,7 +90,7 @@ export default function ReviewItem({ review, refreshReviews }) {
                         toggleModal={toggleModal}
                         deleteHandler={deleteHandler}
                     />,
-                    document.getElementById('modal-root') 
+                    document.getElementById('modal-root')
                 )}
         </div>
     )

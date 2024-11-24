@@ -23,6 +23,7 @@ import EditAuthor from "./components/author/edit-author/EditAuthor"
 
 import BadRequest from "./components/common/error/BadRequest"
 import NotFound from "./components/common/error/NotFound"
+import ReviewList from "./components/review/review-list/ReviewList"
 
 export default function App(){
     return(
@@ -39,6 +40,8 @@ export default function App(){
                 <Route path={routes.books + '/:id'} element={<AuthenticatedRoute element={<BookDetails />} />} />
                 <Route path={routes.createBook} element={<AuthenticatedRoute element={<CreateBook />} />} />
                 <Route path={routes.editBook + '/:id'} element={<AuthenticatedRoute element={<EditBook />} />} />
+
+                <Route path={routes.review + '/:bookId'} element={<AuthenticatedRoute element={<ReviewList />} />} />
 
                 <Route path={routes.author + '/:id'} element={<AuthenticatedRoute element={<AuthorDetails />} />} />
                 <Route path={routes.createAuthor} element={<AuthenticatedRoute element={<CreateAuthor />} />} />

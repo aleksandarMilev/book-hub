@@ -1,6 +1,7 @@
 ﻿namespace BookHub.Server.Features.Review.Service
 {
     using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using Data;
     using Data.Models;
     using Infrastructure.Services;
@@ -17,6 +18,23 @@
         private readonly BookHubDbContext data = data;
         private readonly ICurrentUserService userService = userService;
         private readonly IMapper mapper = mapper;
+
+        public async Task<PaginatedModel<ReviewServiceModel>> AllForBookAsync(int bookId, int pageIndex, int pageSize)
+        {
+            var reviews = this.data
+               .Reviews
+               .Where(r => r.BookId == bookId)
+               .ProjectTo<ReviewServiceModel>(this.mapper.ConfigurationProvider);
+
+            var totalReviews = await reviews.CountAsync();
+
+            var paginatedReviews = await reviews
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PaginatedModel<ReviewServiceModel>(paginatedReviews, totalReviews, pageIndex, pageSize);
+        }
 
         public async Task<int> CreateAsync(CreateReviewServiceModel model)
         {

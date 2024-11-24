@@ -1,5 +1,6 @@
 ﻿namespace BookHub.Server.Infrastructure.Extensions
 {
+    using System.Reflection;
     using System.Text;
 
     using Data;
@@ -113,6 +114,6 @@
         }
 
         public static IServiceCollection AddAutoMapper(this IServiceCollection services)
-            => services.AddAutoMapper(typeof(Program).Assembly);
+            => services.AddAutoMapper(Assembly.GetExecutingAssembly());
     }
 }
