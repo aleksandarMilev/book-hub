@@ -8,6 +8,7 @@
     using Features.Authors.Service;
     using Features.Books.Service;
     using Features.Identity.Service;
+    using Features.Profile.Service;
     using Features.Review.Service;
     using Features.Search.Service;
     using Filters;
@@ -17,7 +18,7 @@
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
     using Services;
-
+  
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
@@ -90,7 +91,8 @@
                 .AddTransient<INationalityService, NationalityService>()
                 .AddTransient<ISearchService, SearchService>()
                 .AddTransient<IReviewService, ReviewService>()
-                .AddTransient<IVoteService, VoteService>();
+                .AddTransient<IVoteService, VoteService>()
+                .AddTransient<IProfileService, ProfileService>();
 
         public static IServiceCollection AddApiControllers(this IServiceCollection services)
         {
