@@ -43,6 +43,9 @@ export default function Header() {
                                             Hello, {username}!
                                         </span>
                                     </Nav.Item>
+                                    <Nav.Link as={Link} to={routes.profile}>
+                                        My Profile
+                                    </Nav.Link>
                                     <Nav.Link as={Link} to={routes.logout}>
                                         Logout
                                     </Nav.Link>

@@ -12,6 +12,8 @@ import Login from './components/identity/login/Login'
 import Register from './components/identity/register/Register'
 import Logout from './components/identity/logout/Logout'
 
+import ProfileDetails from "./components/profile/profile-details/PofileDetails"
+
 import BookList from "./components/book/book-list/BookList"
 import BookDetails from "./components/book/book-details/BookDetails"
 import CreateBook from './components/book/create-book/CreateBook'
@@ -35,6 +37,8 @@ export default function App(){
                 <Route path={routes.login} element={<Login />} />
                 <Route path={routes.register} element={<Register />} />
                 <Route path={routes.logout} element={<Logout />} />
+
+                <Route path={routes.profile} element={<AuthenticatedRoute element={<ProfileDetails />} />} />
 
                 <Route path={routes.books} element={<AuthenticatedRoute element={<BookList />} />} />
                 <Route path={routes.books + '/:id'} element={<AuthenticatedRoute element={<BookDetails />} />} />

@@ -5,6 +5,7 @@ export const routes = {
     register: '/identity/register',
     login: '/identity/login',
     logout: '/identity/logout',
+    profile: '/profile',
     books: '/books',
     topThreeBooks: '/books/topThree',
     createBook: '/books/new',
