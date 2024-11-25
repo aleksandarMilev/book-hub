@@ -1,4 +1,4 @@
-﻿namespace BookHub.Server.Features.Profile.Web
+﻿namespace BookHub.Server.Features.UserProfile.Web
 {
     using AutoMapper;
     using Microsoft.AspNetCore.Authorization;

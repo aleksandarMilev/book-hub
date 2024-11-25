@@ -1,4 +1,4 @@
-﻿namespace BookHub.Server.Features.Profile.Mapper
+﻿namespace BookHub.Server.Features.UserProfile.Mapper
 {
     using AutoMapper;
 

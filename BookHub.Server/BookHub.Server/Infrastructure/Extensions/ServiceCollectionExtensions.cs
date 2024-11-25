@@ -8,7 +8,7 @@
     using Features.Authors.Service;
     using Features.Books.Service;
     using Features.Identity.Service;
-    using Features.Profile.Service;
+    using Features.UserProfile.Service;
     using Features.Review.Service;
     using Features.Search.Service;
     using Filters;

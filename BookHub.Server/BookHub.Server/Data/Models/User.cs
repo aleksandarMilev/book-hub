@@ -19,6 +19,8 @@
 
         public string? DeletedBy { get; set; }
 
+        public UserProfile? Profile { get; set; }
+
         public ICollection<Vote> Votes { get; set; } = new HashSet<Vote>();
 
         public ICollection<Book> Books { get; } = new HashSet<Book>();
