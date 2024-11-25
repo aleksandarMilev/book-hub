@@ -6,6 +6,8 @@ export const routes = {
     login: '/identity/login',
     logout: '/identity/logout',
     profile: '/profile',
+    editProfle: '/profile/edit',
+    createProfle: '/profile/new',
     books: '/books',
     topThreeBooks: '/books/topThree',
     createBook: '/books/new',

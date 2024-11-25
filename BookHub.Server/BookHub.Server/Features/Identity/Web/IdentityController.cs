@@ -1,6 +1,7 @@
 ﻿namespace BookHub.Server.Features.Identity.Web
 {
     using Data.Models;
+    using Features.UserProfile.Service;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Options;
@@ -10,11 +11,13 @@
     using static Common.Messages.Error.Identity;
 
     public class IdentityController(
-        IIdentityService service,
+        IIdentityService identityService,
+        IProfileService profileService,
         UserManager<User> userManager,
         IOptions<AppSettings> appSettings) : ApiController
     {
-        private readonly IIdentityService service = service;
+        private readonly IIdentityService identityService = identityService;
+        private readonly IProfileService profileService = profileService;
         private readonly UserManager<User> userManager = userManager;
         private readonly AppSettings appSettings = appSettings.Value;
 
@@ -31,7 +34,7 @@
 
             if (result.Succeeded)
             {
-                var token = this.service.GenerateJwtToken(this.appSettings.Secret, user.Id, user.UserName!);
+                var token = this.identityService.GenerateJwtToken(this.appSettings.Secret, user.Id, user.UserName!);
 
                 return this.Ok(new LoginResponseModel(user.UserName!, user.Email!, user.Id, token));
             }
@@ -49,7 +52,7 @@
         public async Task<ActionResult> Login(LoginRequestModel model)
         {
             var user = await this.userManager.FindByNameAsync(model.Username);
-
+            
             if (user == null)
             {
                 return this.Unauthorized(new { errorMessage = InvalidLoginAttempt });
@@ -59,9 +62,10 @@
 
             if (passwordIsValid)
             {
-                var token = this.service.GenerateJwtToken(this.appSettings.Secret, user.Id, user.UserName!);
+                var token = this.identityService.GenerateJwtToken(this.appSettings.Secret, user.Id, user.UserName!);
+                var hasProfile = await this.profileService.HasProfileAsync();
 
-                return this.Ok(new LoginResponseModel(user.UserName!, user.Email!, user.Id, token));
+                return this.Ok(new LoginResponseModel(user.UserName!, user.Email!, user.Id, token, hasProfile));
             }
 
             return this.Unauthorized(new { errorMessage = InvalidLoginAttempt });

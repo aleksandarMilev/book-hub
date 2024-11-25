@@ -29,6 +29,11 @@
             public const string UnauthorizedReviewDelete = "Current user can not delete this review!";
         }
 
+        public static class Profile
+        {
+            public const string ProfileNotFound = "The profile was not found!";
+        }
+
         public static class Identity
         {
             public const string InvalidLoginAttempt = "Invalid log in attempt!";

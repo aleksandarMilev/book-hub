@@ -4,6 +4,7 @@ using BookHub.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookHub.Server.Data.Migrations
 {
     [DbContext(typeof(BookHubDbContext))]
-    partial class BookHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241125120856_ChangeProfileKey")]
+    partial class ChangeProfileKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1865,14 +1868,14 @@ namespace BookHub.Server.Data.Migrations
                         {
                             Id = "user1Id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "7257c00c-f39f-4448-af7d-55fea6fef40c",
+                            ConcurrencyStamp = "e909c263-91e4-492f-99bc-76c7e8a321a6",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user1@mail.com",
                             EmailConfirmed = false,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "1fb79b45-2954-4547-8d3d-db0812a78432",
+                            SecurityStamp = "8f060d0e-3148-47ba-a2c0-2e50ce27467b",
                             TwoFactorEnabled = false,
                             UserName = "user1name"
                         },
@@ -1880,14 +1883,14 @@ namespace BookHub.Server.Data.Migrations
                         {
                             Id = "user2Id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "34d9aa51-0245-400a-8e5d-a7ed37c27742",
+                            ConcurrencyStamp = "226ea9f2-8202-4166-8c8f-568ef31da6ba",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user2@mail.com",
                             EmailConfirmed = false,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "39108844-7841-4860-8b61-dec13daa9bac",
+                            SecurityStamp = "e9850908-8e1c-43b6-b653-c5b28ddbce65",
                             TwoFactorEnabled = false,
                             UserName = "user2name"
                         },
@@ -1895,14 +1898,14 @@ namespace BookHub.Server.Data.Migrations
                         {
                             Id = "user3Id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0208b21a-9f6e-40c3-9d1e-2b20f5396019",
+                            ConcurrencyStamp = "afa97071-851e-46d7-81a5-df9a1a09d902",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user3@mail.com",
                             EmailConfirmed = false,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "6e807e76-56be-4c4e-87d2-7c731a6a77f3",
+                            SecurityStamp = "6e13ff8b-2fc9-4110-83f1-598f75ca7e0c",
                             TwoFactorEnabled = false,
                             UserName = "user3name"
                         });
@@ -1970,7 +1973,7 @@ namespace BookHub.Server.Data.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Profiles");
+                    b.ToTable("UserProfile");
                 });
 
             modelBuilder.Entity("BookHub.Server.Data.Models.Vote", b =>

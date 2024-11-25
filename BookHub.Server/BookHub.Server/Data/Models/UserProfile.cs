@@ -7,8 +7,14 @@
 
     using static Common.Constants.Validation.Profile;
 
-    public class UserProfile : DeletableEntity<int>
+    public class UserProfile : IDeletableEntity
     {
+        [Key]
+        [Required]
+        [ForeignKey(nameof(User))]
+        public string UserId { get; set; } = null!;
+
+        public User User { get; set; } = null!;
         [Required]
         [MaxLength(NameMaxLength)]
         public string FirstName { get; set; } = null!;
@@ -35,10 +41,18 @@
 
         public bool IsPrivate { get; set; }
 
-        [Required]
-        [ForeignKey(nameof(User))]
-        public string UserId { get; set; } = null!;
+        public bool IsDeleted { get; set; }
 
-        public User User { get; set; } = null!;
+        public DateTime? DeletedOn { get; set; }
+
+        public string? DeletedBy { get; set; }
+
+        public DateTime CreatedOn { get; set; }
+
+        public string? CreatedBy { get; set; }
+
+        public DateTime? ModifiedOn { get; set; }
+
+        public string? ModifiedBy { get; set; }
     }
 }

@@ -1,22 +1,87 @@
 .profile-details {
     background: #f7f7ff;
-    margin-top: 20px
+    margin-top: 30px;  
+    margin-bottom: 30px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1),
+}
+
+.profile-details .main-body {
+    padding: 30px 0
+}
+
+.profile-details .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; 
+    gap: 20px
+}
+
+.profile-details .col-lg-4 {
+    padding: 15px
 }
 
 .profile-details .card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    word-wrap: break-word;
     background-color: #fff;
-    background-clip: border-box;
-    border: 0 solid transparent;
-    border-radius: 0.25rem;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 2px 6px 0 rgb(218 218 253 / 65%), 0 2px 6px 0 rgb(206 206 238 / 54%)
+    border-radius: 12px; 
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    max-width: 400px;
+    margin: auto
 }
 
-.profile-details .me-2 {
-    margin-right: 0.5rem !important
+.profile-details .card-body img {
+    border-radius: 50%;
+    border: 4px solid #007bff;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease
+}
+
+.profile-details .card-body img:hover {
+    transform: scale(1.1)
+}
+
+.profile-details .card-body h4 {
+    font-size: 1.5rem;  
+    font-weight: 600;
+    color: #333; 
+    margin-bottom: 20px
+}
+
+.profile-details .list-group-item {
+    border: none;
+    padding: 15px 20px; 
+    font-size: 1rem;
+    color: #555;
+    transition: background-color 0.3s ease
+}
+
+.profile-details .list-group-item:hover {
+    background-color: #f1f1f1
+}
+
+.profile-details .list-group-item h6 {
+    font-weight: 600;
+    color: #007bff
+}
+
+.profile-details .list-group-item span {
+    color: #555;
+    font-style: italic
+}
+
+@media (max-width: 992px) {
+    .profile-details .col-lg-4 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+.profile-details .spinner {
+    margin-top: 100px;
+}
+
+.profile-details .card{
+    max-width: 50em;
 }

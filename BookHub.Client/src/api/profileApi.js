@@ -1,7 +1,7 @@
 import { baseUrl, routes } from '../common/constants/api'
 import { errors } from '../common/constants/messages'
 
-export async function getTopThreeAsync(token){
+export async function getAsync(token, userId) {
     const options = {
         method: "GET",
         headers: {
@@ -9,55 +9,39 @@ export async function getTopThreeAsync(token){
         }
     }
 
-    const url = baseUrl + routes.topThreeBooks
+    const url = baseUrl + routes.profile + `/${userId}`
     const response = await fetch(url, options)
 
     if(response.ok){
         return await response.json()
-    }
+    } else if (response.status === 404){
+        return null
+    } 
 
-    throw new Error(errors.book.topThree)
+    throw new Error(errors.profile.get)
 }
 
-export async function getDetailsAsync(id, token){
-    const options = {
-        method: "GET",
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    }
-
-    const url = baseUrl + routes.books + `/${id}`
-    const response = await fetch(url, options)
-
-    if(response.ok){
-        return await response.json()
-    }
-
-    throw new Error(errors.book.notfound)
-}
-
-export async function createAsync(book, token){
+export async function createAsync(profile, token){
     const options = {
         method: "POST",
         headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(book)
+        body: JSON.stringify(profile)
     }
 
-    const url = baseUrl + routes.books
+    const url = baseUrl + routes.profile
     const response = await fetch(url, options)
 
     if(response.ok){
         return await response.json()
     }
 
-    throw new Error(errors.book.create)
+    throw new Error(errors.profile.create)
 }
 
-export async function editAsync(bookId, book, token){
+export async function editAsync(profile, token){
     const options = {
         method: "PUT",
         headers: {
@@ -67,17 +51,17 @@ export async function editAsync(bookId, book, token){
         body: JSON.stringify(book)
     }
 
-    const url = baseUrl + routes.books + `/${bookId}`
+    const url = baseUrl + routes.profile
     const response = await fetch(url, options)
 
     if(response.ok){
         return true
     }
 
-    throw new Error(errors.book.edit)
+    throw new Error(errors.profile.edit)
 }
 
-export async function deleteAsync(bookId, token){
+export async function deleteAsync(token){
     const options = {
         method: "DELETE",
         headers: {
@@ -85,7 +69,7 @@ export async function deleteAsync(bookId, token){
         }
     }
 
-    const url = baseUrl + routes.books + `/${bookId}`
+    const url = baseUrl + routes.books
     const response = await fetch(url, options)
 
     if(response.ok){

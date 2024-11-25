@@ -31,6 +31,8 @@
 
         public DbSet<Reply> Replies { get; set; }
 
+        public DbSet<UserProfile> Profiles { get; set; }
+
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
             this.ApplyAuditInfo();
