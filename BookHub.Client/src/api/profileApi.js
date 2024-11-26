@@ -1,7 +1,7 @@
 import { baseUrl, routes } from '../common/constants/api'
 import { errors } from '../common/constants/messages'
 
-export async function getAsync(token, userId) {
+export async function getAsync(token) {
     const options = {
         method: "GET",
         headers: {
@@ -9,7 +9,7 @@ export async function getAsync(token, userId) {
         }
     }
 
-    const url = baseUrl + routes.profile + `/${userId}`
+    const url = baseUrl + routes.profile
     const response = await fetch(url, options)
 
     if(response.ok){
@@ -34,11 +34,9 @@ export async function createAsync(profile, token){
     const url = baseUrl + routes.profile
     const response = await fetch(url, options)
 
-    if(response.ok){
-        return await response.json()
-    }
-
-    throw new Error(errors.profile.create)
+    if(!response.ok){
+        throw new Error(errors.profile.create)
+    } 
 }
 
 export async function editAsync(profile, token){
@@ -48,17 +46,15 @@ export async function editAsync(profile, token){
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(book)
+        body: JSON.stringify(profile)
     }
 
     const url = baseUrl + routes.profile
     const response = await fetch(url, options)
 
-    if(response.ok){
-        return true
+    if(!response.ok){
+        throw new Error(errors.profile.edit)
     }
-
-    throw new Error(errors.profile.edit)
 }
 
 export async function deleteAsync(token){
@@ -69,12 +65,10 @@ export async function deleteAsync(token){
         }
     }
 
-    const url = baseUrl + routes.books
+    const url = baseUrl + routes.profile
     const response = await fetch(url, options)
 
-    if(response.ok){
-        return true 
+    if(!response.ok){
+        throw new Error(errors.profile.delete)
     }
-
-    return false
 }

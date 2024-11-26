@@ -12,11 +12,11 @@ export async function getTopThreeAsync(token) {
     const url = baseUrl + routes.topThreeAuthors
     const response = await fetch(url, options)
 
-        if(response.ok){
-            return await response.json()
-        }
+    if(response.ok){
+        return await response.json()
+    }
 
-        throw new Error(errors.author.topThree)
+    throw new Error(errors.author.topThree)
 }
 
 export async function getAuthorNamesAsync(token){

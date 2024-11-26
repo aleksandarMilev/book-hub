@@ -33,9 +33,6 @@ export function useGetTopThree() {
 
 export function useGetFullInfo(id) {
     const { token } = useContext(UserContext)
-    const user = useContext(UserContext)
-    console.log(user);
-    
 
     const navigate = useNavigate()
     const [book, setBook] = useState(null)

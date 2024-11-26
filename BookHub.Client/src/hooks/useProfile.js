@@ -1,12 +1,13 @@
 import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom' 
+import { format } from 'date-fns'
 
 import * as profileApi from '../api/profileApi'
 import { routes } from '../common/constants/api'
 import { UserContext } from '../contexts/userContext'
 
 export function useGet(){
-    const { token, userId } = useContext(UserContext)
+    const { token } = useContext(UserContext)
 
     const navigate = useNavigate()
     const [profile, setProfile] = useState(null)
@@ -16,7 +17,19 @@ export function useGet(){
         async function fetchData() {
             try {
                 setIsFetching(true)
-                setProfile(await profileApi.getAsync(token, userId))
+                const profileData = await profileApi.getAsync(token)
+
+                if(profileData){
+                    const profile = {
+                        ...profileData,
+                        dateOfBirth: format(new Date(profileData.dateOfBirth), 'yyyy-MM-dd')
+                    }
+
+                    setProfile(profile)
+                    return
+                }
+               
+                setProfile(null)
             } catch (error) {
                 navigate(routes.badRequest, { state: { message: error.message} })
             } finally {
@@ -25,7 +38,7 @@ export function useGet(){
         }
 
         fetchData()
-    }, [token, userId, navigate ])
+    }, [token, navigate ])
 
     return { profile, isFetching }
 }
@@ -34,17 +47,17 @@ export function useCreate(){
     const { token } = useContext(UserContext) 
     
     const navigate = useNavigate()
-
+    
     const createHandler = async (profileData) => {
         const profile = {
             ...profileData,
-            imageUrl: bookData.profileData || null,
-            socialMediaUrl: bookData.socialMediaUrl || null
+            imageUrl: profileData.imageUrl || null,
+            socialMediaUrl: profileData.socialMediaUrl || null,
+            biography: profileData.biography || null,
         }
-
+        
         try {
-            const profileId = await profileApi.createAsync(profile, token)
-            return profileId
+            await profileApi.createAsync(profile, token)
         } catch (error) {
             navigate(routes.badRequest, { state: { message: error.message } })
         }
@@ -61,17 +74,39 @@ export function useEdit(){
     const editHandler = async (profileData) => {
         const profile = {
             ...profileData,
-            imageUrl: bookData.profileData || null,
-            socialMediaUrl: bookData.socialMediaUrl || null
+            imageUrl: profileData.imageUrl || null,
+            socialMediaUrl: profileData.socialMediaUrl || null,
+            biography: profileData.biography || null,
         }
 
         try {
-            const isSuccessful = await profileApi.editAsync(profile, token)
-            return isSuccessful
+            await profileApi.editAsync(profile, token)
         } catch (error) {
             navigate(routes.badRequest, { state: { message: error.message } })
         }
     }
 
     return editHandler
+}
+
+export function useDelete(showModal, toggleModal){
+    const { token } = useContext(UserContext)
+
+    const navigate = useNavigate()
+
+    const deleteHandler = async () => {
+        if (showModal) {
+            try {
+                await profileApi.deleteAsync(token)
+                navigate(routes.profile)
+            } catch (error) {
+                navigate(routes.badRequest, { state: { message: error.message } })
+            }
+            
+        } else {
+            toggleModal()  
+        }
+    }
+
+    return deleteHandler
 }

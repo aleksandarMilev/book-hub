@@ -2,7 +2,8 @@ export const errors = {
     profile: {
         get: 'Something went wrong while loading your profile. Please refresh the page or try again later!',
         create: 'Oops! We couldn’t create your profile. Please try again later or contact support if the issue persists.',
-        edit: 'Oops! We couldn’t edit your profile. Please try again later or contact support if the issue persists.'
+        edit: 'Oops! We couldn’t edit your profile. Please try again later or contact support if the issue persists.',
+        delete: 'Oops! We couldn’t delete your profile. Please try again later or contact support if the issue persists.'
     },
     author: {
         topThree: 'Something went wrong while loading our top authors for you. Please refresh the page or try again later!',

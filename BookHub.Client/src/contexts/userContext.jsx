@@ -7,7 +7,6 @@ export const UserContext = createContext({
     username: '',
     email: '',
     token: '',
-    hasProfile: false,
     isAuthenticated: false,
     changeAuthenticationState: (state) => {},
     logout: () => {}
@@ -33,7 +32,6 @@ export function UserContextProvider(props) {
         username: user.username,
         email: user.email,
         token: user.token,
-        hasProfile: user.hasProfile,
         isAuthenticated: !!user.username,
         changeAuthenticationState,
         logout
