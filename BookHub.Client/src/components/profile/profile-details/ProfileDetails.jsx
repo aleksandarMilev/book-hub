@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useContext } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
     faPhone,
@@ -13,7 +13,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as useProfile from '../../../hooks/useProfile'
+import * as profileApi from '../../../api/profileApi'
 import { routes } from '../../../common/constants/api'
+import { UserContext } from '../../../contexts/userContext'
 
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner'
 import DeleteModal from  '../../common/delete-modal/DeleteModal'
@@ -23,15 +25,28 @@ import defaultProfilePicture from '../../../assets/images/defaultProfilePicture.
 import './ProfileDetails.css'
 
 export default function ProfileDetails() {
+    const { token } = useContext(UserContext)
+    const navigate = useNavigate()
+
     const { profile, isFetching } = useProfile.useGet()
 
-    console.log(profile);
-    
-    
     const [showModal, setShowModal] = useState(false)
-    const toggleDeleteModal = () => setShowModal(old => !old)
+    const toggleModal = () => setShowModal(old => !old)
 
-    const deleteHandler = useProfile.useDelete(showModal, toggleDeleteModal)
+    async function deleteHandler() {
+        if(showModal){
+            try {
+                await profileApi.deleteAsync(token)
+                navigate(routes.home)
+            } catch (error) {
+                navigate(routes.badRequest, { state: { message: error.message } })
+            } finally {
+                toggleModal()
+            }
+        } else {
+            toggleModal()
+        }
+    }
 
     if (isFetching) {
         return <DefaultSpinner />
@@ -119,7 +134,7 @@ export default function ProfileDetails() {
                                             <button
                                                 type="button"
                                                 className="btn btn-outline-danger"
-                                                onClick={toggleDeleteModal}
+                                                onClick={toggleModal}
                                             >
                                                 <FontAwesomeIcon icon={faTrashAlt} className="me-2" />
                                                 Delete
@@ -139,7 +154,7 @@ export default function ProfileDetails() {
             </div>
                 <DeleteModal
                     showModal={showModal}
-                    toggleModal={toggleDeleteModal}
+                    toggleModal={toggleModal}
                     deleteHandler={deleteHandler}
                 />
         </div>

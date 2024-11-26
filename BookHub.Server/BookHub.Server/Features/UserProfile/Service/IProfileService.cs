@@ -12,7 +12,5 @@
         Task<Result> EditAsync(CreateProfileServiceModel model);
 
         Task<Result> DeleteAsync();
-
-        Task<bool> HasProfileAsync(string userId);
     }
 }

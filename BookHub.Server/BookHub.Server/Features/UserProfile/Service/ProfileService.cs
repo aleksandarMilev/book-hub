@@ -70,11 +70,5 @@
 
             return true;
         }
-
-        public async Task<bool> HasProfileAsync(string userId) 
-            => await this.data
-                .Profiles
-                .AnyAsync(p => p.UserId == userId);
-
     }
 }

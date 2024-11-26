@@ -88,25 +88,3 @@ export function useEdit(){
 
     return editHandler
 }
-
-export function useDelete(showModal, toggleModal){
-    const { token } = useContext(UserContext)
-
-    const navigate = useNavigate()
-
-    const deleteHandler = async () => {
-        if (showModal) {
-            try {
-                await profileApi.deleteAsync(token)
-                navigate(routes.profile)
-            } catch (error) {
-                navigate(routes.badRequest, { state: { message: error.message } })
-            }
-            
-        } else {
-            toggleModal()  
-        }
-    }
-
-    return deleteHandler
-}

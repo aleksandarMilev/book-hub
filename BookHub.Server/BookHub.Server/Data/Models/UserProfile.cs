@@ -7,7 +7,7 @@
 
     using static Common.Constants.Validation.Profile;
 
-    public class UserProfile : IDeletableEntity
+    public class UserProfile : IEntity
     {
         [Key]
         [Required]
@@ -40,12 +40,6 @@
         public string? Biography { get; set; }
 
         public bool IsPrivate { get; set; }
-
-        public bool IsDeleted { get; set; }
-
-        public DateTime? DeletedOn { get; set; }
-
-        public string? DeletedBy { get; set; }
 
         public DateTime CreatedOn { get; set; }
 

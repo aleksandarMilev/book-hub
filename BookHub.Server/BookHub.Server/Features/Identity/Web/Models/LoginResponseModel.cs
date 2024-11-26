@@ -1,11 +1,7 @@
 ﻿namespace BookHub.Server.Features.Identity.Web.Models
 {
-    public class LoginResponseModel(
-        string token,
-        bool hasProfile = false)
+    public class LoginResponseModel(string token)
     {
         public string Token { get; init; } = token;
-
-        public bool HasProfile { get; init; } = hasProfile;
     }
 }

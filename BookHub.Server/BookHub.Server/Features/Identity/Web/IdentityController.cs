@@ -1,7 +1,6 @@
 ﻿namespace BookHub.Server.Features.Identity.Web
 {
     using Data.Models;
-    using Features.UserProfile.Service;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Options;
@@ -11,13 +10,11 @@
     using static Common.Messages.Error.Identity;
 
     public class IdentityController(
-        IIdentityService identityService,
-        IProfileService profileService,
+        IIdentityService service,
         UserManager<User> userManager,
         IOptions<AppSettings> appSettings) : ApiController
     {
-        private readonly IIdentityService identityService = identityService;
-        private readonly IProfileService profileService = profileService;
+        private readonly IIdentityService service = service;
         private readonly UserManager<User> userManager = userManager;
         private readonly AppSettings appSettings = appSettings.Value;
 
@@ -34,7 +31,7 @@
 
             if (result.Succeeded)
             {
-                var token = this.identityService.GenerateJwtToken(
+                var token = this.service.GenerateJwtToken(
                     this.appSettings.Secret,
                     user.Id,
                     user.UserName,
@@ -66,15 +63,13 @@
 
             if (passwordIsValid)
             {
-                var token = this.identityService.GenerateJwtToken(
+                var token = this.service.GenerateJwtToken(
                     this.appSettings.Secret,
                     user.Id,
                     user.UserName!,
                     user.Email!);
 
-                var hasProfile = await this.profileService.HasProfileAsync(user.Id);
-
-                return this.Ok(new LoginResponseModel(token, hasProfile));
+                return this.Ok(new LoginResponseModel(token));
             }
 
             return this.Unauthorized(new { errorMessage = InvalidLoginAttempt });
