@@ -71,10 +71,10 @@
             return true;
         }
 
-        public async Task<bool> HasProfileAsync() 
+        public async Task<bool> HasProfileAsync(string userId) 
             => await this.data
                 .Profiles
-                .AnyAsync(p => p.UserId == this.userService.GetId()!);
+                .AnyAsync(p => p.UserId == userId);
 
     }
 }

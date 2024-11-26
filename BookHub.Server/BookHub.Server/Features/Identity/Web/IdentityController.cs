@@ -34,9 +34,13 @@
 
             if (result.Succeeded)
             {
-                var token = this.identityService.GenerateJwtToken(this.appSettings.Secret, user.Id, user.UserName!);
+                var token = this.identityService.GenerateJwtToken(
+                    this.appSettings.Secret,
+                    user.Id,
+                    user.UserName,
+                    user.Email);
 
-                return this.Ok(new LoginResponseModel(user.UserName!, user.Email!, user.Id, token));
+                return this.Ok(new LoginResponseModel(token));
             }
 
             var errorMessage = result
@@ -62,10 +66,15 @@
 
             if (passwordIsValid)
             {
-                var token = this.identityService.GenerateJwtToken(this.appSettings.Secret, user.Id, user.UserName!);
-                var hasProfile = await this.profileService.HasProfileAsync();
+                var token = this.identityService.GenerateJwtToken(
+                    this.appSettings.Secret,
+                    user.Id,
+                    user.UserName!,
+                    user.Email!);
 
-                return this.Ok(new LoginResponseModel(user.UserName!, user.Email!, user.Id, token, hasProfile));
+                var hasProfile = await this.profileService.HasProfileAsync(user.Id);
+
+                return this.Ok(new LoginResponseModel(token, hasProfile));
             }
 
             return this.Unauthorized(new { errorMessage = InvalidLoginAttempt });

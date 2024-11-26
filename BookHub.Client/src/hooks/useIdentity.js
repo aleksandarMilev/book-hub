@@ -1,4 +1,5 @@
 import { useContext } from "react"
+import { jwtDecode } from 'jwt-decode'
 
 import * as identityApi from "../api/identityApi"
 import { UserContext } from "../contexts/userContext"
@@ -9,7 +10,16 @@ export function useLogin(){
     const onLogin = async (username, password) => {
         try {
             const result = await identityApi.loginAsync(username, password)
-            changeAuthenticationState(result)
+            const tokenEncoded = jwtDecode(result.token)
+
+            const user = {
+                ...result,
+                userId: tokenEncoded.nameid,
+                username: tokenEncoded["unique_name"],
+                email: tokenEncoded.email
+            }
+
+            changeAuthenticationState(user)
         } catch (error) {
             throw error
         }

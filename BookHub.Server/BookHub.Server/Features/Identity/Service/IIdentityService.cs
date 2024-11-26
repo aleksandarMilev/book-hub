@@ -2,6 +2,10 @@
 {
     public interface IIdentityService
     {
-        string GenerateJwtToken(string appSettingsSecret, string userId, string username);
+        string GenerateJwtToken(
+            string appSettingsSecret,
+            string userId,
+            string username,
+            string email);
     }
 }

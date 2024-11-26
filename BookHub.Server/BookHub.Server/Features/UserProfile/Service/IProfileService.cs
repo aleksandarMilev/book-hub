@@ -13,6 +13,6 @@
 
         Task<Result> DeleteAsync();
 
-        Task<bool> HasProfileAsync();
+        Task<bool> HasProfileAsync(string userId);
     }
 }
