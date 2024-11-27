@@ -9,7 +9,7 @@ import './Header.css'
 
 export default function Header() {
     const [expanded, setExpanded] = useState(false)
-    const { isAuthenticated, username } = useContext(UserContext)
+    const { isAuthenticated, isAdmin, username } = useContext(UserContext)
 
     const handleToggle = () => {
         setExpanded(prev => !prev)
@@ -22,9 +22,6 @@ export default function Header() {
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" onClick={handleToggle} />
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="me-auto">
-                            <Nav.Link as={Link} to={routes.admin}>
-                                Article
-                            </Nav.Link>
                             <Nav.Link as={Link} to={routes.home}>
                                 Home
                             </Nav.Link>
@@ -37,6 +34,11 @@ export default function Header() {
                             <Nav.Link as={Link} to={routes.createAuthor}>
                                 Create Author
                             </Nav.Link>
+                            {isAdmin && 
+                            <Nav.Link as={Link} to={routes.admin.createArticle}>
+                                Create Artcile
+                            </Nav.Link>
+                            }
                         </Nav>
                         <Nav className="ms-auto">
                             {isAuthenticated ? (

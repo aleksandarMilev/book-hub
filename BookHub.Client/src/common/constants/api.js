@@ -25,5 +25,7 @@ export const routes = {
     badRequest: '/error/bad-request',
     notFound: '/error/not-found',
     accessDenied: '/access-denied',
-    admin: '/admin/article'
+    admin: {
+        createArticle: '/admin/article/new'
+    }
 }

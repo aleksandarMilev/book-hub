@@ -32,7 +32,7 @@ import BadRequest from "./components/common/error/BadRequest"
 import NotFound from "./components/common/error/NotFound"
 import AccessDenied from "./components/common/error/AccessDenied"
 
-import AdminComp from './components/admin/AdminComp'
+import ArticleForm from "./components/article/article-form/ArticleForm"
 
 export default function App(){
     return(
@@ -60,7 +60,7 @@ export default function App(){
                 <Route path={routes.createAuthor} element={<AuthenticatedRoute element={<CreateAuthor />} />} />
                 <Route path={routes.editAuthor + '/:id'} element={<AuthenticatedRoute element={<EditAuthor />} />} />
 
-                <Route path={routes.admin} element={<AdminRoute element={<AdminComp />} />} />
+                <Route path={routes.admin.createArticle} element={<AdminRoute element={<ArticleForm />} />} />
 
                 <Route path={routes.badRequest} element={<BadRequest />} />
                 <Route path={routes.notFound} element={<NotFound />} />
