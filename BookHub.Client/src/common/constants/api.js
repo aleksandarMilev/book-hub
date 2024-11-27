@@ -39,6 +39,7 @@ export const routes = {
     articles: '/articles',
 
     admin: {
-        createArticle: '/admin/article/new'
+        createArticle: '/admin/article/new',
+        editArticle: '/admin/article/edit'
     }
 }

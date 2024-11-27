@@ -54,7 +54,7 @@ export default function ArticleForm({ article = null, isEditMode = false }) {
         validationSchema,
         onSubmit: async (values) => {
             if (isEditMode) {
-                await editHandler(values) 
+                await editHandler(article.id, values) 
             } else {
                 await createHandler(values)
             }

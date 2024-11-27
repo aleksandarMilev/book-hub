@@ -30,7 +30,8 @@ import ArticleList from "./components/article/article-list/ArticleList"
 import ReviewList from "./components/review/review-list/ReviewList"
 
 import ArticleDetails from "./components/article/article-details/ArticleDetails"
-import CreateArticle from "./components/article/article-form/create-article/CreateArticle"
+import CreateArticle from "./components/article/create-article/CreateArticle"
+import EditArticle from "./components/article/edit-article/EditArticle"
 
 import BadRequest from "./components/common/error/BadRequest"
 import NotFound from "./components/common/error/NotFound"
@@ -65,6 +66,7 @@ export default function App(){
 
                 <Route path={routes.articles} element={<AuthenticatedRoute element={<ArticleList />} />} />
                 <Route path={routes.admin.createArticle} element={<AdminRoute element={<CreateArticle />} />} />
+                <Route path={routes.admin.editArticle + '/:id'} element={<AdminRoute element={<EditArticle />} />} />
                 <Route path={routes.article + '/:id'} element={<AuthenticatedRoute element={<ArticleDetails />} />} />
 
                 <Route path={routes.badRequest} element={<BadRequest />} />

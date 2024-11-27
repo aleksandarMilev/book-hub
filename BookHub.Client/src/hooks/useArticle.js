@@ -59,12 +59,12 @@ export function useCreate(){
     return createHandler
 }
 
-export function useEdit(id){
+export function useEdit(){
     const { token } = useContext(UserContext) 
 
     const navigate = useNavigate()
 
-    const editHandler = async (articleData) => {
+    const editHandler = async (id, articleData) => {
         const article = {
             ...articleData,
             imageUrl: articleData.imageUrl || null,

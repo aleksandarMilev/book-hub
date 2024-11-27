@@ -6,7 +6,7 @@
 
     public static class ControllerExtensions
     {
-        public static ActionResult NoContentOrBadRequest(this ApiController controller, Result result)
+        public static ActionResult NoContentOrBadRequest(this ControllerBase controller, Result result)
         {
             if (result.Succeeded)
             {

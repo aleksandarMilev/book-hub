@@ -1,4 +1,4 @@
-import ArticleForm from '../ArticleForm'
+import ArticleForm from '../article-form/ArticleForm'
 
 export default function CreateArticle() {
     return(

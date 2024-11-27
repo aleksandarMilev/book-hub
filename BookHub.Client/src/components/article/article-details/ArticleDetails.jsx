@@ -1,4 +1,6 @@
-import { useParams } from 'react-router-dom'
+import { useContext } from 'react'
+import { useParams, Link } from 'react-router-dom'
+import { FaEdit, FaTrash } from 'react-icons/fa'
 import { 
     MDBContainer,
     MDBRow,
@@ -11,6 +13,8 @@ import {
 } from 'mdb-react-ui-kit'
 
 import * as useArticle from '../../../hooks/useArticle'
+import { routes } from '../../../common/constants/api'
+import { UserContext } from '../../../contexts/userContext'
 
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner'
 
@@ -18,7 +22,11 @@ import './ArticleDetails.css'
 
 export default function ArticleDetails(){
     const { id } = useParams()
+
     const { article, isFetching } = useArticle.useDetails(id)
+    const { isAdmin } = useContext(UserContext)
+
+    const deleteHandler = async () => {} 
 
     if(isFetching || !article){
         return <DefaultSpinner/>
@@ -59,6 +67,21 @@ export default function ArticleDetails(){
                                     </div>
                                 </MDBCol>
                             </MDBRow>
+                            <div className="d-flex gap-2 mt-4">
+                            {isAdmin && (
+                                <>
+                                    <Link
+                                        to={`${routes.admin.editArticle}/${id}`}
+                                        className="btn btn-warning d-flex align-items-center gap-2"
+                                    >
+                                        <FaEdit /> Edit
+                                    </Link>
+                                    <a href="#" className="btn btn-danger d-flex align-items-center gap-2" onClick={deleteHandler}>
+                                        <FaTrash /> Delete
+                                    </a>
+                                </>
+                            )}
+                        </div>
                         </MDBCardBody>
                     </MDBCard>
                 </MDBCol>
