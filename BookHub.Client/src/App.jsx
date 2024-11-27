@@ -26,6 +26,7 @@ import AuthorDetails from "./components/author/author-details/AuthorDetails"
 import CreateAuthor from "./components/author/create-author/CreateAuthor"
 import EditAuthor from "./components/author/edit-author/EditAuthor"
 
+import ArticleList from "./components/article/article-list/ArticleList"
 import ReviewList from "./components/review/review-list/ReviewList"
 
 import ArticleDetails from "./components/article/article-details/ArticleDetails"
@@ -62,6 +63,7 @@ export default function App(){
                 <Route path={routes.createAuthor} element={<AuthenticatedRoute element={<CreateAuthor />} />} />
                 <Route path={routes.editAuthor + '/:id'} element={<AuthenticatedRoute element={<EditAuthor />} />} />
 
+                <Route path={routes.articles} element={<AuthenticatedRoute element={<ArticleList />} />} />
                 <Route path={routes.admin.createArticle} element={<AdminRoute element={<CreateArticle />} />} />
                 <Route path={routes.article + '/:id'} element={<AuthenticatedRoute element={<ArticleDetails />} />} />
 

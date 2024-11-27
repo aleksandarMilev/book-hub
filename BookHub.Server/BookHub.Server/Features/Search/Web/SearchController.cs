@@ -1,4 +1,5 @@
-﻿namespace BookHub.Server.Features.Search.Web
+﻿#pragma warning disable ASP0023 
+namespace BookHub.Server.Features.Search.Web
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -18,5 +19,13 @@
             int page = DefaultPageIndex,
             int pageSize = DefaultPageSize)
                 => this.Ok(await this.service.BooksAsync(searchTerm, page, pageSize));
+
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult<PaginatedModel<SearchArticleServiceModel>>> Articles(
+            string? searchTerm,
+            int page = DefaultPageIndex,
+            int pageSize = DefaultPageSize)
+                => this.Ok(await this.service.ArticlesAsync(searchTerm, page, pageSize));
     }
 }

@@ -33,3 +33,31 @@ export function useBooks(searchTerm, page = pagination.defaultPageIndex, pageSiz
 
     return { books, totalItems, isFetching }
 }
+
+export function useArticles(searchTerm, page = pagination.defaultPageIndex, pageSize = pagination.defaultPageSize) {
+    const { token } = useContext(UserContext)
+
+    const navigate = useNavigate()
+    const [articles, setArticles] = useState([])
+    const [totalItems, setTotalItems] = useState(0)
+    const [isFetching, setIsFetching] = useState(false)
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                setIsFetching(true)
+                const result = await api.searchArticlesAsync(token, searchTerm || '', page, pageSize)
+                setArticles(result.items)
+                setTotalItems(result.totalItems)
+            } catch (error) {
+                navigate(routes.badRequest, { state: { message: error.message } })
+            } finally {
+                setIsFetching(false)
+            }
+        }
+
+        fetchData()
+    }, [searchTerm, page, pageSize, token, navigate])
+
+    return { articles, totalItems, isFetching }
+}

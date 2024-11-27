@@ -39,5 +39,31 @@
 
             return new PaginatedModel<SearchBookServiceModel>(paginatedBooks, totalBooks, page, pageSize);
         }
+
+        public async Task<PaginatedModel<SearchArticleServiceModel>> ArticlesAsync(string? searchTerm, int page, int pageSize)
+        {
+            var articles = this.data
+                .Articles
+                .ProjectTo<SearchArticleServiceModel>(this.mapper.ConfigurationProvider);
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                articles = articles.Where(a =>
+                    a.Title.ToLower().Contains(searchTerm.ToLower()) ||
+                    a.Introduction.ToLower().Contains(searchTerm.ToLower())
+                );
+            }
+
+            articles = articles.OrderByDescending(b => b.CreatedOn);
+
+            var totalArticles = await articles.CountAsync();
+
+            var paginatedArticles = await articles
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PaginatedModel<SearchArticleServiceModel>(paginatedArticles, totalArticles, page, pageSize);
+        }
     }
 }

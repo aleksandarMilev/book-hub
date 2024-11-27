@@ -18,7 +18,7 @@ export function useDetails(id){
             try {
                 setIsFetching(true)
 
-                const articleData = await articleApi.detailsAsync(id)
+                const articleData = await articleApi.detailsAsync(id, token)
                 const article = {
                     ...articleData,
                     createdOn: format(new Date(articleData.createdOn), 'yyyy-MM-dd')

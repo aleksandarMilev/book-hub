@@ -20,7 +20,30 @@ export async function searchBooksAsync(
 
     if(response.ok){
         return await response.json()
+    } 
+
+    throw new Error(errors.search.badRequest)
+}
+
+export async function searchArticlesAsync(
+    token,
+    searchTerm,
+    page = pagination.defaultPageIndex,
+    pageSize = pagination.defaultPageSize) {
+
+    const options = {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
     }
+
+    const url = `${baseUrl}${routes.searchArticles}?searchTerm=${encodeURIComponent(searchTerm)}&page=${page}&pageSize=${pageSize}`
+    const response = await fetch(url, options)
+
+    if(response.ok){
+        return await response.json()
+    } 
 
     throw new Error(errors.search.badRequest)
 }

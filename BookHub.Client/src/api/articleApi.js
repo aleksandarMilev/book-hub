@@ -13,8 +13,10 @@ export async function detailsAsync(id, token) {
     const response = await fetch(url, options)
 
     if(response.ok){
+        console.log("resp is ok!");
+        
         return await response.json()
-    }
+    } 
 
     throw new Error(errors.article.get)
 }
@@ -28,9 +30,6 @@ export async function createAsync(article, token){
         },
         body: JSON.stringify(article)
     }
-
-    console.log(JSON.stringify(article));
-    
 
     const url = baseAdminUrl + routes.article
     const response = await fetch(url, options)
