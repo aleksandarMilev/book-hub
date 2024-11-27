@@ -61,7 +61,7 @@
 
                     await roleManager.CreateAsync(role);
 
-                    var user = new User
+                    var user = new User()
                     {
                         Email = AdminEmail,
                         UserName = AdminRoleName

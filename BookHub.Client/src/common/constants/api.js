@@ -24,4 +24,6 @@ export const routes = {
     vote: '/vote',
     badRequest: '/error/bad-request',
     notFound: '/error/not-found',
+    accessDenied: '/access-denied',
+    admin: '/admin/article'
 }

@@ -13,10 +13,10 @@ export function useLogin(){
             const tokenEncoded = jwtDecode(result.token)
 
             const user = {
+                ...result,
                 userId: tokenEncoded.nameid,
                 username: tokenEncoded["unique_name"],
-                email: tokenEncoded.email,
-                isAdmin: tokenEncoded.role !== ''
+                isAdmin: !!tokenEncoded.role
             }
 
             changeAuthenticationState(user)

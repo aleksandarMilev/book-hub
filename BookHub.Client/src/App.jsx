@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom"
 
 import AuthenticatedRoute from './components/common/authenticated-route/AuthenticatedRoute'
+import AdminRoute from './components/common/admin-route/AdminRoute'
 import { routes } from "./common/constants/api"
 import { UserContextProvider } from "./contexts/userContext"
 
@@ -25,9 +26,13 @@ import AuthorDetails from "./components/author/author-details/AuthorDetails"
 import CreateAuthor from "./components/author/create-author/CreateAuthor"
 import EditAuthor from "./components/author/edit-author/EditAuthor"
 
+import ReviewList from "./components/review/review-list/ReviewList"
+
 import BadRequest from "./components/common/error/BadRequest"
 import NotFound from "./components/common/error/NotFound"
-import ReviewList from "./components/review/review-list/ReviewList"
+import AccessDenied from "./components/common/error/AccessDenied"
+
+import AdminComp from './components/admin/AdminComp'
 
 export default function App(){
     return(
@@ -55,8 +60,11 @@ export default function App(){
                 <Route path={routes.createAuthor} element={<AuthenticatedRoute element={<CreateAuthor />} />} />
                 <Route path={routes.editAuthor + '/:id'} element={<AuthenticatedRoute element={<EditAuthor />} />} />
 
+                <Route path={routes.admin} element={<AdminRoute element={<AdminComp />} />} />
+
                 <Route path={routes.badRequest} element={<BadRequest />} />
                 <Route path={routes.notFound} element={<NotFound />} />
+                <Route path={routes.accessDenied} element={<AccessDenied />} />
             </Routes>
             <Footer /> 
         </UserContextProvider>
