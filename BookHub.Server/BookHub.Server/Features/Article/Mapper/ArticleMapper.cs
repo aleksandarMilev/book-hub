@@ -11,7 +11,8 @@
         {
             this.CreateMap<CreateArticleWebModel, CreateArticleServiceModel>();
 
-            this.CreateMap<CreateArticleServiceModel, Article>();
+            this.CreateMap<CreateArticleServiceModel, Article>()
+                .ForMember(dest => dest.Views, opt => opt.Ignore());
 
             this.CreateMap<Article, ArticleDetailsServiceModel>();
         }

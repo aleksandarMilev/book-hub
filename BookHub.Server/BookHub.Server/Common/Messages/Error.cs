@@ -29,6 +29,16 @@
             public const string UnauthorizedReviewDelete = "Current user can not delete this review!";
         }
 
+        public static class Article
+        {
+            public const string ArticleNotFound = "The article was not found!";
+
+            public const string UnauthorizedArticleEdit = "Current user can not edit this article!";
+
+            public const string UnauthorizedArticleDelete = "Current user can not delete this article!";
+        }
+
+
         public static class Profile
         {
             public const string ProfileNotFound = "The profile was not found!";

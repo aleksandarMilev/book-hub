@@ -5,5 +5,7 @@
         string? GetUsername();
 
         string? GetId();
+
+        bool IsAdmin();
     }
 }

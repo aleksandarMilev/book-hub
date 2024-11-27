@@ -23,6 +23,6 @@
         [MaxLength(UrlMaxLength)]
         public string? ImageUrl { get; set; } 
 
-        public int Views { get; init; }
+        public int Views { get; set; }
     }
 }

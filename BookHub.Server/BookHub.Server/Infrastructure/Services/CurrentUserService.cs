@@ -4,6 +4,8 @@
 
     using Extensions;
 
+    using static Common.Constants.Constants;
+
     public class CurrentUserService(IHttpContextAccessor httpContext) : ICurrentUserService
     {
         private readonly ClaimsPrincipal user = httpContext.HttpContext?.User!;
@@ -13,5 +15,8 @@
 
         public string? GetId()
             => this.user?.GetId();
+
+        public bool IsAdmin()
+            => this.user.IsInRole(AdminRoleName);
     }
 }
