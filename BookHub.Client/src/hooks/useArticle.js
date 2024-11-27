@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom' 
+import { format } from 'date-fns'
 
 import * as articleApi from '../api/articleApi'
 import { routes } from '../common/constants/api'
@@ -16,7 +17,14 @@ export function useDetails(id){
         async function fetchData() {
             try {
                 setIsFetching(true)
-                setArticle(await articleApi.detailsAsync(id))
+
+                const articleData = await articleApi.detailsAsync(id)
+                const article = {
+                    ...articleData,
+                    createdOn: format(new Date(articleData.createdOn), 'yyyy-MM-dd')
+                }
+
+                setArticle(article)
             } catch (error) {
                 navigate(routes.badRequest, { state: { message: error.message} })
             } finally {

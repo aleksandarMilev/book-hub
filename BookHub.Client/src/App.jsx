@@ -28,6 +28,7 @@ import EditAuthor from "./components/author/edit-author/EditAuthor"
 
 import ReviewList from "./components/review/review-list/ReviewList"
 
+import ArticleDetails from "./components/article/article-details/ArticleDetails"
 import CreateArticle from "./components/article/article-form/create-article/CreateArticle"
 
 import BadRequest from "./components/common/error/BadRequest"
@@ -62,6 +63,7 @@ export default function App(){
                 <Route path={routes.editAuthor + '/:id'} element={<AuthenticatedRoute element={<EditAuthor />} />} />
 
                 <Route path={routes.admin.createArticle} element={<AdminRoute element={<CreateArticle />} />} />
+                <Route path={routes.article + '/:id'} element={<AuthenticatedRoute element={<ArticleDetails />} />} />
 
                 <Route path={routes.badRequest} element={<BadRequest />} />
                 <Route path={routes.notFound} element={<NotFound />} />

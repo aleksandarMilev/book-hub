@@ -5,7 +5,7 @@
     using Service;
     using Service.Models;
 
-    //[Authorize]
+    [Authorize]
     public class ArticleController(IArticleService service) : ApiController
     {
         private readonly IArticleService service = service;

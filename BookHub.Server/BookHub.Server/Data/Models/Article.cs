@@ -21,7 +21,7 @@
         public string Content { get; init; } = null!;
 
         [MaxLength(UrlMaxLength)]
-        public string? ImageUrl { get; init; } 
+        public string? ImageUrl { get; set; } 
 
         public int Views { get; init; }
     }

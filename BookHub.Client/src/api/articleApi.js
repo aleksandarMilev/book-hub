@@ -1,4 +1,4 @@
-import { baseAdminUrl, routes } from '../common/constants/api'
+import { baseUrl, baseAdminUrl, routes } from '../common/constants/api'
 import { errors } from '../common/constants/messages'
 
 export async function detailsAsync(id, token) {
@@ -28,6 +28,9 @@ export async function createAsync(article, token){
         },
         body: JSON.stringify(article)
     }
+
+    console.log(JSON.stringify(article));
+    
 
     const url = baseAdminUrl + routes.article
     const response = await fetch(url, options)
