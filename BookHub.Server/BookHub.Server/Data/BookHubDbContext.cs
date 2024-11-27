@@ -15,23 +15,25 @@
     {
         private readonly ICurrentUserService userService = userService;
 
-        public DbSet<Book> Books { get; set; }
+        public DbSet<Book> Books { get; init; }
 
-        public DbSet<Genre> Genres { get; set; }
+        public DbSet<Genre> Genres { get; init; }
 
-        public DbSet<BookGenre> BooksGenres { get; set; }
+        public DbSet<BookGenre> BooksGenres { get; init; }
 
-        public DbSet<Author> Authors { get; set; }
+        public DbSet<Author> Authors { get; init; }
 
-        public DbSet<Nationality> Nationalities { get; set; }
+        public DbSet<Nationality> Nationalities { get; init; }
 
-        public DbSet<Review> Reviews { get; set; }
+        public DbSet<Review> Reviews { get; init; }
 
-        public DbSet<Vote> Votes { get; set; }
+        public DbSet<Vote> Votes { get; init; }
 
-        public DbSet<Reply> Replies { get; set; }
+        public DbSet<Reply> Replies { get; init; }
 
-        public DbSet<UserProfile> Profiles { get; set; }
+        public DbSet<UserProfile> Profiles { get; init; }
+
+        public DbSet<Article> Articles { get; init; }
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {

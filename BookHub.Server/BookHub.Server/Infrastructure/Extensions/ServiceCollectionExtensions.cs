@@ -5,6 +5,7 @@
 
     using Data;
     using Data.Models;
+    using Features.Article.Service;
     using Features.Authors.Service;
     using Features.Books.Service;
     using Features.Identity.Service;
@@ -18,7 +19,6 @@
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
     using Services;
-    using System.Security.Claims;
 
     public static class ServiceCollectionExtensions
     {
@@ -93,7 +93,8 @@
                 .AddTransient<ISearchService, SearchService>()
                 .AddTransient<IReviewService, ReviewService>()
                 .AddTransient<IVoteService, VoteService>()
-                .AddTransient<IProfileService, ProfileService>();
+                .AddTransient<IProfileService, ProfileService>()
+                .AddTransient<IArticleService, ArticleService>();
 
         public static IServiceCollection AddApiControllers(this IServiceCollection services)
         {

@@ -18,8 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Admin\Features\Article\Mapper\" />
-    <Folder Include="Areas\Admin\Features\Article\Service\" />
+    <Folder Include="Features\Article\Web\User\" />
   </ItemGroup>
 
 </Project>

@@ -18,13 +18,25 @@ export default function ArticleForm() {
     const validationSchema = Yup.object({
         title: Yup
             .string()
-            .min(3, 'Title must be at least 3 characters long')
+            .min(10, 'Title must be at least 10 characters long')
             .max(100, 'Title must be less than 100 characters')
             .required('Title is required'),
+        introduction: Yup
+            .string()
+            .min(10, 'Introduction must be at least 10 characters long')
+            .max(100, 'Introduction must be less than 100 characters')
+            .required('Introduction is required'),
+        imageUrl: Yup
+            .string()
+            .url()
+            .min(10, 'Image URL must be at least 10 characters long')
+            .max(2000, 'Image URL must be less than 2 000 characters')
+            .nullable(),
         content: Yup
             .string()
-            .min(20, 'Content must be at least 20 characters long')
-            .required('Content is required')
+            .min(100, 'Content must be at least 100 characters long')
+            .max(5000, 'Content must be less than 5 000 characters')
+            .required('Content is required'),
     })
 
     const formik = useFormik({
@@ -58,6 +70,34 @@ export default function ArticleForm() {
                                                 type="text"
                                                 {...formik.getFieldProps('title')}
                                                 className={formik.touched.title && formik.errors.title ? 'is-invalid' : ''}
+                                            />
+                                        </MDBCol>
+                                        <MDBCol md="12">
+                                            {formik.touched.introduction && formik.errors.introduction && (
+                                                <div className="text-danger mb-2">{formik.errors.introduction}</div>
+                                            )}
+                                            <MDBInput
+                                                wrapperClass="mb-4"
+                                                label="Article Introduction *"
+                                                size="lg"
+                                                id="introduction"
+                                                type="text"
+                                                {...formik.getFieldProps('introduction')}
+                                                className={formik.touched.introduction && formik.errors.introduction ? 'is-invalid' : ''}
+                                            />
+                                        </MDBCol>
+                                        <MDBCol md="12">
+                                            {formik.touched.imageUrl && formik.errors.imageUrl && (
+                                                <div className="text-danger mb-2">{formik.errors.imageUrl}</div>
+                                            )}
+                                            <MDBInput
+                                                wrapperClass="mb-4"
+                                                label="Image URL"
+                                                size="lg"
+                                                id="imageUrl"
+                                                type="text"
+                                                {...formik.getFieldProps('imageUrl')}
+                                                className={formik.touched.imageUrl && formik.errors.imageUrl ? 'is-invalid' : ''}
                                             />
                                         </MDBCol>
                                     </MDBRow>

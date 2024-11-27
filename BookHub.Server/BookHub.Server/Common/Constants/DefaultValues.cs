@@ -6,6 +6,8 @@
 
         public const string DefaultBookImageUrl = "https://images.alphacoders.com/115/1159192.jpg";
 
+        public const string DefaultArticleImageUrl = "https://img.freepik.com/free-photo/bookmark-books-arrangement-top-view_23-2149894335.jpg";
+
         public const string UnknownNationalityName = "Unknown";
 
         public const string OtherGenreName = "Other";

@@ -5,10 +5,10 @@
 
     using static Common.Constants.Constants;
 
-    //[ApiController]
-    //[Area(AdminRoleName)]
-    //[Route("[area]/[controller]")]
-    //[Authorize(Roles = AdminRoleName)]
+    [ApiController]
+    [Area(AdminRoleName)]
+    [Route("[area]/[controller]")]
+    [Authorize(Roles = AdminRoleName)]
     public abstract class AdminController : ControllerBase
     {
     }
