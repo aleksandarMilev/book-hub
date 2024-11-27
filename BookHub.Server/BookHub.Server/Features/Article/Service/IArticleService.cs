@@ -4,6 +4,8 @@
 
     public interface IArticleService
     {
+        Task<ArticleDetailsServiceModel?> DetailsAsync(int id);
+
         Task<int> CreateAsync(CreateArticleServiceModel model);
     }
 }

@@ -9,7 +9,7 @@
     [Area(AdminRoleName)]
     [Route("[area]/[controller]")]
     [Authorize(Roles = AdminRoleName)]
-    public abstract class AdminController : ControllerBase
+    public abstract class AdminApiController : ControllerBase
     {
     }
 }

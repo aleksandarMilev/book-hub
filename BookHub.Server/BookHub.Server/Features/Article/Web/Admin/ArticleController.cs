@@ -10,7 +10,7 @@
 
     public class ArticleController(
         IArticleService service,
-        IMapper mapper) : AdminController
+        IMapper mapper) : AdminApiController
     {
         private readonly IArticleService service = service;
         private readonly IMapper mapper = mapper;

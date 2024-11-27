@@ -12,6 +12,8 @@
             this.CreateMap<CreateArticleWebModel, CreateArticleServiceModel>();
 
             this.CreateMap<CreateArticleServiceModel, Article>();
+
+            this.CreateMap<Article, ArticleDetailsServiceModel>();
         }
     }
 }

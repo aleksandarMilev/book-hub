@@ -2,6 +2,7 @@
 {
     using AutoMapper;
     using Infrastructure.Extensions;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Models;
     using Service;
@@ -9,7 +10,7 @@
 
     using static Common.Constants.DefaultValues;
 
-    //[Authorize]
+    [Authorize]
     public class ReviewController(
         IReviewService service,
         IMapper mapper) : ApiController
@@ -21,8 +22,8 @@
         public async Task<ActionResult<PaginatedModel<ReviewServiceModel>>> AllForBook(
             int bookId,
             int pageIndex = DefaultPageIndex,
-            int pageSize = DefaultPageSize)
-            => this.Ok(await this.service.AllForBookAsync(bookId, pageIndex, pageSize));
+            int pageSize = DefaultPageSize) 
+                => this.Ok(await this.service.AllForBookAsync(bookId, pageIndex, pageSize));
 
         [HttpPost]
         public async Task<ActionResult<int>> Create(CreateReviewWebModel webModel)
