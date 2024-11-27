@@ -1,4 +1,4 @@
-import { createContext } from "react"
+import { createContext } from 'react'
 
 import usePersistedState from '../hooks/usePersistedState'
 
@@ -7,13 +7,14 @@ export const UserContext = createContext({
     username: '',
     email: '',
     token: '',
+    isAdmin: false,
     isAuthenticated: false,
     changeAuthenticationState: (state) => {},
     logout: () => {}
 })
 
 export function UserContextProvider(props) {
-    function getInitUser(){
+    const getInitUser = () => {
         const storedUser = localStorage.getItem('user')
         return storedUser ? JSON.parse(storedUser) : {}
     }
@@ -31,6 +32,7 @@ export function UserContextProvider(props) {
         userId: user.userId,
         username: user.username,
         email: user.email,
+        isAdmin: user.isAdmin,
         token: user.token,
         isAuthenticated: !!user.username,
         changeAuthenticationState,

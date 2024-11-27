@@ -18,7 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Identity\Service\Models\" />
+    <Folder Include="Areas\Admin\Features\Article\Mapper\" />
+    <Folder Include="Areas\Admin\Features\Article\Service\" />
   </ItemGroup>
 
 </Project>

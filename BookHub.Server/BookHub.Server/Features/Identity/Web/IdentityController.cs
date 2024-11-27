@@ -8,6 +8,7 @@
     using Service;
 
     using static Common.Messages.Error.Identity;
+    using static Common.Constants.Constants;
 
     public class IdentityController(
         IIdentityService service,
@@ -63,11 +64,14 @@
 
             if (passwordIsValid)
             {
+                var isAdmin = await this.userManager.IsInRoleAsync(user, AdminRoleName);
+
                 var token = this.service.GenerateJwtToken(
                     this.appSettings.Secret,
                     user.Id,
                     user.UserName!,
-                    user.Email!);
+                    user.Email!,
+                    isAdmin);
 
                 return this.Ok(new LoginResponseModel(token));
             }

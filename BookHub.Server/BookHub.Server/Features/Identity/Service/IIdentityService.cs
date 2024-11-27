@@ -6,6 +6,7 @@
             string appSettingsSecret,
             string userId,
             string username,
-            string email);
+            string email,
+            bool isAdmin = false);
     }
 }
