@@ -5,6 +5,12 @@ export const errors = {
         edit: 'Oops! We couldn’t edit your profile. Please try again later or contact support if the issue persists.',
         delete: 'Oops! We couldn’t delete your profile. Please try again later or contact support if the issue persists.'
     },
+    article: {
+        get: 'Something went wrong while loading this article. Please refresh the page or try again later!',
+        create: 'Oops! We couldn’t create this article. Please try again later or contact support if the issue persists.',
+        edit: 'Oops! We couldn’t edit this article. Please try again later or contact support if the issue persists.',
+        delete: 'Oops! We couldn’t delete this article. Please try again later or contact support if the issue persists.'
+    },
     author: {
         topThree: 'Something went wrong while loading our top authors for you. Please refresh the page or try again later!',
         namesBadRequest: 'Apologies, we\'re experiencing issues and can\'t display author names at the moment. Please try again later or contact us for assistance.',

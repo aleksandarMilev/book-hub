@@ -1,4 +1,5 @@
 export const baseUrl = 'https://localhost:7216'
+export const baseAdminUrl = 'https://localhost:7216/administrator'
 
 export const routes = {
     home: '/',
@@ -25,6 +26,7 @@ export const routes = {
     badRequest: '/error/bad-request',
     notFound: '/error/not-found',
     accessDenied: '/access-denied',
+    article: '/article',
     admin: {
         createArticle: '/admin/article/new'
     }

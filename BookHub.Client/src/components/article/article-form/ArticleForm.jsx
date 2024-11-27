@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import {
@@ -10,10 +11,14 @@ import {
     MDBInput
 } from 'mdb-react-ui-kit'
 
-import './ArticleForm.css'
+import * as useArticle from '../../../hooks/useArticle'
+import { routes } from '../../../common/constants/api'
 
-export default function ArticleForm() {
-    const createHandler = (values) => {}
+export default function ArticleForm({ article = null, isEditMode = false }) {
+    const navigate = useNavigate()
+
+    const createHandler = useArticle.useCreate()
+    const editHandler = useArticle.useEdit()
 
     const validationSchema = Yup.object({
         title: Yup
@@ -41,11 +46,21 @@ export default function ArticleForm() {
 
     const formik = useFormik({
         initialValues: {
-            title: '',
-            content: ''
+            title: article?.title || '',
+            introduction: article?.introduction || '',
+            imageUrl: article?.imageUrl || '',
+            content: article?.content || ''
         },
         validationSchema,
-        onSubmit: createHandler
+        onSubmit: async (values) => {
+            if (isEditMode) {
+                await editHandler(values) 
+            } else {
+                await createHandler(values)
+            }
+
+            navigate(routes.home)
+        }
     })
 
     return (
