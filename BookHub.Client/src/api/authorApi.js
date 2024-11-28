@@ -113,3 +113,39 @@ export async function deleteAsync(id, token){
 
     return false
 }
+
+export async function approveAsync(authorId, token){
+    const options = {
+        method: "PUT",
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+
+    const url = baseAdminUrl + routes.admin.approveAuthor + `/${authorId}`
+    const response = await fetch(url, options)
+
+    if(response.ok){
+        return true 
+    }
+
+    return false
+}
+
+export async function rejectAsync(authorId, token){
+    const options = {
+        method: "PUT",
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+
+    const url = baseAdminUrl + routes.admin.rejectAuthor + `/${authorId}`
+    const response = await fetch(url, options)
+
+    if(response.ok){
+        return true 
+    }
+
+    return false
+}

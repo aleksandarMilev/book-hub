@@ -16,5 +16,7 @@
         Task<Result> EditAsync(int id, CreateAuthorServiceModel model);
 
         Task<Result> DeleteAsync(int id);
+
+        Task<Result> ApproveAsync(int id);
     }
 }

@@ -107,6 +107,23 @@
             return true;
         }
 
+        public async Task<Result> ApproveAsync(int id)
+        {
+            var author = await this.data
+                 .Authors
+                 .FindAsync(id);
+
+            if (author is null)
+            {
+                return AuthorNotFound;
+            }
+
+            author.IsApproved = true;
+            await this.data.SaveChangesAsync();
+
+            return true;
+        }
+
         private async Task<int> MapNationalityToAuthor(int? id)
         {
             var nationalityId = await this.data

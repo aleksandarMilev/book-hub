@@ -1,4 +1,4 @@
-import { baseUrl, routes } from '../common/constants/api'
+import { baseAdminUrl, baseUrl, routes } from '../common/constants/api'
 import { errors } from '../common/constants/messages'
 
 export async function getTopThreeAsync(token){
@@ -86,6 +86,42 @@ export async function deleteAsync(bookId, token){
     }
 
     const url = baseUrl + routes.books + `/${bookId}`
+    const response = await fetch(url, options)
+
+    if(response.ok){
+        return true 
+    }
+
+    return false
+}
+
+export async function approveAsync(bookId, token){
+    const options = {
+        method: "PUT",
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+
+    const url = baseAdminUrl + routes.admin.approveBook + `/${bookId}`
+    const response = await fetch(url, options)
+
+    if(response.ok){
+        return true 
+    }
+
+    return false
+}
+
+export async function rejectAsync(bookId, token){
+    const options = {
+        method: "PUT",
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+
+    const url = baseAdminUrl + routes.admin.rejectBook + `/${bookId}`
     const response = await fetch(url, options)
 
     if(response.ok){

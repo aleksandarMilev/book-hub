@@ -1,4 +1,4 @@
-﻿namespace BookHub.Server.Features.Books.Web
+﻿namespace BookHub.Server.Features.Books.Web.User
 {
     using AutoMapper;
     using Infrastructure.Extensions;
@@ -19,30 +19,30 @@
         [AllowAnonymous]
         [HttpGet("[action]")]
         public async Task<ActionResult<IEnumerable<BookServiceModel>>> TopThree()
-          => this.Ok(await this.service.TopThreeAsync());
+          => Ok(await service.TopThreeAsync());
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BookServiceModel>>> All()
-            => this.Ok(await this.service.AllAsync());
+            => Ok(await service.AllAsync());
 
         [HttpGet("{id}")]
         public async Task<ActionResult<BookDetailsServiceModel>> Details(int id)
-            => this.Ok(await this.service.DetailsAsync(id)); 
+            => Ok(await service.DetailsAsync(id));
 
         [HttpPost]
         public async Task<ActionResult<int>> Create(CreateBookWebModel webModel)
         {
-            var serviceModel = this.mapper.Map<CreateBookServiceModel>(webModel);
-            var bookId = await this.service.CreateAsync(serviceModel);
+            var serviceModel = mapper.Map<CreateBookServiceModel>(webModel);
+            var bookId = await service.CreateAsync(serviceModel);
 
-            return this.Created(nameof(this.Create), bookId);
+            return Created(nameof(this.Create), bookId);
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult> Edit(int id, CreateBookWebModel webModel)
         {
-            var serviceModel = this.mapper.Map<CreateBookServiceModel>(webModel);
-            var result = await this.service.EditAsync(id, serviceModel);
+            var serviceModel = mapper.Map<CreateBookServiceModel>(webModel);
+            var result = await service.EditAsync(id, serviceModel);
 
             return this.NoContentOrBadRequest(result);
         }
@@ -50,7 +50,7 @@
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var result = await this.service.DeleteAsync(id);
+            var result = await service.DeleteAsync(id);
 
             return this.NoContentOrBadRequest(result);
         }

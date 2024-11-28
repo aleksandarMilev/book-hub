@@ -40,6 +40,12 @@ export const routes = {
 
     admin: {
         createArticle: '/admin/article/new',
-        editArticle: '/admin/article/edit'
+        editArticle: '/admin/article/edit',
+
+        approveBook: '/book/approve',
+        rejectBook: '/book/reject',
+
+        approveAuthor: '/author/approve',
+        rejectAuthor: '/author/reject',
     }
 }

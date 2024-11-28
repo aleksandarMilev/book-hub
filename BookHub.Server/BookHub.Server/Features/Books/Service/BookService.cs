@@ -105,6 +105,24 @@
             return true;
         }
 
+        public async Task<Result> ApproveAsync(int id)
+        {
+            var book = await this.data
+                 .Books
+                 .FindAsync(id);
+
+            if (book is null)
+            {
+                return BookNotFound;
+            }
+
+           
+            book.IsApproved = true;
+            await this.data.SaveChangesAsync();
+
+            return true;
+        }
+
         private async Task<int?> MapAuthorToBookAsync(int? id) 
         {
             var authorId = await this.data

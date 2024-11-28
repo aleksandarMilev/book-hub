@@ -1,5 +1,5 @@
 ﻿#pragma warning disable ASP0023 
-namespace BookHub.Server.Features.Authors.Web
+namespace BookHub.Server.Features.Authors.Web.User
 {
     using AutoMapper;
     using Infrastructure.Extensions;
@@ -20,30 +20,30 @@ namespace BookHub.Server.Features.Authors.Web
         [AllowAnonymous]
         [HttpGet("[action]")]
         public async Task<ActionResult<IEnumerable<AuthorServiceModel>>> TopThree()
-           => this.Ok(await this.service.TopThreeAsync());
+           => Ok(await service.TopThreeAsync());
 
         [HttpGet("[action]")]
         public async Task<ActionResult<IEnumerable<AuthorNamesServiceModel>>> Names()
-            => this.Ok(await this.service.NamesAsync());
+            => Ok(await service.NamesAsync());
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<AuthorDetailsServiceModel>> Details(int id) 
-            => this.Ok(await this.service.DetailsAsync(id));
+        public async Task<ActionResult<AuthorDetailsServiceModel>> Details(int id)
+            => Ok(await service.DetailsAsync(id));
 
         [HttpPost]
         public async Task<ActionResult<int>> Create(CreateAuthorWebModel webModel)
         {
-            var serviceModel = this.mapper.Map<CreateAuthorServiceModel>(webModel);
-            var authorId = await this.service.CreateAsync(serviceModel);
+            var serviceModel = mapper.Map<CreateAuthorServiceModel>(webModel);
+            var authorId = await service.CreateAsync(serviceModel);
 
-            return this.Created(nameof(this.Create), authorId);
+            return Created(nameof(this.Create), authorId);
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult> Edit(int id, CreateAuthorWebModel webModel)
         {
-            var serviceModel = this.mapper.Map<CreateAuthorServiceModel>(webModel);
-            var result = await this.service.EditAsync(id, serviceModel);
+            var serviceModel = mapper.Map<CreateAuthorServiceModel>(webModel);
+            var result = await service.EditAsync(id, serviceModel);
 
             return this.NoContentOrBadRequest(result);
         }
@@ -51,7 +51,7 @@ namespace BookHub.Server.Features.Authors.Web
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var result = await this.service.DeleteAsync(id);
+            var result = await service.DeleteAsync(id);
 
             return this.NoContentOrBadRequest(result);
         }

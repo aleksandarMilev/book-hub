@@ -54,7 +54,9 @@
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
             FilterDeletedModels(modelBuilder);
+            FilterUnapprovedModels(modelBuilder);
         }
 
         private void ApplyAuditInfo() 
@@ -108,6 +110,22 @@
                         .HasQueryFilter(DeletableFilterExpression(e.ClrType));
                 });
 
+        private static void FilterUnapprovedModels(ModelBuilder modelBuilder)
+              => modelBuilder
+                  .Model
+                  .GetEntityTypes()
+                  .Where(e =>
+                  {
+                      return typeof(IApprovableEntity).IsAssignableFrom(e.ClrType);
+                  })
+                  .ToList()
+                  .ForEach(e =>
+                  {
+                      modelBuilder
+                          .Entity(e.ClrType)
+                          .HasQueryFilter(ApprovableFilterExpression(e.ClrType));
+                  });
+
         private static LambdaExpression DeletableFilterExpression(Type entityType)
         {
             var parameter = Expression.Parameter(entityType, "e");
@@ -115,6 +133,15 @@
             var isDeletedFalse = Expression.Equal(isDeletedProperty, Expression.Constant(false));
 
             return Expression.Lambda(isDeletedFalse, parameter);
+        }
+
+        private static LambdaExpression ApprovableFilterExpression(Type entityType)
+        {
+            var parameter = Expression.Parameter(entityType, "e");
+            var isApprovedProperty = Expression.Property(parameter, nameof(IApprovableEntity.IsApproved));
+            var isApprovedFalse = Expression.Equal(isApprovedProperty, Expression.Constant(true));
+
+            return Expression.Lambda(isApprovedFalse, parameter);
         }
     }
 }
