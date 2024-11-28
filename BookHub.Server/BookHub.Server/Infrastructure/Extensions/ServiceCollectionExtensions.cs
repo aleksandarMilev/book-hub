@@ -3,6 +3,7 @@
     using System.Reflection;
     using System.Text;
 
+    using Areas.Admin.Service;
     using Data;
     using Data.Models;
     using Features.Article.Service;
@@ -86,6 +87,7 @@
         public static IServiceCollection AddServices(this IServiceCollection services)
             => services
                 .AddScoped<ICurrentUserService, CurrentUserService>()
+                .AddScoped<IAdminService, AdminService>()
                 .AddTransient<IIdentityService, IdentityService>()
                 .AddTransient<IBookService, BookService>()
                 .AddTransient<IAuthorService, AuthorService>()

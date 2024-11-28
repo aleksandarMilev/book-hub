@@ -1,9 +1,11 @@
 ﻿namespace BookHub.Server.Features.Notification.Service
 {
+    using Models;
+
     public interface INotificationService
     {
-        Task<int> CreateAuthorNotificationAsync(int authorId, string authorName);
+        Task<IEnumerable<NotificationServiceModel>> LastThreeAsync();
 
-        Task<int> CreateBookNotificationAsync(int bookId, string title);
+        Task<int> CreateAsync(int resourceId, string resourceType, string nameProp);
     }
 }

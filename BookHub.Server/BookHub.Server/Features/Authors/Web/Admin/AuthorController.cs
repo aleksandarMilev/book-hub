@@ -2,6 +2,7 @@
 namespace BookHub.Server.Features.Authors.Web.Admin
 {
     using Areas.Admin;
+    using BookHub.Server.Areas.Admin.Web;
     using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;

@@ -38,6 +38,8 @@ export const routes = {
     article: '/article',
     articles: '/articles',
 
+    lastThreeNotifications: '/notification/lastThree',
+
     admin: {
         createArticle: '/admin/article/new',
         editArticle: '/admin/article/edit',

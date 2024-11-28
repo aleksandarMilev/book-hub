@@ -35,9 +35,7 @@
 
         public DbSet<Article> Articles { get; init; }
 
-        public DbSet<BookNotification> BookNotifications { get; init; }
-
-        public DbSet<AuthorNotification> AuthorNotifications { get; init; }
+        public DbSet<Notification> Notifications { get; init; }
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {

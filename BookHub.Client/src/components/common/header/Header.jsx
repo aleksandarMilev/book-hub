@@ -5,7 +5,7 @@ import { Navbar, Nav, Container } from 'react-bootstrap'
 import { routes } from '../../../common/constants/api'
 import { UserContext } from '../../../contexts/userContext'
 
-import Notifications from '../notifications/Notifications'
+import LastNotifications from '../notifications/last-notifications/LastNotifications'
 
 import './Header.css'  
 
@@ -46,7 +46,7 @@ export default function Header() {
                             }
                         </Nav>
                         <Nav className="ms-auto">
-                            {isAuthenticated && <Notifications />}
+                            {isAuthenticated && <LastNotifications />}
                             {isAuthenticated ? (
                                 <>
                                     <Nav.Item>

@@ -1,4 +1,4 @@
-﻿namespace BookHub.Server.Areas.Admin
+﻿namespace BookHub.Server.Areas.Admin.Web
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;

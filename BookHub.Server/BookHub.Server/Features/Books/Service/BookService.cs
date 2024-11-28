@@ -51,12 +51,20 @@
             book.CreatorId = this.userService.GetId()!;
             book.AuthorId = await this.MapAuthorToBookAsync(model.AuthorId);
 
-            await this.notificationService.CreateBookNotificationAsync(book.Id, book.Title);
+            if (this.userService.IsAdmin())
+            {
+                book.IsApproved = true;
+            }
 
             this.data.Add(book);
             await this.data.SaveChangesAsync();
 
             await this.MapBookAndGenresAsync(book.Id, model.Genres);
+
+            if (!this.userService.IsAdmin())
+            {
+                await this.notificationService.CreateAsync(book.Id, nameof(Book) ,book.Title);
+            }
 
             return book.Id;
         }

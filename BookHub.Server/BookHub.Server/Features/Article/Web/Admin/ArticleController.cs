@@ -2,6 +2,7 @@
 {
     using Areas.Admin;
     using AutoMapper;
+    using BookHub.Server.Areas.Admin.Web;
     using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Mvc;
     using Models;

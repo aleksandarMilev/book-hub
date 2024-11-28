@@ -55,10 +55,18 @@
             author.CreatorId = this.userService.GetId()!;
             author.NationalityId = await this.MapNationalityToAuthor(model.NationalityId);
 
+            if (this.userService.IsAdmin())
+            {
+                author.IsApproved = true;
+            }
+
             this.data.Add(author);
             await this.data.SaveChangesAsync();
 
-            await this.notificationService.CreateAuthorNotificationAsync(author.Id, author.Name);
+            if (!this.userService.IsAdmin())
+            {
+                await this.notificationService.CreateAsync(author.Id, nameof(Author) ,author.Name);
+            }
 
             return author.Id;
         }

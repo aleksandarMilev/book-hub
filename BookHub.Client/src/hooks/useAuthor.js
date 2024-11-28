@@ -44,7 +44,7 @@ export function useNames() {
                 setAuthors(await authorApi.getAuthorNamesAsync(token))
                 setIsFetching(old => !old)
             } catch (error) {
-                navigate(routes.badRequest, { state: { message: error.message} })
+                navigate(routes.badRequest, { state: { message: error.message } })
             }
         }
 

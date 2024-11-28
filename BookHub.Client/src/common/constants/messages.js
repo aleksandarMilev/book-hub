@@ -1,4 +1,7 @@
 export const errors = {
+    notification: {
+        lastThree:  'Apologies, we\'re experiencing issues and can\'t display your notifications at the moment. Please try again later or contact us for assistance.'
+    },
     profile: {
         get: 'Something went wrong while loading your profile. Please refresh the page or try again later!',
         create: 'Oops! We couldn’t create your profile. Please try again later or contact support if the issue persists.',
