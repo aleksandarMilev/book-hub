@@ -5,6 +5,8 @@ import { Navbar, Nav, Container } from 'react-bootstrap'
 import { routes } from '../../../common/constants/api'
 import { UserContext } from '../../../contexts/userContext'
 
+import Notifications from '../notifications/Notifications'
+
 import './Header.css'  
 
 export default function Header() {
@@ -35,7 +37,7 @@ export default function Header() {
                                 Create Book
                             </Nav.Link>
                             <Nav.Link as={Link} to={routes.createAuthor}>
-                                Create Author
+                                Create Author   
                             </Nav.Link>
                             {isAdmin && 
                             <Nav.Link as={Link} to={routes.admin.createArticle}>
@@ -44,6 +46,7 @@ export default function Header() {
                             }
                         </Nav>
                         <Nav className="ms-auto">
+                            {isAuthenticated && <Notifications />}
                             {isAuthenticated ? (
                                 <>
                                     <Nav.Item>
