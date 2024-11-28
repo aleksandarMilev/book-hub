@@ -9,9 +9,10 @@
     using Features.Authors.Service;
     using Features.Books.Service;
     using Features.Identity.Service;
-    using Features.UserProfile.Service;
+    using Features.Notification.Service;
     using Features.Review.Service;
     using Features.Search.Service;
+    using Features.UserProfile.Service;
     using Filters;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Identity;
@@ -94,7 +95,8 @@
                 .AddTransient<IReviewService, ReviewService>()
                 .AddTransient<IVoteService, VoteService>()
                 .AddTransient<IProfileService, ProfileService>()
-                .AddTransient<IArticleService, ArticleService>();
+                .AddTransient<IArticleService, ArticleService>()
+                .AddTransient<INotificationService, NotificationService>();
 
         public static IServiceCollection AddApiControllers(this IServiceCollection services)
         {

@@ -35,6 +35,10 @@
 
         public DbSet<Article> Articles { get; init; }
 
+        public DbSet<BookNotification> BookNotifications { get; init; }
+
+        public DbSet<AuthorNotification> AuthorNotifications { get; init; }
+
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
             this.ApplyAuditInfo();

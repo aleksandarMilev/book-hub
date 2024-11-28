@@ -7,17 +7,20 @@
     using Mapper;
     using Microsoft.EntityFrameworkCore;
     using Models;
+    using Notification.Service;
 
     using static Common.Constants.DefaultValues;
     using static Common.Messages.Error.Book;
 
     public class BookService(
         BookHubDbContext data,
+        INotificationService notificationService,
         ICurrentUserService userService,
         IMapper mapper) : IBookService
     {
         private readonly BookHubDbContext data = data;
         private readonly ICurrentUserService userService = userService;
+        private readonly INotificationService notificationService = notificationService;
         private readonly IMapper mapper = mapper;
 
         public async Task<IEnumerable<BookServiceModel>> AllAsync()
@@ -47,6 +50,8 @@
             var book = this.mapper.Map<Book>(model);
             book.CreatorId = this.userService.GetId()!;
             book.AuthorId = await this.MapAuthorToBookAsync(model.AuthorId);
+
+            await this.notificationService.CreateBookNotificationAsync(book.Id, book.Title);
 
             this.data.Add(book);
             await this.data.SaveChangesAsync();

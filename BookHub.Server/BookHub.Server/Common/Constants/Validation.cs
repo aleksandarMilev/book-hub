@@ -94,5 +94,11 @@
             public const int UrlMinLength = 10;
             public const int UrlMaxLength = 2_000;
         }
+
+        public static class Notification
+        {
+            public const int MessageMinLength = 10;
+            public const int MessageMaxLength = 500;
+        }
     }
 }

@@ -7,6 +7,7 @@
     using Infrastructure.Services;
     using Microsoft.EntityFrameworkCore;
     using Models;
+    using Notification.Service;
 
     using static Common.Constants.DefaultValues;
     using static Common.Messages.Error.Author;
@@ -14,10 +15,12 @@
     public class AuthorService(
         BookHubDbContext data,
         ICurrentUserService userService,
+        INotificationService notificationService,
         IMapper mapper) : IAuthorService
     {
         private readonly BookHubDbContext data = data;
         private readonly ICurrentUserService userService = userService;
+        private readonly INotificationService notificationService = notificationService;
         private readonly IMapper mapper = mapper;
 
         public async Task<IEnumerable<AuthorNamesServiceModel>> NamesAsync()
@@ -54,6 +57,8 @@
 
             this.data.Add(author);
             await this.data.SaveChangesAsync();
+
+            await this.notificationService.CreateAuthorNotificationAsync(author.Id, author.Name);
 
             return author.Id;
         }
