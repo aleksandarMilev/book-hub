@@ -8,7 +8,7 @@
 
     using static Common.Constants.Validation.Author;
 
-    public class Author : DeletableEntity<int>
+    public class Author : DeletableEntity<int>, IApprovableEntity
     {
         [Required]
         [MaxLength(NameMaxLength)]
@@ -44,6 +44,8 @@
         public string? CreatorId { get; set; }
 
         public User? Creator { get; set; }
+
+        public bool IsApproved { get; set; }
 
         public ICollection<Book> Books { get; } = new HashSet<Book>();
     }

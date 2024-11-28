@@ -12,10 +12,10 @@
         [MaxLength(ContentMaxLength)]
         public string Content { get; set; } = null!;
 
-        public int Rating { get; set; }
+        public int Rating { get; set; } 
 
         [Required]
-        [ForeignKey(nameof(Creator))]
+        [ForeignKey(nameof(Creator))] 
         public string CreatorId { get; set; } = null!;
 
         public User Creator { get; set; } = null!;

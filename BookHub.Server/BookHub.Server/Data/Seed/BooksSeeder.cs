@@ -20,7 +20,9 @@
                     RatingsCount = 0,
                     ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Pet_Sematary_%281983%29_front_cover%2C_first_edition.jpg/330px-Pet_Sematary_%281983%29_front_cover%2C_first_edition.jpg",
                     AuthorId = 1,
-                    CreatorId = "user1Id"
+                    CreatorId = "user1Id",
+                    PublishedDate = new DateTime(1983, 11, 4),
+                    IsApproved = true
                 },
                 new()
                 {
@@ -38,6 +40,8 @@
                     ImageUrl = "https://librerialaberintopr.com/cdn/shop/products/hallows_459x.jpg?v=1616596206",
                     AuthorId = 2,
                     CreatorId = "user2Id",
+                    PublishedDate = new DateTime(2007, 07, 21),
+                    IsApproved = true
                 },
                 new()
                 {
@@ -51,7 +55,9 @@
                     RatingsCount = 0,
                     ImageUrl = "https://upload.wikimedia.org/wikipedia/en/e/e9/First_Single_Volume_Edition_of_The_Lord_of_the_Rings.gif",
                     AuthorId = 3,
-                    CreatorId = "user3Id"
+                    CreatorId = "user3Id",
+                    PublishedDate = new DateTime(1954, 07, 29),
+                    IsApproved = true
                 }
             };
     }

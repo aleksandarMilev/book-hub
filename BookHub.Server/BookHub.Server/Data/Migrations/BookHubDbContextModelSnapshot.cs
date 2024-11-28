@@ -70,6 +70,41 @@ namespace BookHub.Server.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Articles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Content = "Stephen King's *Pet Sematary* offers a chilling narrative about the emotional weight of grief and the lengths people go to in an effort to reverse the irreversible. When Louis Creed and his family move to rural Maine, they discover a mysterious burial ground behind their home that can bring the dead back to life. What begins as an innocent exploration of local lore quickly turns into a nightmare when Louis faces the ultimate temptation: using the cemetery’s power to alter fate itself. The novel dives deep into human frailty, moral dilemmas,and the unintended consequences of playing God. King's skillful writing leaves readers pondering the fine line between love and selfishness, as well as the destructive force of denial.",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImageUrl = "https://thedailytexan.com/wp-content/uploads/2023/09/pet_sematary_bloodlines_4press-1200x800.jpg",
+                            Introduction = "A tale of love, loss, and the chilling cost of defying death.",
+                            IsDeleted = false,
+                            Title = "Exploring the Haunting Depths of *Pet Sematary*",
+                            Views = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Content = "In *Harry Potter and the Deathly Hallows*, J.K. Rowling masterfully concludes the saga of the Boy Who Lived. Harry, Ron, and Hermione take center stage as they leave Hogwarts behind and embark on a perilous journey to locate and destroy Voldemort’sHorcruxes. Along the way, they uncover hidden truths about Dumbledore’s past, face betrayal, and reaffirm their unshakable friendship. The novel culminates in the iconic Battle of Hogwarts, where courage and sacrifice define the fates of beloved characters. Packed with heart-pounding action and poignant moments, Rowling’s finale is not just a fight between good and evilbut a meditation on love, legacy, and the choices that shape our lives.",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImageUrl = "https://choicefineart.com/cdn/shop/products/book-7-harry-potter-and-the-deathly-hallows-311816.jpg?v=1688079541",
+                            Introduction = "The battle against Voldemort reaches its thrilling and emotional finale.",
+                            IsDeleted = false,
+                            Title = "The Epic Conclusion: *Harry Potter and the Deathly Hallows*",
+                            Views = 0
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Content = "J.R.R. Tolkien’s *The Lord of the Rings* stands as one of the greatest works of fantasy ever written. Spanning three volumes, the story follows Frodo Baggins and the Fellowship as they embark on a dangerous mission to destroy the One Ring, a powerful artifact that threatens to engulf Middle-earth in darkness. Tolkien’s world-building is unparalleled, bringing to life the rich landscapes of Middle-earth, from the idyllic Shire to the fiery Mount Doom. Along the way, characters like Aragorn, Legolas, and Samwise Gamgee demonstrate the values of loyalty, perseverance, and hope. The narrative explores themes of power, corruption, and the resilience of the human spirit, making it a tale that resonates across generations. Whether it’s Gandalf’s wisdom, Frodo’s burden, or the triumph of unity, Tolkien’s masterpiece continues to inspire and enchant readers worldwide.",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImageUrl = "https://example.com/images/lord-of-the-rings.jpg",
+                            Introduction = "A journey of courage, friendship, and the fight against overwhelming darkness.",
+                            IsDeleted = false,
+                            Title = "The Timeless Epic: *The Lord of the Rings*",
+                            Views = 0
+                        });
                 });
 
             modelBuilder.Entity("BookHub.Server.Data.Models.Author", b =>
@@ -117,6 +152,9 @@ namespace BookHub.Server.Data.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -160,6 +198,7 @@ namespace BookHub.Server.Data.Migrations
                             CreatorId = "user1Id",
                             Gender = 0,
                             ImageUrl = "https://media.npr.org/assets/img/2020/04/07/stephen-king.by-shane-leonard_wide-c132de683d677c7a6a1e692f86a7e6670baf3338.jpg?s=1100&c=85&f=jpeg",
+                            IsApproved = false,
                             IsDeleted = false,
                             Name = "Stephen King",
                             NationalityId = 182,
@@ -176,6 +215,7 @@ namespace BookHub.Server.Data.Migrations
                             CreatorId = "user2Id",
                             Gender = 1,
                             ImageUrl = "https://stories.jkrowling.com/wp-content/uploads/2021/09/Shot-B-105_V2_CROP-e1630873059779.jpg",
+                            IsApproved = false,
                             IsDeleted = false,
                             Name = "Joanne Rowling",
                             NationalityId = 181,
@@ -193,6 +233,7 @@ namespace BookHub.Server.Data.Migrations
                             DiedAt = new DateTime(1973, 9, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Gender = 0,
                             ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/J._R._R._Tolkien%2C_ca._1925.jpg/330px-J._R._R._Tolkien%2C_ca._1925.jpg",
+                            IsApproved = false,
                             IsDeleted = false,
                             Name = "John Ronald Reuel Tolkien ",
                             NationalityId = 181,
@@ -234,6 +275,9 @@ namespace BookHub.Server.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -282,8 +326,10 @@ namespace BookHub.Server.Data.Migrations
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatorId = "user1Id",
                             ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Pet_Sematary_%281983%29_front_cover%2C_first_edition.jpg/330px-Pet_Sematary_%281983%29_front_cover%2C_first_edition.jpg",
+                            IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Pet Sematary is a 1983 horror novel by American writer Stephen King. The novel was nominated for a World Fantasy Award for Best Novel in 1984,and adapted into two films: one in 1989 and another in 2019. In November 2013, PS Publishing released Pet Sematary in a limited 30th-anniversary edition.",
+                            PublishedDate = new DateTime(1983, 11, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Sometimes dead is better.",
                             Title = "Pet Sematary"
@@ -296,8 +342,10 @@ namespace BookHub.Server.Data.Migrations
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatorId = "user2Id",
                             ImageUrl = "https://librerialaberintopr.com/cdn/shop/products/hallows_459x.jpg?v=1616596206",
+                            IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Harry Potter and the Deathly Hallows is a fantasy novel written by the British author J. K. Rowling. It is the seventh and final novel in the Harry Potter series. It was released on 21 July 2007 in the United Kingdom by Bloomsbury Publishing, in the United States by Scholastic, and in Canada by Raincoast Books. The novel chronicles the events directly following Harry Potter and the Half-Blood Prince (2005) and the final confrontation between the wizards Harry Potter and Lord Voldemort.",
+                            PublishedDate = new DateTime(2007, 7, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "The last book from the Harry Potter series.",
                             Title = "Harry Potter and the Deathly Hallows"
@@ -310,8 +358,10 @@ namespace BookHub.Server.Data.Migrations
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatorId = "user3Id",
                             ImageUrl = "https://upload.wikimedia.org/wikipedia/en/e/e9/First_Single_Volume_Edition_of_The_Lord_of_the_Rings.gif",
+                            IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Set in Middle-earth, the story began as a sequel to Tolkien's 1937 children's book The Hobbit, but eventually developed into a much larger work. Written in stages between 1937 and 1949, The Lord of the Rings is one of the best-selling books ever written, with over 150 million copies sold.",
+                            PublishedDate = new DateTime(1954, 7, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "The Lord of the Rings is an epic fantasy novel by the English author J. R. R. Tolkien.",
                             Title = "Lord of the Rings"
@@ -1823,6 +1873,148 @@ namespace BookHub.Server.Data.Migrations
                     b.HasIndex("CreatorId");
 
                     b.ToTable("Reviews");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BookId = 1,
+                            Content = "A truly chilling tale. King masterfully explores the dark side of human grief and love.",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatorId = "user1Id",
+                            IsDeleted = false,
+                            Rating = 5
+                        },
+                        new
+                        {
+                            Id = 2,
+                            BookId = 1,
+                            Content = "The book was gripping but felt a bit too disturbing at times for my taste.",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatorId = "user2Id",
+                            IsDeleted = false,
+                            Rating = 3
+                        },
+                        new
+                        {
+                            Id = 3,
+                            BookId = 1,
+                            Content = "An unforgettable story that haunts you long after you've finished it. Highly recommended!",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatorId = "user3Id",
+                            IsDeleted = false,
+                            Rating = 5
+                        },
+                        new
+                        {
+                            Id = 4,
+                            BookId = 1,
+                            Content = "The characters were well-developed, but the plot felt predictable toward the end.",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatorId = "user1Id",
+                            IsDeleted = false,
+                            Rating = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            BookId = 2,
+                            Content = "An incredible conclusion to the series. Every twist and turn kept me on edge.",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatorId = "user2Id",
+                            IsDeleted = false,
+                            Rating = 5
+                        },
+                        new
+                        {
+                            Id = 6,
+                            BookId = 2,
+                            Content = "The Battle of Hogwarts was epic! A bittersweet yet satisfying ending.",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatorId = "user3Id",
+                            IsDeleted = false,
+                            Rating = 5
+                        },
+                        new
+                        {
+                            Id = 7,
+                            BookId = 2,
+                            Content = "I expected more from some of the character arcs, but still a solid read.",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatorId = "user1Id",
+                            IsDeleted = false,
+                            Rating = 4
+                        },
+                        new
+                        {
+                            Id = 8,
+                            BookId = 2,
+                            Content = "Rowling’s world-building continues to amaze, even in the final installment.",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatorId = "user2Id",
+                            IsDeleted = false,
+                            Rating = 5
+                        },
+                        new
+                        {
+                            Id = 9,
+                            BookId = 3,
+                            Content = "A timeless masterpiece. Tolkien’s world and characters are unmatched in depth and richness.",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatorId = "user3Id",
+                            IsDeleted = false,
+                            Rating = 5
+                        },
+                        new
+                        {
+                            Id = 10,
+                            BookId = 3,
+                            Content = "The pacing was slow at times, but the payoff in the end was well worth it.",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatorId = "user1Id",
+                            IsDeleted = false,
+                            Rating = 4
+                        },
+                        new
+                        {
+                            Id = 11,
+                            BookId = 3,
+                            Content = "The bond between Sam and Frodo is the heart of this epic journey. Beautifully written.",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatorId = "user2Id",
+                            IsDeleted = false,
+                            Rating = 5
+                        },
+                        new
+                        {
+                            Id = 12,
+                            BookId = 3,
+                            Content = "An epic tale that defines the fantasy genre. Loved every moment of it.",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatorId = "user3Id",
+                            IsDeleted = false,
+                            Rating = 5
+                        },
+                        new
+                        {
+                            Id = 13,
+                            BookId = 3,
+                            Content = "The attention to detail in Middle-earth is staggering. Tolkien is a true genius.",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatorId = "user1Id",
+                            IsDeleted = false,
+                            Rating = 5
+                        },
+                        new
+                        {
+                            Id = 14,
+                            BookId = 3,
+                            Content = "A bit long for my liking, but undeniably one of the greatest stories ever told.",
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatorId = "user2Id",
+                            IsDeleted = false,
+                            Rating = 4
+                        });
                 });
 
             modelBuilder.Entity("BookHub.Server.Data.Models.User", b =>
@@ -1915,14 +2107,14 @@ namespace BookHub.Server.Data.Migrations
                         {
                             Id = "user1Id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "847bacbc-f5c5-4875-8890-7dea6260378b",
+                            ConcurrencyStamp = "4f733192-8b7d-4930-95d9-306e13e50f6b",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user1@mail.com",
                             EmailConfirmed = false,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "302f13a8-171b-45d7-994f-0e70a6990b52",
+                            SecurityStamp = "61446995-9ea3-42ed-b293-46024a32f46c",
                             TwoFactorEnabled = false,
                             UserName = "user1name"
                         },
@@ -1930,14 +2122,14 @@ namespace BookHub.Server.Data.Migrations
                         {
                             Id = "user2Id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0873a0ff-178e-48cf-a6a0-6eeef31c6f36",
+                            ConcurrencyStamp = "d1334c71-08e1-4c3c-ab87-a42f5116fabf",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user2@mail.com",
                             EmailConfirmed = false,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "4749bb20-4f6f-4fae-b650-134153806f43",
+                            SecurityStamp = "da946aec-4449-4fb7-b30b-57e0fc86f5a0",
                             TwoFactorEnabled = false,
                             UserName = "user2name"
                         },
@@ -1945,14 +2137,14 @@ namespace BookHub.Server.Data.Migrations
                         {
                             Id = "user3Id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "31b2ed9b-d035-4e2f-a47f-e4460a8e08f0",
+                            ConcurrencyStamp = "ce72cd00-92c5-43f2-984a-a210e0371328",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user3@mail.com",
                             EmailConfirmed = false,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "b3e1e669-458b-40a7-8a00-9f40f6bf4f14",
+                            SecurityStamp = "dc9dde0f-2786-419a-b61e-01bb2739aaf1",
                             TwoFactorEnabled = false,
                             UserName = "user3name"
                         });

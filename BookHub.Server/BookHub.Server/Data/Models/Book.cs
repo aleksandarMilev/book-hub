@@ -7,7 +7,7 @@
 
     using static Common.Constants.Validation.Book;
 
-    public class Book : DeletableEntity<int>
+    public class Book : DeletableEntity<int>, IApprovableEntity
     {
         [Required]
         [MaxLength(TitleMaxLength)]
@@ -40,6 +40,8 @@
         public string? CreatorId { get; set; }
 
         public User? Creator { get; set; }
+
+        public bool IsApproved { get; set; }
 
         public ICollection<BookGenre> BooksGenres { get; } = new HashSet<BookGenre>();
 
