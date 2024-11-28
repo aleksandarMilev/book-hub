@@ -1,9 +1,9 @@
 ﻿namespace BookHub.Server.Features.Authors.Web
 {
-    using BookHub.Server.Features.Authors.Service.Models;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Service;
+    using Service.Models;
 
     [Authorize]
     public class NationalityController(INationalityService service) : ApiController

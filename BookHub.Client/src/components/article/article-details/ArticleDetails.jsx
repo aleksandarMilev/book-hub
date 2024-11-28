@@ -1,5 +1,5 @@
-import { useContext } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useContext, useState } from 'react'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { FaEdit, FaTrash } from 'react-icons/fa'
 import { 
     MDBContainer,
@@ -13,20 +13,41 @@ import {
 } from 'mdb-react-ui-kit'
 
 import * as useArticle from '../../../hooks/useArticle'
+import * as articleApi from '../../../api/articleApi'
 import { routes } from '../../../common/constants/api'
 import { UserContext } from '../../../contexts/userContext'
 
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner'
+import DeleteModal from '../../common/delete-modal/DeleteModal'
 
 import './ArticleDetails.css'
 
 export default function ArticleDetails(){
     const { id } = useParams()
+    const navigate = useNavigate()
 
+    const { token } = useContext(UserContext)
+ 
     const { article, isFetching } = useArticle.useDetails(id)
     const { isAdmin } = useContext(UserContext)
 
-    const deleteHandler = async () => {} 
+    const [showModal, setShowModal] = useState(false)
+    const toggleModal = () => setShowModal(old => !old)
+
+    const deleteHandler = async () => {
+        if(showModal){
+            try {
+                await articleApi.deleteAsync(id, token)
+                navigate(routes.home)
+            } catch (error) {
+                navigate(routes.badRequest, { state: { message: error.message } })
+            } finally {
+                toggleModal()
+            }
+        } else {
+            toggleModal()
+        }
+    }
 
     if(isFetching || !article){
         return <DefaultSpinner/>
@@ -83,6 +104,11 @@ export default function ArticleDetails(){
                             )}
                         </div>
                         </MDBCardBody>
+                        <DeleteModal
+                            showModal={showModal}
+                            toggleModal={toggleModal}
+                            deleteHandler={deleteHandler}
+                        />
                     </MDBCard>
                 </MDBCol>
             </MDBRow>

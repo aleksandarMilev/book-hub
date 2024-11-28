@@ -38,7 +38,7 @@ export default function ArticleList() {
                         <input
                             type="text"
                             className="form-control search-input"
-                            placeholder="Search books..."
+                            placeholder="Search articles..."
                             value={searchTerm}
                             onChange={handleSearchChange}
                         />

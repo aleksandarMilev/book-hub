@@ -13,8 +13,6 @@ export async function detailsAsync(id, token) {
     const response = await fetch(url, options)
 
     if(response.ok){
-        console.log("resp is ok!");
-        
         return await response.json()
     } 
 
