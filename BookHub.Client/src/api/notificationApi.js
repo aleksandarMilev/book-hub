@@ -27,7 +27,7 @@ export async function markAsReadAsync(id, token){
         }
     }
 
-    const url = baseUrl + routes.notification + `/${id}` + '/read'
+    const url = baseUrl + routes.notification + `/${id}` + '/markread'
     const response = await fetch(url, options)
 
     if(!response.ok){

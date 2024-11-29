@@ -30,6 +30,7 @@
                     RatingsCount = b.RatingsCount,
                     LongDescription = b.LongDescription,
                     CreatorId = b.CreatorId,
+                    IsApproved = b.IsApproved,
                     Author = b.Author == null
                         ? null
                         : new AuthorServiceModel()
@@ -85,6 +86,7 @@
                        RatingsCount = b.RatingsCount,
                        LongDescription = b.LongDescription,
                        CreatorId = b.CreatorId,
+                       IsApproved = b.IsApproved,
                        Author = b.Author == null
                            ? null
                            : new AuthorServiceModel()

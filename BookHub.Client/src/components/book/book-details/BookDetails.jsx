@@ -1,5 +1,5 @@
 import { useContext, useState, useRef, useEffect } from "react"
-import { useParams, useNavigate, Link, useLocation } from "react-router-dom"
+import { useParams, useNavigate, Link } from "react-router-dom"
 
 import * as bookApi from '../../../api/bookApi'
 import * as useBook from '../../../hooks/useBook'
@@ -18,9 +18,6 @@ import DefaultSpinner from '../../common/default-spinner/DefaultSpinner'
 import './BookDetails.css'
 
 export default function BookDetails() {
-    const location = useLocation()
-    const notificationId = location.state?.notificationId
-
     const { id } = useParams()
     const navigate = useNavigate()
     const firstReviewRef = useRef(null)

@@ -16,8 +16,8 @@
             => this.Ok(await this.service.LastThreeAsync());
 
 
-        [HttpPatch("{id}/read")]
-        public async Task<ActionResult> Read(int id)
+        [HttpPatch("{id}/[action]")]
+        public async Task<ActionResult> MarkRead(int id)
         {
             var result = await service.MarkAsReadAsync(id);
 

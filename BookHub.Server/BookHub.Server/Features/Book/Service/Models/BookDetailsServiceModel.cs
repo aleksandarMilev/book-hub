@@ -15,6 +15,8 @@
 
         public bool MoreThanFiveReviews { get; init; }
 
+        public bool IsApproved { get; init; }
+
         public AuthorServiceModel? Author { get; init; }
 
         public ICollection<ReviewServiceModel> Reviews { get; init; } = new HashSet<ReviewServiceModel>();

@@ -1,9 +1,11 @@
+import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { FaEdit, FaTrash } from 'react-icons/fa'
 import { format } from 'date-fns'
 
 import renderStars from '../../../../common/functions/renderStars'
 import { routes } from "../../../../common/constants/api"
+import { UserContext } from '../../../../contexts/userContext'
 
 import './BookFullInfo.css'
 
@@ -16,6 +18,10 @@ export default function BookFullInfo({
     deleteHandler,
     id
 }) {
+    const { isAdmin } = useContext(UserContext)
+    console.log(book);
+    
+
     const formattedDate = book.publishedDate 
         ? format(new Date(book.publishedDate), 'MMMM dd, yyyy')
         : 'Publication date unknown'
@@ -67,6 +73,16 @@ export default function BookFullInfo({
                                     </Link>
                                     <a href="#" className="btn btn-danger d-flex align-items-center gap-2" onClick={deleteHandler}>
                                         <FaTrash /> Delete
+                                    </a>
+                                </>
+                            )}
+                            {(isAdmin && !book.isApproved) && (
+                                <>
+                                   <a href="#" className="btn btn-success d-flex align-items-center gap-2" onClick={() => {}}>
+                                        <FaTrash /> Approve
+                                    </a>
+                                    <a href="#" className="btn btn-danger d-flex align-items-center gap-2" onClick={() => {}}>
+                                        <FaTrash /> Reject
                                     </a>
                                 </>
                             )}
