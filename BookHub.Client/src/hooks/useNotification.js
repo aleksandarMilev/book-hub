@@ -12,22 +12,21 @@ export function useLastThree(){
     const [notifications, setNotifications] = useState([])
     const [isFetching, setIsFetching] = useState(false)
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                setIsFetching(true)
-                setNotifications(await notificationApi.lastThreeAsync(token))
-            } catch (error) {
-                navigate(routes.badRequest, { state: { message: error.message } } )
-            } finally {
-                setIsFetching(false)
-            }
+    const fetchData = async () => {
+        try {
+            setIsFetching(true)
+            setNotifications(await notificationApi.lastThreeAsync(token))
+        } catch (error) {
+            navigate(routes.badRequest, { state: { message: error.message } } )
+        } finally {
+            setIsFetching(false)
         }
+    }
 
+    useEffect(() => {
+        
         fetchData()
-    }, [token])
+    }, [token, navigate])
 
-    return { notifications, isFetching }
-
-    
+    return { notifications, isFetching, refetch: fetchData}
 }

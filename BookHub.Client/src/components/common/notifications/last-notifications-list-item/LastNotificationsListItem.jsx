@@ -1,11 +1,25 @@
+import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Dropdown } from 'react-bootstrap'
 import { format } from 'date-fns'
 import { FaBook, FaUser } from 'react-icons/fa'
 
+import * as notificationApi from '../../../../api/notificationApi'
+import { UserContext } from '../../../../contexts/userContext'
+
 import './LastNotificationsListItem.css'
 
-export default function LastNotificationsListItem({ notification }){
+export default function LastNotificationsListItem({ notification, refetchNotifications }){
+    const { token } = useContext(UserContext)
+    const navigate = useNavigate()
+
+    const onClickHandler = async (e) => {
+        e.preventDefault()
+        await notificationApi.markAsReadAsync(notification.id, token)
+        refetchNotifications()
+        navigate(`/${notification.resourceType}/${notification.resourceId}`)
+    }
+
     const getIcon = (resourceType) => {
         switch (resourceType) {
             case 'Book':
@@ -17,12 +31,6 @@ export default function LastNotificationsListItem({ notification }){
 
     const notificationClass = notification.isRead ? "notification-item-read" : "notification-item-unread"
     const readStatusMessage = notification.isRead ? "Read" : "Unread"
-
-    const navigate = useNavigate()
-    const onClickHandler = (e) => {
-        e.preventDefault()
-        navigate(`/${notification.resourceType}/${notification.resourceId}`)
-    }
 
     return (
         <Dropdown.Item key={notification.id} onClick={onClickHandler} className="notification-item">

@@ -10,6 +10,7 @@
     using Service.Models;
 
     using static Common.Messages.Notifications;
+    using static Common.Messages.Error.Notification;
 
     public class NotificationService(
         BookHubDbContext data,
@@ -21,6 +22,15 @@
         private readonly ICurrentUserService userService = userService;
         private readonly IAdminService adminService = adminService;
         private readonly IMapper mapper = mapper;
+
+        public async Task<IEnumerable<NotificationServiceModel>> LastThreeAsync()
+          => await this.data
+              .Notifications
+              .Where(n => n.ReceiverId == this.userService.GetId())
+              .ProjectTo<NotificationServiceModel>(this.mapper.ConfigurationProvider)
+              .OrderByDescending(n => n.CreatedOn)
+              .Take(3)
+              .ToListAsync();
 
         public async Task<int> CreateAsync(int resourceId, string resourceType, string nameProp)
         {
@@ -41,13 +51,21 @@
             return notification.Id;
         }
 
-        public async Task<IEnumerable<NotificationServiceModel>> LastThreeAsync()
-            => await this.data
-                .Notifications
-                .Where(n => n.ReceiverId == this.userService.GetId())
-                .ProjectTo<NotificationServiceModel>(this.mapper.ConfigurationProvider)
-                .OrderByDescending(n => n.CreatedOn)
-                .Take(3)
-                .ToListAsync();
+        public async Task<Result> MarkAsReadAsync(int id)
+        {
+            var notification = await this.data
+                 .Notifications
+                 .FindAsync(id);
+
+            if (notification is null)
+            {
+                return NotificationNotFound;
+            }
+
+            notification.IsRead = true;
+            await this.data.SaveChangesAsync();
+
+            return true;
+        }
     }
 }

@@ -18,3 +18,19 @@ export async function lastThreeAsync(token) {
 
     throw new Error(errors.notification.lastThree)
 }
+
+export async function markAsReadAsync(id, token){
+    const options = {
+        method: "PATCH",
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+
+    const url = baseUrl + routes.notification + `/${id}` + '/read'
+    const response = await fetch(url, options)
+
+    if(!response.ok){
+        throw new Error(errors.notification.markAsRead)
+    }
+}

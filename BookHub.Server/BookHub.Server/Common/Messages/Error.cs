@@ -48,5 +48,10 @@
         {
             public const string InvalidLoginAttempt = "Invalid log in attempt!";
         }
+
+        public static class Notification
+        {
+            public const string NotificationNotFound = "The notification was not found!";
+        }
     }
 }
