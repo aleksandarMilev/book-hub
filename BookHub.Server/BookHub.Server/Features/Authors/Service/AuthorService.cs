@@ -4,6 +4,7 @@
     using AutoMapper.QueryableExtensions;
     using Data;
     using Data.Models;
+    using Infrastructure.Extensions;
     using Infrastructure.Services;
     using Microsoft.EntityFrameworkCore;
     using Models;
@@ -46,6 +47,14 @@
                 .Authors
                 .ProjectTo<AuthorDetailsServiceModel>(this.mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(a => a.Id == id);
+
+        public async Task<AuthorDetailsServiceModel?> AdminDetailsAsync(int id)
+             => await this.data
+                 .Authors
+                 .IgnoreQueryFilters()
+                 .ApplyIsDeletedFilter()
+                 .ProjectTo<AuthorDetailsServiceModel>(this.mapper.ConfigurationProvider)
+                 .FirstOrDefaultAsync(a => a.Id == id);
 
         public async Task<int> CreateAsync(CreateAuthorServiceModel model)
         {
@@ -124,7 +133,9 @@
         {
             var author = await this.data
                  .Authors
-                 .FindAsync(id);
+                 .IgnoreQueryFilters()
+                 .ApplyIsDeletedFilter()
+                 .FirstOrDefaultAsync(a => a.Id == id);
 
             if (author is null)
             {
@@ -132,6 +143,25 @@
             }
 
             author.IsApproved = true;
+            await this.data.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<Result> RejectAsync(int id)
+        {
+            var author = await this.data
+                 .Authors
+                 .IgnoreQueryFilters()
+                 .ApplyIsDeletedFilter()
+                 .FirstOrDefaultAsync(a => a.Id == id);
+
+            if (author is null)
+            {
+                return AuthorNotFound;
+            }
+
+            this.data.Remove(author);
             await this.data.SaveChangesAsync();
 
             return true;

@@ -16,6 +16,8 @@
 
         public string? CreatorId { get; set; }
 
+        public bool IsApproved { get; init; }
+
         public ICollection<BookServiceModel> TopBooks { get; set; } = new List<BookServiceModel>();
     }
 }

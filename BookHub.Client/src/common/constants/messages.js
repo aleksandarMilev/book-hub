@@ -16,6 +16,8 @@ export const errors = {
         delete: 'Oops! We couldn’t delete this article. Please try again later or contact support if the issue persists.'
     },
     author: {
+        approve: 'Something went wrong while approving this author. Please refresh the page or try again later!',
+        reject: 'Something went wrong while rejecting this author. Please refresh the page or try again later!',
         topThree: 'Something went wrong while loading our top authors for you. Please refresh the page or try again later!',
         namesBadRequest: 'Apologies, we\'re experiencing issues and can\'t display author names at the moment. Please try again later or contact us for assistance.',
         notfound: 'We couldn’t find the author you’re looking for. Please check the URL or try again later.',
@@ -38,6 +40,8 @@ export const errors = {
         topThree: 'Something went wrong while loading our top picks for you. Please refresh the page or try again later!'
     },
     book: {
+        approve: 'Something went wrong while approving this book. Please refresh the page or try again later!',
+        reject: 'Something went wrong while rejecting this book. Please refresh the page or try again later!',
         topThree: 'Something went wrong while loading our top books for you. Please refresh the page or try again later!',
         notfound: 'We couldn’t find the book you’re looking for. Please check the URL or try again later.',
         create: 'Oops! We couldn’t create your book. Please try again later or contact support if the issue persists.',

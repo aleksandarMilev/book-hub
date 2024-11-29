@@ -98,38 +98,34 @@ export async function deleteAsync(bookId, token){
     return false
 }
 
-export async function approveAsync(bookId, token){
+export async function approveAsync(id, token){
     const options = {
-        method: "PUT",
+        method: "PATCH",
         headers: {
             'Authorization': `Bearer ${token}`
         }
     }
 
-    const url = baseAdminUrl + routes.admin.approveBook + `/${bookId}`
+    const url = baseAdminUrl + routes.book + `/${id}` + '/approve'
     const response = await fetch(url, options)
 
-    if(response.ok){
-        return true 
+    if(!response.ok){
+        throw new Error(errors.book.approve)
     }
-
-    return false
 }
 
-export async function rejectAsync(bookId, token){
+export async function rejectAsync(id, token){
     const options = {
-        method: "PUT",
+        method: "PATCH",
         headers: {
             'Authorization': `Bearer ${token}`
         }
     }
 
-    const url = baseAdminUrl + routes.admin.rejectBook + `/${bookId}`
+    const url = baseAdminUrl + routes.book + `/${id}` + '/reject'
     const response = await fetch(url, options)
 
-    if(response.ok){
-        return true 
+    if(!response.ok){
+        throw new Error(errors.book.reject)
     }
-
-    return false
 }

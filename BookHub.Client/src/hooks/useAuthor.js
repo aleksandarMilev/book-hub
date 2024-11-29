@@ -94,7 +94,7 @@ export function useSearchAuthors(authors) {
 }
 
 export function useGetDetails(id){
-    const { token } = useContext(UserContext)
+    const { token, isAdmin } = useContext(UserContext)
     
     const navigate = useNavigate()
     const [author, setAuthor] = useState(null)
@@ -104,7 +104,7 @@ export function useGetDetails(id){
         async function fetchData() {
             try {
                 setIsFetching(old => !old)
-                setAuthor(await authorApi.getDetailsAsync(id, token))
+                setAuthor(await authorApi.getDetailsAsync(id, token, isAdmin))
                 setIsFetching(old => !old)
             } catch(error) {
                 navigate(routes.notFound, { state: { message: error.message} })

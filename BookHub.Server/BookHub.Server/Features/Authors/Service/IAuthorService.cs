@@ -11,6 +11,8 @@
 
         Task<AuthorDetailsServiceModel?> DetailsAsync(int id);
 
+        Task<AuthorDetailsServiceModel?> AdminDetailsAsync(int id);
+
         Task<int> CreateAsync(CreateAuthorServiceModel model);
 
         Task<Result> EditAsync(int id, CreateAuthorServiceModel model);
@@ -18,5 +20,7 @@
         Task<Result> DeleteAsync(int id);
 
         Task<Result> ApproveAsync(int id);
+
+        Task<Result> RejectAsync(int id);
     }
 }

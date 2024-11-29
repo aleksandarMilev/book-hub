@@ -85,6 +85,7 @@ export default function BookDetails() {
                         setShowFullDescription={setShowFullDescription}
                         isCreator={isCreator}
                         deleteHandler={deleteHandler}
+                        refreshBook={refreshBook}
                         id={id}
                     />
                     <AuthorIntroduction author={book.author} />

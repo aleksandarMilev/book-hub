@@ -1,4 +1,4 @@
-import { baseUrl, routes } from '../common/constants/api'
+import { baseUrl, baseAdminUrl, routes } from '../common/constants/api'
 import { errors } from '../common/constants/messages'
 
 export async function getTopThreeAsync(token) {
@@ -37,7 +37,7 @@ export async function getAuthorNamesAsync(token){
     throw new Error(errors.author.namesBadRequest)
 }
 
-export async function getDetailsAsync(id, token) {
+export async function getDetailsAsync(id, token, isAdmin) {
     const options = {
         method: "GET",
         headers: {
@@ -45,7 +45,10 @@ export async function getDetailsAsync(id, token) {
         }
     }
 
-    const url = baseUrl + routes.author + `/${id}`
+    const url = isAdmin
+        ? baseAdminUrl + routes.author + `/${id}`
+        : baseUrl + routes.author + `/${id}`
+
     const response = await fetch(url, options)
 
     if(response.ok){
@@ -114,38 +117,34 @@ export async function deleteAsync(id, token){
     return false
 }
 
-export async function approveAsync(authorId, token){
+export async function approveAsync(id, token){
     const options = {
-        method: "PUT",
+        method: "PATCH",
         headers: {
             'Authorization': `Bearer ${token}`
         }
     }
 
-    const url = baseAdminUrl + routes.admin.approveAuthor + `/${authorId}`
+    const url = baseAdminUrl + routes.author + `/${id}` + '/approve'
     const response = await fetch(url, options)
 
-    if(response.ok){
-        return true 
+    if(!response.ok){
+        throw new Error(errors.author.approve)
     }
-
-    return false
 }
 
-export async function rejectAsync(authorId, token){
+export async function rejectAsync(id, token){
     const options = {
-        method: "PUT",
+        method: "PATCH",
         headers: {
             'Authorization': `Bearer ${token}`
         }
     }
 
-    const url = baseAdminUrl + routes.admin.rejectAuthor + `/${authorId}`
+    const url = baseAdminUrl + routes.author + `/${id}` + '/reject'
     const response = await fetch(url, options)
 
-    if(response.ok){
-        return true 
+    if(!response.ok){
+        throw new Error(errors.author.reject)
     }
-
-    return false
 }

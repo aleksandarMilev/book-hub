@@ -16,8 +16,8 @@ namespace BookHub.Server.Features.Book.Web.Admin
         [HttpGet("{id}")]
         public async Task<ActionResult<BookDetailsServiceModel>> Details(int id)
             => this.Ok(await this.service.AdminDetailsAsync(id));
-        
-        [HttpPut("[action]/{id}")]
+
+        [HttpPatch("{id}/[action]")]
         public async Task<ActionResult> Approve(int id)
         {
             var result = await this.service.ApproveAsync(id);
@@ -25,10 +25,10 @@ namespace BookHub.Server.Features.Book.Web.Admin
             return this.NoContentOrBadRequest(result);
         }
 
-        [HttpPut("[action]/{id}")]
+        [HttpPatch("{id}/[action]")]
         public async Task<ActionResult> Reject(int id)
         {
-            var result = await this.service.DeleteAsync(id);
+            var result = await this.service.RejectAsync(id);
 
             return this.NoContentOrBadRequest(result);
         }

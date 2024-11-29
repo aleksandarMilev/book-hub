@@ -20,5 +20,7 @@
         Task<Result> DeleteAsync(int id);
 
         Task<Result> ApproveAsync(int id);
+
+        Task<Result> RejectAsync(int id);
     }
 }

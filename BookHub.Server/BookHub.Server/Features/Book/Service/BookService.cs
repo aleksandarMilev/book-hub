@@ -1,9 +1,9 @@
 ﻿namespace BookHub.Server.Features.Book.Service
 {
-    using Infrastructure.Extensions;
     using AutoMapper;
     using Data;
     using Data.Models;
+    using Infrastructure.Extensions;
     using Infrastructure.Services;
     using Mapper;
     using Microsoft.EntityFrameworkCore;
@@ -41,6 +41,7 @@
         public async Task<BookDetailsServiceModel?> DetailsAsync(int id)
             => await this.data
                 .Books
+                .AsQueryable()
                 .MapToDetailsModel(this.userService.GetId()!)
                 .FirstOrDefaultAsync(b => b.Id == id);
 
@@ -131,15 +132,35 @@
         {
             var book = await this.data
                  .Books
-                 .FindAsync(id);
+                 .IgnoreQueryFilters()
+                 .ApplyIsDeletedFilter()
+                 .FirstOrDefaultAsync(a => a.Id == id);
 
             if (book is null)
             {
                 return BookNotFound;
             }
 
-           
             book.IsApproved = true;
+            await this.data.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<Result> RejectAsync(int id)
+        {
+            var book = await this.data
+                 .Books
+                 .IgnoreQueryFilters()
+                 .ApplyIsDeletedFilter()
+                 .FirstOrDefaultAsync(a => a.Id == id);
+
+            if (book is null)
+            {
+                return BookNotFound;
+            }
+
+            this.data.Remove(book);
             await this.data.SaveChangesAsync();
 
             return true;
