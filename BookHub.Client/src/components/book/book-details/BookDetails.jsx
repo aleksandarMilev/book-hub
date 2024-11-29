@@ -37,7 +37,7 @@ export default function BookDetails() {
             const success = await bookApi.deleteAsync(id, token)
             
             if(success){
-                navigate(routes.books)
+                navigate(routes.book)
             } else {
                 navigate(routes.badRequest, { state: { message: errors.book.delete } })
             }

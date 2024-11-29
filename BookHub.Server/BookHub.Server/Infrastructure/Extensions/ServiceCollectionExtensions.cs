@@ -8,7 +8,7 @@
     using Data.Models;
     using Features.Article.Service;
     using Features.Authors.Service;
-    using Features.Books.Service;
+    using Features.Book.Service;
     using Features.Identity.Service;
     using Features.Notification.Service;
     using Features.Review.Service;

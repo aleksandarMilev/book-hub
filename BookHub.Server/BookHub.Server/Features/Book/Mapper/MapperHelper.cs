@@ -1,4 +1,4 @@
-﻿namespace BookHub.Server.Features.Books.Mapper
+﻿namespace BookHub.Server.Features.Book.Mapper
 {
     public static class MapperHelper
     {

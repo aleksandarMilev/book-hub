@@ -1,7 +1,8 @@
+import { useNavigate } from 'react-router-dom'
 import { Dropdown } from 'react-bootstrap'
 import { format } from 'date-fns'
 import { FaBook, FaUser } from 'react-icons/fa'
- 
+
 import './LastNotificationsListItem.css'
 
 export default function LastNotificationsListItem({ notification }){
@@ -17,8 +18,14 @@ export default function LastNotificationsListItem({ notification }){
     const notificationClass = notification.isRead ? "notification-item-read" : "notification-item-unread"
     const readStatusMessage = notification.isRead ? "Read" : "Unread"
 
+    const navigate = useNavigate()
+    const onClickHandler = (e) => {
+        e.preventDefault()
+        navigate(`/${notification.resourceType}/${notification.resourceId}`)
+    }
+
     return (
-        <Dropdown.Item key={notification.id} className="notification-item">
+        <Dropdown.Item key={notification.id} onClick={onClickHandler} className="notification-item">
             <div className="notification-header">
                 <span className="notification-icon-wrapper">
                     {getIcon(notification.resourceType)} 

@@ -62,7 +62,7 @@ export default function TopBooks() {
                                     <span>No genres available</span>
                                 )}
                             </MDBCardText>
-                            <MDBBtn tag={Link} to={routes.books + `/${b.id}`} color='dark' rounded size='sm' className="view-button">
+                            <MDBBtn tag={Link} to={routes.book + `/${b.id}`} color='dark' rounded size='sm' className="view-button">
                                 View
                             </MDBBtn>
                         </MDBCardBody>

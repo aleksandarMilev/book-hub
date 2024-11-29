@@ -37,7 +37,7 @@ export default function BookListItem({ id, imageUrl, title, authorName, shortDes
 
             <div className="col-md-3 d-flex align-items-center justify-content-center mt-1">
                 <div className="d-flex flex-column align-items-center">
-                    <Link to={routes.books + `/${id}`} className="btn btn-sm btn-primary book-list-item-btn">
+                    <Link to={routes.book + `/${id}`} className="btn btn-sm btn-primary book-list-item-btn">
                         View Details
                     </Link>
                 </div>

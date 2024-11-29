@@ -32,7 +32,7 @@ export function useGetTopThree() {
 }
 
 export function useGetFullInfo(id) {
-    const { token } = useContext(UserContext)
+    const { token, isAdmin } = useContext(UserContext)
 
     const navigate = useNavigate()
     const [book, setBook] = useState(null)
@@ -41,7 +41,7 @@ export function useGetFullInfo(id) {
     const fetchData = async () => {
         try {
             setIsFetching(true)
-            const fetchedBook = await bookApi.getDetailsAsync(id, token)
+            const fetchedBook = await bookApi.getDetailsAsync(id, token, isAdmin)
             setBook(fetchedBook)
         } catch (error) {
             navigate(routes.notFound, { state: { message: errors.book.notfound } })

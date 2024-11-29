@@ -1,5 +1,6 @@
-﻿namespace BookHub.Server.Features.Books.Service
+﻿namespace BookHub.Server.Features.Book.Service
 {
+    using Infrastructure.Extensions;
     using AutoMapper;
     using Data;
     using Data.Models;
@@ -31,17 +32,25 @@
 
         public async Task<IEnumerable<BookServiceModel>> TopThreeAsync()
             => await this.data
-               .Books
-               .MapToServiceModel()
-               .OrderByDescending(b => b.AverageRating)
-               .Take(3)
-               .ToListAsync();
+                .Books
+                .MapToServiceModel()
+                .OrderByDescending(b => b.AverageRating)
+                .Take(3)
+                .ToListAsync();
 
         public async Task<BookDetailsServiceModel?> DetailsAsync(int id)
             => await this.data
-                  .Books
-                  .MapToDetailsModel(this.userService.GetId()!)
-                  .FirstOrDefaultAsync(b => b.Id == id);
+                .Books
+                .MapToDetailsModel(this.userService.GetId()!)
+                .FirstOrDefaultAsync(b => b.Id == id);
+
+        public async Task<BookDetailsServiceModel?> AdminDetailsAsync(int id)
+            => await this.data
+                .Books
+                .IgnoreQueryFilters()
+                .ApplyIsDeletedFilter()
+                .MapToDetailsModel(this.userService.GetId()!)
+                .FirstOrDefaultAsync(b => b.Id == id);
 
         public async Task<int> CreateAsync(CreateBookServiceModel model)
         {

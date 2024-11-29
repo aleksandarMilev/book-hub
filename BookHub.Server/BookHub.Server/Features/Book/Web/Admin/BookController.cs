@@ -1,18 +1,22 @@
 ﻿#pragma warning disable ASP0023 
-namespace BookHub.Server.Features.Books.Web.Admin
+namespace BookHub.Server.Features.Book.Web.Admin
 {
-    using Areas.Admin;
-    using BookHub.Server.Areas.Admin.Web;
+    using Areas.Admin.Web;
     using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Service;
+    using Service.Models;
 
     [Authorize]
-    public class BooksController(IBookService service) : AdminApiController
+    public class BookController(IBookService service) : AdminApiController
     {
         private readonly IBookService service = service;
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<BookDetailsServiceModel>> Details(int id)
+            => this.Ok(await this.service.AdminDetailsAsync(id));
+        
         [HttpPut("[action]/{id}")]
         public async Task<ActionResult> Approve(int id)
         {

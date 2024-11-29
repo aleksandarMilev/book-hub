@@ -23,7 +23,8 @@
                     NationalityId = 182,
                     Gender = Gender.Male,
                     BornAt = new DateTime(1947, 09, 21),
-                    CreatorId = "user1Id"
+                    CreatorId = "user1Id",
+                    IsApproved = true
                 },
 
                 new()
@@ -42,7 +43,8 @@
                     NationalityId = 181,
                     Gender = Gender.Female,
                     BornAt = new DateTime(1965, 07, 31),
-                    CreatorId = "user2Id"
+                    CreatorId = "user2Id",
+                    IsApproved = true
                 },
                 new()
                 {
@@ -58,6 +60,7 @@
                     BornAt = new DateTime(1892, 01, 03),
                     DiedAt = new DateTime(1973, 09, 02),
                     CreatorId = "user3Id",
+                    IsApproved = true
                 }
             };
     }

@@ -12,10 +12,10 @@ export const routes = {
     editProfle: '/profile/edit',
     createProfle: '/profile/new',
 
-    books: '/books',
-    topThreeBooks: '/books/topThree',
-    createBook: '/books/new',
-    editBook: '/books/edit',
+    book: '/book',
+    topThreeBooks: '/book/topThree',
+    createBook: '/book/new',
+    editBook: '/book/edit',
     genres: '/genre',
 
     author: '/author',

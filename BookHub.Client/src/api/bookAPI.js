@@ -19,7 +19,7 @@ export async function getTopThreeAsync(token){
     throw new Error(errors.book.topThree)
 }
 
-export async function getDetailsAsync(id, token){
+export async function getDetailsAsync(id, token, isAdmin){
     const options = {
         method: "GET",
         headers: {
@@ -27,7 +27,10 @@ export async function getDetailsAsync(id, token){
         }
     }
 
-    const url = baseUrl + routes.books + `/${id}`
+    const url = isAdmin
+        ? baseAdminUrl + routes.book + `/${id}`
+        : baseUrl + routes.book + `/${id}`
+        
     const response = await fetch(url, options)
 
     if(response.ok){
@@ -47,7 +50,7 @@ export async function createAsync(book, token){
         body: JSON.stringify(book)
     }
 
-    const url = baseUrl + routes.books
+    const url = baseUrl + routes.book
     const response = await fetch(url, options)
 
     if(response.ok){
@@ -67,7 +70,7 @@ export async function editAsync(bookId, book, token){
         body: JSON.stringify(book)
     }
 
-    const url = baseUrl + routes.books + `/${bookId}`
+    const url = baseUrl + routes.book + `/${bookId}`
     const response = await fetch(url, options)
 
     if(response.ok){
@@ -85,7 +88,7 @@ export async function deleteAsync(bookId, token){
         }
     }
 
-    const url = baseUrl + routes.books + `/${bookId}`
+    const url = baseUrl + routes.book + `/${bookId}`
     const response = await fetch(url, options)
 
     if(response.ok){

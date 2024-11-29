@@ -1,7 +1,7 @@
 ﻿namespace BookHub.Server.Features.Authors.Mapper
 {
     using AutoMapper;
-    using Books.Service.Models;
+    using Book.Service.Models;
     using Data.Models;
     using Service.Models;
     using Web.Models;

@@ -1,4 +1,4 @@
-﻿namespace BookHub.Server.Features.Books.Web.User
+﻿namespace BookHub.Server.Features.Book.Web.User
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;

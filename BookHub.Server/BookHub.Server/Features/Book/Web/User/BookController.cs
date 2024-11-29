@@ -1,4 +1,4 @@
-﻿namespace BookHub.Server.Features.Books.Web.User
+﻿namespace BookHub.Server.Features.Book.Web.User
 {
     using AutoMapper;
     using Infrastructure.Extensions;
@@ -9,7 +9,7 @@
     using Service.Models;
 
     [Authorize]
-    public class BooksController(
+    public class BookController(
         IBookService service,
         IMapper mapper) : ApiController
     {

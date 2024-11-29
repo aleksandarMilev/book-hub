@@ -27,7 +27,7 @@ export default function Header() {
                             <Nav.Link as={Link} to={routes.home}>
                                 Home
                             </Nav.Link>
-                            <Nav.Link as={Link} to={routes.books}>
+                            <Nav.Link as={Link} to={routes.book}>
                                 Books
                             </Nav.Link>
                             <Nav.Link as={Link} to={routes.articles}>

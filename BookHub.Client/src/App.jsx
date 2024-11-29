@@ -53,8 +53,8 @@ export default function App(){
                 <Route path={routes.createProfle} element={<AuthenticatedRoute element={<CreateProfile />} />} />
                 <Route path={routes.editProfle} element={<AuthenticatedRoute element={<EditProfile />} />} />
 
-                <Route path={routes.books} element={<AuthenticatedRoute element={<BookList />} />} />
-                <Route path={routes.books + '/:id'} element={<AuthenticatedRoute element={<BookDetails />} />} />
+                <Route path={routes.book} element={<AuthenticatedRoute element={<BookList />} />} />
+                <Route path={routes.book + '/:id'} element={<AuthenticatedRoute element={<BookDetails />} />} />
                 <Route path={routes.createBook} element={<AuthenticatedRoute element={<CreateBook />} />} />
                 <Route path={routes.editBook + '/:id'} element={<AuthenticatedRoute element={<EditBook />} />} />
 

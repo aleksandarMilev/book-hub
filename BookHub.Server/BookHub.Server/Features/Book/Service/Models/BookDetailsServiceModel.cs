@@ -1,4 +1,4 @@
-﻿namespace BookHub.Server.Features.Books.Service.Models
+﻿namespace BookHub.Server.Features.Book.Service.Models
 {
     using Authors.Service.Models;
     using Review.Service.Models;
