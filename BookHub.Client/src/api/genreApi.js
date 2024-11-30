@@ -1,4 +1,5 @@
 import { baseUrl, routes } from '../common/constants/api'
+import { errors } from '../common/constants/messages'
 
 export async function getGenresAsync(token){
     const options = {
@@ -9,16 +10,27 @@ export async function getGenresAsync(token){
     }
 
     const url = baseUrl + routes.genres
+    const response = await fetch(url, options)
 
-    try {
-        const response = await fetch(url, options)
-
-        if(!response.ok){
-            throw new Error()
-        }
-
-        return await response.json()
-    } catch {
-        throw new Error()
+    if(!response.ok){
+        throw new Error(errors.genre.namesBadRequest)
     }
+}
+
+export async function detailsAsync(id, token){
+    const options = {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+
+    const url = baseUrl + routes.genres + `/${id}`
+    const response = await fetch(url, options)
+
+    if(response.ok){
+        return await response.json()
+    }
+
+    throw new Error(errors.genre.details)
 }

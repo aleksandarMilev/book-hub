@@ -21,7 +21,8 @@
                         "and the unintended consequences of playing God. King's skillful writing leaves readers pondering the fine line between love " +
                         "and selfishness, as well as the destructive force of denial.",
                     ImageUrl = "https://thedailytexan.com/wp-content/uploads/2023/09/pet_sematary_bloodlines_4press-1200x800.jpg",
-                    Views = 0
+                    Views = 0,
+                    CreatedOn = DateTime.Now
                 },
                 new()
                 {
@@ -36,7 +37,8 @@
                         "characters. Packed with heart-pounding action and poignant moments, Rowling’s finale is not just a fight between good and evil" +
                         "but a meditation on love, legacy, and the choices that shape our lives.",
                     ImageUrl = "https://choicefineart.com/cdn/shop/products/book-7-harry-potter-and-the-deathly-hallows-311816.jpg?v=1688079541",
-                    Views = 0
+                    Views = 0,
+                    CreatedOn = DateTime.Now
                 },
                 new()
                 {
@@ -52,8 +54,9 @@
                         "The narrative explores themes of power, corruption, and the resilience of the human spirit, making it a tale that resonates " +
                         "across generations. Whether it’s Gandalf’s wisdom, Frodo’s burden, or the triumph of unity, Tolkien’s masterpiece continues " +
                         "to inspire and enchant readers worldwide.",
-                    ImageUrl = "https://example.com/images/lord-of-the-rings.jpg",
-                    Views = 0
+                    ImageUrl = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEibI7_-Az0QVZhhwZO_PcgrNRK7RYnS7JPiddt_LvTC8NTgTzzYcaagGBLR6KtgY1J_VyZzS6HhL7MW9x1h-rioISPanc-daPbdgnZCQQb48PNELDt9gbQlohCJuXGHgritNS_3Ff08oUhs/w1200-h630-p-k-no-nu/acetolkien.jpg",
+                    Views = 0,
+                    CreatedOn = DateTime.Now
                 }
             };
     }

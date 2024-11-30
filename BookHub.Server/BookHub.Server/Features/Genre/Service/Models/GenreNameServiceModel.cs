@@ -1,4 +1,4 @@
-﻿namespace BookHub.Server.Features.Book.Service.Models
+﻿namespace BookHub.Server.Features.Genre.Service.Models
 {
     public class GenreNameServiceModel
     {

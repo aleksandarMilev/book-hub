@@ -67,7 +67,9 @@ export default function BookFullInfo({
                         <div className="genres mb-3">
                             <span className="fw-semibold text-muted me-1">Genres:</span>
                             {book.genres.map(g => (
-                                <span key={g.id} className="badge bg-secondary me-1">{g.name}</span>
+                                <Link to={routes.genres + `/${g.id}`}>
+                                    <span key={g.id} className="badge bg-secondary me-1">{g.name}</span>
+                                </Link>
                             ))}
                         </div>
                         <p className="book-description card-text">

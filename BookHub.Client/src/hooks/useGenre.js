@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import * as genreApi from '../api/genreApi'
-import { errors } from '../common/constants/messages'
 import { routes } from '../common/constants/api'
 import { UserContext } from '../contexts/userContext'
 
@@ -16,11 +15,12 @@ export function useGenres() {
     useEffect(() => {
         async function fetchData() {
             try {
-                setIsFetching(old => !old)
+                setIsFetching(true)
                 setGenres(await genreApi.getGenresAsync(token))
-                setIsFetching(old => !old)
-            } catch {
-                navigate(routes.badRequest, { state: { message: errors.genre.namesBadRequest } })
+            } catch (error) {
+                navigate(routes.badRequest, { state: { message: error.message } })
+            } finally {
+                setIsFetching(false)
             }
         }
 
@@ -50,4 +50,29 @@ export function useSearchGenres(genres, selectedGenres) {
     const updateSearchTerm = (term) => setSearchTerm(term)
 
     return { searchTerm, filteredGenres, updateSearchTerm }
+}
+
+export function useDetails(id) {
+    const navigate = useNavigate()
+    const [genre, setGenre] = useState(null)
+    const [isFetching, setIsFetching] = useState(false)
+
+    const { token } = useContext(UserContext)
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                setIsFetching(true)
+                setGenre(await genreApi.detailsAsync(id, token))
+            } catch (error) {
+                navigate(routes.badRequest, { state: { message: error.message } })
+            } finally {
+                setIsFetching(false)
+            }
+        }
+
+        fetchData()
+    }, [token, navigate])
+
+    return { genre, isFetching }
 }

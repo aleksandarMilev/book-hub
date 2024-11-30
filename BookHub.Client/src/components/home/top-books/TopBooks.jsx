@@ -54,9 +54,11 @@ export default function TopBooks() {
                                 <strong>Genres:</strong> 
                                 {b.genres && b.genres.length > 0 ? (
                                     b.genres.map((g, i) => (
-                                        <span key={g.id} className="genre-item">
-                                            {g.name}{i < b.genres.length - 1 ? ', ' : ''}
-                                        </span>
+                                        <Link to={routes.genres + `/${g.id}`}>
+                                            <span key={g.id} className="genre-item">
+                                                {g.name}{i < b.genres.length - 1 ? ', ' : ''}
+                                            </span>
+                                        </Link>
                                     ))
                                 ) : (
                                     <span>No genres available</span>

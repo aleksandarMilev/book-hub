@@ -12,6 +12,14 @@
         [MaxLength(NameMaxLength)]
         public string Name { get; set; } = null!;
 
+        [Required]
+        [MaxLength(UrlMaxLength)]
+        public string ImageUrl { get; set; } = null!;
+
+        [Required]
+        [MaxLength(DescriptionMaxLength)]
+        public string Description { get; set; } = null!;
+
         public ICollection<BookGenre> BooksGenres { get; } = new HashSet<BookGenre>();
     }
 }

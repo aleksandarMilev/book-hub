@@ -22,6 +22,8 @@ import BookDetails from "./components/book/book-details/BookDetails"
 import CreateBook from './components/book/create-book/CreateBook'
 import EditBook from './components/book/edit-book/EditBook'
 
+import GenreDetails from "./components/genre/genre-details/GenreDetails"
+
 import AuthorDetails from "./components/author/author-details/AuthorDetails"
 import CreateAuthor from "./components/author/create-author/CreateAuthor"
 import EditAuthor from "./components/author/edit-author/EditAuthor"
@@ -59,6 +61,8 @@ export default function App(){
                 <Route path={routes.editBook + '/:id'} element={<AuthenticatedRoute element={<EditBook />} />} />
 
                 <Route path={routes.review + '/:bookId'} element={<AuthenticatedRoute element={<ReviewList />} />} />
+
+                <Route path={routes.genres + '/:id'} element={<AuthenticatedRoute element={<GenreDetails />} />} />
 
                 <Route path={routes.author + '/:id'} element={<AuthenticatedRoute element={<AuthorDetails />} />} />
                 <Route path={routes.createAuthor} element={<AuthenticatedRoute element={<CreateAuthor />} />} />

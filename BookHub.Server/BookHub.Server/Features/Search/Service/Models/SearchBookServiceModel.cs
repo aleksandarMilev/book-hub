@@ -1,6 +1,7 @@
 ﻿namespace BookHub.Server.Features.Search.Service.Models
 {
     using Book.Service.Models;
+    using BookHub.Server.Features.Genre.Service.Models;
 
     public class SearchBookServiceModel
     {

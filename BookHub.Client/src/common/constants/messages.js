@@ -26,6 +26,7 @@ export const errors = {
         delete: 'Oops! Something went wrong while trying to delete the author. Please try again later or contact support if the issue persists.'
     },
     genre: {
+        details: 'We couldn’t find the genre you’re looking for. Please check the URL or try again later.',
         namesBadRequest: 'Apologies, we\'re experiencing issues and can\'t display genre names at the moment. Please try again later or contact us for assistance.'
     },
     identity: {

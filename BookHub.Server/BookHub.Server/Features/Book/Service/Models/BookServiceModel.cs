@@ -1,5 +1,7 @@
 ﻿namespace BookHub.Server.Features.Book.Service.Models
 {
+    using Genre.Service.Models;
+
     public class BookServiceModel
     {
         public int Id { get; init; }

@@ -27,7 +27,9 @@ export default function BookListItem({ id, imageUrl, title, authorName, shortDes
                 <div className="mt-1 mb-2 book-list-item-genres">
                     <FaTag className="me-2" />
                     {genres.map(g => (
-                        <span key={g.id} className="badge bg-secondary me-1">{g.name}</span>
+                        <Link to={routes.genres + `/${g.id}`}>
+                            <span key={g.id} className="badge bg-secondary me-1">{g.name}</span>
+                        </Link>
                     ))}
                 </div>
                 <p className="text-justify para mb-0 book-list-item-description">
