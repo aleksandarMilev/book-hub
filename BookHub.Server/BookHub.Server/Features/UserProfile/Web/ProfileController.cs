@@ -16,9 +16,14 @@
         private readonly IProfileService service = service;
         private readonly IMapper mapper = mapper;
 
+        [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult<ProfileServiceModel>> Get()
-            => this.Ok(await this.service.GetAsync());
+        public async Task<ActionResult<ProfileServiceModel>> Mine()
+            => this.Ok(await this.service.MineAsync());
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IProfileServiceModel>> OtherUser(string id)
+           => this.Ok(await this.service.OtherUserAsync(id));
 
         [HttpPost]
         public async Task<ActionResult<string>> Create(CreateProfileWebModel webModel)

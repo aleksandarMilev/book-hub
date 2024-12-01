@@ -10,6 +10,7 @@
     using Microsoft.EntityFrameworkCore;
     using Models;
     using Notification.Service;
+    using UserProfile.Service;
 
     using static Common.Constants.DefaultValues;
     using static Common.Messages.Error.Book;
@@ -19,12 +20,14 @@
         ICurrentUserService userService,
         IAdminService adminService,
         INotificationService notificationService,
+        IProfileService profileService,
         IMapper mapper) : IBookService
     {
         private readonly BookHubDbContext data = data;
         private readonly ICurrentUserService userService = userService;
         private readonly IAdminService adminService = adminService;
         private readonly INotificationService notificationService = notificationService;
+        private readonly IProfileService profileService = profileService;
         private readonly IMapper mapper = mapper;
 
         public async Task<IEnumerable<BookServiceModel>> AllAsync()
@@ -61,7 +64,7 @@
             model.ImageUrl ??= DefaultBookImageUrl;
 
             var book = this.mapper.Map<Book>(model);
-            book.CreatorId = this.userService.GetId()!;
+            book.CreatorId = this.userService.GetId();
             book.AuthorId = await this.MapAuthorToBookAsync(model.AuthorId);
 
             var userIsAdmin = this.userService.IsAdmin();
@@ -159,6 +162,8 @@
                 book.Title,
                 book.CreatorId!,
                 true);
+
+            await this.profileService.IncrementCountAsync(this.userService.GetId()!, nameof(UserProfile.CreatedBooksCount));
 
             return true;
         }

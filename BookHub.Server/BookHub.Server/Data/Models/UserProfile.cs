@@ -39,6 +39,12 @@
         [MaxLength(BiographyMaxLength)]
         public string? Biography { get; set; }
 
+        public int CreatedBooksCount { get; set; }
+
+        public int CreatedAuthorsCount { get; set; }
+
+        public int ReviewsCount { get; set; }
+
         public bool IsPrivate { get; set; }
 
         public DateTime CreatedOn { get; set; }

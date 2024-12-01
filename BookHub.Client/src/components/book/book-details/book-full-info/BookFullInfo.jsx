@@ -66,7 +66,6 @@ export default function BookFullInfo({
         }
     }
 
-
     return (
         <div className="book-info-card shadow-lg p-4">
             <div className="row g-0">

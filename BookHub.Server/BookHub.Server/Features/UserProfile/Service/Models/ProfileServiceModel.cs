@@ -1,15 +1,7 @@
 ﻿namespace BookHub.Server.Features.UserProfile.Service.Models
 {
-    public class ProfileServiceModel
+    public class ProfileServiceModel : PrivateProfileServiceModel, IProfileServiceModel
     {
-        public string Id { get; init; } = null!;
-
-        public string FirstName { get; init; } = null!;
-
-        public string LastName { get; init; } = null!;
-
-        public string ImageUrl { get; init; } = null!;
-
         public string PhoneNumber { get; init; } = null!;
 
         public DateTime DateOfBirth { get; init; }
@@ -18,6 +10,10 @@
 
         public string? Biography { get; init; }
 
-        public bool IsPrivate { get; init; }
+        public int CreatedBooksCount { get; set; }
+
+        public int CreatedAuthorsCount { get; set; }
+
+        public int ReviewsCount { get; set; }
     }
 }

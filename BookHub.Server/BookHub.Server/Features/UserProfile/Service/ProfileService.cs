@@ -19,11 +19,32 @@
         private readonly ICurrentUserService userService = userService;
         private readonly IMapper mapper = mapper;
 
-        public async Task<ProfileServiceModel?> GetAsync()
+        public async Task<ProfileServiceModel?> MineAsync()
             => await this.data
                 .Profiles
                 .ProjectTo<ProfileServiceModel>(this.mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(p => p.Id == this.userService.GetId()!);
+                .FirstOrDefaultAsync(p => p.Id == "9a025673-4ac4-4e04-ac57-27add1580677");
+
+        public async Task<IProfileServiceModel?> OtherUserAsync(string id)
+        {
+            var model = await this.data
+                .Profiles
+                .ProjectTo<ProfileServiceModel>(this.mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (model is null)
+            {
+                return null;
+            }
+
+            if (model.IsPrivate)
+            {
+                return this.mapper.Map<PrivateProfileServiceModel>(model);
+            }
+
+            return model;
+        }
+         
 
         public async Task<string> CreateAsync(CreateProfileServiceModel model)
         {
@@ -69,6 +90,21 @@
             await this.data.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task IncrementCountAsync(string userId, string propName)
+        {
+            var profile = await this.data
+               .Profiles
+               .FindAsync(userId)
+               ?? throw new InvalidOperationException(ProfileNotFound);
+
+            var property = typeof(Profile)
+                .GetProperty(propName)
+                ?? throw new InvalidOperationException($"{propName} not found!");
+
+            var currentValue = (int)property.GetValue(profile)!;
+            property.SetValue(profile, currentValue + 1);
         }
     }
 }

@@ -6,7 +6,7 @@
 
     using static Common.Constants.Validation.Nationality;
 
-    public class Nationality : IEntity<int>
+    public class Nationality : Entity<int>
     {
         [Required]
         [MaxLength(NameMaxLength)]

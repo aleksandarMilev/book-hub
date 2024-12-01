@@ -20,7 +20,6 @@
             int pageIndex = DefaultPageIndex,
             int pageSize = DefaultPageSize) => this.Ok(await this.service.AllAsync(status, pageIndex, pageSize));
 
-        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult> Add(ReadingListWebModel webModel) 
         {

@@ -5,12 +5,16 @@
 
     public interface IProfileService
     {
-        Task<ProfileServiceModel?> GetAsync();
+        Task<ProfileServiceModel?> MineAsync();
+
+        Task<IProfileServiceModel?> OtherUserAsync(string id);
 
         Task<string> CreateAsync(CreateProfileServiceModel model);
 
         Task<Result> EditAsync(CreateProfileServiceModel model);
 
         Task<Result> DeleteAsync();
+
+        Task IncrementCountAsync(string userId, string propName);
     }
 }

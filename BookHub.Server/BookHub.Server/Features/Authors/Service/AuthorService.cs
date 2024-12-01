@@ -10,6 +10,7 @@
     using Microsoft.EntityFrameworkCore;
     using Models;
     using Notification.Service;
+    using UserProfile.Service;
 
     using static Common.Constants.DefaultValues;
     using static Common.Messages.Error.Author;
@@ -19,12 +20,14 @@
         ICurrentUserService userService,
         IAdminService adminService,
         INotificationService notificationService,
+        IProfileService profileService,
         IMapper mapper) : IAuthorService
     {
         private readonly BookHubDbContext data = data;
         private readonly ICurrentUserService userService = userService;
         private readonly IAdminService adminService = adminService;
         private readonly INotificationService notificationService = notificationService;
+        private readonly IProfileService profileService = profileService;
         private readonly IMapper mapper = mapper;
 
         public async Task<IEnumerable<AuthorNamesServiceModel>> NamesAsync()
@@ -64,10 +67,12 @@
             model.ImageUrl ??= DefaultAuthorImageUrl;
 
             var author = this.mapper.Map<Author>(model);
-            author.CreatorId = this.userService.GetId()!;
+            author.CreatorId = this.userService.GetId();
             author.NationalityId = await this.MapNationalityToAuthor(model.NationalityId);
 
-            if (this.userService.IsAdmin())
+            var userIsAdmin = this.userService.IsAdmin();
+
+            if (userIsAdmin)
             {
                 author.IsApproved = true;
             }
@@ -75,7 +80,7 @@
             this.data.Add(author);
             await this.data.SaveChangesAsync();
 
-            if (!this.userService.IsAdmin())
+            if (!userIsAdmin)
             {
                 await this.notificationService.CreateOnEntityCreationAsync(
                     author.Id,
@@ -158,6 +163,8 @@
                 author.Name,
                 author.CreatorId!,
                 true);
+
+            await this.profileService.IncrementCountAsync(this.userService.GetId()!, nameof(UserProfile.CreatedAuthorsCount));
 
             return true;
         }

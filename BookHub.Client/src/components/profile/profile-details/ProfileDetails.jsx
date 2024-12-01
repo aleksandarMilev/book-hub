@@ -9,7 +9,10 @@ import {
     faLock,
     faEdit,
     faTrashAlt,
-    faPlus
+    faPlus,
+    faBook,
+    faComment,
+    faChartBar
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as useProfile from '../../../hooks/useProfile'
@@ -51,6 +54,8 @@ export default function ProfileDetails() {
     if (isFetching) {
         return <DefaultSpinner />
     }
+
+    console.log(profile)
 
     return (
         <div className="profile-details container-fluid">
@@ -123,6 +128,36 @@ export default function ProfileDetails() {
                                         )}
                                     </span>
                                 </div>
+                                <hr className="my-4" />
+                                <div className="statistics-section">
+                                    <h6 className="mb-0">
+                                        <FontAwesomeIcon icon={faChartBar} className="me-2 text-info" />
+                                        Statistics
+                                    </h6>
+                                    <div className="statistics-items mt-3">
+                                        <div className="stat-item">
+                                                <span className="stat-label">
+                                                    <FontAwesomeIcon icon={faBook} className="me-2 text-info" />
+                                                    Books Created:
+                                                </span>
+                                                <span className="stat-value">{profile?.createdBooksCount || 0}</span>
+                                            </div>
+                                            <div className="stat-item">
+                                                <span className="stat-label">
+                                                    <FontAwesomeIcon icon={faUser} className="me-2 text-success" />
+                                                    Authors Created:
+                                                </span>
+                                                <span className="stat-value">{profile?.createdAuthorsCount || 0}</span>
+                                            </div>
+                                            <div className="stat-item">
+                                                <span className="stat-label">
+                                                    <FontAwesomeIcon icon={faComment} className="me-2 text-warning" />
+                                                    Reviews Written:
+                                                </span>
+                                                <span className="stat-value">{profile?.reviewsCount || 0}</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 <hr className="my-4" />
                                 <div className="d-flex justify-content-around mt-3">
                                     {profile ? (

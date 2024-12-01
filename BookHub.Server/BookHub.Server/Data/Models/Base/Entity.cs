@@ -1,6 +1,6 @@
 ﻿namespace BookHub.Server.Data.Models.Base
 {
-    public abstract class IEntity<TKey> : IEntity
+    public abstract class Entity<TKey> : IEntity
     {
         public TKey Id { get; set ; }
 

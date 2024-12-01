@@ -15,6 +15,8 @@
             this.CreateMap<CreateProfileWebModel, CreateProfileServiceModel>();
 
             this.CreateMap<CreateProfileServiceModel, UserProfile>();
+
+            this.CreateMap<ProfileServiceModel, PrivateProfileServiceModel>();
         }
     }
 }

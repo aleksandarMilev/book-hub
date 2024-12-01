@@ -7,16 +7,19 @@
     using Infrastructure.Services;
     using Microsoft.EntityFrameworkCore;
     using Models;
+    using UserProfile.Service;
 
     using static Common.Messages.Error.Review;
 
     public class ReviewService(
         BookHubDbContext data,
         ICurrentUserService userService,
+        IProfileService profileService,
         IMapper mapper) : IReviewService
     {
         private readonly BookHubDbContext data = data;
         private readonly ICurrentUserService userService = userService;
+        private readonly IProfileService profileService = profileService;
         private readonly IMapper mapper = mapper;
 
         public async Task<PaginatedModel<ReviewServiceModel>> AllForBookAsync(int bookId, int pageIndex, int pageSize)
@@ -51,11 +54,13 @@
             var review = this.mapper.Map<Review>(model);
             review.CreatorId = userId;
 
+            this.data.Add(review);
+            await this.data.SaveChangesAsync();
+
             await this.CalculateBookRatingAsync(model.BookId, model.Rating);
             await this.CalculateAuthorRatingAsync(model.BookId, model.Rating);
 
-            this.data.Add(review);
-            await this.data.SaveChangesAsync();
+            await this.profileService.IncrementCountAsync(userId, nameof(UserProfile.ReviewsCount));
 
             return review.Id;
         }
