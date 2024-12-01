@@ -77,7 +77,16 @@ export function useOtherProfile(id){
         async function fetchData() {
             try {
                 setIsFetching(true)
-                setProfile(await profileApi.otherAsync(id, token))
+
+                const profileData = await profileApi.otherAsync(id, token)
+                const profile = {
+                    ...profileData,
+                    dateOfBirth: profileData.dateOfBirth 
+                        ? format(new Date(profileData.dateOfBirth), 'yyyy-MM-dd') 
+                        : null
+                }
+
+                setProfile(profile)
             } catch (error) {
                 navigate(routes.badRequest, { state: { message: error.message} })
             } finally {

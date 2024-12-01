@@ -59,7 +59,7 @@ export default function ProfileDetails() {
         return <DefaultSpinner />
     }
 
-    console.log(profile);
+    console.log(profile)
     
 
     return (
@@ -80,113 +80,125 @@ export default function ProfileDetails() {
                                         <h4>{profile ? `${profile.firstName} ${profile.lastName}` : 'Your Name'}</h4>
                                     </div>
                                 </div>
-                                <hr className="my-4" />
-                                <ul className="list-group list-group-flush">
-                                    <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                        <h6 className="mb-0">
-                                            <FontAwesomeIcon icon={faPhone} className="me-2 text-primary" />
-                                            Phone Number
-                                        </h6>
-                                        <span className="text-secondary">{profile?.phoneNumber || 'Your phone number'}</span>
-                                    </li>
-                                    <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                        <h6 className="mb-0">
-                                            <FontAwesomeIcon icon={faBirthdayCake} className="me-2 text-danger" />
-                                            Date of Birth
-                                        </h6>
-                                        <span className="text-secondary">{profile?.dateOfBirth || 'Your date of birth'}</span>
-                                    </li>
-                                    <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                        <h6 className="mb-0">
-                                            <FontAwesomeIcon icon={faGlobe} className="me-2 text-info" />
-                                            Website
-                                        </h6>
-                                        <span className="text-secondary">
-                                            {profile?.socialMediaUrl ? (
-                                                <a href={profile.socialMediaUrl} target="_blank" rel="noopener noreferrer">
-                                                    {profile.socialMediaUrl}
-                                                </a>
-                                            ) : (
-                                                'Your website URL'
-                                            )}
-                                        </span>
-                                    </li>
-                                    <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                        <h6 className="mb-0">
-                                            <FontAwesomeIcon icon={faLock} className="me-2 text-warning" />
-                                            Account Privacy
-                                        </h6>
-                                        <span className="text-secondary">{profile?.isPrivate ? 'Private' : 'Public'}</span>
-                                    </li>
-                                </ul>
-                                <hr className="my-4" />
-                                <div className="list-group-item d-flex flex-column align-items-start">
-                                    <h6 className="mb-0">
-                                        <FontAwesomeIcon icon={faUser} className="me-2 text-success" />
-                                        Biography
-                                    </h6>
-                                    <span className="text-secondary mt-2">
-                                        {profile?.biography ? (
-                                            <p className="bio-text">{profile.biography}</p>
-                                        ) : (
-                                            'Your biography'
-                                        )}
-                                    </span>
-                                </div>
-                                <hr className="my-4" />
-                                <div className="statistics-section">
-                                    <h6 className="mb-0">
-                                        <FontAwesomeIcon icon={faChartBar} className="me-2 text-info" />
-                                        Statistics
-                                    </h6>
-                                    <div className="statistics-items mt-3">
-                                        <div className="stat-item">
-                                                <span className="stat-label">
-                                                    <FontAwesomeIcon icon={faBook} className="me-2 text-info" />
-                                                    Books Created:
+                                {(!profile?.isPrivate) || (profile?.isPrivate && profile?.id === userId)
+                                    ?
+                                    <>
+                                        <hr className="my-4" />
+                                        <ul className="list-group list-group-flush">
+                                            <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                <h6 className="mb-0">
+                                                    <FontAwesomeIcon icon={faPhone} className="me-2 text-primary" />
+                                                    Phone Number
+                                                </h6>
+                                                <span className="text-secondary">{profile?.phoneNumber || 'Your phone number'}</span>
+                                            </li>
+                                            <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                <h6 className="mb-0">
+                                                    <FontAwesomeIcon icon={faBirthdayCake} className="me-2 text-danger" />
+                                                    Date of Birth
+                                                </h6>
+                                                <span className="text-secondary">{profile?.dateOfBirth || 'Your date of birth'}</span>
+                                            </li>
+                                            <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                <h6 className="mb-0">
+                                                    <FontAwesomeIcon icon={faGlobe} className="me-2 text-info" />
+                                                    Website
+                                                </h6>
+                                                <span className="text-secondary">
+                                                    {profile?.socialMediaUrl ? (
+                                                        <a href={profile.socialMediaUrl} target="_blank" rel="noopener noreferrer">
+                                                            {profile.socialMediaUrl}
+                                                        </a>
+                                                    ) : (
+                                                        'Your website URL'
+                                                    )}
                                                 </span>
-                                                <span className="stat-value">{profile?.createdBooksCount || 0}</span>
-                                            </div>
-                                            <div className="stat-item">
-                                                <span className="stat-label">
-                                                    <FontAwesomeIcon icon={faUser} className="me-2 text-success" />
-                                                    Authors Created:
-                                                </span>
-                                                <span className="stat-value">{profile?.createdAuthorsCount || 0}</span>
-                                            </div>
-                                            <div className="stat-item">
-                                                <span className="stat-label">
-                                                    <FontAwesomeIcon icon={faComment} className="me-2 text-warning" />
-                                                    Reviews Written:
-                                                </span>
-                                                <span className="stat-value">{profile?.reviewsCount || 0}</span>
-                                            </div>
+                                            </li>
+                                            <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                <h6 className="mb-0">
+                                                    <FontAwesomeIcon icon={faLock} className="me-2 text-warning" />
+                                                    Account Privacy
+                                                </h6>
+                                                <span className="text-secondary">{profile?.isPrivate ? 'Private' : 'Public'}</span>
+                                            </li>
+                                        </ul>
+                                        <hr className="my-4" />
+                                        <div className="list-group-item d-flex flex-column align-items-start">
+                                            <h6 className="mb-0">
+                                                <FontAwesomeIcon icon={faUser} className="me-2 text-success" />
+                                                Biography
+                                            </h6>
+                                            <span className="text-secondary mt-2">
+                                                {profile?.biography ? (
+                                                    <p className="bio-text">{profile.biography}</p>
+                                                ) : (
+                                                    'Your biography'
+                                                )}
+                                            </span>
                                         </div>
+                                        <hr className="my-4" />
+                                        <div className="statistics-section">
+                                            <h6 className="mb-0">
+                                                <FontAwesomeIcon icon={faChartBar} className="me-2 text-info" />
+                                                Statistics
+                                            </h6>
+                                            <div className="statistics-items mt-3">
+                                                <div className="stat-item">
+                                                        <span className="stat-label">
+                                                            <FontAwesomeIcon icon={faBook} className="me-2 text-info" />
+                                                            Books Created:
+                                                        </span>
+                                                        <span className="stat-value">{profile?.createdBooksCount || 0}</span>
+                                                    </div>
+                                                    <div className="stat-item">
+                                                        <span className="stat-label">
+                                                            <FontAwesomeIcon icon={faUser} className="me-2 text-success" />
+                                                            Authors Created:
+                                                        </span>
+                                                        <span className="stat-value">{profile?.createdAuthorsCount || 0}</span>
+                                                    </div>
+                                                    <div className="stat-item">
+                                                        <span className="stat-label">
+                                                            <FontAwesomeIcon icon={faComment} className="me-2 text-warning" />
+                                                            Reviews Written:
+                                                        </span>
+                                                        <span className="stat-value">{profile?.reviewsCount || 0}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <hr className="my-4" />
+                                        <div className="d-flex justify-content-around mt-3">
+                                            {profile && userId === profile.id 
+                                                &&
+                                                <>
+                                                    <Link to={routes.editProfle} className="btn btn-outline-primary">
+                                                        <FontAwesomeIcon icon={faEdit} className="me-2" />
+                                                        Edit
+                                                    </Link>
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-outline-danger"
+                                                        onClick={toggleModal}
+                                                    >
+                                                        <FontAwesomeIcon icon={faTrashAlt} className="me-2" />
+                                                        Delete
+                                                    </button>
+                                                </>
+                                            }
+                                            {!profile
+                                                &&
+                                                <Link to={routes.createProfle} className="btn btn-outline-success">
+                                                    <FontAwesomeIcon icon={faPlus} className="me-2" />
+                                                    Create
+                                                </Link>
+                                            }
+                                        </div>
+                                    </>
+                                    :
+                                    <div className="private-profile-message">
+                                        <p>This user profile is private. Only the owner can view its full details.</p>
                                     </div>
-                                <hr className="my-4" />
-                                <div className="d-flex justify-content-around mt-3">
-                                    {profile && userId === profile.id ? (
-                                        <>
-                                            <Link to={routes.editProfle} className="btn btn-outline-primary">
-                                                <FontAwesomeIcon icon={faEdit} className="me-2" />
-                                                Edit
-                                            </Link>
-                                            <button
-                                                type="button"
-                                                className="btn btn-outline-danger"
-                                                onClick={toggleModal}
-                                            >
-                                                <FontAwesomeIcon icon={faTrashAlt} className="me-2" />
-                                                Delete
-                                            </button>
-                                        </>
-                                    ) : (
-                                        <Link to={routes.createProfle} className="btn btn-outline-success">
-                                            <FontAwesomeIcon icon={faPlus} className="me-2" />
-                                            Create
-                                        </Link>
-                                    )}
-                                </div>
+                                }
                             </div>
                         </div>
                     </div>
