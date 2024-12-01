@@ -7,7 +7,20 @@
     {
         Task<IEnumerable<NotificationServiceModel>> LastThreeAsync();
 
-        Task<int> CreateAsync(int resourceId, string resourceType, string nameProp);
+        Task<PaginatedModel<NotificationServiceModel>> AllAsync(int pageIndex, int pageSize);
+
+        Task<int> CreateOnEntityCreationAsync(
+           int resourceId,
+           string resourceType,
+           string nameProp,
+           string receiverId);
+
+        Task<int> CreateOnEntityApprovalStatusChangeAsync(
+           int resourceId,
+           string resourceType,
+           string nameProp,
+           string receiverId,
+           bool isApproved);
 
         Task<Result> MarkAsReadAsync(int id);
     }

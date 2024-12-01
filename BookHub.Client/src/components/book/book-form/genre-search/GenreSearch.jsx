@@ -2,7 +2,13 @@ import { useSearchGenres } from '../../../../hooks/useGenre'
 
 import './GenreSearch.css'
 
-export default function GenreSearch({ genres, loading, formik, selectedGenres, setSelectedGenres }) {
+export default function GenreSearch({
+    genres,
+    loading, 
+    formik, 
+    selectedGenres, 
+    setSelectedGenres }) {
+        
     const {
         searchTerm,
         filteredGenres,

@@ -1,14 +1,22 @@
+import { Link, useNavigate } from 'react-router-dom'
 import { Dropdown } from 'react-bootstrap'
 
-import * as useNotification from '../../../../hooks/useNotification'
+import * as useNotification from '../../../hooks/useNotification'
+import { routes } from '../../../common/constants/api'
 
-import DefaultSpinner from '../../default-spinner/DefaultSpinner'
+import DefaultSpinner from '../../common/default-spinner/DefaultSpinner'
 import LastNotificationsListItem from '../last-notifications-list-item/LastNotificationsListItem'
 
 import './LastNotifications.css'
 
 export default function LastNotifications() {
+    const navigate = useNavigate()
     const { notifications, isFetching, refetch } = useNotification.useLastThree()
+
+    const onClickHandler = async (e) => {
+        e.preventDefault()
+        navigate(routes.allNotifications)
+    }
 
     if(isFetching){
         return <DefaultSpinner/>
@@ -31,6 +39,9 @@ export default function LastNotifications() {
                     ) : (
                     <Dropdown.Item>No new notifications</Dropdown.Item>
                 )}
+                <Link to={routes.allNotifications}>
+                    <Dropdown.Item onClick={onClickHandler}>All</Dropdown.Item>
+                </Link>
             </Dropdown.Menu>
         </Dropdown>
     )

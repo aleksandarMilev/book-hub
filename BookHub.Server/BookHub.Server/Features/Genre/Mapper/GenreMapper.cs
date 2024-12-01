@@ -9,9 +9,9 @@
     {
         public GenreMapper()
         {
-            CreateMap<Book, BookServiceModel>();
+            this.CreateMap<Book, BookServiceModel>();
 
-            CreateMap<Genre, GenreDetailsServiceModel>()
+            this.CreateMap<Genre, GenreDetailsServiceModel>()
                 .ForMember(
                     dest => dest.TopBooks,
                     opt => opt.MapFrom(
@@ -20,7 +20,7 @@
                             .Select(bg => bg.Book)
                             .OrderByDescending(b => b.AverageRating)));
 
-            CreateMap<Genre, GenreNameServiceModel>();
+            this.CreateMap<Genre, GenreNameServiceModel>();
         }
     }
 }

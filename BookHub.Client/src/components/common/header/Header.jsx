@@ -5,7 +5,7 @@ import { Navbar, Nav, Container } from 'react-bootstrap'
 import { routes } from '../../../common/constants/api'
 import { UserContext } from '../../../contexts/userContext'
 
-import LastNotifications from '../notifications/last-notifications/LastNotifications'
+import LastNotifications from '../../notifications/last-notifications/LastNotifications'
 
 import './Header.css'  
 

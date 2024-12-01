@@ -1,5 +1,6 @@
 ﻿namespace BookHub.Server.Features.Authors.Service
 {
+    using Areas.Admin.Service;
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using Data;
@@ -16,11 +17,13 @@
     public class AuthorService(
         BookHubDbContext data,
         ICurrentUserService userService,
+        IAdminService adminService,
         INotificationService notificationService,
         IMapper mapper) : IAuthorService
     {
         private readonly BookHubDbContext data = data;
         private readonly ICurrentUserService userService = userService;
+        private readonly IAdminService adminService = adminService;
         private readonly INotificationService notificationService = notificationService;
         private readonly IMapper mapper = mapper;
 
@@ -74,7 +77,11 @@
 
             if (!this.userService.IsAdmin())
             {
-                await this.notificationService.CreateAsync(author.Id, nameof(Author) ,author.Name);
+                await this.notificationService.CreateOnEntityCreationAsync(
+                    author.Id,
+                    nameof(Author), 
+                    author.Name,
+                    await this.adminService.GetIdAsync());
             }
 
             return author.Id;
@@ -145,6 +152,13 @@
             author.IsApproved = true;
             await this.data.SaveChangesAsync();
 
+            await this.notificationService.CreateOnEntityApprovalStatusChangeAsync(
+                id,
+                nameof(Author),
+                author.Name,
+                author.CreatorId!,
+                true);
+
             return true;
         }
 
@@ -163,6 +177,13 @@
 
             this.data.Remove(author);
             await this.data.SaveChangesAsync();
+
+            await this.notificationService.CreateOnEntityApprovalStatusChangeAsync(
+                id,
+                nameof(Author),
+                author.Name,
+                author.CreatorId!,
+                false);
 
             return true;
         }

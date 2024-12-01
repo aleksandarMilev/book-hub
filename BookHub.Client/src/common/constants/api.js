@@ -39,6 +39,7 @@ export const routes = {
     articles: '/articles',
 
     notification: '/notification',
+    allNotifications: '/notification/all',
     lastThreeNotifications: '/notification/lastThree',
     markNotificationRead: '/notification/markAsRead',
 

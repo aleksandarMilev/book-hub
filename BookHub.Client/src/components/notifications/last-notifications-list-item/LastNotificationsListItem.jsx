@@ -4,8 +4,8 @@ import { Dropdown } from 'react-bootstrap'
 import { format } from 'date-fns'
 import { FaBook, FaUser } from 'react-icons/fa'
 
-import * as notificationApi from '../../../../api/notificationApi'
-import { UserContext } from '../../../../contexts/userContext'
+import * as notificationApi from '../../../api/notificationApi'
+import { UserContext } from '../../../contexts/userContext'
 
 import './LastNotificationsListItem.css'
 

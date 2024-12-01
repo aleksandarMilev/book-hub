@@ -24,6 +24,8 @@ import EditBook from './components/book/edit-book/EditBook'
 
 import GenreDetails from "./components/genre/genre-details/GenreDetails"
 
+import NotificationList from "./components/notifications/notification-list/NotificationList"
+
 import AuthorDetails from "./components/author/author-details/AuthorDetails"
 import CreateAuthor from "./components/author/create-author/CreateAuthor"
 import EditAuthor from "./components/author/edit-author/EditAuthor"
@@ -72,6 +74,8 @@ export default function App(){
                 <Route path={routes.admin.createArticle} element={<AdminRoute element={<CreateArticle />} />} />
                 <Route path={routes.admin.editArticle + '/:id'} element={<AdminRoute element={<EditArticle />} />} />
                 <Route path={routes.article + '/:id'} element={<AuthenticatedRoute element={<ArticleDetails />} />} />
+
+                <Route path={routes.allNotifications} element={<AuthenticatedRoute element={<NotificationList />} />} />
 
                 <Route path={routes.badRequest} element={<BadRequest />} />
                 <Route path={routes.notFound} element={<NotFound />} />

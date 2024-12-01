@@ -1,5 +1,6 @@
 ﻿namespace BookHub.Server.Features.Book.Service
 {
+    using Areas.Admin.Service;
     using AutoMapper;
     using Data;
     using Data.Models;
@@ -15,12 +16,14 @@
 
     public class BookService(
         BookHubDbContext data,
-        INotificationService notificationService,
         ICurrentUserService userService,
+        IAdminService adminService,
+        INotificationService notificationService,
         IMapper mapper) : IBookService
     {
         private readonly BookHubDbContext data = data;
         private readonly ICurrentUserService userService = userService;
+        private readonly IAdminService adminService = adminService;
         private readonly INotificationService notificationService = notificationService;
         private readonly IMapper mapper = mapper;
 
@@ -61,7 +64,9 @@
             book.CreatorId = this.userService.GetId()!;
             book.AuthorId = await this.MapAuthorToBookAsync(model.AuthorId);
 
-            if (this.userService.IsAdmin())
+            var userIsAdmin = this.userService.IsAdmin();
+
+            if (userIsAdmin)
             {
                 book.IsApproved = true;
             }
@@ -71,9 +76,13 @@
 
             await this.MapBookAndGenresAsync(book.Id, model.Genres);
 
-            if (!this.userService.IsAdmin())
+            if (!userIsAdmin)
             {
-                await this.notificationService.CreateAsync(book.Id, nameof(Book) ,book.Title);
+                await this.notificationService.CreateOnEntityCreationAsync(
+                    book.Id,
+                    nameof(Book),
+                    book.Title,
+                    await this.adminService.GetIdAsync());
             }
 
             return book.Id;
@@ -144,6 +153,13 @@
             book.IsApproved = true;
             await this.data.SaveChangesAsync();
 
+            await this.notificationService.CreateOnEntityApprovalStatusChangeAsync(
+                id,
+                nameof(Book),
+                book.Title,
+                book.CreatorId!,
+                true);
+
             return true;
         }
 
@@ -162,6 +178,13 @@
 
             this.data.Remove(book);
             await this.data.SaveChangesAsync();
+
+            await this.notificationService.CreateOnEntityApprovalStatusChangeAsync(
+                id,
+                nameof(Book),
+                book.Title,
+                book.CreatorId!,
+                false);
 
             return true;
         }

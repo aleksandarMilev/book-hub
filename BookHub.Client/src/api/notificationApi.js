@@ -19,6 +19,25 @@ export async function lastThreeAsync(token) {
     throw new Error(errors.notification.lastThree)
 }
 
+export async function allAsync(token, pageIndex, pageSize) {
+    const options = {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+    
+    const url = `${baseUrl}${routes.allNotifications}?pageIndex=${pageIndex}&pageSize=${pageSize}`;
+    const response = await fetch(url, options)
+
+    if(response.ok){
+        return await response.json()
+    }
+
+    throw new Error(errors.notification.all)
+}
+
+
 export async function markAsReadAsync(id, token){
     const options = {
         method: "PATCH",

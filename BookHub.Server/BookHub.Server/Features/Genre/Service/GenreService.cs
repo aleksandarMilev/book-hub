@@ -14,15 +14,15 @@
         private readonly IMapper mapper = mapper;
 
         public async Task<IEnumerable<GenreNameServiceModel>> NamesAsync()
-          => await data
+          => await this.data
               .Genres
-              .ProjectTo<GenreNameServiceModel>(mapper.ConfigurationProvider)
+              .ProjectTo<GenreNameServiceModel>(this.mapper.ConfigurationProvider)
               .ToListAsync();
 
         public async Task<GenreDetailsServiceModel?> DetailsAsync(int id)
-           => await data
+           => await this.data
                .Genres
-               .ProjectTo<GenreDetailsServiceModel>(mapper.ConfigurationProvider)
+               .ProjectTo<GenreDetailsServiceModel>(this.mapper.ConfigurationProvider)
                .FirstOrDefaultAsync(g => g.Id == id);
     }
 }

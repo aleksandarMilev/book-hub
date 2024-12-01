@@ -30,16 +30,17 @@ export default function BookForm({ bookData = null, isEditMode = false }) {
     
     const createHandler = useBook.useCreate()
     const editHandler = useBook.useEdit()
+    
     const { authors, loading: authorsLoading } = useAuthor.useNames()
     const { genres, isFetching: genresLoading } = useGenre.useGenres()
 
-    const [selectedGenres, setSelectedGenres] = useState([]);
+    const [selectedGenres, setSelectedGenres] = useState([])
 
     useEffect(() => {
         if (bookData && bookData.genres) {
             setSelectedGenres(bookData.genres)
         }
-    }, [bookData]);
+    }, [bookData])
 
     const validationSchema = Yup.object({
         title: Yup.string().min(2).max(200).required('Title is required!'),
@@ -68,13 +69,13 @@ export default function BookForm({ bookData = null, isEditMode = false }) {
                     const isSuccessfullyEdited = await editHandler(bookData.id, { ...values }) 
 
                     if(isSuccessfullyEdited){
-                        navigate(routes.books + `/${bookData.id}`)
+                        navigate(routes.book + `/${bookData.id}`)
                     }
                 } else {
                     const bookId = await createHandler(values)
 
                     if (bookId) {
-                        navigate(routes.books + `/${bookId}`)
+                        navigate(routes.book + `/${bookId}`)
                     }
                 }
             } catch (error) {
