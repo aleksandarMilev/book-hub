@@ -28,7 +28,15 @@ namespace BookHub.Server.Features.Notification.Web
         [HttpPatch("{id}/[action]")]
         public async Task<ActionResult> MarkRead(int id)
         {
-            var result = await service.MarkAsReadAsync(id);
+            var result = await this.service.MarkAsReadAsync(id);
+
+            return this.NoContentOrBadRequest(result);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var result = await this.service.DeleteAsync(id);
 
             return this.NoContentOrBadRequest(result);
         }

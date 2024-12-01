@@ -1,8 +1,6 @@
-#notifications-dropdown {
-    margin-left: 10px
-}
-
-.dropdown-menu {
-    max-height: 200px;
-    overflow-y: auto
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    font-size: 12px
 }

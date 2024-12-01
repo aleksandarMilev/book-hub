@@ -1,11 +1,12 @@
 .footer-section {
     background-color: rgba(0, 0, 0, 0.05);
+    margin: auto
 }
 
 .social-links a {
-    margin-right: 1rem;
+    margin-right: 1rem
 }
 
 .social-links a:last-child {
-    margin-right: 0;
+    margin-right: 0
 }

@@ -23,5 +23,7 @@
            bool isApproved);
 
         Task<Result> MarkAsReadAsync(int id);
+
+        Task<Result> DeleteAsync(int id);
     }
 }

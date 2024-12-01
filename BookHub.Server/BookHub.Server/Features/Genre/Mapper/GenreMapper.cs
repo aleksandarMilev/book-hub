@@ -18,7 +18,8 @@
                         src => src
                             .BooksGenres
                             .Select(bg => bg.Book)
-                            .OrderByDescending(b => b.AverageRating)));
+                            .OrderByDescending(b => b.AverageRating)
+                            .Take(3)));
 
             this.CreateMap<Genre, GenreNameServiceModel>();
         }

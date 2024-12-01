@@ -37,7 +37,6 @@ export async function allAsync(token, pageIndex, pageSize) {
     throw new Error(errors.notification.all)
 }
 
-
 export async function markAsReadAsync(id, token){
     const options = {
         method: "PATCH",
@@ -52,4 +51,22 @@ export async function markAsReadAsync(id, token){
     if(!response.ok){
         throw new Error(errors.notification.markAsRead)
     }
+}
+
+export async function deleteAsync(id, token){
+    const options = {
+        method: "DELETE",
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+
+    const url = baseUrl + routes.notification + `/${id}`
+    const response = await fetch(url, options)
+    
+    if(response.ok){
+        return true 
+    }
+
+    return false
 }

@@ -110,5 +110,22 @@
 
             return true;
         }
+
+        public async Task<Result> DeleteAsync(int id)
+        {
+            var notification = await this.data
+                 .Notifications
+                 .FindAsync(id);
+
+            if (notification is null)
+            {
+                return NotificationNotFound;
+            }
+
+            this.data.Remove(notification);
+            await this.data.SaveChangesAsync();
+
+            return true;
+        }
     }
 }

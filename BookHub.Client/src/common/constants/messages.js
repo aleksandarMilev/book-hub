@@ -1,6 +1,7 @@
 export const errors = {
     notification: {
         markAsRead: 'Something went wrong. Please refresh the page or try again later!',
+        delete: 'Oops! We couldn’t delete this notification. Please try again later or contact support if the issue persists.',
         all: 'Something went wrong while loading your notifications. Please refresh the page or try again later!',
         lastThree:  'Apologies, we\'re experiencing issues and can\'t display your notifications at the moment. Please try again later or contact us for assistance.'
     },
