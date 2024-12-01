@@ -30,5 +30,7 @@
         public ICollection<Reply> Replies { get; } = new HashSet<Reply>();
 
         public ICollection<Review> Reviews { get; } = new HashSet<Review>();
+
+        public ICollection<ReadingList> ReadingLists { get; } = new HashSet<ReadingList>();
     }
 }

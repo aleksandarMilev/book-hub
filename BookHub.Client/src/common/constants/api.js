@@ -38,6 +38,8 @@ export const routes = {
     article: '/article',
     articles: '/articles',
 
+    readingList: '/readingList',
+
     notification: '/notification',
     allNotifications: '/notification/all',
     lastThreeNotifications: '/notification/lastThree',

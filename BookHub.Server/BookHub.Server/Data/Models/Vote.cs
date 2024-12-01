@@ -5,7 +5,7 @@
     using Base;
     using Microsoft.EntityFrameworkCore;
 
-    public class Vote : Entity<int>
+    public class Vote : IEntity<int>
     {
         public bool IsUpvote { get; set; }
 

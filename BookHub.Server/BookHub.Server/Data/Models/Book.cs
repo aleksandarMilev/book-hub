@@ -46,5 +46,7 @@
         public ICollection<BookGenre> BooksGenres { get; } = new HashSet<BookGenre>();
 
         public ICollection<Review> Reviews { get; } = new HashSet<Review>();  
+
+        public ICollection<ReadingList> ReadingLists { get; } = new HashSet<ReadingList>();
     }
 }

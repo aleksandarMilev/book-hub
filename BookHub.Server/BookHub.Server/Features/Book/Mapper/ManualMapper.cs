@@ -62,7 +62,12 @@
                            })
                            .Take(5)
                            .ToHashSet(),
-                       MoreThanFiveReviews = b.Reviews.Count() > 5
+                       MoreThanFiveReviews = b.Reviews.Count() > 5,
+                       ReadingStatus = b
+                            .ReadingLists
+                            .Where(rl => rl.BookId == b.Id && rl.UserId == userId)
+                            .Select(rl => Convert.ToString(rl.Status))
+                            .FirstOrDefault()
                    });
 
         public static IQueryable<BookServiceModel> MapToServiceModel(this DbSet<Book> books)

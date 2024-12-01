@@ -12,6 +12,7 @@
     using Features.Genre.Service;
     using Features.Identity.Service;
     using Features.Notification.Service;
+    using Features.ReadingList.Service;
     using Features.Review.Service;
     using Features.Search.Service;
     using Features.UserProfile.Service;
@@ -99,7 +100,8 @@
                 .AddTransient<IVoteService, VoteService>()
                 .AddTransient<IProfileService, ProfileService>()
                 .AddTransient<IArticleService, ArticleService>()
-                .AddTransient<INotificationService, NotificationService>();
+                .AddTransient<INotificationService, NotificationService>()
+                .AddTransient<IReadingListService, ReadingListService>();
 
         public static IServiceCollection AddApiControllers(this IServiceCollection services)
         {

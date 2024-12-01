@@ -1,6 +1,6 @@
 ﻿namespace BookHub.Server.Data.Models.Base
 {
-    public abstract class DeletableEntity<TKey> : Entity<TKey>, IDeletableEntity
+    public abstract class DeletableEntity<TKey> : IEntity<TKey>, IDeletableEntity
     {
         public bool IsDeleted { get; set; }
 

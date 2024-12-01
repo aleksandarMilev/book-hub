@@ -21,6 +21,8 @@
 
         public DbSet<BookGenre> BooksGenres { get; init; }
 
+        public DbSet<ReadingList> ReadingLists { get; init; }
+
         public DbSet<Author> Authors { get; init; }
 
         public DbSet<Nationality> Nationalities { get; init; }

@@ -4,6 +4,7 @@ using BookHub.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookHub.Server.Data.Migrations
 {
     [DbContext(typeof(BookHubDbContext))]
-    partial class BookHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241201121610_AddReadingList")]
+    partial class AddReadingList
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -82,7 +85,7 @@ namespace BookHub.Server.Data.Migrations
                         {
                             Id = 1,
                             Content = "Stephen King's *Pet Sematary* offers a chilling narrative about the emotional weight of grief and the lengths people go to in an effort to reverse the irreversible. When Louis Creed and his family move to rural Maine, they discover a mysterious burial ground behind their home that can bring the dead back to life. What begins as an innocent exploration of local lore quickly turns into a nightmare when Louis faces the ultimate temptation: using the cemetery’s power to alter fate itself. The novel dives deep into human frailty, moral dilemmas,and the unintended consequences of playing God. King's skillful writing leaves readers pondering the fine line between love and selfishness, as well as the destructive force of denial.",
-                            CreatedOn = new DateTime(2024, 12, 1, 14, 32, 4, 728, DateTimeKind.Local).AddTicks(1152),
+                            CreatedOn = new DateTime(2024, 12, 1, 14, 16, 9, 837, DateTimeKind.Local).AddTicks(293),
                             ImageUrl = "https://thedailytexan.com/wp-content/uploads/2023/09/pet_sematary_bloodlines_4press-1200x800.jpg",
                             Introduction = "A tale of love, loss, and the chilling cost of defying death.",
                             IsDeleted = false,
@@ -93,7 +96,7 @@ namespace BookHub.Server.Data.Migrations
                         {
                             Id = 2,
                             Content = "In *Harry Potter and the Deathly Hallows*, J.K. Rowling masterfully concludes the saga of the Boy Who Lived. Harry, Ron, and Hermione take center stage as they leave Hogwarts behind and embark on a perilous journey to locate and destroy Voldemort’sHorcruxes. Along the way, they uncover hidden truths about Dumbledore’s past, face betrayal, and reaffirm their unshakable friendship. The novel culminates in the iconic Battle of Hogwarts, where courage and sacrifice define the fates of beloved characters. Packed with heart-pounding action and poignant moments, Rowling’s finale is not just a fight between good and evilbut a meditation on love, legacy, and the choices that shape our lives.",
-                            CreatedOn = new DateTime(2024, 12, 1, 14, 32, 4, 728, DateTimeKind.Local).AddTicks(1220),
+                            CreatedOn = new DateTime(2024, 12, 1, 14, 16, 9, 837, DateTimeKind.Local).AddTicks(353),
                             ImageUrl = "https://choicefineart.com/cdn/shop/products/book-7-harry-potter-and-the-deathly-hallows-311816.jpg?v=1688079541",
                             Introduction = "The battle against Voldemort reaches its thrilling and emotional finale.",
                             IsDeleted = false,
@@ -104,7 +107,7 @@ namespace BookHub.Server.Data.Migrations
                         {
                             Id = 3,
                             Content = "J.R.R. Tolkien’s *The Lord of the Rings* stands as one of the greatest works of fantasy ever written. Spanning three volumes, the story follows Frodo Baggins and the Fellowship as they embark on a dangerous mission to destroy the One Ring, a powerful artifact that threatens to engulf Middle-earth in darkness. Tolkien’s world-building is unparalleled, bringing to life the rich landscapes of Middle-earth, from the idyllic Shire to the fiery Mount Doom. Along the way, characters like Aragorn, Legolas, and Samwise Gamgee demonstrate the values of loyalty, perseverance, and hope. The narrative explores themes of power, corruption, and the resilience of the human spirit, making it a tale that resonates across generations. Whether it’s Gandalf’s wisdom, Frodo’s burden, or the triumph of unity, Tolkien’s masterpiece continues to inspire and enchant readers worldwide.",
-                            CreatedOn = new DateTime(2024, 12, 1, 14, 32, 4, 728, DateTimeKind.Local).AddTicks(1223),
+                            CreatedOn = new DateTime(2024, 12, 1, 14, 16, 9, 837, DateTimeKind.Local).AddTicks(356),
                             ImageUrl = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEibI7_-Az0QVZhhwZO_PcgrNRK7RYnS7JPiddt_LvTC8NTgTzzYcaagGBLR6KtgY1J_VyZzS6HhL7MW9x1h-rioISPanc-daPbdgnZCQQb48PNELDt9gbQlohCJuXGHgritNS_3Ff08oUhs/w1200-h630-p-k-no-nu/acetolkien.jpg",
                             Introduction = "A journey of courage, friendship, and the fight against overwhelming darkness.",
                             IsDeleted = false,
@@ -1902,9 +1905,6 @@ namespace BookHub.Server.Data.Migrations
                     b.Property<int>("BookId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -1917,7 +1917,10 @@ namespace BookHub.Server.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("UserId", "BookId", "Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "BookId");
 
                     b.HasIndex("BookId");
 
@@ -2265,14 +2268,14 @@ namespace BookHub.Server.Data.Migrations
                         {
                             Id = "user1Id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "eecb8012-20f1-4bfa-adf1-460f0fb820aa",
+                            ConcurrencyStamp = "da84699c-e519-4e10-9d3d-0d6e24394eb6",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user1@mail.com",
                             EmailConfirmed = false,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "64038dfb-cd28-41b9-b8cb-85a878193bc0",
+                            SecurityStamp = "2b5b7bc2-1fc1-474b-93b9-1b57dc1c88c2",
                             TwoFactorEnabled = false,
                             UserName = "user1name"
                         },
@@ -2280,14 +2283,14 @@ namespace BookHub.Server.Data.Migrations
                         {
                             Id = "user2Id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "1678d7b2-a116-4425-9db1-3f3b1a6a007c",
+                            ConcurrencyStamp = "da5fe7b0-71a6-458d-a260-ca5b2be5d05b",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user2@mail.com",
                             EmailConfirmed = false,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "a98c061e-cf2d-49d5-961e-ce36626c478a",
+                            SecurityStamp = "64f6ce7e-0062-44f1-9357-23f14b3c722d",
                             TwoFactorEnabled = false,
                             UserName = "user2name"
                         },
@@ -2295,14 +2298,14 @@ namespace BookHub.Server.Data.Migrations
                         {
                             Id = "user3Id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "4613c70b-b9dc-4baa-b640-c90e8a4f9b7e",
+                            ConcurrencyStamp = "a6efa988-b46d-4bf2-a8a9-4bcab0b68f61",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user3@mail.com",
                             EmailConfirmed = false,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "8d187695-c782-4ac1-ab67-62bd5399a913",
+                            SecurityStamp = "300cb41d-46b6-4e42-a38b-8141ee834735",
                             TwoFactorEnabled = false,
                             UserName = "user3name"
                         },
@@ -2310,14 +2313,14 @@ namespace BookHub.Server.Data.Migrations
                         {
                             Id = "user4Id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "85f47670-d274-40d8-885f-a8ae8df07462",
+                            ConcurrencyStamp = "b2a07e8e-b4e2-476e-b2f7-9e9f1d100303",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user4@mail.com",
                             EmailConfirmed = false,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "b7145ef4-c8eb-4a69-872c-f08aaf20ffce",
+                            SecurityStamp = "796e21ef-6394-4eb4-a460-c5ee26f33271",
                             TwoFactorEnabled = false,
                             UserName = "user4name"
                         },
@@ -2325,14 +2328,14 @@ namespace BookHub.Server.Data.Migrations
                         {
                             Id = "user5Id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ca730cf9-fcab-435e-990c-79b2f4a7d3c6",
+                            ConcurrencyStamp = "2fecc576-7213-45ed-8f93-fc749c91c967",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user5@mail.com",
                             EmailConfirmed = false,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "6abaa88d-c924-4d7a-908a-e0a0ab0a3e29",
+                            SecurityStamp = "c4a897cb-8f04-4adb-93c8-ceccb1e1e8e3",
                             TwoFactorEnabled = false,
                             UserName = "user5name"
                         },
@@ -2340,14 +2343,14 @@ namespace BookHub.Server.Data.Migrations
                         {
                             Id = "user6Id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "1210dc1c-ebad-464b-98a4-f33374fbb1c1",
+                            ConcurrencyStamp = "79c054d2-41a5-4ee3-a951-e4ec117aeaed",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user6@mail.com",
                             EmailConfirmed = false,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "71d0a102-658a-4f0f-8fe5-84f6a5aa4674",
+                            SecurityStamp = "02146d76-9f86-41e7-917c-f3974b945545",
                             TwoFactorEnabled = false,
                             UserName = "user6name"
                         });

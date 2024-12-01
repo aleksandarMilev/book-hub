@@ -1,4 +1,8 @@
 export const errors = {
+    readingList: {
+        add:  'Something went wrong while adding the book in your list. Please refresh the page or try again later!',
+        remove:  'Something went wrong while removing the book from your list. Please refresh the page or try again later!'
+    },
     notification: {
         markAsRead: 'Something went wrong. Please refresh the page or try again later!',
         delete: 'Oops! We couldn’t delete this notification. Please try again later or contact support if the issue persists.',
