@@ -7,6 +7,8 @@
     {
         Task<ProfileServiceModel?> MineAsync();
 
+        Task<IEnumerable<ProfileServiceModel>> TopThreeAsync();
+
         Task<IProfileServiceModel?> OtherUserAsync(string id);
 
         Task<string> CreateAsync(CreateProfileServiceModel model);

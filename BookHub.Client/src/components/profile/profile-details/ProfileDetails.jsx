@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
     faPhone,
@@ -28,10 +28,14 @@ import defaultProfilePicture from '../../../assets/images/defaultProfilePicture.
 import './ProfileDetails.css'
 
 export default function ProfileDetails() {
-    const { token } = useContext(UserContext)
+    const location = useLocation()
+
+    const { token, userId } = useContext(UserContext)
     const navigate = useNavigate()
 
-    const { profile, isFetching } = useProfile.useGet()
+    const { profile, isFetching } = location?.state?.id 
+        ? useProfile.useOtherProfile(location?.state?.id) 
+        : useProfile.useMineProfile()
 
     const [showModal, setShowModal] = useState(false)
     const toggleModal = () => setShowModal(old => !old)
@@ -55,7 +59,8 @@ export default function ProfileDetails() {
         return <DefaultSpinner />
     }
 
-    console.log(profile)
+    console.log(profile);
+    
 
     return (
         <div className="profile-details container-fluid">
@@ -160,7 +165,7 @@ export default function ProfileDetails() {
                                     </div>
                                 <hr className="my-4" />
                                 <div className="d-flex justify-content-around mt-3">
-                                    {profile ? (
+                                    {profile && userId === profile.id ? (
                                         <>
                                             <Link to={routes.editProfle} className="btn btn-outline-primary">
                                                 <FontAwesomeIcon icon={faEdit} className="me-2" />

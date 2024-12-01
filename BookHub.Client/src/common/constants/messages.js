@@ -10,7 +10,9 @@ export const errors = {
         lastThree:  'Apologies, we\'re experiencing issues and can\'t display your notifications at the moment. Please try again later or contact us for assistance.'
     },
     profile: {
+        topThree: 'Something went wrong while loading our top users for you. Please refresh the page or try again later!',
         get: 'Something went wrong while loading your profile. Please refresh the page or try again later!',
+        getOther: 'Something went wrong while loading this profile. Please refresh the page or try again later!',
         create: 'Oops! We couldn’t create your profile. Please try again later or contact support if the issue persists.',
         edit: 'Oops! We couldn’t edit your profile. Please try again later or contact support if the issue persists.',
         delete: 'Oops! We couldn’t delete your profile. Please try again later or contact support if the issue persists.'

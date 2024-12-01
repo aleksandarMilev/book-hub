@@ -9,6 +9,7 @@ export const routes = {
     logout: '/identity/logout',
 
     profile: '/profile',
+    topProfiles: '/profile/topThree',
     editProfle: '/profile/edit',
     createProfle: '/profile/new',
 

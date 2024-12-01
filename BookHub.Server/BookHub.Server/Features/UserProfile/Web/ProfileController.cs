@@ -17,6 +17,10 @@
         private readonly IMapper mapper = mapper;
 
         [AllowAnonymous]
+        [HttpGet("[action]")]
+        public async Task<ActionResult<IEnumerable<ProfileServiceModel>>> TopThree()
+            => this.Ok(await this.service.TopThreeAsync());
+
         [HttpGet]
         public async Task<ActionResult<ProfileServiceModel>> Mine()
             => this.Ok(await this.service.MineAsync());

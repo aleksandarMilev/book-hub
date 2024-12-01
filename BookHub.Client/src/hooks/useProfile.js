@@ -6,7 +6,30 @@ import * as profileApi from '../api/profileApi'
 import { routes } from '../common/constants/api'
 import { UserContext } from '../contexts/userContext'
 
-export function useGet(){
+export function useTopThree(){
+    const [profiles, setProfiles] = useState(null)
+    const [isFetching, setIsFetching] = useState(false)
+    const [error, setError] = useState(null)
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                setIsFetching(true)
+                setProfiles(await profileApi.topThreeAsync())
+            } catch (error) {
+                setError(error)
+            } finally {
+                setIsFetching(false)
+            }
+        }
+
+        fetchData()
+    }, [])
+
+    return { profiles, isFetching, error }
+}
+
+export function useMineProfile(){
     const { token } = useContext(UserContext)
 
     const navigate = useNavigate()
@@ -17,7 +40,7 @@ export function useGet(){
         async function fetchData() {
             try {
                 setIsFetching(true)
-                const profileData = await profileApi.getAsync(token)
+                const profileData = await profileApi.mineAsync(token)
 
                 if(profileData){
                     const profile = {
@@ -39,6 +62,31 @@ export function useGet(){
 
         fetchData()
     }, [token, navigate ])
+
+    return { profile, isFetching }
+}
+
+export function useOtherProfile(id){
+    const { token } = useContext(UserContext)
+
+    const navigate = useNavigate()
+    const [profile, setProfile] = useState(null)
+    const [isFetching, setIsFetching] = useState(false)
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                setIsFetching(true)
+                setProfile(await profileApi.otherAsync(id, token))
+            } catch (error) {
+                navigate(routes.badRequest, { state: { message: error.message} })
+            } finally {
+                setIsFetching(false)
+            }
+        }
+
+        fetchData()
+    }, [token, navigate, id])
 
     return { profile, isFetching }
 }

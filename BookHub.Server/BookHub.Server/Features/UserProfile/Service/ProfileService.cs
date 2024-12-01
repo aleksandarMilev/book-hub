@@ -19,11 +19,22 @@
         private readonly ICurrentUserService userService = userService;
         private readonly IMapper mapper = mapper;
 
+        public async Task<IEnumerable<ProfileServiceModel>> TopThreeAsync()
+            => await this.data
+                .Profiles
+                .OrderByDescending(p => 
+                    p.CreatedBooksCount + 
+                    p.CreatedAuthorsCount + 
+                    p.ReviewsCount)
+                .Take(3)
+                .ProjectTo<ProfileServiceModel>(this.mapper.ConfigurationProvider)
+                .ToListAsync();
+
         public async Task<ProfileServiceModel?> MineAsync()
             => await this.data
                 .Profiles
                 .ProjectTo<ProfileServiceModel>(this.mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(p => p.Id == "9a025673-4ac4-4e04-ac57-27add1580677");
+                .FirstOrDefaultAsync(p => p.Id == this.userService.GetId());
 
         public async Task<IProfileServiceModel?> OtherUserAsync(string id)
         {
