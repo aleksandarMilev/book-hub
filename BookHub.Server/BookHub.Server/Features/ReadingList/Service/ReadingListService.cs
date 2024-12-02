@@ -22,6 +22,7 @@
         private readonly IMapper mapper = mapper;
 
         public async Task<PaginatedModel<BookServiceModel>> AllAsync(
+            string userId,
             string status,
             int pageIndex,
             int pageSize)
@@ -29,7 +30,7 @@
             var books = this.data
                 .ReadingLists
                 .Where(rl =>
-                    rl.UserId == this.userService.GetId() &&
+                    rl.UserId == userId &&
                     rl.Status == ParseToEnum(status))
                 .ProjectTo<BookServiceModel>(this.mapper.ConfigurationProvider);
 

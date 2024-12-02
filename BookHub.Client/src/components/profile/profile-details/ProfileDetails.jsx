@@ -16,10 +16,12 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as useProfile from '../../../hooks/useProfile'
+import * as useReadingList from '../../../hooks/useReadingList'
 import * as profileApi from '../../../api/profileApi'
 import { routes } from '../../../common/constants/api'
 import { UserContext } from '../../../contexts/userContext'
 
+import BookListItem from '../../book/book-list-item/BooksListItem'
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner'
 import DeleteModal from  '../../common/delete-modal/DeleteModal'
 
@@ -33,9 +35,14 @@ export default function ProfileDetails() {
     const { token, userId } = useContext(UserContext)
     const navigate = useNavigate()
 
-    const { profile, isFetching } = location?.state?.id 
+    const { profile, isFetching: profileIsFteching  } = location?.state?.id 
         ? useProfile.useOtherProfile(location?.state?.id) 
         : useProfile.useMineProfile()
+
+    const { 
+        readingList,
+        isFetching: readingListIsFteching,
+        error  } = useReadingList.useCurrentlyReadingList(profile?.isPrivate, profile?.id)
 
     const [showModal, setShowModal] = useState(false)
     const toggleModal = () => setShowModal(old => !old)
@@ -55,12 +62,9 @@ export default function ProfileDetails() {
         }
     }
 
-    if (isFetching) {
+    if (profileIsFteching) {
         return <DefaultSpinner />
     }
-
-    console.log(profile)
-    
 
     return (
         <div className="profile-details container-fluid">
@@ -192,6 +196,17 @@ export default function ProfileDetails() {
                                                     Create
                                                 </Link>
                                             }
+                                        </div>
+                                        <div className="currently-reading-container">
+                                            <h1>
+                                                {location?.state?.id 
+                                                    ? profile?.firstName + ' is ' 
+                                                    : 'You\'re '
+                                                }currently reading: 
+                                            </h1>
+                                                {readingList && readingList.items && readingList.items.length > 0 
+                                                    ? readingList.items.map(b => (<BookListItem key={b.id} {...b} />))
+                                                    : 'No currently reading books'}
                                         </div>
                                     </>
                                     :

@@ -1,5 +1,28 @@
 import { baseUrl, routes } from '../common/constants/api'
+import { readingListStatus } from '../common/constants/defaultValues'
 import { errors } from '../common/constants/messages'
+
+export async function currentlyReadingListAsync(userId, token){
+    const options = {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+
+    const status = readingListStatus.currentlyReading
+
+    const params = new URLSearchParams({ userId, status })
+    const url = `${baseUrl + routes.readingList}?${params.toString()}`
+
+    const response = await fetch(url, options)
+
+    if(response.ok){
+        return await response.json()
+    }
+
+    throw new Error(errors.readingList.currentlyReading)
+}
 
 export async function addInListAsync(bookId, status, token){
     const bodyObj = {

@@ -16,9 +16,10 @@
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BookServiceModel>>> All(
+            string userId,
             string status,
             int pageIndex = DefaultPageIndex,
-            int pageSize = DefaultPageSize) => this.Ok(await this.service.AllAsync(status, pageIndex, pageSize));
+            int pageSize = DefaultPageSize) => this.Ok(await this.service.AllAsync(userId, status, pageIndex, pageSize));
 
         [HttpPost]
         public async Task<ActionResult> Add(ReadingListWebModel webModel) 

@@ -6,6 +6,7 @@
     public interface IReadingListService
     {
         Task<PaginatedModel<BookServiceModel>> AllAsync(
+           string userId,
            string status,
            int pageIndex,
            int pageSize);
