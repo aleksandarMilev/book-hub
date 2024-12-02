@@ -39,7 +39,8 @@ export default function Statistics() {
 
     return (
         <div className="statistics-container">
-            <h2 className="statistics-title">BookHub</h2>
+            <h2 className="statistics-title">Welocome to BookHub!</h2>
+            <h4>Dive Into a Universe of Books and Beyond</h4>
             <div className="row">
                 <div className="col-md-4 mb-4">
                     <div className="stat-card">

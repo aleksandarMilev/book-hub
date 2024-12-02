@@ -13,6 +13,16 @@
     color: #343a40
 }
 
+.statistics-container h4 {
+    font-size: 1.3rem;
+    font-weight: 300;
+    color: #555; 
+    margin-top: 0;
+    line-height: 1.5; 
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); 
+    text-align: center
+}
+
 .stat-card {
     background-color: #fff;
     padding: 20px;

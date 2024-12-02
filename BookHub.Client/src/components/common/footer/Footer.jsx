@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 import {
     MDBFooter, 
     MDBContainer, 
@@ -51,13 +53,13 @@ export default function Footer() {
                                 Join the BookHub community to discover new reads and share your favorites!
                             </p>
                         </MDBCol>
-                        <MDBCol md="2" lg="2" xl="2" className="mx-auto mb-4">
+                        {/* <MDBCol md="2" lg="2" xl="2" className="mx-auto mb-4">
                             <h6 className="text-uppercase fw-bold mb-4">Explore</h6>
                             <p>
-                                <a href="#!" className="text-reset">Bestsellers</a>
+                                <a href="#!" className="text-reset">Books</a>
                             </p>
                             <p>
-                                <a href="#!" className="text-reset">New Releases</a>
+                                <a href="#!" className="text-reset">Articles</a>
                             </p>
                             <p>
                                 <a href="#!" className="text-reset">Author Interviews</a>
@@ -80,7 +82,7 @@ export default function Footer() {
                             <p>
                                 <a href="#!" className="text-reset">Literary Events</a>
                             </p>
-                        </MDBCol>
+                        </MDBCol> */}
                         <MDBCol md="4" lg="3" xl="3" className="mx-auto mb-md-0 mb-4">
                             <h6 className="text-uppercase fw-bold mb-4">Contact</h6>
                             <p>
@@ -92,10 +94,10 @@ export default function Footer() {
                                 info@bookhub.com
                             </p>
                             <p>
-                                <MDBIcon icon="phone" className="me-3" /> + 01 234 567 88
+                                <MDBIcon icon="phone" className="me-3" /> + 800KHUB
                             </p>
                             <p>
-                                <MDBIcon icon="print" className="me-3" /> + 01 234 567 89
+                                <MDBIcon icon="print" className="me-3" /> + B00KHU8
                             </p>
                         </MDBCol>
                     </MDBRow>
