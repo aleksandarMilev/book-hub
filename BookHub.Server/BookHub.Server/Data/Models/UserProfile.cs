@@ -45,6 +45,12 @@
 
         public int ReviewsCount { get; set; }
 
+        public int ReadBooksCount { get; set; }
+
+        public int ToReadBooksCount { get; set; }
+
+        public int CurrentlyReadingBooksCount { get; set; }
+
         public bool IsPrivate { get; set; }
 
         public DateTime CreatedOn { get; set; }

@@ -17,6 +17,11 @@
 
         Task<Result> DeleteAsync();
 
-        Task IncrementCountAsync(string userId, string propName);
+        Task UpdateCountAsync(
+            string userId,
+            string propName,
+            Func<int, int> updateFunc);
+
+        Task<bool> MoreThanFiveCurrentlyReadingAsync(string userId);
     }
 }

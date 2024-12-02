@@ -9,16 +9,19 @@
     using Infrastructure.Services;
     using Microsoft.Data.SqlClient;
     using Microsoft.EntityFrameworkCore;
+    using UserProfile.Service;
 
     using static Common.Messages.Error.ReadingList;
 
     public class ReadingListService(
         BookHubDbContext data,
         ICurrentUserService userService,
+        IProfileService profileService,
         IMapper mapper) : IReadingListService
     {
         private readonly BookHubDbContext data = data;
         private readonly ICurrentUserService userService = userService;
+        private readonly IProfileService profileService = profileService;
         private readonly IMapper mapper = mapper;
 
         public async Task<PaginatedModel<BookServiceModel>> AllAsync(
@@ -31,7 +34,7 @@
                 .ReadingLists
                 .Where(rl =>
                     rl.UserId == userId &&
-                    rl.Status == ParseToEnum(status))
+                    rl.Status == ParseStatusToEnum(status))
                 .ProjectTo<BookServiceModel>(this.mapper.ConfigurationProvider);
 
             var total = await books.CountAsync();
@@ -46,34 +49,51 @@
 
         public async Task<Result> AddAsync(int bookId, string status)
         {
+            var userId = this.userService.GetId();
+            var statusEnum = ParseStatusToEnum(status);
+
+            if (statusEnum == ReadingListStatus.CurrentlyReading &&
+                await this.profileService.MoreThanFiveCurrentlyReadingAsync(userId!))
+            {
+                return MoreThanFiveCurrentlyReading;
+            }
+
             var mapEntity = new ReadingList()
             {
-                UserId = this.userService.GetId()!,
+                UserId = userId!,
                 BookId = bookId,
-                Status = ParseToEnum(status),
+                Status = statusEnum,
             };
 
             try
             {
                 this.data.Add(mapEntity);
                 await this.data.SaveChangesAsync();
-
-                return true;
             }
             catch (SqlException)
             {
                 return BookAlreadyInTheList;
             }
+
+            await this.profileService.UpdateCountAsync(
+                userId!,
+                GetPropertyName(statusEnum),
+                x => ++x);
+
+            return true;
         }
 
         public async Task<Result> DeleteAsync(int bookId, string status)
         {
+            var userId = this.userService.GetId();
+            var statusEnum = ParseStatusToEnum(status);
+
             var mapEntity = await this.data
                 .ReadingLists
                 .FirstOrDefaultAsync(rl =>
-                    rl.UserId == this.userService.GetId() && 
-                    rl.BookId == bookId && 
-                    rl.Status == ParseToEnum(status));
+                    rl.UserId == userId &&
+                    rl.BookId == bookId &&
+                    rl.Status == statusEnum);
 
             if (mapEntity is null) 
             {
@@ -83,10 +103,15 @@
             this.data.Remove(mapEntity);
             await this.data.SaveChangesAsync();
 
+            await this.profileService.UpdateCountAsync(
+               userId!,
+               GetPropertyName(statusEnum),
+               x => --x);
+
             return true;
         }
 
-        private static ReadingListStatus ParseToEnum(string status)
+        private static ReadingListStatus ParseStatusToEnum(string status)
         {
             if (Enum.TryParse(status, ignoreCase: true, out ReadingListStatus statusEnum))
             {
@@ -95,5 +120,14 @@
 
             throw new InvalidOperationException("Invalid reading list status type!");
         }
+
+        private static string GetPropertyName(ReadingListStatus status)
+            => status switch
+            {
+                ReadingListStatus.Read => nameof(UserProfile.ReadBooksCount),
+                ReadingListStatus.ToRead => nameof(UserProfile.ToReadBooksCount),
+                ReadingListStatus.CurrentlyReading => nameof(UserProfile.CurrentlyReadingBooksCount),
+                _ => throw new InvalidOperationException("Invalid reading list status type!")
+            };
     }
 }

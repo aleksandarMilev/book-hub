@@ -9,6 +9,7 @@
     using Models;
 
     using static Common.Messages.Error.Profile;
+    using static Common.Constants.Validation.Profile;
 
     public class ProfileService(
         BookHubDbContext data,
@@ -56,7 +57,6 @@
             return model;
         }
          
-
         public async Task<string> CreateAsync(CreateProfileServiceModel model)
         {
             var profile = this.mapper.Map<UserProfile>(model);
@@ -103,19 +103,32 @@
             return true;
         }
 
-        public async Task IncrementCountAsync(string userId, string propName)
+        public async Task UpdateCountAsync(
+            string userId,
+            string propName,
+            Func<int, int> updateFunc)
         {
             var profile = await this.data
                .Profiles
                .FindAsync(userId)
                ?? throw new InvalidOperationException(ProfileNotFound);
 
-            var property = typeof(Profile)
+            var property = typeof(UserProfile)
                 .GetProperty(propName)
                 ?? throw new InvalidOperationException($"{propName} not found!");
 
             var currentValue = (int)property.GetValue(profile)!;
-            property.SetValue(profile, currentValue + 1);
+            var updatedValue = updateFunc(currentValue);
+            property.SetValue(profile, updatedValue);
+
+            await this.data.SaveChangesAsync();
         }
+
+        public async Task<bool> MoreThanFiveCurrentlyReadingAsync(string userId)
+            => await this.data
+                .Profiles
+                .Where(p => p.UserId == userId)
+                .Select(p => p.CurrentlyReadingBooksCount)
+                .FirstOrDefaultAsync() > CurrentlyReadingBooksMaxCount;
     }
 }

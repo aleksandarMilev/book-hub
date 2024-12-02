@@ -163,7 +163,10 @@
                 book.CreatorId!,
                 true);
 
-            await this.profileService.IncrementCountAsync(this.userService.GetId()!, nameof(UserProfile.CreatedBooksCount));
+            await this.profileService.UpdateCountAsync(
+                this.userService.GetId()!,
+                nameof(UserProfile.CreatedBooksCount),
+                x => ++x);
 
             return true;
         }

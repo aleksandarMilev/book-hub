@@ -60,7 +60,10 @@
             await this.CalculateBookRatingAsync(model.BookId, model.Rating);
             await this.CalculateAuthorRatingAsync(model.BookId, model.Rating);
 
-            await this.profileService.IncrementCountAsync(userId, nameof(UserProfile.ReviewsCount));
+            await this.profileService.UpdateCountAsync(
+                userId,
+                nameof(UserProfile.ReviewsCount),
+                x => ++x);
 
             return review.Id;
         }

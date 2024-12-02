@@ -83,6 +83,8 @@
 
             public const int BiographyMinLength = 10;
             public const int BiographyMaxLength = 1_000;
+
+            public const int CurrentlyReadingBooksMaxCount = 5;
         }
 
         public static class Article

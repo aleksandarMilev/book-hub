@@ -12,7 +12,8 @@ import {
     faPlus,
     faBook,
     faComment,
-    faChartBar
+    faChartBar,
+    faBookReader
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as useProfile from '../../../hooks/useProfile'
@@ -28,6 +29,7 @@ import DeleteModal from  '../../common/delete-modal/DeleteModal'
 import defaultProfilePicture from '../../../assets/images/defaultProfilePicture.png'
 
 import './ProfileDetails.css'
+import { FaReadme } from 'react-icons/fa'
 
 export default function ProfileDetails() {
     const location = useLocation()
@@ -38,6 +40,10 @@ export default function ProfileDetails() {
     const { profile, isFetching: profileIsFteching  } = location?.state?.id 
         ? useProfile.useOtherProfile(location?.state?.id) 
         : useProfile.useMineProfile()
+
+    if(profile){
+        console.log(profile)
+    }
 
     const { 
         readingList,
@@ -144,31 +150,52 @@ export default function ProfileDetails() {
                                         <div className="statistics-section">
                                             <h6 className="mb-0">
                                                 <FontAwesomeIcon icon={faChartBar} className="me-2 text-info" />
-                                                Statistics
+                                                Statistics:
                                             </h6>
                                             <div className="statistics-items mt-3">
                                                 <div className="stat-item">
-                                                        <span className="stat-label">
-                                                            <FontAwesomeIcon icon={faBook} className="me-2 text-info" />
-                                                            Books Created:
-                                                        </span>
-                                                        <span className="stat-value">{profile?.createdBooksCount || 0}</span>
-                                                    </div>
-                                                    <div className="stat-item">
-                                                        <span className="stat-label">
-                                                            <FontAwesomeIcon icon={faUser} className="me-2 text-success" />
-                                                            Authors Created:
-                                                        </span>
-                                                        <span className="stat-value">{profile?.createdAuthorsCount || 0}</span>
-                                                    </div>
-                                                    <div className="stat-item">
-                                                        <span className="stat-label">
-                                                            <FontAwesomeIcon icon={faComment} className="me-2 text-warning" />
-                                                            Reviews Written:
-                                                        </span>
-                                                        <span className="stat-value">{profile?.reviewsCount || 0}</span>
-                                                    </div>
+                                                    <span className="stat-label">
+                                                        <FontAwesomeIcon icon={faBook} className="me-2 text-info" />
+                                                        Books Created:
+                                                    </span>
+                                                    <span className="stat-value">{profile?.createdBooksCount || 0}</span>
                                                 </div>
+                                                <div className="stat-item">
+                                                    <span className="stat-label">
+                                                        <FontAwesomeIcon icon={faUser} className="me-2 text-success" />
+                                                        Authors Created:
+                                                    </span>
+                                                    <span className="stat-value">{profile?.createdAuthorsCount || 0}</span>
+                                                </div>
+                                                <div className="stat-item">
+                                                    <span className="stat-label">
+                                                        <FontAwesomeIcon icon={faComment} className="me-2 text-warning" />
+                                                        Reviews Written:
+                                                    </span>
+                                                    <span className="stat-value">{profile?.reviewsCount || 0}</span>
+                                                </div>
+                                                <div className="stat-item">
+                                                    <span className="stat-label">
+                                                        <FontAwesomeIcon icon={faBookReader} className="me-2 text-warning" />
+                                                        Currently Reading:
+                                                    </span>
+                                                    <span className="stat-value">{profile?.currentlyReadingBooksCount || 0}</span>
+                                                </div>
+                                                <div className="stat-item">
+                                                    <span className="stat-label">
+                                                        <FontAwesomeIcon icon={faBookReader} className="me-2 text-warning" />
+                                                        Want to Read:
+                                                    </span>
+                                                    <span className="stat-value">{profile?.toReadBooksCount || 0}</span>
+                                                </div>
+                                                <div className="stat-item">
+                                                    <span className="stat-label">
+                                                        <FontAwesomeIcon icon={faBookReader} className="me-2 text-warning" />
+                                                        Read:
+                                                    </span>
+                                                    <span className="stat-value">{profile?.readBooksCount || 0}</span>
+                                                </div>
+                                            </div>
                                             </div>
                                         <hr className="my-4" />
                                         <div className="d-flex justify-content-around mt-3">

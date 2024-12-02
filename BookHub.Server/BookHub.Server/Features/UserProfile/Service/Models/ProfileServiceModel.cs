@@ -15,5 +15,11 @@
         public int CreatedAuthorsCount { get; set; }
 
         public int ReviewsCount { get; set; }
+
+        public int ReadBooksCount { get; set; }
+
+        public int ToReadBooksCount { get; set; }
+
+        public int CurrentlyReadingBooksCount { get; set; }
     }
 }
