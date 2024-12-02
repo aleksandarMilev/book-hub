@@ -8,3 +8,8 @@ export const readingListStatus = {
     toRead: 'toRead',
     currentlyReading: 'currentlyReading'
 }
+
+export const messageStatus = {
+    success: 'success',
+    failure: 'failure'
+}

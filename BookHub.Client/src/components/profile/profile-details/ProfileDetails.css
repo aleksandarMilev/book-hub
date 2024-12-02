@@ -126,28 +126,25 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)
 }
 
-/* Styling for the main container */
 .currently-reading-container {
-    background-color: #f9f9f9; /* Light grey background for contrast */
-    border: 1px solid #ddd; /* Subtle border */
-    border-radius: 8px; /* Rounded corners */
-    padding: 20px; /* Space inside the container */
-    margin: 20px auto; /* Center the container with margin */
-    max-width: 800px; /* Limit the width */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    background-color: #f9f9f9; 
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px; 
+    margin: 20px auto; 
+    max-width: 800px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1)
 }
 
-/* Styling for the heading */
 .currently-reading-container h1 {
-    font-size: 1.8rem; /* Slightly larger font */
-    font-weight: bold; /* Make it stand out */
-    color: #333; /* Dark grey text */
-    margin-bottom: 15px; /* Space between heading and content */
+    font-size: 1.8rem; 
+    font-weight: bold; 
+    color: #333; 
+    margin-bottom: 15px
 }
 
-/* Styling for the fallback text */
 .currently-reading-container p {
-    font-size: 1rem; /* Normal font size */
-    color: #555; /* Medium grey text */
-    margin-top: 10px; /* Add some space above */
+    font-size: 1rem; 
+    color: #555; 
+    margin-top: 10px
 }

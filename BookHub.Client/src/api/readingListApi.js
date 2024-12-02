@@ -42,9 +42,15 @@ export async function addInListAsync(bookId, status, token){
     const url = baseUrl + routes.readingList
     const response = await fetch(url, options)
 
+    if(response.status === 400){
+        return await response.json()
+    }
+
     if(!response.ok){
         throw new Error(errors.readingList.add)
     }
+
+    return null
 }
 
 export async function removeFromListAsync(bookId, status, token){

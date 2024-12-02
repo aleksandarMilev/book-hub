@@ -129,6 +129,6 @@
                 .Profiles
                 .Where(p => p.UserId == userId)
                 .Select(p => p.CurrentlyReadingBooksCount)
-                .FirstOrDefaultAsync() > CurrentlyReadingBooksMaxCount;
+                .FirstOrDefaultAsync() == CurrentlyReadingBooksMaxCount;
     }
 }

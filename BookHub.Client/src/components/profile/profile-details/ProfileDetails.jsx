@@ -41,10 +41,6 @@ export default function ProfileDetails() {
         ? useProfile.useOtherProfile(location?.state?.id) 
         : useProfile.useMineProfile()
 
-    if(profile){
-        console.log(profile)
-    }
-
     const { 
         readingList,
         isFetching: readingListIsFteching,

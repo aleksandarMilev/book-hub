@@ -9,6 +9,7 @@ import renderStars from '../../../../common/functions/renderStars'
 import { readingListStatus } from '../../../../common/constants/defaultValues'
 import { routes } from "../../../../common/constants/api"
 import { UserContext } from '../../../../contexts/userContext'
+import { useMessage } from '../../../../contexts/messageContext'
 
 import './BookFullInfo.css'
 
@@ -25,6 +26,7 @@ export default function BookFullInfo({
 
     const navigate = useNavigate()
     const { isAdmin, token } = useContext(UserContext)
+    const { showMessage } = useMessage()
 
     const formattedDate = book.publishedDate 
         ? format(new Date(book.publishedDate), 'MMMM dd, yyyy')
@@ -50,7 +52,11 @@ export default function BookFullInfo({
 
     const handleAddToList = async (status) => {
         try {
-            await readingListApi.addInListAsync(book.id, status, token)
+            const error = await readingListApi.addInListAsync(book.id, status, token)
+            if(error){
+                showMessage(error.errorMessage, false)
+            }
+
             refreshBook()
         } catch (error) {
             navigate(routes.badRequest, { state: { message: error.message } })

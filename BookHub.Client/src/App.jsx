@@ -40,48 +40,51 @@ import EditArticle from "./components/article/edit-article/EditArticle"
 import BadRequest from "./components/common/error/BadRequest"
 import NotFound from "./components/common/error/NotFound"
 import AccessDenied from "./components/common/error/AccessDenied"
+import { MessageProvider } from "./contexts/messageContext"
 
 
 export default function App(){
     return(
         <UserContextProvider>
-            <Header />
-            <Routes>
-                <Route path={routes.home} element={<Home />} />
+            <MessageProvider>
+                <Header />
+                <Routes>
+                    <Route path={routes.home} element={<Home />} />
 
-                <Route path={routes.login} element={<Login />} />
-                <Route path={routes.register} element={<Register />} />
-                <Route path={routes.logout} element={<Logout />} />
+                    <Route path={routes.login} element={<Login />} />
+                    <Route path={routes.register} element={<Register />} />
+                    <Route path={routes.logout} element={<Logout />} />
 
-                <Route path={routes.profile} element={<AuthenticatedRoute element={<ProfileDetails />} />} />
-                <Route path={routes.createProfle} element={<AuthenticatedRoute element={<CreateProfile />} />} />
-                <Route path={routes.editProfle} element={<AuthenticatedRoute element={<EditProfile />} />} />
+                    <Route path={routes.profile} element={<AuthenticatedRoute element={<ProfileDetails />} />} />
+                    <Route path={routes.createProfle} element={<AuthenticatedRoute element={<CreateProfile />} />} />
+                    <Route path={routes.editProfle} element={<AuthenticatedRoute element={<EditProfile />} />} />
 
-                <Route path={routes.book} element={<AuthenticatedRoute element={<BookList />} />} />
-                <Route path={routes.book + '/:id'} element={<AuthenticatedRoute element={<BookDetails />} />} />
-                <Route path={routes.createBook} element={<AuthenticatedRoute element={<CreateBook />} />} />
-                <Route path={routes.editBook + '/:id'} element={<AuthenticatedRoute element={<EditBook />} />} />
+                    <Route path={routes.book} element={<AuthenticatedRoute element={<BookList />} />} />
+                    <Route path={routes.book + '/:id'} element={<AuthenticatedRoute element={<BookDetails />} />} />
+                    <Route path={routes.createBook} element={<AuthenticatedRoute element={<CreateBook />} />} />
+                    <Route path={routes.editBook + '/:id'} element={<AuthenticatedRoute element={<EditBook />} />} />
 
-                <Route path={routes.review + '/:bookId'} element={<AuthenticatedRoute element={<ReviewList />} />} />
+                    <Route path={routes.review + '/:bookId'} element={<AuthenticatedRoute element={<ReviewList />} />} />
 
-                <Route path={routes.genres + '/:id'} element={<AuthenticatedRoute element={<GenreDetails />} />} />
+                    <Route path={routes.genres + '/:id'} element={<AuthenticatedRoute element={<GenreDetails />} />} />
 
-                <Route path={routes.author + '/:id'} element={<AuthenticatedRoute element={<AuthorDetails />} />} />
-                <Route path={routes.createAuthor} element={<AuthenticatedRoute element={<CreateAuthor />} />} />
-                <Route path={routes.editAuthor + '/:id'} element={<AuthenticatedRoute element={<EditAuthor />} />} />
+                    <Route path={routes.author + '/:id'} element={<AuthenticatedRoute element={<AuthorDetails />} />} />
+                    <Route path={routes.createAuthor} element={<AuthenticatedRoute element={<CreateAuthor />} />} />
+                    <Route path={routes.editAuthor + '/:id'} element={<AuthenticatedRoute element={<EditAuthor />} />} />
 
-                <Route path={routes.articles} element={<AuthenticatedRoute element={<ArticleList />} />} />
-                <Route path={routes.admin.createArticle} element={<AdminRoute element={<CreateArticle />} />} />
-                <Route path={routes.admin.editArticle + '/:id'} element={<AdminRoute element={<EditArticle />} />} />
-                <Route path={routes.article + '/:id'} element={<AuthenticatedRoute element={<ArticleDetails />} />} />
+                    <Route path={routes.articles} element={<AuthenticatedRoute element={<ArticleList />} />} />
+                    <Route path={routes.admin.createArticle} element={<AdminRoute element={<CreateArticle />} />} />
+                    <Route path={routes.admin.editArticle + '/:id'} element={<AdminRoute element={<EditArticle />} />} />
+                    <Route path={routes.article + '/:id'} element={<AuthenticatedRoute element={<ArticleDetails />} />} />
 
-                <Route path={routes.allNotifications} element={<AuthenticatedRoute element={<NotificationList />} />} />
+                    <Route path={routes.allNotifications} element={<AuthenticatedRoute element={<NotificationList />} />} />
 
-                <Route path={routes.badRequest} element={<BadRequest />} />
-                <Route path={routes.notFound} element={<NotFound />} />
-                <Route path={routes.accessDenied} element={<AccessDenied />} />
-            </Routes>
-            <Footer /> 
+                    <Route path={routes.badRequest} element={<BadRequest />} />
+                    <Route path={routes.notFound} element={<NotFound />} />
+                    <Route path={routes.accessDenied} element={<AccessDenied />} />
+                </Routes>
+                <Footer /> 
+            </MessageProvider>
         </UserContextProvider>
     )
 }
