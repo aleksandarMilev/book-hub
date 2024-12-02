@@ -8,6 +8,8 @@ export const routes = {
     login: '/identity/login',
     logout: '/identity/logout',
 
+    statistics: '/statistics',
+
     profile: '/profile',
     topProfiles: '/profile/topThree',
     editProfle: '/profile/edit',

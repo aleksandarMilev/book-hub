@@ -1,4 +1,7 @@
 export const errors = {
+    statistics: {
+        get: 'Something went wrong while loading our statistics. Please refresh the page or try again later!',
+    },
     readingList: {
         currentlyReading:  'Apologies, we\'re experiencing issues and can\'t display the user currenlty reading books at the moment. Please try again later or contact us for assistance.',
         add:  'Something went wrong while adding the book in your list. Please refresh the page or try again later!',

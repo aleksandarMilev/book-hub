@@ -50,11 +50,13 @@ export default function BookFullInfo({
         }
     }
 
-    const handleAddToList = async (status) => {
+    const handleAddToList = async (status, title) => {
         try {
             const error = await readingListApi.addInListAsync(book.id, status, token)
             if(error){
                 showMessage(error.errorMessage, false)
+            } else{
+                showMessage(`You have successfuly added ${title} in your collection!`, true)
             }
 
             refreshBook()
@@ -63,10 +65,11 @@ export default function BookFullInfo({
         }
     }
 
-    const handleRemoveFromList = async (status) => {
+    const handleRemoveFromList = async (status, title) => {
         try {
             await readingListApi.removeFromListAsync(book.id, status, token)
             refreshBook()
+            showMessage(`You have successfuly removed ${title} from your collection!`, true)
         } catch (error) {
             navigate(routes.badRequest, { state: { message: error.message } })
         }
@@ -125,19 +128,19 @@ export default function BookFullInfo({
                                 <div className="d-flex gap-2 mt-2">
                                     <button
                                         className="btn btn-outline-success d-flex align-items-center gap-2"
-                                        onClick={() => handleAddToList(readingListStatus.read)}
+                                        onClick={() => handleAddToList(readingListStatus.read, book.title)}
                                     >
                                         <FaBook /> Read
                                     </button>
                                     <button
                                         className="btn btn-outline-primary d-flex align-items-center gap-2"
-                                        onClick={() => handleAddToList(readingListStatus.toRead)}
+                                        onClick={() => handleAddToList(readingListStatus.toRead, book.title)}
                                     >
                                         <FaBookmark /> Want To Read
                                     </button>
                                     <button
                                         className="btn btn-outline-warning d-flex align-items-center gap-2"
-                                        onClick={() => handleAddToList(readingListStatus.currentlyReading)}
+                                        onClick={() => handleAddToList(readingListStatus.currentlyReading, book.title)}
                                     >
                                         <FaClock /> Currently Reading
                                     </button>
@@ -151,7 +154,7 @@ export default function BookFullInfo({
                                             </p>
                                             <button
                                                 className="btn btn-outline-danger d-flex align-items-center gap-2"
-                                                onClick={() => handleRemoveFromList(readingListStatus.read)}
+                                                onClick={() => handleRemoveFromList(readingListStatus.read, book.title)}
                                             >
                                                 Remove from your list
                                             </button>
@@ -164,7 +167,7 @@ export default function BookFullInfo({
                                             </p>
                                             <button
                                                 className="btn btn-outline-danger d-flex align-items-center gap-2"
-                                                onClick={() => handleRemoveFromList(readingListStatus.toRead)}
+                                                onClick={() => handleRemoveFromList(readingListStatus.toRead, book.title)}
                                             >
                                                 Remove from your list
                                             </button>
@@ -177,7 +180,7 @@ export default function BookFullInfo({
                                             </p>
                                             <button
                                                 className="btn btn-outline-danger d-flex align-items-center gap-2"
-                                                onClick={() => handleRemoveFromList(readingListStatus.currentlyReading)}
+                                                onClick={() => handleRemoveFromList(readingListStatus.currentlyReading, book.title)}
                                             >
                                                 Remove from your list
                                             </button>

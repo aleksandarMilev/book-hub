@@ -15,6 +15,7 @@
     using Features.ReadingList.Service;
     using Features.Review.Service;
     using Features.Search.Service;
+    using Features.Statistics.Service;
     using Features.UserProfile.Service;
     using Filters;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -101,7 +102,8 @@
                 .AddTransient<IProfileService, ProfileService>()
                 .AddTransient<IArticleService, ArticleService>()
                 .AddTransient<INotificationService, NotificationService>()
-                .AddTransient<IReadingListService, ReadingListService>();
+                .AddTransient<IReadingListService, ReadingListService>()
+                .AddTransient<IStatisticsService, StatisticsService>();
 
         public static IServiceCollection AddApiControllers(this IServiceCollection services)
         {
