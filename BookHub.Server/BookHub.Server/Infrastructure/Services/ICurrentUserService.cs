@@ -1,6 +1,8 @@
 ﻿namespace BookHub.Server.Infrastructure.Services
 {
-    public interface ICurrentUserService
+    using Infrastructure.Services.ServiceLifetimes;
+
+    public interface ICurrentUserService : IScopedService
     {
         string? GetUsername();
 

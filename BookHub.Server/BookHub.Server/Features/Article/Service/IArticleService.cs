@@ -1,9 +1,10 @@
 ﻿namespace BookHub.Server.Features.Article.Service
 {
     using Infrastructure.Services;
+    using Infrastructure.Services.ServiceLifetimes;
     using Models;
 
-    public interface IArticleService
+    public interface IArticleService : ITransientService
     {
         Task<ArticleDetailsServiceModel?> DetailsAsync(int id);
 

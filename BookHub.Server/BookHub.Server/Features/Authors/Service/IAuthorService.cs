@@ -1,9 +1,10 @@
 ﻿namespace BookHub.Server.Features.Authors.Service
 {
     using Infrastructure.Services;
+    using Infrastructure.Services.ServiceLifetimes;
     using Models;
 
-    public interface IAuthorService
+    public interface IAuthorService : ITransientService
     {
         Task<IEnumerable<AuthorNamesServiceModel>> NamesAsync();
 

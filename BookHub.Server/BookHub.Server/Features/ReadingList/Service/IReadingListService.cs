@@ -2,8 +2,9 @@
 {
     using Book.Service.Models;
     using Infrastructure.Services;
+    using Infrastructure.Services.ServiceLifetimes;
 
-    public interface IReadingListService
+    public interface IReadingListService : ITransientService
     {
         Task<PaginatedModel<BookServiceModel>> AllAsync(
            string userId,

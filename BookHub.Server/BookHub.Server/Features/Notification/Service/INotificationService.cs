@@ -1,9 +1,10 @@
 ﻿namespace BookHub.Server.Features.Notification.Service
 {
     using Infrastructure.Services;
+    using Infrastructure.Services.ServiceLifetimes;
     using Models;
 
-    public interface INotificationService
+    public interface INotificationService : ITransientService
     {
         Task<IEnumerable<NotificationServiceModel>> LastThreeAsync();
 

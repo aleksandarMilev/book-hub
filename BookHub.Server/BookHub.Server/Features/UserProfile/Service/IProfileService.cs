@@ -1,9 +1,10 @@
 ﻿namespace BookHub.Server.Features.UserProfile.Service
 {
     using Infrastructure.Services;
+    using Infrastructure.Services.ServiceLifetimes;
     using Models;
 
-    public interface IProfileService
+    public interface IProfileService : ITransientService
     {
         Task<ProfileServiceModel?> MineAsync();
 

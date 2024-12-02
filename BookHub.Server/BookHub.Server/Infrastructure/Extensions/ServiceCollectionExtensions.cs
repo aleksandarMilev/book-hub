@@ -3,27 +3,15 @@
     using System.Reflection;
     using System.Text;
 
-    using Areas.Admin.Service;
     using Data;
     using Data.Models;
-    using Features.Article.Service;
-    using Features.Authors.Service;
-    using Features.Book.Service;
-    using Features.Genre.Service;
-    using Features.Identity.Service;
-    using Features.Notification.Service;
-    using Features.ReadingList.Service;
-    using Features.Review.Service;
-    using Features.Search.Service;
-    using Features.Statistics.Service;
-    using Features.UserProfile.Service;
     using Filters;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
-    using Services;
+    using Services.ServiceLifetimes;
 
     public static class ServiceCollectionExtensions
     {
@@ -88,22 +76,43 @@
         }
 
         public static IServiceCollection AddServices(this IServiceCollection services)
-            => services
-                .AddScoped<ICurrentUserService, CurrentUserService>()
-                .AddScoped<IAdminService, AdminService>()
-                .AddTransient<IIdentityService, IdentityService>()
-                .AddTransient<IBookService, BookService>()
-                .AddTransient<IAuthorService, AuthorService>()
-                .AddTransient<IGenreService, GenreService>()
-                .AddTransient<INationalityService, NationalityService>()
-                .AddTransient<ISearchService, SearchService>()
-                .AddTransient<IReviewService, ReviewService>()
-                .AddTransient<IVoteService, VoteService>()
-                .AddTransient<IProfileService, ProfileService>()
-                .AddTransient<IArticleService, ArticleService>()
-                .AddTransient<INotificationService, NotificationService>()
-                .AddTransient<IReadingListService, ReadingListService>()
-                .AddTransient<IStatisticsService, StatisticsService>();
+        {
+            var singletonInterfaceType = typeof(ISingletonService);
+            var scopedInterfaceType = typeof(IScopedService);
+            var transientInterfaceType = typeof(ITransientService);
+
+            Assembly
+                .GetExecutingAssembly()
+                .GetExportedTypes()
+                .Where(t => t.IsClass && !t.IsAbstract)
+                .Select(t => new
+                {
+                    Service = t.GetInterface($"I{t.Name}"),
+                    Implementation = t
+
+                })
+                .Where(t => t.Service != null)
+                .ToList()
+                .ForEach(t =>
+                {
+                    if (singletonInterfaceType.IsAssignableFrom(t.Service))
+                    {
+                        services.AddSingleton(t.Service, t.Implementation);
+                    }
+
+                    if (scopedInterfaceType.IsAssignableFrom(t.Service))
+                    {
+                        services.AddScoped(t.Service, t.Implementation);
+                    }
+
+                    if (transientInterfaceType.IsAssignableFrom(t.Service))
+                    {
+                        services.AddTransient(t.Service, t.Implementation);
+                    }
+                });
+
+            return services;
+        }
 
         public static IServiceCollection AddApiControllers(this IServiceCollection services)
         {

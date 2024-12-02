@@ -1,9 +1,10 @@
 ﻿namespace BookHub.Server.Features.Review.Service
 {
     using Infrastructure.Services;
+    using Infrastructure.Services.ServiceLifetimes;
     using Models;
 
-    public interface IReviewService
+    public interface IReviewService : ITransientService
     {
         Task<PaginatedModel<ReviewServiceModel>> AllForBookAsync(int bookId, int pageIndex, int pageSize);
 

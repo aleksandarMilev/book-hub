@@ -1,6 +1,8 @@
 ﻿namespace BookHub.Server.Features.Identity.Service
 {
-    public interface IIdentityService
+    using Infrastructure.Services.ServiceLifetimes;
+
+    public interface IIdentityService : ITransientService
     {
         string GenerateJwtToken(
             string appSettingsSecret,

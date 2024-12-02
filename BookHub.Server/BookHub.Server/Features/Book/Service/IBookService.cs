@@ -2,8 +2,9 @@
 {
     using Models;
     using Infrastructure.Services;
+    using Infrastructure.Services.ServiceLifetimes;
 
-    public interface IBookService
+    public interface IBookService : ITransientService
     {
         Task<IEnumerable<BookServiceModel>> AllAsync();
 
