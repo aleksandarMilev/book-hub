@@ -169,7 +169,7 @@ export default function BookFullInfo({
                                                 className="btn btn-outline-danger d-flex align-items-center gap-2"
                                                 onClick={() => handleRemoveFromList(readingListStatus.toRead, book.title)}
                                             >
-                                                Remove from your list
+                                                Done? Change status to Read!
                                             </button>
                                         </>
                                     )}
@@ -182,7 +182,7 @@ export default function BookFullInfo({
                                                 className="btn btn-outline-danger d-flex align-items-center gap-2"
                                                 onClick={() => handleRemoveFromList(readingListStatus.currentlyReading, book.title)}
                                             >
-                                                Remove from your list
+                                                Done? Change status to Read!
                                             </button>
                                         </>
                                     )}

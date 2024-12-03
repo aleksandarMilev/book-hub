@@ -148,3 +148,59 @@
     color: #555; 
     margin-top: 10px
 }
+
+.book-stats, .book-stats-link {
+    display: inline-block;
+    margin: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.book-stats {
+    background-color: #f4f4f4;
+    color: #333;
+    border: 1px solid #ccc;
+}
+
+.favorite-stats {
+    background-color: #ffd1dc;
+    color: #d63384
+}
+
+.read-stats {
+    background-color: #d1ffd6; 
+    color: #28a745
+}
+
+.book-stats-link {
+    text-decoration: none;
+    background-color: #e0f7fa;
+    color: #00796b;
+    border: 1px solid #00796b
+}
+
+.favorite-stats-link {
+    background-color: #ffecb3;
+    color: #ff9800
+}
+
+.read-stats-link {
+    background-color: #e1bee7;
+    color: #6a1b9a
+}
+
+.book-stats-link:hover {
+    background-color: #004d40; 
+    color: white;
+    border-color: white
+}
+
+.book-stats:hover {
+    background-color: #dcdcdc;
+    color: #000;
+    cursor: pointer
+}

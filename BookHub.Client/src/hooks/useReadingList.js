@@ -3,10 +3,17 @@ import { useContext, useEffect, useState } from 'react'
 import * as api from '../api/readingListApi'
 import { UserContext } from '../contexts/userContext'
 
-export function useCurrentlyReadingList(isPrivate, id){
+export function useGet(
+    id, 
+    status, 
+    page = null, 
+    pageSize = null, 
+    isPrivate = false
+){
     const { token, userId } = useContext(UserContext)
 
     const [readingList, setReadingList] = useState([])
+    const [totalItems, setTotalItems] = useState(0)
     const [isFetching, setIsFetching] = useState(false)
     const [error, setError] = useState(null) 
 
@@ -21,7 +28,9 @@ export function useCurrentlyReadingList(isPrivate, id){
 
             try {
                 setIsFetching(true)
-                setReadingList(await api.currentlyReadingListAsync(id, token))
+                const result = await api.getAsync(id, token, status, page, pageSize)
+                setReadingList(result.items)
+                setTotalItems(result.totalItems)
             } catch (error) {
                 setError(error.message)
             } finally {
@@ -30,7 +39,7 @@ export function useCurrentlyReadingList(isPrivate, id){
         }
 
         fetchData()
-    }, [id, token])
+    }, [id, token, page, pageSize, status, isPrivate, userId])
 
-    return { readingList, isFetching, error }
+    return { readingList, totalItems, isFetching, error }
 }

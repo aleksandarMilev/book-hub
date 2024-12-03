@@ -1,0 +1,9 @@
+.read-status-title {
+    margin: 1em;
+    font-size: 2rem; 
+    font-weight: bold; 
+    margin-bottom: 1rem; 
+    text-align: center; 
+    transition: color 0.3s ease
+}
+  

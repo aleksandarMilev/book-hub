@@ -19,6 +19,7 @@ import {
 import * as useProfile from '../../../hooks/useProfile'
 import * as useReadingList from '../../../hooks/useReadingList'
 import * as profileApi from '../../../api/profileApi'
+import { readingListStatus } from '../../../common/constants/defaultValues'
 import { routes } from '../../../common/constants/api'
 import { UserContext } from '../../../contexts/userContext'
 
@@ -29,7 +30,6 @@ import DeleteModal from  '../../common/delete-modal/DeleteModal'
 import defaultProfilePicture from '../../../assets/images/defaultProfilePicture.png'
 
 import './ProfileDetails.css'
-import { FaReadme } from 'react-icons/fa'
 
 export default function ProfileDetails() {
     const location = useLocation()
@@ -41,15 +41,20 @@ export default function ProfileDetails() {
         ? useProfile.useOtherProfile(location?.state?.id) 
         : useProfile.useMineProfile()
 
-    const { 
-        readingList,
-        isFetching: readingListIsFteching,
-        error  } = useReadingList.useCurrentlyReadingList(profile?.isPrivate, profile?.id)
+    const { readingList, isFetching: readingListIsFteching, error  } = useReadingList.useGet(
+            profile?.id,
+            readingListStatus.currentlyReading,
+            null,
+            null,
+            profile?.isPrivate
+        )
+
+    console.log(readingList);
 
     const [showModal, setShowModal] = useState(false)
     const toggleModal = () => setShowModal(old => !old)
 
-    async function deleteHandler() {
+    const deleteHandler = async () => {
         if(showModal){
             try {
                 await profileApi.deleteAsync(token)
@@ -63,6 +68,24 @@ export default function ProfileDetails() {
             toggleModal()
         }
     }
+
+    const getNavigateState = (status) => {
+        return {
+            state: {
+                id: location?.state?.id ?  location?.state?.id : profile?.id,
+                readingListStatus: status,
+                firstName: profile?.firstName
+            }
+        }
+    }
+
+    const onReadListClick = () => {
+        navigate(routes.readingList, getNavigateState(readingListStatus.read))
+    } 
+
+    const onToReadListClick = () => {
+        navigate(routes.readingList, getNavigateState(readingListStatus.toRead))
+    } 
 
     if (profileIsFteching) {
         return <DefaultSpinner />
@@ -220,16 +243,32 @@ export default function ProfileDetails() {
                                                 </Link>
                                             }
                                         </div>
-                                        <div className="currently-reading-container">
-                                            <h1>
-                                                {location?.state?.id 
-                                                    ? profile?.firstName + ' is ' 
-                                                    : 'You\'re '
-                                                }currently reading: 
-                                            </h1>
-                                                {readingList && readingList.items && readingList.items.length > 0 
-                                                    ? readingList.items.map(b => (<BookListItem key={b.id} {...b} />))
-                                                    : 'No currently reading books'}
+                                        {readingListIsFteching 
+                                            ? <DefaultSpinner/>
+                                            :
+                                            <div className="currently-reading-container">
+                                                <h1>
+                                                    {location?.state?.id 
+                                                        ? profile?.firstName + ' is ' 
+                                                        : 'You\'re '
+                                                    }currently reading: 
+                                                </h1>
+                                                    {readingList && readingList.length > 0 
+                                                        ? readingList.map(b => (<BookListItem key={b.id} {...b} />))
+                                                        : 'No currently reading books'}
+                                            </div>
+                                        }
+                                        <div 
+                                            onClick={onToReadListClick}
+                                            className="book-stats favorite-stats"
+                                        >
+                                            To Read ({profile?.toReadBooksCount})
+                                        </div>
+                                        <div 
+                                            onClick={onReadListClick}
+                                            className="book-stats read-stats"
+                                        >
+                                            Read ({profile?.readBooksCount})
                                         </div>
                                     </>
                                     :

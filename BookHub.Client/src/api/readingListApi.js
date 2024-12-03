@@ -1,8 +1,13 @@
 import { baseUrl, routes } from '../common/constants/api'
-import { readingListStatus } from '../common/constants/defaultValues'
 import { errors } from '../common/constants/messages'
 
-export async function currentlyReadingListAsync(userId, token){
+export async function getAsync(
+    userId,
+    token,
+    status,
+    page,
+    pageSize
+){
     const options = {
         method: "GET",
         headers: {
@@ -10,10 +15,22 @@ export async function currentlyReadingListAsync(userId, token){
         }
     }
 
-    const status = readingListStatus.currentlyReading
+    const urlParamObject = {
+        userId,
+        status
+    }
 
-    const params = new URLSearchParams({ userId, status })
+    if (page) {
+        urlParamObject.pageIndex = page
+    }
+    if (pageSize) {
+        urlParamObject.pageSize = pageSize
+    }
+
+    const params = new URLSearchParams(urlParamObject)
     const url = `${baseUrl + routes.readingList}?${params.toString()}`
+
+    console.log(url);
 
     const response = await fetch(url, options)
 
