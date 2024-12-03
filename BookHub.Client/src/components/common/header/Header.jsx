@@ -30,6 +30,9 @@ export default function Header() {
                             <Nav.Link as={Link} to={routes.book}>
                                 Books
                             </Nav.Link>
+                            <Nav.Link as={Link} to={routes.author}>
+                                Authors
+                            </Nav.Link>
                             <Nav.Link as={Link} to={routes.articles}>
                                 Articles
                             </Nav.Link>

@@ -30,6 +30,7 @@ export const routes = {
 
     searchBooks: '/search/books',
     searchArticles: '/search/articles',
+    searchAuthors: '/search/authors',
 
     review: '/review',
     vote: '/vote',

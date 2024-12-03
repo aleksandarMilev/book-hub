@@ -27,13 +27,13 @@ namespace BookHub.Server.Features.Search.Web
             int pageSize = DefaultPageSize) => this.Ok(await this.service.ArticlesAsync(searchTerm, page, pageSize));
 
         [HttpGet("[action]")]
-        public async Task<ActionResult<PaginatedModel<SearchArticleServiceModel>>> Authors(
+        public async Task<ActionResult<PaginatedModel<SearchAuthorServiceModel>>> Authors(
            string? searchTerm,
            int page = DefaultPageIndex,
            int pageSize = DefaultPageSize) => this.Ok(await this.service.AuthorsAsync(searchTerm, page, pageSize));
 
         [HttpGet("[action]")]
-        public async Task<ActionResult<PaginatedModel<SearchArticleServiceModel>>> Profiles(
+        public async Task<ActionResult<PaginatedModel<SearchProfileServiceModel>>> Profiles(
            string? searchTerm,
            int page = DefaultPageIndex,
            int pageSize = DefaultPageSize) => this.Ok(await this.service.ProfilesAsync(searchTerm, page, pageSize));

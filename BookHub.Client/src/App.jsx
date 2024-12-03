@@ -28,6 +28,7 @@ import NotificationList from "./components/notifications/notification-list/Notif
 
 import ReadingList from "./components/reading-list//ReadingList"
 
+import AuthorList from "./components/author/author-list/AuthorList"
 import AuthorDetails from "./components/author/author-details/AuthorDetails"
 import CreateAuthor from "./components/author/create-author/CreateAuthor"
 import EditAuthor from "./components/author/edit-author/EditAuthor"
@@ -72,6 +73,7 @@ export default function App(){
 
                     <Route path={routes.genres + '/:id'} element={<AuthenticatedRoute element={<GenreDetails />} />} />
 
+                    <Route path={routes.author} element={<AuthenticatedRoute element={<AuthorList />} />} />
                     <Route path={routes.author + '/:id'} element={<AuthenticatedRoute element={<AuthorDetails />} />} />
                     <Route path={routes.createAuthor} element={<AuthenticatedRoute element={<CreateAuthor />} />} />
                     <Route path={routes.editAuthor + '/:id'} element={<AuthenticatedRoute element={<EditAuthor />} />} />
