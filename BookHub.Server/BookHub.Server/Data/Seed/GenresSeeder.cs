@@ -90,7 +90,7 @@
                 new()
                 {
                     Id = 8,
-                    Name = "Historical",
+                    Name = "Historical fiction",
                     Description =
                         "Historical fiction immerses readers in the past, blending factual events with fictional narratives to create vivid portrayals of bygone eras. " +
                         "These stories illuminate the lives, struggles, and triumphs of people from different times, providing insight into cultural, social, and " +
@@ -229,6 +229,154 @@
                         "power or universal energy. From philosophical reflections to practical guides, these works resonate with readers seeking" +
                         "inspiration, understanding, and spiritual fulfillment across diverse traditions and belief systems.",
                     ImageUrl = "https://m.media-amazon.com/images/I/61jxcM3UskL._AC_UF1000,1000_QL80_.jpg"
+                },
+                new()
+                {
+                    Id = 21,
+                    Name = "Crime",
+                    Description =
+                        "Crime fiction is centered around the investigation of a crime, often focusing on the detection of criminals or the pursuit of " +
+                        "justice. It may include detectives, police officers, or amateur sleuths solving crimes like murder, theft, or corruption. " +
+                        "The genre can involve suspense, action, and exploration of moral dilemmas surrounding law and order. Subgenres include hardboiled" +
+                        "crime, cozy mysteries, and police procedurals, all providing different approaches to solving crimes and investigating human behavior.",
+                    ImageUrl = "https://img.tpt.cloud/nextavenue/uploads/2019/04/Crime-Fiction-Savvy-Sleuths-Over-50_53473532.inside.1200x775.jpg"
+                },
+
+                new()
+                {
+                    Id = 22,
+                    Name = "Urban Fiction",
+                    Description =
+                        "Urban fiction explores life in modern, often gritty urban settings, focusing on the struggles, relationships, and experiences of " +
+                        "people in cities. This genre frequently addresses themes like poverty, crime, social injustice, and community dynamics. " +
+                        "It can incorporate elements of drama, romance, and even horror, often portraying the challenges of urban life with raw, " +
+                        "unflinching realism. Urban fiction is popular in contemporary literature and often includes characters from marginalized communities.",
+                    ImageUrl = "https://frugalbookstore.net/cdn/shop/collections/Urban-Fiction.png?v=1724599745&width=480"
+                },
+
+                new()
+                {
+                    Id = 23,
+                    Name = "Fairy Tale",
+                    Description =
+                        "Fairy tale fiction involves magical or fantastical stories often set in a world where magic and mythical creatures exist. " +
+                        "These stories typically follow a clear moral arc, with characters who experience trials or transformation before achieving a happy " +
+                        "ending. Fairy tales often feature archetypal characters like witches, princes, and princesses, and they explore themes of " +
+                        "good vs. evil, justice, and personal growth. Many fairy tales have been passed down through generations, and the genre continues to " +
+                        "inspire modern adaptations and retellings.",
+                    ImageUrl = "https://news.syr.edu/wp-content/uploads/2023/09/enchanting_fairy_tale_woodland_onto_a_castle_an.original-scaled.jpg"
+                },
+
+                new()
+                {
+                    Id = 24,
+                    Name = "Epic",
+                    Description =
+                        "Epic fiction is characterized by large-scale, grand narratives often centered around heroic characters or monumental events. " +
+                        "Epics typically focus on the struggles and triumphs of protagonists who undergo significant personal or societal change. " +
+                        "These stories often span extensive periods of time and encompass entire civilizations, exploring themes like war, leadership, and cultural " +
+                        "identity. Classic examples include *The Iliad* and *The Odyssey*, with modern epics continuing to explore the human experience in vast, " +
+                        "sweeping terms.",
+                    ImageUrl = "https://i0.wp.com/joncronshaw.com/wp-content/uploads/2024/01/DALL%C2%B7E-2024-01-17-09.05.10-A-magical-and-enchanting-landscape-for-a-fantasy-blog-post-featuring-an-ancient-castle-perched-on-a-high-cliff-a-vast-mystical-forest-with-towering.png?fit=1200%2C686&ssl=1"
+                },
+
+                new()
+                {
+                    Id = 25,
+                    Name = "Political Fiction",
+                    Description =
+                        "Political fiction uses stories to explore, criticize, or comment on political systems, ideologies, and power dynamics. These narratives " +
+                        "often examine how political structures affect individuals and societies, focusing on themes of corruption, revolution, and social change. " +
+                        "Political fiction can include dystopian novels, satires, and thrillers, offering commentary on both contemporary and historical politics. " +
+                        "Through these stories, authors challenge readers to think critically about the systems that govern their lives.",
+                    ImageUrl = "https://markelayat.com/wp-content/uploads/elementor/thumbs/Political-Fiction-ft-image-qwo9yzatn5xk8t34vvqfivz2ed7zuj5lccn9ylm7bc.png"
+                },
+
+                new()
+                {
+                    Id = 26,
+                    Name = "Philosophical Fiction",
+                    Description =
+                        "Philosophical fiction delves into profound questions about existence, ethics, free will, and the nature of reality. These novels often " +
+                        "explore abstract ideas and are driven by deep intellectual themes rather than plot or action. Philosophical fiction may follow characters " +
+                        "who engage in critical thinking, self-reflection, or existential crises. These works often question the meaning of life, morality, " +
+                        "and consciousness, and they can be a blend of both fiction and philosophy, prompting readers to consider their own beliefs and perspectives.",
+                    ImageUrl = "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1546103428i/5297._UX160_.jpg"
+                },
+                new()
+                {
+                    Id = 27,
+                    Name = "True Crime",
+                    Description =
+                        "True crime fiction is based on real-life criminal events, recounting the details of notorious crimes, investigations, and trials. " +
+                        "It often focuses on infamous cases, delving into the psychology of criminals, the detectives or journalists who solve the cases, and the " +
+                        "social impact of the crime. True crime often incorporates extensive research and interviews, giving readers an inside look at the " +
+                        "complexities of real-life crime and law enforcement. These works can be chilling and thought-provoking, blending elements of mystery, drama," +
+                        "and historical non-fiction.",
+                    ImageUrl = "https://is1-ssl.mzstatic.com/image/thumb/Podcasts221/v4/00/07/67/000767b5-bad1-5d78-db34-373363ec6b3e/mza_8962416523973028402.jpg/1200x1200bf.webp"
+                },
+                new()
+                {
+                    Id = 28,
+                    Name = "Satire",
+                    Description =
+                        "Satire is a genre that uses humor, irony, and exaggeration to criticize or mock individuals, institutions, or societal norms. " +
+                        "It often employs wit and sarcasm to highlight the flaws and absurdities of the subject being criticized, sometimes with the intent of " +
+                        "provoking thought or promoting change. Satirical works can cover a wide range of topics, including politics, culture, and human nature, " +
+                        "and can be both lighthearted or dark in tone. Famous examples include works like Gulliver's Travels and Catch-22.",
+                    ImageUrl = "https://photos.demandstudios.com/getty/article/64/32/529801877.jpg"
+                },
+                new()
+                {
+                    Id = 29,
+                    Name = "Psychological Fiction",
+                    Description =
+                        "Psychological fiction delves into the inner workings of the mind, exploring complex emotional states, mental illness, " +
+                        "and the psychological effects of personal trauma, relationships, and societal pressures. These works often focus on character " +
+                        "development and the emotional or mental struggles of the protagonists, rather than external events. Psychological fiction can blur the lines " +
+                        "between reality and illusion, questioning perceptions and exploring the deeper layers of human consciousness. It often presents " +
+                        "challenging and sometimes disturbing narratives about identity and self-perception. Notable examples include The Bell Jar and The Catcher in the Rye.",
+                    ImageUrl = "https://literaturelegends.com/wp-content/uploads/2023/08/psychological.jpg"
+                },
+                new()
+                {
+                    Id = 30,
+                    Name = "Supernatural",
+                    Description =
+                        "Supernatural fiction explores phenomena beyond the natural world, often incorporating ghosts, spirits, vampires, or otherworldly beings. " +
+                        "These works blend elements of horror, fantasy, and the unexplained, and often delve into themes of life after death, paranormal activity, and other mystifying occurrences. " +
+                        "The supernatural genre captivates readers with its portrayal of eerie events and the unknown, often blurring the line between reality and the mystical. Examples include works like The Haunting of Hill House and The Turn of the Screw.",
+                    ImageUrl = "https://fully-booked.ca/wp-content/uploads/2024/02/evolution-of-paranormal-fiction-1024x576.jpg"
+                },
+                new()
+                {
+                    Id = 31,
+                    Name = "Gothic Fiction",
+                    Description =
+                        "Gothic fiction is characterized by its dark, eerie atmosphere, and often involves elements of horror, mystery, and the supernatural. " +
+                        "These stories typically feature gloomy, decaying settings such as castles, mansions, or haunted landscapes, and often include tragic or macabre themes. " +
+                        "Gothic fiction focuses on emotions like fear, dread, and despair, and explores the darker sides of human nature. Famous examples include works like Wuthering Heights and Frankenstein.",
+                    ImageUrl = "https://bookstr.com/wp-content/uploads/2022/09/V8mj92.webp"
+                },
+                new()
+                {
+                    Id = 32,
+                    Name = "Magical Realism",
+                    Description =
+                        "Magical realism blends elements of magic or the supernatural with a realistic narrative, creating a world where extraordinary events occur within ordinary settings. " +
+                        "This genre often explores themes of identity, culture, and human experience, and it is marked by the seamless integration of magical elements into everyday life. " +
+                        "Prominent examples include books like One Hundred Years of Solitude and The House of the Spirits.",
+                    ImageUrl = "https://www.world-defined.com/wp-content/uploads/2024/04/Magic-Realism-Books-978x652-1.webp"
+                },
+                new()
+                {
+                    Id = 33,
+                    Name = "Dark Fantasy",
+                    Description =
+                        "Dark fantasy combines elements of fantasy with a sense of horror, despair, and the supernatural. " +
+                        "These stories often take place in dark, gritty worlds where magic, danger, and moral ambiguity challenge the characters. " +
+                        "Dark fantasy blends the fantastical with the disturbing, creating a sense of dread and unease. Examples include books like The Dark Tower series and A Song of Ice and Fire.",
+                    ImageUrl = "https://miro.medium.com/v2/resize:fit:1024/1*VU5O34UlH-1SXZkEnL0dyg.jpeg"
                 }
             };
     }

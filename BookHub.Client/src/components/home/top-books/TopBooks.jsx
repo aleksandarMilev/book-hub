@@ -30,7 +30,7 @@ export default function TopBooks() {
 
     return (
         <div className="top-books-container">
-            <h2 className="top-books-title mb-4">Top Three Books</h2>
+            <h2 className="top-books-title mb-4">Top Books</h2>
             <MDBCardGroup className="card-group">
                 {books.map(b => (
                     <MDBCard key={b.id} className="top-book-card">

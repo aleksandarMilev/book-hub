@@ -43,13 +43,36 @@ export default function BookForm({ bookData = null, isEditMode = false }) {
     }, [bookData])
 
     const validationSchema = Yup.object({
-        title: Yup.string().min(2).max(200).required('Title is required!'),
-        authorId: Yup.number().nullable(),
-        imageUrl: Yup.string().url().min(10).max(2000),
-        shortDescription: Yup.string().min(10).max(100).required('You should provide some short description'),
-        longDescription: Yup.string().min(100).max(5000).required('You should provide a long description!'),
-        genres: Yup.array().min(1, 'At least one genre is required').required('Genres are required'), 
-        publishedDate: Yup.date().max(new Date(), 'Published date must be in the past')
+        title: Yup
+            .string()
+            .min(2)
+            .max(200)
+            .required('Title is required!'),
+        authorId: Yup
+            .number()
+            .nullable(),
+        imageUrl: Yup
+            .string()
+            .url()
+            .min(10)
+            .max(2000),
+        shortDescription: Yup
+            .string()
+            .min(10)
+            .max(200)
+            .required('You should provide some short description'),
+        longDescription: Yup
+            .string()
+            .min(100)
+            .max(10000)
+            .required('You should provide a long description!'),
+        genres: Yup
+            .array()
+            .min(1, 'At least one genre is required')
+            .required('Genres are required'), 
+        publishedDate: Yup
+            .date()
+            .max(new Date(), 'Published date must be in the past')
     })
 
     const formik = useFormik({

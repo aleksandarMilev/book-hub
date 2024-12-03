@@ -38,7 +38,7 @@ export default function ArticleListItem({ id, title, introduction, imageUrl, cre
                         </MDBCardTitle>
                         <MDBCardText className="article-item-introduction">{introduction}</MDBCardText>
                         <MDBCardText className="text-muted">
-                            Published on {format(new Date(createdOn), 'yyyy-MM-dd')}
+                            Published on {format(new Date(createdOn), 'dd MMM yyyy')}
                         </MDBCardText>
                     </MDBCardBody>
                 </MDBCol>

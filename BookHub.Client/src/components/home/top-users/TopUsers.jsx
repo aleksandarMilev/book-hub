@@ -28,7 +28,7 @@ export default function TopUsers() {
 
     return (
         <div className="top-users-container">
-            <h2>Top 3 Users</h2>
+            <h2>Top Users</h2>
             <div className="top-users-list">
                 {profiles?.map(p => (
                     <div className="top-user-card" onClick={() => onClickHandler(p.id)}>

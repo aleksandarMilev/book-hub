@@ -5,10 +5,10 @@
         public static class Book
         {
             public const int ShortDescriptionMinLength = 10;
-            public const int ShortDescriptionMaxLength = 100;
+            public const int ShortDescriptionMaxLength = 200;
 
             public const int LongDescriptionMinLength = 100;
-            public const int LongDescriptionMaxLength = 5_000;
+            public const int LongDescriptionMaxLength = 10_000;
 
             public const int AuthorNameMinLength = 2;
             public const int AuthorNameMaxLength = 100;
@@ -41,7 +41,7 @@
         public static class Review
         {
             public const int ContentMinLength = 5;
-            public const int ContentMaxLength = 1_000;
+            public const int ContentMaxLength = 5_000;
 
             public const double RatingMinValue = 1.0;
             public const double RatingMaxValue = 5.0;
@@ -93,7 +93,7 @@
             public const int TitleMaxLength = 100;
 
             public const int IntroductionMinLength = 10;
-            public const int IntroductionMaxLength = 100;
+            public const int IntroductionMaxLength = 500;
 
             public const int ContentMinLength = 100;
             public const int ContentMaxLength = 5_000;

@@ -23,7 +23,7 @@ export default function ReviewForm({ bookId, refreshReviews, setIsReviewCreatedO
         validationSchema: Yup.object({
             content: Yup.string()
                 .min(10, 'Review must be at least 10 characters')
-                .max(2000, 'Review cannot exceed 2000 characters')
+                .max(5000, 'Review cannot exceed 5000 characters')
                 .required('Review content is required'),
             rating: Yup.number()
                 .min(1, 'Please select a rating')

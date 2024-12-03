@@ -29,7 +29,7 @@ export default function ArticleForm({ article = null, isEditMode = false }) {
         introduction: Yup
             .string()
             .min(10, 'Introduction must be at least 10 characters long')
-            .max(100, 'Introduction must be less than 100 characters')
+            .max(500, 'Introduction must be less than 500 characters')
             .required('Introduction is required'),
         imageUrl: Yup
             .string()

@@ -3,11 +3,7 @@
     font-weight: bold;
     color: #1b2838;
     line-height: 1.2;
-    margin-bottom: 15px;
-    background: linear-gradient(90deg, rgba(255, 143, 0, 1) 0%, rgba(255, 255, 255, 1) 50%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent
+    margin-bottom: 15px
 }
 
 .article-introduction {
