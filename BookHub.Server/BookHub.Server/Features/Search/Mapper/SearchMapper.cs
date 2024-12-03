@@ -1,9 +1,8 @@
 ﻿namespace BookHub.Server.Features.Search.Mapper
 {
     using AutoMapper;
-    using Book.Service.Models;
-    using BookHub.Server.Features.Genre.Service.Models;
     using Data.Models;
+    using Genre.Service.Models;
     using Service.Models;
 
     public class SearchMapper : Profile
@@ -17,6 +16,10 @@
                  .ForMember(dest => dest.AuthorName, opt => opt.MapFrom(src => src.Author == null ? null : src.Author.Name));
 
             this.CreateMap<Article, SearchArticleServiceModel>();
+
+            this.CreateMap<Author, SearchAuthorServiceModel>();
+
+            this.CreateMap<UserProfile, SearchProfileServiceModel>();
         }
     }
 }

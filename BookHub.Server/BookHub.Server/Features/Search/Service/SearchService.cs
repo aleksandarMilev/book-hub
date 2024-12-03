@@ -65,5 +65,55 @@
 
             return new PaginatedModel<SearchArticleServiceModel>(paginatedArticles, totalArticles, page, pageSize);
         }
+
+        public async Task<PaginatedModel<SearchAuthorServiceModel>> AuthorsAsync(string? searchTerm, int page, int pageSize)
+        {
+            var authors = this.data
+                .Authors
+                .ProjectTo<SearchAuthorServiceModel>(this.mapper.ConfigurationProvider);
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                authors = authors.Where(a =>
+                    a.Name.ToLower().Contains(searchTerm.ToLower()) ||
+                    a.PenName.ToLower().Contains(searchTerm.ToLower())
+                );
+            }
+
+            authors = authors.OrderByDescending(b => b.AverageRating);
+
+            var total = await authors.CountAsync();
+
+            var paginatedAuthors = await authors
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PaginatedModel<SearchAuthorServiceModel>(paginatedAuthors, total, page, pageSize);
+        }
+
+        public async Task<PaginatedModel<SearchProfileServiceModel>> ProfilesAsync(string? searchTerm, int page, int pageSize)
+        {
+            var profiles = this.data
+                 .Profiles
+                 .ProjectTo<SearchProfileServiceModel>(this.mapper.ConfigurationProvider);
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                profiles = profiles.Where(a =>
+                    a.FirstName.ToLower().Contains(searchTerm.ToLower()) ||
+                    a.LastName.ToLower().Contains(searchTerm.ToLower())
+                );
+            }
+
+            var total = await profiles.CountAsync();
+
+            var paginatedProfiles = await profiles
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PaginatedModel<SearchProfileServiceModel>(paginatedProfiles, total, page, pageSize);
+        }
     }
 }

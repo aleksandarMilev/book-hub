@@ -17,15 +17,25 @@ namespace BookHub.Server.Features.Search.Web
         public async Task<ActionResult<PaginatedModel<SearchBookServiceModel>>> Books(
             string? searchTerm,
             int page = DefaultPageIndex,
-            int pageSize = DefaultPageSize)
-                => this.Ok(await this.service.BooksAsync(searchTerm, page, pageSize));
+            int pageSize = DefaultPageSize) => this.Ok(await this.service.BooksAsync(searchTerm, page, pageSize));
 
 
         [HttpGet("[action]")]
         public async Task<ActionResult<PaginatedModel<SearchArticleServiceModel>>> Articles(
             string? searchTerm,
             int page = DefaultPageIndex,
-            int pageSize = DefaultPageSize)
-                => this.Ok(await this.service.ArticlesAsync(searchTerm, page, pageSize));
+            int pageSize = DefaultPageSize) => this.Ok(await this.service.ArticlesAsync(searchTerm, page, pageSize));
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult<PaginatedModel<SearchArticleServiceModel>>> Authors(
+           string? searchTerm,
+           int page = DefaultPageIndex,
+           int pageSize = DefaultPageSize) => this.Ok(await this.service.AuthorsAsync(searchTerm, page, pageSize));
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult<PaginatedModel<SearchArticleServiceModel>>> Profiles(
+           string? searchTerm,
+           int page = DefaultPageIndex,
+           int pageSize = DefaultPageSize) => this.Ok(await this.service.ProfilesAsync(searchTerm, page, pageSize));
     }
 }
