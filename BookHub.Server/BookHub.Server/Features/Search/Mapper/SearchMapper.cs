@@ -19,7 +19,8 @@
 
             this.CreateMap<Author, SearchAuthorServiceModel>();
 
-            this.CreateMap<UserProfile, SearchProfileServiceModel>();
+            this.CreateMap<UserProfile, SearchProfileServiceModel>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.UserId));
         }
     }
 }

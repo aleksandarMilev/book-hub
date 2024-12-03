@@ -48,6 +48,29 @@ export async function searchAuthorsAsync(
     throw new Error(errors.search.badRequest)
 }
 
+export async function searchProfilesAsync(
+    token,
+    searchTerm,
+    page = pagination.defaultPageIndex,
+    pageSize = pagination.defaultPageSize) {
+
+    const options = {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+
+    const url = `${baseUrl}${routes.searchProfiles}?searchTerm=${encodeURIComponent(searchTerm)}&page=${page}&pageSize=${pageSize}`
+    const response = await fetch(url, options)
+
+    if(response.ok){
+        return await response.json()
+    } 
+
+    throw new Error(errors.search.badRequest)
+}
+
 export async function searchArticlesAsync(
     token,
     searchTerm,

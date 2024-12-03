@@ -76,7 +76,9 @@
             {
                 authors = authors.Where(a =>
                     a.Name.ToLower().Contains(searchTerm.ToLower()) ||
-                    a.PenName.ToLower().Contains(searchTerm.ToLower())
+                    a.PenName != null 
+                        ? a.PenName.ToLower().Contains(searchTerm.ToLower())
+                        : false
                 );
             }
 
@@ -102,7 +104,8 @@
             {
                 profiles = profiles.Where(a =>
                     a.FirstName.ToLower().Contains(searchTerm.ToLower()) ||
-                    a.LastName.ToLower().Contains(searchTerm.ToLower())
+                    a.LastName.ToLower().Contains(searchTerm.ToLower()) ||
+                    (a.FirstName.ToLower() + " " + a.LastName.ToLower()).Contains(searchTerm.ToLower())
                 );
             }
 

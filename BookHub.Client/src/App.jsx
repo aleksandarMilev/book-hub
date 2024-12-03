@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom"
 
 import AuthenticatedRoute from './components/common/authenticated-route/AuthenticatedRoute'
 import AdminRoute from './components/common/admin-route/AdminRoute'
+import { MessageProvider } from "./contexts/messageContext"
 import { routes } from "./common/constants/api"
 import { UserContextProvider } from "./contexts/userContext"
 
@@ -13,6 +14,7 @@ import Login from './components/identity/login/Login'
 import Register from './components/identity/register/Register'
 import Logout from './components/identity/logout/Logout'
 
+import ProfileList from "./components/profile/profile-list/ProfileList"
 import ProfileDetails from "./components/profile/profile-details/ProfileDetails"
 import CreateProfile from "./components/profile/create-profile/CreateProfile"
 import EditProfile from "./components/profile/edit-profile/EditProfile"
@@ -43,7 +45,6 @@ import EditArticle from "./components/article/edit-article/EditArticle"
 import BadRequest from "./components/common/error/BadRequest"
 import NotFound from "./components/common/error/NotFound"
 import AccessDenied from "./components/common/error/AccessDenied"
-import { MessageProvider } from "./contexts/messageContext"
 
 
 export default function App(){
@@ -58,6 +59,7 @@ export default function App(){
                     <Route path={routes.register} element={<Register />} />
                     <Route path={routes.logout} element={<Logout />} />
 
+                    <Route path={routes.profiles} element={<AuthenticatedRoute element={<ProfileList />} />} />
                     <Route path={routes.profile} element={<AuthenticatedRoute element={<ProfileDetails />} />} />
                     <Route path={routes.createProfle} element={<AuthenticatedRoute element={<CreateProfile />} />} />
                     <Route path={routes.editProfle} element={<AuthenticatedRoute element={<EditProfile />} />} />

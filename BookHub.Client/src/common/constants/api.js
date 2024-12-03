@@ -11,6 +11,7 @@ export const routes = {
     statistics: '/statistics',
 
     profile: '/profile',
+    profiles: '/profiles',
     topProfiles: '/profile/topThree',
     editProfle: '/profile/edit',
     createProfle: '/profile/new',
@@ -31,6 +32,7 @@ export const routes = {
     searchBooks: '/search/books',
     searchArticles: '/search/articles',
     searchAuthors: '/search/authors',
+    searchProfiles: '/search/profiles',
 
     review: '/review',
     vote: '/vote',

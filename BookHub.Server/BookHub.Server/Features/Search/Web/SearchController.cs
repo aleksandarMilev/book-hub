@@ -8,7 +8,7 @@ namespace BookHub.Server.Features.Search.Web
 
     using static Common.Constants.DefaultValues;
 
-    [Authorize]
+    //[Authorize]
     public class SearchController(ISearchService service) : ApiController
     {
         private readonly ISearchService service = service;

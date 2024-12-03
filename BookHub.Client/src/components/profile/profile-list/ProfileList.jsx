@@ -5,17 +5,17 @@ import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
 import { pagination } from '../../../common/constants/defaultValues'
 import * as useSearch from '../../../hooks/useSearch'
 
-import AuthorListItem from '../author-list-item/AuthorListItem'
+import ProfileListItem from '../profile-list-item/ProfileListItem'
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner'
 
 import image from '../../../assets/images/no-books-found.png'
 
-export default function AuthorList() {
+export default function ProfileList() {
     const [searchTerm, setSearchTerm] = useState('')
     const [page, setPage] = useState(pagination.defaultPageIndex)
     const pageSize = pagination.defaultPageSize
 
-    const { authors, totalItems, isFetching } = useSearch.useAuthors(searchTerm, page, pageSize)
+    const { profiles, totalItems, isFetching } = useSearch.useProfiles(searchTerm, page, pageSize)
 
     const totalPages = Math.ceil(totalItems / pageSize)
 
@@ -36,7 +36,7 @@ export default function AuthorList() {
                         <input
                             type="text"
                             className="form-control search-input"
-                            placeholder="Search authors..."
+                            placeholder="Search users..."
                             value={searchTerm}
                             onChange={handleSearchChange}
                         />
@@ -50,10 +50,10 @@ export default function AuthorList() {
                 <div className="col-md-10">
                     {isFetching ? (
                         <DefaultSpinner />
-                    ) : authors.length > 0 ? (
+                    ) : profiles.length > 0 ? (
                         <>
-                            {authors.map(a => (
-                                <AuthorListItem key={a.id} {...a} />
+                            {profiles.map(p => (
+                                <ProfileListItem key={p.id} {...p} />
                             ))}
                             <div className="pagination-container d-flex justify-content-center mt-4">
                                 <button
@@ -83,7 +83,7 @@ export default function AuthorList() {
                                 className="mb-4"
                                 style={{ maxWidth: '200px', opacity: 0.7 }}
                             />
-                            <h5 className="text-muted">We couldn't find any authors</h5>
+                            <h5 className="text-muted">We couldn't find any users</h5>
                             <p className="text-muted text-center" style={{ maxWidth: '400px' }}>
                                 Try adjusting your search terms or exploring our collection for more options.
                             </p>
