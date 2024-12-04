@@ -13,6 +13,8 @@
     using Microsoft.OpenApi.Models;
     using Services.ServiceLifetimes;
 
+    using static Common.Constants.Constants;
+
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
@@ -27,6 +29,10 @@
             services
                 .AddIdentity<User, IdentityRole>(opt =>
                 {
+                    opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(AccountLockoutTimeSpan); 
+                    opt.Lockout.MaxFailedAccessAttempts = MaxFailedLoginAttempts; 
+                    opt.Lockout.AllowedForNewUsers = true;
+
                     opt.User.RequireUniqueEmail = true;
                     opt.Password.RequireUppercase = false;
                     opt.Password.RequireLowercase = false;

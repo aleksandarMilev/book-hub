@@ -65,10 +65,17 @@
                 }
             }
 
+            if (await this.userManager.IsLockedOutAsync(user))
+            {
+                return this.Unauthorized(new { errorMessage = AccountIsLocked });
+            }
+
             var passwordIsValid = await this.userManager.CheckPasswordAsync(user, model.Password);
 
             if (passwordIsValid)
             {
+                await this.userManager.ResetAccessFailedCountAsync(user);
+
                 var isAdmin = await this.userManager.IsInRoleAsync(user, AdminRoleName);
 
                 var token = this.service.GenerateJwtToken(
@@ -79,6 +86,13 @@
                     isAdmin);
 
                 return this.Ok(new LoginResponseModel(token));
+            }
+
+            await this.userManager.AccessFailedAsync(user);
+
+            if (await this.userManager.IsLockedOutAsync(user))
+            {
+                return this.Unauthorized(new { errorMessage = AccountWasLocked });
             }
 
             return this.Unauthorized(new { errorMessage = InvalidLoginAttempt });
