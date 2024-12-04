@@ -27,11 +27,14 @@ export async function registerAsync(username, email, password) {
     throw new Error(errorData?.errorMessage || errors.identity.register)
 }
 
-export async function loginAsync(credentials, password) {
+export async function loginAsync(credentials, password, rememberMe) {
     const user = {
         credentials,
-        password
+        password,
+        rememberMe
     }
+
+    console.log(JSON.stringify(user))
 
     const options = {
         method: 'POST',

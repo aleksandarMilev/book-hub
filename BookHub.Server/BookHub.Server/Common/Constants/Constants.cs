@@ -11,5 +11,9 @@
         public const int AccountLockoutTimeSpan = 15;
 
         public const int MaxFailedLoginAttempts = 3;
+
+        public const int DefaultTokenExpirationTime = 7;
+
+        public const int ExtendedTokenExpirationTime = 30;
     }
 }

@@ -8,9 +8,9 @@ import { UserContext } from "../contexts/userContext"
 export function useLogin(){
     const { changeAuthenticationState } = useContext(UserContext)
 
-    const onLogin = async (credentials, password) => {
+    const onLogin = async (credentials, password, rememberMe) => {
         try {
-            const result = await identityApi.loginAsync(credentials, password)
+            const result = await identityApi.loginAsync(credentials, password, rememberMe)
             const tokenEncoded = jwtDecode(result.token)
 
             const user = {

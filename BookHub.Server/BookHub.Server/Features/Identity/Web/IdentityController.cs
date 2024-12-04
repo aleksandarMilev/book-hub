@@ -54,13 +54,12 @@
         {
             var user = await this.userManager.FindByNameAsync(model.Credentials);
 
-            if (user == null)
+            if (user is null)
             {
                 user = await this.userManager.FindByEmailAsync(model.Credentials);
 
-                if (user == null)
+                if (user is null)
                 {
-                    await Console.Out.WriteLineAsync();
                     return this.Unauthorized(new { errorMessage = InvalidLoginAttempt });
                 }
             }

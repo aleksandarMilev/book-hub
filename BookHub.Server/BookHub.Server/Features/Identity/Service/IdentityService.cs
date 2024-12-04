@@ -15,6 +15,7 @@
             string userId,
             string username,
             string email,
+            bool rememberMe,
             bool isAdmin = false)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -35,7 +36,9 @@
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
                 Subject = new ClaimsIdentity(claimList),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = rememberMe
+                    ? DateTime.UtcNow.AddDays(ExtendedTokenExpirationTime)
+                    : DateTime.UtcNow.AddDays(DefaultTokenExpirationTime),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 

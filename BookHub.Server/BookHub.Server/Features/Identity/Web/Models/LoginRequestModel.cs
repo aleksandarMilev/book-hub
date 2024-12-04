@@ -7,6 +7,8 @@
         [Required]
         public string Credentials { get; init; } = null!;
 
+        public bool RememberMe { get; init; } 
+
         [Required]
         public string Password { get; init; } = null!;
     }

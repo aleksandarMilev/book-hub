@@ -20,19 +20,26 @@ export default function Login() {
     const loginHandler = useIdentity.useLogin()
 
     const validationSchema = Yup.object({
-        credentials: Yup.string().required('Username or Email is required'),
-        password: Yup.string().required('Password is required')
+        credentials: Yup
+            .string()
+            .required('Username or Email is required'),
+        password: Yup
+            .string()
+            .required('Password is required'),
+        rememberMe: Yup
+            .boolean()
     })
 
     const formik = useFormik({
         initialValues: {
             credentials: '',
-            password: ''
+            password: '',
+            rememberMe: false
         },
         validationSchema,
         onSubmit: async (values, { setErrors }) => {
             try {
-                await loginHandler(values.credentials, values.password)
+                await loginHandler(values.credentials, values.password, values.rememberMe)
                 navigate(routes.home)
             } catch (error) {
                 setErrors({ credentials: error.message || 'An error occurred' })
@@ -98,7 +105,14 @@ export default function Login() {
                             />
                         </div>
                         <div className="d-flex justify-content-between mb-4">
-                            <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='Remember me' />
+                        <MDBCheckbox 
+                            name='rememberMe'
+                            id='flexCheckDefault'
+                            label='Remember me'
+                            checked={formik.values.rememberMe} 
+                            onChange={formik.handleChange} 
+                            onBlur={formik.handleBlur}
+                        />
                             <a href="!#">Forgot password?</a>
                         </div>
                         <div className='text-center text-md-start mt-4 pt-2'>
