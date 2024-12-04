@@ -2,6 +2,8 @@
 {
     using Areas.Admin.Service;
     using AutoMapper;
+    using AutoMapper.QueryableExtensions;
+    using BookHub.Server.Features.Search.Service.Models;
     using Data;
     using Data.Models;
     using Infrastructure.Extensions;
@@ -43,6 +45,25 @@
                 .OrderByDescending(b => b.AverageRating)
                 .Take(3)
                 .ToListAsync();
+
+        public async Task<PaginatedModel<BookServiceModel>> ByGenreAsync(int genreId, int page, int pageSize)
+        {
+            var books = this.data
+                .Books
+                .Where(g => g.BooksGenres.Any(bg => bg.GenreId == genreId))
+                .MapToServiceModel();
+
+            books = books.OrderByDescending(b => b.AverageRating);
+
+            var totalBooks = await books.CountAsync();
+
+            var paginatedBooks = await books
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PaginatedModel<BookServiceModel>(paginatedBooks, totalBooks, page, pageSize);
+        }
 
         public async Task<BookDetailsServiceModel?> DetailsAsync(int id)
             => await this.data

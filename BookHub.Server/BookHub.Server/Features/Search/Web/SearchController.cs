@@ -19,7 +19,6 @@ namespace BookHub.Server.Features.Search.Web
             int page = DefaultPageIndex,
             int pageSize = DefaultPageSize) => this.Ok(await this.service.BooksAsync(searchTerm, page, pageSize));
 
-
         [HttpGet("[action]")]
         public async Task<ActionResult<PaginatedModel<SearchArticleServiceModel>>> Articles(
             string? searchTerm,

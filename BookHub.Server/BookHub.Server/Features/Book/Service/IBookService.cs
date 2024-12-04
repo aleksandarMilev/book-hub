@@ -8,6 +8,8 @@
     {
         Task<IEnumerable<BookServiceModel>> AllAsync();
 
+        Task<PaginatedModel<BookServiceModel>> ByGenreAsync(int genreId, int page, int pageSize);
+
         Task<IEnumerable<BookServiceModel>> TopThreeAsync();
 
         Task<BookDetailsServiceModel?> DetailsAsync(int id);

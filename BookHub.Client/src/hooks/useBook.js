@@ -31,6 +31,36 @@ export function useGetTopThree() {
     return { books, isFetching, error } 
 }
 
+export function useByGenre(genreId, page = pagination.defaultPageIndex, pageSize = pagination.defaultPageSize) {
+    console.log('BY GENRE!');
+    
+    const { token } = useContext(UserContext)
+
+    const navigate = useNavigate()
+    const [books, setBooks] = useState([])
+    const [totalItems, setTotalItems] = useState(0)
+    const [isFetching, setIsFetching] = useState(false)
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                setIsFetching(true)
+                const result = await bookApi.byGenreAsync(token, genreId, page, pageSize)
+                setBooks(result.items)
+                setTotalItems(result.totalItems)
+            } catch (error) {
+                navigate(routes.badRequest, { state: { message: error.message } })
+            } finally {
+                setIsFetching(false)
+            }
+        }
+
+        fetchData()
+    }, [genreId, page, pageSize, token, navigate])
+
+    return { books, totalItems, isFetching }
+}
+
 export function useGetFullInfo(id) {
     const { token, isAdmin } = useContext(UserContext)
 

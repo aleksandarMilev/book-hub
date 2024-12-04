@@ -1,4 +1,5 @@
-﻿namespace BookHub.Server.Features.Book.Web.User
+﻿#pragma warning disable ASP0023 
+namespace BookHub.Server.Features.Book.Web.User
 {
     using AutoMapper;
     using Infrastructure.Extensions;
@@ -7,6 +8,8 @@
     using Models;
     using Service;
     using Service.Models;
+
+    using static Common.Constants.DefaultValues;
 
     [Authorize]
     public class BookController(
@@ -24,6 +27,13 @@
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BookServiceModel>>> All()
             => this.Ok(await this.service.AllAsync());
+
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+        public async Task<ActionResult<PaginatedModel<BookServiceModel>>> ByGenre(
+            int genreId,
+            int page = DefaultPageIndex,
+            int pageSize = DefaultPageSize) => this.Ok(await this.service.ByGenreAsync(genreId, page, pageSize));
 
         [HttpGet("{id}")]
         public async Task<ActionResult<BookDetailsServiceModel>> Details(int id)

@@ -1,7 +1,8 @@
-import { useParams } from 'react-router-dom'
-import { MDBTypography, MDBCardText } from 'mdb-react-ui-kit'
+import { useParams, useNavigate } from 'react-router-dom'
+import { MDBTypography, MDBCardText, MDBBtn } from 'mdb-react-ui-kit'
 
 import * as useGenre from '../../../hooks/useGenre'
+import { routes } from '../../../common/constants/api'
 
 import BookListItem from '../../book/book-list-item/BooksListItem'
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner'
@@ -10,10 +11,16 @@ import './GenreDetails.css';
 
 export default function GenreDetails() {
     const { id } = useParams()
+    const navigate = useNavigate()
     const { genre, isFetching } = useGenre.useDetails(id)
 
     if (isFetching || !genre) {
         return <DefaultSpinner />
+    }
+
+    const onAllBookClick = (e) => {
+        e.preventDefault()
+        navigate(routes.book, { state: { genreId: id, genreName: genre.name } })
     }
 
     return (
@@ -38,9 +45,16 @@ export default function GenreDetails() {
             <div className="top-books-section mt-5">
                 <MDBTypography tag="h4" className="section-title">Top Books</MDBTypography>
                 {genre.topBooks && genre.topBooks.length > 0 ? (
-                    genre.topBooks.map((book) => (
-                        <BookListItem key={book.id} {...book} />
-                    ))
+                    <>
+                        {genre.topBooks.map(b => (
+                            <BookListItem key={b.id} {...b} />
+                        ))}
+                        <div className="d-flex justify-content-center mt-3">
+                            <MDBBtn onClick={(e) => onAllBookClick(e)}>
+                                View all {genre.name} books
+                            </MDBBtn>
+                        </div>
+                    </>
                 ) : (
                     <MDBCardText>No books available for this genre.</MDBCardText>
                 )}

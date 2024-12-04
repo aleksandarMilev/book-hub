@@ -18,6 +18,7 @@ export const routes = {
     createProfle: '/profile/new',
 
     book: '/book',
+    booksByGenre: '/book/byGenre',
     topThreeBooks: '/book/topThree',
     createBook: '/book/new',
     editBook: '/book/edit',

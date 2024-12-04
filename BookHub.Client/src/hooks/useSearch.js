@@ -7,6 +7,7 @@ import { routes } from '../common/constants/api'
 import { UserContext } from '../contexts/userContext'
 
 export function useBooks(searchTerm, page = pagination.defaultPageIndex, pageSize = pagination.defaultPageSize) {
+    console.log('BY BOOKS!');
     const { token } = useContext(UserContext)
 
     const navigate = useNavigate()

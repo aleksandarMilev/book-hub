@@ -70,7 +70,7 @@
                             .FirstOrDefault()
                    });
 
-        public static IQueryable<BookServiceModel> MapToServiceModel(this DbSet<Book> books)
+        public static IQueryable<BookServiceModel> MapToServiceModel(this IQueryable<Book> books)
             => books
                 .Select(b => new BookServiceModel()
                 {
