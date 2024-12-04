@@ -61,5 +61,5 @@ export default function ProfileListItem({ id: profileId, imageUrl, firstName, la
                 </div>
             </div>
         </div>
-    );
+    )
 }

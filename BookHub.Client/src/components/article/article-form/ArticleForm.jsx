@@ -41,7 +41,7 @@ export default function ArticleForm({ article = null, isEditMode = false }) {
             .string()
             .min(100, 'Content must be at least 100 characters long')
             .max(5000, 'Content must be less than 5 000 characters')
-            .required('Content is required'),
+            .required('Content is required')
     })
 
     const formik = useFormik({

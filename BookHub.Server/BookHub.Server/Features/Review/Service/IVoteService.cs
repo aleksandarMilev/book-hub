@@ -1,6 +1,8 @@
 ﻿namespace BookHub.Server.Features.Review.Service
 {
-    public interface IVoteService
+    using Infrastructure.Services.ServiceLifetimes;
+
+    public interface IVoteService : ITransientService
     {
         Task<int?> CreateAsync(int reviewId, bool isUpvote);
     }

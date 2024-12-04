@@ -68,7 +68,7 @@ export async function upvoteAsync(id, token){
         },
         body: JSON.stringify({
             reviewId: id,
-            isUpvote: true,
+            isUpvote: true
         })
     }
 
@@ -91,7 +91,7 @@ export async function downvoteAsync(id, token){
         },
         body: JSON.stringify({
             reviewId: id,
-            isUpvote: false,
+            isUpvote: false
         })
     }
 

@@ -80,6 +80,10 @@
                 new() { BookId = 14, GenreId = 7 }, //adventure
                 new() { BookId = 14, GenreId = 24 }, //epic
                 new() { BookId = 14, GenreId = 25 }, //political
+                //hitchhiker
+                new() { BookId = 15, GenreId = 2 }, //science fiction
+                new() { BookId = 15, GenreId = 3 }, //fantasy
+                new() { BookId = 15, GenreId = 16 }, //comedy
             };
     }
 }

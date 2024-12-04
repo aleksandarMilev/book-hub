@@ -14,7 +14,7 @@
 
         public async Task<int?> CreateAsync(int reviewId, bool isUpvote)
         {
-            var userId = this.userService.GetId()!;
+            var userId = this.userService.GetId();
 
             var voteExists = await this.data
                 .Votes
@@ -44,7 +44,7 @@
             { 
                 ReviewId = reviewId,
                 IsUpvote = isUpvote,
-                CreatorId = userId
+                CreatorId = userId!
             };
 
             this.data.Add(vote);

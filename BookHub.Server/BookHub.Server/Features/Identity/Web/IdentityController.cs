@@ -49,15 +49,20 @@
             return this.Unauthorized(new { errorMessage });
         }
 
-
         [HttpPost(nameof(this.Login))]
         public async Task<ActionResult> Login(LoginRequestModel model)
         {
-            var user = await this.userManager.FindByNameAsync(model.Username);
-            
+            var user = await this.userManager.FindByNameAsync(model.Credentials);
+
             if (user == null)
             {
-                return this.Unauthorized(new { errorMessage = InvalidLoginAttempt });
+                user = await this.userManager.FindByEmailAsync(model.Credentials);
+
+                if (user == null)
+                {
+                    await Console.Out.WriteLineAsync();
+                    return this.Unauthorized(new { errorMessage = InvalidLoginAttempt });
+                }
             }
 
             var passwordIsValid = await this.userManager.CheckPasswordAsync(user, model.Password);

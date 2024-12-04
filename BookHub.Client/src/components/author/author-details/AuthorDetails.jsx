@@ -56,7 +56,7 @@ export default function AuthorDetails() {
 
     const toggleModal = () => setShowModal(prev => !prev)
 
-    async function deleteHandler() {
+    const deleteHandler = async() => {
         if (showModal) {
             const success = await authorApi.deleteAsync(id, token)
             

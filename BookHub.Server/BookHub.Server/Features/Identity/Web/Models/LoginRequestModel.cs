@@ -5,7 +5,7 @@
     public class LoginRequestModel
     {
         [Required]
-        public string Username { get; init; } = null!;
+        public string Credentials { get; init; } = null!;
 
         [Required]
         public string Password { get; init; } = null!;

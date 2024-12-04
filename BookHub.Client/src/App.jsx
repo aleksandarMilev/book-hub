@@ -47,7 +47,6 @@ import BadRequest from "./components/common/error/BadRequest"
 import NotFound from "./components/common/error/NotFound"
 import AccessDenied from "./components/common/error/AccessDenied"
 
-
 export default function App(){
     return(
         <UserContextProvider>

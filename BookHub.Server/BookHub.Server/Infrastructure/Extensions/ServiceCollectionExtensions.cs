@@ -27,6 +27,7 @@
             services
                 .AddIdentity<User, IdentityRole>(opt =>
                 {
+                    opt.User.RequireUniqueEmail = true;
                     opt.Password.RequireUppercase = false;
                     opt.Password.RequireLowercase = false;
                     opt.Password.RequireNonAlphanumeric = false;

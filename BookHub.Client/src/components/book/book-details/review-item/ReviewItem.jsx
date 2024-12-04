@@ -1,12 +1,12 @@
-import React, { useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { MDBIcon, MDBBtn } from 'mdb-react-ui-kit'
 
 import * as reviewApi from '../../../../api/reviewApi'
+import renderStars from '../../../../common/functions/renderStars'
 import { errors } from '../../../../common/constants/messages'
 import { routes } from '../../../../common/constants/api'
 import { UserContext } from '../../../../contexts/userContext'
-import renderStars from '../../../../common/functions/renderStars'
 
 import DeleteModal from '../../../common/delete-modal/DeleteModal'
 
@@ -20,7 +20,7 @@ export default function ReviewItem({ review, onVote }) {
 
     const toggleModal = () => setShowModal((old) => !old)
 
-    async function upvoteHandler() {
+    const upvoteHandler = async () => {
         const success = await reviewApi.upvoteAsync(id, token)
         if (success) {
             setUpvoteCount(prev => ++prev)
@@ -28,7 +28,7 @@ export default function ReviewItem({ review, onVote }) {
         }
     }
 
-    async function downvoteHandler() {
+    const downvoteHandler = async () => {
         const success = await reviewApi.downvoteAsync(id, token)
         if (success) {
             setDownvoteCount(prev => ++prev)
@@ -36,9 +36,10 @@ export default function ReviewItem({ review, onVote }) {
         }
     }
 
-    async function deleteHandler() {
+    const deleteHandler = async() => {
         if (showModal) {
             const success = await reviewApi.deleteAsync(id, token)
+            
             if (success) {
                 toggleModal()
                 onVote() 

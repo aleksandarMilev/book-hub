@@ -32,7 +32,7 @@ export default function BookDetails() {
 
     const toggleModal = () => setShowModal(prev => !prev)
 
-    async function deleteHandler() {
+    const deleteHandler = async () => {
         if (showModal) {
             const success = await bookApi.deleteAsync(id, token)
             
@@ -74,8 +74,6 @@ export default function BookDetails() {
     const descriptionPreview = book?.longDescription?.slice(0, previewTextLength)
 
     const existingReview = book.reviews?.find(review => review.creatorId === userId)
-
-    console.log(hasProfile);
     
     return (
             <div className="book-details-container mt-5">

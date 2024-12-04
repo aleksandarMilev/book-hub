@@ -50,4 +50,3 @@ export default function NationalitySearch({ nationalities, loading, formik }) {
         </div>
     )
 }
-

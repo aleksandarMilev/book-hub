@@ -7,11 +7,12 @@ import { routes } from '../../../common/constants/api'
 import BookListItem from '../../book/book-list-item/BooksListItem'
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner'
 
-import './GenreDetails.css';
+import './GenreDetails.css'
 
 export default function GenreDetails() {
     const { id } = useParams()
     const navigate = useNavigate()
+
     const { genre, isFetching } = useGenre.useDetails(id)
 
     if (isFetching || !genre) {

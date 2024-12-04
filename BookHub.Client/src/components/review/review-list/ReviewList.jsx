@@ -66,7 +66,7 @@ export default function ReviewList() {
     return (
         <div className='review-list'>
             <h1>{bookTitle}</h1>
-            {reviews.map((r) => (
+            {reviews.map(r => (
                 <ReviewItem key={r.id} review={r} onVote={() => fetchData(page)} />
             ))}
 

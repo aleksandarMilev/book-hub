@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { FaSearch } from 'react-icons/fa'
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
+import { FaArrowLeft, FaArrowRight, FaSearch } from 'react-icons/fa'
 
 import { pagination } from '../../../common/constants/defaultValues'
 import * as useSearch from '../../../hooks/useSearch'
@@ -66,7 +65,7 @@ export default function BookList() {
                         <DefaultSpinner />
                     ) : books.length > 0 ? (
                         <>
-                            {books.map((b) => (
+                            {books.map(b => (
                                 <BookListItem key={b.id} {...b} />
                             ))}
                             <div className="pagination-container d-flex justify-content-center mt-4">

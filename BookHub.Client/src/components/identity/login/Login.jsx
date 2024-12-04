@@ -20,22 +20,22 @@ export default function Login() {
     const loginHandler = useIdentity.useLogin()
 
     const validationSchema = Yup.object({
-        username: Yup.string().required('Username is required'),
+        credentials: Yup.string().required('Username or Email is required'),
         password: Yup.string().required('Password is required')
     })
 
     const formik = useFormik({
         initialValues: {
-            username: '',
+            credentials: '',
             password: ''
         },
         validationSchema,
         onSubmit: async (values, { setErrors }) => {
             try {
-                await loginHandler(values.username, values.password)
-                navigate(routes.home);
+                await loginHandler(values.credentials, values.password)
+                navigate(routes.home)
             } catch (error) {
-                setErrors({ username: error.message || 'An error occurred' })
+                setErrors({ credentials: error.message || 'An error occurred' })
             }
         }
     })
@@ -68,16 +68,16 @@ export default function Login() {
                     </div>
                     <form onSubmit={formik.handleSubmit}>
                         <div className="mb-4">
-                            {formik.touched.username && formik.errors.username && (
-                                <div className="text-danger mb-2">{formik.errors.username}</div>
+                            {formik.touched.credentials && formik.errors.credentials && (
+                                <div className="text-danger mb-2">{formik.errors.credentials}</div>
                             )}
                             <MDBInput 
-                                label='Username' 
-                                id='username' 
+                                label='Username or Email' 
+                                id='credentials' 
                                 type='text' 
                                 size="lg"
-                                name='username'
-                                value={formik.values.username}
+                                name='credentials'
+                                value={formik.values.credentials}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                             />

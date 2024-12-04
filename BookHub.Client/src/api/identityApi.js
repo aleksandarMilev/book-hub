@@ -27,9 +27,9 @@ export async function registerAsync(username, email, password) {
     throw new Error(errorData?.errorMessage || errors.identity.register)
 }
 
-export async function loginAsync(username, password) {
+export async function loginAsync(credentials, password) {
     const user = {
-        username,
+        credentials,
         password
     }
 
@@ -40,7 +40,6 @@ export async function loginAsync(username, password) {
     }
 
     const url = baseUrl + routes.login
-
     const response = await fetch(url, options)
     
     if (response.ok) {

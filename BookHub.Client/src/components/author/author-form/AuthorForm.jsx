@@ -24,22 +24,45 @@ import './AuthorForm.css'
 
 export default function AuthorForm({ authorData = null, isEditMode = false }) {
     const navigate = useNavigate()
+
     const createHandler = useAuthor.useCreate()
     const editHandler = useAuthor.useEdit()  
+
     const { nationalities, loading } = useNationality.useNationalities()
 
     const validationSchema = Yup.object({
-        name: Yup.string().min(2).max(200).required('Name is required!'),
-        penName: Yup.string().min(2).max(200),
-        imageUrl: Yup.string().url().min(10).max(2000),
-        bornAt: Yup.date().max(new Date(), 'Date of birth must be in the past'),
+        name: Yup
+            .string()
+            .min(2)
+            .max(200)
+            .required('Name is required!'),
+        penName: Yup
+            .string()
+            .min(2)
+            .max(200),
+        imageUrl: Yup
+            .string()
+            .url()
+            .min(10)
+            .max(2000),
+        bornAt: Yup
+            .date()
+            .max(new Date(), 'Date of birth must be in the past'),
         diedAt: Yup
             .date()
             .max(new Date(), 'Date of birth must be in the past')
             .min(Yup.ref('bornAt'), 'Date of death cannot be earlier than date of birth'),
-        gender: Yup.string().required('Gender is required!'),
-        nationality: Yup.string().required('Nationality is required!'),
-        biography: Yup.string().min(50).max(10000).required('Biography is required!')
+        gender: Yup
+            .string()
+            .required('Gender is required!'),
+        nationality: Yup
+            .string()
+            .required('Nationality is required!'),
+        biography: Yup
+            .string()
+            .min(50)
+            .max(10000)
+            .required('Biography is required!')
     })
 
     const initialNationality = isEditMode && authorData?.nationality

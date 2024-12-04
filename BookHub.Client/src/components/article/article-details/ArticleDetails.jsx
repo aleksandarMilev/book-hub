@@ -26,10 +26,9 @@ export default function ArticleDetails(){
     const { id } = useParams()
     const navigate = useNavigate()
 
-    const { token } = useContext(UserContext)
+    const { token, isAdmin } = useContext(UserContext)
  
     const { article, isFetching } = useArticle.useDetails(id)
-    const { isAdmin } = useContext(UserContext)
 
     const [showModal, setShowModal] = useState(false)
     const toggleModal = () => setShowModal(old => !old)

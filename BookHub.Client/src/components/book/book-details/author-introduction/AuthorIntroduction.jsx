@@ -1,5 +1,6 @@
-import { FaBook } from 'react-icons/fa'
 import { Link } from 'react-router-dom'  
+import { FaBook } from 'react-icons/fa'
+
 import { routes } from '../../../../common/constants/api'
 
 import './AuthorIntroduction.css'
