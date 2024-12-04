@@ -24,7 +24,7 @@ export default function BookDetails() {
     const [showModal, setShowModal] = useState(false) 
     const [showFullDescription, setShowFullDescription] = useState(false)
 
-    const { userId, token } = useContext(UserContext)
+    const { userId, token, hasProfile } = useContext(UserContext)
     const { book, isFetching, refreshBook } = useBook.useGetFullInfo(id)
 
     const [isReviewCreated, setIsReviewCreated] = useState(false)
@@ -75,6 +75,8 @@ export default function BookDetails() {
 
     const existingReview = book.reviews?.find(review => review.creatorId === userId)
 
+    console.log(hasProfile);
+    
     return (
             <div className="book-details-container mt-5">
                 <div className="book-details-card shadow-lg p-4">
@@ -89,17 +91,37 @@ export default function BookDetails() {
                         id={id}
                     />
                     <AuthorIntroduction author={book.author} />
-                    {!existingReview && <CreateReview 
-                        bookId={id}
-                        refreshReviews={refreshBook}
-                        setIsReviewCreated={setIsReviewCreated} 
-                    />}
-                    {existingReview && <EditReview 
-                        bookId={id}
-                        existingReview={existingReview}
-                        setIsReviewEdited={setIsReviewEdited} 
-                        refreshReviews={refreshBook}
-                    />}
+                    {hasProfile ? (
+                        <>
+                            {!existingReview && (
+                                <CreateReview 
+                                    bookId={id}
+                                    refreshReviews={refreshBook}
+                                    setIsReviewCreated={setIsReviewCreated} 
+                                />
+                            )}
+                            {existingReview && (
+                                <EditReview 
+                                    bookId={id}
+                                    existingReview={existingReview}
+                                    setIsReviewEdited={setIsReviewEdited} 
+                                    refreshReviews={refreshBook}
+                                />
+                            )}
+                        </>
+                    ) : (
+                        <>
+                            <h3 className="create-review-heading">Create Review</h3>
+                            <div className="create-profile-container">
+                                <Link 
+                                    className="create-profile-link"
+                                    to={routes.profile}
+                                >
+                                    Create Profile
+                                </Link>
+                            </div>
+                        </>
+                    )}
                    <div className="reviews-section mt-4 text-center">
                         <h5 className="reviews-title">Reviews</h5>
                         {book.reviews && book.reviews.length > 0 ? (

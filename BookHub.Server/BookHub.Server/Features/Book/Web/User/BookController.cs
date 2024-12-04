@@ -19,30 +19,30 @@
         [AllowAnonymous]
         [HttpGet("[action]")]
         public async Task<ActionResult<IEnumerable<BookServiceModel>>> TopThree()
-          => Ok(await service.TopThreeAsync());
+          => this.Ok(await this.service.TopThreeAsync());
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BookServiceModel>>> All()
-            => Ok(await service.AllAsync());
+            => this.Ok(await this.service.AllAsync());
 
         [HttpGet("{id}")]
         public async Task<ActionResult<BookDetailsServiceModel>> Details(int id)
-            => Ok(await service.DetailsAsync(id));
+            => this.Ok(await this.service.DetailsAsync(id));
 
         [HttpPost]
         public async Task<ActionResult<int>> Create(CreateBookWebModel webModel)
         {
-            var serviceModel = mapper.Map<CreateBookServiceModel>(webModel);
-            var bookId = await service.CreateAsync(serviceModel);
+            var serviceModel = this.mapper.Map<CreateBookServiceModel>(webModel);
+            var bookId = await this.service.CreateAsync(serviceModel);
 
-            return Created(nameof(this.Create), bookId);
+            return this.Created(nameof(this.Create), bookId);
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult> Edit(int id, CreateBookWebModel webModel)
         {
-            var serviceModel = mapper.Map<CreateBookServiceModel>(webModel);
-            var result = await service.EditAsync(id, serviceModel);
+            var serviceModel = this.mapper.Map<CreateBookServiceModel>(webModel);
+            var result = await this.service.EditAsync(id, serviceModel);
 
             return this.NoContentOrBadRequest(result);
         }
@@ -50,7 +50,7 @@
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var result = await service.DeleteAsync(id);
+            var result = await this.service.DeleteAsync(id);
 
             return this.NoContentOrBadRequest(result);
         }

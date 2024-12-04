@@ -30,8 +30,6 @@ export async function getAsync(
     const params = new URLSearchParams(urlParamObject)
     const url = `${baseUrl + routes.readingList}?${params.toString()}`
 
-    console.log(url);
-
     const response = await fetch(url, options)
 
     if(response.ok){

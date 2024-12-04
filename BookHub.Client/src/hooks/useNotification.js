@@ -44,7 +44,6 @@ export function useAll(page = pagination.defaultPageIndex, pageSize = pagination
         try {
             setIsFetching(true)
             const result = await notificationApi.allAsync(token, page, pageSize) 
-            console.log(result);
             setNotifications(result.items)
             setTotalItems(result.totalItems)
         } catch (error) {

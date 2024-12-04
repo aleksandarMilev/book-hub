@@ -37,8 +37,6 @@ export default function ReadingList(){
         return <DefaultSpinner/>   
     }
 
-    console.log(readingList);
-
     const totalPages = Math.ceil(totalItems / pageSize)
    
     return(

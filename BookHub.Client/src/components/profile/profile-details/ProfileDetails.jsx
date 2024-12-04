@@ -49,8 +49,6 @@ export default function ProfileDetails() {
             profile?.isPrivate
         )
 
-    console.log(readingList);
-
     const [showModal, setShowModal] = useState(false)
     const toggleModal = () => setShowModal(old => !old)
 

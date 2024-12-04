@@ -1,4 +1,5 @@
-﻿namespace BookHub.Server.Features.UserProfile.Web
+﻿#pragma warning disable ASP0023 
+namespace BookHub.Server.Features.UserProfile.Web
 {
     using AutoMapper;
     using Infrastructure.Extensions;
@@ -20,6 +21,10 @@
         [HttpGet("[action]")]
         public async Task<ActionResult<IEnumerable<ProfileServiceModel>>> TopThree()
             => this.Ok(await this.service.TopThreeAsync());
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult<bool>> Exists()
+         => this.Ok(await this.service.HasProfileAsync());
 
         [HttpGet]
         public async Task<ActionResult<ProfileServiceModel>> Mine()

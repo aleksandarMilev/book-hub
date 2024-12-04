@@ -46,7 +46,6 @@
     transition: background-color 0.3s ease, transform 0.2s ease
 }
 
-/* Hover and active states */
 .reviews-button:hover {
     background-color: #0056b3; 
     transform: translateY(-2px)
@@ -56,3 +55,44 @@
     background-color: #003d82;
     transform: translateY(1px)
 }
+
+/* Center the heading */
+.create-review-heading {
+    text-align: center; /* Center the text horizontally */
+    margin: 1em 0; /* Optional: Adds some space below the heading */
+}
+
+/* Center the link container */
+.create-profile-container {
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    align-items: center; /* Centers vertically if the container has a height */
+    margin-top: 20px; /* Adjust this value for space around the link */
+}
+
+/* Styling for the link */
+.create-profile-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    text-align: center; /* Ensure text is centered inside the link */
+}
+
+.create-profile-link:hover {
+    background-color: #0056b3;
+}
+
+.create-profile-link:active {
+    background-color: #004085;
+}
+
+.create-profile-link:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(38, 143, 255, 0.5);
+}
+

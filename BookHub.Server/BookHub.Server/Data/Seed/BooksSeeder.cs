@@ -85,7 +85,7 @@
                         AverageRating = 4.8,
                         RatingsCount = 5,
                         ImageUrl = "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1327144697i/3744438.jpg",
-                        AuthorId = 4,
+                        AuthorId = 5,
                         PublishedDate = new DateTime(1949, 6, 8),
                         IsApproved = true
                     },
@@ -105,7 +105,7 @@
                         AverageRating = 4.83,
                         RatingsCount = 6,
                         ImageUrl = "https://m.media-amazon.com/images/I/61Lpsc7B3jL.jpg",
-                        AuthorId = 5,
+                        AuthorId = 4,
                         PublishedDate = new DateTime(1962, 2, 1),
                         IsApproved = true
                     },

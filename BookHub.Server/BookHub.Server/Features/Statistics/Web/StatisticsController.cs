@@ -13,6 +13,6 @@
         [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<StatisticsServiceModel>> Get()
-            => await this.service.GetAsync();
+            => this.Ok(await this.service.GetAsync());
     }
 }

@@ -1,6 +1,7 @@
 import { useContext } from "react"
 import { jwtDecode } from 'jwt-decode'
 
+import * as profileApi from '../api/profileApi'
 import * as identityApi from "../api/identityApi"
 import { UserContext } from "../contexts/userContext"
 
@@ -19,6 +20,8 @@ export function useLogin(){
                 isAdmin: !!tokenEncoded.role
             }
 
+            user.hasProfile = await profileApi.hasProfileAsync(result.token)
+
             changeAuthenticationState(user)
         } catch (error) {
             throw error
@@ -34,7 +37,18 @@ export function useRegister() {
     const onRegister = async (username, email, password) => {
         try {
             const result = await identityApi.registerAsync(username, email, password)
-            changeAuthenticationState(result)
+            const tokenEncoded = jwtDecode(result.token)
+
+            const user = {
+                ...result,
+                userId: tokenEncoded.nameid,
+                username: tokenEncoded["unique_name"],
+                isAdmin: !!tokenEncoded.role
+            }
+
+            user.hasProfile = await profileApi.hasProfileAsync(result.token)
+
+            changeAuthenticationState(user)
         } catch(error)  {
             throw error
         }

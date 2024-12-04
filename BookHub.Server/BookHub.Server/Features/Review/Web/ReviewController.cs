@@ -22,8 +22,7 @@
         public async Task<ActionResult<PaginatedModel<ReviewServiceModel>>> AllForBook(
             int bookId,
             int pageIndex = DefaultPageIndex,
-            int pageSize = DefaultPageSize) 
-                => this.Ok(await this.service.AllForBookAsync(bookId, pageIndex, pageSize));
+            int pageSize = DefaultPageSize) => this.Ok(await this.service.AllForBookAsync(bookId, pageIndex, pageSize));
 
         [HttpPost]
         public async Task<ActionResult<int>> Create(CreateReviewWebModel webModel)
@@ -32,7 +31,6 @@
             var id = await this.service.CreateAsync(serviceModel);
 
             return this.Created(nameof(this.Create), id);
-
         }
 
         [HttpPut("{id}")]

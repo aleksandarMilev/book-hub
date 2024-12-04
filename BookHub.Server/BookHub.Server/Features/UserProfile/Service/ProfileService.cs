@@ -20,6 +20,11 @@
         private readonly ICurrentUserService userService = userService;
         private readonly IMapper mapper = mapper;
 
+        public async Task<bool> HasProfileAsync()
+            => await this.data
+                .Profiles
+                .AnyAsync(p => p.UserId == this.userService.GetId());
+
         public async Task<IEnumerable<ProfileServiceModel>> TopThreeAsync()
             => await this.data
                 .Profiles

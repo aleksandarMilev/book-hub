@@ -10,7 +10,6 @@
     {
         private readonly IGenreService service = service;
 
-        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GenreNameServiceModel>>> Names()
            => this.Ok(await this.service.NamesAsync());

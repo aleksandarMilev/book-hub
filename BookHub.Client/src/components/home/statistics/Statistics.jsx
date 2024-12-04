@@ -7,7 +7,8 @@ import {
     FaUserTie, 
     FaCommentDots, 
     FaTags, 
-    FaNewspaper 
+    FaNewspaper,
+    FaBookReader
 } from 'react-icons/fa'
 
 import { routes } from '../../../common/constants/api'

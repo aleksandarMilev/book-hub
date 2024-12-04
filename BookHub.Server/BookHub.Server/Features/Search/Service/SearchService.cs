@@ -76,9 +76,7 @@
             {
                 authors = authors.Where(a =>
                     a.Name.ToLower().Contains(searchTerm.ToLower()) ||
-                    a.PenName != null 
-                        ? a.PenName.ToLower().Contains(searchTerm.ToLower())
-                        : false
+                   (a.PenName != null && a.PenName.ToLower().Contains(searchTerm.ToLower()))
                 );
             }
 

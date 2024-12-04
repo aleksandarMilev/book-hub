@@ -6,6 +6,8 @@
 
     public interface IProfileService : ITransientService
     {
+        Task<bool> HasProfileAsync();
+
         Task<ProfileServiceModel?> MineAsync();
 
         Task<IEnumerable<ProfileServiceModel>> TopThreeAsync();

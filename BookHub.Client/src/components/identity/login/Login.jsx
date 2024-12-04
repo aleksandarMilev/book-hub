@@ -2,7 +2,15 @@ import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
-import { MDBBtn, MDBContainer, MDBRow, MDBCol, MDBInput, MDBIcon, MDBCheckbox } from 'mdb-react-ui-kit'
+import { 
+    MDBBtn,
+    MDBContainer, 
+    MDBRow, 
+    MDBCol, 
+    MDBInput, 
+    MDBIcon, 
+    MDBCheckbox 
+} from 'mdb-react-ui-kit'
 
 import * as useIdentity from '../../../hooks/useIdentity'
 import { routes } from '../../../common/constants/api'

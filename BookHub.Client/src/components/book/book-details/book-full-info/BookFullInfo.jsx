@@ -25,7 +25,7 @@ export default function BookFullInfo({
 }) {
 
     const navigate = useNavigate()
-    const { isAdmin, token } = useContext(UserContext)
+    const { isAdmin, token, hasProfile } = useContext(UserContext)
     const { showMessage } = useMessage()
 
     const formattedDate = book.publishedDate 
@@ -124,70 +124,80 @@ export default function BookFullInfo({
                         </p>
                         <div className="read-buttons-section mt-4">
                             <h5>Manage Your Reading List:</h5>
-                            {book.readingStatus === null ? (
-                                <div className="d-flex gap-2 mt-2">
-                                    <button
-                                        className="btn btn-outline-success d-flex align-items-center gap-2"
-                                        onClick={() => handleAddToList(readingListStatus.read, book.title)}
-                                    >
-                                        <FaBook /> Read
-                                    </button>
-                                    <button
-                                        className="btn btn-outline-primary d-flex align-items-center gap-2"
-                                        onClick={() => handleAddToList(readingListStatus.toRead, book.title)}
-                                    >
-                                        <FaBookmark /> Want To Read
-                                    </button>
-                                    <button
-                                        className="btn btn-outline-warning d-flex align-items-center gap-2"
-                                        onClick={() => handleAddToList(readingListStatus.currentlyReading, book.title)}
-                                    >
-                                        <FaClock /> Currently Reading
-                                    </button>
-                                </div>
+                            {hasProfile ? (
+                                book.readingStatus === null ? (
+                                    <div className="d-flex gap-2 mt-2">
+                                        <button
+                                            className="btn btn-outline-success d-flex align-items-center gap-2"
+                                            onClick={() => handleAddToList(readingListStatus.read, book.title)}
+                                        >
+                                            <FaBook /> Read
+                                        </button>
+                                        <button
+                                            className="btn btn-outline-primary d-flex align-items-center gap-2"
+                                            onClick={() => handleAddToList(readingListStatus.toRead, book.title)}
+                                        >
+                                            <FaBookmark /> Want To Read
+                                        </button>
+                                        <button
+                                            className="btn btn-outline-warning d-flex align-items-center gap-2"
+                                            onClick={() => handleAddToList(readingListStatus.currentlyReading, book.title)}
+                                        >
+                                            <FaClock /> Currently Reading
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div className={`reading-status-message mt-3 ${book.readingStatus.toLowerCase()}`}>
+                                        {book.readingStatus.toLowerCase() === readingListStatus.read.toLowerCase() && (
+                                            <>
+                                                <p className="text-success">
+                                                    You have marked this book as <strong>Read</strong>.
+                                                </p>
+                                                <button
+                                                    className="btn btn-outline-danger d-flex align-items-center gap-2"
+                                                    onClick={() => handleRemoveFromList(readingListStatus.read, book.title)}
+                                                >
+                                                    Remove from your list
+                                                </button>
+                                            </>
+                                        )}
+                                        {book.readingStatus.toLowerCase() === readingListStatus.toRead.toLowerCase() && (
+                                            <>
+                                                <p className="text-success">
+                                                    You have that you <strong>Want To Read</strong> this book.
+                                                </p>
+                                                <button
+                                                    className="btn btn-outline-danger d-flex align-items-center gap-2"
+                                                    onClick={() => handleRemoveFromList(readingListStatus.toRead, book.title)}
+                                                >
+                                                    Done? Change status to Read!
+                                                </button>
+                                            </>
+                                        )}
+                                        {book.readingStatus.toLowerCase() === readingListStatus.currentlyReading.toLowerCase() && (
+                                            <>
+                                                <p className="text-success">
+                                                    You are currently <strong>Reading</strong> this book.
+                                                </p>
+                                                <button
+                                                    className="btn btn-outline-danger d-flex align-items-center gap-2"
+                                                    onClick={() => handleRemoveFromList(readingListStatus.currentlyReading, book.title)}
+                                                >
+                                                    Done? Change status to Read!
+                                                </button>
+                                            </>
+                                        )}
+                                    </div>
+                                )
                             ) : (
-                                <div className={`reading-status-message mt-3 ${book.readingStatus.toLowerCase()}`}>
-                                    {book.readingStatus.toLowerCase() === readingListStatus.read.toLowerCase() && (
-                                        <>
-                                            <p className="text-success">
-                                                You have marked this book as <strong>Read</strong>.
-                                            </p>
-                                            <button
-                                                className="btn btn-outline-danger d-flex align-items-center gap-2"
-                                                onClick={() => handleRemoveFromList(readingListStatus.read, book.title)}
-                                            >
-                                                Remove from your list
-                                            </button>
-                                        </>
-                                    )}
-                                    {book.readingStatus.toLowerCase() === readingListStatus.toRead.toLowerCase() && (
-                                        <>
-                                            <p className="text-success">
-                                                You have that you <strong>Want To Read</strong> this book.
-                                            </p>
-                                            <button
-                                                className="btn btn-outline-danger d-flex align-items-center gap-2"
-                                                onClick={() => handleRemoveFromList(readingListStatus.toRead, book.title)}
-                                            >
-                                                Done? Change status to Read!
-                                            </button>
-                                        </>
-                                    )}
-                                    {book.readingStatus.toLowerCase() === readingListStatus.currentlyReading.toLowerCase() && (
-                                        <>
-                                            <p className="text-success">
-                                                You are currently <strong>Reading</strong> this book.
-                                            </p>
-                                            <button
-                                                className="btn btn-outline-danger d-flex align-items-center gap-2"
-                                                onClick={() => handleRemoveFromList(readingListStatus.currentlyReading, book.title)}
-                                            >
-                                                Done? Change status to Read!
-                                            </button>
-                                        </>
-                                    )}
-                                </div>
+                                <Link 
+                                    className="create-profile-link"
+                                    to={routes.profile}
+                                >
+                                    Create Profile
+                                </Link>
                             )}
+
                         </div>
                         <div className="d-flex gap-2 mt-4">
                             {isCreator && (

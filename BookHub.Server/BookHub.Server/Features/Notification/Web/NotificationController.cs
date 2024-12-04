@@ -21,8 +21,7 @@ namespace BookHub.Server.Features.Notification.Web
         [HttpGet("[action]")]
         public async Task<ActionResult<IEnumerable<NotificationServiceModel>>> All(
             int pageIndex = DefaultPageIndex,
-            int pageSize = DefaultPageSize) 
-                => this.Ok(await this.service.AllAsync(pageIndex, pageSize));
+            int pageSize = DefaultPageSize) => this.Ok(await this.service.AllAsync(pageIndex, pageSize));
 
 
         [HttpPatch("{id}/[action]")]

@@ -6,6 +6,7 @@ import * as profileApi from '../api/profileApi'
 import { routes } from '../common/constants/api'
 import { UserContext } from '../contexts/userContext'
 
+
 export function useTopThree(){
     const [profiles, setProfiles] = useState(null)
     const [isFetching, setIsFetching] = useState(false)
@@ -101,7 +102,7 @@ export function useOtherProfile(id){
 }
 
 export function useCreate(){
-    const { token } = useContext(UserContext) 
+    const { token, changeHasProfileState } = useContext(UserContext) 
     
     const navigate = useNavigate()
     
@@ -115,6 +116,7 @@ export function useCreate(){
         
         try {
             await profileApi.createAsync(profile, token)
+            changeHasProfileState(true)
         } catch (error) {
             navigate(routes.badRequest, { state: { message: error.message } })
         }

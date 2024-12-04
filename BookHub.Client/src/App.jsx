@@ -1,7 +1,8 @@
 import { Route, Routes } from "react-router-dom"
 
-import AuthenticatedRoute from './components/common/authenticated-route/AuthenticatedRoute'
 import AdminRoute from './components/common/admin-route/AdminRoute'
+import ProfileRoute from "./components/common/profile-route/ProfileRoute"
+import AuthenticatedRoute from './components/common/authenticated-route/AuthenticatedRoute'
 import { MessageProvider } from "./contexts/messageContext"
 import { routes } from "./common/constants/api"
 import { UserContextProvider } from "./contexts/userContext"
@@ -62,12 +63,12 @@ export default function App(){
                     <Route path={routes.profiles} element={<AuthenticatedRoute element={<ProfileList />} />} />
                     <Route path={routes.profile} element={<AuthenticatedRoute element={<ProfileDetails />} />} />
                     <Route path={routes.createProfle} element={<AuthenticatedRoute element={<CreateProfile />} />} />
-                    <Route path={routes.editProfle} element={<AuthenticatedRoute element={<EditProfile />} />} />
+                    <Route path={routes.editProfle} element={<ProfileRoute element={<EditProfile />} />} />
 
                     <Route path={routes.book} element={<AuthenticatedRoute element={<BookList />} />} />
                     <Route path={routes.book + '/:id'} element={<AuthenticatedRoute element={<BookDetails />} />} />
-                    <Route path={routes.createBook} element={<AuthenticatedRoute element={<CreateBook />} />} />
-                    <Route path={routes.editBook + '/:id'} element={<AuthenticatedRoute element={<EditBook />} />} />
+                    <Route path={routes.createBook} element={<ProfileRoute element={<CreateBook />} />} />
+                    <Route path={routes.editBook + '/:id'} element={<ProfileRoute element={<EditBook />} />} />
 
                     <Route path={routes.readingList} element={<AuthenticatedRoute element={<ReadingList />} />} />
 
@@ -77,8 +78,8 @@ export default function App(){
 
                     <Route path={routes.author} element={<AuthenticatedRoute element={<AuthorList />} />} />
                     <Route path={routes.author + '/:id'} element={<AuthenticatedRoute element={<AuthorDetails />} />} />
-                    <Route path={routes.createAuthor} element={<AuthenticatedRoute element={<CreateAuthor />} />} />
-                    <Route path={routes.editAuthor + '/:id'} element={<AuthenticatedRoute element={<EditAuthor />} />} />
+                    <Route path={routes.createAuthor} element={<ProfileRoute element={<CreateAuthor />} />} />
+                    <Route path={routes.editAuthor + '/:id'} element={<ProfileRoute element={<EditAuthor />} />} />
 
                     <Route path={routes.articles} element={<AuthenticatedRoute element={<ArticleList />} />} />
                     <Route path={routes.admin.createArticle} element={<AdminRoute element={<CreateArticle />} />} />

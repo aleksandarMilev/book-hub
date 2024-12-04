@@ -12,6 +12,7 @@ export const routes = {
 
     profile: '/profile',
     profiles: '/profiles',
+    hasProfile: '/profile/exists',
     topProfiles: '/profile/topThree',
     editProfle: '/profile/edit',
     createProfle: '/profile/new',
