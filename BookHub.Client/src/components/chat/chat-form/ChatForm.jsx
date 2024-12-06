@@ -1,17 +1,11 @@
 import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
-import { 
-    Col, 
-    Button, 
-    Row, 
-    Card, 
-    Form, 
-    Container 
-} from 'react-bootstrap'
 
 import { routes } from '../../../common/constants/api'
 import * as useChat from '../../../hooks/useChat'
+
+import image from '../../../assets/images/chat.avif'
 
 import './ChatForm.css'
 
@@ -65,64 +59,57 @@ export default function ChatForm({ chatData = null, isEditMode = false }) {
     })
 
     return (
-        <Container>
-          <Row className="vh-100 d-flex justify-content-center align-items-center">
-            <Col md={8} lg={6} xs={12}>
-              <Card className="shadow">
-                <Card.Body>
-                  <h2 className="fw-bold text-uppercase mb-4 text-center">
+        <div className="chat-form-container">
+            <div className="chat-form-card">
+                <div className="chat-form-image">
+                    <img src={image} alt="Chat Illustration" />
+                </div>
+                <h2 className="chat-form-title">
                     {isEditMode ? 'Edit Chat' : 'Create New Chat'}
-                  </h2>
-                  <Form onSubmit={formik.handleSubmit}>
-                    <Form.Group className="mb-3" controlId="name">
-                      <Form.Label>Name</Form.Label>
-                      <Form.Control
-                        type="text"
-                        placeholder="Enter chat name"
-                        value={formik.values.name}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        isInvalid={formik.touched.name && formik.errors.name}
-                      />
-                      {formik.touched.name && formik.errors.name && (
-                        <Form.Control.Feedback type="invalid">
-                          {formik.errors.name}
-                        </Form.Control.Feedback>
-                      )}
-                    </Form.Group>
-
-                    <Form.Group className="mb-3" controlId="imageUrl">
-                      <Form.Label>Image URL</Form.Label>
-                      <Form.Control
-                        type="text"
-                        placeholder="Enter chat image URL (optional)"
-                        value={formik.values.imageUrl}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        isInvalid={formik.touched.imageUrl && formik.errors.imageUrl}
-                      />
-                      {formik.touched.imageUrl && formik.errors.imageUrl && (
-                        <Form.Control.Feedback type="invalid">
-                          {formik.errors.imageUrl}
-                        </Form.Control.Feedback>
-                      )}
-                    </Form.Group>
-                    <div className="d-grid mt-3">
-                      <Button variant="primary" type="submit">
-                        {isEditMode ? 'Update Chat' : 'Create Chat'}
-                      </Button>
+                </h2>
+                <form className="chat-form" onSubmit={formik.handleSubmit}>
+                    <div className="form-group">
+                        <label htmlFor="name">Name</label>
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            placeholder="Enter chat name"
+                            value={formik.values.name}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            className={`form-input ${formik.touched.name && formik.errors.name ? 'invalid' : ''}`}
+                        />
+                        {formik.touched.name && formik.errors.name && (
+                            <div className="error-message">{formik.errors.name}</div>
+                        )}
                     </div>
-
+                    <div className="form-group">
+                        <label htmlFor="imageUrl">Image URL</label>
+                        <input
+                            type="text"
+                            id="imageUrl"
+                            name="imageUrl"
+                            placeholder="Enter chat image URL (optional)"
+                            value={formik.values.imageUrl}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            className={`form-input ${formik.touched.imageUrl && formik.errors.imageUrl ? 'invalid' : ''}`}
+                        />
+                        {formik.touched.imageUrl && formik.errors.imageUrl && (
+                            <div className="error-message">{formik.errors.imageUrl}</div>
+                        )}
+                    </div>
+                    <button type="submit" className="form-submit-btn">
+                        {isEditMode ? 'Update Chat' : 'Create Chat'}
+                    </button>
                     {formik.errors.submit && (
-                      <div className="text-danger mt-3 text-center">
-                        {formik.errors.submit}
-                      </div>
+                        <div className="error-message form-submit-error">
+                            {formik.errors.submit}
+                        </div>
                     )}
-                  </Form>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-        </Container>
+                </form>
+            </div>
+        </div>
     )
 }
