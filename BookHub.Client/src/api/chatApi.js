@@ -1,7 +1,7 @@
 import { baseUrl, routes } from '../common/constants/api'
 import { errors } from '../common/constants/messages'
 
-export async function addUserToChatAsync(chatId, userId, token){
+export async function inviteUserToChatAsync(chatId, userId, token){
     const optionsOjb = {
         userId
     }
@@ -14,12 +14,80 @@ export async function addUserToChatAsync(chatId, userId, token){
         },
         body: JSON.stringify(optionsOjb)
     }
-    const url = baseUrl + routes.chat + `/${chatId}/users`
+    const url = baseUrl + routes.chat + `/${chatId}/invite`
     const response = await fetch(url, options)
 
     if(!response.ok){
         throw new Error(errors.chat.addUser)
     }
+}
+
+export async function rejectAsync(chatId, userId, token){
+    const options = {
+        method: "POST",
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+
+    const url = baseUrl + routes.chat + `/${chatId}` + `/invite/${userId}/reject`
+    const response = await fetch(url, options)
+
+    if(!response.ok){
+        throw new Error(errors.chat.reject)
+    }
+}
+
+
+export async function acceptAsync(chatId, userId, token){
+    const options = {
+        method: "POST",
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+
+    const url = baseUrl + routes.chat + `/${chatId}` + `/invite/${userId}/accept`
+    const response = await fetch(url, options)
+
+    if(!response.ok){
+        throw new Error(errors.chat.accept)
+    }
+
+}
+
+export async function hasAccessAsync(chatId, userId, token){
+    const options = {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+    const url = baseUrl + routes.chat + `/${chatId}` + `/access/${userId}`
+    const response = await fetch(url, options)
+
+    if(response.ok){
+        return await response.json()
+    }
+
+    throw new Error(errors.chat.details)
+}
+
+export async function userIsInvitedAsync(chatId, userId, token){
+    const options = {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+    const url = baseUrl + routes.chat + `/${chatId}` + `/invited/${userId}`
+    const response = await fetch(url, options)
+
+    if(response.ok){
+        return await response.json()
+    }
+
+    throw new Error(errors.chat.details)
 }
 
 export async function detailsAsync(chatId, token){

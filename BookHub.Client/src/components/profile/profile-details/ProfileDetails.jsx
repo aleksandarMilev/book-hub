@@ -95,11 +95,11 @@ export default function ProfileDetails() {
         navigate(routes.readingList, getNavigateState(readingListStatus.toRead))
     } 
 
-    const onAddToChatClick = async (e, chatId, userId, firstName, chatName) => {
+    const onInviteToChatClick = async (e, chatId, userId, firstName, chatName) => {
         e.preventDefault()
 
         try {
-            await chatApi.addUserToChatAsync(chatId, userId, token)
+            await chatApi.inviteUserToChatAsync(chatId, userId, token)
             showMessage(`You successfully added ${firstName} to ${chatName}!`, true)
         } catch (error) {
             showMessage(error.message, false)
@@ -251,7 +251,7 @@ export default function ProfileDetails() {
                                                                     <button 
                                                                         key={c.id} 
                                                                         className="chat-button"
-                                                                        onClick={e => onAddToChatClick(
+                                                                        onClick={e => onInviteToChatClick(
                                                                             e,
                                                                             c.id,
                                                                             profile.id,

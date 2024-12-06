@@ -24,8 +24,13 @@
                     opt => opt.MapFrom(src => src.Sender.Profile!.FirstName + " " + src.Sender.Profile.LastName));
 
             this.CreateMap<Chat, ChatDetailsServiceModel>()
-                .ForMember(dest => dest.Participants, opt => opt.MapFrom(src => src.ChatsUsers.Select(cu => cu.User.Profile)))
-                .ForMember(dest => dest.Messages, opt => opt.MapFrom(src => src.Messages));
+                .ForMember(dest => dest.Messages, opt => opt.MapFrom(src => src.Messages))
+                .ForMember(
+                    dest => dest.Participants,
+                    opt => opt.MapFrom(src => src
+                        .ChatsUsers
+                        .Where(cu => cu.HasAccepted)
+                        .Select(cu => cu.User.Profile)));
 
             this.CreateMap<CreateChatMessageServiceModel, ChatMessage>();
 

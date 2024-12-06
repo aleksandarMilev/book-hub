@@ -1,5 +1,5 @@
-import { useContext, useState } from "react"
-import { useParams, useNavigate, Link } from "react-router-dom"
+import { useContext, useEffect, useState } from "react"
+import { useParams, useNavigate } from "react-router-dom"
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import {
@@ -35,6 +35,14 @@ export default function ChatDetails() {
 
     const { chat, isFetching, refetch } = useChat.useDetails(id)
 
+    const[isInvited, setIsinvited] = useState(false)
+
+    useEffect(() => {
+        api
+        .userIsInvitedAsync(id, userId, token)
+        .then(r => setIsinvited(r))
+    }, [id, userId, token])
+       
     const createMessageHandler = useChat.useCreateMessage()
     const editMessageHandler = useChat.useEditMessage()
 
@@ -108,11 +116,45 @@ export default function ChatDetails() {
         navigate(routes.profile, { state: { id: profileId === userId ? null : profileId } })
     }
 
-    if (isFetching) {
-        return <DefaultSpinner />
+    const onAcceptClick = async () => {
+        try {
+            await api.acceptAsync(id, userId, token)
+            showMessage(`You are now a member in ${chat.name}!`, true)
+            setIsinvited(false)
+            refetch()
+        } catch (error) {
+            showMessage(error.message, false)
+        } 
     }
 
+    const onRejectClick = async () => {
+        try {
+            await api.rejectAsync(id, userId, token)
+            showMessage("You have successfully rejected this chat invitation!", true)
+            setIsinvited(false)
+            navigate(routes.home)
+        } catch (error) {
+            showMessage(error.message, false)
+        }  
+    }
+
+    if (isFetching) {
+        return <DefaultSpinner />
+    } 
+
     return (
+        <>
+          {isInvited && (
+            <div className="invite-box">
+                <p>You were invited to join in {chat?.name}</p>
+                <span className="invite-button accept-button" onClick={onAcceptClick}>
+                    Accept
+                </span>
+                <span className="invite-button reject-button" onClick={onRejectClick}>
+                    Reject
+                </span>
+            </div>
+        )}
         <MDBContainer className="py-5 vh-100">
             <MDBRow className="d-flex justify-content-center h-100">
                 <MDBCol md="10" lg="8" className="h-100">
@@ -268,28 +310,37 @@ export default function ChatDetails() {
                                 </MDBCardHeader>
                                 <MDBCardBody style={{ flex: 1, overflowY: "auto" }}>
                                     <ul className="list-unstyled mb-0">
-                                        {chat?.participants.map(p => (
-                                            <li
-                                                key={p.id}
-                                                className="d-flex align-items-center mb-3 profile-item"
-                                                onClick={() => onProfileClickHandler(p.id)}
-                                            >
-                                                <MDBCardImage
-                                                    src={p.imageUrl}
-                                                    alt={p.firstName}
-                                                    style={{
-                                                        width: "40px",
-                                                        height: "40px",
-                                                        borderRadius: "50%",
-                                                        objectFit: "cover",
-                                                        marginRight: "10px"
-                                                    }}
-                                                />
-                                                <span>
-                                                    {p.firstName} {p.lastName}
-                                                </span>
-                                            </li>
-                                        ))}
+                                    {chat
+                                        ?.participants
+                                        .sort((a, b) => (a.id === chat?.creatorId ? -1 : b.id === chat?.creatorId ? 1 : 0))
+                                        .map((p, i) => (
+                                        <li
+                                            key={p.id}
+                                            className="d-flex align-items-center mb-3 profile-item"
+                                            onClick={() => onProfileClickHandler(p.id)}
+                                        >
+                                            <MDBCardImage
+                                                src={p.imageUrl}
+                                                alt={p.firstName}
+                                                style={{
+                                                    width: "40px",
+                                                    height: "40px",
+                                                    borderRadius: "50%",
+                                                    objectFit: "cover",
+                                                    marginRight: "10px"
+                                                }}
+                                            />
+                                            <span>
+                                                {i === 0 ? (
+                                                    <>
+                                                        <strong>{p.firstName} {p.lastName}</strong> <span className="text-muted">(Chat Creator)</span>
+                                                    </>
+                                                ) : (
+                                                    `${p.firstName} ${p.lastName}`
+                                                )}
+                                            </span>
+                                        </li>
+                                    ))}
                                     </ul>
                                 </MDBCardBody>
                             </MDBCard>
@@ -298,5 +349,6 @@ export default function ChatDetails() {
                 </MDBCol>
             </MDBRow>
         </MDBContainer>
+        </>
     )
 }

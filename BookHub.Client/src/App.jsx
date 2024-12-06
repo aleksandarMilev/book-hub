@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom"
 
 import AdminRoute from './components/common/admin-route/AdminRoute'
 import ProfileRoute from "./components/common/profile-route/ProfileRoute"
+import ChatRoute from "./components/common/chat-route/ChatRoute"
 import AuthenticatedRoute from './components/common/authenticated-route/AuthenticatedRoute'
 import { MessageProvider } from "./contexts/messageContext"
 import { routes } from "./common/constants/api"
@@ -93,7 +94,7 @@ export default function App(){
 
                     <Route path={routes.createChat} element={<AuthenticatedRoute element={<ChatForm />} />} />
                     <Route path={routes.chats} element={<AuthenticatedRoute element={<ChatList />} />} />
-                    <Route path={routes.chat + '/:id'} element={<AuthenticatedRoute element={<ChatDetails />} />} />
+                    <Route path={routes.chat + '/:id'} element={<ChatRoute element={<ChatDetails />} />} />
 
                     <Route path={routes.badRequest} element={<BadRequest />} />
                     <Route path={routes.notFound} element={<NotFound />} />

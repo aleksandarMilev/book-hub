@@ -1,5 +1,6 @@
 ﻿namespace BookHub.Server.Infrastructure.Extensions
 {
+    using Data.Models;
     using Data.Models.Base;
 
     public static class DbQueryExtensions

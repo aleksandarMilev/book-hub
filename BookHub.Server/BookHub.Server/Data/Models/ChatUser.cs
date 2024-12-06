@@ -19,5 +19,7 @@
         public int ChatId { get; set; } 
 
         public Chat Chat { get; set; } = null!;
+
+        public bool HasAccepted { get; set; }
     }
 }

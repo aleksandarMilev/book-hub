@@ -1,6 +1,7 @@
 ﻿namespace BookHub.Server.Features.Chat.Web
 {
     using AutoMapper;
+    using BookHub.Server.Infrastructure.Services;
     using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -16,7 +17,6 @@
         private readonly IChatService service = service;
         private readonly IMapper mapper = mapper;
 
-        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<ChatDetailsServiceModel>> Details(int id)
            => this.Ok(await this.service.DetailsAsync(id));
@@ -24,6 +24,14 @@
         [HttpGet("chats-not-joined")]
         public async Task<ActionResult<IEnumerable<ChatServiceModel>>> ChatsNotJoined(string userId)
             => this.Ok(await this.service.ChatsNotJoinedAsync(userId));
+
+        [HttpGet("{chatId}/access/{userId}")]
+        public async Task<ActionResult<bool>> CanAccessChat(int chatId, string userId)
+            => this.Ok(await this.service.CanAccessChatAsync(chatId, userId));
+
+        [HttpGet("{chatId}/invited/{userId}")]
+        public async Task<ActionResult<bool>> IsInvited(int chatId, string userId)
+            => this.Ok(await this.service.IsInvitedAsync(chatId, userId));
 
         [HttpPost]
         public async Task<ActionResult<int>> Create(CreateChatWebModel webModel)
@@ -34,15 +42,30 @@
             return this.Created(nameof(this.Create), id);
         }
 
-        [AllowAnonymous]
-        [HttpPost("{chatId}/users")]
-        public async Task<ActionResult<(int, string)>> AddUserToChat(int chatId, AddUserToChatWebModel model)
+        [HttpPost("{chatId}/invite")]
+        public async Task<ActionResult<(int, string)>> InviteUserToChat(int chatId, AddUserToChatWebModel model)
         {
-            var id = await this.service.AddUserToChatAsync(chatId, model.UserId);
+            var id = await this.service.InviteUserToChatAsync(chatId, model.UserId);
 
-            return this.Created(nameof(this.AddUserToChat), id);
+            return this.Created(nameof(this.InviteUserToChat), id);
         }
-            
+
+        [HttpPost("{chatId}/invite/{userId}/accept")]
+        public async Task<ActionResult<Result>> Accept(int chatId, string userId)
+        {
+            var result = await this.service.AcceptAsync(chatId, userId);
+
+            return this.NoContentOrBadRequest(result);
+        }
+
+        [HttpPost("{chatId}/invite/{userId}/reject")]
+        public async Task<ActionResult<Result>> Reject(int chatId, string userId)
+        {
+            var result = await this.service.RejectAsync(chatId, userId);
+
+            return this.NoContentOrBadRequest(result);
+        }
+
         [HttpPut("{id}")]
         public Task<IActionResult> Edit(int id, CreateChatWebModel webModel) 
             => throw new NotImplementedException();

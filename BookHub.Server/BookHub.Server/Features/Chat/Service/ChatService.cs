@@ -37,6 +37,19 @@
                 .ProjectTo<ChatServiceModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 
+        public async Task<bool> CanAccessChatAsync(int chatId, string userId)
+            => await this.data
+                .ChatsUsers
+                .AnyAsync(cu => cu.UserId == userId && cu.ChatId == chatId);
+
+        public async Task<bool> IsInvitedAsync(int chatId, string userId)
+              => await this.data
+                  .ChatsUsers
+                  .AnyAsync(cu => 
+                      cu.UserId == userId && 
+                      cu.ChatId == chatId &&
+                      !cu.HasAccepted);
+
         public async Task<ChatDetailsServiceModel?> DetailsAsync(int id)
             => await this.data
                 .Chats
@@ -55,13 +68,48 @@
             this.data.Add(chat);
             await this.data.SaveChangesAsync();
 
-            _ = await this.CreateChatUserEntityAsync(chat.Id, creatorId);
+            _ = await this.CreateChatUserEntityAsync(chat.Id, creatorId, true);
 
             return chat.Id;
         }
+        public async Task<(int, string)> InviteUserToChatAsync(int chatId, string userId)
+            => await this.CreateChatUserEntityAsync(chatId, userId, false);
 
-        public async Task<(int, string)> AddUserToChatAsync(int chatId, string userId)
-            => await this.CreateChatUserEntityAsync(chatId, userId);
+        public async Task<Result> AcceptAsync(int chatId, string userId)
+        {
+            var mapEntity = await this.data
+                .ChatsUsers
+                .FirstOrDefaultAsync(cu => cu.UserId == userId && cu.ChatId == chatId)
+                ?? throw new InvalidOperationException();
+
+            if (mapEntity is null)
+            {
+                return "Map entity not found!";
+            }
+
+            mapEntity.HasAccepted = true;
+            await this.data.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<Result> RejectAsync(int chatId, string userId)
+        {
+            var mapEntity = await this.data
+               .ChatsUsers
+               .FirstOrDefaultAsync(cu => cu.UserId == userId && cu.ChatId == chatId)
+               ?? throw new InvalidOperationException();
+
+            if (mapEntity is null)
+            {
+                return "Map entity not found!";
+            }
+
+            this.data.Remove(mapEntity);
+            await this.data.SaveChangesAsync();
+
+            return true;
+        }
 
         public Task<Result> EditAsync(int id) 
             => throw new NotImplementedException();
@@ -89,12 +137,13 @@
             return true;
         }
 
-        private async Task<(int, string)> CreateChatUserEntityAsync(int chatId, string userId)
+        private async Task<(int, string)> CreateChatUserEntityAsync(int chatId, string userId, bool hasAccepted)
         {
             var mapEntity = new ChatUser()
             {
                 UserId = userId,
-                ChatId = chatId
+                ChatId = chatId,
+                HasAccepted = hasAccepted
             };
 
             try

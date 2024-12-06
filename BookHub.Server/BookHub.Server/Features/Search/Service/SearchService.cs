@@ -124,7 +124,10 @@
         {
             var chats = this.data
                  .Chats
-                 .Where(c => c.ChatsUsers.Any(cu => cu.UserId == this.userService.GetId()))
+                 .Where(c => c.ChatsUsers.Any(cu =>
+                        cu.UserId == this.userService.GetId() &&
+                        cu.HasAccepted
+                 ))
                  .ProjectTo<SearchChatServiceModel>(this.mapper.ConfigurationProvider);
 
             if (!string.IsNullOrWhiteSpace(searchTerm))

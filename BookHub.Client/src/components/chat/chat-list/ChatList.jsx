@@ -35,7 +35,7 @@ export default function ChatList() {
                             <input
                                 type="text"
                                 className="form-control search-input"
-                                placeholder="Search books..."
+                                placeholder="Search chats..."
                                 value={searchTerm}
                                 onChange={handleSearchChange}
                             />
