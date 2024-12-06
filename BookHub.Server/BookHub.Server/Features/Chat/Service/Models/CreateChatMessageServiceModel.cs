@@ -4,6 +4,6 @@
     {
         public string Message { get; init; } = null!;
 
-        public string ChatId { get; init; } = null!;
+        public int ChatId { get; init; }
     }
 }

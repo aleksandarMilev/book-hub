@@ -14,8 +14,14 @@
 
             this.CreateMap<Chat, ChatServiceModel>();
 
-            this.CreateMap<UserProfile, PrivateProfileServiceModel>();
-            this.CreateMap<ChatMessage, ChatMessageServiceModel>();
+            this.CreateMap<UserProfile, PrivateProfileServiceModel>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.UserId));
+
+            this.CreateMap<ChatMessage, ChatMessageServiceModel>()
+                .ForMember(dest => dest.SenderImageUrl, opt => opt.MapFrom(src => src.Sender.Profile!.ImageUrl))
+                .ForMember(
+                    dest => dest.SenderName,
+                    opt => opt.MapFrom(src => src.Sender.Profile!.FirstName + " " + src.Sender.Profile.LastName));
 
             this.CreateMap<Chat, ChatDetailsServiceModel>()
                 .ForMember(dest => dest.Participants, opt => opt.MapFrom(src => src.ChatsUsers.Select(cu => cu.User.Profile)))

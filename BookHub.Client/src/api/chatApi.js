@@ -26,6 +26,24 @@ export async function addUserToChatAsync(chatId, userId, token){
     }
 }
 
+export async function detailsAsync(chatId, token){
+    const options = {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }
+    const url = baseUrl + routes.chat + `/${chatId}`
+    const response = await fetch(url, options)
+
+    if(response.ok){
+        return await response.json()
+    }
+
+    throw new Error(errors.chat.details)
+} 
+
 export async function chatsNotJoinedAsync(userId, token){
     const options = {
         method: "GET",
@@ -81,4 +99,42 @@ export async function editAsync(chatId, chat, token){
     }
 
     throw new Error(errors.chat.edit)
+}
+
+export async function createMessageAsync(message, token){
+    const options = {
+        method: "POST",
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(message)
+    }
+
+    console.log(JSON.stringify(message))
+
+    const url = baseUrl + routes.chatMessage
+    const response = await fetch(url, options)
+
+    if(!response.ok){
+        throw new Error(errors.chat.createMessage)
+    }
+}
+
+export async function editMessageAsync(messageId, message, token){
+    const options = {
+        method: "PUT",
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(message)
+    }
+
+    const url = baseUrl + routes.chatMessage + `/${messageId}`
+    const response = await fetch(url, options)
+
+    if(!response.ok){
+        throw new Error(errors.chat.editMessage)
+    }
 }

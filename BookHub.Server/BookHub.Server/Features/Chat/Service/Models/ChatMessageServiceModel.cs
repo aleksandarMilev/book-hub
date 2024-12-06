@@ -8,6 +8,10 @@
 
         public string SenderId { get; init; } = null!;
 
+        public string SenderName { get; init; } = null!;
+
+        public string SenderImageUrl { get; init; } = null!;
+
         public DateTime CreatedOn { get; init; }
     }
 }

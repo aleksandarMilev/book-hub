@@ -4,8 +4,8 @@
 
     public class ChatDetailsServiceModel : ChatServiceModel
     {
-        public IEnumerable<PrivateProfileServiceModel> Participants { get; } = new HashSet<PrivateProfileServiceModel>();
+        public ICollection<PrivateProfileServiceModel> Participants { get; init; } = new HashSet<PrivateProfileServiceModel>();
 
-        public IEnumerable<ChatMessageServiceModel> Messages { get; } = new HashSet<ChatMessageServiceModel>();
+        public ICollection<ChatMessageServiceModel> Messages { get; init; } = new HashSet<ChatMessageServiceModel>();
     }
 }

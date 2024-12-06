@@ -16,6 +16,7 @@
         private readonly IChatService service = service;
         private readonly IMapper mapper = mapper;
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<ChatDetailsServiceModel>> Details(int id)
            => this.Ok(await this.service.DetailsAsync(id));

@@ -10,7 +10,6 @@
         [StringLength(MessageMaxLength, MinimumLength = MessageMinLength)]
         public string Message { get; init; } = null!;
 
-        [Required]
-        public string ChatId { get; init; } = null!;
+        public int ChatId { get; init; }
     }
 }

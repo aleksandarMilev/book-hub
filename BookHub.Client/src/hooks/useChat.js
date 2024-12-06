@@ -35,6 +35,32 @@ export function useChatsNotJoined(userId){
     return { chatNames, isFetching, error, refetch: fetchData  }
 }
 
+export function useDetails(chatId){
+    const { token } = useContext(UserContext)
+    
+    const navigate = useNavigate()
+    const [chat, setChat] = useState(null)
+    const [isFetching, setIsFetching] = useState(false)
+
+    async function fetchData() {
+        try {
+            setIsFetching(true)
+            setChat(await api.detailsAsync(chatId, token))
+        } catch(error) {
+            navigate(routes.badRequest, { state: { message: error.message } })
+        } finally {
+            setIsFetching(false)
+        }
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [chatId, token, navigate])
+
+    return { chat, isFetching, refetch: fetchData }
+}
+
+
 export function useCreate(){
     const { token } = useContext(UserContext) 
     
@@ -73,6 +99,45 @@ export function useEdit(){
             return isSuccessful
         } catch (error) {
             navigate(routes.badRequest, { state: { message: error.message } })
+        }
+    }
+
+    return editHandler
+}
+
+export function useCreateMessage(){
+    const { token } = useContext(UserContext) 
+
+    const createHandler = async (messageData) => {
+        console.log(messageData);
+        
+
+        const message = {
+            ...messageData
+        }
+
+        try {
+            await api.createMessageAsync(message, token)
+        } catch (error) {
+            throw new Error(error.message)
+        }
+    }
+
+    return createHandler
+}
+
+export function useEditMessage(){
+    const { token } = useContext(UserContext) 
+    
+    const editHandler = async (messageId, messageData) => {
+        const message = {
+            ...messageData
+        }
+
+        try {
+            await api.editMessageAsync(messageId, message, token)
+        } catch (error) {
+            throw new Error(error.message)
         }
     }
 
