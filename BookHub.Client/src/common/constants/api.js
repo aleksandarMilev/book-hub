@@ -53,6 +53,9 @@ export const routes = {
     lastThreeNotifications: '/notification/lastThree',
     markNotificationRead: '/notification/markAsRead',
 
+    chat: '/chat',
+    createChat: '/chat/new',
+
     admin: {
         createArticle: '/admin/article/new',
         editArticle: '/admin/article/edit',

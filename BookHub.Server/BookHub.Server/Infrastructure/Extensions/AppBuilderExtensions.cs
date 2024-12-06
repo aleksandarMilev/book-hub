@@ -2,6 +2,7 @@
 {
     using Data;
     using Data.Models;
+    using Features.Chat.Web;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
 
@@ -9,12 +10,22 @@
 
     public static class AppBuilderExtensions
     {
-        public static void ApplyMigrations(this IApplicationBuilder app)
+        public static IApplicationBuilder ApplyMigrations(this IApplicationBuilder app)
         {
             using var services = app.ApplicationServices.CreateScope();
             var data = services.ServiceProvider.GetService<BookHubDbContext>();
             data?.Database.Migrate();
+
+            return app;
         }
+
+        public static IApplicationBuilder UseAppEndpoints(this IApplicationBuilder app)
+            => app
+                .UseEndpoints(e =>
+                {
+                    e.MapControllers();
+                    e.MapHub<ChatHub>("/chatHub");
+                });
 
         public static IApplicationBuilder UseSwaggerUI(this IApplicationBuilder app) 
             => app

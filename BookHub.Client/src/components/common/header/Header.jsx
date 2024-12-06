@@ -45,6 +45,9 @@ export default function Header() {
                             <Nav.Link as={Link} to={routes.createAuthor}>
                                 Create Author   
                             </Nav.Link>
+                            <Nav.Link as={Link} to={routes.createChat}>
+                                Create Chat   
+                            </Nav.Link>
                             {isAdmin && 
                             <Nav.Link as={Link} to={routes.admin.createArticle}>
                                 Create Artcile

@@ -8,9 +8,9 @@
     {
         Task<bool> HasProfileAsync();
 
-        Task<ProfileServiceModel?> MineAsync();
-
         Task<IEnumerable<ProfileServiceModel>> TopThreeAsync();
+
+        Task<ProfileServiceModel?> MineAsync();
 
         Task<IProfileServiceModel?> OtherUserAsync(string id);
 

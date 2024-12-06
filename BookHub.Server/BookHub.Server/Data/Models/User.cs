@@ -2,6 +2,7 @@
 {
     using Base;
     using Microsoft.AspNetCore.Identity;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     public class User : IdentityUser, IDeletableEntity
     {
@@ -32,5 +33,11 @@
         public ICollection<Review> Reviews { get; } = new HashSet<Review>();
 
         public ICollection<ReadingList> ReadingLists { get; } = new HashSet<ReadingList>();
+
+        public ICollection<ChatUser> ChatsUsers { get; set; } = new HashSet<ChatUser>();
+
+        public ICollection<Chat> ChatsCreated { get; set; } = new HashSet<Chat>();
+
+        public ICollection<ChatMessage> SentChatMessages { get; } = new HashSet<ChatMessage>();
     }
 }

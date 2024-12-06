@@ -31,6 +31,7 @@ namespace BookHub.Server.Features.Search.Web
            int page = DefaultPageIndex,
            int pageSize = DefaultPageSize) => this.Ok(await this.service.AuthorsAsync(searchTerm, page, pageSize));
 
+        [AllowAnonymous]
         [HttpGet("[action]")]
         public async Task<ActionResult<PaginatedModel<SearchProfileServiceModel>>> Profiles(
            string? searchTerm,

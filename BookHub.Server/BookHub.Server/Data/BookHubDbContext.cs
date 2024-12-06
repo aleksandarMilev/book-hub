@@ -39,9 +39,16 @@
 
         public DbSet<Notification> Notifications { get; init; }
 
+        public DbSet<ChatMessage> ChatMessages { get; init; }
+
+        public DbSet<Chat> Chats { get; init; }
+
+        public DbSet<ChatUser> ChatsUsers { get; init; }
+
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
             this.ApplyAuditInfo();
+
 
             return base.SaveChanges(acceptAllChangesOnSuccess);
         }

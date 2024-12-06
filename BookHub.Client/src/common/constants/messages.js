@@ -14,6 +14,7 @@ export const errors = {
         lastThree:  'Apologies, we\'re experiencing issues and can\'t display your notifications at the moment. Please try again later or contact us for assistance.'
     },
     profile: {
+        names: 'Apologies, we\'re experiencing issues and can\'t display user names at the moment. Please try again later or contact us for assistance.',
         topThree: 'Something went wrong while loading our top users for you. Please refresh the page or try again later!',
         get: 'Something went wrong while loading your profile. Please refresh the page or try again later!',
         getOther: 'Something went wrong while loading this profile. Please refresh the page or try again later!',
@@ -60,6 +61,11 @@ export const errors = {
         create: 'Oops! We couldn’t create your book. Please try again later or contact support if the issue persists.',
         edit: 'Oops! We couldn’t edit your book. Please try again later or contact support if the issue persists.',
         delete: 'Oops! We couldn’t delete your book. Please try again later or contact support if the issue persists.'
+    },
+    chat: {
+        create: 'Oops! We couldn’t create your chat. Please try again later or contact support if the issue persists.',
+        edit: 'Oops! We couldn’t edit your chat. Please try again later or contact support if the issue persists.',
+        delete: 'Oops! We couldn’t delete your chat. Please try again later or contact support if the issue persists.'
     },
     review: {
         create: 'Oops! We couldn’t create your review. Please try again later or contact support if the issue persists.',

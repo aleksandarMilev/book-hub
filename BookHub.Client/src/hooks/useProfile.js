@@ -6,7 +6,6 @@ import * as profileApi from '../api/profileApi'
 import { routes } from '../common/constants/api'
 import { UserContext } from '../contexts/userContext'
 
-
 export function useTopThree(){
     const [profiles, setProfiles] = useState(null)
     const [isFetching, setIsFetching] = useState(false)
@@ -28,6 +27,53 @@ export function useTopThree(){
     }, [])
 
     return { profiles, isFetching, error }
+}
+
+export function useNames() {
+    const navigate = useNavigate()
+    const [names, setNames] = useState([])
+    const [isFetching, setIsFetching] = useState(false)
+
+    const { token } = useContext(UserContext)
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                setIsFetching(true)
+                setNames(await profileApi.getNamesAsync(token))
+            } catch (error) {
+                navigate(routes.badRequest, { state: { message: error.message } })
+            } finally {
+                setIsFetching(false)
+            }
+        }
+
+        fetchData()
+    }, [token, navigate])
+
+    return { names, isFetching }
+}
+
+export function useSearchProfiles(users, selectedUsers) {
+    const [searchTerm, setSearchTerm] = useState('')
+    const [filteredUsers, setFilteredUsers] = useState([])
+
+    useEffect(() => {
+        if (searchTerm === '') {
+            setFilteredUsers([])
+        } else {
+            const filtered = users.filter(u =>
+                u.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+                !selectedUsers.some(selected => selected.id === u.id)
+            )
+            
+            setFilteredUsers(users)
+        }
+    }, [searchTerm, users, selectedUsers])
+
+    const updateSearchTerm = (term) => setSearchTerm(term)
+
+    return { searchTerm, filteredUsers, updateSearchTerm }
 }
 
 export function useMineProfile(){

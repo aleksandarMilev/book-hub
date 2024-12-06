@@ -6,6 +6,8 @@
 
         public const string DefaultBookImageUrl = "https://images.alphacoders.com/115/1159192.jpg";
 
+        public const string DefaultChatImageUrl = "https://pushfestival.ca/2015/wp-content/uploads/blogger/-rqsdeqC0mpU/UG5c0Xwk9hI/AAAAAAAAA7g/Q9psMuS468M/s1600/LiesbethBernaerts_HumanLibrary.jpg";
+
         public const string DefaultArticleImageUrl = "https://img.freepik.com/free-photo/bookmark-books-arrangement-top-view_23-2149894335.jpg";
 
         public const string UnknownNationalityName = "Unknown";

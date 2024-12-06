@@ -43,6 +43,8 @@ import ArticleDetails from "./components/article/article-details/ArticleDetails"
 import CreateArticle from "./components/article/create-article/CreateArticle"
 import EditArticle from "./components/article/edit-article/EditArticle"
 
+import ChatForm from "./components/chat/chat-form/ChatForm"
+
 import BadRequest from "./components/common/error/BadRequest"
 import NotFound from "./components/common/error/NotFound"
 import AccessDenied from "./components/common/error/AccessDenied"
@@ -86,6 +88,8 @@ export default function App(){
                     <Route path={routes.article + '/:id'} element={<AuthenticatedRoute element={<ArticleDetails />} />} />
 
                     <Route path={routes.allNotifications} element={<AuthenticatedRoute element={<NotificationList />} />} />
+
+                    <Route path={routes.createChat} element={<AuthenticatedRoute element={<ChatForm />} />} />
 
                     <Route path={routes.badRequest} element={<BadRequest />} />
                     <Route path={routes.notFound} element={<NotFound />} />

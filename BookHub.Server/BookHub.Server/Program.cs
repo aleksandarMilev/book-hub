@@ -17,7 +17,8 @@ namespace BookHub.Server
                 .AddApiControllers()
                 .AddServices()
                 .AddAutoMapper()
-                .AddSwagger();
+                .AddSwagger()
+                .AddSignalR();
 
             if (builder.Environment.IsDevelopment())
             {
@@ -36,7 +37,7 @@ namespace BookHub.Server
                 .UseAllowedCors()
                 .UseAuthentication()
                 .UseAuthorization()
-                .UseEndpoints(e => e.MapControllers())
+                .UseAppEndpoints()
                 .UseSwaggerUI()
                 .AddAdmin()
                 .ApplyMigrations();

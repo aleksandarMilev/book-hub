@@ -9,7 +9,7 @@
             string userId,
             string username,
             string email,
-            bool rememberMe,
+            bool rememberMe = false,
             bool isAdmin = false);
     }
 }

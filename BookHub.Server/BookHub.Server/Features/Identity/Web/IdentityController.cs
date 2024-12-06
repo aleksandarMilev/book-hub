@@ -82,6 +82,7 @@
                     user.Id,
                     user.UserName!,
                     user.Email!,
+                    model.RememberMe,
                     isAdmin);
 
                 return this.Ok(new LoginResponseModel(token));

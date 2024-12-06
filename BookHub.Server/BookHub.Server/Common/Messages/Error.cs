@@ -66,5 +66,23 @@
 
             public const string MoreThanFiveCurrentlyReading = "User can not add more than 5 books in the currently reading list!";
         }
+
+        public static class Chat
+        {
+            public const string ChatNotFound = "The chat was not found!";
+
+            public const string UnauthorizedChatEdit = "Current user can not edit this chat!";
+
+            public const string UnauthorizedChatDelete = "Current user can not delete this chat!";
+        }
+
+        public static class ChatMessage
+        {
+            public const string MessageNotFound = "The message was not found!";
+
+            public const string UnauthorizedMessageEdit = "Current user can not edit this message!";
+
+            public const string UnauthorizedMessageDelete = "Current user can not delete this message!";
+        }
     }
 }
