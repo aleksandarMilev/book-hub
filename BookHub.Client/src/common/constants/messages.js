@@ -63,9 +63,11 @@ export const errors = {
         delete: 'Oops! We couldn’t delete your book. Please try again later or contact support if the issue persists.'
     },
     chat: {
+        names: 'Something went wrong while loading your chats. Please refresh the page or try again later!',
         create: 'Oops! We couldn’t create your chat. Please try again later or contact support if the issue persists.',
         edit: 'Oops! We couldn’t edit your chat. Please try again later or contact support if the issue persists.',
-        delete: 'Oops! We couldn’t delete your chat. Please try again later or contact support if the issue persists.'
+        delete: 'Oops! We couldn’t delete your chat. Please try again later or contact support if the issue persists.',
+        addUser: 'Something went wrong while adding this user to the chat. Please refresh the page or try again later!'
     },
     review: {
         create: 'Oops! We couldn’t create your review. Please try again later or contact support if the issue persists.',

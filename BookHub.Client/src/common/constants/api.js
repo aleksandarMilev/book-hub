@@ -55,6 +55,7 @@ export const routes = {
 
     chat: '/chat',
     createChat: '/chat/new',
+    chatsNotJoined: '/chat/chats-not-joined',
 
     admin: {
         createArticle: '/admin/article/new',

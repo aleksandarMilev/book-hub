@@ -20,6 +20,10 @@
         public async Task<ActionResult<ChatDetailsServiceModel>> Details(int id)
            => this.Ok(await this.service.DetailsAsync(id));
 
+        [HttpGet("chats-not-joined")]
+        public async Task<ActionResult<IEnumerable<ChatServiceModel>>> ChatsNotJoined(string userId)
+            => this.Ok(await this.service.ChatsNotJoinedAsync(userId));
+
         [HttpPost]
         public async Task<ActionResult<int>> Create(CreateChatWebModel webModel)
         {
@@ -29,6 +33,15 @@
             return this.Created(nameof(this.Create), id);
         }
 
+        [AllowAnonymous]
+        [HttpPost("{chatId}/users")]
+        public async Task<ActionResult<(int, string)>> AddUserToChat(int chatId, AddUserToChatWebModel model)
+        {
+            var id = await this.service.AddUserToChatAsync(chatId, model.UserId);
+
+            return this.Created(nameof(this.AddUserToChat), id);
+        }
+            
         [HttpPut("{id}")]
         public Task<IActionResult> Edit(int id, CreateChatWebModel webModel) 
             => throw new NotImplementedException();

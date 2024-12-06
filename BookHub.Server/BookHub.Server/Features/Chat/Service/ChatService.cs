@@ -27,6 +27,16 @@
                 .ProjectTo<ChatServiceModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 
+        public async Task<IEnumerable<ChatServiceModel>> ChatsNotJoinedAsync(string userToJoinId)
+            => await this.data
+                .Chats
+                .Where(c => 
+                    c.CreatorId == this.userService.GetId() && 
+                    !c.ChatsUsers.Any(cu => cu.UserId == userToJoinId)
+                )
+                .ProjectTo<ChatServiceModel>(this.mapper.ConfigurationProvider)
+                .ToListAsync();
+
         public async Task<ChatDetailsServiceModel?> DetailsAsync(int id)
             => await this.data
                 .Chats
@@ -45,10 +55,13 @@
             this.data.Add(chat);
             await this.data.SaveChangesAsync();
 
-            await this.AddCreatorToChatAsync(creatorId, chat.Id);
+            _ = await this.CreateChatUserEntityAsync(chat.Id, creatorId);
 
             return chat.Id;
         }
+
+        public async Task<(int, string)> AddUserToChatAsync(int chatId, string userId)
+            => await this.CreateChatUserEntityAsync(chatId, userId);
 
         public Task<Result> EditAsync(int id) 
             => throw new NotImplementedException();
@@ -76,11 +89,11 @@
             return true;
         }
 
-        private async Task AddCreatorToChatAsync(string creatorId, int chatId)
+        private async Task<(int, string)> CreateChatUserEntityAsync(int chatId, string userId)
         {
             var mapEntity = new ChatUser()
             {
-                UserId = creatorId,
+                UserId = userId,
                 ChatId = chatId
             };
 
@@ -88,6 +101,8 @@
             {
                 this.data.Add(mapEntity);
                 await this.data.SaveChangesAsync();
+
+                return (chatId, userId);
             }
             catch (SqlException)
             {

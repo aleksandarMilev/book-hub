@@ -36,34 +36,34 @@ export function useMineProfile(){
     const [profile, setProfile] = useState(null)
     const [isFetching, setIsFetching] = useState(false)
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                setIsFetching(true)
-                const profileData = await profileApi.mineAsync(token)
+    async function fetchData() {
+        try {
+            setIsFetching(true)
+            const profileData = await profileApi.mineAsync(token)
 
-                if(profileData){
-                    const profile = {
-                        ...profileData,
-                        dateOfBirth: format(new Date(profileData.dateOfBirth), 'yyyy-MM-dd')
-                    }
-
-                    setProfile(profile)
-                    return
+            if(profileData){
+                const profile = {
+                    ...profileData,
+                    dateOfBirth: format(new Date(profileData.dateOfBirth), 'yyyy-MM-dd')
                 }
-               
-                setProfile(null)
-            } catch (error) {
-                navigate(routes.badRequest, { state: { message: error.message} })
-            } finally {
-                setIsFetching(false)
+
+                setProfile(profile)
+                return
             }
+           
+            setProfile(null)
+        } catch (error) {
+            navigate(routes.badRequest, { state: { message: error.message} })
+        } finally {
+            setIsFetching(false)
         }
+    }
 
+    useEffect(() => {
         fetchData()
-    }, [token, navigate ])
+    }, [token, navigate])
 
-    return { profile, isFetching }
+    return { profile, isFetching, refetch: fetchData }
 }
 
 export function useOtherProfile(id){
@@ -73,31 +73,32 @@ export function useOtherProfile(id){
     const [profile, setProfile] = useState(null)
     const [isFetching, setIsFetching] = useState(false)
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                setIsFetching(true)
+    async function fetchData() {
+        try {
+            setIsFetching(true)
 
-                const profileData = await profileApi.otherAsync(id, token)
-                const profile = {
-                    ...profileData,
-                    dateOfBirth: profileData.dateOfBirth 
-                        ? format(new Date(profileData.dateOfBirth), 'yyyy-MM-dd') 
-                        : null
-                }
-
-                setProfile(profile)
-            } catch (error) {
-                navigate(routes.badRequest, { state: { message: error.message} })
-            } finally {
-                setIsFetching(false)
+            const profileData = await profileApi.otherAsync(id, token)
+            const profile = {
+                ...profileData,
+                dateOfBirth: profileData.dateOfBirth 
+                    ? format(new Date(profileData.dateOfBirth), 'yyyy-MM-dd') 
+                    : null
             }
-        }
 
+            setProfile(profile)
+        } catch (error) {
+            navigate(routes.badRequest, { state: { message: error.message} })
+        } finally {
+            setIsFetching(false)
+        }
+    }
+
+
+    useEffect(() => {
         fetchData()
     }, [token, navigate, id])
 
-    return { profile, isFetching }
+    return { profile, isFetching, refetch: fetchData }
 }
 
 export function useCreate(){

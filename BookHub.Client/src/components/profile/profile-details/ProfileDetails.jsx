@@ -18,10 +18,13 @@ import {
 
 import * as useProfile from '../../../hooks/useProfile'
 import * as useReadingList from '../../../hooks/useReadingList'
+import * as useChat from '../../../hooks/useChat'
 import * as profileApi from '../../../api/profileApi'
+import * as chatApi from '../../../api/chatApi'
 import { readingListStatus } from '../../../common/constants/defaultValues'
 import { routes } from '../../../common/constants/api'
 import { UserContext } from '../../../contexts/userContext'
+import { useMessage } from '../../../contexts/messageContext'
 
 import BookListItem from '../../book/book-list-item/BooksListItem'
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner'
@@ -33,15 +36,22 @@ import './ProfileDetails.css'
 
 export default function ProfileDetails() {
     const location = useLocation()
-
-    const { token, userId } = useContext(UserContext)
     const navigate = useNavigate()
 
-    const { profile, isFetching: profileIsFteching  } = location?.state?.id 
+    const { showMessage } = useMessage()
+    const { token, userId } = useContext(UserContext)
+
+    const { profile, isFetching: profileIsFteching, refetch  } = location?.state?.id 
         ? useProfile.useOtherProfile(location?.state?.id) 
         : useProfile.useMineProfile()
 
-    const { readingList, isFetching: readingListIsFteching, error  } = useReadingList.useGet(
+    const { 
+        chatNames: chatButtons, 
+        isFetching: chatButtonsAreFteching, 
+        error: chatButtonsError,
+        refetch: chatButtonsRefetch  } = useChat.useChatsNotJoined(location?.state?.id)
+
+    const { readingList, isFetching: readingListIsFteching  } = useReadingList.useGet(
             profile?.id,
             readingListStatus.currentlyReading,
             null,
@@ -83,6 +93,19 @@ export default function ProfileDetails() {
 
     const onToReadListClick = () => {
         navigate(routes.readingList, getNavigateState(readingListStatus.toRead))
+    } 
+
+    const onAddToChatClick = async (e, chatId, userId, firstName, chatName) => {
+        e.preventDefault()
+
+        try {
+            await chatApi.addUserToChatAsync(chatId, userId, token)
+            showMessage(`You successfully added ${firstName} to ${chatName}!`, true)
+        } catch (error) {
+            showMessage(error.message, false)
+        } finally {
+            chatButtonsRefetch()
+        }
     } 
 
     if (profileIsFteching) {
@@ -216,6 +239,34 @@ export default function ProfileDetails() {
                                             </div>
                                         <hr className="my-4" />
                                         <div className="d-flex justify-content-around mt-3">
+                                            {profile && userId !== profile.id && !profile.isPrivate &&
+                                                <section className="chat-section">
+                                                    <h3 className="chat-section-heading">Add this user to a chat:</h3>
+                                                    <div className="chat-buttons-container">
+                                                        {chatButtonsError ? (
+                                                            <p className="chat-buttons-error">{chatButtonsError}</p>
+                                                        ) : (
+                                                            chatButtons && !chatButtonsAreFteching && (
+                                                                chatButtons.map(c => (
+                                                                    <button 
+                                                                        key={c.id} 
+                                                                        className="chat-button"
+                                                                        onClick={e => onAddToChatClick(
+                                                                            e,
+                                                                            c.id,
+                                                                            profile.id,
+                                                                            profile.firstName,
+                                                                            c.name
+                                                                         )}
+                                                                    >
+                                                                        {c.name}
+                                                                    </button>
+                                                                ))
+                                                            )
+                                                        )}
+                                                    </div>
+                                                </section>
+                                            }
                                             {profile && userId === profile.id 
                                                 &&
                                                 <>
