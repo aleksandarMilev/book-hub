@@ -7,7 +7,6 @@ import { routes } from '../common/constants/api'
 import { UserContext } from '../contexts/userContext'
 
 export function useBooks(searchTerm, page = pagination.defaultPageIndex, pageSize = pagination.defaultPageSize) {
-    console.log('BY BOOKS!');
     const { token } = useContext(UserContext)
 
     const navigate = useNavigate()
@@ -33,6 +32,34 @@ export function useBooks(searchTerm, page = pagination.defaultPageIndex, pageSiz
     }, [searchTerm, page, pageSize, token, navigate])
 
     return { books, totalItems, isFetching }
+}
+
+export function useChats(searchTerm, page = pagination.defaultPageIndex, pageSize = pagination.defaultPageSize) {
+    const { token } = useContext(UserContext)
+
+    const navigate = useNavigate()
+    const [chats, setChats] = useState([])
+    const [totalItems, setTotalItems] = useState(0)
+    const [isFetching, setIsFetching] = useState(false)
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                setIsFetching(true)
+                const result = await api.searchChatsAsync(token, searchTerm || '', page, pageSize)
+                setChats(result.items)
+                setTotalItems(result.totalItems)
+            } catch (error) {
+                navigate(routes.badRequest, { state: { message: error.message } })
+            } finally {
+                setIsFetching(false)
+            }
+        }
+
+        fetchData()
+    }, [searchTerm, page, pageSize, token, navigate])
+
+    return { chats, totalItems, isFetching }
 }
 
 export function useAuthors(searchTerm, page = pagination.defaultPageIndex, pageSize = pagination.defaultPageSize) {

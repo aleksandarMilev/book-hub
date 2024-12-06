@@ -21,6 +21,8 @@
 
             this.CreateMap<UserProfile, SearchProfileServiceModel>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.UserId));
+
+            this.CreateMap<Chat, SearchChatServiceModel>();
         }
     }
 }

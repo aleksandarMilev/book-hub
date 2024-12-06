@@ -3,14 +3,17 @@
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using Data;
+    using Infrastructure.Services;
     using Microsoft.EntityFrameworkCore;
     using Models;
 
     public class SearchService(
         BookHubDbContext data,
+        ICurrentUserService userService,
         IMapper mapper) : ISearchService
     {
         private readonly BookHubDbContext data = data;
+        private readonly ICurrentUserService userService = userService;
         private readonly IMapper mapper = mapper;
 
         public async Task<PaginatedModel<SearchBookServiceModel>> BooksAsync(string? searchTerm, int page, int pageSize)
@@ -115,6 +118,30 @@
                 .ToListAsync();
 
             return new PaginatedModel<SearchProfileServiceModel>(paginatedProfiles, total, page, pageSize);
+        }
+
+        public async Task<PaginatedModel<SearchChatServiceModel>> ChatsAsync(string? searchTerm, int page, int pageSize)
+        {
+            var chats = this.data
+                 .Chats
+                 .Where(c => c.ChatsUsers.Any(cu => cu.UserId == this.userService.GetId()))
+                 .ProjectTo<SearchChatServiceModel>(this.mapper.ConfigurationProvider);
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                chats = chats.Where(c =>
+                    c.Name.ToLower().Contains(searchTerm.ToLower())
+                );
+            }
+
+            var total = await chats.CountAsync();
+
+            var paginatedChats = await chats
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PaginatedModel<SearchChatServiceModel>(paginatedChats, total, page, pageSize);
         }
     }
 }

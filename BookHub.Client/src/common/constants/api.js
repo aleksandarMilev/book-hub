@@ -35,6 +35,7 @@ export const routes = {
     searchArticles: '/search/articles',
     searchAuthors: '/search/authors',
     searchProfiles: '/search/profiles',
+    searchChats: '/search/chats',
 
     review: '/review',
     vote: '/vote',
@@ -54,6 +55,7 @@ export const routes = {
     markNotificationRead: '/notification/markAsRead',
 
     chat: '/chat',
+    chats: '/chats',
     createChat: '/chat/new',
     chatsNotJoined: '/chat/chats-not-joined',
 

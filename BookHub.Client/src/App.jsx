@@ -44,6 +44,7 @@ import CreateArticle from "./components/article/create-article/CreateArticle"
 import EditArticle from "./components/article/edit-article/EditArticle"
 
 import ChatForm from "./components/chat/chat-form/ChatForm"
+import ChatList from "./components/chat/chat-list/ChatList"
 
 import BadRequest from "./components/common/error/BadRequest"
 import NotFound from "./components/common/error/NotFound"
@@ -90,6 +91,7 @@ export default function App(){
                     <Route path={routes.allNotifications} element={<AuthenticatedRoute element={<NotificationList />} />} />
 
                     <Route path={routes.createChat} element={<AuthenticatedRoute element={<ChatForm />} />} />
+                    <Route path={routes.chats} element={<AuthenticatedRoute element={<ChatList />} />} />
 
                     <Route path={routes.badRequest} element={<BadRequest />} />
                     <Route path={routes.notFound} element={<NotFound />} />

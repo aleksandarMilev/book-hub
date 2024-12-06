@@ -13,5 +13,6 @@
 
         Task<PaginatedModel<SearchProfileServiceModel>> ProfilesAsync(string? searchTerm, int page, int pageSize);
 
+        Task<PaginatedModel<SearchChatServiceModel>> ChatsAsync(string? searchTerm, int page, int pageSize);
     }
 }

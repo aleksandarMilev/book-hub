@@ -37,5 +37,11 @@ namespace BookHub.Server.Features.Search.Web
            string? searchTerm,
            int page = DefaultPageIndex,
            int pageSize = DefaultPageSize) => this.Ok(await this.service.ProfilesAsync(searchTerm, page, pageSize));
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult<PaginatedModel<SearchChatServiceModel>>> Chats(
+            string? searchTerm,
+            int page = DefaultPageIndex,
+            int pageSize = DefaultPageSize) => this.Ok(await this.service.ChatsAsync(searchTerm, page, pageSize));
     }
 }

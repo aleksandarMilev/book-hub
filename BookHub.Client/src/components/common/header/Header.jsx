@@ -33,11 +33,14 @@ export default function Header() {
                             <Nav.Link as={Link} to={routes.author}>
                                 Authors
                             </Nav.Link>
-                            <Nav.Link as={Link} to={routes.profiles}>
-                                Users
-                            </Nav.Link>
                             <Nav.Link as={Link} to={routes.articles}>
                                 Articles
+                            </Nav.Link>
+                            <Nav.Link as={Link} to={routes.chats}>
+                                Chats
+                            </Nav.Link>
+                            <Nav.Link as={Link} to={routes.profiles}>
+                                Users
                             </Nav.Link>
                             <Nav.Link as={Link} to={routes.createBook}>
                                 Create Book
