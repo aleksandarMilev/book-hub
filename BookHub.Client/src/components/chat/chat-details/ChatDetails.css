@@ -148,3 +148,7 @@
 .alert-warning .cancel-button:hover {
     color: #0056b3
 }
+
+.profile-item :hover {
+    cursor: pointer
+}

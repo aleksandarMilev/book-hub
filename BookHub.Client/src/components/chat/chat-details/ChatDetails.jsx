@@ -1,8 +1,9 @@
 import { useContext, useState } from "react"
-import { useParams, useNavigate } from "react-router-dom"
+import { useParams, useNavigate, Link } from "react-router-dom"
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import {
+    MDBCardImage,
     MDBContainer,
     MDBRow,
     MDBCol,
@@ -103,118 +104,197 @@ export default function ChatDetails() {
         }
     }
 
+    const onProfileClickHandler = (profileId) => {
+        navigate(routes.profile, { state: { id: profileId === userId ? null : profileId } })
+    }
+
     if (isFetching) {
         return <DefaultSpinner />
     }
 
     return (
-        <MDBContainer className="py-5">
-            <MDBRow className="d-flex justify-content-center">
-                <MDBCol md="8" lg="6" xl="4">
-                    <MDBCard id="chat1" style={{ borderRadius: "15px" }}>
-                        <MDBCardHeader
-                            className="d-flex justify-content-between align-items-center p-3 bg-info text-white border-bottom-0"
-                            style={{
-                                borderTopLeftRadius: "15px",
-                                borderTopRightRadius: "15px"
-                            }}
-                        >
-                            <p className="mb-0 fw-bold">{chat?.name}</p>
-                        </MDBCardHeader>
-                        <MDBCardBody>
-                            {chat?.messages.map(m => {
-                                console.log(m);
-                                
-                                const isSentByUser = m.senderId === userId
-                                const sender = chat.participants.find(p => p.id === m.senderId)
-
-                                return (
-                                    <div
-                                        key={m.id}
-                                        className={`d-flex flex-row justify-content-${isSentByUser ? 'end' : 'start'} mb-4`}
-                                    >
-                                        <div
-                                            className={`p-3 ${isSentByUser ? 'me-3 border' : 'ms-3'}`}
-                                            style={{
-                                                borderRadius: "15px",
-                                                backgroundColor: isSentByUser ? "#fbfbfb" : "rgba(57, 192, 237,.2)",
-                                            }}
-                                        >
-                                            <p className="small mb-0">{m.message}</p>
-                                            <small className="text-muted">
-                                                {
-                                                    m.modifiedOn 
-                                                        ? utcToLocal(m.modifiedOn) + ' (Modified)'
-                                                        : utcToLocal(m.createdOn)
-                                                }
-                                            </small>
-                                            {isSentByUser && (
-                                                <>
-                                                   <MDBIcon
-                                                    fas
-                                                    icon="pencil-alt"
-                                                    className="ms-2 cursor-pointer"
-                                                    onClick={() => handleEditMessage(m)}
-                                                />
-                                                    <MDBIcon
-                                                        fas
-                                                        icon="trash"
-                                                        className="ms-2 cursor-pointer"
-                                                        onClick={() => handleDeleteMessage(m.id)}
-                                                       
-                                                    />
-                                                </>
-                                            )}
-                                        </div>
-                                        <img
-                                            src={sender?.imageUrl || "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"}
-                                            alt="avatar"
-                                            style={{ width: "45px", height: "100%" }}
-                                        />
-                                        <div className="ms-2">
-                                            <strong>{sender?.firstName} {sender?.lastName}</strong>
-                                        </div>
-                                    </div>
-                                )
-                            })}
-
-                            <form onSubmit={formik.handleSubmit}>
-                            {isEditMode && (
-                                <div className="alert alert-warning">
-                                    You are editing a message.{" "}
-                                    <span
-                                        className="cancel-button"
-                                        onClick={handleCancelEdit}
-                                    >
-                                        Cancel
-                                    </span>
-                                </div>
-                            )}
-                                <MDBTextArea
-                                    className="form-outline"
-                                    label="Type your message"
-                                    id="textAreaExample"
-                                    name="message"
-                                    value={formik.values.message}
-                                    onChange={formik.handleChange}
-                                    rows={4}
-                                    isInvalid={formik.touched.message && formik.errors.message}
-                                />
-                                {formik.touched.message && formik.errors.message && (
-                                    <div className="text-danger">{formik.errors.message}</div>
-                                )}
-
-                                <MDBBtn
-                                    type="submit"
-                                    color="primary"
-                                    className="mt-3"
-                                    disabled={formik.isSubmitting || !formik.isValid}
+        <MDBContainer className="py-5 vh-100">
+            <MDBRow className="d-flex justify-content-center h-100">
+                <MDBCol md="10" lg="8" className="h-100">
+                    <MDBRow className="h-100">
+                        <MDBCol md="8" lg="8" className="h-100">
+                            <MDBCard id="chat1" style={{ borderRadius: "15px", height: "100%", display: "flex", flexDirection: "column" }}>
+                                <MDBCardHeader
+                                    className="d-flex align-items-center bg-info text-white"
+                                    style={{
+                                        borderTopLeftRadius: "15px",
+                                        borderTopRightRadius: "15px",
+                                        flexDirection: "column",
+                                        textAlign: "center",
+                                    }}
                                 >
-                                    {isEditMode ? "Update Message" : "Send Message"}
-                                </MDBBtn>
-                            </form>
-                        </MDBCardBody>
-                    </MDBCard>
+                                    <MDBCardImage
+                                        src={chat?.imageUrl}
+                                        alt="Chat"
+                                        style={{
+                                            width: "80px",
+                                            height: "80px",
+                                            borderRadius: "50%",
+                                            objectFit: "cover"
+                                        }}
+                                        className="mb-2"
+                                    />
+                                    <p className="mb-0 fw-bold">{chat?.name}</p>
+                                </MDBCardHeader>
+                                <MDBCardBody style={{ flex: 1, overflowY: "auto" }}>
+                                    {chat?.messages.map(m => {
+                                        const isSentByUser = m.senderId === userId
+                                        const sender = chat.participants.find(p => p.id === m.senderId)
+
+                                        return (
+                                            <div
+                                                key={m.id}
+                                                className={`d-flex flex-row justify-content-${
+                                                    isSentByUser ? "end" : "start"
+                                                } mb-4`}
+                                            >
+                                                <div
+                                                    className={`p-3 ${
+                                                        isSentByUser ? "me-3 border" : "ms-3"
+                                                    }`}
+                                                    style={{
+                                                        borderRadius: "15px",
+                                                        backgroundColor: isSentByUser
+                                                            ? "#fbfbfb"
+                                                            : "rgba(57, 192, 237,.2)",
+                                                    }}
+                                                >
+                                                    <p className="small mb-0">{m.message}</p>
+                                                    <small className="text-muted">
+                                                        {m.modifiedOn
+                                                            ? utcToLocal(m.modifiedOn) + " (Modified)"
+                                                            : utcToLocal(m.createdOn)}
+                                                    </small>
+                                                    {isSentByUser && (
+                                                        <>
+                                                            <MDBIcon
+                                                                fas
+                                                                icon="pencil-alt"
+                                                                className="ms-2 cursor-pointer"
+                                                                onClick={() => handleEditMessage(m)}
+                                                            />
+                                                            <MDBIcon
+                                                                fas
+                                                                icon="trash"
+                                                                className="ms-2 cursor-pointer"
+                                                                onClick={() =>
+                                                                    handleDeleteMessage(m.id)
+                                                                }
+                                                            />
+                                                        </>
+                                                    )}
+                                                </div>
+                                                <img
+                                                    src={
+                                                        sender?.imageUrl ||
+                                                        "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
+                                                    }
+                                                    alt="avatar"
+                                                    style={{ width: "45px", height: "100%" }}
+                                                />
+                                                <div 
+                                                    className="ms-2 profile-item"
+                                                    onClick={() => onProfileClickHandler(sender.id)}
+                                                >
+                                                    <strong>
+                                                        {sender?.firstName} {sender?.lastName}
+                                                    </strong>
+                                                </div>
+                                            </div>
+                                        )
+                                    })}
+                                    <form onSubmit={formik.handleSubmit}>
+                                        {isEditMode && (
+                                            <div className="alert alert-warning">
+                                                You are editing a message.{" "}
+                                                <span
+                                                    className="cancel-button"
+                                                    onClick={handleCancelEdit}
+                                                >
+                                                    Cancel
+                                                </span>
+                                            </div>
+                                        )}
+                                        <MDBTextArea
+                                            className="form-outline"
+                                            label="Type your message"
+                                            id="textAreaExample"
+                                            name="message"
+                                            value={formik.values.message}
+                                            onChange={formik.handleChange}
+                                            rows={4}
+                                            isInvalid={
+                                                formik.touched.message && formik.errors.message
+                                            }
+                                        />
+                                        {formik.touched.message && formik.errors.message && (
+                                            <div className="text-danger">{formik.errors.message}</div>
+                                        )}
+    
+                                        <MDBBtn
+                                            type="submit"
+                                            color="primary"
+                                            className="mt-3"
+                                            disabled={formik.isSubmitting || !formik.isValid}
+                                        >
+                                            {isEditMode ? "Update Message" : "Send Message"}
+                                        </MDBBtn>
+                                    </form>
+                                </MDBCardBody>
+                            </MDBCard>
+                        </MDBCol>
+                        <MDBCol md="4" lg="4" className="h-100">
+                            <MDBCard
+                                style={{
+                                    borderRadius: "15px",
+                                    height: "100%",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                }}
+                            >
+                                <MDBCardHeader
+                                    className="bg-light text-center"
+                                    style={{
+                                        borderTopLeftRadius: "15px",
+                                        borderTopRightRadius: "15px"
+                                    }}
+                                >
+                                    <h6 className="mb-0">Participants</h6>
+                                </MDBCardHeader>
+                                <MDBCardBody style={{ flex: 1, overflowY: "auto" }}>
+                                    <ul className="list-unstyled mb-0">
+                                        {chat?.participants.map(p => (
+                                            <li
+                                                key={p.id}
+                                                className="d-flex align-items-center mb-3 profile-item"
+                                                onClick={() => onProfileClickHandler(p.id)}
+                                            >
+                                                <MDBCardImage
+                                                    src={p.imageUrl}
+                                                    alt={p.firstName}
+                                                    style={{
+                                                        width: "40px",
+                                                        height: "40px",
+                                                        borderRadius: "50%",
+                                                        objectFit: "cover",
+                                                        marginRight: "10px"
+                                                    }}
+                                                />
+                                                <span>
+                                                    {p.firstName} {p.lastName}
+                                                </span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </MDBCardBody>
+                            </MDBCard>
+                        </MDBCol>
+                    </MDBRow>
                 </MDBCol>
             </MDBRow>
         </MDBContainer>
