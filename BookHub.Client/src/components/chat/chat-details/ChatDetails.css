@@ -10,12 +10,12 @@
   }
   
   #chat1 .form-outline .form-control {
-    padding: 1rem; /* Increased padding for better readability */
-    font-size: 1.1rem; /* Slightly bigger text for messages */
+    padding: 1rem;
+    font-size: 1.1rem;
   }
   
   #chat1 .form-outline .form-label {
-    font-size: 1rem; /* Adjusted label font size */
+    font-size: 1rem;
   }
   
   #chat1 .form-outline ~ .form-notch div {
@@ -94,14 +94,12 @@
     color: #bfbfbf;
   }
   
-  /* Custom styles for the messages container */
   #chat1 .message-container {
-    max-height: 500px; /* Increase the container size */
-    overflow-y: auto; /* Allow scrolling for long chats */
+    max-height: 500px; 
+    overflow-y: auto;
     padding-right: 10px;
   }
   
-  /* Custom styles for each message */
   #chat1 .message {
     padding: 10px 20px;
     margin-bottom: 1rem;
@@ -110,7 +108,6 @@
     word-wrap: break-word;
   }
   
-  /* Adjust the form styles */
   #chat1 form {
     padding: 20px;
   }
@@ -134,4 +131,20 @@
     font-size: 1.1rem; 
     padding: 0.75rem 2rem;
   }
-  
+
+  .alert-warning {
+    font-size: 0.875rem;
+    padding: 0.35rem 0.6rem; 
+    margin-bottom: 1.5rem
+}
+
+.alert-warning .cancel-button {
+    color: #0d6efd; 
+    cursor: pointer; 
+    font-weight: 600; 
+    transition: color 0.2s ease-in-out
+}
+
+.alert-warning .cancel-button:hover {
+    color: #0056b3
+}

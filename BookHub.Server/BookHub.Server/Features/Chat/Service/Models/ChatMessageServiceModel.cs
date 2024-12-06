@@ -13,5 +13,7 @@
         public string SenderImageUrl { get; init; } = null!;
 
         public DateTime CreatedOn { get; init; }
+
+        public DateTime? ModifiedOn { get; init; }
     }
 }

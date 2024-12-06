@@ -17,11 +17,7 @@ export async function addUserToChatAsync(chatId, userId, token){
     const url = baseUrl + routes.chat + `/${chatId}/users`
     const response = await fetch(url, options)
 
-    console.log(JSON.stringify(userId))
-
     if(!response.ok){
-        console.log(await response.json())
-        
         throw new Error(errors.chat.addUser)
     }
 }
@@ -136,5 +132,26 @@ export async function editMessageAsync(messageId, message, token){
 
     if(!response.ok){
         throw new Error(errors.chat.editMessage)
+    }
+}
+
+export async function deleteMessageAsync(id, token){
+    console.log(typeof(token));
+    console.log(typeof(id));
+    
+
+    const options = {
+        method: "DELETE",
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }
+
+    const url = baseUrl + routes.chatMessage + `/${id}`
+    const response = await fetch(url, options)
+
+    if(!response.ok){
+        throw new Error(errors.chat.deleteMessage)
     }
 }

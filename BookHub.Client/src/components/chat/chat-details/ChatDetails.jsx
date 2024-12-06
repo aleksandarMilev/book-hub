@@ -1,4 +1,4 @@
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
@@ -15,6 +15,7 @@ import {
 } from "mdb-react-ui-kit"
 
 import * as useChat from "../../../hooks/useChat"
+import * as api from "../../../api/chatApi"
 import { utcToLocal } from '../../../common/functions/utcToLocal'
 import { useMessage } from '../../../contexts/messageContext'
 import { routes } from "../../../common/constants/api"
@@ -28,7 +29,7 @@ export default function ChatDetails() {
     const { id } = useParams()
     const navigate = useNavigate()
 
-    const { userId } = useContext(UserContext)
+    const { userId, token } = useContext(UserContext)
     const { showMessage } = useMessage()
 
     const { chat, isFetching, refetch } = useChat.useDetails(id)
@@ -36,8 +37,8 @@ export default function ChatDetails() {
     const createMessageHandler = useChat.useCreateMessage()
     const editMessageHandler = useChat.useEditMessage()
 
-    const isEditMode = false
-    const messageToEdit = null
+    const [isEditMode, setIsEditMode] = useState(false)
+    const [messageToEdit, setMessageToEdit] = useState(null)
 
     const validationSchema = Yup.object({
         message: Yup
@@ -50,28 +51,57 @@ export default function ChatDetails() {
     const formik = useFormik({
         initialValues: {
             chatId: id,
-            message: isEditMode ? messageToEdit?.message || '' : ''
+            message: ''
         },
         validationSchema,
         onSubmit: async (values) => {
             const messageData = { ...values, chatId: id }
-            
+
             try {
-                if (isEditMode) {
-                    await editMessageHandler(chat.id, { ...messageData })
+                if (isEditMode && messageToEdit) {
+                    await editMessageHandler(messageToEdit.id, { ...messageData })
                 } else {
                     await createMessageHandler(messageData)
                 }
-                
-                navigate(routes.chat +  `/${chat.id}`)
+
+                formik.resetForm()
+                refetch()
+                navigate(routes.chat + `/${chat.id}`)
             } catch {
                 showMessage("Something went wrong while processing your message, please try again", false)
             } finally {
-                formik.resetForm()
-                refetch()
+                setIsEditMode(false)
+                setMessageToEdit(null)
             }
         }
     })
+
+    const handleEditMessage = (message) => {
+        setIsEditMode(true)
+        setMessageToEdit(message)
+
+        formik.setValues({
+            chatId: id,
+            message: message.message
+        })
+    }
+
+    const handleCancelEdit = () => {
+        setIsEditMode(false)
+        setMessageToEdit(null)
+        formik.resetForm() 
+    }
+
+    const handleDeleteMessage = async (id) => {
+        try {
+            await api.deleteMessageAsync(id, token)
+            showMessage("Your message was successfuly deleted", true)
+        } catch (error) {
+            showMessage(error.message, false)
+        } finally {
+            refetch()
+        }
+    }
 
     if (isFetching) {
         return <DefaultSpinner />
@@ -89,16 +119,15 @@ export default function ChatDetails() {
                                 borderTopRightRadius: "15px"
                             }}
                         >
-                            <MDBIcon fas icon="angle-left" />
                             <p className="mb-0 fw-bold">{chat?.name}</p>
-                            <MDBIcon fas icon="times" />
                         </MDBCardHeader>
                         <MDBCardBody>
                             {chat?.messages.map(m => {
+                                console.log(m);
+                                
                                 const isSentByUser = m.senderId === userId
-    
                                 const sender = chat.participants.find(p => p.id === m.senderId)
-    
+
                                 return (
                                     <div
                                         key={m.id}
@@ -114,9 +143,28 @@ export default function ChatDetails() {
                                             <p className="small mb-0">{m.message}</p>
                                             <small className="text-muted">
                                                 {
-                                                    utcToLocal(m.createdOn)
+                                                    m.modifiedOn 
+                                                        ? utcToLocal(m.modifiedOn) + ' (Modified)'
+                                                        : utcToLocal(m.createdOn)
                                                 }
                                             </small>
+                                            {isSentByUser && (
+                                                <>
+                                                   <MDBIcon
+                                                    fas
+                                                    icon="pencil-alt"
+                                                    className="ms-2 cursor-pointer"
+                                                    onClick={() => handleEditMessage(m)}
+                                                />
+                                                    <MDBIcon
+                                                        fas
+                                                        icon="trash"
+                                                        className="ms-2 cursor-pointer"
+                                                        onClick={() => handleDeleteMessage(m.id)}
+                                                       
+                                                    />
+                                                </>
+                                            )}
                                         </div>
                                         <img
                                             src={sender?.imageUrl || "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"}
@@ -129,8 +177,19 @@ export default function ChatDetails() {
                                     </div>
                                 )
                             })}
-    
+
                             <form onSubmit={formik.handleSubmit}>
+                            {isEditMode && (
+                                <div className="alert alert-warning">
+                                    You are editing a message.{" "}
+                                    <span
+                                        className="cancel-button"
+                                        onClick={handleCancelEdit}
+                                    >
+                                        Cancel
+                                    </span>
+                                </div>
+                            )}
                                 <MDBTextArea
                                     className="form-outline"
                                     label="Type your message"
@@ -144,7 +203,7 @@ export default function ChatDetails() {
                                 {formik.touched.message && formik.errors.message && (
                                     <div className="text-danger">{formik.errors.message}</div>
                                 )}
-    
+
                                 <MDBBtn
                                     type="submit"
                                     color="primary"
