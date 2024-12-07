@@ -150,13 +150,24 @@ export default function ChatDetails() {
         }  
     }
 
+    const onLeaveClick = async (profileId) => {
+        try {
+            await api.removeUserAsync(id, profileId, token)
+            showMessage(`You have successfuly left the chat!`, true)
+            navigate(routes.home)
+        } catch (error) {
+            showMessage(error.message, false)
+        }  
+    }
+
     if (isFetching) {
         return <DefaultSpinner />
     } 
 
     return (
         <>
-          {isInvited && (
+          {isInvited 
+            ? (
             <div className="invite-box">
                 <p>You were invited to join in {chat?.name}</p>
                 <span className="invite-button accept-button" onClick={onAcceptClick}>
@@ -166,7 +177,14 @@ export default function ChatDetails() {
                     Reject
                 </span>
             </div>
-        )}
+            ) : (
+                currentUserIsChatCreator || 
+                    <div className="invite-box" style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                        <span className="invite-button reject-button" onClick={() => onLeaveClick(userId)}>
+                            Leave
+                        </span> 
+                    </div>
+            )}
         <MDBContainer className="py-5 vh-100">
             <MDBRow className="d-flex justify-content-center h-100">
                 <MDBCol md="10" lg="8" className="h-100">
