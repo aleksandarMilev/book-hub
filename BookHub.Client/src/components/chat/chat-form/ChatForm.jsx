@@ -41,7 +41,7 @@ export default function ChatForm({ chatData = null, isEditMode = false }) {
         onSubmit: async (values) => {
             try {
                 if (isEditMode) {
-                    const isSuccessfullyEdited = await editHandler(chatData.id, { ...values }) 
+                    const isSuccessfullyEdited = await editHandler(chatData.id, values) 
 
                     if(isSuccessfullyEdited){
                         showMessage(`You have successfuly edited ${values.name}`, true)

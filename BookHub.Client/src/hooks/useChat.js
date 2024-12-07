@@ -109,9 +109,6 @@ export function useCreateMessage(){
     const { token } = useContext(UserContext) 
 
     const createHandler = async (messageData) => {
-        console.log(messageData);
-        
-
         const message = {
             ...messageData
         }

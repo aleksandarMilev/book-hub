@@ -156,8 +156,29 @@
             return true;
         }
 
-        public Task<Result> EditAsync(int id) 
-            => throw new NotImplementedException();
+        public async Task<Result> EditAsync(int id, CreateChatServiceModel model)
+        {
+            var chat = await this.data
+               .Chats
+               .FindAsync(id);
+
+            if (chat is null)
+            {
+                return ChatNotFound;
+            }
+
+            if (!this.userService.IsAdmin() &&
+                chat.CreatorId != this.userService.GetId())
+            {
+                return UnauthorizedChatEdit;
+            }
+
+            this.mapper.Map(model, chat);
+            await this.data.SaveChangesAsync();
+
+            return true;
+        }
+           
 
         public async Task<Result> DeleteAsync(int id)
         {

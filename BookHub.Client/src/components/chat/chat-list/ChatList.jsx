@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { FaArrowLeft, FaArrowRight, FaSearch } from 'react-icons/fa'
 
-import { pagination } from '../../../common/constants/defaultValues'
 import * as useSearch from '../../../hooks/useSearch'
+import { pagination } from '../../../common/constants/defaultValues'
 
 import ChatListItem from '../chat-list-item/ChatListItem'
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner'

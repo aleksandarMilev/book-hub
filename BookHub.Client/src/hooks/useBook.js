@@ -32,8 +32,6 @@ export function useGetTopThree() {
 }
 
 export function useByGenre(genreId, page = pagination.defaultPageIndex, pageSize = pagination.defaultPageSize) {
-    console.log('BY GENRE!');
-    
     const { token } = useContext(UserContext)
 
     const navigate = useNavigate()

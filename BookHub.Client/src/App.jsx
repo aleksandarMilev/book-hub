@@ -44,8 +44,9 @@ import ArticleDetails from "./components/article/article-details/ArticleDetails"
 import CreateArticle from "./components/article/create-article/CreateArticle"
 import EditArticle from "./components/article/edit-article/EditArticle"
 
-import ChatForm from "./components/chat/chat-form/ChatForm"
 import ChatList from "./components/chat/chat-list/ChatList"
+import CreateChat from "./components/chat/create-chat/CreateChat"
+import EditChat from "./components/chat/edit-chat/EditChat"
 import ChatDetails from "./components/chat/chat-details/ChatDetails"
 
 import BadRequest from "./components/common/error/BadRequest"
@@ -92,9 +93,10 @@ export default function App(){
 
                     <Route path={routes.allNotifications} element={<AuthenticatedRoute element={<NotificationList />} />} />
 
-                    <Route path={routes.createChat} element={<AuthenticatedRoute element={<ChatForm />} />} />
                     <Route path={routes.chats} element={<AuthenticatedRoute element={<ChatList />} />} />
                     <Route path={routes.chat + '/:id'} element={<ChatRoute element={<ChatDetails />} />} />
+                    <Route path={routes.createChat} element={<AuthenticatedRoute element={<CreateChat />} />} />
+                    <Route path={routes.editChat} element={<AuthenticatedRoute element={<EditChat />} />} />
 
                     <Route path={routes.badRequest} element={<BadRequest />} />
                     <Route path={routes.notFound} element={<NotFound />} />

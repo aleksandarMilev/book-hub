@@ -32,7 +32,7 @@
 
         Task<Result> RemoveUserAsync(int chatId, string userToRemoveId);
 
-        Task<Result> EditAsync(int id);
+        Task<Result> EditAsync(int id, CreateChatServiceModel model);
 
         Task<Result> DeleteAsync(int id);
     }

@@ -1,8 +1,9 @@
 ﻿namespace BookHub.Server.Features.Chat.Web
 {
     using AutoMapper;
-    using BookHub.Server.Infrastructure.Services;
+    using BookHub.Server.Data.Models;
     using Infrastructure.Extensions;
+    using Infrastructure.Services;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Models;
@@ -84,11 +85,16 @@
         }
 
         [HttpPut("{id}")]
-        public Task<IActionResult> Edit(int id, CreateChatWebModel webModel) 
-            => throw new NotImplementedException();
+        public async Task<ActionResult<Result>> Edit(int id, CreateChatWebModel webModel)
+        {
+            var serviceModel = this.mapper.Map<CreateChatServiceModel>(webModel);
+            var result = await this.service.EditAsync(id, serviceModel);
+
+            return this.NoContentOrBadRequest(result);
+        }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ActionResult<Result>> Delete(int id)
         {
             var result = await this.service.DeleteAsync(id);
 

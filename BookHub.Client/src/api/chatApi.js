@@ -206,8 +206,6 @@ export async function createMessageAsync(message, token){
         body: JSON.stringify(message)
     }
 
-    console.log(JSON.stringify(message))
-
     const url = baseUrl + routes.chatMessage
     const response = await fetch(url, options)
 
@@ -235,10 +233,6 @@ export async function editMessageAsync(messageId, message, token){
 }
 
 export async function deleteMessageAsync(id, token){
-    console.log(typeof(token));
-    console.log(typeof(id));
-    
-
     const options = {
         method: "DELETE",
         headers: {

@@ -34,8 +34,6 @@ export async function loginAsync(credentials, password, rememberMe) {
         rememberMe
     }
 
-    console.log(JSON.stringify(user))
-
     const options = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
