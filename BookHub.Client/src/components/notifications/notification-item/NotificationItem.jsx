@@ -30,7 +30,7 @@ export default function NotificationItem({ notification, refetch }){
             const success = await notificationApi.deleteAsync(notification.id, token)
             
             if(success){
-                navigate(routes.allNotifications)
+                navigate(routes.notification)
                 refetch()
                 toggleModal()
             } else {

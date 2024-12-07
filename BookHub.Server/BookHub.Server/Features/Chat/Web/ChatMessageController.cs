@@ -8,6 +8,8 @@
     using Service;
     using Service.Models;
 
+    using static Common.Constants.ApiRoutes.CommonRoutes;
+
     public class ChatMessageController(
         IChatMessageService service,
         ICurrentUserService userService,
@@ -33,7 +35,7 @@
             return this.Created(nameof(this.Create), id);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut(Id)]
         public async Task<ActionResult<Result>> Edit(int id, CreateChatMessageWebModel webModel)
         {
             var serviceModel = this.mapper.Map<CreateChatMessageServiceModel>(webModel);
@@ -53,7 +55,7 @@
             return this.BadRequest(result.ErrorMessage);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete(Id)]
         public async Task<ActionResult<Result>> Delete(int id)
         {
             var result = await this.service.DeleteAsync(id);

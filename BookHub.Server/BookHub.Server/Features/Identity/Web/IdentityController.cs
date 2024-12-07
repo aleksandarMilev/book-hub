@@ -7,8 +7,8 @@
     using Models;
     using Service;
 
-    using static Common.Messages.Error.Identity;
     using static Common.Constants.Constants;
+    using static Common.Messages.Error.Identity;
 
     public class IdentityController(
         IIdentityService service,
@@ -19,7 +19,7 @@
         private readonly UserManager<User> userManager = userManager;
         private readonly AppSettings appSettings = appSettings.Value;
 
-        [HttpPost(nameof(this.Register))]
+        [HttpPost(ApiRoutes.Register)]
         public async Task<ActionResult> Register(RegisterRequestModel model)
         {
             var user = new User()
@@ -49,7 +49,7 @@
             return this.Unauthorized(new { errorMessage });
         }
 
-        [HttpPost(nameof(this.Login))]
+        [HttpPost(ApiRoutes.Login)]
         public async Task<ActionResult> Login(LoginRequestModel model)
         {
             var user = await this.userManager.FindByNameAsync(model.Credentials);

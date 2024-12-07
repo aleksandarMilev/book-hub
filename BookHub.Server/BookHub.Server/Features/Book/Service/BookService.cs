@@ -32,12 +32,6 @@
         private readonly IProfileService profileService = profileService;
         private readonly IMapper mapper = mapper;
 
-        public async Task<IEnumerable<BookServiceModel>> AllAsync()
-            => await this.data
-                .Books
-                .MapToServiceModel()
-                .ToListAsync();
-
         public async Task<IEnumerable<BookServiceModel>> TopThreeAsync()
             => await this.data
                 .Books

@@ -1,13 +1,14 @@
 ﻿namespace BookHub.Server.Features.Article.Web.Admin
 {
-    using Areas.Admin;
+    using Areas.Admin.Web;
     using AutoMapper;
-    using BookHub.Server.Areas.Admin.Web;
     using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Mvc;
     using Models;
     using Service;
     using Service.Models;
+
+    using static Common.Constants.ApiRoutes.CommonRoutes;
 
     public class ArticleController(
         IArticleService service,
@@ -25,7 +26,7 @@
             return this.Created(nameof(this.Create), id);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut(Id)]
         public async Task<ActionResult> Edit(int id, CreateArticleWebModel webModel)
         {
             var serviceModel = this.mapper.Map<CreateArticleServiceModel>(webModel);
@@ -34,7 +35,7 @@
             return this.NoContentOrBadRequest(result);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete(Id)]
         public async Task<ActionResult> Delete(int id)
         {
             var result = await this.service.DeleteAsync(id);

@@ -1,5 +1,4 @@
-﻿#pragma warning disable ASP0023 
-namespace BookHub.Server.Features.Book.Web.User
+﻿namespace BookHub.Server.Features.Book.Web.User
 {
     using AutoMapper;
     using Infrastructure.Extensions;
@@ -9,6 +8,7 @@ namespace BookHub.Server.Features.Book.Web.User
     using Service;
     using Service.Models;
 
+    using static Common.Constants.ApiRoutes.CommonRoutes;
     using static Common.Constants.DefaultValues;
 
     [Authorize]
@@ -20,22 +20,18 @@ namespace BookHub.Server.Features.Book.Web.User
         private readonly IMapper mapper = mapper;
 
         [AllowAnonymous]
-        [HttpGet("[action]")]
+        [HttpGet(ApiRoutes.Top)]
         public async Task<ActionResult<IEnumerable<BookServiceModel>>> TopThree()
           => this.Ok(await this.service.TopThreeAsync());
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BookServiceModel>>> All()
-            => this.Ok(await this.service.AllAsync());
-
-        [AllowAnonymous]
-        [HttpGet("[action]")]
+        [Route(ApiRoutes.ByGenre + Id)]
         public async Task<ActionResult<PaginatedModel<BookServiceModel>>> ByGenre(
-            int genreId,
+            int id,
             int page = DefaultPageIndex,
-            int pageSize = DefaultPageSize) => this.Ok(await this.service.ByGenreAsync(genreId, page, pageSize));
+            int pageSize = DefaultPageSize) => this.Ok(await this.service.ByGenreAsync(id, page, pageSize));
 
-        [HttpGet("{id}")]
+        [HttpGet(Id)]
         public async Task<ActionResult<BookDetailsServiceModel>> Details(int id)
             => this.Ok(await this.service.DetailsAsync(id));
 
@@ -48,7 +44,7 @@ namespace BookHub.Server.Features.Book.Web.User
             return this.Created(nameof(this.Create), bookId);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut(Id)]
         public async Task<ActionResult> Edit(int id, CreateBookWebModel webModel)
         {
             var serviceModel = this.mapper.Map<CreateBookServiceModel>(webModel);
@@ -57,7 +53,7 @@ namespace BookHub.Server.Features.Book.Web.User
             return this.NoContentOrBadRequest(result);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete(Id)]
         public async Task<ActionResult> Delete(int id)
         {
             var result = await this.service.DeleteAsync(id);

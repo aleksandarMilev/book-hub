@@ -8,7 +8,7 @@
     {
         Task<IEnumerable<ChatServiceModel>> AllAsync();
 
-        Task<IEnumerable<ChatServiceModel>> ChatsNotJoinedAsync(string userToJoinId);
+        Task<IEnumerable<ChatServiceModel>> NotJoinedAsync(string userToJoinId);
 
         Task<bool> CanAccessChatAsync(int chatId, string userId);
 

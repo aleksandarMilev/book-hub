@@ -5,13 +5,15 @@
     using Service;
     using Service.Models;
 
+    using static ApiRoutes;
+
     [Authorize]
     public class NationalityController(INationalityService service) : ApiController
     {
         private readonly INationalityService service = service;
 
-        [HttpGet]
+        [HttpGet(Nationality.Names)]
         public async Task<ActionResult<IEnumerable<NationalityServiceModel>>> Names()
-           => Ok(await service.NamesAsync());
+           => this.Ok(await this.service.NamesAsync());
     }
 }

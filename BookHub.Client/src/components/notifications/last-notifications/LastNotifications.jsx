@@ -18,7 +18,7 @@ export default function LastNotifications() {
 
     const onClickHandler = async (e) => {
         e.preventDefault()
-        navigate(routes.allNotifications)
+        navigate(routes.notification)
     }
 
     if (isFetching) {
@@ -49,7 +49,7 @@ export default function LastNotifications() {
                     <Dropdown.Item>No new notifications</Dropdown.Item>
                 )}
 
-                <Link to={routes.allNotifications}>
+                <Link to={routes.notification}>
                     <Dropdown.Item onClick={onClickHandler}>All</Dropdown.Item>
                 </Link>
             </Dropdown.Menu>

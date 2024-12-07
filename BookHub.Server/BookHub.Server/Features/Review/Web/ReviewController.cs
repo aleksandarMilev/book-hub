@@ -9,6 +9,7 @@
     using Service.Models;
 
     using static Common.Constants.DefaultValues;
+    using static Common.Constants.ApiRoutes.CommonRoutes;
 
     [Authorize]
     public class ReviewController(
@@ -18,7 +19,7 @@
         private readonly IReviewService service = service;
         private readonly IMapper mapper = mapper;
 
-        [HttpGet("{bookId}")]
+        [HttpGet(Id)]
         public async Task<ActionResult<PaginatedModel<ReviewServiceModel>>> AllForBook(
             int bookId,
             int pageIndex = DefaultPageIndex,
@@ -33,7 +34,7 @@
             return this.Created(nameof(this.Create), id);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut(Id)]
         public async Task<ActionResult> Edit(int id, CreateReviewWebModel webModel)
         {
             var serviceModel = this.mapper.Map<CreateReviewServiceModel>(webModel);
@@ -42,7 +43,7 @@
             return this.NoContentOrBadRequest(result);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete(Id)]
         public async Task<ActionResult> Delete(int id)
         {
             var result = await this.service.DeleteAsync(id);

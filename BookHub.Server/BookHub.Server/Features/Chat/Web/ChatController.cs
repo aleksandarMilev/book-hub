@@ -1,7 +1,6 @@
 ﻿namespace BookHub.Server.Features.Chat.Web
 {
     using AutoMapper;
-    using BookHub.Server.Data.Models;
     using Infrastructure.Extensions;
     using Infrastructure.Services;
     using Microsoft.AspNetCore.Authorization;
@@ -9,6 +8,8 @@
     using Models;
     using Service;
     using Service.Models;
+
+    using static Common.Constants.ApiRoutes.CommonRoutes;
 
     [Authorize]
     public class ChatController(
@@ -18,19 +19,19 @@
         private readonly IChatService service = service;
         private readonly IMapper mapper = mapper;
 
-        [HttpGet("{id}")]
+        [HttpGet(Id)]
         public async Task<ActionResult<ChatDetailsServiceModel>> Details(int id)
            => this.Ok(await this.service.DetailsAsync(id));
 
-        [HttpGet("chats-not-joined")]
-        public async Task<ActionResult<IEnumerable<ChatServiceModel>>> ChatsNotJoined(string userId)
-            => this.Ok(await this.service.ChatsNotJoinedAsync(userId));
+        [HttpGet(ApiRoutes.NotJoined)]
+        public async Task<ActionResult<IEnumerable<ChatServiceModel>>> NotJoined(string userId)
+            => this.Ok(await this.service.NotJoinedAsync(userId));
 
-        [HttpGet("{chatId}/access/{userId}")]
+        [HttpGet(Id + ApiRoutes.Access + Id)]
         public async Task<ActionResult<bool>> CanAccessChat(int chatId, string userId)
             => this.Ok(await this.service.CanAccessChatAsync(chatId, userId));
 
-        [HttpGet("{chatId}/invited/{userId}")]
+        [HttpGet(Id + ApiRoutes.Invited + Id)]
         public async Task<ActionResult<bool>> IsInvited(int chatId, string userId)
             => this.Ok(await this.service.IsInvitedAsync(chatId, userId));
 
@@ -43,7 +44,7 @@
             return this.Created(nameof(this.Create), id);
         }
 
-        [HttpPost("{chatId}/invite")]
+        [HttpPost(Id + ApiRoutes.Invite)]
         public async Task<ActionResult<(int, string)>> InviteUserToChat(int chatId, AddUserToChatWebModel model)
         {
             var id = await this.service.InviteUserToChatAsync(
@@ -54,7 +55,7 @@
             return this.Created(nameof(this.InviteUserToChat), id);
         }
 
-        [HttpPost("invite/accept")]
+        [HttpPost(ApiRoutes.AcceptInvite)]
         public async Task<ActionResult<Result>> Accept(ProcessChatInvitationWebModel model)
         {
             var result = await this.service.AcceptAsync(
@@ -65,7 +66,7 @@
             return this.NoContentOrBadRequest(result);
         }
 
-        [HttpPost("invite/reject")]
+        [HttpPost(ApiRoutes.RejectInvite)]
         public async Task<ActionResult<Result>> Reject(ProcessChatInvitationWebModel model)
         {
             var result = await this.service.RejectAsync(
@@ -76,7 +77,7 @@
             return this.NoContentOrBadRequest(result);
         }
 
-        [HttpDelete("remove-user")]
+        [HttpDelete(ApiRoutes.RemoveUser)]
         public async Task<ActionResult<Result>> Remove(int chatId, string userId)
         {
             var result = await this.service.RemoveUserAsync(chatId, userId);
@@ -84,7 +85,7 @@
             return this.NoContentOrBadRequest(result);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut(Id)]
         public async Task<ActionResult<Result>> Edit(int id, CreateChatWebModel webModel)
         {
             var serviceModel = this.mapper.Map<CreateChatServiceModel>(webModel);
@@ -93,7 +94,7 @@
             return this.NoContentOrBadRequest(result);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete(Id)]
         public async Task<ActionResult<Result>> Delete(int id)
         {
             var result = await this.service.DeleteAsync(id);

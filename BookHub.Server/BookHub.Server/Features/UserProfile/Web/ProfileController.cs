@@ -9,6 +9,8 @@ namespace BookHub.Server.Features.UserProfile.Web
     using Service;
     using Service.Models;
 
+    using static Common.Constants.ApiRoutes.CommonRoutes;
+
     [Authorize]
     public class ProfileController(
         IProfileService service,
@@ -18,19 +20,19 @@ namespace BookHub.Server.Features.UserProfile.Web
         private readonly IMapper mapper = mapper;
 
         [AllowAnonymous]
-        [HttpGet("[action]")]
+        [HttpGet(ApiRoutes.Top)]
         public async Task<ActionResult<IEnumerable<ProfileServiceModel>>> TopThree()
             => this.Ok(await this.service.TopThreeAsync());
 
-        [HttpGet("[action]")]
+        [HttpGet(ApiRoutes.Exists)]
         public async Task<ActionResult<bool>> Exists()
          => this.Ok(await this.service.HasProfileAsync());
 
-        [HttpGet]
+        [HttpGet(ApiRoutes.Mine)]
         public async Task<ActionResult<ProfileServiceModel>> Mine()
             => this.Ok(await this.service.MineAsync());
 
-        [HttpGet("{id}")]
+        [HttpGet(Id)]
         public async Task<ActionResult<IProfileServiceModel>> OtherUser(string id)
            => this.Ok(await this.service.OtherUserAsync(id));
 

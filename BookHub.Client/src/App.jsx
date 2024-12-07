@@ -91,7 +91,7 @@ export default function App(){
                     <Route path={routes.admin.editArticle + '/:id'} element={<AdminRoute element={<EditArticle />} />} />
                     <Route path={routes.article + '/:id'} element={<AuthenticatedRoute element={<ArticleDetails />} />} />
 
-                    <Route path={routes.allNotifications} element={<AuthenticatedRoute element={<NotificationList />} />} />
+                    <Route path={routes.notification} element={<AuthenticatedRoute element={<NotificationList />} />} />
 
                     <Route path={routes.chats} element={<AuthenticatedRoute element={<ChatList />} />} />
                     <Route path={routes.chat + '/:id'} element={<ChatRoute element={<ChatDetails />} />} />

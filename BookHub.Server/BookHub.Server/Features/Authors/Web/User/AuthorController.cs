@@ -1,5 +1,4 @@
-﻿#pragma warning disable ASP0023 
-namespace BookHub.Server.Features.Authors.Web.User
+﻿namespace BookHub.Server.Features.Authors.Web.User
 {
     using AutoMapper;
     using Infrastructure.Extensions;
@@ -8,6 +7,9 @@ namespace BookHub.Server.Features.Authors.Web.User
     using Models;
     using Service;
     using Service.Models;
+
+    using static ApiRoutes;
+    using static Common.Constants.ApiRoutes.CommonRoutes;
 
     [Authorize]
     public class AuthorController(
@@ -18,15 +20,15 @@ namespace BookHub.Server.Features.Authors.Web.User
         private readonly IMapper mapper = mapper;
 
         [AllowAnonymous]
-        [HttpGet("[action]")]
+        [HttpGet(Author.Top)]
         public async Task<ActionResult<IEnumerable<AuthorServiceModel>>> TopThree()
            => this.Ok(await this.service.TopThreeAsync());
 
-        [HttpGet("[action]")]
+        [HttpGet(Author.Names)]
         public async Task<ActionResult<IEnumerable<AuthorNamesServiceModel>>> Names()
             => this.Ok(await this.service.NamesAsync());
 
-        [HttpGet("{id}")]
+        [HttpGet(Id)]
         public async Task<ActionResult<AuthorDetailsServiceModel>> Details(int id)
             => this.Ok(await this.service.DetailsAsync(id));
 
@@ -39,7 +41,7 @@ namespace BookHub.Server.Features.Authors.Web.User
             return this.Created(nameof(this.Create), authorId);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut(Id)]
         public async Task<ActionResult> Edit(int id, CreateAuthorWebModel webModel)
         {
             var serviceModel = this.mapper.Map<CreateAuthorServiceModel>(webModel);
@@ -48,7 +50,7 @@ namespace BookHub.Server.Features.Authors.Web.User
             return this.NoContentOrBadRequest(result);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete(Id)]
         public async Task<ActionResult> Delete(int id)
         {
             var result = await this.service.DeleteAsync(id);

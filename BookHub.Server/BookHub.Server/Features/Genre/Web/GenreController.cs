@@ -5,6 +5,8 @@
     using Service;
     using Service.Models;
 
+    using static Common.Constants.ApiRoutes.CommonRoutes;
+
     [Authorize]
     public class GenreController(IGenreService service) : ApiController
     {
@@ -14,8 +16,8 @@
         public async Task<ActionResult<IEnumerable<GenreNameServiceModel>>> Names()
            => this.Ok(await this.service.NamesAsync());
 
-        [HttpGet("{id}")]
+        [HttpGet(Id)]
         public async Task<ActionResult<IEnumerable<GenreNameServiceModel>>> Details(int id)
-          => this.Ok(await this.service.DetailsAsync(id));
+           => this.Ok(await this.service.DetailsAsync(id));
     }
 }

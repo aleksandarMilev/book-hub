@@ -30,7 +30,7 @@
                 .ProjectTo<ChatServiceModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 
-        public async Task<IEnumerable<ChatServiceModel>> ChatsNotJoinedAsync(string userToJoinId)
+        public async Task<IEnumerable<ChatServiceModel>> NotJoinedAsync(string userToJoinId)
             => await this.data
                 .Chats
                 .Where(c => 

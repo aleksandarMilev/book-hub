@@ -32,7 +32,7 @@ export async function byGenreAsync(
         }
     }
 
-    const url = `${baseUrl}${routes.booksByGenre}?genreId=${encodeURIComponent(genreId)}&page=${page}&pageSize=${pageSize}`
+    const url = `${baseUrl}${routes.booksByGenre}/${encodeURIComponent(genreId)}?&page=${page}&pageSize=${pageSize}`
     const response = await fetch(url, options)
 
     if(response.ok){

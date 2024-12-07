@@ -1,5 +1,4 @@
-﻿#pragma warning disable ASP0023 
-namespace BookHub.Server.Features.Notification.Web
+﻿namespace BookHub.Server.Features.Notification.Web
 {
     using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Authorization;
@@ -8,23 +7,24 @@ namespace BookHub.Server.Features.Notification.Web
     using Service.Models;
 
     using static Common.Constants.DefaultValues;
+    using static Common.Constants.ApiRoutes.CommonRoutes;
 
     [Authorize]
     public class NotificationController(INotificationService service) : ApiController
     {
         private readonly INotificationService service = service;
 
-        [HttpGet("[action]")]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<NotificationServiceModel>>> All(
+           int pageIndex = DefaultPageIndex,
+           int pageSize = DefaultPageSize) => this.Ok(await this.service.AllAsync(pageIndex, pageSize));
+
+
+        [HttpGet(ApiRoutes.Last)]
         public async Task<ActionResult<IEnumerable<NotificationServiceModel>>> LastThree()
             => this.Ok(await this.service.LastThreeAsync());
 
-        [HttpGet("[action]")]
-        public async Task<ActionResult<IEnumerable<NotificationServiceModel>>> All(
-            int pageIndex = DefaultPageIndex,
-            int pageSize = DefaultPageSize) => this.Ok(await this.service.AllAsync(pageIndex, pageSize));
-
-
-        [HttpPatch("{id}/[action]")]
+        [HttpPatch(Id + ApiRoutes.Read)]
         public async Task<ActionResult> MarkRead(int id)
         {
             var result = await this.service.MarkAsReadAsync(id);
@@ -32,7 +32,7 @@ namespace BookHub.Server.Features.Notification.Web
             return this.NoContentOrBadRequest(result);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete(Id)]
         public async Task<ActionResult> Delete(int id)
         {
             var result = await this.service.DeleteAsync(id);

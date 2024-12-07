@@ -27,7 +27,7 @@ export async function allAsync(token, pageIndex, pageSize) {
         }
     }
     
-    const url = `${baseUrl}${routes.allNotifications}?pageIndex=${pageIndex}&pageSize=${pageSize}`;
+    const url = `${baseUrl}${routes.notification}?pageIndex=${pageIndex}&pageSize=${pageSize}`;
     const response = await fetch(url, options)
 
     if(response.ok){

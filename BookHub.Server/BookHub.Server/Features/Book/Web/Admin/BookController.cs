@@ -1,5 +1,4 @@
-﻿#pragma warning disable ASP0023 
-namespace BookHub.Server.Features.Book.Web.Admin
+﻿namespace BookHub.Server.Features.Book.Web.Admin
 {
     using Areas.Admin.Web;
     using Infrastructure.Extensions;
@@ -8,16 +7,18 @@ namespace BookHub.Server.Features.Book.Web.Admin
     using Service;
     using Service.Models;
 
+    using static Common.Constants.ApiRoutes.CommonRoutes;
+
     [Authorize]
     public class BookController(IBookService service) : AdminApiController
     {
         private readonly IBookService service = service;
 
-        [HttpGet("{id}")]
+        [HttpGet(Id)]
         public async Task<ActionResult<BookDetailsServiceModel>> Details(int id)
             => this.Ok(await this.service.AdminDetailsAsync(id));
 
-        [HttpPatch("{id}/[action]")]
+        [HttpPatch(Id + ApiRoutes.Approve)]
         public async Task<ActionResult> Approve(int id)
         {
             var result = await this.service.ApproveAsync(id);
@@ -25,7 +26,7 @@ namespace BookHub.Server.Features.Book.Web.Admin
             return this.NoContentOrBadRequest(result);
         }
 
-        [HttpPatch("{id}/[action]")]
+        [HttpPatch(Id + ApiRoutes.Reject)]
         public async Task<ActionResult> Reject(int id)
         {
             var result = await this.service.RejectAsync(id);

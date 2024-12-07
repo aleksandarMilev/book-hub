@@ -6,8 +6,6 @@
 
     public interface IBookService : ITransientService
     {
-        Task<IEnumerable<BookServiceModel>> AllAsync();
-
         Task<PaginatedModel<BookServiceModel>> ByGenreAsync(int genreId, int page, int pageSize);
 
         Task<IEnumerable<BookServiceModel>> TopThreeAsync();
