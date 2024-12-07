@@ -118,7 +118,7 @@ export default function ChatDetails() {
 
     const onAcceptClick = async () => {
         try {
-            await api.acceptAsync(id, userId, token)
+            await api.acceptAsync(id, chat?.name, chat?.creatorId, token)
             showMessage(`You are now a member in ${chat.name}!`, true)
             setIsinvited(false)
             refetch()
@@ -129,7 +129,7 @@ export default function ChatDetails() {
 
     const onRejectClick = async () => {
         try {
-            await api.rejectAsync(id, userId, token)
+            await api.rejectAsync(id, chat?.name, chat?.creatorId, token)
             showMessage("You have successfully rejected this chat invitation!", true)
             setIsinvited(false)
             navigate(routes.home)

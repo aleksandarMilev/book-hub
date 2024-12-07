@@ -8,6 +8,7 @@
     using Microsoft.Data.SqlClient;
     using Microsoft.EntityFrameworkCore;
     using Service.Models;
+    using Notification.Service;
 
     using static Common.Constants.DefaultValues;
     using static Common.Messages.Error.Chat;
@@ -15,10 +16,12 @@
     public class ChatService(
         BookHubDbContext data,
         ICurrentUserService userService,
+        INotificationService notificationService,
         IMapper mapper) : IChatService
     {
         private readonly BookHubDbContext data = data;
         private readonly ICurrentUserService userService = userService;
+        private readonly INotificationService notificationService = notificationService;
         private readonly IMapper mapper = mapper;
 
         public async Task<IEnumerable<ChatServiceModel>> AllAsync()
@@ -72,14 +75,27 @@
 
             return chat.Id;
         }
-        public async Task<(int, string)> InviteUserToChatAsync(int chatId, string userId)
-            => await this.CreateChatUserEntityAsync(chatId, userId, false);
 
-        public async Task<Result> AcceptAsync(int chatId, string userId)
+        public async Task<(int, string)> InviteUserToChatAsync(int chatId, string chatName, string userId)
         {
+            var result = await this.CreateChatUserEntityAsync(chatId, userId, false);
+
+            _ = await this.notificationService.CreateOnChatInvitationAsync(
+                chatId,
+                chatName,
+                userId
+            );
+
+            return result;
+        }
+
+        public async Task<Result> AcceptAsync(int chatId, string chatName, string chatCreatorId)
+        {
+            var invitedUserId = this.userService.GetId();
+
             var mapEntity = await this.data
                 .ChatsUsers
-                .FirstOrDefaultAsync(cu => cu.UserId == userId && cu.ChatId == chatId)
+                .FirstOrDefaultAsync(cu => cu.UserId == invitedUserId && cu.ChatId == chatId)
                 ?? throw new InvalidOperationException();
 
             if (mapEntity is null)
@@ -90,14 +106,23 @@
             mapEntity.HasAccepted = true;
             await this.data.SaveChangesAsync();
 
+            _ = await this.notificationService
+                .CreateOnChatInvitationStatusChangedAsync(
+                    chatId,
+                    chatName,
+                    chatCreatorId,
+                    true);
+
             return true;
         }
 
-        public async Task<Result> RejectAsync(int chatId, string userId)
+        public async Task<Result> RejectAsync(int chatId, string chatName, string chatCreatorId)
         {
+            var invitedUserId = this.userService.GetId();
+
             var mapEntity = await this.data
                .ChatsUsers
-               .FirstOrDefaultAsync(cu => cu.UserId == userId && cu.ChatId == chatId)
+               .FirstOrDefaultAsync(cu => cu.UserId == invitedUserId && cu.ChatId == chatId)
                ?? throw new InvalidOperationException();
 
             if (mapEntity is null)
@@ -107,6 +132,13 @@
 
             this.data.Remove(mapEntity);
             await this.data.SaveChangesAsync();
+
+            _ = await this.notificationService
+                .CreateOnChatInvitationStatusChangedAsync(
+                    chatId,
+                    chatName,
+                    chatCreatorId,
+                    false);
 
             return true;
         }

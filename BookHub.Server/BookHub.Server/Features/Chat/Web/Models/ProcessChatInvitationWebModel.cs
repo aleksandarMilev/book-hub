@@ -4,13 +4,15 @@
 
     using static Common.Constants.Validation.Chat;
 
-    public class AddUserToChatWebModel
+    public class ProcessChatInvitationWebModel
     {
-        [Required]
-        public string UserId { get; set; } = null!;
+        public int ChatId { get; init; }
 
         [Required]
         [StringLength(NameMaxLength, MinimumLength = NameMinLength)]
-        public string ChatName { get; set; } = null!;
+        public string ChatName { get; init; } = null!;
+
+        [Required]
+        public string ChatCreatorId { get; init; } = null!;
     }
 }

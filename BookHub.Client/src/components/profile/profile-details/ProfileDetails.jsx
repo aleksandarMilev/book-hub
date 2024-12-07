@@ -99,7 +99,7 @@ export default function ProfileDetails() {
         e.preventDefault()
 
         try {
-            await chatApi.inviteUserToChatAsync(chatId, userId, token)
+            await chatApi.inviteUserToChatAsync(chatId, chatName, userId, token)
             showMessage(`You successfully added ${firstName} to ${chatName}!`, true)
         } catch (error) {
             showMessage(error.message, false)

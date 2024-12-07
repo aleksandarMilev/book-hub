@@ -45,23 +45,32 @@
         [HttpPost("{chatId}/invite")]
         public async Task<ActionResult<(int, string)>> InviteUserToChat(int chatId, AddUserToChatWebModel model)
         {
-            var id = await this.service.InviteUserToChatAsync(chatId, model.UserId);
+            var id = await this.service.InviteUserToChatAsync(
+                chatId,
+                model.ChatName,
+                model.UserId);
 
             return this.Created(nameof(this.InviteUserToChat), id);
         }
 
-        [HttpPost("{chatId}/invite/{userId}/accept")]
-        public async Task<ActionResult<Result>> Accept(int chatId, string userId)
+        [HttpPost("invite/accept")]
+        public async Task<ActionResult<Result>> Accept(ProcessChatInvitationWebModel model)
         {
-            var result = await this.service.AcceptAsync(chatId, userId);
+            var result = await this.service.AcceptAsync(
+                model.ChatId,
+                model.ChatName,
+                model.ChatCreatorId);
 
             return this.NoContentOrBadRequest(result);
         }
 
-        [HttpPost("{chatId}/invite/{userId}/reject")]
-        public async Task<ActionResult<Result>> Reject(int chatId, string userId)
+        [HttpPost("invite/reject")]
+        public async Task<ActionResult<Result>> Reject(ProcessChatInvitationWebModel model)
         {
-            var result = await this.service.RejectAsync(chatId, userId);
+            var result = await this.service.RejectAsync(
+                model.ChatId,
+                model.ChatName,
+                model.ChatCreatorId);
 
             return this.NoContentOrBadRequest(result);
         }

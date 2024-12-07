@@ -10,6 +10,7 @@
 
     using static Common.Messages.Notifications;
     using static Common.Messages.Error.Notification;
+    using Humanizer.Localisation;
 
     public class NotificationService(
         BookHubDbContext data,
@@ -49,8 +50,8 @@
         }
 
         public async Task<int> CreateOnEntityCreationAsync(
-            int resourceId, 
-            string resourceType, 
+            int resourceId,
+            string resourceType,
             string nameProp,
             string receiverId)
         {
@@ -84,6 +85,51 @@
             {
                 ResourceId = resourceId,
                 ResourceType = resourceType,
+                Message = message,
+                ReceiverId = receiverId
+            };
+
+            this.data.Add(notification);
+            await this.data.SaveChangesAsync();
+
+            return notification.Id;
+        }
+
+        public async Task<int> CreateOnChatInvitationAsync(int chatId, string chatName, string receiverId)
+        {
+            var username = this.userService.GetUsername();
+            var message = string.Format(ChatInvitation, username, chatName);
+
+            var notification = new Notification()
+            {
+                ResourceId = chatId,
+                ResourceType = nameof(Chat),
+                Message = message,
+                ReceiverId = receiverId
+            };
+
+            this.data.Add(notification);
+            await this.data.SaveChangesAsync();
+
+            return notification.Id;
+        }
+
+        public async Task<int> CreateOnChatInvitationStatusChangedAsync(
+            int chatId,
+            string chatName,
+            string receiverId,
+            bool hasAccepted)
+        {
+            var message = string.Format(
+                ChatInvitationStatusChange,
+                this.userService.GetUsername(),
+                hasAccepted ? "accepted" : "rejected",
+                chatName);
+
+            var notification = new Notification()
+            {
+                ResourceId = chatId,
+                ResourceType = nameof(Chat),
                 Message = message,
                 ReceiverId = receiverId
             };

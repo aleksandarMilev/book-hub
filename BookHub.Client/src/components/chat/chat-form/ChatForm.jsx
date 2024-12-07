@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
 
+import { useMessage } from '../../../contexts/messageContext'
 import { routes } from '../../../common/constants/api'
 import * as useChat from '../../../hooks/useChat'
 
@@ -14,6 +15,8 @@ export default function ChatForm({ chatData = null, isEditMode = false }) {
 
     const createHandler = useChat.useCreate()
     const editHandler = useChat.useEdit()
+
+    const { showMessage } = useMessage()
 
     const validationSchema = Yup.object({
         name: Yup
@@ -35,25 +38,25 @@ export default function ChatForm({ chatData = null, isEditMode = false }) {
             imageUrl: chatData?.imageUrl || ''
         },
         validationSchema,
-        onSubmit: async (values, { setErrors }) => {
+        onSubmit: async (values) => {
             try {
                 if (isEditMode) {
                     const isSuccessfullyEdited = await editHandler(chatData.id, { ...values }) 
 
                     if(isSuccessfullyEdited){
-                        // navigate(routes.chat + `/${chatData.id}`)
-                        navigate(routes.home)
+                        showMessage(`You have successfuly edited ${values.name}`, true)
+                        navigate(routes.chat + `/${chatData.id}`)
                     }
                 } else {
                     const chatId = await createHandler(values)
 
                     if (chatId) {
-                        // navigate(routes.chat + `/${chatId}`)
-                        navigate(routes.home)
+                        showMessage(`You have successfuly created ${values.name}`, true)
+                        navigate(routes.chat + `/${chatId}`)
                     }
                 }
             } catch (error) {
-                setErrors({ submit: 'Something went wrong, please try again!' })
+                showMessage(`Something went wrong while creating your chat, please try again!`, false)
             }
         }
     })

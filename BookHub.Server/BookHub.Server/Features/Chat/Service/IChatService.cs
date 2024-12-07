@@ -18,10 +18,17 @@
 
         Task<int> CreateAsync(CreateChatServiceModel model);
 
-        Task<(int, string)> InviteUserToChatAsync(int chatId, string userId);
-        Task<Result> AcceptAsync(int chatId, string userId);
+        Task<(int, string)> InviteUserToChatAsync(int chatId, string chatName, string userId);
 
-        Task<Result> RejectAsync(int chatId, string userId);
+        Task<Result> AcceptAsync(
+            int chatId,
+            string chatName,
+            string chatCreatorId);
+
+        Task<Result> RejectAsync(
+            int chatId,
+            string chatName,
+            string chatCreatorId);
 
         Task<Result> EditAsync(int id);
 

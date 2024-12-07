@@ -1,9 +1,10 @@
 import { baseUrl, routes } from '../common/constants/api'
 import { errors } from '../common/constants/messages'
 
-export async function inviteUserToChatAsync(chatId, userId, token){
+export async function inviteUserToChatAsync(chatId, chatName, userId, token){
     const optionsOjb = {
-        userId
+        userId,
+        chatName
     }
 
     const options = {
@@ -22,15 +23,23 @@ export async function inviteUserToChatAsync(chatId, userId, token){
     }
 }
 
-export async function rejectAsync(chatId, userId, token){
+export async function rejectAsync(chatId, chatName, chatCreatorId, token){
+    const chatInvitationObj = {
+        chatId,
+        chatName,
+        chatCreatorId
+    }
+
     const options = {
         method: "POST",
         headers: {
-            'Authorization': `Bearer ${token}`
-        }
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(chatInvitationObj)
     }
 
-    const url = baseUrl + routes.chat + `/${chatId}` + `/invite/${userId}/reject`
+    const url = baseUrl + routes.rejectChatInvitation
     const response = await fetch(url, options)
 
     if(!response.ok){
@@ -38,17 +47,25 @@ export async function rejectAsync(chatId, userId, token){
     }
 }
 
+export async function acceptAsync(chatId, chatName, chatCreatorId, token){
+    const chatInvitationObj = {
+        chatId,
+        chatName,
+        chatCreatorId
+    }
 
-export async function acceptAsync(chatId, userId, token){
     const options = {
         method: "POST",
         headers: {
-            'Authorization': `Bearer ${token}`
-        }
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(chatInvitationObj)
     }
 
-    const url = baseUrl + routes.chat + `/${chatId}` + `/invite/${userId}/accept`
+    const url = baseUrl + routes.acceptChatInvitation
     const response = await fetch(url, options)
+    console.log(response);
 
     if(!response.ok){
         throw new Error(errors.chat.accept)

@@ -23,6 +23,14 @@
            string receiverId,
            bool isApproved);
 
+        Task<int> CreateOnChatInvitationAsync(int chatId, string chatName, string receiverId);
+
+        Task<int> CreateOnChatInvitationStatusChangedAsync(
+            int chatId,
+            string chatName,
+            string receiverId,
+            bool hasAccepted);
+
         Task<Result> MarkAsReadAsync(int id);
 
         Task<Result> DeleteAsync(int id);
