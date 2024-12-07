@@ -65,12 +65,26 @@ export async function acceptAsync(chatId, chatName, chatCreatorId, token){
 
     const url = baseUrl + routes.acceptChatInvitation
     const response = await fetch(url, options)
-    console.log(response);
 
     if(!response.ok){
         throw new Error(errors.chat.accept)
     }
+}
 
+export async function removeUserAsync(chatId, userToRemoveId, token){
+    const options = {
+        method: "DELETE",
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        }
+    }
+
+    const url = baseUrl + routes.removeChatUser + `?chatId=${chatId}&userId=${userToRemoveId}`
+    const response = await fetch(url, options)
+
+    if(!response.ok){
+        throw new Error(errors.chat.removeUser)
+    }
 }
 
 export async function hasAccessAsync(chatId, userId, token){

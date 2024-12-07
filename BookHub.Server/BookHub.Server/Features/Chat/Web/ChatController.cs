@@ -75,6 +75,14 @@
             return this.NoContentOrBadRequest(result);
         }
 
+        [HttpDelete("remove-user")]
+        public async Task<ActionResult<Result>> Remove(int chatId, string userId)
+        {
+            var result = await this.service.RemoveUserAsync(chatId, userId);
+
+            return this.NoContentOrBadRequest(result);
+        }
+
         [HttpPut("{id}")]
         public Task<IActionResult> Edit(int id, CreateChatWebModel webModel) 
             => throw new NotImplementedException();

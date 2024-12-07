@@ -30,6 +30,8 @@
             string chatName,
             string chatCreatorId);
 
+        Task<Result> RemoveUserAsync(int chatId, string userToRemoveId);
+
         Task<Result> EditAsync(int id);
 
         Task<Result> DeleteAsync(int id);

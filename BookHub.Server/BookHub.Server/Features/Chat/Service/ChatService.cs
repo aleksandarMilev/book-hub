@@ -80,11 +80,7 @@
         {
             var result = await this.CreateChatUserEntityAsync(chatId, userId, false);
 
-            _ = await this.notificationService.CreateOnChatInvitationAsync(
-                chatId,
-                chatName,
-                userId
-            );
+            _ = await this.notificationService.CreateOnChatInvitationAsync(chatId, chatName, userId);
 
             return result;
         }
@@ -139,6 +135,23 @@
                     chatName,
                     chatCreatorId,
                     false);
+
+            return true;
+        }
+
+        public async Task<Result> RemoveUserAsync(int chatId, string userToRemoveId)
+        {
+            var mapEntity = await this.data
+                .ChatsUsers
+                .FirstOrDefaultAsync(cu => cu.UserId == userToRemoveId && cu.ChatId == chatId);
+
+            if (mapEntity is null)
+            {
+                return "Map entity not found!";
+            }
+
+            this.data.Remove(mapEntity);
+            await this.data.SaveChangesAsync();
 
             return true;
         }

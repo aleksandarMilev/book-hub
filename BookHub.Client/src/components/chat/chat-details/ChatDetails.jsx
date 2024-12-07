@@ -49,6 +49,8 @@ export default function ChatDetails() {
     const [isEditMode, setIsEditMode] = useState(false)
     const [messageToEdit, setMessageToEdit] = useState(null)
 
+    const currentUserIsChatCreator = userId === chat?.creatorId
+
     const validationSchema = Yup.object({
         message: Yup
             .string()
@@ -133,6 +135,16 @@ export default function ChatDetails() {
             showMessage("You have successfully rejected this chat invitation!", true)
             setIsinvited(false)
             navigate(routes.home)
+        } catch (error) {
+            showMessage(error.message, false)
+        }  
+    }
+
+    const onRemoveUserClick = async (profileId, firstName) => {
+        try {
+            await api.removeUserAsync(id, profileId, token)
+            showMessage(`You have successfully removed ${firstName}!`, true),
+            refetch()
         } catch (error) {
             showMessage(error.message, false)
         }  
@@ -336,7 +348,20 @@ export default function ChatDetails() {
                                                         <strong>{p.firstName} {p.lastName}</strong> <span className="text-muted">(Chat Creator)</span>
                                                     </>
                                                 ) : (
-                                                    `${p.firstName} ${p.lastName}`
+                                                    <>
+                                                        {p.firstName} {p.lastName}
+                                                        {currentUserIsChatCreator && 
+                                                            <MDBIcon
+                                                            fas
+                                                            icon="times"
+                                                            className="ms-2 cursor-pointer"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation()
+                                                                onRemoveUserClick(p.id, p.firstName)
+                                                            }}
+                                                        />}
+                                                    </>
+                                               
                                                 )}
                                             </span>
                                         </li>

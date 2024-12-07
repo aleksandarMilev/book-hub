@@ -63,6 +63,7 @@ export const errors = {
         delete: 'Oops! We couldn’t delete your book. Please try again later or contact support if the issue persists.'
     },
     chat: {
+        removeUser: 'Something went wrong while removing this user from the chat. Please try again later.',
         accept: 'Something went wrong while adding you in this chat. Please try again later.',
         reject: 'Something went wrong while removing you from this chat. Please try again later.',
         createMessage: 'Something went wrong sending your message. Please try again later.',
