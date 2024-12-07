@@ -5,16 +5,25 @@
     public class ChatHub : Hub
     {
         public async Task SendMessageToChat(int chatId, string senderId, string message)
-            => await this.Clients
-                .Group(chatId.ToString())
+        {
+            await Clients.Group(chatId.ToString())
                 .SendAsync("ReceiveMessage", senderId, message);
+        }
 
-        public async Task JoinChat(int id)
-            => await this.Groups
-                .AddToGroupAsync(this.Context.ConnectionId, id.ToString());
+        public async Task JoinChat(int chatId)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, chatId.ToString());
+        }
 
-        public async Task LeaveChat(int id)
-            => await this.Groups
-                .RemoveFromGroupAsync(this.Context.ConnectionId, id.ToString());
+        public async Task LeaveChat(int chatId)
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, chatId.ToString());
+        }
+
+        public override async Task OnDisconnectedAsync(Exception? exception)
+        {
+            await base.OnDisconnectedAsync(exception);
+        }
     }
+
 }

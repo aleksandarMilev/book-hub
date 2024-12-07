@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
@@ -10,18 +10,17 @@ import {
     MDBCard,
     MDBCardHeader,
     MDBCardBody,
-    MDBIcon,
-    MDBTextArea,
-    MDBBtn
 } from "mdb-react-ui-kit"
 
 import * as useChat from "../../../hooks/useChat"
-import * as api from "../../../api/chatApi"
-import { utcToLocal } from '../../../common/functions/utcToLocal'
 import { useMessage } from '../../../contexts/messageContext'
 import { routes } from "../../../common/constants/api"
 import { UserContext } from "../../../contexts/userContext"
 
+import Message from "./message/Message"
+import SendForm from "./send-form/SendForm"
+import ParticipantListItem from "./participant-list-item/ParticipantListItem"
+import ChatButtons from "./chat-buttons/ChatButtons"
 import DefaultSpinner from "../../common/default-spinner/DefaultSpinner"
 
 import './ChatDetails.css'
@@ -30,26 +29,16 @@ export default function ChatDetails() {
     const { id } = useParams()
     const navigate = useNavigate()
 
-    const { userId, token } = useContext(UserContext)
+    const { userId } = useContext(UserContext)
     const { showMessage } = useMessage()
 
     const { chat, isFetching, refetch } = useChat.useDetails(id)
-
-    const[isInvited, setIsinvited] = useState(false)
-
-    useEffect(() => {
-        api
-        .userIsInvitedAsync(id, userId, token)
-        .then(r => setIsinvited(r))
-    }, [id, userId, token])
-       
+    
     const createMessageHandler = useChat.useCreateMessage()
     const editMessageHandler = useChat.useEditMessage()
 
     const [isEditMode, setIsEditMode] = useState(false)
     const [messageToEdit, setMessageToEdit] = useState(null)
-
-    const currentUserIsChatCreator = userId === chat?.creatorId
 
     const validationSchema = Yup.object({
         message: Yup
@@ -103,61 +92,8 @@ export default function ChatDetails() {
         formik.resetForm() 
     }
 
-    const handleDeleteMessage = async (id) => {
-        try {
-            await api.deleteMessageAsync(id, token)
-            showMessage("Your message was successfuly deleted", true)
-        } catch (error) {
-            showMessage(error.message, false)
-        } finally {
-            refetch()
-        }
-    }
-
     const onProfileClickHandler = (profileId) => {
         navigate(routes.profile, { state: { id: profileId === userId ? null : profileId } })
-    }
-
-    const onAcceptClick = async () => {
-        try {
-            await api.acceptAsync(id, chat?.name, chat?.creatorId, token)
-            showMessage(`You are now a member in ${chat.name}!`, true)
-            setIsinvited(false)
-            refetch()
-        } catch (error) {
-            showMessage(error.message, false)
-        } 
-    }
-
-    const onRejectClick = async () => {
-        try {
-            await api.rejectAsync(id, chat?.name, chat?.creatorId, token)
-            showMessage("You have successfully rejected this chat invitation!", true)
-            setIsinvited(false)
-            navigate(routes.home)
-        } catch (error) {
-            showMessage(error.message, false)
-        }  
-    }
-
-    const onRemoveUserClick = async (profileId, firstName) => {
-        try {
-            await api.removeUserAsync(id, profileId, token)
-            showMessage(`You have successfully removed ${firstName}!`, true),
-            refetch()
-        } catch (error) {
-            showMessage(error.message, false)
-        }  
-    }
-
-    const onLeaveClick = async (profileId) => {
-        try {
-            await api.removeUserAsync(id, profileId, token)
-            showMessage(`You have successfuly left the chat!`, true)
-            navigate(routes.home)
-        } catch (error) {
-            showMessage(error.message, false)
-        }  
     }
 
     if (isFetching) {
@@ -166,232 +102,77 @@ export default function ChatDetails() {
 
     return (
         <>
-          {isInvited 
-            ? (
-            <div className="invite-box">
-                <p>You were invited to join in {chat?.name}</p>
-                <span className="invite-button accept-button" onClick={onAcceptClick}>
-                    Accept
-                </span>
-                <span className="invite-button reject-button" onClick={onRejectClick}>
-                    Reject
-                </span>
-            </div>
-            ) : (
-                currentUserIsChatCreator || 
-                    <div className="invite-box" style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                        <span className="invite-button reject-button" onClick={() => onLeaveClick(userId)}>
-                            Leave
-                        </span> 
-                    </div>
-            )}
-        <MDBContainer className="py-5 vh-100">
-            <MDBRow className="d-flex justify-content-center h-100">
-                <MDBCol md="10" lg="8" className="h-100">
-                    <MDBRow className="h-100">
-                        <MDBCol md="8" lg="8" className="h-100">
-                            <MDBCard id="chat1" style={{ borderRadius: "15px", height: "100%", display: "flex", flexDirection: "column" }}>
-                                <MDBCardHeader
-                                    className="d-flex align-items-center bg-info text-white"
-                                    style={{
-                                        borderTopLeftRadius: "15px",
-                                        borderTopRightRadius: "15px",
-                                        flexDirection: "column",
-                                        textAlign: "center",
-                                    }}
-                                >
-                                    <MDBCardImage
-                                        src={chat?.imageUrl}
-                                        alt="Chat"
-                                        style={{
-                                            width: "80px",
-                                            height: "80px",
-                                            borderRadius: "50%",
-                                            objectFit: "cover"
-                                        }}
-                                        className="mb-2"
-                                    />
-                                    <p className="mb-0 fw-bold">{chat?.name}</p>
-                                </MDBCardHeader>
-                                <MDBCardBody style={{ flex: 1, overflowY: "auto" }}>
-                                    {chat?.messages.map(m => {
-                                        const isSentByUser = m.senderId === userId
-                                        const sender = chat.participants.find(p => p.id === m.senderId)
-
-                                        return (
-                                            <div
-                                                key={m.id}
-                                                className={`d-flex flex-row justify-content-${
-                                                    isSentByUser ? "end" : "start"
-                                                } mb-4`}
-                                            >
-                                                <div
-                                                    className={`p-3 ${
-                                                        isSentByUser ? "me-3 border" : "ms-3"
-                                                    }`}
-                                                    style={{
-                                                        borderRadius: "15px",
-                                                        backgroundColor: isSentByUser
-                                                            ? "#fbfbfb"
-                                                            : "rgba(57, 192, 237,.2)",
-                                                    }}
-                                                >
-                                                    <p className="small mb-0">{m.message}</p>
-                                                    <small className="text-muted">
-                                                        {m.modifiedOn
-                                                            ? utcToLocal(m.modifiedOn) + " (Modified)"
-                                                            : utcToLocal(m.createdOn)}
-                                                    </small>
-                                                    {isSentByUser && (
-                                                        <>
-                                                            <MDBIcon
-                                                                fas
-                                                                icon="pencil-alt"
-                                                                className="ms-2 cursor-pointer"
-                                                                onClick={() => handleEditMessage(m)}
-                                                            />
-                                                            <MDBIcon
-                                                                fas
-                                                                icon="trash"
-                                                                className="ms-2 cursor-pointer"
-                                                                onClick={() =>
-                                                                    handleDeleteMessage(m.id)
-                                                                }
-                                                            />
-                                                        </>
-                                                    )}
-                                                </div>
-                                                <img
-                                                    src={
-                                                        sender?.imageUrl ||
-                                                        "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                                                    }
-                                                    alt="avatar"
-                                                    style={{ width: "45px", height: "100%" }}
-                                                />
-                                                <div 
-                                                    className="ms-2 profile-item"
-                                                    onClick={() => onProfileClickHandler(sender.id)}
-                                                >
-                                                    <strong>
-                                                        {sender?.firstName} {sender?.lastName}
-                                                    </strong>
-                                                </div>
-                                            </div>
-                                        )
-                                    })}
-                                    <form onSubmit={formik.handleSubmit}>
-                                        {isEditMode && (
-                                            <div className="alert alert-warning">
-                                                You are editing a message.{" "}
-                                                <span
-                                                    className="cancel-button"
-                                                    onClick={handleCancelEdit}
-                                                >
-                                                    Cancel
-                                                </span>
-                                            </div>
-                                        )}
-                                        <MDBTextArea
-                                            className="form-outline"
-                                            label="Type your message"
-                                            id="textAreaExample"
-                                            name="message"
-                                            value={formik.values.message}
-                                            onChange={formik.handleChange}
-                                            rows={4}
-                                            isInvalid={
-                                                formik.touched.message && formik.errors.message
-                                            }
+           <ChatButtons chatName={chat?.name} chatCreatorId={chat?.creatorId}/>
+            <MDBContainer className="py-5 vh-100">
+                <MDBRow className="d-flex justify-content-center h-100">
+                    <MDBCol md="10" lg="8" className="h-100">
+                        <MDBRow className="h-100">
+                            <MDBCol md="8" lg="8" className="h-100">
+                                <MDBCard id="chat1" className="chat-card">
+                                    <MDBCardHeader className="chat-card-header">
+                                        <MDBCardImage
+                                            src={chat?.imageUrl}
+                                            alt="Chat"
+                                            className="chat-card-header-img"
                                         />
-                                        {formik.touched.message && formik.errors.message && (
-                                            <div className="text-danger">{formik.errors.message}</div>
-                                        )}
+                                        <p className="mb-0 fw-bold">{chat?.name}</p>
+                                    </MDBCardHeader>
+                                    <MDBCardBody className="chat-card-body">
+                                        {chat?.messages.map(m => {
+                                            const isSentByUser = m.senderId === userId
+                                            const sender = chat.participants.find(p => p.id === m.senderId)
     
-                                        <MDBBtn
-                                            type="submit"
-                                            color="primary"
-                                            className="mt-3"
-                                            disabled={formik.isSubmitting || !formik.isValid}
-                                        >
-                                            {isEditMode ? "Update Message" : "Send Message"}
-                                        </MDBBtn>
-                                    </form>
-                                </MDBCardBody>
-                            </MDBCard>
-                        </MDBCol>
-                        <MDBCol md="4" lg="4" className="h-100">
-                            <MDBCard
-                                style={{
-                                    borderRadius: "15px",
-                                    height: "100%",
-                                    display: "flex",
-                                    flexDirection: "column",
-                                }}
-                            >
-                                <MDBCardHeader
-                                    className="bg-light text-center"
-                                    style={{
-                                        borderTopLeftRadius: "15px",
-                                        borderTopRightRadius: "15px"
-                                    }}
-                                >
-                                    <h6 className="mb-0">Participants</h6>
-                                </MDBCardHeader>
-                                <MDBCardBody style={{ flex: 1, overflowY: "auto" }}>
-                                    <ul className="list-unstyled mb-0">
-                                    {chat
-                                        ?.participants
-                                        .sort((a, b) => (a.id === chat?.creatorId ? -1 : b.id === chat?.creatorId ? 1 : 0))
-                                        .map((p, i) => (
-                                        <li
-                                            key={p.id}
-                                            className="d-flex align-items-center mb-3 profile-item"
-                                            onClick={() => onProfileClickHandler(p.id)}
-                                        >
-                                            <MDBCardImage
-                                                src={p.imageUrl}
-                                                alt={p.firstName}
-                                                style={{
-                                                    width: "40px",
-                                                    height: "40px",
-                                                    borderRadius: "50%",
-                                                    objectFit: "cover",
-                                                    marginRight: "10px"
-                                                }}
-                                            />
-                                            <span>
-                                                {i === 0 ? (
-                                                    <>
-                                                        <strong>{p.firstName} {p.lastName}</strong> <span className="text-muted">(Chat Creator)</span>
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        {p.firstName} {p.lastName}
-                                                        {currentUserIsChatCreator && 
-                                                            <MDBIcon
-                                                            fas
-                                                            icon="times"
-                                                            className="ms-2 cursor-pointer"
-                                                            onClick={(e) => {
-                                                                e.stopPropagation()
-                                                                onRemoveUserClick(p.id, p.firstName)
-                                                            }}
-                                                        />}
-                                                    </>
-                                               
-                                                )}
-                                            </span>
-                                        </li>
-                                    ))}
-                                    </ul>
-                                </MDBCardBody>
-                            </MDBCard>
-                        </MDBCol>
-                    </MDBRow>
-                </MDBCol>
-            </MDBRow>
-        </MDBContainer>
+                                            return (
+                                                <Message
+                                                    key={m.id}
+                                                    m={m}
+                                                    isSentByUser={isSentByUser}
+                                                    sender={sender}
+                                                    onEdit={handleEditMessage}
+                                                    onProfileClick={onProfileClickHandler}
+                                                />
+                                            )
+                                        })}
+                                        <SendForm
+                                            formik={formik}
+                                            isEditMode={isEditMode}
+                                            handleCancelEdit={handleCancelEdit}
+                                        />
+                                    </MDBCardBody>
+                                </MDBCard>
+                            </MDBCol>
+                            <MDBCol md="4" lg="4" className="h-100">
+                                <MDBCard className="participants-card">
+                                    <MDBCardHeader className="participants-card-header">
+                                        <h6 className="mb-0">Participants</h6>
+                                    </MDBCardHeader>
+                                    <MDBCardBody className="participants-card-body">
+                                        <ul className="participants-list">
+                                            {chat?.participants
+                                                .sort((a, b) =>
+                                                    a.id === chat?.creatorId
+                                                        ? -1
+                                                        : b.id === chat?.creatorId
+                                                        ? 1
+                                                        : 0
+                                                )
+                                                .map((p, i) => (
+                                                    <ParticipantListItem
+                                                        key={p.id}
+                                                        participants={p}
+                                                        index={i}
+                                                        onProfileClickHandler={onProfileClickHandler}
+                                                        currentUserIsChatCreator={userId === chat?.creatorId}
+                                                    />
+                                                ))}
+                                        </ul>
+                                    </MDBCardBody>
+                                </MDBCard>
+                            </MDBCol>
+                        </MDBRow>
+                    </MDBCol>
+                </MDBRow>
+            </MDBContainer>
         </>
     )
 }

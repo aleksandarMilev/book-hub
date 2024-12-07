@@ -211,3 +211,81 @@
     background-color: #c82333;
     transform: scale(1.05);
 }
+
+/* General styles */
+.invite-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.invite-button.accept-button {
+    cursor: pointer;
+    color: green;
+    padding: 5px 10px;
+}
+
+.invite-button.reject-button {
+    cursor: pointer;
+    color: red;
+    padding: 5px 10px;
+}
+
+/* Chat Card Styles */
+#chat1 {
+    border-radius: 15px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-card-header {
+    display: flex;
+    align-items: center;
+    background-color: #17a2b8; /* 'bg-info' class color */
+    color: white; /* 'text-white' class color */
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    flex-direction: column;
+    text-align: center;
+}
+
+.chat-card-header img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 8px; /* For spacing below the image */
+}
+
+/* Chat Card Body */
+.chat-card-body {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* Participants List Styles */
+.participants-card {
+    border-radius: 15px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.participants-card-header {
+    background-color: #f8f9fa; /* 'bg-light' class color */
+    text-align: center;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.participants-card-body {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.participants-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
