@@ -1,15 +1,21 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { MDBIcon } from 'mdb-react-ui-kit'
 
+import * as api from '../../../api/chatApi'
 import { routes } from '../../../common/constants/api'
 import { UserContext } from '../../../contexts/userContext'
+import { useMessage } from '../../../contexts/messageContext'
+
+import DeleteModal from '../../common/delete-modal/DeleteModal'
 
 import './ChatListItem.css'
 
 export default function ChatListItem({ id, name, imageUrl, creatorId }) {
     const navigate = useNavigate()
-    const { userId } = useContext(UserContext)
+
+    const { userId, token } = useContext(UserContext)
+    const { showMessage } = useMessage() 
 
     const onEditClick = () => {
         const chatData = {
@@ -21,7 +27,25 @@ export default function ChatListItem({ id, name, imageUrl, creatorId }) {
         navigate(routes.editChat, { state: { chat: chatData } })
     }
 
+    const [showModal, setShowModal] = useState(false)
+    const toggleModal = () => setShowModal(prev => !prev)
+
+    const onChatDelete = async () => {
+        if(showModal){
+            try {
+                await api.deleteChatAsync(id, token)
+                showMessage(`You have successfuly deleted ${name}!`, true)
+                navigate(routes.home)
+            } catch(error) {
+                showMessage(error.message, false)
+            }
+        } else {
+            toggleModal()
+        }
+    }
+
     return (
+        <>
         <div className="row chat-list-item p-2 bg-light border rounded mb-3 shadow-sm">
             <div className="col-3 d-flex justify-content-center align-items-center">
                 <img
@@ -43,7 +67,7 @@ export default function ChatListItem({ id, name, imageUrl, creatorId }) {
                         <MDBIcon
                             icon="trash"
                             className="cursor-pointer ms-2"
-                            onClick={() => {}}
+                            onClick={onChatDelete}
                             title="Delete Chat"
                         />
                     </div>
@@ -53,5 +77,11 @@ export default function ChatListItem({ id, name, imageUrl, creatorId }) {
                 </Link>
             </div>
         </div>
+         <DeleteModal
+         showModal={showModal}
+         toggleModal={toggleModal}
+         deleteHandler={onChatDelete}
+     />
+     </>
     )
 }

@@ -196,6 +196,24 @@ export async function editAsync(chatId, chat, token){
     throw new Error(errors.chat.edit)
 }
 
+export async function deleteChatAsync(chatId, token){
+    const options = {
+        method: "DELETE",
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        }
+    }
+
+    const url = baseUrl + routes.chat + `/${chatId}`
+    const response = await fetch(url, options)
+
+    if(response.ok){
+        return true
+    }
+
+    throw new Error(errors.chat.delete)
+}
+
 export async function createMessageAsync(message, token){
     const options = {
         method: "POST",
