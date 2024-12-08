@@ -12,7 +12,7 @@ export default function NationalitySearch({ nationalities, loading, formik }) {
 
     return (
         <div className="mb-4">
-            <h6 className="fw-bold mb-2">{"Nationality: * (select 'unknown' if you are not sure)"}</h6>
+            <h6 className="fw-bold mb-2">{"Nationality: (select 'unknown' if you are not sure)"}</h6>
             <input
                 type="text"
                 id="nationality"

@@ -9,7 +9,7 @@ export default function EditAuthor() {
     const { id } = useParams()
     const { author, isFetching } = useAuthor.useGetDetails(id)
 
-    return isFetching ? 
-        <AuthorForm authorData={author} isEditMode={true} /> 
-        : <DefaultSpinner/ >
+    return isFetching 
+        ? <DefaultSpinner/ >
+        : <AuthorForm authorData={author} isEditMode={true} /> 
 }

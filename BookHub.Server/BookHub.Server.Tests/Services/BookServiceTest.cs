@@ -35,7 +35,7 @@
         public BookServiceTest()
         {
             var options = new DbContextOptionsBuilder<BookHubDbContext>()
-                .UseInMemoryDatabase(databaseName: "InMemoryDatabase")
+                .UseInMemoryDatabase(databaseName: "BookServiceInMemoryDatabase")
                 .Options;
 
             this.mockUserService = new Mock<ICurrentUserService>();
@@ -50,7 +50,7 @@
 
             this.mockUserService
                 .Setup(x => x.IsAdmin())
-                .Returns(true);
+                .Returns(false);
 
             this.data = new BookHubDbContext(options, this.mockUserService.Object);
 
@@ -231,6 +231,8 @@
         [Fact]
         public async Task CreateAsync_ShouldReturnBookId_AndSetIsApprovedToFalse_IfUserIsAdmin()
         {
+            this.SetIsAdmin(true);
+
             var model = new CreateBookServiceModel()
             {
                 Title = "The Dead Zone",
@@ -242,7 +244,6 @@
                    "Dead Zone long description,Dead Zone long description,Dead Zone long description",
                 ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Pet_Sematary_%281983%29_front_cover%2C_first_edition.jpg/330px-Pet_Sematary_%281983%29_front_cover%2C_first_edition.jpg",
             };
-
 
             var bookId = await this.bookService.CreateAsync(model);
 

@@ -129,7 +129,7 @@ export function useCreate(){
             imageUrl : imageUrl || null,
             gender,
             biography,
-            nationalityId: nationality,
+            nationalityId: nationality || null,
             bornAt,
             diedAt
         }

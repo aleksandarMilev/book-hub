@@ -12,9 +12,12 @@ import {
     MDBInput
 } from 'mdb-react-ui-kit'
 
-import { routes } from '../../../common/constants/api'
 import * as useAuthor from '../../../hooks/useAuthor'
 import * as useNationality from '../../../hooks/useNationality'
+import { routes } from '../../../common/constants/api'
+import { useMessage } from '../../../contexts/messageContext'
+import { useContext } from 'react'
+import { UserContext } from '../../../contexts/userContext'
 
 import image from '../../../assets/images/createAuthor.jpg'
 import NationalitySearch from './nationality-search/NationalitySearch'
@@ -22,14 +25,19 @@ import GenderRadio from './gender-radio/GenderRadio'
 
 import './AuthorForm.css'
 
+
 export default function AuthorForm({ authorData = null, isEditMode = false }) {
     const navigate = useNavigate()
+
+    const { isAdmin } = useContext(UserContext)
 
     const createHandler = useAuthor.useCreate()
     const editHandler = useAuthor.useEdit()  
 
     const { nationalities, loading } = useNationality.useNationalities()
 
+    const { showMessage } = useMessage()
+ 
     const validationSchema = Yup.object({
         name: Yup
             .string()
@@ -56,8 +64,7 @@ export default function AuthorForm({ authorData = null, isEditMode = false }) {
             .string()
             .required('Gender is required!'),
         nationality: Yup
-            .string()
-            .required('Nationality is required!'),
+            .string(),
         biography: Yup
             .string()
             .min(50)
@@ -67,11 +74,11 @@ export default function AuthorForm({ authorData = null, isEditMode = false }) {
 
     const initialNationality = isEditMode && authorData?.nationality
         ? authorData.nationality.id
-        : '';
+        : ''
 
     const initialNationalityName = isEditMode && authorData?.nationality
         ? authorData.nationality.name
-        : '';
+        : ''
 
     const formik = useFormik({
         initialValues: {
@@ -86,7 +93,7 @@ export default function AuthorForm({ authorData = null, isEditMode = false }) {
             biography: authorData?.biography || ''
         },
         validationSchema,
-        onSubmit: async (values, { setErrors }) => {
+        onSubmit: async (values) => {
             try {
                 const finalValues = { ...values, nationality: values.nationality || initialNationality }
                 
@@ -94,17 +101,25 @@ export default function AuthorForm({ authorData = null, isEditMode = false }) {
                     const isSuccessfullyEdited = await editHandler(authorData.id, finalValues)
                       
                     if(isSuccessfullyEdited){
+                        showMessage(`${authorData.name} was successfully edited!`, true)
                         navigate(routes.author + `/${authorData.id}`)
                     }
                 } else {
                     const authorId = await createHandler(finalValues)  
 
                     if(authorId){
-                        navigate(routes.author + `/${authorId}`)
+                        showMessage(
+                            isAdmin
+                                ? "Author successfully created!"
+                                : "Thank you for being part of our community! Our admin team will process your author soon.",
+                                true
+                        )
+                        
+                        navigate(isAdmin ? routes.author + `/${authorId}` : routes.home)
                     }
                 }
-            } catch (error) {
-                setErrors({ submit: error.message })
+            } catch {
+                showMessage("Something went wrong, please, try again!", false)
             }
         }
     })

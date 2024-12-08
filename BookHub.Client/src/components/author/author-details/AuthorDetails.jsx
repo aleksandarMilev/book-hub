@@ -20,6 +20,7 @@ import renderStars from '../../../common/functions/renderStars'
 import { errors } from '../../../common/constants/messages'
 import { routes } from '../../../common/constants/api'
 import { UserContext } from '../../../contexts/userContext'
+import { useMessage } from '../../../contexts/messageContext'
 
 import BookListItem from '../../book/book-list-item/BooksListItem'
 import DeleteModal from '../../common/delete-modal/DeleteModal'
@@ -33,26 +34,9 @@ export default function AuthorDetails() {
     const [showModal, setShowModal] = useState(false)
     
     const { userId, token, isAdmin } = useContext(UserContext)
+    const { showMessage } = useMessage()
 
     const { author, isFetching } = useAuthor.useGetDetails(id)
-
-    const approveHandler = async () => {
-        try {
-            await authorApi.approveAsync(id, token)
-            navigate(routes.author + `/${id}`)
-        } catch (error) {
-            navigate(routes.badRequest, { state: { message: error.message } })
-        }
-    }
-
-    const rejectHandler = async () => {
-        try {
-            await authorApi.rejectAsync(id, token)
-            navigate(routes.home)
-        } catch (error) {
-            navigate(routes.badRequest, { state: { message: error.message } })
-        }
-    }
 
     const toggleModal = () => setShowModal(prev => !prev)
 
@@ -61,9 +45,10 @@ export default function AuthorDetails() {
             const success = await authorApi.deleteAsync(id, token)
             
             if(success){
-                navigate(routes.book)
+                navigate(routes.author)
+                showMessage(`${author?.name || 'This author'} was successfully deleted!`, true)
             } else {
-                navigate(routes.badRequest, { state: { message: errors.author.delete } })
+                showMessage(`Something went wrong while deleting ${author?.name || 'this author'}, please, try again!`, false)
             }
         } else {
             toggleModal()  
@@ -100,32 +85,33 @@ export default function AuthorDetails() {
                                         </MDBCardText>
                                     </div>
                                 </div>
-                                {isCreator && (
                                     <div className="author-actions">
-                                        <Link to={`${routes.editAuthor}/${author.id}`} className="me-2">
-                                            <MDBBtn outline color="warning" size="sm">
-                                                <FaEdit className="me-1" /> Edit
+                                        {isCreator && 
+                                            <Link to={`${routes.editAuthor}/${author.id}`} className="me-2">
+                                                <MDBBtn outline color="warning" size="sm">
+                                                    <FaEdit className="me-1" /> Edit
+                                                </MDBBtn>
+                                            </Link>
+                                        }
+                                        {(isCreator || isAdmin) && 
+                                            <MDBBtn
+                                                outline
+                                                color="danger"
+                                                size="sm"
+                                                onClick={toggleModal}
+                                            >
+                                                <FaTrashAlt className="me-1" /> Delete
                                             </MDBBtn>
-                                        </Link>
-                                        <MDBBtn
-                                            outline
-                                            color="danger"
-                                            size="sm"
-                                            onClick={toggleModal}
-                                        >
-                                            <FaTrashAlt className="me-1" /> Delete
-                                        </MDBBtn>
+                                        }
                                     </div>
-                                )}
-                                {(isAdmin && !author.isApproved) && (
-                                    <div className="author-actions">
-                                        <a href="#" className="btn btn-success d-flex align-items-center gap-2" onClick={approveHandler}>
-                                            <FaTrash /> Approve
-                                        </a>
-                                        <a href="#" className="btn btn-danger d-flex align-items-center gap-2" onClick={rejectHandler}>
-                                            <FaTrash /> Reject
-                                        </a>
-                                    </div>
+                                {isAdmin && !author.isApproved && (
+                                    <ApproveRejectButtons
+                                        authorId={author.id}
+                                        authorName={author.name}
+                                        initialIsApproved={author.isApproved}
+                                        token={token}
+                                        onSuccess={(message, success = true) => showMessage(message, success)}
+                                    />
                                 )}
                                 <section className="author-about">
                                     <MDBTypography tag="h4" className="section-title">About</MDBTypography>
@@ -177,6 +163,46 @@ export default function AuthorDetails() {
                 toggleModal={toggleModal}
                 deleteHandler={deleteHandler}
             />
+        </div>
+    )
+}
+
+function ApproveRejectButtons({ authorId, authorName, initialIsApproved, token, onSuccess }) {
+    const navigate = useNavigate()
+    const [isApproved, setIsApproved] = useState(initialIsApproved)
+
+    const approveHandler = async () => {
+        try {
+            await authorApi.approveAsync(authorId, token)
+            setIsApproved(true)
+            onSuccess(`${authorName} was successfully approved!`)
+        } catch (error) {
+            onSuccess(error.message, false)
+        }
+    }
+
+    const rejectHandler = async () => {
+        try {
+            await authorApi.rejectAsync(authorId, token)
+            onSuccess(`${authorName} was successfully rejected!`)
+            navigate(routes.home)
+        } catch (error) {
+            onSuccess(error.message, false)
+        }
+    }
+
+    if (isApproved) {
+        return <p className="text-success">This author has been approved.</p>
+    }
+
+    return (
+        <div className="author-actions">
+            <button className="btn btn-success me-2" onClick={approveHandler}>
+                Approve
+            </button>
+            <button className="btn btn-danger" onClick={rejectHandler}>
+                Reject
+            </button>
         </div>
     )
 }

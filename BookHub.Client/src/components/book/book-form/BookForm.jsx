@@ -107,7 +107,7 @@ export default function BookForm({ bookData = null, isEditMode = false }) {
                         showMessage(
                             isAdmin
                                 ? "Book successfully created!"
-                                : "Thank you for being part of our community! Our admin team will process your booking soon.",
+                                : "Thank you for being part of our community! Our admin team will process your book soon.",
                                 true
                         )
 
@@ -116,9 +116,7 @@ export default function BookForm({ bookData = null, isEditMode = false }) {
                 }
             } catch {
                 showMessage(
-                    "Something went wrong. Please, try again.",
-                    false
-                )
+                    "Something went wrong. Please, try again.", false)
             }
         }
     })

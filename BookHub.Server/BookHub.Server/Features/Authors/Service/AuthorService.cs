@@ -187,7 +187,7 @@
                 true);
 
             await this.profileService.UpdateCountAsync(
-                this.userService.GetId()!,
+                author.CreatorId!,
                 nameof(UserProfile.CreatedAuthorsCount),
                 x => ++x);
 

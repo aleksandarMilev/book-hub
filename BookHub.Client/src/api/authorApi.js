@@ -69,14 +69,14 @@ export async function createAsync(author, token){
     }
 
     const url = baseUrl + routes.author
-    const response = await fetch(url, options)
 
+    const response = await fetch(url, options)
+    
     if(response.ok){
-        return await response.json()
+        return  await response.json()
     }
 
     throw new Error(errors.author.create)
-
 }
 
 export async function editAsync(authorId, author, token){
