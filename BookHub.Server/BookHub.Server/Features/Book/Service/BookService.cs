@@ -47,7 +47,7 @@
         {
             var books = this.data
                 .Books
-                .Where(g => g.BooksGenres.Any(bg => bg.GenreId == genreId))
+                .Where(b => b.BooksGenres.Any(bg => bg.GenreId == genreId))
                 .MapToServiceModel();
 
             books = books.OrderByDescending(b => b.AverageRating);
@@ -66,7 +66,7 @@
             => await this.data
                 .Books
                 .AsQueryable()
-                .MapToDetailsModel(this.userService.GetId()!)
+                .MapToDetailsModel()
                 .FirstOrDefaultAsync(b => b.Id == id);
 
         public async Task<BookDetailsServiceModel?> AdminDetailsAsync(int id)
@@ -151,7 +151,7 @@
                 return string.Format(DbEntityNotFound, nameof(Book), id);
             }
 
-            if (book.CreatorId != this.userService.GetId()! &&
+            if (book.CreatorId != this.userService.GetId() &&
                 !this.userService.IsAdmin())
             {
                 return string.Format(
@@ -191,7 +191,7 @@
                 true);
 
             await this.profileService.UpdateCountAsync(
-                this.userService.GetId()!,
+                book.CreatorId!,
                 nameof(UserProfile.CreatedBooksCount),
                 x => ++x);
 

@@ -74,8 +74,7 @@
 
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-            FilterDeletedModels(modelBuilder);
-            FilterUnapprovedModels(modelBuilder);
+            FilterModels(modelBuilder);
         }
 
         private void ApplyAuditInfo() 
@@ -113,54 +112,48 @@
                     }
                 });
 
-        private static void FilterDeletedModels(ModelBuilder modelBuilder)
+        private static void FilterModels(ModelBuilder modelBuilder)
             => modelBuilder
                 .Model
                 .GetEntityTypes()
-                .Where(e =>
-                {
-                    return typeof(IDeletableEntity).IsAssignableFrom(e.ClrType);
-                })
                 .ToList()
-                .ForEach(e =>
+                .ForEach(entityType =>
                 {
-                    modelBuilder
-                        .Entity(e.ClrType)
-                        .HasQueryFilter(DeletableFilterExpression(e.ClrType));
+                    var entityClrType = entityType.ClrType;
+                    var filterExpression = BuildFilterExpression(entityClrType);
+
+                    if (filterExpression != null)
+                    {
+                        modelBuilder.Entity(entityClrType).HasQueryFilter(filterExpression);
+                    }
                 });
 
-        private static void FilterUnapprovedModels(ModelBuilder modelBuilder)
-              => modelBuilder
-                  .Model
-                  .GetEntityTypes()
-                  .Where(e =>
-                  {
-                      return typeof(IApprovableEntity).IsAssignableFrom(e.ClrType);
-                  })
-                  .ToList()
-                  .ForEach(e =>
-                  {
-                      modelBuilder
-                          .Entity(e.ClrType)
-                          .HasQueryFilter(ApprovableFilterExpression(e.ClrType));
-                  });
-
-        private static LambdaExpression DeletableFilterExpression(Type entityType)
+        private static LambdaExpression? BuildFilterExpression(Type entityType)
         {
             var parameter = Expression.Parameter(entityType, "e");
-            var isDeletedProperty = Expression.Property(parameter, nameof(IDeletableEntity.IsDeleted));
-            var isDeletedFalse = Expression.Equal(isDeletedProperty, Expression.Constant(false));
 
-            return Expression.Lambda(isDeletedFalse, parameter);
-        }
+            Expression? combinedFilter = null;
 
-        private static LambdaExpression ApprovableFilterExpression(Type entityType)
-        {
-            var parameter = Expression.Parameter(entityType, "e");
-            var isApprovedProperty = Expression.Property(parameter, nameof(IApprovableEntity.IsApproved));
-            var isApprovedFalse = Expression.Equal(isApprovedProperty, Expression.Constant(true));
+            if (typeof(IDeletableEntity).IsAssignableFrom(entityType))
+            {
+                var isDeletedProperty = Expression.Property(parameter, nameof(IDeletableEntity.IsDeleted));
+                var isNotDeleted = Expression.Equal(isDeletedProperty, Expression.Constant(false));
+                combinedFilter = isNotDeleted;
+            }
 
-            return Expression.Lambda(isApprovedFalse, parameter);
+            if (typeof(IApprovableEntity).IsAssignableFrom(entityType))
+            {
+                var isApprovedProperty = Expression.Property(parameter, nameof(IApprovableEntity.IsApproved));
+                var isApproved = Expression.Equal(isApprovedProperty, Expression.Constant(true));
+
+                combinedFilter = combinedFilter == null
+                    ? isApproved
+                    : Expression.AndAlso(combinedFilter, isApproved);
+            }
+
+            return combinedFilter == null
+                ? null
+                : Expression.Lambda(combinedFilter, parameter);
         }
     }
 }

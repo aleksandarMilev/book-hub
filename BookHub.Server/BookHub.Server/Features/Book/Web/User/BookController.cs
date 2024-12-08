@@ -24,13 +24,13 @@
         public async Task<ActionResult<IEnumerable<BookServiceModel>>> TopThree()
           => this.Ok(await this.service.TopThreeAsync());
 
-        [HttpGet]
-        [Route(ApiRoutes.ByGenre + Id)]
+        [HttpGet(ApiRoutes.ByGenre + Id)]
         public async Task<ActionResult<PaginatedModel<BookServiceModel>>> ByGenre(
             int id,
             int page = DefaultPageIndex,
             int pageSize = DefaultPageSize) => this.Ok(await this.service.ByGenreAsync(id, page, pageSize));
 
+        [AllowAnonymous]
         [HttpGet(Id)]
         public async Task<ActionResult<BookDetailsServiceModel>> Details(int id)
             => this.Ok(await this.service.DetailsAsync(id));

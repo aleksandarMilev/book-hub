@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
@@ -13,10 +13,12 @@ import {
     MDBInput
 } from 'mdb-react-ui-kit'
 
-import { routes } from '../../../common/constants/api'
 import * as useBook from '../../../hooks/useBook'
 import * as useAuthor from '../../../hooks/useAuthor'
 import * as useGenre from '../../../hooks/useGenre'
+import { routes } from '../../../common/constants/api'
+import { useMessage } from '../../../contexts/messageContext'
+import { UserContext } from '../../../contexts/userContext'
 
 import AuthorSearch from './author-search/AuthorSearch'
 import GenreSearch from './genre-search/GenreSearch' 
@@ -27,6 +29,7 @@ import './BookForm.css'
 
 export default function BookForm({ bookData = null, isEditMode = false }) {
     const navigate = useNavigate()
+    const { isAdmin } = useContext(UserContext)
     
     const createHandler = useBook.useCreate()
     const editHandler = useBook.useEdit()
@@ -35,6 +38,8 @@ export default function BookForm({ bookData = null, isEditMode = false }) {
     const { genres, isFetching: genresLoading } = useGenre.useGenres()
 
     const [selectedGenres, setSelectedGenres] = useState([])
+
+    const { showMessage } = useMessage()
 
     useEffect(() => {
         if (bookData && bookData.genres) {
@@ -68,7 +73,7 @@ export default function BookForm({ bookData = null, isEditMode = false }) {
             .required('You should provide a long description!'),
         genres: Yup
             .array()
-            .min(1, 'At least one genre is required')
+            .min(isEditMode ? 0 : 1, 'At least one genre is required')
             .required('Genres are required'), 
         publishedDate: Yup
             .date()
@@ -83,26 +88,37 @@ export default function BookForm({ bookData = null, isEditMode = false }) {
             publishedDate: bookData?.publishedDate || '',
             shortDescription: bookData?.shortDescription || '',
             longDescription: bookData?.longDescription || '',
-            genres: selectedGenres.map(g => g.id)
+            genres: bookData?.genres.map(g => g.id) || selectedGenres.map(g => g.id)
         },
         validationSchema,
-        onSubmit: async (values, { setErrors }) => {
+        onSubmit: async (values) => {
             try {
                 if (isEditMode) {
                     const isSuccessfullyEdited = await editHandler(bookData.id, { ...values }) 
 
                     if(isSuccessfullyEdited){
+                        showMessage(`${bookData.title} was successfully edited!`, true)
                         navigate(routes.book + `/${bookData.id}`)
                     }
                 } else {
                     const bookId = await createHandler(values)
 
-                    if (bookId) {
-                        navigate(routes.book + `/${bookId}`)
+                    if(bookId){
+                        showMessage(
+                            isAdmin
+                                ? "Book successfully created!"
+                                : "Thank you for being part of our community! Our admin team will process your booking soon.",
+                                true
+                        )
+
+                        navigate(isAdmin ? routes.book + `/${bookId}` : routes.home)
                     }
                 }
-            } catch (error) {
-                setErrors({ submit: 'my error message' })
+            } catch {
+                showMessage(
+                    "Something went wrong. Please, try again.",
+                    false
+                )
             }
         }
     })

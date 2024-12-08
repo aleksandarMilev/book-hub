@@ -1,6 +1,6 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { FaBook, FaBookmark, FaClock, FaEdit, FaTrash } from 'react-icons/fa'
+import { FaEdit, FaTrash } from 'react-icons/fa'
 import { format } from 'date-fns'
 
 import * as bookApi from '../../../../api/bookApi'
@@ -20,10 +20,8 @@ export default function BookFullInfo({
     setShowFullDescription,
     isCreator,
     deleteHandler,
-    refreshBook,
     id
 }) {
-    const navigate = useNavigate()
 
     const { isAdmin, token, hasProfile } = useContext(UserContext)
     const { showMessage } = useMessage()
@@ -31,49 +29,6 @@ export default function BookFullInfo({
     const formattedDate = book.publishedDate 
         ? format(new Date(book.publishedDate), 'MMMM dd, yyyy')
         : 'Publication date unknown'
-
-    const approveHandler = async () => {
-        try {
-            await bookApi.approveAsync(book.id, token)
-            refreshBook()
-        } catch (error) {
-            navigate(routes.badRequest, { state: { message: error.message } })
-        }
-    }
-
-    const rejectHandler = async () => {
-        try {
-            await bookApi.rejectAsync(book.id, token)
-            navigate(routes.home)
-        } catch (error) {
-            navigate(routes.badRequest, { state: { message: error.message } })
-        }
-    }
-
-    const handleAddToList = async (status, title) => {
-        try {
-            const error = await readingListApi.addInListAsync(book.id, status, token)
-            if(error){
-                showMessage(error.errorMessage, false)
-            } else{
-                showMessage(`You have successfuly added ${title} in your collection!`, true)
-            }
-
-            refreshBook()
-        } catch (error) {
-            navigate(routes.badRequest, { state: { message: error.message } })
-        }
-    }
-
-    const handleRemoveFromList = async (status, title) => {
-        try {
-            await readingListApi.removeFromListAsync(book.id, status, token)
-            refreshBook()
-            showMessage(`You have successfuly removed ${title} from your collection!`, true)
-        } catch (error) {
-            navigate(routes.badRequest, { state: { message: error.message } })
-        }
-    }
 
     return (
         <div className="book-info-card shadow-lg p-4">
@@ -114,7 +69,7 @@ export default function BookFullInfo({
                             {showFullDescription ? book.longDescription : `${descriptionPreview}...`}
                         </p>
                         <button
-                            onClick={() => setShowFullDescription((prev) => !prev)}
+                            onClick={() => setShowFullDescription(prev => !prev)}
                             className="btn btn-link p-0 text-decoration-none text-primary show-more-button"
                         >
                             {showFullDescription ? 'Show Less' : 'Show More'}
@@ -123,116 +78,156 @@ export default function BookFullInfo({
                             Published: {formattedDate}
                         </p>
                         <div className="read-buttons-section mt-4">
-                            <h5>Manage Your Reading List:</h5>
-                            {hasProfile ? (
-                                book.readingStatus === null ? (
-                                    <div className="d-flex gap-2 mt-2">
-                                        <button
-                                            className="btn btn-outline-success d-flex align-items-center gap-2"
-                                            onClick={() => handleAddToList(readingListStatus.read, book.title)}
-                                        >
-                                            <FaBook /> Read
-                                        </button>
-                                        <button
-                                            className="btn btn-outline-primary d-flex align-items-center gap-2"
-                                            onClick={() => handleAddToList(readingListStatus.toRead, book.title)}
-                                        >
-                                            <FaBookmark /> Want To Read
-                                        </button>
-                                        <button
-                                            className="btn btn-outline-warning d-flex align-items-center gap-2"
-                                            onClick={() => handleAddToList(readingListStatus.currentlyReading, book.title)}
-                                        >
-                                            <FaClock /> Currently Reading
-                                        </button>
-                                    </div>
-                                ) : (
-                                    <div className={`reading-status-message mt-3 ${book.readingStatus.toLowerCase()}`}>
-                                        {book.readingStatus.toLowerCase() === readingListStatus.read.toLowerCase() && (
-                                            <>
-                                                <p className="text-success">
-                                                    You have marked this book as <strong>Read</strong>.
-                                                </p>
-                                                <button
-                                                    className="btn btn-outline-danger d-flex align-items-center gap-2"
-                                                    onClick={() => handleRemoveFromList(readingListStatus.read, book.title)}
-                                                >
-                                                    Remove from your list
-                                                </button>
-                                            </>
-                                        )}
-                                        {book.readingStatus.toLowerCase() === readingListStatus.toRead.toLowerCase() && (
-                                            <>
-                                                <p className="text-success">
-                                                    You have that you <strong>Want To Read</strong> this book.
-                                                </p>
-                                                <button
-                                                    className="btn btn-outline-danger d-flex align-items-center gap-2"
-                                                    onClick={() => handleRemoveFromList(readingListStatus.toRead, book.title)}
-                                                >
-                                                    Done? Change status to Read!
-                                                </button>
-                                            </>
-                                        )}
-                                        {book.readingStatus.toLowerCase() === readingListStatus.currentlyReading.toLowerCase() && (
-                                            <>
-                                                <p className="text-success">
-                                                    You are currently <strong>Reading</strong> this book.
-                                                </p>
-                                                <button
-                                                    className="btn btn-outline-danger d-flex align-items-center gap-2"
-                                                    onClick={() => handleRemoveFromList(readingListStatus.currentlyReading, book.title)}
-                                                >
-                                                    Done? Change status to Read!
-                                                </button>
-                                            </>
-                                        )}
-                                    </div>
-                                )
-                            ) : (
-                                <Link 
-                                    className="create-profile-link"
-                                    to={routes.profile}
-                                >
-                                    Create Profile
-                                </Link>
-                            )}
+                        <div className="read-buttons-section mt-4">
+                            {isAdmin  
+                                ? (
+                                <ApproveRejectButtons
+                                    bookId={book.id}
+                                    initialIsApproved={book.isApproved}
+                                    token={token}
+                                    showMessage={showMessage}
+                                />
+                                ) : 
+                                    hasProfile 
+                                    ? (
+                                        <ReadingListButtons
+                                            bookId={book.id}
+                                            initialReadingStatus={book.readingStatus}
+                                            token={token}
+                                            showMessage={showMessage}
+                                        />
+                                    ) : (
+                                    <Link to={routes.profile}>Create Profile</Link>
+                                )}
+                        </div>
 
                         </div>
                         <div className="d-flex gap-2 mt-4">
                             {isCreator && (
-                                <>
-                                    <Link
-                                        to={`${routes.editBook}/${id}`}
-                                        className="btn btn-warning d-flex align-items-center gap-2"
-                                    >
-                                        <FaEdit /> Edit
-                                    </Link>
-                                    <button className="btn btn-danger d-flex align-items-center gap-2" onClick={deleteHandler}>
-                                        <FaTrash /> Delete
-                                    </button>
-                                </>
+                                <Link
+                                    to={`${routes.editBook}/${id}`}
+                                    className="btn btn-warning d-flex align-items-center gap-2"
+                                >
+                                    <FaEdit /> Edit
+                                </Link>
                             )}
-                            {(isAdmin && !book.isApproved) && (
-                                <>
-                                    <button
-                                        className="btn btn-success d-flex align-items-center gap-2"
-                                        onClick={approveHandler}
-                                    >
-                                        Approve
-                                    </button>
-                                    <button
-                                        className="btn btn-danger d-flex align-items-center gap-2"
-                                        onClick={rejectHandler}
-                                    >
-                                        Reject
-                                    </button>
-                                </>
+                            {(isCreator || isAdmin) && (
+                                <button className="btn btn-danger d-flex align-items-center gap-2" onClick={deleteHandler}>
+                                    <FaTrash /> Delete
+                                </button>
                             )}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    )
+}
+
+function ReadingListButtons({ bookId, initialReadingStatus, token, showMessage }) {
+    const [readingStatus, setReadingStatus] = useState(initialReadingStatus)
+
+    const handleAddToList = async (status) => {
+        try {
+            const error = await readingListApi.addInListAsync(bookId, status, token);
+            if (error) {
+                showMessage(error.errorMessage, false)
+            } else {
+                setReadingStatus(status)
+                showMessage(`You have successfully updated your reading list!`, true)
+            }
+        } catch (error) {
+            showMessage(`Error updating your reading list. Please try again!`, false)
+        }
+    }
+
+    const handleRemoveFromList = async () => {
+        try {
+            await readingListApi.removeFromListAsync(bookId, readingStatus, token)
+            setReadingStatus(null)
+            showMessage(`You have successfully removed the book from your list!`, true)
+        } catch (error) {
+            showMessage(`Error removing the book. Please try again!`, false)
+        }
+    }
+
+    if (!readingStatus) {
+        return (
+            <div className="d-flex gap-2">
+                <button
+                    className="btn btn-outline-success"
+                    onClick={() => handleAddToList(readingListStatus.read)}
+                >
+                    Mark as Read
+                </button>
+                <button
+                    className="btn btn-outline-primary"
+                    onClick={() => handleAddToList(readingListStatus.toRead)}
+                >
+                    Add to Want to Read
+                </button>
+                <button
+                    className="btn btn-outline-warning"
+                    onClick={() => handleAddToList(readingListStatus.currentlyReading)}
+                >
+                    Add to Currently Reading
+                </button>
+            </div>
+        )
+    }
+
+    return (
+        <div className="reading-status">
+            {readingStatus === readingListStatus.read && (
+                <p>You marked this book as <strong>Read</strong>.</p>
+            )}
+            {readingStatus === readingListStatus.toRead && (
+                <p>You added this book to <strong>Want to Read</strong>.</p>
+            )}
+            {readingStatus === readingListStatus.currentlyReading && (
+                <p>You are currently <strong>Reading</strong> this book.</p>
+            )}
+            <button className="btn btn-outline-danger" onClick={handleRemoveFromList}>
+                Remove from List
+            </button>
+        </div>
+    )
+}
+
+function ApproveRejectButtons({ bookId, initialIsApproved, token, showMessage }) {
+    const navigate = useNavigate()
+    const [isApproved, setIsApproved] = useState(initialIsApproved)
+
+    const approveHandler = async () => {
+        try {
+            await bookApi.approveAsync(bookId, token)
+            showMessage(`You have successfully approved the book!`, true)
+            setIsApproved(true)
+        } catch (error) {
+            showMessage(`Error approving the book. Please try again!`, false)
+        }
+    }
+
+    const rejectHandler = async () => {
+        try {
+            await bookApi.rejectAsync(bookId, token)
+            showMessage(`You have successfully rejected the book!`, true)
+            navigate(routes.home)
+        } catch (error) {
+            showMessage(`Error rejecting the book. Please try again!`, false)
+        }
+    }
+
+    return !isApproved ? (
+        <div className="d-flex gap-2">
+            <button className="btn btn-success d-flex align-items-center gap-2" onClick={approveHandler}>
+                Approve
+            </button>
+            <button className="btn btn-danger d-flex align-items-center gap-2" onClick={rejectHandler}>
+                Reject
+            </button>
+        </div>
+    ) : (
+        <p className="text-success">This book has been approved.</p>
     )
 }

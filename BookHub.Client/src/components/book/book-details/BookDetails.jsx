@@ -3,8 +3,8 @@ import { useParams, useNavigate, Link } from "react-router-dom"
 
 import * as bookApi from '../../../api/bookApi'
 import * as useBook from '../../../hooks/useBook'
-import { errors } from "../../../common/constants/messages"
 import { routes } from "../../../common/constants/api"
+import { useMessage } from "../../../contexts/messageContext"
 import { UserContext } from "../../../contexts/userContext"
 
 import BookFullInfo from './book-full-info/BookFullInfo'
@@ -24,8 +24,10 @@ export default function BookDetails() {
     const [showModal, setShowModal] = useState(false) 
     const [showFullDescription, setShowFullDescription] = useState(false)
 
-    const { userId, token, hasProfile } = useContext(UserContext)
+    const { userId, token, hasProfile, isAdmin } = useContext(UserContext)
     const { book, isFetching, refreshBook } = useBook.useGetFullInfo(id)
+
+    const { showMessage } = useMessage()
 
     const [isReviewCreated, setIsReviewCreated] = useState(false)
     const [isReviewEdited, setIsReviewEdited] = useState(false)
@@ -37,9 +39,10 @@ export default function BookDetails() {
             const success = await bookApi.deleteAsync(id, token)
             
             if(success){
+                showMessage(`${book?.title || 'This book'} was successfully deleted!`, true)
                 navigate(routes.book)
             } else {
-                navigate(routes.badRequest, { state: { message: errors.book.delete } })
+                showMessage(`Somehting went wrong while deleting ${book?.title || 'this book'}, please, try again!`, false)
             }
         } else {
             toggleModal()  
@@ -89,37 +92,38 @@ export default function BookDetails() {
                         id={id}
                     />
                     <AuthorIntroduction author={book.author} />
-                    {hasProfile ? (
-                        <>
-                            {!existingReview && (
-                                <CreateReview 
-                                    bookId={id}
-                                    refreshReviews={refreshBook}
-                                    setIsReviewCreated={setIsReviewCreated} 
-                                />
-                            )}
-                            {existingReview && (
-                                <EditReview 
-                                    bookId={id}
-                                    existingReview={existingReview}
-                                    setIsReviewEdited={setIsReviewEdited} 
-                                    refreshReviews={refreshBook}
-                                />
-                            )}
-                        </>
-                    ) : (
-                        <>
-                            <h3 className="create-review-heading">Create Review</h3>
-                            <div className="create-profile-container">
-                                <Link 
-                                    className="create-profile-link"
-                                    to={routes.profile}
-                                >
-                                    Create Profile
-                                </Link>
-                            </div>
-                        </>
-                    )}
+                    {!isAdmin && hasProfile 
+                        ? (
+                            <>
+                                {!existingReview && (
+                                    <CreateReview 
+                                        bookId={id}
+                                        refreshReviews={refreshBook}
+                                        setIsReviewCreated={setIsReviewCreated} 
+                                    />
+                                )}
+                                {existingReview && (
+                                    <EditReview 
+                                        bookId={id}
+                                        existingReview={existingReview}
+                                        setIsReviewEdited={setIsReviewEdited} 
+                                        refreshReviews={refreshBook}
+                                    />
+                                )}
+                                </>
+                        ) : (
+                            !isAdmin && <>
+                                <h3 className="create-review-heading">Create Review</h3>
+                                <div className="create-profile-container">
+                                    <Link 
+                                        className="create-profile-link"
+                                        to={routes.profile}
+                                    >
+                                        Create Profile
+                                    </Link>
+                                </div>
+                            </>
+                        )}
                    <div className="reviews-section mt-4 text-center">
                         <h5 className="reviews-title">Reviews</h5>
                         {book.reviews && book.reviews.length > 0 ? (

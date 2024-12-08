@@ -9,6 +9,6 @@ export default function EditBook() {
     const { book, isFetching } = useBook.useGetFullInfo(id)
 
     return isFetching 
-        ? <BookForm bookData={book} isEditMode={true} /> 
-        : <DefaultSpinner/ >
+        ? <DefaultSpinner/ >
+        : <BookForm bookData={book} isEditMode={true} /> 
 }
