@@ -2,9 +2,9 @@
 {
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
-    using Data;
     using Microsoft.EntityFrameworkCore;
     using Models;
+    using Server.Data;
 
     public class GenreService(
         BookHubDbContext data,

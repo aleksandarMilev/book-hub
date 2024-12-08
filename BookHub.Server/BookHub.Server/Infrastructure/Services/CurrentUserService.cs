@@ -4,7 +4,7 @@
 
     using Extensions;
 
-    using static Common.Constants.Constants;
+    using static BookHub.Server.Common.Constants;
 
     public class CurrentUserService(IHttpContextAccessor httpContext) : ICurrentUserService
     {

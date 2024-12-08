@@ -1,14 +1,12 @@
 ﻿namespace BookHub.Server.Features.Chat.Service
 {
     using AutoMapper;
-    using AutoMapper.QueryableExtensions;
-    using Data;
     using Data.Models;
     using Infrastructure.Services;
-    using Microsoft.EntityFrameworkCore;
+    using Server.Data;
     using Service.Models;
 
-    using static Common.Messages.Error.ChatMessage;
+    using static Common.ErrorMessage;
 
     public class ChatMessageService(
         BookHubDbContext data,
@@ -18,14 +16,6 @@
         private readonly BookHubDbContext data = data;
         private readonly ICurrentUserService userService = userService;
         private readonly IMapper mapper = mapper;
-
-        public async Task<IEnumerable<ChatMessageServiceModel>> AllForChatAsync(int chatId)
-            //=> await this.data
-            //    .ChatMessages
-            //    .Where(c => c.ChatId == chatId)
-            //    .ProjectTo<ChatMessageServiceModel>(this.mapper.ConfigurationProvider)
-            //    .ToListAsync();
-            => throw new NotImplementedException();
 
         public async Task<int> CreateAsync(CreateChatMessageServiceModel model)
         {
@@ -46,13 +36,16 @@
 
             if (message is null)
             {
-                return MessageNotFound;
+                return string.Format(DbEntityNotFound, nameof(ChatMessage), id);
             }
 
-            if (!this.userService.IsAdmin() &&
-               message.SenderId != this.userService.GetId())
+            if (message.SenderId != this.userService.GetId())
             {
-                return UnauthorizedMessageEdit;
+                return string.Format(
+                    UnauthorizedDbEntityAction,
+                    this.userService.GetUsername(),
+                    nameof(ChatMessage),
+                    id);
             }
 
             this.mapper.Map(model, message);
@@ -69,13 +62,16 @@
 
             if (message is null)
             {
-                return MessageNotFound;
+                return string.Format(DbEntityNotFound, nameof(ChatMessage), id);
             }
 
-            if (!this.userService.IsAdmin() &&
-               message.SenderId != this.userService.GetId())
+            if (message.SenderId != this.userService.GetId())
             {
-                return UnauthorizedMessageDelete;
+                return string.Format(
+                    UnauthorizedDbEntityAction,
+                    this.userService.GetUsername(),
+                    nameof(ChatMessage),
+                    id);
             }
 
             this.data.Remove(message);

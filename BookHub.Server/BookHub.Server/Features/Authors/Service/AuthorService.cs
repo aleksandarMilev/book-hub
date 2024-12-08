@@ -3,17 +3,17 @@
     using Areas.Admin.Service;
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
-    using Data;
     using Data.Models;
+    using Features.UserProfile.Data.Models;
     using Infrastructure.Extensions;
     using Infrastructure.Services;
     using Microsoft.EntityFrameworkCore;
     using Models;
     using Notification.Service;
+    using Server.Data;
     using UserProfile.Service;
 
-    using static Common.Constants.DefaultValues;
-    using static Common.Messages.Error.Author;
+    using static Common.ErrorMessage;
 
     public class AuthorService(
         BookHubDbContext data,
@@ -23,6 +23,10 @@
         IProfileService profileService,
         IMapper mapper) : IAuthorService
     {
+        private const string DefaultAuthorImageUrl = "https://famouswritingroutines.com/wp-content/uploads/2022/06/daily-word-counts-of-famous-authors-1140x761.jpg";
+        private const string UnknownNationalityName = "Unknown";
+        private const int TopThreeCount = 3;
+
         private readonly BookHubDbContext data = data;
         private readonly ICurrentUserService userService = userService;
         private readonly IAdminService adminService = adminService;
@@ -45,7 +49,7 @@
                 .Authors
                 .ProjectTo<AuthorServiceModel>(this.mapper.ConfigurationProvider)
                 .OrderByDescending(a => a.AverageRating)
-                .Take(3)
+                .Take(TopThreeCount)
                 .ToListAsync();
 
         public async Task<AuthorDetailsServiceModel?> DetailsAsync(int id)
@@ -95,17 +99,21 @@
         public async Task<Result> EditAsync(int id, CreateAuthorServiceModel model)
         {
             var author = await this.data
-                 .Authors
-                 .FindAsync(id);
+                .Authors
+                .FindAsync(id);
 
             if (author is null)
             {
-                return AuthorNotFound;
+                return string.Format(DbEntityNotFound, nameof(Author), id);
             }
 
-            if (author.CreatorId != this.userService.GetId()!)
+            if (author.CreatorId != this.userService.GetId())
             {
-                return UnauthorizedAuthorEdit;
+                return string.Format(
+                    UnauthorizedDbEntityAction,
+                    this.userService.GetUsername(),
+                    nameof(Author),
+                    id);
             }
 
             model.ImageUrl ??= DefaultAuthorImageUrl;
@@ -127,12 +135,17 @@
 
             if (author is null)
             {
-                return AuthorNotFound;
+                return string.Format(DbEntityNotFound, nameof(Author), id);
             }
 
-            if (author.CreatorId != this.userService.GetId()!)
+            if (author.CreatorId != this.userService.GetId() &&
+                !this.userService.IsAdmin())
             {
-                return UnauthorizedAuthorDelete;
+                return string.Format(
+                    UnauthorizedDbEntityAction,
+                    this.userService.GetUsername(),
+                    nameof(Author),
+                    id);
             }
 
             this.data.Remove(author);
@@ -151,7 +164,16 @@
 
             if (author is null)
             {
-                return AuthorNotFound;
+                return string.Format(DbEntityNotFound, nameof(Author), id);
+            }
+
+            if (!this.userService.IsAdmin())
+            {
+                return string.Format(
+                    UnauthorizedDbEntityAction,
+                    this.userService.GetUsername(),
+                    nameof(Author),
+                    id);
             }
 
             author.IsApproved = true;
@@ -182,7 +204,16 @@
 
             if (author is null)
             {
-                return AuthorNotFound;
+                return string.Format(DbEntityNotFound, nameof(Author), id);
+            }
+
+            if (!this.userService.IsAdmin())
+            {
+                return string.Format(
+                    UnauthorizedDbEntityAction,
+                    this.userService.GetUsername(),
+                    nameof(Author),
+                    id);
             }
 
             this.data.Remove(author);

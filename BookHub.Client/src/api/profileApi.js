@@ -56,7 +56,7 @@ export async function mineAsync(token) {
         }
     }
 
-    const url = baseUrl + routes.profile
+    const url = baseUrl + routes.mineProfile
     const response = await fetch(url, options)
 
     if(response.ok){

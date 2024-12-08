@@ -2,14 +2,15 @@
 {
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
-    using Data;
     using Data.Models;
+    using Features.UserProfile.Data.Models;
     using Infrastructure.Services;
     using Microsoft.EntityFrameworkCore;
     using Models;
+    using Server.Data;
     using UserProfile.Service;
 
-    using static Common.Messages.Error.Review;
+    using static Common.ErrorMessage;
 
     public class ReviewService(
         BookHubDbContext data,
@@ -76,22 +77,26 @@
 
             if (review is null)
             {
-                return ReviewNotFound;
+                return string.Format(DbEntityNotFound, nameof(Review), id);
             }
 
             var userId = this.userService.GetId()!;
 
             if (review.CreatorId != userId)
             {
-                return UnauthorizedReviewEdit;
+                return string.Format(
+                    UnauthorizedDbEntityAction,
+                    this.userService.GetUsername(),
+                    nameof(Review),
+                    id);
             }
-
-            await this.CalculateBookRatingAsync(model.BookId, model.Rating, review.Rating);
-            await this.CalculateAuthorRatingAsync(model.BookId, model.Rating, review.Rating);
 
             this.mapper.Map(model, review);
 
             await this.data.SaveChangesAsync();
+
+            await this.CalculateBookRatingAsync(model.BookId, model.Rating, review.Rating);
+            await this.CalculateAuthorRatingAsync(model.BookId, model.Rating, review.Rating);
 
             return true;
         }
@@ -104,21 +109,26 @@
 
             if (review is null)
             {
-                return ReviewNotFound;
+                return string.Format(DbEntityNotFound, nameof(Review), id);
             }
 
             var userId = this.userService.GetId()!;
 
-            if (review.CreatorId != userId)
+            if (review.CreatorId != userId &&
+                !this.userService.IsAdmin())
             {
-                return UnauthorizedReviewDelete;
+                return string.Format(
+                     UnauthorizedDbEntityAction,
+                     this.userService.GetUsername(),
+                     nameof(Review),
+                     id);
             }
-
-            await this.CalculateBookRatingAsync(review.BookId, 0, review.Rating, true);
-            await this.CalculateAuthorRatingAsync(review.BookId, 0, review.Rating, true);
 
             this.data.Remove(review);
             await this.data.SaveChangesAsync();
+
+            await this.CalculateBookRatingAsync(review.BookId, 0, review.Rating, true);
+            await this.CalculateAuthorRatingAsync(review.BookId, 0, review.Rating, true);
 
             return true;
         }
@@ -169,6 +179,8 @@
 
             book.AverageRating = newAverageRating;
             book.RatingsCount = newRatingsCount;
+
+            await this.data.SaveChangesAsync();
         }
 
         private async Task CalculateAuthorRatingAsync(int bookId, int newRating, int? oldRating = null, bool isDeleteMode = false)
@@ -204,6 +216,8 @@
 
             author.AverageRating = newAverageRating;
             author.RatingsCount = newRatingsCount;
+
+            await this.data.SaveChangesAsync();
         }
     }
 }

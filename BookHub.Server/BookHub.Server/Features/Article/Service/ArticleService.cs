@@ -1,19 +1,20 @@
 ﻿namespace BookHub.Server.Features.Article.Service
 {
     using AutoMapper;
-    using Data;
     using Data.Models;
     using Infrastructure.Services;
     using Models;
+    using Server.Data;
 
-    using static Common.Constants.DefaultValues;
-    using static Common.Messages.Error.Article;
+    using static Common.ErrorMessage;
 
     public class ArticleService(
         BookHubDbContext data,
         ICurrentUserService userService,
         IMapper mapper) : IArticleService
     {
+        private const string DefaultImageUrl = "https://img.freepik.com/free-photo/bookmark-books-arrangement-top-view_23-2149894335.jpg";
+
         private readonly BookHubDbContext data = data;
         private readonly ICurrentUserService userService = userService;
         private readonly IMapper mapper = mapper;
@@ -37,7 +38,7 @@
 
         public async Task<int> CreateAsync(CreateArticleServiceModel model)
         {
-            model.ImageUrl ??= DefaultArticleImageUrl;
+            model.ImageUrl ??= DefaultImageUrl;
 
             var article = this.mapper.Map<Article>(model);
 
@@ -55,15 +56,19 @@
 
             if (article is null)
             {
-                return ArticleNotFound;
+                return string.Format(DbEntityNotFound, nameof(Article), id);
             }
 
             if (!this.userService.IsAdmin())
             {
-                return UnauthorizedArticleEdit;
+                return string.Format(
+                    UnauthorizedDbEntityAction,
+                    this.userService.GetUsername(),
+                    nameof(Article),
+                    id);
             }
 
-            model.ImageUrl ??= DefaultArticleImageUrl;
+            model.ImageUrl ??= DefaultImageUrl;
 
             this.mapper.Map(model, article);
 
@@ -80,12 +85,16 @@
 
             if (article is null)
             {
-                return ArticleNotFound;
+                return string.Format(DbEntityNotFound, nameof(Article), id);
             }
 
             if (!this.userService.IsAdmin())
             {
-                return UnauthorizedArticleEdit;
+                return string.Format(
+                    UnauthorizedDbEntityAction,
+                    this.userService.GetUsername(),
+                    nameof(Article),
+                    id);
             }
 
             this.data.Remove(article);

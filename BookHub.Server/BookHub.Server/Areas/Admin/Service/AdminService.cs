@@ -1,9 +1,10 @@
 ﻿namespace BookHub.Server.Areas.Admin.Service
 {
+    using BookHub.Server.Features.Identity.Data.Models;
     using Data.Models;
     using Microsoft.AspNetCore.Identity;
 
-    using static Common.Constants.Constants;
+    using static BookHub.Server.Common.Constants;
 
     public class AdminService(UserManager<User> userManager) : IAdminService
     {

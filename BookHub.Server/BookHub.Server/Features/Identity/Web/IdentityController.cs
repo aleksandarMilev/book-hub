@@ -7,8 +7,8 @@
     using Models;
     using Service;
 
-    using static Common.Constants.Constants;
-    using static Common.Messages.Error.Identity;
+    using static Common.Constants;
+    using static ErrorMessage;
 
     public class IdentityController(
         IIdentityService service,

@@ -1,8 +1,8 @@
 ﻿namespace BookHub.Server.Features.Authors.Service
 {
-    using Data;
     using Microsoft.EntityFrameworkCore;
     using Models;
+    using Server.Data;
 
     public class NationalityService(BookHubDbContext data) : INationalityService
     {

@@ -3,15 +3,15 @@
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using Book.Service.Models;
-    using Data;
     using Data.Models;
-    using Data.Models.Enums;
+    using Features.UserProfile.Data.Models;
     using Infrastructure.Services;
     using Microsoft.Data.SqlClient;
     using Microsoft.EntityFrameworkCore;
+    using Server.Data;
     using UserProfile.Service;
 
-    using static Common.Messages.Error.ReadingList;
+    using static ErrorMessage;
 
     public class ReadingListService(
         BookHubDbContext data,
@@ -118,7 +118,7 @@
                 return statusEnum;
             }
 
-            throw new InvalidOperationException("Invalid reading list status type!");
+            throw new ReadingListTypeException(status);
         }
 
         private static string GetPropertyName(ReadingListStatus status)
@@ -127,7 +127,7 @@
                 ReadingListStatus.Read => nameof(UserProfile.ReadBooksCount),
                 ReadingListStatus.ToRead => nameof(UserProfile.ToReadBooksCount),
                 ReadingListStatus.CurrentlyReading => nameof(UserProfile.CurrentlyReadingBooksCount),
-                _ => throw new InvalidOperationException("Invalid reading list status type!")
+                _ => throw new ReadingListTypeException(status.ToString())
             };
     }
 }

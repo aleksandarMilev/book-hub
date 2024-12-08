@@ -2,16 +2,16 @@
 {
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
-    using Data;
     using Data.Models;
     using Infrastructure.Services;
     using Microsoft.Data.SqlClient;
     using Microsoft.EntityFrameworkCore;
-    using Service.Models;
     using Notification.Service;
+    using Server.Data;
+    using Server.Data.Models.Shared.ChatUser;
+    using Service.Models;
 
-    using static Common.Constants.DefaultValues;
-    using static Common.Messages.Error.Chat;
+    using static Common.ErrorMessage;
 
     public class ChatService(
         BookHubDbContext data,
@@ -19,6 +19,8 @@
         INotificationService notificationService,
         IMapper mapper) : IChatService
     {
+        private const string DefaultImageUrl = "https://pushfestival.ca/2015/wp-content/uploads/blogger/-rqsdeqC0mpU/UG5c0Xwk9hI/AAAAAAAAA7g/Q9psMuS468M/s1600/LiesbethBernaerts_HumanLibrary.jpg";
+
         private readonly BookHubDbContext data = data;
         private readonly ICurrentUserService userService = userService;
         private readonly INotificationService notificationService = notificationService;
@@ -63,7 +65,7 @@
         {
             var creatorId = this.userService.GetId()!;
 
-            model.ImageUrl ??= DefaultChatImageUrl;
+            model.ImageUrl ??= DefaultImageUrl;
 
             var chat = this.mapper.Map<Chat>(model);
             chat.CreatorId = creatorId;
@@ -76,13 +78,11 @@
             return chat.Id;
         }
 
-        public async Task<(int, string)> InviteUserToChatAsync(int chatId, string chatName, string userId)
+        public async Task InviteUserToChatAsync(int chatId, string chatName, string userId)
         {
-            var result = await this.CreateChatUserEntityAsync(chatId, userId, false);
+            _ = await this.CreateChatUserEntityAsync(chatId, userId, false);
 
-            _ = await this.notificationService.CreateOnChatInvitationAsync(chatId, chatName, userId);
-
-            return result;
+            await this.notificationService.CreateOnChatInvitationAsync(chatId, chatName, userId);
         }
 
         public async Task<Result> AcceptAsync(int chatId, string chatName, string chatCreatorId)
@@ -91,12 +91,11 @@
 
             var mapEntity = await this.data
                 .ChatsUsers
-                .FirstOrDefaultAsync(cu => cu.UserId == invitedUserId && cu.ChatId == chatId)
-                ?? throw new InvalidOperationException();
+                .FirstOrDefaultAsync(cu => cu.UserId == invitedUserId && cu.ChatId == chatId);
 
             if (mapEntity is null)
             {
-                return "Map entity not found!";
+                return string.Format(DbEntityNotFound, nameof(ChatUser), $"{chatId}-{invitedUserId}");
             }
 
             mapEntity.HasAccepted = true;
@@ -118,12 +117,11 @@
 
             var mapEntity = await this.data
                .ChatsUsers
-               .FirstOrDefaultAsync(cu => cu.UserId == invitedUserId && cu.ChatId == chatId)
-               ?? throw new InvalidOperationException();
+               .FirstOrDefaultAsync(cu => cu.UserId == invitedUserId && cu.ChatId == chatId);
 
             if (mapEntity is null)
             {
-                return "Map entity not found!";
+                return string.Format(DbEntityNotFound, nameof(ChatUser), $"{chatId}-{invitedUserId}");
             }
 
             this.data.Remove(mapEntity);
@@ -147,7 +145,7 @@
 
             if (mapEntity is null)
             {
-                return "Map entity not found!";
+                return string.Format(DbEntityNotFound, nameof(ChatUser), $"{chatId}-{userToRemoveId}");
             }
 
             this.data.Remove(mapEntity);
@@ -164,14 +162,20 @@
 
             if (chat is null)
             {
-                return ChatNotFound;
+                return string.Format(DbEntityNotFound, nameof(Chat), id);
             }
 
-            if (!this.userService.IsAdmin() &&
-                chat.CreatorId != this.userService.GetId())
+            if (chat.CreatorId != this.userService.GetId() &&
+                !this.userService.IsAdmin())
             {
-                return UnauthorizedChatEdit;
+                return string.Format(
+                    UnauthorizedDbEntityAction,
+                    this.userService.GetUsername(),
+                    nameof(ChatUser), 
+                    id);
             }
+
+            model.ImageUrl ??= DefaultImageUrl;
 
             this.mapper.Map(model, chat);
             await this.data.SaveChangesAsync();
@@ -188,13 +192,17 @@
 
             if (chat is null)
             {
-                return ChatNotFound;
+                return string.Format(DbEntityNotFound, nameof(Chat), id);
             }
 
-            if (!this.userService.IsAdmin() && 
-                chat.CreatorId != this.userService.GetId())
+            if (chat.CreatorId != this.userService.GetId() &&
+                !this.userService.IsAdmin())
             {
-                return UnauthorizedChatDelete;
+                return string.Format(
+                    UnauthorizedDbEntityAction,
+                    this.userService.GetUsername(),
+                    nameof(ChatUser),
+                    id);
             }
 
             this.data.Remove(chat);
@@ -203,7 +211,7 @@
             return true;
         }
 
-        private async Task<(int, string)> CreateChatUserEntityAsync(int chatId, string userId, bool hasAccepted)
+        private async Task<bool> CreateChatUserEntityAsync(int chatId, string userId, bool hasAccepted)
         {
             var mapEntity = new ChatUser()
             {
@@ -217,11 +225,11 @@
                 this.data.Add(mapEntity);
                 await this.data.SaveChangesAsync();
 
-                return (chatId, userId);
+                return true;
             }
             catch (SqlException)
             {
-                throw new InvalidOperationException("This user is already a participant in the chat!");
+                return false;
             }
         }
     }

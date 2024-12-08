@@ -2,15 +2,14 @@
 {
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
-    using Data;
     using Data.Models;
     using Infrastructure.Services;
     using Microsoft.EntityFrameworkCore;
+    using Server.Data;
     using Service.Models;
 
-    using static Common.Messages.Notifications;
-    using static Common.Messages.Error.Notification;
-    using Humanizer.Localisation;
+    using static Messages;
+    using static Common.ErrorMessage;
 
     public class NotificationService(
         BookHubDbContext data,
@@ -148,7 +147,7 @@
 
             if (notification is null)
             {
-                return NotificationNotFound;
+                return string.Format(DbEntityNotFound, nameof(Notification), id);
             }
 
             notification.IsRead = true;
@@ -165,7 +164,7 @@
 
             if (notification is null)
             {
-                return NotificationNotFound;
+                return string.Format(DbEntityNotFound, nameof(Notification), id);
             }
 
             this.data.Remove(notification);

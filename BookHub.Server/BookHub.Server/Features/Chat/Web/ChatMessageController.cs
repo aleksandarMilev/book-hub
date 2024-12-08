@@ -8,7 +8,7 @@
     using Service;
     using Service.Models;
 
-    using static Common.Constants.ApiRoutes.CommonRoutes;
+    using static Server.Common.ApiRoutes;
 
     public class ChatMessageController(
         IChatMessageService service,

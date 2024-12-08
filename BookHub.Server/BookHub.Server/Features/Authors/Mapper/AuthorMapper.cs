@@ -2,8 +2,10 @@
 {
     using AutoMapper;
     using Book.Service.Models;
-    using BookHub.Server.Features.Genre.Service.Models;
     using Data.Models;
+    using Features.Book.Data.Models;
+    using Features.Genre.Data.Models;
+    using Features.Genre.Service.Models;
     using Service.Models;
     using Web.Models;
 

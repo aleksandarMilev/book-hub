@@ -4,9 +4,9 @@
     {
         public const string NotJoined = "not-joined/";
 
-        public const string Access = "access/";
+        public const string Access = "access/{userId}/";
 
-        public const string Invited = "invited/";
+        public const string Invited = "invited/{userId}/";
 
         public const string Invite = "invite/";
 

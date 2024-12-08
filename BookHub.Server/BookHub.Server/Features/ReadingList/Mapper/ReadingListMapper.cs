@@ -4,6 +4,8 @@
     using Book.Service.Models;
     using Genre.Service.Models;
     using Data.Models;
+    using BookHub.Server.Features.Book.Data.Models;
+    using BookHub.Server.Features.Genre.Data.Models;
 
     public class ReadingListMapper : Profile
     {

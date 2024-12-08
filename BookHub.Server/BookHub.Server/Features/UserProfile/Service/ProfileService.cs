@@ -2,14 +2,15 @@
 {
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
-    using Data;
+    using BookHub.Server.Common;
     using Data.Models;
     using Infrastructure.Services;
     using Microsoft.EntityFrameworkCore;
     using Models;
+    using Server.Data;
 
-    using static Common.Messages.Error.Profile;
-    using static Common.Constants.Validation.Profile;
+    using static Common.ErrorMessage;
+    using static Shared.ValidationConstants;
 
     public class ProfileService(
         BookHubDbContext data,
@@ -75,13 +76,15 @@
 
         public async Task<Result> EditAsync(CreateProfileServiceModel model)
         {
+            var userId = this.userService.GetId();
+
             var profile = await this.data
                  .Profiles
-                 .FindAsync(this.userService.GetId()!);
+                 .FindAsync(userId);
 
             if (profile is null)
             {
-                return ProfileNotFound;
+                return string.Format(DbEntityNotFound, nameof(UserProfile), userId);
             }
 
             this.mapper.Map(model, profile);
@@ -93,13 +96,15 @@
 
         public async Task<Result> DeleteAsync()
         {
+            var userId = this.userService.GetId();
+
             var profile = await this.data
                 .Profiles
-                .FindAsync(this.userService.GetId()!);
+                .FindAsync(userId);
 
             if (profile is null)
             {
-                return ProfileNotFound;
+                return string.Format(DbEntityNotFound, nameof(UserProfile), userId);
             }
 
             this.data.Remove(profile);
@@ -116,11 +121,11 @@
             var profile = await this.data
                .Profiles
                .FindAsync(userId)
-               ?? throw new InvalidOperationException(ProfileNotFound);
+               ?? throw new DbEntityNotFoundException<string>(nameof(UserProfile), userId);
 
             var property = typeof(UserProfile)
                 .GetProperty(propName)
-                ?? throw new InvalidOperationException($"{propName} not found!");
+                ?? throw new ArgumentException($"{propName}");
 
             var currentValue = (int)property.GetValue(profile)!;
             var updatedValue = updateFunc(currentValue);

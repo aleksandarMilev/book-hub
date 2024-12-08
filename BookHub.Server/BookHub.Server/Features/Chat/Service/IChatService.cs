@@ -18,7 +18,7 @@
 
         Task<int> CreateAsync(CreateChatServiceModel model);
 
-        Task<(int, string)> InviteUserToChatAsync(int chatId, string chatName, string userId);
+        Task InviteUserToChatAsync(int chatId, string chatName, string userId);
 
         Task<Result> AcceptAsync(
             int chatId,

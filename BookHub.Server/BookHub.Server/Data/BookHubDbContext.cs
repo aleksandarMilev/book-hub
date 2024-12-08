@@ -3,12 +3,23 @@
     using System.Linq.Expressions;
     using System.Reflection;
 
+    using Data.Models.Shared.BookGenre;
+    using Data.Models.Shared.ChatUser;
+    using Features.Article.Data.Models;
+    using Features.Authors.Data.Models;
+    using Features.Book.Data.Models;
+    using Features.Chat.Data.Models;
+    using Features.Genre.Data.Models;
+    using Features.Identity.Data.Models;
+    using Features.Notification.Data.Models;
+    using Features.ReadingList.Data.Models;
+    using Features.Review.Data.Models;
+    using Features.UserProfile.Data.Models;
     using Infrastructure.Services;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
-    using Models;
     using Models.Base;
-
+   
     public class BookHubDbContext(
         DbContextOptions<BookHubDbContext> options, 
         ICurrentUserService userService) : IdentityDbContext<User>(options)
@@ -31,8 +42,6 @@
 
         public DbSet<Vote> Votes { get; init; }
 
-        public DbSet<Reply> Replies { get; init; }
-
         public DbSet<UserProfile> Profiles { get; init; }
 
         public DbSet<Article> Articles { get; init; }
@@ -48,7 +57,6 @@
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
             this.ApplyAuditInfo();
-
 
             return base.SaveChanges(acceptAllChangesOnSuccess);
         }

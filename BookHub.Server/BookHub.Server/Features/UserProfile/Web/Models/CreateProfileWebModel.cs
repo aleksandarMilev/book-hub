@@ -2,7 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    using static Common.Constants.Validation.Profile;
+    using static Shared.ValidationConstants;
 
     public class CreateProfileWebModel
     {

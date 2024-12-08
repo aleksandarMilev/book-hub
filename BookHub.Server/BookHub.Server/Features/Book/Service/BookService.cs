@@ -2,20 +2,19 @@
 {
     using Areas.Admin.Service;
     using AutoMapper;
-    using AutoMapper.QueryableExtensions;
-    using BookHub.Server.Features.Search.Service.Models;
-    using Data;
     using Data.Models;
+    using Features.UserProfile.Data.Models;
     using Infrastructure.Extensions;
     using Infrastructure.Services;
     using Mapper;
     using Microsoft.EntityFrameworkCore;
     using Models;
     using Notification.Service;
+    using Server.Data;
+    using Server.Data.Models.Shared.BookGenre;
     using UserProfile.Service;
 
-    using static Common.Constants.DefaultValues;
-    using static Common.Messages.Error.Book;
+    using static Common.ErrorMessage;
 
     public class BookService(
         BookHubDbContext data,
@@ -25,6 +24,10 @@
         IProfileService profileService,
         IMapper mapper) : IBookService
     {
+        private const string DefaultImageUrl = "https://images.alphacoders.com/115/1159192.jpg";
+        private const int TopThreeBooksCount = 3;
+        private const string OtherGenreName = "Other";
+
         private readonly BookHubDbContext data = data;
         private readonly ICurrentUserService userService = userService;
         private readonly IAdminService adminService = adminService;
@@ -37,7 +40,7 @@
                 .Books
                 .MapToServiceModel()
                 .OrderByDescending(b => b.AverageRating)
-                .Take(3)
+                .Take(TopThreeBooksCount)
                 .ToListAsync();
 
         public async Task<PaginatedModel<BookServiceModel>> ByGenreAsync(int genreId, int page, int pageSize)
@@ -76,7 +79,7 @@
 
         public async Task<int> CreateAsync(CreateBookServiceModel model)
         {
-            model.ImageUrl ??= DefaultBookImageUrl;
+            model.ImageUrl ??= DefaultImageUrl;
 
             var book = this.mapper.Map<Book>(model);
             book.CreatorId = this.userService.GetId();
@@ -114,15 +117,19 @@
 
             if (book is null)
             {
-                return BookNotFound;
+                return string.Format(DbEntityNotFound, nameof(Book), id);
             }
 
             if (book.CreatorId != this.userService.GetId()!)
             {
-                return UnauthorizedBookEdit;
+                return string.Format(
+                    UnauthorizedDbEntityAction,
+                    this.userService.GetUsername(),
+                    nameof(Book),
+                    id);
             }
 
-            model.ImageUrl ??= DefaultBookImageUrl;
+            model.ImageUrl ??= DefaultImageUrl;
             this.mapper.Map(model, book);
             book.AuthorId = await this.MapAuthorToBookAsync(model.AuthorId);
 
@@ -141,12 +148,17 @@
 
             if (book is null)
             {
-                return BookNotFound;
+                return string.Format(DbEntityNotFound, nameof(Book), id);
             }
 
-            if (book.CreatorId != this.userService.GetId()!)
+            if (book.CreatorId != this.userService.GetId()! &&
+                !this.userService.IsAdmin())
             {
-                return UnauthorizedBookDelete;
+                return string.Format(
+                    UnauthorizedDbEntityAction,
+                    this.userService.GetUsername(),
+                    nameof(Book),
+                    id);
             }
 
             this.data.Remove(book);
@@ -165,7 +177,7 @@
 
             if (book is null)
             {
-                return BookNotFound;
+                return string.Format(DbEntityNotFound, nameof(Book), id);
             }
 
             book.IsApproved = true;
@@ -196,7 +208,7 @@
 
             if (book is null)
             {
-                return BookNotFound;
+                return string.Format(DbEntityNotFound, nameof(Book), id);
             }
 
             this.data.Remove(book);

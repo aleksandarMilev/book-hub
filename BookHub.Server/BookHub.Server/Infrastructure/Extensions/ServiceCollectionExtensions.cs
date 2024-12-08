@@ -2,7 +2,7 @@
 {
     using System.Reflection;
     using System.Text;
-
+    using BookHub.Server.Features.Identity.Data.Models;
     using Data;
     using Data.Models;
     using Filters;
@@ -13,10 +13,12 @@
     using Microsoft.OpenApi.Models;
     using Services.ServiceLifetimes;
 
-    using static Common.Constants.Constants;
-
     public static class ServiceCollectionExtensions
     {
+        private const int AccountLockoutTimeSpan = 15;
+
+        private const int MaxFailedLoginAttempts = 3;
+
         public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
             => services
                 .AddDbContext<BookHubDbContext>(options =>

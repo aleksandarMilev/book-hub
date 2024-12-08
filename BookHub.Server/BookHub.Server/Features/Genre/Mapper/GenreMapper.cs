@@ -3,6 +3,7 @@
     using AutoMapper;
     using Book.Service.Models;
     using Data.Models;
+    using Features.Book.Data.Models;
     using Service.Models;
 
     public class GenreMapper : Profile

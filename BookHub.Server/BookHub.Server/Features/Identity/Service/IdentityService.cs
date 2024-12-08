@@ -6,10 +6,14 @@
 
     using Microsoft.IdentityModel.Tokens;
 
-    using static Common.Constants.Constants;
+    using static BookHub.Server.Common.Constants;
 
     public class IdentityService : IIdentityService
     {
+        private const int DefaultTokenExpirationTime = 7;
+
+        private const int ExtendedTokenExpirationTime = 30;
+
         public string GenerateJwtToken(
             string appSettingsSecret,
             string userId,

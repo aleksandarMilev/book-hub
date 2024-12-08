@@ -3,6 +3,7 @@
     using AutoMapper;
     using Data.Models;
     using Service.Models;
+    using UserProfile.Data.Models;
     using UserProfile.Service.Models;
     using Web.Models;
 

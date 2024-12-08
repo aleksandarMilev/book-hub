@@ -6,8 +6,8 @@
     using Service;
     using Service.Models;
 
-    using static Common.Constants.DefaultValues;
-    using static Common.Constants.ApiRoutes.CommonRoutes;
+    using static Server.Common.ApiRoutes;
+    using static Server.Common.DefaultValues;
 
     [Authorize]
     public class NotificationController(INotificationService service) : ApiController
@@ -18,7 +18,6 @@
         public async Task<ActionResult<IEnumerable<NotificationServiceModel>>> All(
            int pageIndex = DefaultPageIndex,
            int pageSize = DefaultPageSize) => this.Ok(await this.service.AllAsync(pageIndex, pageSize));
-
 
         [HttpGet(ApiRoutes.Last)]
         public async Task<ActionResult<IEnumerable<NotificationServiceModel>>> LastThree()

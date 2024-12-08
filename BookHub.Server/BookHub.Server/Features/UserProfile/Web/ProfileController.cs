@@ -1,5 +1,4 @@
-﻿#pragma warning disable ASP0023 
-namespace BookHub.Server.Features.UserProfile.Web
+﻿namespace BookHub.Server.Features.UserProfile.Web
 {
     using AutoMapper;
     using Infrastructure.Extensions;
@@ -9,7 +8,7 @@ namespace BookHub.Server.Features.UserProfile.Web
     using Service;
     using Service.Models;
 
-    using static Common.Constants.ApiRoutes.CommonRoutes;
+    using static Server.Common.ApiRoutes;
 
     [Authorize]
     public class ProfileController(

@@ -1,12 +1,13 @@
 ﻿namespace BookHub.Server.Infrastructure.Extensions
 {
+    using BookHub.Server.Features.Identity.Data.Models;
     using Data;
     using Data.Models;
     using Features.Chat.Web;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
 
-    using static Common.Constants.Constants;
+    using static BookHub.Server.Common.Constants;
 
     public static class AppBuilderExtensions
     {

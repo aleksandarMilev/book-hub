@@ -9,7 +9,7 @@
     using Service;
     using Service.Models;
 
-    using static Common.Constants.ApiRoutes.CommonRoutes;
+    using static Server.Common.ApiRoutes;
 
     [Authorize]
     public class ChatController(
@@ -27,11 +27,11 @@
         public async Task<ActionResult<IEnumerable<ChatServiceModel>>> NotJoined(string userId)
             => this.Ok(await this.service.NotJoinedAsync(userId));
 
-        [HttpGet(Id + ApiRoutes.Access + Id)]
+        [HttpGet(Id + ApiRoutes.Access)]
         public async Task<ActionResult<bool>> CanAccessChat(int chatId, string userId)
             => this.Ok(await this.service.CanAccessChatAsync(chatId, userId));
 
-        [HttpGet(Id + ApiRoutes.Invited + Id)]
+        [HttpGet(Id + ApiRoutes.Invited)]
         public async Task<ActionResult<bool>> IsInvited(int chatId, string userId)
             => this.Ok(await this.service.IsInvitedAsync(chatId, userId));
 
@@ -47,21 +47,15 @@
         [HttpPost(Id + ApiRoutes.Invite)]
         public async Task<ActionResult<(int, string)>> InviteUserToChat(int chatId, AddUserToChatWebModel model)
         {
-            var id = await this.service.InviteUserToChatAsync(
-                chatId,
-                model.ChatName,
-                model.UserId);
+            await this.service.InviteUserToChatAsync(chatId, model.ChatName, model.UserId);
 
-            return this.Created(nameof(this.InviteUserToChat), id);
+            return this.Created(nameof(this.InviteUserToChat), chatId);
         }
 
         [HttpPost(ApiRoutes.AcceptInvite)]
         public async Task<ActionResult<Result>> Accept(ProcessChatInvitationWebModel model)
         {
-            var result = await this.service.AcceptAsync(
-                model.ChatId,
-                model.ChatName,
-                model.ChatCreatorId);
+            var result = await this.service.AcceptAsync(model.ChatId, model.ChatName, model.ChatCreatorId);
 
             return this.NoContentOrBadRequest(result);
         }

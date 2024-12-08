@@ -1,6 +1,6 @@
 ﻿namespace BookHub.Server.Features.Authors.Mapper
 {
-    using Data.Models.Enums;
+    using Data.Models;
 
     public static class MapperHelper
     {

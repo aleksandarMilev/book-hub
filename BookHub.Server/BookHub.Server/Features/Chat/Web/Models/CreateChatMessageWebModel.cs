@@ -2,7 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    using static Common.Constants.Validation.Chat;
+    using static Shared.ValidationConstants;
 
     public class CreateChatMessageWebModel
     {

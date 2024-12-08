@@ -8,8 +8,8 @@
     using Service;
     using Service.Models;
 
-    using static Common.Constants.DefaultValues;
-    using static Common.Constants.ApiRoutes.CommonRoutes;
+    using static Server.Common.ApiRoutes;
+    using static Server.Common.DefaultValues;
 
     [Authorize]
     public class ReviewController(

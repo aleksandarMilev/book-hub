@@ -1,9 +1,9 @@
 ﻿namespace BookHub.Server.Features.Review.Service
 {
-    using Data;
     using Data.Models;
     using Infrastructure.Services;
     using Microsoft.EntityFrameworkCore;
+    using Server.Data;
 
     public class VoteService(
         BookHubDbContext data,

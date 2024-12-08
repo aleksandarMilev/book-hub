@@ -10,7 +10,8 @@ export const routes = {
 
     statistics: '/statistics',
 
-    profile: '/profile/mine',
+    profile: '/profile',
+    mineProfile: '/profile/mine',
     profiles: '/profiles',
     hasProfile: '/profile/exists',
     topProfiles: '/profile/top',

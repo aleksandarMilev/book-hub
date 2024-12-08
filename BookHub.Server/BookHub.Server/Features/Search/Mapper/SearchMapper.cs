@@ -1,6 +1,12 @@
 ﻿namespace BookHub.Server.Features.Search.Mapper
 {
     using AutoMapper;
+    using BookHub.Server.Features.Article.Data.Models;
+    using BookHub.Server.Features.Authors.Data.Models;
+    using BookHub.Server.Features.Book.Data.Models;
+    using BookHub.Server.Features.Chat.Data.Models;
+    using BookHub.Server.Features.Genre.Data.Models;
+    using BookHub.Server.Features.UserProfile.Data.Models;
     using Data.Models;
     using Genre.Service.Models;
     using Service.Models;
