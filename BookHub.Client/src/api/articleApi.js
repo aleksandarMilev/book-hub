@@ -32,9 +32,11 @@ export async function createAsync(article, token){
     const url = baseAdminUrl + routes.article
     const response = await fetch(url, options)
 
-    if(!response.ok){
-        throw new Error(errors.article.create)
-    } 
+    if(response.ok){
+        return await response.json()
+    }
+    
+    throw new Error(errors.article.create)
 }
 
 export async function editAsync(id, article, token){

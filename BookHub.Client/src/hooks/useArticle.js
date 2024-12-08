@@ -26,7 +26,7 @@ export function useDetails(id){
 
                 setArticle(article)
             } catch (error) {
-                navigate(routes.badRequest, { state: { message: error.message} })
+                navigate(routes.notFound, { state: { message: error.message} })
             } finally {
                 setIsFetching(false)
             }
@@ -50,7 +50,8 @@ export function useCreate(){
         }
         
         try {
-            await articleApi.createAsync(article, token)
+            const id = await articleApi.createAsync(article, token)
+            return id
         } catch (error) {
             navigate(routes.badRequest, { state: { message: error.message } })
         }

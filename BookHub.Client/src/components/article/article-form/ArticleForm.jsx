@@ -13,9 +13,11 @@ import {
 
 import * as useArticle from '../../../hooks/useArticle'
 import { routes } from '../../../common/constants/api'
+import { useMessage } from '../../../contexts/messageContext'
 
 export default function ArticleForm({ article = null, isEditMode = false }) {
     const navigate = useNavigate()
+    const { showMessage } = useMessage()
 
     const createHandler = useArticle.useCreate()
     const editHandler = useArticle.useEdit()
@@ -55,11 +57,13 @@ export default function ArticleForm({ article = null, isEditMode = false }) {
         onSubmit: async (values) => {
             if (isEditMode) {
                 await editHandler(article.id, values) 
+                showMessage(`${article?.title || 'This article'} was successfully edited!`, true)
+                navigate(routes.article + `/${article.id}`)
             } else {
-                await createHandler(values)
+                const id = await createHandler(values)
+                showMessage(`${article?.title || 'This article'} was successfully created!`, true)
+                navigate(routes.article + `/${id}`)
             }
-
-            navigate(routes.home)
         }
     })
 

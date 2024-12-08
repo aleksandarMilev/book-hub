@@ -16,6 +16,7 @@ import * as useArticle from '../../../hooks/useArticle'
 import * as articleApi from '../../../api/articleApi'
 import { routes } from '../../../common/constants/api'
 import { UserContext } from '../../../contexts/userContext'
+import { useMessage } from '../../../contexts/messageContext'
 
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner'
 import DeleteModal from '../../common/delete-modal/DeleteModal'
@@ -25,6 +26,7 @@ import './ArticleDetails.css'
 export default function ArticleDetails(){
     const { id } = useParams()
     const navigate = useNavigate()
+    const { showMessage } = useMessage()
 
     const { token, isAdmin } = useContext(UserContext)
  
@@ -37,9 +39,10 @@ export default function ArticleDetails(){
         if(showModal){
             try {
                 await articleApi.deleteAsync(id, token)
+                showMessage(`${article?.title || 'This article'} was successfully deleted!`, true)
                 navigate(routes.home)
             } catch (error) {
-                navigate(routes.badRequest, { state: { message: error.message } })
+                showMessage(error.message, false)
             } finally {
                 toggleModal()
             }

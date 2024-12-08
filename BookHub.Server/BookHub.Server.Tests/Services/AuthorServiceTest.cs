@@ -105,12 +105,6 @@
         }
 
         [Fact]
-        public async Task DetailsAsync_ShouldReturn_AuthorDetails_WhenAuthorExists()
-        {
-            true.Should().BeTrue();
-        }
-
-        [Fact]
         public async Task DetailsAsync_ShouldReturnNull_WhenAuthorDoesNotExist()
         {
             var invalidId = 999_212_214; 
@@ -118,12 +112,6 @@
             var author = await this.authorService.DetailsAsync(invalidId);
 
             author.Should().BeNull();
-        }
-
-        [Fact]
-        public async Task AdminDetailsAsync_ShouldReturn_AuthorDetails_WhenAuthorExists()
-        {
-            true.Should().BeTrue();
         }
 
         [Fact]
