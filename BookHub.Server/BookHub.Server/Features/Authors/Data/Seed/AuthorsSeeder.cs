@@ -26,6 +26,7 @@
                         "Bangor, Maine, with his wife, fellow novelist Tabitha King, and continues to write and inspire new generations of " +
                         "readers and writers.",
                     PenName = "Richard Bachman",
+                    RatingsCount = 14,
                     AverageRating = 4.7,
                     NationalityId = 182,
                     Gender = Gender.Male,
@@ -52,6 +53,7 @@
                         "and founded the Volant Charitable Trust to combat social inequality. Rowling lives in Scotland with her family and continues " +
                         "to write, inspiring readers of all ages with her imaginative storytelling and philanthropy.",
                     PenName = "J. K. Rowling",
+                    RatingsCount = 4,
                     AverageRating = 4.75,
                     NationalityId = 181,
                     Gender = Gender.Female,
@@ -75,6 +77,7 @@
                         "of the literary group The Inklings, alongside C.S. Lewis. Tolkien's contributions to literature earned him global acclaim and a " +
                         "lasting legacy as the 'father of modern fantasy.' He passed away in 1973, but his works continue to captivate readers worldwide.",
                     PenName = "J.R.R Tolkien",
+                    RatingsCount = 6,
                     AverageRating = 4.67,
                     NationalityId = 181,
                     Gender = Gender.Male,
@@ -101,6 +104,7 @@
                         "generations of readers and writers to question societal norms and explore new perspectives. Kesey passed away in 2001, leaving " +
                         "behind a legacy of bold storytelling and a spirit of rebellion.",
                     PenName = null,
+                    RatingsCount = 6,
                     AverageRating = 4.6,
                     NationalityId = 182,
                     Gender = Gender.Male,
@@ -127,6 +131,7 @@
                         "of 46, but his work remains widely read and influential, especially in the context of discussions surrounding state power, civil " +
                         "liberties, and the role of the individual in society.",
                     PenName = "George Orwell",
+                    RatingsCount = 7,
                     AverageRating = 4.9,
                     NationalityId = 181,
                     Gender = Gender.Male,
@@ -152,6 +157,7 @@
                         "away in 1912 at the age of 64, but his legacy as the creator of one of literature's most enduring villains continues to " +
                         "captivate readers around the world.",
                     PenName = "Bram Stoker",
+                    RatingsCount = 6,
                     AverageRating = 4.6,
                     NationalityId = 78,
                     Gender = Gender.Male,
@@ -174,6 +180,7 @@
                         "music and translations. His works, while not always critically lauded, gained a loyal following, and he is considered an " +
                         "influential figure in British literature. Burgess continued to write prolifically until his death in 1993 at the age of 76.",
                     PenName = "Anthony Burgess",
+                    RatingsCount = 6,
                     AverageRating = 4.3,
                     NationalityId = 181,
                     Gender = Gender.Male,
@@ -194,6 +201,7 @@
                         "Her works have been translated into over 100 languages, and her influence on the mystery genre is profound. Christie was appointed a Dame Commander of the Order of the British Empire in 1971. " +
                         "She continued writing until her death in 1976, leaving behind a legacy that includes Murder on the Orient Express, Death on the Nile, and And Then There Were None.",
                     PenName = "Agatha Christie",
+                    RatingsCount = 7,
                     AverageRating = 4.48,
                     NationalityId = 181,
                     Gender = Gender.Female,
@@ -215,6 +223,7 @@
                         "insightful critiques of social systems. His writing style was marked by his use of vivid, poetic descriptions and a deep understanding of his " +
                         "characters' struggles.",
                     PenName = "John Steinbeck",
+                    RatingsCount = 4,
                     AverageRating = 4.5,
                     NationalityId = 182,
                     Gender = Gender.Male,
@@ -235,6 +244,7 @@
                         "Herbert's distinctive writing style is known for its philosophical depth, intricate world-building, and the exploration of human evolution. His work has had a profound influence on both science fiction and popular culture. " +
                         "Herbert passed away in 1986, but his legacy continues through his novels, which are still widely read and respected today.",
                     PenName = "Frank Herbert",
+                    RatingsCount = 3,
                     AverageRating = 4.67,
                     NationalityId = 182,
                     Gender = Gender.Male,
@@ -256,6 +266,7 @@
                         "and wrote other notable works, including Dirk Gently's Holistic Detective Agency. Adams passed away in 2001 at the age of 49, but his influence on the science fiction genre and " +
                         "popular culture remains enduring.",
                     PenName = "Douglas Adams",
+                    RatingsCount = 4,
                     AverageRating = 4.5,
                     NationalityId = 181,
                     Gender = Gender.Male,

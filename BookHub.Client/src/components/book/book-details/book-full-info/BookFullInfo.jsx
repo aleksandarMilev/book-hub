@@ -23,14 +23,15 @@ export default function BookFullInfo({
     id
 }) {
 
+    console.log(book);
+    
+
     const { isAdmin, token, hasProfile } = useContext(UserContext)
     const { showMessage } = useMessage()
 
     const formattedDate = book.publishedDate 
         ? format(new Date(book.publishedDate), 'MMMM dd, yyyy')
         : 'Publication date unknown'
-
-        console.log(book)
 
     return (
         <div className="book-info-card shadow-lg p-4">
@@ -102,7 +103,6 @@ export default function BookFullInfo({
                                     <Link to={routes.profile}>Create Profile</Link>
                                 )}
                         </div>
-
                         </div>
                         <div className="d-flex gap-2 mt-4">
                             {isCreator && (

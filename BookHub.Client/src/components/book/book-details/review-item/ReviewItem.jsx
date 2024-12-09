@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useState, memo } from 'react'
 import ReactDOM from 'react-dom'
 import { MDBIcon, MDBBtn } from 'mdb-react-ui-kit'
 
@@ -10,29 +10,42 @@ import { UserContext } from '../../../../contexts/userContext'
 
 import DeleteModal from '../../../common/delete-modal/DeleteModal'
 
-export default function ReviewItem({ review, onVote }) {
+export default function ReviewItem ({ review, onVote }) {
     const { userId, token } = useContext(UserContext)
     const { id, content, rating, creatorId, createdBy, upvotes, downvotes } = review
+
+    const [upvoteClicked, setUpvoteClicked] = useState(false)
+    const [downvoteClicked, setDownvoteClicked] = useState(false)
 
     const [upvoteCount, setUpvoteCount] = useState(upvotes)
     const [downvoteCount, setDownvoteCount] = useState(downvotes)
     const [showModal, setShowModal] = useState(false)
 
-    const toggleModal = () => setShowModal((old) => !old)
+    const toggleModal = () => setShowModal(prev => !prev)
 
     const upvoteHandler = async () => {
         const success = await reviewApi.upvoteAsync(id, token)
         if (success) {
+            if(downvoteClicked){
+                setDownvoteCount(prev => --prev)
+                setDownvoteClicked(false)
+            }
+
             setUpvoteCount(prev => ++prev)
-            onVote() 
+            setUpvoteClicked(true)
         }
     }
 
     const downvoteHandler = async () => {
         const success = await reviewApi.downvoteAsync(id, token)
         if (success) {
+            if(upvoteClicked){
+                setUpvoteCount(prev => --prev)
+                setUpvoteClicked(false)
+            }
+            
             setDownvoteCount(prev => ++prev)
-            onVote() 
+            setDownvoteClicked(true)
         }
     }
 
@@ -63,6 +76,7 @@ export default function ReviewItem({ review, onVote }) {
             <div className="review-footer d-flex justify-content-between align-items-center">
                 <div className="review-votes d-flex align-items-center">
                     <MDBIcon
+                        style={{color: upvoteClicked ? 'blue' : 'black', cursor: 'pointer'}}
                         icon="arrow-up"
                         className="vote-icon"
                         onClick={upvoteHandler}
@@ -70,6 +84,7 @@ export default function ReviewItem({ review, onVote }) {
                     <span>{upvoteCount}</span>
 
                     <MDBIcon
+                        style={{color: downvoteClicked ? 'red' : 'black', cursor: 'pointer'}}
                         icon="arrow-down"
                         className="vote-icon ms-2"
                         onClick={downvoteHandler}

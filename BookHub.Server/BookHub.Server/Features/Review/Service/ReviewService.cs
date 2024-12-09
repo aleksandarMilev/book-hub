@@ -2,7 +2,10 @@
 {
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
+    using Common;
     using Data.Models;
+    using Features.Authors.Data.Models;
+    using Features.Book.Data.Models;
     using Features.UserProfile.Data.Models;
     using Infrastructure.Services;
     using Microsoft.EntityFrameworkCore;
@@ -47,7 +50,7 @@
 
             if (await this.UserAlreadyReviewedTheBookAsync(userId, model.BookId))
             {
-                throw new InvalidOperationException("This user has already written a review!");
+                throw new ReviewDuplicatedException(this.userService.GetUsername()!, model.BookId);
             }
 
             await this.ValidateBookId(model.BookId);
@@ -91,15 +94,18 @@
                     id);
             }
 
+            var oldRating = review.Rating;
+
             this.mapper.Map(model, review);
 
             await this.data.SaveChangesAsync();
 
-            await this.CalculateBookRatingAsync(model.BookId, model.Rating, review.Rating);
-            await this.CalculateAuthorRatingAsync(model.BookId, model.Rating, review.Rating);
+            await this.CalculateBookRatingAsync(model.BookId, model.Rating, oldRating);
+            await this.CalculateAuthorRatingAsync(model.BookId, model.Rating, oldRating);
 
             return true;
         }
+
 
         public async Task<Result> DeleteAsync(int id)
         {
@@ -124,14 +130,18 @@
                      id);
             }
 
+            var oldRating = review.Rating;
+            var bookId = review.BookId;
+
             this.data.Remove(review);
             await this.data.SaveChangesAsync();
 
-            await this.CalculateBookRatingAsync(review.BookId, 0, review.Rating, true);
-            await this.CalculateAuthorRatingAsync(review.BookId, 0, review.Rating, true);
+            await this.CalculateBookRatingAsync(bookId, 0, oldRating, true);
+            await this.CalculateAuthorRatingAsync(bookId, 0, oldRating, true);
 
             return true;
         }
+
 
         private async Task ValidateBookId(int bookId)
         {
@@ -143,7 +153,7 @@
 
             if (id == 0)
             {
-                throw new InvalidOperationException("Book not found!");
+                throw new DbEntityNotFoundException<int>(nameof(Book), bookId);
             }
         }
 
@@ -157,18 +167,18 @@
             var book = await this.data
                .Books
                .FindAsync(bookId)
-               ?? throw new InvalidOperationException("Book not found!");
+               ?? throw new DbEntityNotFoundException<int>(nameof(Book), bookId);
 
             double newAverageRating;
-            var newRatingsCount = isDeleteMode ? --book.RatingsCount : book.RatingsCount;
+            var newRatingsCount = isDeleteMode ? book.RatingsCount - 1 : book.RatingsCount;
 
             if (oldRating.HasValue)
             {
                 newAverageRating = ((book.AverageRating * book.RatingsCount) - oldRating.Value + newRating) / newRatingsCount;
             }
-            else 
+            else
             {
-                newRatingsCount = book.RatingsCount + 1;
+                newRatingsCount++;
                 newAverageRating = ((book.AverageRating * book.RatingsCount) + newRating) / newRatingsCount;
             }
 
@@ -183,6 +193,7 @@
             await this.data.SaveChangesAsync();
         }
 
+
         private async Task CalculateAuthorRatingAsync(int bookId, int newRating, int? oldRating = null, bool isDeleteMode = false)
         {
             var authorId = await this.data
@@ -194,18 +205,18 @@
             var author = await this.data
                .Authors
                .FindAsync(authorId)
-               ?? throw new InvalidOperationException("Author not found!");
+               ?? throw new DbEntityNotFoundException<int?>(nameof(Author), authorId);
 
             double newAverageRating;
-            var newRatingsCount = isDeleteMode ? --author.RatingsCount : author.RatingsCount;
+            var newRatingsCount = isDeleteMode ? author.RatingsCount - 1 : author.RatingsCount;
 
             if (oldRating.HasValue)
             {
                 newAverageRating = ((author.AverageRating * author.RatingsCount) - oldRating.Value + newRating) / newRatingsCount;
             }
-            else 
+            else
             {
-                newRatingsCount = author.RatingsCount + 1;
+                newRatingsCount++;
                 newAverageRating = ((author.AverageRating * author.RatingsCount) + newRating) / newRatingsCount;
             }
 
