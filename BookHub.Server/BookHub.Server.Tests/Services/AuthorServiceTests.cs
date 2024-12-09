@@ -17,7 +17,7 @@
 
     using static Common.ErrorMessage;
 
-    public class AuthorServiceTest
+    public class AuthorServiceTests
     {
         private readonly BookHubDbContext data;
 
@@ -29,7 +29,7 @@
 
         private readonly AuthorService authorService;
 
-        public AuthorServiceTest()
+        public AuthorServiceTests()
         {
             var options = new DbContextOptionsBuilder<BookHubDbContext>()
                 .UseInMemoryDatabase(databaseName: "AuthorServiceInMemoryDatabase")

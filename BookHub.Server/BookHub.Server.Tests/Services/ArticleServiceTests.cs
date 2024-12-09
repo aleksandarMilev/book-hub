@@ -14,7 +14,7 @@
 
     using static Common.ErrorMessage;
 
-    public class ArticleServiceTest
+    public class ArticleServiceTests
     {
         private readonly BookHubDbContext data;
 
@@ -23,7 +23,7 @@
 
         private readonly ArticleService articleService;
 
-        public ArticleServiceTest()
+        public ArticleServiceTests()
         {
             var options = new DbContextOptionsBuilder<BookHubDbContext>()
                 .UseInMemoryDatabase(databaseName: "ArticleServiceInMemoryDatabase")

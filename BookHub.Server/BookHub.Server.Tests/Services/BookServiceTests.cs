@@ -20,7 +20,7 @@
 
     using static Common.ErrorMessage;
 
-    public class BookServiceTest 
+    public class BookServiceTests 
     {
         private readonly BookHubDbContext data;
 
@@ -32,7 +32,7 @@
 
         private readonly BookService bookService;
 
-        public BookServiceTest()
+        public BookServiceTests()
         {
             var options = new DbContextOptionsBuilder<BookHubDbContext>()
                 .UseInMemoryDatabase(databaseName: "BookServiceInMemoryDatabase")
