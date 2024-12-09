@@ -19,7 +19,7 @@
         public NationalityServiceTests()
         {
             var options = new DbContextOptionsBuilder<BookHubDbContext>()
-                .UseInMemoryDatabase(databaseName: "ArticleServiceInMemoryDatabase")
+                .UseInMemoryDatabase(databaseName: "NationalityServiceInMemoryDatabase")
                 .Options;
 
             this.mockUserService = new Mock<ICurrentUserService>();
