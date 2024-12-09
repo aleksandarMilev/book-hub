@@ -3,18 +3,99 @@
     using System.IdentityModel.Tokens.Jwt;
     using System.Security.Claims;
     using System.Text;
+    using System.Threading.Tasks;
 
+    using Data.Models;
+    using Infrastructure.Services;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
 
-    using static BookHub.Server.Common.Constants;
+    using static Constants;
+    using static Common.Constants;
 
-    public class IdentityService : IIdentityService
+    public class IdentityService(
+        UserManager<User> userManager,
+        IOptions<AppSettings> appSettings) : IIdentityService
     {
-        private const int DefaultTokenExpirationTime = 7;
+        private readonly UserManager<User> userManager = userManager;
+        private readonly AppSettings appSettings = appSettings.Value;
 
-        private const int ExtendedTokenExpirationTime = 30;
+        public async Task<ResultWith<string>> RegisterAsync(string email, string username, string password)
+        {
+            var user = new User()
+            {
+                Email = email,
+                UserName = username
+            };
 
-        public string GenerateJwtToken(
+            var result = await this.userManager.CreateAsync(user, password);
+
+            if (result.Succeeded)
+            {
+                var token = GenerateJwtToken(
+                    this.appSettings.Secret,
+                    user.Id,
+                    user.UserName,
+                    user.Email);
+
+                return ResultWith<string>.Success(token);
+            }
+
+            var errorMessage = string.Join("; ", result.Errors.Select(e => e.Description));
+
+            return ResultWith<string>.Failure(errorMessage ?? InvalidRegisterAttempt);
+        }
+
+        public async Task<ResultWith<string>> LoginAsync(string credentials, string password, bool rememberMe)
+        {
+            var user = await this.userManager.FindByNameAsync(credentials);
+
+            if (user is null)
+            {
+                user = await this.userManager.FindByEmailAsync(credentials);
+
+                if (user is null)
+                {
+                    return ResultWith<string>.Failure(InvalidLoginAttempt);
+                }
+            }
+
+            if (await this.userManager.IsLockedOutAsync(user))
+            {
+                return ResultWith<string>.Failure(AccountIsLocked);
+            }
+
+            var passwordIsValid = await this.userManager.CheckPasswordAsync(user, password);
+
+            if (passwordIsValid)
+            {
+                await this.userManager.ResetAccessFailedCountAsync(user);
+
+                var isAdmin = await this.userManager.IsInRoleAsync(user, AdminRoleName);
+
+                var token = GenerateJwtToken(
+                    this.appSettings.Secret,
+                    user.Id,
+                    user.UserName!,
+                    user.Email!,
+                    rememberMe,
+                    isAdmin);
+
+                return ResultWith<string>.Success(token);
+            }
+
+            await this.userManager.AccessFailedAsync(user);
+
+            if (await this.userManager.IsLockedOutAsync(user))
+            {
+                return ResultWith<string>.Failure(AccountWasLocked);
+            }
+
+            return ResultWith<string>.Failure(InvalidLoginAttempt);
+        }
+
+        private static string GenerateJwtToken(
             string appSettingsSecret,
             string userId,
             string username,
