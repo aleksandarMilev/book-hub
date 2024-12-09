@@ -3,12 +3,14 @@
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using Data.Models;
+    using Features.Chat.Data.Models;
     using Infrastructure.Services;
     using Microsoft.EntityFrameworkCore;
     using Server.Data;
     using Service.Models;
 
-    using static Messages;
+    using static Constants;
+    using static Constants.Messages;
     using static Common.ErrorMessage;
 
     public class NotificationService(
@@ -25,7 +27,7 @@
                 .Notifications
                 .Where(n => n.ReceiverId == this.userService.GetId())
                 .OrderByDescending(n => n.CreatedOn)
-                .Take(3)
+                .Take(LastThree)
                 .ProjectTo<NotificationServiceModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 
@@ -78,7 +80,7 @@
             string receiverId,
             bool isApproved)
         {
-            var message = string.Format(ApprovalStatusChange, nameProp, isApproved ? "approved" : "rejected");
+            var message = string.Format(ApprovalStatusChange, nameProp, isApproved ? Approved : Rejected);
 
             var notification = new Notification()
             {
@@ -122,7 +124,7 @@
             var message = string.Format(
                 ChatInvitationStatusChange,
                 this.userService.GetUsername(),
-                hasAccepted ? "accepted" : "rejected",
+                hasAccepted ? Accepted : Rejected,
                 chatName);
 
             var notification = new Notification()
