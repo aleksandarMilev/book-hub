@@ -2,10 +2,10 @@
 {
     using AutoMapper;
     using Book.Service.Models;
-    using Genre.Service.Models;
     using Data.Models;
-    using BookHub.Server.Features.Book.Data.Models;
-    using BookHub.Server.Features.Genre.Data.Models;
+    using Features.Book.Data.Models;
+    using Features.Genre.Data.Models;
+    using Genre.Service.Models;
 
     public class ReadingListMapper : Profile
     {

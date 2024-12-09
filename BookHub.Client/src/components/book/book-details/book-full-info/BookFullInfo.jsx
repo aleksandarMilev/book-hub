@@ -30,6 +30,8 @@ export default function BookFullInfo({
         ? format(new Date(book.publishedDate), 'MMMM dd, yyyy')
         : 'Publication date unknown'
 
+        console.log(book)
+
     return (
         <div className="book-info-card shadow-lg p-4">
             <div className="row g-0">
@@ -57,7 +59,7 @@ export default function BookFullInfo({
                             <span className="fw-semibold text-muted me-1">
                                 Genres:
                             </span>
-                            {book.genres.map((g) => (
+                            {book.genres.map(g => (
                                 <Link to={routes.genres + `/${g.id}`} key={g.id}>
                                     <span className="badge bg-secondary me-1">
                                         {g.name}
@@ -178,13 +180,13 @@ function ReadingListButtons({ bookId, initialReadingStatus, token, showMessage }
 
     return (
         <div className="reading-status">
-            {readingStatus === readingListStatus.read && (
+            {readingStatus.toLowerCase() === readingListStatus.read.toLowerCase() && (
                 <p>You marked this book as <strong>Read</strong>.</p>
             )}
-            {readingStatus === readingListStatus.toRead && (
+            {readingStatus.toLowerCase() === readingListStatus.toRead.toLowerCase() && (
                 <p>You added this book to <strong>Want to Read</strong>.</p>
             )}
-            {readingStatus === readingListStatus.currentlyReading && (
+            {readingStatus.toLowerCase() === readingListStatus.currentlyReading.toLowerCase() && (
                 <p>You are currently <strong>Reading</strong> this book.</p>
             )}
             <button className="btn btn-outline-danger" onClick={handleRemoveFromList}>

@@ -30,11 +30,13 @@
             int pageIndex,
             int pageSize)
         {
+            var enumStatus = ParseStatusToEnum(status);
+
             var books = this.data
                 .ReadingLists
                 .Where(rl =>
                     rl.UserId == userId &&
-                    rl.Status == ParseStatusToEnum(status))
+                    rl.Status == enumStatus)
                 .ProjectTo<BookServiceModel>(this.mapper.ConfigurationProvider);
 
             var total = await books.CountAsync();
@@ -57,6 +59,18 @@
             {
                 return MoreThanFiveCurrentlyReading;
             }
+          
+            var exists = await this.data
+               .ReadingLists
+               .AnyAsync(rl =>
+                   rl.UserId == userId &&
+                   rl.BookId == bookId &&
+                   rl.Status == statusEnum);
+
+            if (exists)
+            {
+                return BookAlreadyInTheList;
+            }
 
             var mapEntity = new ReadingList()
             {
@@ -65,15 +79,8 @@
                 Status = statusEnum,
             };
 
-            try
-            {
-                this.data.Add(mapEntity);
-                await this.data.SaveChangesAsync();
-            }
-            catch (SqlException)
-            {
-                return BookAlreadyInTheList;
-            }
+            this.data.Add(mapEntity);
+            await this.data.SaveChangesAsync();
 
             await this.profileService.UpdateCountAsync(
                 userId!,

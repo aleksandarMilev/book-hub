@@ -125,7 +125,7 @@
 
             var property = typeof(UserProfile)
                 .GetProperty(propName)
-                ?? throw new ArgumentException($"{propName}");
+                ?? throw new ArgumentException(propName);
 
             var currentValue = (int)property.GetValue(profile)!;
             var updatedValue = updateFunc(currentValue);

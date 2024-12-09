@@ -66,7 +66,7 @@
             => await this.data
                 .Books
                 .AsQueryable()
-                .MapToDetailsModel()
+                .MapToDetailsModel(this.userService.GetId()!)
                 .FirstOrDefaultAsync(b => b.Id == id);
 
         public async Task<BookDetailsServiceModel?> AdminDetailsAsync(int id)

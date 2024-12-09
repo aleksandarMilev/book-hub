@@ -30,7 +30,6 @@
             int page = DefaultPageIndex,
             int pageSize = DefaultPageSize) => this.Ok(await this.service.ByGenreAsync(id, page, pageSize));
 
-        [AllowAnonymous]
         [HttpGet(Id)]
         public async Task<ActionResult<BookDetailsServiceModel>> Details(int id)
             => this.Ok(await this.service.DetailsAsync(id));

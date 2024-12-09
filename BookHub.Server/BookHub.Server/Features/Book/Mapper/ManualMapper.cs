@@ -8,7 +8,9 @@
 
     public static class ManualMapper
     {
-        public static IQueryable<BookDetailsServiceModel> MapToDetailsModel(this IQueryable<Book> books, string userId = null)
+        public static IQueryable<BookDetailsServiceModel> MapToDetailsModel(
+            this IQueryable<Book> books,
+            string userId)
                => books
                    .Select(b => new BookDetailsServiceModel()
                    {
