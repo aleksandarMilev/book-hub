@@ -438,7 +438,6 @@
             this.SetIsAdmin(false);
         }
 
-
         private void SetIsAdmin(bool isAdmin)
             => this.mockUserService
                 .Setup(x => x.IsAdmin())

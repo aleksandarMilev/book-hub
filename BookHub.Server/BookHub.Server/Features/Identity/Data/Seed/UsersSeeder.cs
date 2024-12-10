@@ -42,7 +42,7 @@
                     Id = "user6Id",
                     UserName = "user6name",
                     Email = "user6@mail.com"
-                },
+                }
             };
     }
 }

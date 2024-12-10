@@ -26,6 +26,13 @@
                 .Profiles
                 .AnyAsync(p => p.UserId == this.userService.GetId());
 
+        public async Task<bool> MoreThanFiveCurrentlyReadingAsync(string userId)
+            => await this.data
+                .Profiles
+                .Where(p => p.UserId == userId)
+                .Select(p => p.CurrentlyReadingBooksCount)
+                .FirstOrDefaultAsync() == CurrentlyReadingBooksMaxCount;
+
         public async Task<IEnumerable<ProfileServiceModel>> TopThreeAsync()
             => await this.data
                 .Profiles
@@ -133,12 +140,5 @@
 
             await this.data.SaveChangesAsync();
         }
-
-        public async Task<bool> MoreThanFiveCurrentlyReadingAsync(string userId)
-            => await this.data
-                .Profiles
-                .Where(p => p.UserId == userId)
-                .Select(p => p.CurrentlyReadingBooksCount)
-                .FirstOrDefaultAsync() == CurrentlyReadingBooksMaxCount;
     }
 }
