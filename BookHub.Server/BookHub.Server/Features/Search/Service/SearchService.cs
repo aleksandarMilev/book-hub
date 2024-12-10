@@ -132,9 +132,7 @@
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                chats = chats.Where(c =>
-                    c.Name.ToLower().Contains(searchTerm.ToLower())
-                );
+                chats = chats.Where(c => c.Name.ToLower().Contains(searchTerm.ToLower()));
             }
 
             var total = await chats.CountAsync();

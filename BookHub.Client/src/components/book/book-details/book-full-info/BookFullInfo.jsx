@@ -22,10 +22,6 @@ export default function BookFullInfo({
     deleteHandler,
     id
 }) {
-
-    console.log(book);
-    
-
     const { isAdmin, token, hasProfile } = useContext(UserContext)
     const { showMessage } = useMessage()
 
