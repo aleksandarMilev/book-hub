@@ -56,7 +56,6 @@
             result.Users.Should().Be(usersCount);
             result.Genres.Should().Be(genresCount);
             result.Reviews.Should().Be(reviewsCount);
-
         }
 
         private async Task PrepareDbAsync()
