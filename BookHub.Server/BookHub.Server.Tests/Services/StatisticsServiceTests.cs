@@ -1,60 +1,37 @@
 ﻿namespace BookHub.Server.Tests.Services
 {
-    using AutoMapper;
     using Data;
-    using Data.Models.Shared.ChatUser;
     using Features.Article.Data.Models;
     using Features.Authors.Data.Models;
     using Features.Book.Data.Models;
-    using Features.Chat.Data.Models;
-    using Features.Search.Mapper;
-    using Features.Search.Service;
-    using Features.Search.Service.Models;
-    using Features.UserProfile.Data.Models;
+    using Features.Genre.Data.Models;
+    using Features.Review.Data.Models;
+    using Features.Statistics.Service;
     using FluentAssertions;
     using Infrastructure.Services;
     using Microsoft.EntityFrameworkCore;
     using Moq;
     using Xunit;
 
-    public class SearchServiceTests
+    public class StatisticsServiceTests
     {
         private readonly BookHubDbContext data;
 
         private readonly Mock<ICurrentUserService> mockUserService;
-        private readonly IMapper mapper;
 
-        private readonly SearchService searchService;
+        private readonly StatisticsService statisticsService;
 
-        public SearchServiceTests()
+        public StatisticsServiceTests()
         {
             var options = new DbContextOptionsBuilder<BookHubDbContext>()
-                .UseInMemoryDatabase(databaseName: "SearchServiceInMemoryDatabase")
+                .UseInMemoryDatabase(databaseName: "StatisticsServiceInMemoryDatabase")
                 .Options;
 
             this.mockUserService = new Mock<ICurrentUserService>();
 
-            this.mockUserService
-                .Setup(x => x.GetUsername())
-                .Returns("current-user-username");
-
-            this.mockUserService
-                .Setup(x => x.GetId())
-                .Returns("current-user-id");
-
-            this.mockUserService
-                .Setup(x => x.IsAdmin())
-                .Returns(false);
-
             this.data = new BookHubDbContext(options, this.mockUserService.Object);
 
-            this.mapper = new MapperConfiguration(cfg => cfg.AddProfile(new SearchMapper())).CreateMapper();
-
-            this.searchService = new SearchService(
-                this.data,
-                this.mockUserService.Object,
-                this.mapper
-            );
+            this.statisticsService = new StatisticsService(this.data);
 
             Task
                 .Run(this.PrepareDbAsync)
@@ -63,453 +40,24 @@
         }
 
         [Fact]
-        public async Task BooksAsync_ShouldReturnAllBooks_WhenSearchTermIsNull()
+        public async Task GetAsync_ShouldReturn_TheCorrectData()
         {
-            var page = 1;
-            var pageSize = 10;
+            var booksCount = 5;
+            var articlesCount = 4;
+            var authorsCount = 5;
+            var usersCount = 0;
+            var genresCount = 5;
+            var reviewsCount = 10;
 
-            var result = await this.searchService.BooksAsync(null, page, pageSize);
+            var result = await this.statisticsService.GetAsync();
+            result.Books.Should().Be(booksCount);
+            result.Articles.Should().Be(articlesCount);
+            result.Authors.Should().Be(authorsCount);
+            result.Users.Should().Be(usersCount);
+            result.Genres.Should().Be(genresCount);
+            result.Reviews.Should().Be(reviewsCount);
 
-            result.Items.Should().NotBeNullOrEmpty();
-            result.Items.Should().AllBeOfType(typeof(SearchBookServiceModel));
-            result.TotalItems.Should().Be(5); 
         }
-
-        [Fact]
-        public async Task BooksAsync_ShouldReturnPaginatedResult()
-        {
-            var page = 1;
-            var pageSize = 2;
-
-            var result = await this.searchService.BooksAsync(null, page, pageSize);
-
-            result.Items.Should().HaveCount(pageSize);
-            result.TotalItems.Should().Be(5);
-            result.PageIndex.Should().Be(page);
-            result.PageSize.Should().Be(pageSize);
-        }
-
-        [Fact]
-        public async Task BooksAsync_ShouldFilterByTitle()
-        {
-            var searchTerm = "Pet";
-            var page = 1;
-            var pageSize = 10;
-
-            var result = await this.searchService.BooksAsync(searchTerm, page, pageSize);
-
-            result.Items.Should().HaveCount(1); 
-            result.Items.First().Title.Should().Contain(searchTerm);
-        }
-
-        [Fact]
-        public async Task BooksAsync_ShouldFilterByIntroduction()
-        {
-            var searchTerm = "Sometimes dead is";
-            var page = 1;
-            var pageSize = 10;
-
-            var result = await this.searchService.BooksAsync(searchTerm, page, pageSize);
-
-            result.Items.Should().HaveCount(1);
-            result.Items.First().Title.Should().Be("Pet Sematary");
-        }
-
-        [Fact]
-        public async Task BooksAsync_ShouldFilterByAuthorName()
-        {
-            var searchTerm = "Stephen K";
-            var page = 1;
-            var pageSize = 10;
-
-            var result = await this.searchService.BooksAsync(searchTerm, page, pageSize);
-
-            result.Items.Should().HaveCount(1);
-            result.Items.First().Title.Should().Be("Pet Sematary");
-        }
-
-        [Fact]
-        public async Task BooksAsync_ShouldBeCaseInsensitive()
-        {
-            var searchTerm = "PeT SEmAtAry";
-            var page = 1;
-            var pageSize = 10;
-
-            var result = await this.searchService.BooksAsync(searchTerm, page, pageSize);
-
-            result.Items.Should().HaveCount(1);
-            result.Items.First().Title.Should().Be("Pet Sematary");
-        }
-
-        [Fact]
-        public async Task BooksAsync_ShouldReturnEmptyCollection_WhenSearchTermDoesNotMatch()
-        {
-            var searchTerm = "invalid search term";
-            var page = 1;
-            var pageSize = 10;
-
-            var result = await this.searchService.BooksAsync(searchTerm, page, pageSize);
-
-            result.Items.Should().BeEmpty();
-            result.TotalItems.Should().Be(0);
-        }
-
-        [Fact]
-        public async Task ArticlesAsync_ShouldReturnAllArticles_WhenSearchTermIsNull()
-        {
-            var page = 1;
-            var pageSize = 10;
-
-            var result = await this.searchService.ArticlesAsync(null, page, pageSize);
-
-            result.Items.Should().NotBeNullOrEmpty();
-            result.Items.Should().AllBeOfType(typeof(SearchArticleServiceModel));
-            result.TotalItems.Should().Be(4);
-        }
-
-        [Fact]
-        public async Task ArticlesAsync_ShouldReturnPaginatedResult()
-        {
-            var page = 1;
-            var pageSize = 2;
-
-            var result = await this.searchService.ArticlesAsync(null, page, pageSize);
-
-            result.Items.Should().HaveCount(pageSize);
-            result.TotalItems.Should().Be(4);
-            result.PageIndex.Should().Be(page);
-            result.PageSize.Should().Be(pageSize);
-        }
-
-        [Fact]
-        public async Task ArticlesAsync_ShouldFilterByTitle()
-        {
-            var searchTerm = "Exploring the Haunting";
-            var page = 1;
-            var pageSize = 10;
-
-            var result = await this.searchService.ArticlesAsync(searchTerm, page, pageSize);
-
-            result.Items.Should().HaveCount(1);
-            result.Items.First().Title.Should().Contain(searchTerm);
-        }
-
-        [Fact]
-        public async Task ArticlesAsync_ShouldFilterByIntroduction()
-        {
-            var searchTerm = "loss, and the chilling";
-            var page = 1;
-            var pageSize = 10;
-
-            var result = await this.searchService.ArticlesAsync(searchTerm, page, pageSize);
-
-            result.Items.Should().HaveCount(1);
-            result.Items.First().Introduction.Should().Contain(searchTerm);
-        }
-
-        [Fact]
-        public async Task ArticlesAsync_ShouldBeCaseInsensitive()
-        {
-            var searchTerm = "EXPloRinG tHE HauNTinG";
-            var page = 1;
-            var pageSize = 10;
-
-            var result = await this.searchService.ArticlesAsync(searchTerm, page, pageSize);
-
-            result.Items.Should().HaveCount(1);
-            result.Items.First().Title.Should().Be("Exploring the Haunting Depths of Pet Sematary");
-        }
-
-        [Fact]
-        public async Task ArticlesAsync_ShouldReturnEmptyCollection_WhenSearchTermDoesNotMatch()
-        {
-            var searchTerm = "invalid search term";
-            var page = 1;
-            var pageSize = 10;
-
-            var result = await this.searchService.ArticlesAsync(searchTerm, page, pageSize);
-
-            result.Items.Should().BeEmpty();
-            result.TotalItems.Should().Be(0);
-        }
-
-        [Fact]
-        public async Task AuthorsAsync_ShouldReturnAllAuthors_WhenSearchTermIsNull()
-        {
-            var page = 1;
-            var pageSize = 10;
-
-            var result = await this.searchService.AuthorsAsync(null, page, pageSize);
-
-            result.Items.Should().NotBeNullOrEmpty();
-            result.Items.Should().AllBeOfType(typeof(SearchAuthorServiceModel));
-            result.TotalItems.Should().Be(5);
-        }
-
-        [Fact]
-        public async Task AuthorsAsync_ShouldReturnPaginatedResult()
-        {
-            var page = 1;
-            var pageSize = 2;
-
-            var result = await this.searchService.AuthorsAsync(null, page, pageSize);
-
-            result.Items.Should().HaveCount(pageSize);
-            result.TotalItems.Should().Be(5);
-            result.PageIndex.Should().Be(page);
-            result.PageSize.Should().Be(pageSize);
-        }
-
-        [Fact]
-        public async Task AuthorsAsync_ShouldFilterByName()
-        {
-            var searchTerm = "Steph";
-            var page = 1;
-            var pageSize = 10;
-
-            var result = await this.searchService.AuthorsAsync(searchTerm, page, pageSize);
-
-            result.Items.Should().HaveCount(1);
-            result.Items.First().Name.Should().Contain(searchTerm);
-        }
-
-        [Fact]
-        public async Task AuthorsAsync_ShouldFilterByPenName()
-        {
-            var searchTerm = "Bach";
-            var page = 1;
-            var pageSize = 10;
-
-            var result = await this.searchService.AuthorsAsync(searchTerm, page, pageSize);
-
-            result.Items.Should().HaveCount(1);
-            result.Items.First().Name.Should().Be("Stephen King");
-        }
-
-        [Fact]
-        public async Task AuthorsAsync_ShouldBeCaseInsensitive()
-        {
-            var searchTerm = "STEphEn KiNg";
-            var page = 1;
-            var pageSize = 10;
-
-            var result = await this.searchService.AuthorsAsync(searchTerm, page, pageSize);
-
-            result.Items.Should().HaveCount(1);
-            result.Items.First().Name.Should().Be("Stephen King");
-        }
-
-        [Fact]
-        public async Task AuthorsAsync_ShouldReturnEmptyCollection_WhenSearchTermDoesNotMatch()
-        {
-            var searchTerm = "invalid search term";
-            var page = 1;
-            var pageSize = 10;
-
-            var result = await this.searchService.AuthorsAsync(searchTerm, page, pageSize);
-
-            result.Items.Should().BeEmpty();
-            result.TotalItems.Should().Be(0);
-        }
-
-        [Fact]
-        public async Task ProfilesAsync_ShouldReturnAllProfiles_WhenSearchTermIsNull()
-        {
-            var page = 1;
-            var pageSize = 10;
-
-            var result = await this.searchService.ProfilesAsync(null, page, pageSize);
-
-            result.Items.Should().NotBeNullOrEmpty();
-            result.Items.Should().AllBeOfType(typeof(SearchProfileServiceModel));
-            result.TotalItems.Should().Be(3);
-        }
-
-        [Fact]
-        public async Task ProfilesAsync_ShouldReturnPaginatedResult()
-        {
-            var page = 1;
-            var pageSize = 2;
-
-            var result = await this.searchService.ProfilesAsync(null, page, pageSize);
-
-            result.Items.Should().HaveCount(pageSize);
-            result.TotalItems.Should().Be(3);
-            result.PageIndex.Should().Be(page);
-            result.PageSize.Should().Be(pageSize);
-        }
-
-        [Fact]
-        public async Task ProfilesAsync_ShouldFilterByFristName()
-        {
-            var searchTerm = "John";
-            var page = 1;
-            var pageSize = 10;
-
-            var result = await this.searchService.ProfilesAsync(searchTerm, page, pageSize);
-
-            result.Items.Should().HaveCount(2);
-            result.Items.Any(p => p.FirstName == "John").Should().BeTrue();
-            result.Items.Any(p => p.LastName == "Johnson").Should().BeTrue();
-        }
-
-        [Fact]
-        public async Task ProfilesAsync_ShouldFilterByLastName()
-        {
-            var searchTerm = "Doe";
-            var page = 1;
-            var pageSize = 10;
-
-            var result = await this.searchService.ProfilesAsync(searchTerm, page, pageSize);
-
-            result.Items.Should().HaveCount(1);
-            result.Items.First().LastName.Should().Be(searchTerm);
-        }
-
-        [Fact]
-        public async Task ProfilesAsync_ShouldFilter_ConcatenatedFirstAndLastName()
-        {
-            var searchTerm = "John D";
-            var page = 1;
-            var pageSize = 10;
-
-            var result = await this.searchService.ProfilesAsync(searchTerm, page, pageSize);
-
-            result.Items.Should().HaveCount(1);
-            result.Items.First().FirstName.Should().Be("John");
-            result.Items.First().LastName.Should().Be("Doe");
-        }
-
-        [Fact]
-        public async Task ProfilesAsync_ShouldBeCaseInsensitive()
-        {
-            var searchTerm = "jOhN DoE";
-            var page = 1;
-            var pageSize = 10;
-
-            var result = await this.searchService.ProfilesAsync(searchTerm, page, pageSize);
-
-            result.Items.Should().HaveCount(1);
-            result.Items.First().FirstName.Should().Be("John");
-            result.Items.First().LastName.Should().Be("Doe");
-        }
-
-        [Fact]
-        public async Task ProfilesAsync_ShouldReturnEmptyCollection_WhenSearchTermDoesNotMatch()
-        {
-            var searchTerm = "invalid search term";
-            var page = 1;
-            var pageSize = 10;
-
-            var result = await this.searchService.ProfilesAsync(searchTerm, page, pageSize);
-
-            result.Items.Should().BeEmpty();
-            result.TotalItems.Should().Be(0);
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        [Fact]
-        public async Task ChatsAsync_ShouldReturnAllChats_WhereCurrentUserIsParticipant_AndAlso_HasAcceptedToJoin_WhenSearchTermIsNull()
-        {
-            this.SetCurrentUserId("user1Id");
-
-            var page = 1;
-            var pageSize = 10;
-
-            var result = await this.searchService.ChatsAsync(null, page, pageSize);
-
-            result.Items.Should().NotBeNullOrEmpty();
-            result.Items.Should().AllBeOfType(typeof(SearchChatServiceModel));
-            result.TotalItems.Should().Be(2);
-        }
-
-        [Fact]
-        public async Task ChatsAsync_ShouldReturnPaginatedResult()
-        {
-            this.SetCurrentUserId("user1Id");
-
-            var page = 1;
-            var pageSize = 2;
-
-            var result = await this.searchService.ChatsAsync(null, page, pageSize);
-
-            result.Items.Should().HaveCount(pageSize);
-            result.TotalItems.Should().Be(2);
-            result.PageIndex.Should().Be(page);
-            result.PageSize.Should().Be(pageSize);
-        }
-
-        [Fact]
-        public async Task ChatsAsync_ShouldFilterByName()
-        {
-            this.SetCurrentUserId("user1Id");
-
-            var searchTerm = "Chat 1";
-            var page = 1;
-            var pageSize = 10;
-
-            var result = await this.searchService.ChatsAsync(searchTerm, page, pageSize);
-
-            result.Items.Should().HaveCount(1);
-            result.Items.First().Name.Should().Be(searchTerm);
-        }
-
-        [Fact]
-        public async Task ChatsAsync_ShouldBeCaseInsensitive()
-        {
-            this.SetCurrentUserId("user1Id");
-
-            var searchTerm = "ChAt 1";
-            var page = 1;
-            var pageSize = 10;
-
-            var result = await this.searchService.ChatsAsync(searchTerm, page, pageSize);
-
-            result.Items.Should().HaveCount(1);
-            result.Items.First().Name.Should().Be("Chat 1");
-        }
-
-        [Fact]
-        public async Task ChatsAsync_ShouldReturnEmptyCollection_WhenSearchTermDoesNotMatch()
-        {
-            var searchTerm = "invalid search term";
-            var page = 1;
-            var pageSize = 10;
-
-            var result = await this.searchService.ChatsAsync(searchTerm, page, pageSize);
-
-            result.Items.Should().BeEmpty();
-            result.TotalItems.Should().Be(0);
-        }
-
-        private void SetCurrentUserId(string userId)
-            => this.mockUserService
-                .Setup(x => x.GetId())
-                .Returns(userId);
 
         private async Task PrepareDbAsync()
         {
@@ -809,159 +357,148 @@
                 await this.data.SaveChangesAsync();
             }
 
-            if (!await this.data.Profiles.AnyAsync())
+            if (!await this.data.Reviews.AnyAsync())
             {
-                var profiles = new UserProfile[]
+                var reviews = new Review[]
                 {
                     new()
                     {
-                        UserId = "user1Id",
-                        FirstName = "John",
-                        LastName = "Doe",
-                        ImageUrl = "https://www.shareicon.net/data/512x512/2016/05/24/770117_people_512x512.png",
-                        PhoneNumber = "+1234567890",
-                        DateOfBirth = new DateTime(1990, 05, 15),
-                        SocialMediaUrl = "https://twitter.com/johndoe",
-                        Biography = "John is a passionate reader and a book reviewer.",
-                        CreatedBooksCount = 0,
-                        CreatedAuthorsCount = 0,
-                        ReviewsCount = 15,
-                        ReadBooksCount = 3,
-                        ToReadBooksCount = 2,
-                        CurrentlyReadingBooksCount = 1,
-                        IsPrivate = false,
-                    },
-                    new()
-                    {
-                        UserId = "user2Id",
-                        FirstName = "Alice",
-                        LastName = "Smith",
-                        ImageUrl = "https://static.vecteezy.com/system/resources/previews/002/002/257/non_2x/beautiful-woman-avatar-character-icon-free-vector.jpg",
-                        PhoneNumber = "+1987654321",
-                        DateOfBirth = new DateTime(1985, 07, 22),
-                        SocialMediaUrl = "https://facebook.com/alicesmith",
-                        Biography = "Alice enjoys exploring fantasy and sci-fi genres.",
-                        CreatedBooksCount = 0,
-                        CreatedAuthorsCount = 0,
-                        ReviewsCount = 15,
-                        ReadBooksCount = 3,
-                        ToReadBooksCount = 1,
-                        CurrentlyReadingBooksCount = 1,
-                        IsPrivate = false,
-                    },
-                    new()
-                    {
-                        UserId = "user3Id",
-                        FirstName = "Bob",
-                        LastName = "Johnson",
-                        ImageUrl = "https://cdn1.iconfinder.com/data/icons/user-pictures/101/malecostume-512.png",
-                        PhoneNumber = "+1122334455",
-                        DateOfBirth = new DateTime(2000, 11, 01),
-                        SocialMediaUrl = "https://instagram.com/bobjohnson",
-                        Biography = "Bob is a new reader with a love for thrillers and mysteries.",
-                        CreatedBooksCount = 0,
-                        CreatedAuthorsCount = 0,
-                        ReviewsCount = 14,
-                        ReadBooksCount = 3,
-                        ToReadBooksCount = 1,
-                        CurrentlyReadingBooksCount = 2,
-                        IsPrivate = false,
-                    }
-                };
-
-                this.data.AddRange(profiles);
-                await this.data.SaveChangesAsync();
-            }
-
-            if (!await this.data.Chats.AnyAsync())
-            {
-                var chats = new Chat[]
-                {
-                    new()
-                    { 
                         Id = 1,
-                        Name = "Chat 1",
-                        ImageUrl = "https://mock.image.com",
+                        Content = "A truly chilling tale. King masterfully explores the dark side of human grief and love.",
+                        Rating = 5,
                         CreatorId = "user1Id",
+                        CreatedBy = "user1name",
+                        BookId = 1
                     },
                     new()
                     {
                         Id = 2,
-                        Name = "Chat 2",
-                        ImageUrl = "https://mock.image.com",
+                        Content = "The book was gripping but felt a bit too disturbing at times for my taste.",
+                        Rating = 3,
                         CreatorId = "user2Id",
+                        CreatedBy = "user2name",
+                        BookId = 1
                     },
                     new()
                     {
                         Id = 3,
-                        Name = "Chat 3",
-                        ImageUrl = "https://mock.image.com",
+                        Content = "An unforgettable story that haunts you long after you've finished it. Highly recommended!",
+                        Rating = 5,
                         CreatorId = "user3Id",
+                        CreatedBy = "user3name",
+                        BookId = 1
                     },
+                    new()
+                    {
+                        Id = 4,
+                        Content = "The characters were well-developed, but the plot felt predictable toward the end.",
+                        Rating = 4,
+                        CreatorId = "user4Id",
+                        CreatedBy = "user4name",
+                        BookId = 1
+                    },
+                    new()
+                    {
+                        Id = 5,
+                        Content = "An incredible conclusion to the series. Every twist and turn kept me on edge.",
+                        Rating = 5,
+                        CreatorId = "user1Id",
+                        CreatedBy = "user1name",
+                        BookId = 2
+                    },
+                    new()
+                    {
+                        Id = 6,
+                        Content = "The Battle of Hogwarts was epic! A bittersweet yet satisfying ending.",
+                        Rating = 5,
+                        CreatorId = "user2Id",
+                        CreatedBy = "user2name",
+                        BookId = 2
+                    },
+                    new()
+                    {
+                        Id = 7,
+                        Content = "I expected more from some of the character arcs, but still a solid read.",
+                        Rating = 4,
+                        CreatorId = "user3Id",
+                        CreatedBy = "user3name",
+                        BookId = 2
+                    },
+                    new()
+                    {
+                        Id = 8,
+                        Content = "Rowling’s world-building continues to amaze, even in the final installment.",
+                        Rating = 5,
+                        CreatorId = "user4Id",
+                        CreatedBy = "user4name",
+                        BookId = 2
+                    },
+                    new()
+                    {
+                        Id = 9,
+                        Content = "A timeless masterpiece. Tolkien’s world and characters are unmatched in depth and richness.",
+                        Rating = 5,
+                        CreatorId = "user1Id",
+                        CreatedBy = "user1name",
+                        BookId = 3
+                    },
+                    new()
+                    {
+                        Id = 10,
+                        Content = "The pacing was slow at times, but the payoff in the end was well worth it.",
+                        Rating = 4,
+                        CreatorId = "user2Id",
+                        CreatedBy = "user2name",
+                        BookId = 3
+                    }
                 };
 
-                var chatsUsers = new ChatUser[]
+                this.data.AddRange(reviews);
+                await this.data.SaveChangesAsync();
+            }
+
+            if (!await this.data.Genres.AnyAsync())
+            {
+                var genres = new Genre[]
                 {
                     new()
-                    { 
-                        UserId = "user1Id",
-                        ChatId = 1,
-                        HasAccepted = true
+                    {
+                        Id = 1,
+                        Name = "Horror",
+                        Description = "Horror fiction is designed to scare, unsettle, or horrify readers unknown",
+                        ImageUrl = "https://org-dcmp-staticassets.s3.us-east-1.amazonaws.com/posterimages/13453_1.jpg"
                     },
                     new()
                     {
-                        UserId = "user2Id",
-                        ChatId = 1,
-                        HasAccepted = true
+                        Id = 2,
+                        Name = "Science Fiction",
+                        Description = "Science fiction explores futuristic, scientific, and technological themes",
+                        ImageUrl = "https://www.editoreric.com/greatlit/litgraphics/book-spiral-galaxy.jpg"
                     },
                     new()
                     {
-                        UserId = "user3Id",
-                        ChatId = 1,
-                        HasAccepted = false
-                    },
-
-                    new()
-                    {
-                        UserId = "user2Id",
-                        ChatId = 2,
-                        HasAccepted = true
+                        Id = 3,
+                        Name = "Fantasy",
+                        Description = "Fantasy stories transport readers to magical realms filled with ts",
+                        ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5EcrB6fhai5L3-7Ted6fZgxUjCti0W4avrA&s"
                     },
                     new()
                     {
-                        UserId = "user3Id",
-                        ChatId = 2,
-                        HasAccepted = true
+                        Id = 4,
+                        Name = "Mystery",
+                        Description = "Mystery fiction is a puzzle-driven genre that engages reintrigue",
+                        ImageUrl = "https://celadonbooks.com/wp-content/uploads/2020/03/what-is-a-mystery.jpg"
                     },
                     new()
                     {
-                        UserId = "user1Id",
-                        ChatId = 2,
-                        HasAccepted = false
-                    },
-
-                    new()
-                    {
-                        UserId = "user3Id",
-                        ChatId = 3,
-                        HasAccepted = true
-                    },
-                    new()
-                    {
-                        UserId = "user1Id",
-                        ChatId = 3,
-                        HasAccepted = true
-                    },
-                    new()
-                    {
-                        UserId = "user2Id",
-                        ChatId = 3,
-                        HasAccepted = false
-                    },
+                        Id = 5,
+                        Name = "Romance",
+                        Description = "Romance novels celebrate the complexities of love and and emotional growth",
+                        ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/3/36/Hammond-SS10.jpg"
+                    }
                 };
 
-                this.data.AddRange(chats);
-                this.data.AddRange(chatsUsers);
+                this.data.AddRange(genres);
                 await this.data.SaveChangesAsync();
             }
         }
