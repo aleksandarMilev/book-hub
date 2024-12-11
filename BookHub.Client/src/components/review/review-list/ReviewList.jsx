@@ -59,7 +59,7 @@ export default function ReviewList() {
         return <DefaultSpinner />
     }
 
-    if (!reviews || reviews.length === 0) {
+    if (reviews?.length === 0) {
         return <p>No reviews found.</p>
     }
 

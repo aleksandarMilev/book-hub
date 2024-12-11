@@ -102,12 +102,15 @@ export default function ChatDetails() {
                         msg.id === response.id 
                             ? { ...msg,
                                 message: response.message,
-                                createdOn: response.createdOn,
-                                modifiedOn: response.modifiedOn} 
+                                createdOn: convertToLocalTime(response.createdOn),
+                                modifiedOn: convertToLocalTime(response.modifiedOn)
+                            }
                             : msg
                     ))
                 } else {
                     response = await createMessageHandler(messageData)
+                    response.createdOn = convertToLocalTime(response.createdOn)
+
                     setMessages(prevMessages => [...prevMessages, response])
                 }
 
@@ -225,4 +228,28 @@ export default function ChatDetails() {
             </MDBContainer>
         </>
     )
+}
+const convertToLocalTime = (serverDate) => {
+    try {
+        const trimmedDate = serverDate.split('.')[0]
+        const utcDateObj = new Date(trimmedDate.replace(" ", "T") + "Z")
+
+        if (isNaN(utcDateObj)) {
+            throw new Error("Invalid server date format")
+        }
+
+        const correctedDate = new Date(utcDateObj.getTime() - 2 * 60 * 60 * 1000)
+
+        return correctedDate.toLocaleString('en-GB', {
+            weekday: 'short',
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        })
+    } catch (error) {
+        return "Invalid Date"
+    }
 }

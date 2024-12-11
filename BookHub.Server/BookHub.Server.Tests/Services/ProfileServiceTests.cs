@@ -1,18 +1,18 @@
 ﻿namespace BookHub.Server.Tests.Services
 {
     using AutoMapper;
+    using Common;
     using Data;
     using Features.Identity.Data.Models;
     using Features.UserProfile.Data.Models;
     using Features.UserProfile.Mapper;
     using Features.UserProfile.Service;
+    using Features.UserProfile.Service.Models;
+    using FluentAssertions;
     using Infrastructure.Services;
     using Microsoft.EntityFrameworkCore;
     using Moq;
     using Xunit;
-    using FluentAssertions;
-    using BookHub.Server.Features.UserProfile.Service.Models;
-    using BookHub.Server.Common;
 
     public class ProfileServiceTests
     {

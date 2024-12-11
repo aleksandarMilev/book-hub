@@ -45,8 +45,7 @@
                 SenderId = message.SenderId,
                 SenderName = profile!.Name,
                 SenderImageUrl = profile!.Image,
-                CreatedOn = message.CreatedOn,
-                ModifiedOn = message.ModifiedOn
+                CreatedOn = message.CreatedOn
             };
 
             return serviceModel;
@@ -95,7 +94,7 @@
                 SenderName = profile!.Name,
                 SenderImageUrl = profile!.Image,
                 CreatedOn = message.CreatedOn,
-                ModifiedOn = message.ModifiedOn
+                ModifiedOn = message.ModifiedOn!.Value
             };
 
             return ResultWith<ChatMessageServiceModel>

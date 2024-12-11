@@ -1,4 +1,4 @@
-﻿namespace BookHub.Server.Features.UserProfile.Web
+﻿namespace BookHub.Server.Features.UserProfile.Web.User
 {
     using AutoMapper;
     using Infrastructure.Extensions;
@@ -25,7 +25,7 @@
 
         [HttpGet(ApiRoutes.Exists)]
         public async Task<ActionResult<bool>> Exists()
-         => this.Ok(await this.service.HasProfileAsync());
+            => this.Ok(await this.service.HasProfileAsync());
 
         [HttpGet(ApiRoutes.Mine)]
         public async Task<ActionResult<ProfileServiceModel>> Mine()
@@ -33,7 +33,7 @@
 
         [HttpGet(Id)]
         public async Task<ActionResult<IProfileServiceModel>> OtherUser(string id)
-           => this.Ok(await this.service.OtherUserAsync(id));
+            => this.Ok(await this.service.OtherUserAsync(id));
 
         [HttpPost]
         public async Task<ActionResult<string>> Create(CreateProfileWebModel webModel)

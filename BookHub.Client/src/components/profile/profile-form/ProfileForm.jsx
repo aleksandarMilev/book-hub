@@ -13,11 +13,13 @@ import {
 
 import * as useProfile from '../../../hooks/useProfile'
 import { routes } from '../../../common/constants/api'
+import { useMessage } from '../../../contexts/messageContext'
 
 import './ProfileForm.css'
 
 export default function ProfileForm({ profile = null, isEditMode = false }) {
     const navigate = useNavigate()
+    const { showMessage } = useMessage()
 
     const createHandler = useProfile.useCreate()
     const editHandler = useProfile.useEdit()
@@ -82,8 +84,10 @@ export default function ProfileForm({ profile = null, isEditMode = false }) {
         onSubmit: async (values) => {
             if (isEditMode) {
                 await editHandler(values) 
+                showMessage("You have successfully edited your profile!", true)
             } else {
                 await createHandler(values)
+                showMessage("You have successfully created your profile!", true)
             }
 
             navigate(routes.profile)

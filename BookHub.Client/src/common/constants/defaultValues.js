@@ -1,5 +1,5 @@
 export const pagination = {
-    defaultPageSize: 2,
+    defaultPageSize: 10,
     defaultPageIndex: 1
 }
 

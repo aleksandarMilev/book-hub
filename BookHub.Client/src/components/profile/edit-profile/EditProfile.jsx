@@ -7,6 +7,6 @@ export default function EditProfile(){
     const { profile, isFetching } = useProfile.useMineProfile()
 
     return isFetching 
-        ? <ProfileForm profile={profile} isEditMode={true} /> 
-        : <DefaultSpinner/ >
+        ? <DefaultSpinner/ >
+        : <ProfileForm profile={profile} isEditMode={true} /> 
 }

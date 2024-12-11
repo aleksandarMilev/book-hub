@@ -14,7 +14,7 @@ import './ChatListItem.css'
 export default function ChatListItem({ id, name, imageUrl, creatorId }) {
     const navigate = useNavigate()
 
-    const { userId, token } = useContext(UserContext)
+    const { userId, token, isAdmin } = useContext(UserContext)
     const { showMessage } = useMessage() 
 
     const onEditClick = () => {
@@ -56,32 +56,34 @@ export default function ChatListItem({ id, name, imageUrl, creatorId }) {
             </div>
             <div className="col-7 d-flex flex-column justify-content-between chat-list-item-content">
                 <h5 className="mb-1 chat-list-item-name">{name}</h5>
-                {userId === creatorId && (
                     <div className="d-flex mt-2">
-                        <MDBIcon
-                            icon="pen"
-                            className="cursor-pointer"
-                            title="Edit Chat"
-                            onClick={onEditClick}
-                        />
-                        <MDBIcon
-                            icon="trash"
-                            className="cursor-pointer ms-2"
-                            onClick={onChatDelete}
-                            title="Delete Chat"
-                        />
+                        {userId === creatorId && (
+                                <MDBIcon
+                                    icon="pen"
+                                    className="cursor-pointer"
+                                    title="Edit Chat"
+                                    onClick={onEditClick}
+                                />
+                        )}
+                        {(userId === creatorId) || isAdmin ? (
+                            <MDBIcon
+                                    icon="trash"
+                                    className="cursor-pointer ms-2"
+                                    onClick={onChatDelete}
+                                    title="Delete Chat"
+                                />
+                        ): null}
                     </div>
-                )}
                 <Link to={`/chat/${id}`} className="chat-list-item-btn">
                     Details
                 </Link>
             </div>
         </div>
-         <DeleteModal
-         showModal={showModal}
-         toggleModal={toggleModal}
-         deleteHandler={onChatDelete}
-     />
+        <DeleteModal
+            showModal={showModal}
+            toggleModal={toggleModal}
+            deleteHandler={onChatDelete}
+        />
      </>
     )
 }

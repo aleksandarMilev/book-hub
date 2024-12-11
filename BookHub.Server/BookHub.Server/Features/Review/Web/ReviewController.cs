@@ -21,9 +21,9 @@
 
         [HttpGet(Id)]
         public async Task<ActionResult<PaginatedModel<ReviewServiceModel>>> AllForBook(
-            int bookId,
+            int id,
             int pageIndex = DefaultPageIndex,
-            int pageSize = DefaultPageSize) => this.Ok(await this.service.AllForBookAsync(bookId, pageIndex, pageSize));
+            int pageSize = DefaultPageSize) => this.Ok(await this.service.AllForBookAsync(id, pageIndex, pageSize));
 
         [HttpPost]
         public async Task<ActionResult<int>> Create(CreateReviewWebModel webModel)

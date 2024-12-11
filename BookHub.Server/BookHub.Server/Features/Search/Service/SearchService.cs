@@ -124,25 +124,31 @@
         {
             var chats = this.data
                  .Chats
-                 .Where(c => c.ChatsUsers.Any(cu =>
-                        cu.UserId == this.userService.GetId() &&
-                        cu.HasAccepted
-                 ))
-                 .ProjectTo<SearchChatServiceModel>(this.mapper.ConfigurationProvider);
+                 .AsQueryable();
+
+            if (!this.userService.IsAdmin())
+            {
+                chats = chats.Where(c => c.ChatsUsers.Any(cu =>
+                    cu.UserId == this.userService.GetId() &&
+                    cu.HasAccepted
+                 ));
+            }
+
+             var chatModels = chats.ProjectTo<SearchChatServiceModel>(this.mapper.ConfigurationProvider);
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                chats = chats.Where(c => c.Name.ToLower().Contains(searchTerm.ToLower()));
+                chatModels = chatModels.Where(c => c.Name.ToLower().Contains(searchTerm.ToLower()));
             }
 
-            var total = await chats.CountAsync();
+            var total = await chatModels.CountAsync();
 
-            var paginatedChats = await chats
+            var paginatedChats = await chatModels
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
-            return new PaginatedModel<SearchChatServiceModel>(paginatedChats, total, page, pageSize);
+            return new PaginatedModel<SearchChatServiceModel>(chatModels, total, page, pageSize);
         }
     }
 }

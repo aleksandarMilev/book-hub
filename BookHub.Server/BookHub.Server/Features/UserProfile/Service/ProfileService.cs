@@ -101,17 +101,28 @@
             return true;
         }
 
-        public async Task<Result> DeleteAsync()
+        public async Task<Result> DeleteAsync(string userToDeleteId = null!)
         {
-            var userId = this.userService.GetId();
+            var currentUserId = this.userService.GetId()!;
+            userToDeleteId ??= currentUserId;
 
             var profile = await this.data
                 .Profiles
-                .FindAsync(userId);
+                .FindAsync(userToDeleteId);
 
             if (profile is null)
             {
-                return string.Format(DbEntityNotFound, nameof(UserProfile), userId);
+                return string.Format(DbEntityNotFound, nameof(UserProfile), userToDeleteId);
+            }
+
+            if (profile.UserId != currentUserId &&
+                !this.userService.IsAdmin())
+            { 
+                return string.Format(
+                    UnauthorizedDbEntityAction,
+                    this.userService.GetUsername(),
+                    nameof(UserProfile),
+                    userToDeleteId);
             }
 
             this.data.Remove(profile);

@@ -48,9 +48,9 @@ export default function Header() {
                             <Nav.Link as={Link} to={routes.createAuthor}>
                                 Create Author   
                             </Nav.Link>
-                            <Nav.Link as={Link} to={routes.createChat}>
+                            {isAdmin || <Nav.Link as={Link} to={routes.createChat}>
                                 Create Chat   
-                            </Nav.Link>
+                            </Nav.Link>}
                             {isAdmin && 
                             <Nav.Link as={Link} to={routes.admin.createArticle}>
                                 Create Artcile
@@ -66,9 +66,9 @@ export default function Header() {
                                             Hello, {username}!
                                         </span>
                                     </Nav.Item>
-                                    <Nav.Link as={Link} to={routes.profile}>
+                                    {isAdmin || <Nav.Link as={Link} to={routes.profile}>
                                         My Profile
-                                    </Nav.Link>
+                                    </Nav.Link>}
                                     <Nav.Link as={Link} to={routes.logout}>
                                         Logout
                                     </Nav.Link>

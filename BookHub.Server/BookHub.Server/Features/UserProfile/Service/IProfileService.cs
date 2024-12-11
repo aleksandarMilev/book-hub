@@ -18,7 +18,7 @@
 
         Task<Result> EditAsync(CreateProfileServiceModel model);
 
-        Task<Result> DeleteAsync();
+        Task<Result> DeleteAsync(string userId = null!);
 
         Task UpdateCountAsync(
             string userId,

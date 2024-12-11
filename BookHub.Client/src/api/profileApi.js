@@ -1,4 +1,4 @@
-import { baseUrl, routes } from '../common/constants/api'
+import { baseUrl, baseAdminUrl, routes } from '../common/constants/api'
 import { errors } from '../common/constants/messages'
 
 export async function getNamesAsync(token){
@@ -131,6 +131,22 @@ export async function deleteAsync(token){
     }
 
     const url = baseUrl + routes.profile
+    const response = await fetch(url, options)
+
+    if(!response.ok){
+        throw new Error(errors.profile.delete)
+    }
+}
+
+export async function adminDeleteAsync(profileId, token){
+    const options = {
+        method: "DELETE",
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+
+    const url = baseAdminUrl + routes.profile + `/${profileId}`
     const response = await fetch(url, options)
 
     if(!response.ok){

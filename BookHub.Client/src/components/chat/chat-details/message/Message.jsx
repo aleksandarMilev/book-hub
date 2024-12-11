@@ -1,11 +1,23 @@
 import { useContext } from 'react'
 import { MDBIcon } from 'mdb-react-ui-kit'
 
-import * as api from '../../../../api/chatApi'
-import { utcToLocal } from '../../../../common/functions/utcToLocal'
 import { useMessage } from '../../../../contexts/messageContext'
 import { UserContext } from '../../../../contexts/userContext'
 
+const convertToLocalTime = (utcDate) => {
+    const localDate = new Date(utcDate)
+    const offset = localDate.getTimezoneOffset() * 60000
+    const localTime = new Date(localDate.getTime() - offset)
+    return localTime.toLocaleString('en-GB', {
+        weekday: 'short',
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+    })
+}
 
 export default function Message ({ m, isSentByUser, sender, onEdit, onDelete, onProfileClick }) {
     const { token } = useContext(UserContext)
@@ -25,26 +37,11 @@ export default function Message ({ m, isSentByUser, sender, onEdit, onDelete, on
             >
                 <p className="small mb-0">{m.message}</p>
                 <small className="text-muted">
-                {m.modifiedOn
-                    ? new Date(m.modifiedOn).toLocaleString('en-GB', {
-                        weekday: 'short',  
-                        day: '2-digit',    
-                        month: 'short',    
-                        year: 'numeric',   
-                        hour: '2-digit',   
-                        minute: '2-digit', 
-                        hour12: false       
-                    }) + " (Modified)"
-                    : new Date(m.createdOn).toLocaleString('en-GB', {
-                        weekday: 'short',
-                        day: '2-digit',    
-                        month: 'short',    
-                        year: 'numeric',   
-                        hour: '2-digit',   
-                        minute: '2-digit', 
-                        hour12: false       
-                    })
-                }
+                {
+                    m.modifiedOn
+                        ? convertToLocalTime(m.modifiedOn) + " (Modified)"
+                        : convertToLocalTime(m.createdOn)
+                }               
                 </small>
                 {isSentByUser && (
                     <>

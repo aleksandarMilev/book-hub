@@ -39,7 +39,7 @@ export default function ProfileDetails() {
     const navigate = useNavigate()
 
     const { showMessage } = useMessage()
-    const { token, userId } = useContext(UserContext)
+    const { token, userId, isAdmin } = useContext(UserContext)
 
     const { profile, isFetching: profileIsFteching, refetch  } = location?.state?.id 
         ? useProfile.useOtherProfile(location?.state?.id) 
@@ -65,10 +65,13 @@ export default function ProfileDetails() {
     const deleteHandler = async () => {
         if(showModal){
             try {
-                await profileApi.deleteAsync(token)
+                isAdmin 
+                    ? await profileApi.adminDeleteAsync(profile.id, token)
+                    : await profileApi.deleteAsync(token)
+                showMessage("The profile was successfully deleted!", true)
                 navigate(routes.home)
             } catch (error) {
-                navigate(routes.badRequest, { state: { message: error.message } })
+                showMessage(error.message, false)
             } finally {
                 toggleModal()
             }
@@ -119,6 +122,19 @@ export default function ProfileDetails() {
                     <div className="col-lg-6">
                         <div className="card">
                             <div className="card-body">
+                                {profile && isAdmin
+                                    &&
+                                    <>
+                                        <button
+                                            type="button"
+                                            className="btn btn-outline-danger"
+                                            onClick={toggleModal}
+                                        >
+                                            <FontAwesomeIcon icon={faTrashAlt} className="me-2" />
+                                            Delete
+                                        </button>
+                                    </>
+                                }
                                 <div className="d-flex flex-column align-items-center text-center">
                                     <img
                                         src={profile?.imageUrl || defaultProfilePicture}
@@ -292,33 +308,28 @@ export default function ProfileDetails() {
                                                 </Link>
                                             }
                                         </div>
-                                        {readingListIsFteching 
-                                            ? <DefaultSpinner/>
-                                            :
-                                            <div className="currently-reading-container">
-                                                <h1>
-                                                    {location?.state?.id 
-                                                        ? profile?.firstName + ' is ' 
-                                                        : 'You\'re '
-                                                    }currently reading: 
-                                                </h1>
-                                                    {readingList && readingList.length > 0 
-                                                        ? readingList.map(b => (<BookListItem key={b.id} {...b} />))
-                                                        : 'No currently reading books'}
-                                            </div>
-                                        }
-                                        <div 
-                                            onClick={onToReadListClick}
-                                            className="book-stats favorite-stats"
-                                        >
-                                            To Read ({profile?.toReadBooksCount})
-                                        </div>
-                                        <div 
-                                            onClick={onReadListClick}
-                                            className="book-stats read-stats"
-                                        >
-                                            Read ({profile?.readBooksCount})
-                                        </div>
+                                        {profile && (
+                                            <>
+                                                {readingListIsFteching ? (
+                                                    <DefaultSpinner />
+                                                ) : (
+                                                    <div className="currently-reading-container">
+                                                        <h1>
+                                                            {location?.state?.id ? profile?.firstName + ' is ' : 'You\'re '} currently reading: 
+                                                        </h1>
+                                                        {readingList && readingList.length > 0 
+                                                            ? readingList.map(b => (<BookListItem key={b.id} {...b} />)) 
+                                                            : 'No currently reading books'}
+                                                    </div>
+                                                )}
+                                                <div onClick={onToReadListClick} className="book-stats favorite-stats">
+                                                    To Read ({profile?.toReadBooksCount})
+                                                </div>
+                                                <div onClick={onReadListClick} className="book-stats read-stats">
+                                                    Read ({profile?.readBooksCount})
+                                                </div>
+                                            </>
+                                        )}
                                     </>
                                     :
                                     <div className="private-profile-message">
