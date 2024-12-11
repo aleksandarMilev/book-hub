@@ -38,7 +38,7 @@ namespace BookHub.Server
                 .UseAuthorization()
                 .UseAppEndpoints()
                 .UseSwaggerUI()
-                .AddAdmin()
+                .AddAdmin(builder.Configuration)
                 .ApplyMigrations();
 
             app.Run();

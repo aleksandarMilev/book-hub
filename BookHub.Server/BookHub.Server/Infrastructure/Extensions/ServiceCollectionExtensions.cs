@@ -2,9 +2,9 @@
 {
     using System.Reflection;
     using System.Text;
-    using BookHub.Server.Features.Identity.Data.Models;
+
     using Data;
-    using Data.Models;
+    using Features.Identity.Data.Models;
     using Filters;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Identity;

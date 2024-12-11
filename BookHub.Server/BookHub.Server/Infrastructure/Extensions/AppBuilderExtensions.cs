@@ -39,17 +39,18 @@
                      opt.AllowAnyMethod();
                  });
 
-        public static IApplicationBuilder AddAdmin(this IApplicationBuilder app) 
+        public static IApplicationBuilder AddAdmin(this IApplicationBuilder app, IConfiguration configuration) 
         {
             using var serviceScope = app.ApplicationServices.CreateScope();
             var services = serviceScope.ServiceProvider;
 
-            CreateAdminRole(services);
+            var adminPassword = configuration.GetAdminPassword();
+            CreateAdminRole(services, adminPassword);
 
             return app;
         }
 
-        private static void CreateAdminRole(IServiceProvider services)
+        private static void CreateAdminRole(IServiceProvider services, string adminPassword)
         {
             var userManager = services.GetRequiredService<UserManager<User>>();
             var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
@@ -72,8 +73,7 @@
                         UserName = AdminRoleName
                     };
 
-                    await userManager.CreateAsync(user, AdminPassword);
-
+                    await userManager.CreateAsync(user, adminPassword);
                     await userManager.AddToRoleAsync(user, role.Name);
                 })
                 .GetAwaiter()
