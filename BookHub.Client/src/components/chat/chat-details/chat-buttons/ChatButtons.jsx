@@ -1,11 +1,12 @@
 import { useState, useEffect, useContext } from "react"
+import { useNavigate, useParams } from "react-router-dom"
+
 import * as api from '../../../../api/chatApi'
 import { UserContext } from "../../../../contexts/userContext"
-import { useNavigate, useParams } from "react-router-dom"
 import { useMessage } from "../../../../contexts/messageContext"
 import { routes } from "../../../../common/constants/api"
 
-export default function ChatButtons({ chatName, chatCreatorId }){
+export default function ChatButtons({ chatName, chatCreatorId, refreshParticipantsList }){
     const { id } = useParams()
     const navigate = useNavigate()
 
@@ -22,10 +23,10 @@ export default function ChatButtons({ chatName, chatCreatorId }){
 
     const onAcceptClick = async () => {
         try {
-            await api.acceptAsync(id, chatName, chatCreatorId, token)
+            const newParticipant = await api.acceptAsync(id, chatName, chatCreatorId, token)
             showMessage(`You are now a member in ${chatName}!`, true)
             setIsinvited(false)
-            //refetch()
+            refreshParticipantsList(newParticipant)
         } catch (error) {
             showMessage(error.message, false)
         } 

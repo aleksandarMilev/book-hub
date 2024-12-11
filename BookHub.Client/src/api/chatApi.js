@@ -66,9 +66,11 @@ export async function acceptAsync(chatId, chatName, chatCreatorId, token){
     const url = baseUrl + routes.acceptChatInvitation
     const response = await fetch(url, options)
 
-    if(!response.ok){
-        throw new Error(errors.chat.accept)
+    if(response.ok){
+        return await response.json()
     }
+
+    throw new Error(errors.chat.accept)
 }
 
 export async function removeUserAsync(chatId, userToRemoveId, token){
@@ -136,6 +138,8 @@ export async function detailsAsync(chatId, token){
         return await response.json()
     }
 
+    console.log(await response.json());
+    
     throw new Error(errors.chat.details)
 } 
 
@@ -227,9 +231,13 @@ export async function createMessageAsync(message, token){
     const url = baseUrl + routes.chatMessage
     const response = await fetch(url, options)
 
-    if(!response.ok){
-        throw new Error(errors.chat.createMessage)
+    if(response.ok){
+        let r = await response.json()
+        //console.log(r)
+        return r        
     }
+
+    throw new Error(errors.chat.createMessage)
 }
 
 export async function editMessageAsync(messageId, message, token){
@@ -245,9 +253,13 @@ export async function editMessageAsync(messageId, message, token){
     const url = baseUrl + routes.chatMessage + `/${messageId}`
     const response = await fetch(url, options)
 
-    if(!response.ok){
-        throw new Error(errors.chat.editMessage)
+    if(response.ok){
+        let r = await response.json()
+        //console.log(r)
+        return r        
     }
+
+    throw new Error(errors.chat.editMessage)
 }
 
 export async function deleteMessageAsync(id, token){

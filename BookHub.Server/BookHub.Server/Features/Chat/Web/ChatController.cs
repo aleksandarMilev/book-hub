@@ -8,6 +8,7 @@
     using Models;
     using Service;
     using Service.Models;
+    using UserProfile.Service.Models;
 
     using static Server.Common.ApiRoutes;
 
@@ -27,13 +28,14 @@
         public async Task<ActionResult<IEnumerable<ChatServiceModel>>> NotJoined(string userId)
             => this.Ok(await this.service.NotJoinedAsync(userId));
 
+        [AllowAnonymous]
         [HttpGet(Id + ApiRoutes.Access)]
-        public async Task<ActionResult<bool>> CanAccessChat(int chatId, string userId)
-            => this.Ok(await this.service.CanAccessChatAsync(chatId, userId));
+        public async Task<ActionResult<bool>> CanAccessChat(int id, string userId)
+            => this.Ok(await this.service.CanAccessChatAsync(id, userId));
 
         [HttpGet(Id + ApiRoutes.Invited)]
-        public async Task<ActionResult<bool>> IsInvited(int chatId, string userId)
-            => this.Ok(await this.service.IsInvitedAsync(chatId, userId));
+        public async Task<ActionResult<bool>> IsInvited(int id, string userId)
+            => this.Ok(await this.service.IsInvitedAsync(id, userId));
 
         [HttpPost]
         public async Task<ActionResult<int>> Create(CreateChatWebModel webModel)
@@ -45,19 +47,27 @@
         }
 
         [HttpPost(Id + ApiRoutes.Invite)]
-        public async Task<ActionResult<(int, string)>> InviteUserToChat(int chatId, AddUserToChatWebModel model)
+        public async Task<ActionResult<(int, string)>> InviteUserToChat(int id, AddUserToChatWebModel model)
         {
-            await this.service.InviteUserToChatAsync(chatId, model.ChatName, model.UserId);
+            await this.service.InviteUserToChatAsync(id, model.ChatName, model.UserId);
 
-            return this.Created(nameof(this.InviteUserToChat), chatId);
+            return this.Created(nameof(this.InviteUserToChat), id);
         }
 
         [HttpPost(ApiRoutes.AcceptInvite)]
-        public async Task<ActionResult<Result>> Accept(ProcessChatInvitationWebModel model)
+        public async Task<ActionResult<ResultWith<PrivateProfileServiceModel>>> Accept(ProcessChatInvitationWebModel model)
         {
-            var result = await this.service.AcceptAsync(model.ChatId, model.ChatName, model.ChatCreatorId);
+            var result = await this.service.AcceptAsync(
+                model.ChatId,
+                model.ChatName,
+                model.ChatCreatorId);
 
-            return this.NoContentOrBadRequest(result);
+            if (result.Succeeded)
+            {
+                return this.Ok(result.Data);
+            }
+
+            return this.BadRequest(result.ErrorMessage);
         }
 
         [HttpPost(ApiRoutes.RejectInvite)]

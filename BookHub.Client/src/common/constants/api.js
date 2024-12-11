@@ -62,7 +62,7 @@ export const routes = {
     chatMessage: '/chatMessage',
     acceptChatInvitation: '/chat/invite/accept',
     rejectChatInvitation: '/chat/invite/reject',
-    removeChatUser: '/chat/remove-user',
+    removeChatUser: '/chat/remove/user',
 
     admin: {
         createArticle: '/admin/article/new',

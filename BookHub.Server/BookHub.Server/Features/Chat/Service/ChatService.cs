@@ -2,6 +2,7 @@
 {
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
+    using BookHub.Server.Features.UserProfile.Service.Models;
     using Data.Models;
     using Infrastructure.Services;
     using Microsoft.Data.SqlClient;
@@ -85,9 +86,9 @@
             await this.notificationService.CreateOnChatInvitationAsync(chatId, chatName, userId);
         }
 
-        public async Task<Result> AcceptAsync(int chatId, string chatName, string chatCreatorId)
+        public async Task<ResultWith<PrivateProfileServiceModel>> AcceptAsync(int chatId, string chatName, string chatCreatorId)
         {
-            var invitedUserId = this.userService.GetId();
+            var invitedUserId = this.userService.GetId()!;
 
             var mapEntity = await this.data
                 .ChatsUsers
@@ -108,7 +109,14 @@
                     chatCreatorId,
                     true);
 
-            return true;
+            var profileModel = await this.data
+                .Profiles
+                .Where(p => p.UserId == invitedUserId)
+                .ProjectTo<PrivateProfileServiceModel>(this.mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync();
+
+            return ResultWith<PrivateProfileServiceModel>
+                .Success(profileModel!);
         }
 
         public async Task<Result> RejectAsync(int chatId, string chatName, string chatCreatorId)

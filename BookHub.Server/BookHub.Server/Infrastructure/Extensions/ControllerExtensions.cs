@@ -1,6 +1,5 @@
 ﻿namespace BookHub.Server.Infrastructure.Extensions
 {
-    using Features;
     using Microsoft.AspNetCore.Mvc;
     using Services;
 

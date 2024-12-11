@@ -6,9 +6,9 @@
 
     public interface IChatMessageService : ITransientService
     {
-        Task<int> CreateAsync(CreateChatMessageServiceModel model);
+        Task<ChatMessageServiceModel> CreateAsync(CreateChatMessageServiceModel model);
 
-        Task<Result> EditAsync(int id, CreateChatMessageServiceModel model);
+        Task<ResultWith<ChatMessageServiceModel>> EditAsync(int id, CreateChatMessageServiceModel model);
 
         Task<Result> DeleteAsync(int id);
     }

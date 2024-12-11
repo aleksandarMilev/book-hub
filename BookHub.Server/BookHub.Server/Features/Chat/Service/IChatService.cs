@@ -1,5 +1,6 @@
 ﻿namespace BookHub.Server.Features.Chat.Service
 {
+    using Features.UserProfile.Service.Models;
     using Infrastructure.Services;
     using Infrastructure.Services.ServiceLifetimes;
     using Service.Models;
@@ -20,7 +21,7 @@
 
         Task InviteUserToChatAsync(int chatId, string chatName, string userId);
 
-        Task<Result> AcceptAsync(
+        Task<ResultWith<PrivateProfileServiceModel>> AcceptAsync(
             int chatId,
             string chatName,
             string chatCreatorId);

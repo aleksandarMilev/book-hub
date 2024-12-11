@@ -12,6 +12,7 @@ import {
     MDBCardBody,
 } from "mdb-react-ui-kit"
 
+import * as api from "../../../api/chatApi"
 import * as useChat from "../../../hooks/useChat"
 import { useMessage } from '../../../contexts/messageContext'
 import { routes } from "../../../common/constants/api"
@@ -29,16 +30,52 @@ export default function ChatDetails() {
     const { id } = useParams()
     const navigate = useNavigate()
 
-    const { userId } = useContext(UserContext)
+    const { userId, token } = useContext(UserContext)
     const { showMessage } = useMessage()
 
     const { chat, isFetching, refetch } = useChat.useDetails(id)
+
+    const [isEditMode, setIsEditMode] = useState(false)
+    const [messageToEdit, setMessageToEdit] = useState(null)
+
+    const [messages, setMessages] = useState(chat?.messages || [])
+
+    useEffect(() => {
+        setMessages(chat?.messages || [])
+    }, [chat])
     
     const createMessageHandler = useChat.useCreateMessage()
     const editMessageHandler = useChat.useEditMessage()
 
-    const [isEditMode, setIsEditMode] = useState(false)
-    const [messageToEdit, setMessageToEdit] = useState(null)
+    const deleteMessageHandler = async (id) => {
+        try {
+            await api.deleteMessageAsync(id, token)
+            setMessages(prevMessages => prevMessages.filter(msg => msg.id !== id))
+            showMessage("Your message was successfuly deleted", true)
+        } catch (error) {
+            showMessage(error.message, false)
+        }
+    }
+
+    const [participants, setParticipants] = useState(chat?.participants || [])
+
+    useEffect(() => {
+        setParticipants(chat?.participants || [])
+    }, [chat])
+
+    const refreshParticipantsList = (newParticipant) => {
+        setParticipants(prev => [...prev, newParticipant])
+    }
+    
+    const removeUserClickhandler = async (profileId, firstName) => {
+        try {
+            await api.removeUserAsync(id, profileId, token)
+            setParticipants(prev => prev.filter(p => p.id !== profileId))
+            showMessage(`You have successfully removed ${firstName}!`, true)
+        } catch (error) {
+            showMessage(error.message, false)
+        }  
+    }
 
     const validationSchema = Yup.object({
         message: Yup
@@ -58,15 +95,23 @@ export default function ChatDetails() {
             const messageData = { ...values, chatId: id }
 
             try {
+                let response
                 if (isEditMode && messageToEdit) {
-                    await editMessageHandler(messageToEdit.id, { ...messageData })
+                    response = await editMessageHandler(messageToEdit.id, { ...messageData })
+                    setMessages(prevMessages => prevMessages.map(msg => 
+                        msg.id === response.id 
+                            ? { ...msg,
+                                message: response.message,
+                                createdOn: response.createdOn,
+                                modifiedOn: response.modifiedOn} 
+                            : msg
+                    ))
                 } else {
-                    await createMessageHandler(messageData)
+                    response = await createMessageHandler(messageData)
+                    setMessages(prevMessages => [...prevMessages, response])
                 }
 
                 formik.resetForm()
-                refetch()
-                navigate(routes.chat + `/${chat.id}`)
             } catch {
                 showMessage("Something went wrong while processing your message, please try again", false)
             } finally {
@@ -102,7 +147,10 @@ export default function ChatDetails() {
 
     return (
         <>
-           <ChatButtons chatName={chat?.name} chatCreatorId={chat?.creatorId}/>
+           <ChatButtons 
+                chatName={chat?.name}
+                chatCreatorId={chat?.creatorId}
+                refreshParticipantsList={refreshParticipantsList}/>
             <MDBContainer className="py-5 vh-100">
                 <MDBRow className="d-flex justify-content-center h-100">
                     <MDBCol md="10" lg="8" className="h-100">
@@ -118,7 +166,7 @@ export default function ChatDetails() {
                                         <p className="mb-0 fw-bold">{chat?.name}</p>
                                     </MDBCardHeader>
                                     <MDBCardBody className="chat-card-body">
-                                        {chat?.messages.map(m => {
+                                        {messages?.map(m => {
                                             const isSentByUser = m.senderId === userId
                                             const sender = chat.participants.find(p => p.id === m.senderId)
     
@@ -129,6 +177,7 @@ export default function ChatDetails() {
                                                     isSentByUser={isSentByUser}
                                                     sender={sender}
                                                     onEdit={handleEditMessage}
+                                                    onDelete={deleteMessageHandler}
                                                     onProfileClick={onProfileClickHandler}
                                                 />
                                             )
@@ -148,7 +197,7 @@ export default function ChatDetails() {
                                     </MDBCardHeader>
                                     <MDBCardBody className="participants-card-body">
                                         <ul className="participants-list">
-                                            {chat?.participants
+                                            {participants
                                                 .sort((a, b) =>
                                                     a.id === chat?.creatorId
                                                         ? -1
@@ -159,9 +208,10 @@ export default function ChatDetails() {
                                                 .map((p, i) => (
                                                     <ParticipantListItem
                                                         key={p.id}
-                                                        participants={p}
+                                                        participant={p}
                                                         index={i}
                                                         onProfileClickHandler={onProfileClickHandler}
+                                                        onDeleteHandler={removeUserClickhandler}
                                                         currentUserIsChatCreator={userId === chat?.creatorId}
                                                     />
                                                 ))}

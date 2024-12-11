@@ -114,7 +114,7 @@ export function useCreateMessage(){
         }
 
         try {
-            await api.createMessageAsync(message, token)
+            return await api.createMessageAsync(message, token)
         } catch (error) {
             throw new Error(error.message)
         }
@@ -132,7 +132,7 @@ export function useEditMessage(){
         }
 
         try {
-            await api.editMessageAsync(messageId, message, token)
+            return await api.editMessageAsync(messageId, message, token)
         } catch (error) {
             throw new Error(error.message)
         }
