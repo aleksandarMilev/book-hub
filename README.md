@@ -2,6 +2,12 @@
 
 BookHub is a web application that allows users to create and manage books and authors, write and vote on reviews, create reading lists, read articles and participate in chats. It's designed to be a one-stop platform for book lovers to engage with the literary community, share their thoughts, and discover new content.
 
+![My App Screenshot](./screenshots/scr1.png)
+![My App Screenshot](./screenshots/scr2.png)
+![My App Screenshot](./screenshots/scr3.png)
+![My App Screenshot](./screenshots/scr4.png)
+![My App Screenshot](./screenshots/scr5.png)
+
 ## Features
 
 - **Identity**: Users must register with a username, email, and password. Only the home page is accessible to non-authenticated users.
@@ -15,6 +21,13 @@ BookHub is a web application that allows users to create and manage books and au
 - **Notifications**: Users with a configured profile receive notifications for events such as: admin-approved/rejected book/author creations, chat invitations, and responses to their chat invitations (accepted/rejected).
 - **Search**: Users can search for most features on the site, including books, authors, articles, and more.
 
+## Admin Account
+
+If you need access to admin functionality, you can use the following seeded admin account:
+
+- **Username**: Administrator
+- **Password**: admin1234
+
 ## Technologies Used
 
 This app is built using **ReactJS** for the front-end and **ASP.NET Core Web API** for the back-end. Other technologies and libraries used include:
@@ -22,7 +35,6 @@ This app is built using **ReactJS** for the front-end and **ASP.NET Core Web API
 - **MSSQL** 
 - **Entity Framework Core**
 - **AutoMapper** 
-- **SignalR** 
 - **Swagger**
 - **XUnit**
 - **Moq** 
