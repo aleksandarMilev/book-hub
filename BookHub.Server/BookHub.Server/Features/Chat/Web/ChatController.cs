@@ -47,11 +47,16 @@
         }
 
         [HttpPost(Id + ApiRoutes.Invite)]
-        public async Task<ActionResult<(int, string)>> InviteUserToChat(int id, AddUserToChatWebModel model)
+        public async Task<ActionResult<int>> InviteUserToChat(int id, AddUserToChatWebModel model)
         {
-            await this.service.InviteUserToChatAsync(id, model.ChatName, model.UserId);
+            var result = await this.service.InviteUserToChatAsync(id, model.ChatName, model.UserId);
 
-            return this.Created(nameof(this.InviteUserToChat), id);
+            if (result.Succeeded)
+            {
+                return this.Created(nameof(this.Created), id);
+            }
+
+            return this.BadRequest(new { errorMessage = result.ErrorMessage });
         }
 
         [HttpPost(ApiRoutes.AcceptInvite)]

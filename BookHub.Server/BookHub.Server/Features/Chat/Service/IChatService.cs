@@ -1,14 +1,12 @@
 ﻿namespace BookHub.Server.Features.Chat.Service
 {
-    using Features.UserProfile.Service.Models;
     using Infrastructure.Services;
     using Infrastructure.Services.ServiceLifetimes;
     using Service.Models;
+    using UserProfile.Service.Models;
 
     public interface IChatService : ITransientService
     {
-        Task<IEnumerable<ChatServiceModel>> AllAsync();
-
         Task<IEnumerable<ChatServiceModel>> NotJoinedAsync(string userToJoinId);
 
         Task<bool> CanAccessChatAsync(int chatId, string userId);
@@ -19,7 +17,7 @@
 
         Task<int> CreateAsync(CreateChatServiceModel model);
 
-        Task InviteUserToChatAsync(int chatId, string chatName, string userId);
+        Task<Result> InviteUserToChatAsync(int chatId, string chatName, string userId);
 
         Task<ResultWith<PrivateProfileServiceModel>> AcceptAsync(
             int chatId,

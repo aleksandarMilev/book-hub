@@ -2,7 +2,6 @@
 {
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
-    using BookHub.Server.Features.UserProfile.Service.Models;
     using Data.Models;
     using Infrastructure.Services;
     using Microsoft.Data.SqlClient;
@@ -11,6 +10,7 @@
     using Server.Data;
     using Server.Data.Models.Shared.ChatUser;
     using Service.Models;
+    using UserProfile.Service.Models;
 
     using static Common.ErrorMessage;
 
@@ -26,12 +26,6 @@
         private readonly ICurrentUserService userService = userService;
         private readonly INotificationService notificationService = notificationService;
         private readonly IMapper mapper = mapper;
-
-        public async Task<IEnumerable<ChatServiceModel>> AllAsync()
-            => await this.data
-                .Chats
-                .ProjectTo<ChatServiceModel>(this.mapper.ConfigurationProvider)
-                .ToListAsync();
 
         public async Task<IEnumerable<ChatServiceModel>> NotJoinedAsync(string userToJoinId)
             => await this.data
@@ -79,11 +73,83 @@
             return chat.Id;
         }
 
-        public async Task InviteUserToChatAsync(int chatId, string chatName, string userId)
+        public async Task<Result> EditAsync(int id, CreateChatServiceModel model)
         {
+            var chat = await this.data
+               .Chats
+               .FindAsync(id);
+
+            if (chat is null)
+            {
+                return string.Format(DbEntityNotFound, nameof(Chat), id);
+            }
+
+            if (chat.CreatorId != this.userService.GetId())
+            {
+                return string.Format(
+                    UnauthorizedDbEntityAction,
+                    this.userService.GetUsername(),
+                    nameof(Chat), 
+                    id);
+            }
+
+            model.ImageUrl ??= DefaultImageUrl;
+
+            this.mapper.Map(model, chat);
+            await this.data.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<Result> DeleteAsync(int id)
+        {
+            var chat = await this.data
+                .Chats
+                .FindAsync(id);
+
+            if (chat is null)
+            {
+                return string.Format(DbEntityNotFound, nameof(Chat), id);
+            }
+
+            if (chat.CreatorId != this.userService.GetId() &&
+                !this.userService.IsAdmin())
+            {
+                return string.Format(
+                    UnauthorizedDbEntityAction,
+                    this.userService.GetUsername(),
+                    nameof(Chat),
+                    id);
+            }
+
+            this.data.Remove(chat);
+            await this.data.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<Result> InviteUserToChatAsync(int chatId, string chatName, string userId)
+        {
+            var chatCreatorId = await this.data
+               .Chats
+               .Where(c => c.Id == chatId)
+               .Select(c => c.CreatorId)
+               .FirstOrDefaultAsync();
+
+            if (chatCreatorId != this.userService.GetId())
+            {
+                return string.Format(
+                    UnauthorizedDbEntityAction,
+                    this.userService.GetUsername(),
+                    nameof(Chat),
+                    chatId);
+            }
+
             _ = await this.CreateChatUserEntityAsync(chatId, userId, false);
 
             await this.notificationService.CreateOnChatInvitationAsync(chatId, chatName, userId);
+
+            return true;
         }
 
         public async Task<ResultWith<PrivateProfileServiceModel>> AcceptAsync(int chatId, string chatName, string chatCreatorId)
@@ -147,6 +213,24 @@
 
         public async Task<Result> RemoveUserAsync(int chatId, string userToRemoveId)
         {
+            var currentUserId = this.userService.GetId()!;
+
+            var chatCreatorId = await this.data
+                .Chats
+                .Where(c => c.Id == chatId)
+                .Select(c => c.CreatorId)
+                .FirstOrDefaultAsync();
+
+            if (chatCreatorId != currentUserId &&
+                userToRemoveId != currentUserId)
+            {
+                return string.Format(
+                    UnauthorizedDbEntityAction,
+                    this.userService.GetUsername(),
+                    nameof(Chat),
+                    chatId);
+            }
+
             var mapEntity = await this.data
                 .ChatsUsers
                 .FirstOrDefaultAsync(cu => cu.UserId == userToRemoveId && cu.ChatId == chatId);
@@ -157,63 +241,6 @@
             }
 
             this.data.Remove(mapEntity);
-            await this.data.SaveChangesAsync();
-
-            return true;
-        }
-
-        public async Task<Result> EditAsync(int id, CreateChatServiceModel model)
-        {
-            var chat = await this.data
-               .Chats
-               .FindAsync(id);
-
-            if (chat is null)
-            {
-                return string.Format(DbEntityNotFound, nameof(Chat), id);
-            }
-
-            if (chat.CreatorId != this.userService.GetId() &&
-                !this.userService.IsAdmin())
-            {
-                return string.Format(
-                    UnauthorizedDbEntityAction,
-                    this.userService.GetUsername(),
-                    nameof(ChatUser), 
-                    id);
-            }
-
-            model.ImageUrl ??= DefaultImageUrl;
-
-            this.mapper.Map(model, chat);
-            await this.data.SaveChangesAsync();
-
-            return true;
-        }
-           
-
-        public async Task<Result> DeleteAsync(int id)
-        {
-            var chat = await this.data
-                .Chats
-                .FindAsync(id);
-
-            if (chat is null)
-            {
-                return string.Format(DbEntityNotFound, nameof(Chat), id);
-            }
-
-            if (chat.CreatorId != this.userService.GetId() &&
-                !this.userService.IsAdmin())
-            {
-                return string.Format(
-                    UnauthorizedDbEntityAction,
-                    this.userService.GetUsername(),
-                    nameof(ChatUser),
-                    id);
-            }
-
-            this.data.Remove(chat);
             await this.data.SaveChangesAsync();
 
             return true;

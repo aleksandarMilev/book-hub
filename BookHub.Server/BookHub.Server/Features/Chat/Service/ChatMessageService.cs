@@ -50,7 +50,6 @@
             };
 
             return serviceModel;
-            //return this.mapper.Map<ChatMessageServiceModel>(message);
         }
 
         public async Task<ResultWith<ChatMessageServiceModel>> EditAsync(int id, CreateChatMessageServiceModel model)

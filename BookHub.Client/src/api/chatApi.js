@@ -138,8 +138,6 @@ export async function detailsAsync(chatId, token){
         return await response.json()
     }
 
-    console.log(await response.json());
-    
     throw new Error(errors.chat.details)
 } 
 
@@ -232,9 +230,7 @@ export async function createMessageAsync(message, token){
     const response = await fetch(url, options)
 
     if(response.ok){
-        let r = await response.json()
-        //console.log(r)
-        return r        
+        return await response.json()     
     }
 
     throw new Error(errors.chat.createMessage)
@@ -254,9 +250,7 @@ export async function editMessageAsync(messageId, message, token){
     const response = await fetch(url, options)
 
     if(response.ok){
-        let r = await response.json()
-        //console.log(r)
-        return r        
+        return await response.json()
     }
 
     throw new Error(errors.chat.editMessage)

@@ -1,9 +1,7 @@
 ﻿namespace BookHub.Server.Infrastructure.Extensions
 {
-    using BookHub.Server.Features.Identity.Data.Models;
     using Data;
-    using Data.Models;
-    using Features.Chat.Web;
+    using Features.Identity.Data.Models;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
 
@@ -21,12 +19,7 @@
         }
 
         public static IApplicationBuilder UseAppEndpoints(this IApplicationBuilder app)
-            => app
-                .UseEndpoints(e =>
-                {
-                    e.MapControllers();
-                    e.MapHub<ChatHub>("/chatHub");
-                });
+            => app.UseEndpoints(e => e.MapControllers());
 
         public static IApplicationBuilder UseSwaggerUI(this IApplicationBuilder app) 
             => app
@@ -39,12 +32,12 @@
 
         public static IApplicationBuilder UseAllowedCors(this IApplicationBuilder app)
             => app
-                .UseCors(opt =>
-                {
-                    opt.AllowAnyOrigin();
-                    opt.AllowAnyHeader();
-                    opt.AllowAnyMethod();
-                });
+                 .UseCors(opt =>
+                 { 
+                     opt.AllowAnyOrigin();
+                     opt.AllowAnyHeader();
+                     opt.AllowAnyMethod();
+                 });
 
         public static IApplicationBuilder AddAdmin(this IApplicationBuilder app) 
         {

@@ -24,9 +24,6 @@ export default function ChatRoute({ element }) {
 
     }, [id, userId, token])
 
-    console.log(hasAccess);
-    
-
     if (!hasAccess && !isLoading) {
         return <Navigate to={routes.home} replace />
     }

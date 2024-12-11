@@ -4,7 +4,6 @@
     using Infrastructure.Extensions;
     using Infrastructure.Services;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.SignalR;
     using Models;
     using Service;
     using Service.Models;
@@ -14,21 +13,19 @@
     public class ChatMessageController(
         IChatMessageService service,
         ICurrentUserService userService,
-        IHubContext<ChatHub> hubContext,
         IMapper mapper) : ApiController
     {
         private readonly IChatMessageService service = service;
         private readonly ICurrentUserService userService = userService;
-        private readonly IHubContext<ChatHub> hubContext = hubContext;
         private readonly IMapper mapper = mapper;
 
         [HttpPost]
         public async Task<ActionResult<ChatMessageServiceModel>> Create(CreateChatMessageWebModel webModel)
         {
             var serviceModel = this.mapper.Map<CreateChatMessageServiceModel>(webModel);
-            var result = await this.service.CreateAsync(serviceModel);
+            var createdServiceModel = await this.service.CreateAsync(serviceModel);
 
-            return this.Created(nameof(this.Create), result);
+            return this.Created(nameof(this.Create), createdServiceModel);
         }
 
         [HttpPut(Id)]

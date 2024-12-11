@@ -17,8 +17,7 @@ namespace BookHub.Server
                 .AddApiControllers()
                 .AddServices()
                 .AddAutoMapper()
-                .AddSwagger()
-                .AddSignalR();
+                .AddSwagger();
 
             if (builder.Environment.IsDevelopment())
             {
