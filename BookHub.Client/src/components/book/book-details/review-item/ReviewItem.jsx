@@ -11,7 +11,7 @@ import { UserContext } from '../../../../contexts/userContext'
 import DeleteModal from '../../../common/delete-modal/DeleteModal'
 
 export default function ReviewItem ({ review, onVote }) {
-    const { userId, token } = useContext(UserContext)
+    const { userId, token, hasProfile } = useContext(UserContext)
     const { id, content, rating, creatorId, createdBy, upvotes, downvotes } = review
 
     const [upvoteClicked, setUpvoteClicked] = useState(false)
@@ -74,7 +74,7 @@ export default function ReviewItem ({ review, onVote }) {
             </div>
             <p className="review-content">{content}</p>
             <div className="review-footer d-flex justify-content-between align-items-center">
-                <div className="review-votes d-flex align-items-center">
+                {hasProfile && <div className="review-votes d-flex align-items-center">
                     <MDBIcon
                         style={{color: upvoteClicked ? 'blue' : 'black', cursor: 'pointer'}}
                         icon="arrow-up"
@@ -90,7 +90,7 @@ export default function ReviewItem ({ review, onVote }) {
                         onClick={downvoteHandler}
                     />
                     <span>{downvoteCount}</span>
-                </div>
+                </div>}
                 {userId === creatorId && (
                     <div className="review-actions">
                         <MDBBtn color="danger" size="sm" onClick={toggleModal}>
