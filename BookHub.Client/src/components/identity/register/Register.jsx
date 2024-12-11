@@ -121,9 +121,6 @@ export default function Register() {
                                         className='w-100'
                                     />
                                 </div>
-                                <div className='mb-4'>
-                                    <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='Subscribe to our newsletter' />
-                                </div>
                                 <MDBBtn className='mb-4' size='lg' type="submit">Register</MDBBtn>
                             </form>
                         </MDBCol>

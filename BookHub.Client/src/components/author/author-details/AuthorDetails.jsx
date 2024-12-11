@@ -40,6 +40,11 @@ export default function AuthorDetails() {
 
     const toggleModal = () => setShowModal(prev => !prev)
 
+    const onAllBooksClick = (e) => {
+        e.preventDefault()
+        navigate(routes.book, { state: { authorId: id, authorName: author?.name } })
+    }
+
     const deleteHandler = async() => {
         if (showModal) {
             const success = await authorApi.deleteAsync(id, token)
@@ -146,9 +151,16 @@ export default function AuthorDetails() {
                                 <section className="author-top-books">
                                     <MDBTypography tag="h4" className="section-title">Top Books</MDBTypography>
                                     {author.topBooks && author.topBooks.length > 0 ? (
-                                        author.topBooks.map(b => (
-                                            <BookListItem key={b.id} {...b} /> 
-                                        ))
+                                        <>
+                                            {author.topBooks.map(b => (
+                                                <BookListItem key={b.id} {...b} />
+                                            ))}
+                                            <div className="d-flex justify-content-center mt-3">
+                                                <MDBBtn onClick={(e) => onAllBooksClick(e)}>
+                                                    View all {author?.name} books
+                                                </MDBBtn>
+                                            </div>
+                                        </>
                                     ) : (
                                         <MDBCardText>No books available for this author.</MDBCardText>
                                     )}

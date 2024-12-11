@@ -57,21 +57,12 @@ export default function Login() {
                         alt="Sample" 
                     />
                 </MDBCol>
-                <MDBCol col='4' md='6'>
+                <MDBCol
+                    style={{marginTop: '3.4em'}} 
+                    col='4'
+                    md='6'>
                     <div className="d-flex flex-row align-items-center justify-content-center">
-                        <p className="lead fw-normal mb-0 me-3">Sign in with</p>
-                        <MDBBtn floating size='md' tag='a' className='me-2'>
-                            <MDBIcon fab icon='facebook-f' />
-                        </MDBBtn>
-                        <MDBBtn floating size='md' tag='a' className='me-2'>
-                            <MDBIcon fab icon='twitter' />
-                        </MDBBtn>
-                        <MDBBtn floating size='md' tag='a' className='me-2'>
-                            <MDBIcon fab icon='linkedin-in' />
-                        </MDBBtn>
-                    </div>
-                    <div className="divider d-flex align-items-center my-4">
-                        <p className="text-center fw-bold mx-3 mb-0">Or</p>
+                        <p className="lead fw-normal mb-3 me-3">Sign in</p>
                     </div>
                     <form onSubmit={formik.handleSubmit}>
                         <div className="mb-4">
@@ -113,7 +104,6 @@ export default function Login() {
                             onChange={formik.handleChange} 
                             onBlur={formik.handleBlur}
                         />
-                            <a href="!#">Forgot password?</a>
                         </div>
                         <div className='text-center text-md-start mt-4 pt-2'>
                             <MDBBtn 

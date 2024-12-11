@@ -19,7 +19,7 @@ export default function GenreDetails() {
         return <DefaultSpinner />
     }
 
-    const onAllBookClick = (e) => {
+    const onAllBooksClick = (e) => {
         e.preventDefault()
         navigate(routes.book, { state: { genreId: id, genreName: genre.name } })
     }
@@ -51,7 +51,7 @@ export default function GenreDetails() {
                             <BookListItem key={b.id} {...b} />
                         ))}
                         <div className="d-flex justify-content-center mt-3">
-                            <MDBBtn onClick={(e) => onAllBookClick(e)}>
+                            <MDBBtn onClick={(e) => onAllBooksClick(e)}>
                                 View all {genre.name} books
                             </MDBBtn>
                         </div>

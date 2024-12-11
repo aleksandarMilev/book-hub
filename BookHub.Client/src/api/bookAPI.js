@@ -42,6 +42,29 @@ export async function byGenreAsync(
     throw new Error(errors.search.badRequest)
 }
 
+export async function byAuthorAsync(
+    token,
+    authorId,
+    page = pagination.defaultPageIndex,
+    pageSize = pagination.defaultPageSize) {
+
+    const options = {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+
+    const url = `${baseUrl}${routes.booksByAuthor}/${encodeURIComponent(authorId)}?&page=${page}&pageSize=${pageSize}`
+    const response = await fetch(url, options)
+
+    if(response.ok){
+        return await response.json()
+    } 
+
+    throw new Error(errors.search.badRequest)
+}
+
 export async function getDetailsAsync(id, token, isAdmin){
     const options = {
         method: "GET",

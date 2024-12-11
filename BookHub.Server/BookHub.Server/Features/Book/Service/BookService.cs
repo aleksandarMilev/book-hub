@@ -62,6 +62,25 @@
             return new PaginatedModel<BookServiceModel>(paginatedBooks, totalBooks, page, pageSize);
         }
 
+        public async Task<PaginatedModel<BookServiceModel>> ByAuthorAsync(int authorId, int page, int pageSize)
+        {
+            var books = this.data
+                .Books
+                .Where(b => b.AuthorId == authorId)
+                .MapToServiceModel();
+
+            books = books.OrderByDescending(b => b.AverageRating);
+
+            var totalBooks = await books.CountAsync();
+
+            var paginatedBooks = await books
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PaginatedModel<BookServiceModel>(paginatedBooks, totalBooks, page, pageSize);
+        }
+
         public async Task<BookDetailsServiceModel?> DetailsAsync(int id)
             => await this.data
                 .Books

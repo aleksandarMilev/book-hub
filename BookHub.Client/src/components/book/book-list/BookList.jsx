@@ -15,8 +15,12 @@ import './BookList.css'
 
 export default function BookList() {
     const location = useLocation()
+
     const genreId = location?.state?.genreId
     const genreName = location?.state?.genreName
+
+    const authorId = location?.state?.authorId
+    const authorName = location?.state?.authorName
 
     const [searchTerm, setSearchTerm] = useState('')
     const [page, setPage] = useState(pagination.defaultPageIndex)
@@ -24,7 +28,9 @@ export default function BookList() {
 
     const { books, totalItems, isFetching } = genreId 
         ?  useBook.useByGenre(genreId, page, pageSize)
-        :  useSearch.useBooks(searchTerm, page, pageSize)
+        :  authorId
+            ? useBook.useByAuthor(authorId, page, pageSize)
+            : useSearch.useBooks(searchTerm, page, pageSize)
 
     const totalPages = Math.ceil(totalItems / pageSize)
 
@@ -39,25 +45,29 @@ export default function BookList() {
 
     return (
         <div className="container mt-5 mb-5">
-            {genreId ? (
+            {genreId 
+                ? (
                 <h1 className="text text-center mb-4">{genreName} Books</h1>
-            ) : (
-                <div className="row mb-4">
-                    <div className="col-md-10 mx-auto d-flex">
-                        <div className="search-bar-container d-flex">
-                            <input
-                                type="text"
-                                className="form-control search-input"
-                                placeholder="Search books..."
-                                value={searchTerm}
-                                onChange={handleSearchChange}
-                            />
-                            <button className="btn btn-light search-btn" disabled={isFetching}>
-                                <FaSearch size={20} />
-                            </button>
+                ) : authorId 
+                    ? (
+                    <h1 className="text text-center mb-4">All Books by {authorName}</h1>
+                    ) : (
+                        <div className="row mb-4">
+                            <div className="col-md-10 mx-auto d-flex">
+                                <div className="search-bar-container d-flex">
+                                    <input
+                                        type="text"
+                                        className="form-control search-input"
+                                        placeholder="Search books..."
+                                        value={searchTerm}
+                                        onChange={handleSearchChange}
+                                    />
+                                    <button className="btn btn-light search-btn" disabled={isFetching}>
+                                        <FaSearch size={20} />
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
             )}
             <div className="d-flex justify-content-center row">
                 <div className="col-md-10">

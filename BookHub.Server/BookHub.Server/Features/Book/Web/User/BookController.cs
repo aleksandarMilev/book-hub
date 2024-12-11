@@ -30,6 +30,12 @@
             int page = DefaultPageIndex,
             int pageSize = DefaultPageSize) => this.Ok(await this.service.ByGenreAsync(id, page, pageSize));
 
+        [HttpGet(ApiRoutes.ByAuthor + Id)]
+        public async Task<ActionResult<PaginatedModel<BookServiceModel>>> ByAuthor(
+           int id,
+           int page = DefaultPageIndex,
+           int pageSize = DefaultPageSize) => this.Ok(await this.service.ByAuthorAsync(id, page, pageSize));
+
         [HttpGet(Id)]
         public async Task<ActionResult<BookDetailsServiceModel>> Details(int id)
             => this.Ok(await this.service.DetailsAsync(id));

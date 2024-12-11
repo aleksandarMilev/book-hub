@@ -6,6 +6,8 @@
 
         public const string ByGenre = "genre/";
 
+        public const string ByAuthor = "author/";
+
         public const string Approve = "approve/";
 
         public const string Reject = "reject/";

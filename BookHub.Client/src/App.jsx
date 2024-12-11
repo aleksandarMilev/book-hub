@@ -95,7 +95,7 @@ export default function App(){
 
                     <Route path={routes.chats} element={<AuthenticatedRoute element={<ChatList />} />} />
                     <Route path={routes.chat + '/:id'} element={<ChatRoute element={<ChatDetails />} />} />
-                    <Route path={routes.createChat} element={<AuthenticatedRoute element={<CreateChat />} />} />
+                    <Route path={routes.createChat} element={<ProfileRoute element={<CreateChat />} />} />
                     <Route path={routes.editChat} element={<AuthenticatedRoute element={<EditChat />} />} />
 
                     <Route path={routes.badRequest} element={<BadRequest />} />

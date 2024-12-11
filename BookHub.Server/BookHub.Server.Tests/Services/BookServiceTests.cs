@@ -116,7 +116,24 @@
                 .Should()
                 .BeGreaterThanOrEqualTo(paginatedResult.Items.Last().AverageRating);
 
-            paginatedResult.Items.Should().HaveCount(2);
+            paginatedResult.PageIndex.Should().Be(page);
+            paginatedResult.PageSize.Should().Be(pageSize);
+        }
+
+        [Fact]
+        public async Task ByAuthorAsync_ShouldReturn_PaginatedBooksOrderedByRating()
+        {
+            int authorId = 1;
+            int page = 1;
+            int pageSize = 2;
+
+            var paginatedResult = await this.bookService.ByAuthorAsync(authorId, page, pageSize);
+
+            paginatedResult
+                .Items
+                .Should()
+                .HaveCount(1);
+
             paginatedResult.PageIndex.Should().Be(page);
             paginatedResult.PageSize.Should().Be(pageSize);
         }

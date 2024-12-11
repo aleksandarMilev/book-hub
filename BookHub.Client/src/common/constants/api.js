@@ -20,6 +20,7 @@ export const routes = {
 
     book: '/book',
     booksByGenre: '/book/genre',
+    booksByAuthor: '/book/author',
     topThreeBooks: '/book/top',
     createBook: '/book/new',
     editBook: '/book/edit',
