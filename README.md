@@ -1,6 +1,8 @@
 # BookHub
 
-BookHub is a web application that allows users to create and manage books and authors, write and vote on reviews, create reading lists, read articles and participate in chats. It's designed to be a one-stop platform for book lovers to engage with the literary community, share their thoughts, and discover new content.
+BookHub is a web application that allows users to create and manage books and authors, write and vote on reviews, create reading lists, read articles and participate in chats. It's designed to be a one-stop platform for book lovers to engage with the literary community, share their thoughts, and discover new content. It is my project for the final course of SoftUni C# Web track.
+
+![My App Screenshot](./screenshots/certificate)
 
 ![My App Screenshot](./screenshots/scr1.png)
 ![My App Screenshot](./screenshots/scr2.png)
