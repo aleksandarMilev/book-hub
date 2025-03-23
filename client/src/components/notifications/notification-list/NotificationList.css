@@ -1,0 +1,27 @@
+.notification-list .list-group-item {
+  border-left: 5px solid transparent;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.notification-list .list-group-item.unread {
+  background-color: #f9f9f9;
+  border-color: #007bff;
+}
+
+.notification-list .list-group-item.read {
+  background-color: #ffffff;
+  color: #6c757d;
+}
+
+.notification-list .list-group-item h5 {
+  font-size: 1.1rem;
+}
+
+.notification-list .list-group-item:hover {
+  background-color: #e9f4ff;
+}
+
+.notification-list .btn {
+  font-size: 0.9rem;
+  padding: 5px 10px;
+}

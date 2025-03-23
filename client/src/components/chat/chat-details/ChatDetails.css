@@ -1,0 +1,336 @@
+#chat1 {
+  border-radius: 15px;
+  max-width: 100%;
+  margin-top: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+#chat1 .form-outline {
+  margin-bottom: 1rem;
+}
+
+#chat1 .form-outline .form-control {
+  padding: 1rem;
+  font-size: 1.1rem;
+}
+
+#chat1 .form-outline .form-label {
+  font-size: 1rem;
+}
+
+#chat1 .form-outline ~ .form-notch div {
+  pointer-events: none;
+  border: 1px solid;
+  border-color: #eee;
+  box-sizing: border-box;
+  background: transparent;
+}
+
+#chat1 .form-outline ~ .form-notch .form-notch-leading {
+  left: 0;
+  top: 0;
+  height: 100%;
+  border-right: none;
+  border-radius: 0.65rem 0 0 0.65rem;
+}
+
+#chat1 .form-outline ~ .form-notch .form-notch-middle {
+  flex: 0 0 auto;
+  max-width: calc(100% - 1rem);
+  height: 100%;
+  border-right: none;
+  border-left: none;
+}
+
+#chat1 .form-outline ~ .form-notch .form-notch-trailing {
+  flex-grow: 1;
+  height: 100%;
+  border-left: none;
+  border-radius: 0 0.65rem 0.65rem 0;
+}
+
+#chat1 .form-outline:focus ~ .form-notch .form-notch-leading {
+  border-top: 0.125rem solid #39c0ed;
+  border-bottom: 0.125rem solid #39c0ed;
+  border-left: 0.125rem solid #39c0ed;
+}
+
+#chat1 .form-outline:focus ~ .form-notch .form-notch-leading,
+#chat1 .form-outline.active ~ .form-notch .form-notch-leading {
+  border-right: none;
+  transition: all 0.2s linear;
+}
+
+#chat1 .form-outline:focus ~ .form-notch .form-notch-middle {
+  border-bottom: 0.125rem solid;
+  border-color: #39c0ed;
+}
+
+#chat1 .form-outline:focus ~ .form-notch .form-notch-middle,
+#chat1 .form-outline.active ~ .form-notch .form-notch-middle {
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  transition: all 0.2s linear;
+}
+
+#chat1 .form-outline .form-control:focus ~ .form-notch .form-notch-trailing {
+  border-top: 0.125rem solid #39c0ed;
+  border-bottom: 0.125rem solid #39c0ed;
+  border-right: 0.125rem solid #39c0ed;
+}
+
+#chat1 .form-outline .form-control:focus ~ .form-notch .form-notch-trailing,
+#chat1 .form-outline .form-control.active ~ .form-notch .form-notch-trailing {
+  border-left: none;
+  transition: all 0.2s linear;
+}
+
+#chat1 .form-outline .form-control:focus ~ .form-label {
+  color: #39c0ed;
+}
+
+#chat1 .form-outline .form-control ~ .form-label {
+  color: #bfbfbf;
+}
+
+#chat1 .message-container {
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+#chat1 .message {
+  padding: 10px 20px;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+  background-color: #f0f0f0;
+  word-wrap: break-word;
+}
+
+#chat1 form {
+  padding: 20px;
+}
+
+#chat1 form .form-outline {
+  margin-bottom: 15px;
+}
+
+#chat1 .form-outline input,
+#chat1 .form-outline textarea {
+  font-size: 1.2rem;
+  padding: 1rem;
+}
+
+#chat1 .form-outline .form-control {
+  font-size: 1.1rem;
+  padding: 1rem;
+}
+
+#chat1 .btn {
+  font-size: 1.1rem;
+  padding: 0.75rem 2rem;
+}
+
+.alert-warning {
+  font-size: 0.875rem;
+  padding: 0.35rem 0.6rem;
+  margin-bottom: 1.5rem;
+}
+
+.alert-warning .cancel-button {
+  color: #0d6efd;
+  cursor: pointer;
+  font-weight: 600;
+  transition: color 0.2s ease-in-out;
+}
+
+.alert-warning .cancel-button:hover {
+  color: #0056b3;
+}
+
+.profile-item :hover {
+  cursor: pointer;
+}
+
+.invite-box {
+  margin-top: 70px;
+  display: flex;
+  gap: 20px;
+  padding: 15px 30px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: "Roboto", sans-serif;
+  margin-bottom: 20px;
+}
+
+.invite-box p {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.invite-button {
+  padding: 12px 30px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease,
+    box-shadow 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+}
+
+.accept-button {
+  background-color: #28a745;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 30px;
+  transition: transform 0.2s ease, background-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.accept-button:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.accept-button:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.reject-button {
+  background-color: #dc3545;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 30px;
+  transition: transform 0.2s ease, background-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.reject-button:hover {
+  background-color: #c82333;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.reject-button:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.invite-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.invite-button.accept-button,
+.invite-button.reject-button {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 12px 30px;
+  text-align: center;
+  border-radius: 50px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease,
+    background-color 0.3s ease;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-decoration: none;
+  outline: none;
+}
+
+.invite-button.accept-button {
+  background-color: #28a745;
+}
+
+.invite-button.reject-button {
+  background-color: #dc3545;
+}
+
+.invite-button.accept-button:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+}
+
+.invite-button.reject-button:hover {
+  background-color: #c82333;
+  transform: translateY(-2px);
+}
+
+.invite-button.accept-button:active,
+.invite-button.reject-button:active {
+  transform: translateY(0);
+}
+
+#chat1 {
+  border-radius: 15px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-card-header {
+  display: flex;
+  align-items: center;
+  background-color: #17a2b8;
+  color: white;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  flex-direction: column;
+  text-align: center;
+}
+
+.chat-card-header img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 8px;
+}
+
+.chat-card-body {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.participants-card {
+  border-radius: 15px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.participants-card-header {
+  background-color: #f8f9fa;
+  text-align: center;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.participants-card-body {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.participants-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}

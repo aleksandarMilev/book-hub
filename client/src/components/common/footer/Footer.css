@@ -1,0 +1,46 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+#root {
+  flex-grow: 1;
+}
+
+footer {
+  flex-shrink: 0;
+  width: 100%;
+}
+
+footer .footer-section {
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 1rem 0;
+  text-align: center;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  margin-top: auto;
+}
+
+.social-links a {
+  margin-right: 1rem;
+}
+
+.social-links a:last-child {
+  margin-right: 0;
+}
+
+footer {
+  flex-shrink: 0;
+}
+
+footer {
+  margin-top: 15vh;
+}

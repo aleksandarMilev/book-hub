@@ -1,14 +1,12 @@
 # BookHub
 
-BookHub is a web application that allows users to create and manage books and authors, write and vote on reviews, create reading lists, read articles and participate in chats. It's designed to be a one-stop platform for book lovers to engage with the literary community, share their thoughts, and discover new content. It is my project for the final course of SoftUni C# Web track.
+BookHub is a web application that allows users to create and manage books and authors, write and vote on reviews, create reading lists, read articles and participate in chats. It's designed to be a one-stop platform for book lovers to engage with the literary community, share their thoughts, and discover new content. It is my project for the final course of SoftUni C# Web track. The app is fully dockerized.
 
-![My App Screenshot](./screenshots/certificate)
-
-![My App Screenshot](./screenshots/scr1.png)
-![My App Screenshot](./screenshots/scr2.png)
-![My App Screenshot](./screenshots/scr3.png)
-![My App Screenshot](./screenshots/scr4.png)
-![My App Screenshot](./screenshots/scr5.png)
+![Home page screenshot](./screenshots/scr1.png)
+![Home page screenshot](./screenshots/scr2.png)
+![Home page screenshot](./screenshots/scr3.png)
+![Home page screenshot](./screenshots/scr4.png)
+![Home page screenshot](./screenshots/scr5.png)
 
 ## Features
 
@@ -33,13 +31,13 @@ If you need access to admin functionality, you can use the following seeded admi
 
 This app is built using **ReactJS** for the front-end and **ASP.NET Core Web API** for the back-end. Other technologies and libraries used include:
 
-- **MSSQL** 
+- **MSSQL**
 - **Entity Framework Core**
-- **AutoMapper** 
+- **AutoMapper**
 - **Swagger**
 - **XUnit**
-- **Moq** 
-- **Bootstrap** 
+- **Moq**
+- **Bootstrap**
 
 ## Project Structure and Architecture
 
@@ -47,10 +45,9 @@ This app is built using **ReactJS** for the front-end and **ASP.NET Core Web API
 
 ![My App Screenshot](./screenshots/db.png)
 
-
 ### Back-End
 
-BookHub is a simple monolithic application using a classic 3-layered architecture: **Web**, **Service**, and **Data** layers. 
+BookHub is a simple monolithic application using a classic 3-layered architecture: **Web**, **Service**, and **Data** layers.
 
 ![My App Screenshot](./screenshots/server.png)
 
@@ -61,12 +58,14 @@ When you open the `BookHub.Server` folder, you will see the following main direc
 ![My App Screenshot](./screenshots/areas.png)
 
 The **Areas** folder contains minimal functionality, as most features are organized under the **Infrastructure** and **Features** directories. This folder includes:
+
 - A base controller (`AdminApiController`) that all admin-specific endpoints inherit.
 - A service with a single method for retrieving the admin ID.
 
 #### Common
 
 The **Common** folder primarily holds:
+
 - Constants: Used throughout various services and features.
 - Custom exception (`DbEntityNotFoundException`): Shared and used by most feature services.
 
@@ -110,16 +109,18 @@ The **Infrastructure** folder centralizes application-wide services and utilitie
   - **`GetAppSettings`**: Retrieves the `AppSettings` section from the configuration and registers it for dependency injection.
   - **`AddAutoMapper`**: Configures AutoMapper with mappings defined in the current assembly.
 
--  **Filters**: Includes `ModelOrNotFoundActionFilter`, which streamlines controller logic by automatically returning `BadRequest` for `null` results or `Ok` for valid models.
+- **Filters**: Includes `ModelOrNotFoundActionFilter`, which streamlines controller logic by automatically returning `BadRequest` for `null` results or `Ok` for valid models.
 
 - **Services**: This folder contains service-related classes and interfaces that support various functionalities across the application. Key components include:
 
   - **ServiceLifetimes**: Interfaces designed to enable service registration by convention, implemented in the `ServiceCollectionExtensions`.
+
     - `ISingletonService`
     - `ITransientService`
     - `IScopedService`
 
   - **Current User Service**:
+
     - **`ICurrentUserService`**: Defines methods for accessing information about the current user, such as their username, ID, and admin status.
     - **`CurrentUserService`**: Implements `ICurrentUserService` by using `IHttpContextAccessor` to retrieve user details from the current HTTP context.
 
@@ -134,22 +135,26 @@ The **Infrastructure** folder centralizes application-wide services and utilitie
 The **Features** folder contains the logic and functionality for each application feature. Inside most **Feature** folders, you will find the following structure:
 
 - **Web**:
+
   - **Models**: Contains web models to handle incoming client data for `POST`/`PUT` requests. These models include validation for required properties, string lengths, and other constraints.
-  - **Controllers**: Manages request/response logic for feature-specific endpoints. 
+  - **Controllers**: Manages request/response logic for feature-specific endpoints.
     - For admin-specific functionality (e.g., approving/rejecting books or authors), you will find separate `User` and `Admin` controllers.
     - In some cases, related but distinct entities have their own controllers. For example, in the `Author` feature, there are separate controllers for `Author` and `Author's Nationality`. Although nationalities are closely related to authors and cannot exist independently, they are separate database entities, so I use distinct endpoints.
     - When no such distinction exists, a single controller handles all requests for the feature.
 
 - **Service**:
+
   - **Models**: Contains service models, which act as intermediaries between the web layer and the service layer. Incoming web models are mapped to service models before being processed to maintain separation of concerns and ensure the service layer is independent of the web layer.
-  - **Service Implementation**: Includes the interface and implementation for the feature's business logic, ensuring controllers remain thin and focused. 
+  - **Service Implementation**: Includes the interface and implementation for the feature's business logic, ensuring controllers remain thin and focused.
     - In cases of tightly coupled but distinct logic (e.g., reviews and votes), there may be multiple services for a single feature.
- 
- - **Mapper**: Contains mapping profiles for AutoMapper to streamline the conversion between different models in the application layers. 
-    - For complex scenarios like the `Book` feature's detailed queries, manual mapping is used in a `ManualMapper.cs` file.
-    - Occasionally, helper methods in a `MapperHelper` are included for tasks like date-to-string conversions, enum parsing, etc.
+
+- **Mapper**: Contains mapping profiles for AutoMapper to streamline the conversion between different models in the application layers.
+
+  - For complex scenarios like the `Book` feature's detailed queries, manual mapping is used in a `ManualMapper.cs` file.
+  - Occasionally, helper methods in a `MapperHelper` are included for tasks like date-to-string conversions, enum parsing, etc.
 
 - **Data**:
+
   - **Models**: Database models for the feature.
   - **Seed**: Seeds initial data specific to the feature.
   - **Configuration**: Handles entity configurations, reducing clutter in the `OnModelCreating` method of the `DbContext`. This often includes using `HasData()` for seeding and defining indexes where necessary.
@@ -165,7 +170,7 @@ The **BookHub.Server.Tests** project contains unit tests for the business logic 
 
 - **In-Memory Database**: I use Entity Framework's InMemory provider for testing database interactions.
 - **Mocking Dependencies**: All service dependencies are mocked using Moq. For instance, the `BookService` relies on multiple services, such as `IProfileService` and `INotificationService`, which are injected as mocks.
-- **Real AutoMapper**: I do not mock AutoMapper. 
+- **Real AutoMapper**: I do not mock AutoMapper.
 - **FluentAssertions**: I use FluentAssertions for more readable and expressive test assertions.
 
 ### Front-End
@@ -201,6 +206,7 @@ This folder contains all the files responsible for making requests to the server
 - If the response is not successful, throw an error based on the response status or retrun `false`.
 
 #### Common
+
 This folder contains constants used throughout the app, such as API endpoints and error messages, and also some utility functions.
 
 #### Components
@@ -213,18 +219,17 @@ The actual `.jsx` files for each feature.
 
 This folder contains two context providers used for managing global application state: `MessageContext` and `UserContext`.
 
-- **MessageContext**: 
-  - Manages global messages displayed to the user. 
+- **MessageContext**:
+  - Manages global messages displayed to the user.
   - Provides a `showMessage` function to set the message and display it. It's used throughout the app to display success or error messages
-  
-- **UserContext**: 
+- **UserContext**:
   - Manages the authentication state and user profile information globally.
-  - Stores the user's credentials, authentication status, profile completion status, and admin rights. 
+  - Stores the user's credentials, authentication status, profile completion status, and admin rights.
   - The `UserContext` provider persists the user data in `localStorage`, so the user remains logged in after a page reload.
     - Provides functions to:
-        - Change authentication state (`changeAuthenticationState`)
-        - Update profile completion status (`changeHasProfileState`)
-        - Log the user out and clear the stored user data from the context and `localStorage`.
+      - Change authentication state (`changeAuthenticationState`)
+      - Update profile completion status (`changeHasProfileState`)
+      - Log the user out and clear the stored user data from the context and `localStorage`.
 
 #### Hooks
 
@@ -239,7 +244,6 @@ For example, instead of placing complex logic inside a component, a custom hook 
 Let's finally take a look at the `App.jsx` file, which is responsible for route registration and includes some custom routing logic. In the `src/components/common` folder, you will find several common `.jsx` files, including:
 
 - **`AuthenticatedRoute.jsx`**: This component checks if the current user is authenticated using the `UserContext.jsx`. If the user is not authenticated, it redirects them to the `Login.jsx` page. If the user is authenticated, it returns the requested component, allowing access to protected routes.
-  
 - **`AdminRoute.jsx`**: Similar to `AuthenticatedRoute.jsx`, this component checks if the current user is an admin by using the `UserContext.jsx`. If the user is not an admin, they are redirected to the `AccessDenied.jsx` page, where a user-friendly "Unauthorized" message is displayed. If the user is an admin, the requested component is returned, granting access to admin-specific routes.
 
 - **`ProfileRoute.jsx`**: This route is used to ensure that users have a completed profile after registration. It checks if the current user has a profile using a custom hook. If the user does not have a profile, they are redirected to the `Profile.jsx` component, where they will be prompted to complete their profile with a "Create Profile" button. If the user already has a profile, the requested component is returned.

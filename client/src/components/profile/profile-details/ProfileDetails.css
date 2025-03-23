@@ -1,0 +1,258 @@
+.profile-details {
+  background: #f7f7ff;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.profile-details .main-body {
+  padding: 30px 0;
+}
+
+.profile-details .row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.profile-details .col-lg-4 {
+  padding: 15px;
+}
+
+.profile-details .card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  max-width: 400px;
+  margin: auto;
+}
+
+.profile-details .card-body img {
+  border-radius: 50%;
+  border: 4px solid #007bff;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease;
+}
+
+.profile-details .card-body img:hover {
+  transform: scale(1.1);
+}
+
+.profile-details .card-body h4 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.profile-details .list-group-item {
+  border: none;
+  padding: 15px 20px;
+  font-size: 1rem;
+  color: #555;
+  transition: background-color 0.3s ease;
+}
+
+.profile-details .list-group-item:hover {
+  background-color: #f1f1f1;
+}
+
+.profile-details .list-group-item h6 {
+  font-weight: 600;
+  color: #007bff;
+}
+
+.profile-details .list-group-item span {
+  color: #555;
+  font-style: italic;
+}
+
+@media (max-width: 992px) {
+  .profile-details .col-lg-4 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+.profile-details .spinner {
+  margin-top: 100px;
+}
+
+.profile-details .card {
+  max-width: 50em;
+}
+
+.statistics-section {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.statistics-items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+}
+
+.stat-label {
+  font-weight: bold;
+}
+
+.stat-value {
+  color: #555;
+}
+
+.private-profile-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 20px auto;
+  max-width: 600px;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 500;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.currently-reading-container {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 800px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.currently-reading-container h1 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.currently-reading-container p {
+  font-size: 1rem;
+  color: #555;
+  margin-top: 10px;
+}
+
+.book-stats,
+.book-stats-link {
+  display: inline-block;
+  margin: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.book-stats {
+  background-color: #f4f4f4;
+  color: #333;
+  border: 1px solid #ccc;
+}
+
+.favorite-stats {
+  background-color: #ffd1dc;
+  color: #d63384;
+}
+
+.read-stats {
+  background-color: #d1ffd6;
+  color: #28a745;
+}
+
+.book-stats-link {
+  text-decoration: none;
+  background-color: #e0f7fa;
+  color: #00796b;
+  border: 1px solid #00796b;
+}
+
+.favorite-stats-link {
+  background-color: #ffecb3;
+  color: #ff9800;
+}
+
+.read-stats-link {
+  background-color: #e1bee7;
+  color: #6a1b9a;
+}
+
+.book-stats-link:hover {
+  background-color: #004d40;
+  color: white;
+  border-color: white;
+}
+
+.book-stats:hover {
+  background-color: #dcdcdc;
+  color: #000;
+  cursor: pointer;
+}
+
+.chat-section {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.chat-section-heading {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.chat-buttons-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.chat-button {
+  padding: 10px 15px;
+  font-size: 14px;
+  color: #ffffff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.chat-button:hover {
+  background-color: #0056b3;
+}
+
+.chat-button:focus {
+  outline: none;
+  box-shadow: 0 0 5px #0056b3;
+}
+
+.chat-buttons-error {
+  color: #ff4d4f;
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
+}

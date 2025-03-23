@@ -1,0 +1,41 @@
+.genre-details {
+  font-family: "Roboto", sans-serif;
+}
+
+.genre-image img {
+  object-fit: cover;
+  height: 100%;
+}
+
+.card-title {
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+.card-text {
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+button {
+  transition: all 0.3s ease-in-out;
+}
+
+button:hover {
+  background-color: #48c6ef;
+  color: white;
+  border: none;
+}
+
+.top-books-section {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+}
+
+.section-title {
+  margin-bottom: 1.5rem;
+  font-weight: bold;
+  color: #4b6584;
+}
