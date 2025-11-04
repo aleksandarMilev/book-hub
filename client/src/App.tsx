@@ -16,6 +16,10 @@ import CreateArticle from './components/article/create-article/CreateArticle';
 import ArticleList from './components/article/article-list/ArticleList';
 import BadRequest from './components/common/error/BadRequest';
 import NotFound from './components/common/error/NotFound';
+import AuthorDetails from './components/author/author-details/AuthorDetails';
+import AuthorList from './components/author/author-list/AuthorList';
+import CreateAuthor from './components/author/create-author/CreateAuthor';
+import EditAuthor from './components/author/edit-author/EditAuthor';
 
 export default function App() {
   return (

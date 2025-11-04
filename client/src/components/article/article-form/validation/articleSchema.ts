@@ -3,7 +3,6 @@ import * as Yup from 'yup';
 const constraints = {
   title: { min: 10, max: 100 },
   introduction: { min: 10, max: 500 },
-  imageUrl: { min: 10, max: 2_000 },
   content: { min: 100, max: 5_000 },
 };
 
@@ -24,10 +23,10 @@ export const articleSchema = Yup.object({
     .max(constraints.introduction.max, messages.max('Introduction', constraints.introduction.max))
     .required(messages.required('Introduction')),
   imageUrl: Yup.string()
+    .transform((v) => (v === '' ? null : v))
     .url(messages.url)
-    .min(constraints.imageUrl.min, messages.min('Image URL', constraints.imageUrl.min))
-    .max(constraints.imageUrl.max, messages.max('Image URL', constraints.imageUrl.max))
-    .nullable(),
+    .nullable()
+    .notRequired(),
   content: Yup.string()
     .min(constraints.content.min, messages.min('Content', constraints.content.min))
     .max(constraints.content.max, messages.max('Content', constraints.content.max))

@@ -1,89 +1,85 @@
 import axios from 'axios';
-import { getAuthConfig } from '../common/utils';
-import type { Author } from './types/author.type';
-import { baseAdminUrl, baseUrl, routes } from '../../common/constants/api';
+import { baseUrl, baseAdminUrl, routes } from '../../common/constants/api';
 import { errors } from '../../common/constants/messages';
+import type { Author, AuthorInput, AuthorDetails } from './types/author.type';
+import { getAuthConfig, returnIfRequestCanceled } from '../common/utils';
 
-export async function topThree(token: string) {
-  try {
-    const url = `${baseUrl}${routes.topThreeAuthors}`;
-    const response = await axios.get<Author[]>(url, getAuthConfig(token));
-
-    return response.data;
-  } catch {
-    throw new Error(errors.author.topThree);
-  }
-}
-
-export async function names(token: string): Promise<Author[]> {
-  try {
-    const url = `${baseUrl}${routes.authorNames}`;
-    const response = await axios.get<Author[]>(url, getAuthConfig(token));
-
-    return response.data;
-  } catch {
-    throw new Error(errors.author.namesBadRequest);
-  }
-}
-
-export async function details(id: number, token: string, isAdmin: boolean) {
+export async function details(id: string, token: string, isAdmin: boolean, signal?: AbortSignal) {
   try {
     const url = `${isAdmin ? baseAdminUrl : baseUrl}${routes.author}/${id}`;
-    const response = await axios.get<Author>(url, getAuthConfig(token));
+    const response = await axios.get<AuthorDetails>(url, getAuthConfig(token, signal));
 
     return response.data;
-  } catch {
-    throw new Error(errors.author.notfound);
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.author.notFound);
   }
 }
 
-export async function create(author: Author, token: string): Promise<string> {
+export async function create(author: AuthorInput, token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.author}`;
-    const response = await axios.post<{ id: string }>(url, author, getAuthConfig(token));
+    const url = `${baseAdminUrl}${routes.author}`;
+    const response = await axios.post<{ id: string }>(url, author, getAuthConfig(token, signal));
 
     return response.data.id;
-  } catch {
-    throw new Error(errors.author.create);
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.author.create);
   }
 }
 
-export async function edit(id: number, author: Author, token: string): Promise<boolean> {
+export async function edit(id: number, author: AuthorInput, token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.author}/${id}`;
-    await axios.put(url, author, getAuthConfig(token));
-
-    return true;
-  } catch {
-    throw new Error(errors.author.edit);
+    const url = `${baseAdminUrl}${routes.author}/${id}`;
+    await axios.put(url, author, getAuthConfig(token, signal));
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.author.edit);
   }
 }
 
-export async function remove(id: number, token: string): Promise<boolean> {
+export async function remove(id: string, token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.author}/${id}`;
-    await axios.delete(url, getAuthConfig(token));
-
-    return true;
-  } catch {
-    throw new Error(errors.author.delete);
+    const url = `${baseAdminUrl}${routes.author}/${id}`;
+    await axios.delete(url, getAuthConfig(token, signal));
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.author.delete);
   }
 }
 
-export async function approve(id: number, token: string): Promise<void> {
+export async function approve(id: number, token: string, signal?: AbortSignal) {
   try {
     const url = `${baseAdminUrl}${routes.author}/${id}/approve`;
-    await axios.patch(url, null, getAuthConfig(token));
-  } catch {
-    throw new Error(errors.author.approve);
+    await axios.patch<void>(url, null, getAuthConfig(token, signal));
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.author.approve);
   }
 }
 
-export async function reject(id: number, token: string): Promise<void> {
+export async function reject(id: number, token: string, signal?: AbortSignal) {
   try {
     const url = `${baseAdminUrl}${routes.author}/${id}/reject`;
-    await axios.patch(url, null, getAuthConfig(token));
-  } catch {
-    throw new Error(errors.author.reject);
+    await axios.patch<void>(url, null, getAuthConfig(token, signal));
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.author.reject);
+  }
+}
+
+export async function names(token: string, signal?: AbortSignal) {
+  try {
+    const url = `${baseUrl}${routes.authorNames}`;
+    const response = await axios.get<Author[]>(url, getAuthConfig(token, signal));
+
+    return response.data;
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.author.namesBadRequest);
+  }
+}
+
+export async function topThree(token: string, signal?: AbortSignal) {
+  try {
+    const url = `${baseUrl}${routes.topThreeAuthors}`;
+    const response = await axios.get<Author[]>(url, getAuthConfig(token, signal));
+
+    return response.data;
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.author.topThree);
   }
 }

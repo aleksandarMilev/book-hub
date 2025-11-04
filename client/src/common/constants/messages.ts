@@ -57,7 +57,7 @@ export const errors = {
     reject: baseMessages.reject.replace('{entity}', 'author'),
     topThree: baseMessages.topThree.replace('{entityPlural}', 'authors'),
     namesBadRequest: baseMessages.namesBadRequest.replace('{entity}', 'author'),
-    notfound: baseMessages.notFound.replace('{entity}', 'author'),
+    notFound: baseMessages.notFound.replace('{entity}', 'author'),
     create:
       'We’re sorry, something went wrong while creating the author. Please try again later. If the issue persists, contact support for assistance.',
     edit: 'We’re sorry, something went wrong while updating the author’s details. Please try again later. If the issue persists, contact support for assistance.',

@@ -20,7 +20,7 @@ export function returnIfRequestCanceled(error: unknown, message: string): void {
     axios.isCancel?.(error) || (error instanceof Error && error.name === 'CanceledError');
 
   if (isRequestCanceled) {
-    return;
+    throw error;
   }
 
   throw new Error(message);

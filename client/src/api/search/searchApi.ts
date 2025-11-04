@@ -2,7 +2,7 @@ import axios from 'axios';
 import { baseUrl, routes } from '../../common/constants/api';
 import { errors } from '../../common/constants/messages';
 import { pagination } from '../../common/constants/defaultValues';
-import type { PagedResult } from '../common/types.ts/pagedResults';
+import type { PagedResult } from '../common/types/pagedResults';
 import { getAuthConfig, returnIfRequestCanceled } from '../common/utils';
 import type { BookSearchResult } from './types/bookSearchResult';
 import type { ChatSearchResult } from './types/chatResultSearch';

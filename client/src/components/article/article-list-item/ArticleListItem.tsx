@@ -1,6 +1,5 @@
 import type { FC } from 'react';
 import { Link } from 'react-router-dom';
-import { format } from 'date-fns';
 import {
   MDBRow,
   MDBCol,
@@ -14,6 +13,7 @@ import {
 import { routes } from '../../../common/constants/api';
 import './ArticleListItem.css';
 import type { ArticleSummary } from '../../../api/article/types/article.type';
+import { formatIsoDate } from '../../../common/functions/utils';
 
 const ArticleListItem: FC<ArticleSummary> = ({ id, title, introduction, imageUrl, createdOn }) => {
   return (
@@ -31,7 +31,11 @@ const ArticleListItem: FC<ArticleSummary> = ({ id, title, introduction, imageUrl
               }}
             />
           ) : (
-            <div className="article-item-image-placeholder d-flex align-items-center justify-content-center text-muted">
+            <div
+              className="article-item-image-placeholder d-flex align-items-center justify-content-center text-muted"
+              role="img"
+              aria-label="No image available"
+            >
               No Image
             </div>
           )}
@@ -47,7 +51,7 @@ const ArticleListItem: FC<ArticleSummary> = ({ id, title, introduction, imageUrl
               {introduction}
             </MDBCardText>
             <MDBCardText className="text-muted small">
-              Published on {createdOn ? format(new Date(createdOn), 'dd MMM yyyy') : 'Unknown date'}
+              Published on {formatIsoDate(createdOn, 'Publish date unavailable')}
             </MDBCardText>
           </MDBCardBody>
         </MDBCol>

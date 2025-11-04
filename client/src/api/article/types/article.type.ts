@@ -1,10 +1,12 @@
+export type ISODateString = string;
+
 interface ArticleBase {
   id: number;
   title: string;
   introduction: string;
   content: string;
   imageUrl?: string | null;
-  createdOn?: string;
+  createdOn?: ISODateString;
   views?: number;
 }
 
