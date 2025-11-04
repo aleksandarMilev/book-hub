@@ -1,6 +1,8 @@
-import { useSearchNationalities } from "../../../../hooks/useNationality";
+import type { FC, ChangeEvent } from 'react';
+import { useSearchNationalities } from '../../../../hooks/useNationality';
+import type { NationalitySearchProps } from './types/nationalitySearchProps';
 
-export default function NationalitySearch({ nationalities, loading, formik }) {
+const NationalitySearch: FC<NationalitySearchProps> = ({ nationalities, loading, formik }) => {
   const {
     searchTerm,
     filteredNationalities,
@@ -10,10 +12,14 @@ export default function NationalitySearch({ nationalities, loading, formik }) {
     showDropdownOnFocus,
   } = useSearchNationalities(nationalities);
 
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    updateSearchTerm(e.target.value);
+  };
+
   return (
     <div className="mb-4">
       <h6 className="fw-bold mb-2">
-        {"Nationality: (select 'unknown' if you are not sure)"}
+        Nationality: <span className="fw-normal">(select "unknown" if you are not sure)</span>
       </h6>
       <input
         type="text"
@@ -21,7 +27,7 @@ export default function NationalitySearch({ nationalities, loading, formik }) {
         className="form-control"
         placeholder="Search for a nationality..."
         value={searchTerm}
-        onChange={(e) => updateSearchTerm(e.target.value)}
+        onChange={handleInputChange}
         onFocus={showDropdownOnFocus}
       />
       {loading ? (
@@ -29,10 +35,7 @@ export default function NationalitySearch({ nationalities, loading, formik }) {
       ) : (
         showDropdown &&
         searchTerm && (
-          <ul
-            className="list-group mt-2"
-            style={{ maxHeight: "200px", overflowY: "auto" }}
-          >
+          <ul className="list-group mt-2" style={{ maxHeight: '200px', overflowY: 'auto' }}>
             {filteredNationalities.length === 0 ? (
               <li className="list-group-item">No matches found</li>
             ) : (
@@ -41,13 +44,13 @@ export default function NationalitySearch({ nationalities, loading, formik }) {
                   key={n.id}
                   className="list-group-item"
                   onClick={() => {
-                    formik.setFieldValue("nationality", n.id);
-                    selectNationality(n.name);
+                    formik.setFieldValue('nationality', n.id);
+                    selectNationality(n);
                   }}
                   style={{
-                    cursor: "pointer",
-                    padding: "10px",
-                    borderBottom: "1px solid #ddd",
+                    cursor: 'pointer',
+                    padding: '10px',
+                    borderBottom: '1px solid #ddd',
                   }}
                 >
                   {n.name}
@@ -59,4 +62,6 @@ export default function NationalitySearch({ nationalities, loading, formik }) {
       )}
     </div>
   );
-}
+};
+
+export default NationalitySearch;

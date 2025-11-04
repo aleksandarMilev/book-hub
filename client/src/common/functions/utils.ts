@@ -1,3 +1,17 @@
+import { format } from 'date-fns';
+
+export const parseId = (idAsString?: string) => {
+  const id = Number(idAsString);
+  if (!Number.isFinite(id)) {
+    throw new Error('Invalid id.');
+  }
+
+  return id;
+};
+
+export const formatIsoDate = (iso?: string, fallback = 'Unknown date') =>
+  iso ? format(new Date(iso), 'dd MMM yyyy') : fallback;
+
 export const utcToLocal = (utcDateString: string) => {
   const isoDateString = utcDateString.replace(' ', 'T') + 'Z';
   const utcDate = new Date(isoDateString);

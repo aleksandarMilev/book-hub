@@ -4,24 +4,26 @@ import { useNavigate } from 'react-router-dom';
 import * as api from '../api/author/authorApi';
 import { routes } from '../common/constants/api';
 import { UserContext } from '../contexts/user/userContext';
-import type { Author } from '../api/author/types/author.type';
+import { useMessage } from '../contexts/message/messageContext';
+import type { Author, AuthorInput, AuthorDetails } from '../api/author/types/author.type';
 
-export function useGetTopThree() {
+export function useTopThree() {
   const { token } = useContext(UserContext);
+
   const [authors, setAuthors] = useState<Author[]>([]);
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!token) {
-      return;
-    }
-
-    const fetchData = async () => {
+    const controller = new AbortController();
+    const fetchAuthors = async () => {
       try {
         setIsFetching(true);
-        const data = await api.topThree(token);
-        setAuthors(data);
+
+        const data = await api.topThree(token, controller.signal);
+        if (data) {
+          setAuthors(data);
+        }
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Failed to load authors.';
         setError(message);
@@ -30,7 +32,8 @@ export function useGetTopThree() {
       }
     };
 
-    void fetchData();
+    void fetchAuthors();
+    return () => controller.abort();
   }, [token]);
 
   return { authors, isFetching, error };
@@ -38,20 +41,20 @@ export function useGetTopThree() {
 
 export function useNames() {
   const { token } = useContext(UserContext);
+
   const navigate = useNavigate();
   const [authors, setAuthors] = useState<Author[]>([]);
   const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
-    if (!token) {
-      return;
-    }
-
+    const controller = new AbortController();
     const fetchData = async () => {
       try {
         setIsFetching(true);
-        const data = await api.names(token);
-        setAuthors(data);
+        const data = await api.names(token, controller.signal);
+        if (data) {
+          setAuthors(data);
+        }
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Failed to load author names.';
         navigate(routes.badRequest, { state: { message } });
@@ -61,12 +64,13 @@ export function useNames() {
     };
 
     void fetchData();
+    return () => controller.abort();
   }, [token, navigate]);
 
   return { authors, isFetching };
 }
 
-export function useSearchAuthors(authors: Author[]) {
+export function useSearch(authors: Author[]) {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredAuthors, setFilteredAuthors] = useState<Author[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -103,21 +107,24 @@ export function useSearchAuthors(authors: Author[]) {
   };
 }
 
-export function useGetDetails(id: number) {
-  const { token, isAdmin } = useContext(UserContext);
+export function useDetails(id: string) {
   const navigate = useNavigate();
-  const [author, setAuthor] = useState<Author | null>(null);
+  const { token, isAdmin } = useContext(UserContext);
+
+  const [author, setAuthor] = useState<AuthorDetails | null>(null);
   const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
-    if (!id || !token) {
-      return;
-    }
-
+    const controller = new AbortController();
     const fetchData = async () => {
       try {
         setIsFetching(true);
-        const data = await api.details(id, token, isAdmin);
+
+        const data = await api.details(id, token, isAdmin, controller.signal);
+        if (!data) {
+          return;
+        }
+
         setAuthor(data);
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Author not found.';
@@ -128,6 +135,7 @@ export function useGetDetails(id: number) {
     };
 
     void fetchData();
+    return () => controller.abort();
   }, [id, token, isAdmin, navigate]);
 
   return { author, isFetching };
@@ -138,12 +146,11 @@ export function useCreate() {
   const navigate = useNavigate();
 
   const createHandler = useCallback(
-    async (authorData: Omit<Author, 'id'>) => {
-      const authorToSend: Author = {
+    async (authorData: AuthorInput) => {
+      const authorToSend: AuthorInput = {
         ...authorData,
         penName: authorData.penName || null,
         imageUrl: authorData.imageUrl || null,
-        ...(authorData.nationalityId && { nationalityId: authorData.nationalityId }),
       };
 
       try {
@@ -164,16 +171,15 @@ export function useEdit() {
   const navigate = useNavigate();
 
   const editHandler = useCallback(
-    async (id: number, authorData: Author) => {
-      const authorToSend: Author = {
+    async (id: number, authorData: AuthorInput) => {
+      const authorToSend: AuthorInput = {
         ...authorData,
         penName: authorData.penName || null,
         imageUrl: authorData.imageUrl || null,
-        ...(authorData.nationalityId && { nationalityId: authorData.nationalityId }),
       };
 
       try {
-        return await api.edit(id, authorToSend, token);
+        await api.edit(id, authorToSend, token);
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Failed to edit author.';
         navigate(routes.badRequest, { state: { message } });
@@ -184,3 +190,31 @@ export function useEdit() {
 
   return editHandler;
 }
+
+export const useRemove = (id: string, token: string, name?: string) => {
+  const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
+  const { showMessage } = useMessage();
+
+  const toggleModal = useCallback(() => setShowModal((prev) => !prev), []);
+
+  const deleteHandler = useCallback(async () => {
+    if (showModal) {
+      try {
+        await api.remove(id, token);
+
+        showMessage(`${name || 'This author'} was successfully deleted!`, true);
+        navigate(routes.home);
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Failed to delete author.';
+        showMessage(message, false);
+      } finally {
+        toggleModal();
+      }
+    } else {
+      toggleModal();
+    }
+  }, [showModal, id, token, name, navigate, showMessage, toggleModal]);
+
+  return { showModal, toggleModal, deleteHandler };
+};

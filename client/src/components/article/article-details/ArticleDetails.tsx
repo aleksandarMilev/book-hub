@@ -17,16 +17,30 @@ import { routes } from '../../../common/constants/api';
 
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
 import DeleteModal from '../../common/delete-modal/DeleteModal';
+import { UserContext } from '../../../contexts/user/userContext';
+import { formatIsoDate, parseId } from '../../../common/functions/utils';
 
 import './ArticleDetails.css';
-import { UserContext } from '../../../contexts/user/userContext';
 
 const ArticleDetails: FC = () => {
-  let { id } = useParams<{ id: string }>();
+  const { id } = useParams<{ id: string }>();
+  let parsedId: number | null = null;
 
-  const { token, isAdmin } = useContext(UserContext);
-  const { article, isFetching } = hooks.useDetails(id!);
-  const { showModal, toggleModal, deleteHandler } = hooks.useRemove(id!, token, article?.title);
+  try {
+    parsedId = parseId(id);
+  } catch {}
+
+  if (parsedId == null) {
+    return <div>Invalid article id.</div>;
+  }
+
+  const { isAdmin } = useContext(UserContext);
+  const { article, isFetching, error } = hooks.useDetails(parsedId);
+  const { showModal, toggleModal, deleteHandler } = hooks.useRemove(parsedId, article?.title);
+
+  if (error) {
+    return <div className="alert alert-danger">{error}</div>;
+  }
 
   if (isFetching || !article) {
     return <DefaultSpinner />;
@@ -42,9 +56,7 @@ const ArticleDetails: FC = () => {
                 <MDBCol md="12">
                   <MDBCardTitle className="article-title">{article.title}</MDBCardTitle>
                   <MDBCardText className="text-muted">
-                    {article.createdOn
-                      ? `Published on ${new Date(article.createdOn).toLocaleDateString()}`
-                      : 'Publish date unavailable'}
+                    {formatIsoDate(article.createdOn, 'Publish date unavailable')}
                   </MDBCardText>
                 </MDBCol>
               </MDBRow>
@@ -53,7 +65,13 @@ const ArticleDetails: FC = () => {
                   {article.imageUrl ? (
                     <img src={article.imageUrl} alt={article.title} className="article-image" />
                   ) : (
-                    <div className="article-image-placeholder">No Image Available</div>
+                    <div
+                      className="article-image-placeholder"
+                      role="img"
+                      aria-label="No image available"
+                    >
+                      No Image Available
+                    </div>
                   )}
                 </MDBCol>
               </MDBRow>
@@ -67,7 +85,7 @@ const ArticleDetails: FC = () => {
                 <MDBCol md="6">
                   <div className="article-meta">
                     <MDBIcon fas icon="eye" className="me-2" />
-                    {article.views} Views
+                    {article.views ?? 0} Views
                   </div>
                 </MDBCol>
               </MDBRow>
@@ -75,12 +93,14 @@ const ArticleDetails: FC = () => {
                 <div className="d-flex gap-2 mt-4">
                   <Link
                     to={`${routes.admin.editArticle}/${id}`}
+                    aria-label="Edit article"
                     className="btn btn-warning d-flex align-items-center gap-2"
                   >
                     <FaEdit /> Edit
                   </Link>
                   <button
                     type="button"
+                    aria-label="Delete article"
                     className="btn btn-danger d-flex align-items-center gap-2"
                     onClick={deleteHandler}
                   >

@@ -4,13 +4,16 @@ import { FaSearch } from 'react-icons/fa';
 import { pagination } from '../../../common/constants/defaultValues';
 import * as hooks from '../../../hooks/useSearch';
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
-import image from '../../../assets/images/no-books-found.png';
-import ArticleListItem from '../article-list-item/ArticleListItem';
-import { useDebounce } from '../../../hooks/common/useDebounce';
-import type { ArticleSummary } from '../../../api/article/types/article.type';
 import Pagination from '../../common/pagination/Pagination';
+import image from '../../../assets/images/no-books-found.png';
 
-const ArticleList: FC = () => {
+import './AuthorList.css';
+import { useDebounce } from '../../../hooks/common/useDebounce';
+import type { Author } from '../../../api/author/types/author.type';
+import type { AuthorSearchResult } from '../../../api/search/types/authorSearchResult';
+import AuthorListItem from '../author-list-item/AuthorListItem';
+
+const AuthorList: FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm);
 
@@ -18,10 +21,10 @@ const ArticleList: FC = () => {
   const pageSize = pagination.defaultPageSize;
 
   const {
-    items: articles,
+    items: authors,
     totalItems,
     isFetching,
-  } = hooks.useSearchArticles(debouncedSearchTerm, page, pageSize);
+  } = hooks.useSearchAuthors(debouncedSearchTerm, page, pageSize);
 
   const totalPages = Math.ceil(totalItems / pageSize) || 1;
 
@@ -46,16 +49,12 @@ const ArticleList: FC = () => {
             <input
               type="text"
               className="form-control search-input"
-              placeholder="Search articles..."
+              placeholder="Search authors..."
               value={searchTerm}
               onChange={handleSearchChange}
               disabled={isFetching}
             />
-            <button
-              className="btn btn-light search-btn"
-              disabled={isFetching}
-              aria-label="Search articles"
-            >
+            <button className="btn btn-light search-btn" disabled={isFetching}>
               <FaSearch size={20} />
             </button>
           </div>
@@ -66,11 +65,12 @@ const ArticleList: FC = () => {
         <div className="col-md-10">
           {isFetching ? (
             <DefaultSpinner />
-          ) : articles.length > 0 ? (
+          ) : authors.length > 0 ? (
             <>
-              {articles.map((article: ArticleSummary) => (
-                <ArticleListItem key={article.id} {...article} />
+              {authors.map((author: AuthorSearchResult) => (
+                <AuthorListItem key={author.id} {...author} />
               ))}
+
               <Pagination
                 page={page}
                 totalPages={totalPages}
@@ -82,12 +82,12 @@ const ArticleList: FC = () => {
             <div className="d-flex flex-column align-items-center justify-content-center mt-5">
               <img
                 src={image}
-                alt="No articles found"
+                alt="No authors found"
                 className="mb-4 clickable"
                 style={{ maxWidth: '200px', opacity: 0.7, cursor: 'pointer' }}
                 onClick={() => setSearchTerm('')}
               />
-              <h5 className="text-muted">We couldn't find any articles</h5>
+              <h5 className="text-muted">We couldn't find any authors</h5>
               <p className="text-muted text-center" style={{ maxWidth: '400px' }}>
                 Try adjusting your search terms or exploring our collection for more options.
               </p>
@@ -99,4 +99,4 @@ const ArticleList: FC = () => {
   );
 };
 
-export default ArticleList;
+export default AuthorList;

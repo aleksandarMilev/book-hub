@@ -26,6 +26,7 @@ export const useArticleFormik = ({ article = null, isEditMode = false }: Article
       try {
         if (isEditMode && article?.id) {
           await editHandler(article.id, values);
+
           showMessage(`${article.title || 'This article'} was successfully edited!`, true);
           navigate(`${routes.article}/${article.id}`, { replace: true });
         } else {

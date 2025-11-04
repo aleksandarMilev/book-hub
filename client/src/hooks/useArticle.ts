@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { format } from 'date-fns';
 
 import * as api from '../api/article/articleApi';
 import { routes } from '../common/constants/api';
@@ -8,119 +7,117 @@ import { UserContext } from '../contexts/user/userContext';
 import type { Article, ArticleInput } from '../api/article/types/article.type';
 import { useMessage } from '../contexts/message/messageContext';
 
-export function useDetails(id: string) {
+export function useDetails(id: number) {
   const { token } = useContext(UserContext);
-  const navigate = useNavigate();
 
   const [article, setArticle] = useState<Article | null>(null);
-  const [isFetching, setIsFetching] = useState<boolean>(false);
+  const [isFetching, setIsFetching] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
-    const fetchArticle = async () => {
+    (async () => {
       try {
         setIsFetching(true);
+        setError(null);
 
         const data = await api.details(id, token, controller.signal);
-        if (!data) {
+        setArticle(data);
+      } catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError') {
           return;
         }
 
-        const formattedArticle: Article = {
-          ...data,
-          ...(data.createdOn && {
-            createdOn: format(new Date(data.createdOn), 'yyyy-MM-dd'),
-          }),
-        };
-
-        setArticle(formattedArticle);
-      } catch (error) {
         const message = error instanceof Error ? error.message : 'Article not found.';
-        navigate(routes.notFound, { state: { message } });
+        setError(message);
       } finally {
         setIsFetching(false);
       }
-    };
-
-    void fetchArticle();
+    })();
 
     return () => controller.abort();
-  }, [id, token, navigate]);
+  }, [id, token]);
 
-  return { article, isFetching };
+  return { article, isFetching, error };
 }
 
 export function useCreate() {
   const { token } = useContext(UserContext);
   const navigate = useNavigate();
 
-  const createHandler = useCallback(
+  return useCallback(
     async (articleData: ArticleInput) => {
-      const articleToSend: ArticleInput = {
-        ...articleData,
-        imageUrl: articleData.imageUrl || null,
-      };
-
+      const articleToSend = { ...articleData, imageUrl: articleData.imageUrl || null };
       try {
         return await api.create(articleToSend, token);
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Failed to create article.';
+
         navigate(routes.badRequest, { state: { message } });
+        throw error;
       }
     },
     [token, navigate],
   );
-
-  return createHandler;
 }
 
 export function useEdit() {
   const { token } = useContext(UserContext);
   const navigate = useNavigate();
 
-  const editHandler = useCallback(
+  return useCallback(
     async (id: number, articleData: ArticleInput) => {
-      const articleToSend: ArticleInput = {
-        ...articleData,
-        imageUrl: articleData.imageUrl || null,
-      };
-
+      const articleToSend = { ...articleData, imageUrl: articleData.imageUrl || null };
       try {
-        await api.edit(id, articleToSend, token);
+        const success = await api.edit(id, articleToSend, token);
+        if (!success) {
+          throw new Error('Failed to edit article.');
+        }
+
+        return true;
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Failed to edit article.';
+
         navigate(routes.badRequest, { state: { message } });
+        throw error;
       }
     },
     [token, navigate],
   );
-
-  return editHandler;
 }
 
-export const useRemove = (id: string, token: string, title?: string) => {
-  const [showModal, setShowModal] = useState(false);
+export const useRemove = (id: number, title?: string) => {
   const navigate = useNavigate();
   const { showMessage } = useMessage();
+  const { token } = useContext(UserContext);
 
+  const [showModal, setShowModal] = useState(false);
   const toggleModal = useCallback(() => setShowModal((prev) => !prev), []);
 
   const deleteHandler = useCallback(async () => {
-    if (showModal) {
-      try {
-        await api.remove(id, token);
+    if (!showModal) {
+      toggleModal();
+      return;
+    }
 
-        showMessage(`${title || 'This article'} was successfully deleted!`, true);
-        navigate(routes.home);
-      } catch (error: unknown) {
-        const message = error instanceof Error ? error.message : 'Failed to delete article.';
-        showMessage(message, false);
-      } finally {
-        toggleModal();
+    const controller = new AbortController();
+    try {
+      await api.remove(id, token, controller.signal);
+
+      showMessage(`${title || 'This article'} was successfully deleted!`, true);
+      navigate(routes.home);
+    } catch (error: unknown) {
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        return;
       }
-    } else {
+
+      const message = error instanceof Error ? error.message : 'Failed to delete article.';
+      showMessage(message, false);
+    } finally {
       toggleModal();
     }
+
+    return () => controller.abort();
   }, [showModal, id, token, title, navigate, showMessage, toggleModal]);
 
   return { showModal, toggleModal, deleteHandler };
