@@ -21,6 +21,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@microsoft/signalr": "^8.0.7",
+    "axios": "^1.13.1",
     "bootstrap": "^5.3.3",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
@@ -35,7 +36,8 @@
     "react-dom": "^18.3.1",
     "react-icons": "^5.3.0",
     "react-router-dom": "^6.27.0",
-    "yup": "^1.4.0"
+    "yup": "^1.4.0",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",

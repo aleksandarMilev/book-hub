@@ -21,6 +21,6 @@
     "exactOptionalPropertyTypes": true,
     "useUnknownInCatchVariables": true
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "vite-env.d.ts"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "vite-env.d.ts", "src/hooks/useProfile.ts"],
   "exclude": ["node_modules", "dist"]
 }
