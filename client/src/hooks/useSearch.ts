@@ -10,7 +10,7 @@ import type { BookSearchResult } from '../api/search/types/bookSearchResult';
 import type { ChatSearchResult } from '../api/search/types/chatResultSearch';
 import type { AuthorSearchResult } from '../api/search/types/authorSearchResult';
 import type { ProfileSearchResult } from '../api/search/types/profileSearchResult';
-import type { ArticleSearchResult } from '../api/search/types/articleSearchResult';
+import type { ArticleSummary } from '../api/article/types/article';
 
 function useSearch<T>(
   search: (
@@ -101,5 +101,5 @@ export function useSearchArticles(
   page: number = pagination.defaultPageIndex,
   pageSize: number = pagination.defaultPageSize,
 ) {
-  return useSearch<ArticleSearchResult>(api.searchArticles, searchTerm, page, pageSize);
+  return useSearch<ArticleSummary>(api.searchArticles, searchTerm, page, pageSize);
 }

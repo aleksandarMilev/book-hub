@@ -1,11 +1,18 @@
-import type { CreateReview } from './createReview';
-
-export interface Review extends CreateReview {
+export interface Review {
   id: number;
-  userId: string;
-  username: string;
-  createdOn: string;
-  modifiedOn?: string | null;
+  bookId: number;
+  content: string;
+  rating: number;
+  creatorId: number;
+  createdBy: string;
   upvotes: number;
   downvotes: number;
+  createdOn?: string;
+  updatedOn?: string;
+}
+
+export interface ReviewInput {
+  bookId: number;
+  content: string;
+  rating: number;
 }

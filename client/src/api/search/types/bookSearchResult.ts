@@ -1,8 +1,6 @@
-export interface BookSearchResult {
-  id: number;
-  title: string;
-  authorName: string;
-  imageUrl: string;
-  averageRating: number;
-  ratingsCount: number;
-}
+import type { BookListItemType } from '../../book/types/book';
+import type { Genre } from '../../genre/types/genre';
+
+export type BookSearchResult = Omit<BookListItemType, 'genres'> & {
+  genres?: Genre[];
+};

@@ -15,9 +15,9 @@ import GenderRadio from './gender-radio/GenderRadio';
 import NationalitySearch from './nationality-search/NationalitySearch';
 import { useAuthorFormik } from './formik/useAuthorFormik';
 import * as nationalityHooks from '../../../hooks/useNationality';
-import type { AuthorFormProps } from './types/authorFormProps';
 
 import './AuthorForm.css';
+import type { AuthorFormProps } from '../../../api/author/types/author';
 
 const AuthorForm: FC<AuthorFormProps> = ({ authorData = null, isEditMode = false }) => {
   const formik = useAuthorFormik({ authorData, isEditMode });

@@ -1,6 +1,6 @@
 import type { FC, ChangeEvent } from 'react';
 import { useSearchNationalities } from '../../../../hooks/useNationality';
-import type { NationalitySearchProps } from './types/nationalitySearchProps';
+import type { NationalitySearchProps } from '../../../../api/author/types/author';
 
 const NationalitySearch: FC<NationalitySearchProps> = ({ nationalities, loading, formik }) => {
   const {

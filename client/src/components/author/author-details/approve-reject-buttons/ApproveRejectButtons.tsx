@@ -1,8 +1,6 @@
 import { useState, type FC } from 'react';
-import type { ApproveRejectButtonsProps } from './types/approveRejectButtonsProps';
-import { useNavigate } from 'react-router-dom';
-import * as api from '../../../../api/author/authorApi';
-import { routes } from '../../../../common/constants/api';
+import { useAuthorApproval } from '../../../../hooks/useAuthor';
+import type { ApproveRejectButtonsProps } from '../../../../api/author/types/author';
 
 const ApproveRejectButtons: FC<ApproveRejectButtonsProps> = ({
   authorId,
@@ -11,30 +9,18 @@ const ApproveRejectButtons: FC<ApproveRejectButtonsProps> = ({
   token,
   onSuccess,
 }) => {
-  const navigate = useNavigate();
   const [isApproved, setIsApproved] = useState(initialIsApproved);
-
-  const approveHandler = async () => {
-    try {
-      await api.approve(authorId, token);
-
-      setIsApproved(true);
-      onSuccess(`${authorName} was successfully approved!`);
-    } catch (error: any) {
-      onSuccess(error.message ?? 'Approval failed.', false);
-    }
-  };
-
-  const rejectHandler = async () => {
-    try {
-      await api.reject(authorId, token);
-
-      onSuccess(`${authorName} was successfully rejected!`);
-      navigate(routes.home);
-    } catch (error: any) {
-      onSuccess(error.message ?? 'Rejection failed.', false);
-    }
-  };
+  const { approveHandler, rejectHandler } = useAuthorApproval({
+    authorId,
+    authorName,
+    token,
+    onSuccess: (message, success = true) => {
+      onSuccess(message, success);
+      if (success && message.includes('approved')) {
+        setIsApproved(true);
+      }
+    },
+  });
 
   if (isApproved) {
     return <p className="text-success">This author has been approved.</p>;

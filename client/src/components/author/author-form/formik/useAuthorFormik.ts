@@ -6,9 +6,11 @@ import { UserContext } from '../../../../contexts/user/userContext';
 import * as authorHooks from '../../../../hooks/useAuthor';
 import { authorSchema } from '../validation/authorSchema';
 import { routes } from '../../../../common/constants/api';
-import type { AuthorFormProps } from '../types/authorFormProps';
-import type { AuthorInput } from '../../../../api/author/types/author.type';
-import type { AuthorFormValues } from './types/authorFormValues';
+import type {
+  AuthorFormProps,
+  AuthorFormValues,
+  AuthorInput,
+} from '../../../../api/author/types/author';
 
 export const useAuthorFormik = ({ authorData = null, isEditMode = false }: AuthorFormProps) => {
   const navigate = useNavigate();

@@ -4,17 +4,22 @@ import { useMessage } from '../../../../contexts/message/messageContext';
 import * as hooks from '../../../../hooks/useArticle';
 import { articleSchema } from '../validation/articleSchema';
 import { routes } from '../../../../common/constants/api';
-import type { ArticleInput } from '../../../../api/article/types/article.type';
-import type { ArticleFormProps } from '../types/articleFormProps';
+import type { Article, ArticleInput } from '../../../../api/article/types/article';
 
-export const useArticleFormik = ({ article = null, isEditMode = false }: ArticleFormProps) => {
+export const useArticleFormik = ({
+  article = null,
+  isEditMode = false,
+}: {
+  article?: Article | null;
+  isEditMode?: boolean;
+}) => {
   const navigate = useNavigate();
   const { showMessage } = useMessage();
 
   const createHandler = hooks.useCreate();
   const editHandler = hooks.useEdit();
 
-  const formik = useFormik<ArticleInput>({
+  const formik = useFormik<ArticleInput & { imageUrl: string }>({
     initialValues: {
       title: article?.title || '',
       introduction: article?.introduction || '',

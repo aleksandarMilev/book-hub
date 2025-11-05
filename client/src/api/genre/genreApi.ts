@@ -1,28 +1,29 @@
-import axios from 'axios';
-import { baseUrl, routes } from '../../common/constants/api';
+import { routes } from '../../common/constants/api';
 import { errors } from '../../common/constants/messages';
-import { getAuthConfig } from '../common/utils';
-import type { GenreName } from './types/genreName';
-import type { GenreDetails } from './types/genreDetails';
+import { http } from '../common/http';
+import { getAuthConfig, returnIfRequestCanceled } from '../common/utils';
+import type { Genre, GenreDetails } from './types/genre';
 
-export async function all(token: string) {
+export async function all(token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.genres}`;
-    const response = await axios.get<GenreName[]>(url, getAuthConfig(token));
+    const url = `${routes.genres}`;
+    const response = await http.get<Genre[]>(url, getAuthConfig(token, signal));
 
     return response.data;
-  } catch {
-    throw new Error(errors.genre.namesBadRequest);
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.genre.namesBadRequest);
+    throw error;
   }
 }
 
-export async function details(id: number, token: string) {
+export async function details(id: number, token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.genres}/${id}`;
-    const response = await axios.get<GenreDetails>(url, getAuthConfig(token));
+    const url = `${routes.genres}/${id}`;
+    const response = await http.get<GenreDetails>(url, getAuthConfig(token, signal));
 
     return response.data;
-  } catch {
-    throw new Error(errors.genre.details);
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.genre.details);
+    throw error;
   }
 }

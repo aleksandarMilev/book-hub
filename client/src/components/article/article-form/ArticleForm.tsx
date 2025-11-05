@@ -9,10 +9,13 @@ import {
   MDBInput,
 } from 'mdb-react-ui-kit';
 
-import type { ArticleFormProps } from './types/articleFormProps';
 import { useArticleFormik } from './formik/useArticleFormik';
+import type { Article } from '../../../api/article/types/article';
 
-const ArticleForm: FC<ArticleFormProps> = ({ article = null, isEditMode = false }) => {
+const ArticleForm: FC<{
+  article?: Article | null;
+  isEditMode?: boolean;
+}> = ({ article = null, isEditMode = false }) => {
   const formik = useArticleFormik({ article, isEditMode });
 
   return (

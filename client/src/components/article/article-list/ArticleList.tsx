@@ -7,8 +7,8 @@ import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
 import image from '../../../assets/images/no-books-found.png';
 import ArticleListItem from '../article-list-item/ArticleListItem';
 import { useDebounce } from '../../../hooks/common/useDebounce';
-import type { ArticleSummary } from '../../../api/article/types/article.type';
 import Pagination from '../../common/pagination/Pagination';
+import type { ArticleSummary } from '../../../api/article/types/article';
 
 const ArticleList: FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -61,7 +61,6 @@ const ArticleList: FC = () => {
           </div>
         </div>
       </div>
-
       <div className="d-flex justify-content-center row">
         <div className="col-md-10">
           {isFetching ? (

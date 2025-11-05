@@ -20,6 +20,18 @@ import AuthorDetails from './components/author/author-details/AuthorDetails';
 import AuthorList from './components/author/author-list/AuthorList';
 import CreateAuthor from './components/author/create-author/CreateAuthor';
 import EditAuthor from './components/author/edit-author/EditAuthor';
+import BookDetails from './components/book/book-details/BookDetails';
+import CreateBook from './components/book/create-book/CreateBook';
+import BookList from './components/book/book-list/BookList';
+import EditBook from './components/book/edit-book/EditBook';
+import ReviewList from './components/review/review-list/ReviewList';
+import Footer from './components/common/footer/Footer';
+import ReadingList from './components/reading-list/ReadingList';
+import Home from './components/home/Home';
+import GenreDetails from './components/genre/genre-details/GenreDetails';
+import Login from './components/identity/login/Login';
+import Logout from './components/identity/logout/Logout';
+import Register from './components/identity/register/Register';
 
 export default function App() {
   return (
@@ -42,10 +54,10 @@ export default function App() {
             element={<AuthenticatedRoute element={<ProfileDetails />} />}
           />
           <Route
-            path={routes.createProfle}
+            path={routes.createProfile}
             element={<AuthenticatedRoute element={<CreateProfile />} />}
           />
-          <Route path={routes.editProfle} element={<ProfileRoute element={<EditProfile />} />} />
+          <Route path={routes.editProfile} element={<ProfileRoute element={<EditProfile />} />} />
 
           <Route path={routes.book} element={<AuthenticatedRoute element={<BookList />} />} />
           <Route
