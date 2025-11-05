@@ -1,123 +1,135 @@
-import axios from 'axios';
-import { getAuthConfig } from '../common/utils';
-import { baseAdminUrl, baseUrl, routes } from '../../common/constants/api';
+import { routes } from '../../common/constants/api';
 import { errors } from '../../common/constants/messages';
 import { pagination } from '../../common/constants/defaultValues';
-import type { Book } from './types/book.type';
+import { getAuthConfig, returnIfRequestCanceled } from '../common/utils';
+import { http, httpAdmin } from '../common/http';
+import type { PagedResult } from '../common/types/pagedResults';
+import type { BookDetailsResponse, BookListItemType, BookUpsertPayload } from './types/book';
 
-export async function topThree(token: string): Promise<Book[]> {
+export async function topThree(token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.topThreeBooks}`;
-    const response = await axios.get<Book[]>(url, getAuthConfig(token));
+    const url = `${routes.topThreeBooks}`;
+    const response = await http.get<BookListItemType[]>(url, getAuthConfig(token, signal));
 
     return response.data;
-  } catch {
-    throw new Error(errors.book.topThree);
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.book.topThree);
+    throw error;
   }
 }
 
 export async function byGenre(
   token: string,
-  genreId: string,
+  genreId: string | number,
   page = pagination.defaultPageIndex,
   pageSize = pagination.defaultPageSize,
+  signal?: AbortSignal,
 ) {
   try {
-    const url = `${baseUrl}${routes.booksByGenre}/${encodeURIComponent(
-      genreId,
-    )}?page=${page}&pageSize=${pageSize}`;
-
-    const response = await axios.get<{ items: Book[]; totalItems: number }>(
+    const url = `${routes.booksByGenre}/${encodeURIComponent(String(genreId))}?page=${page}&pageSize=${pageSize}`;
+    const response = await http.get<PagedResult<BookListItemType>>(
       url,
-      getAuthConfig(token),
+      getAuthConfig(token, signal),
     );
 
     return response.data;
-  } catch {
-    throw new Error(errors.search.badRequest);
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.search.badRequest);
+    throw error;
   }
 }
 
 export async function byAuthor(
   token: string,
-  authorId: string,
+  authorId: string | number,
   page = pagination.defaultPageIndex,
   pageSize = pagination.defaultPageSize,
+  signal?: AbortSignal,
 ) {
   try {
-    const url = `${baseUrl}${routes.booksByAuthor}/${encodeURIComponent(
-      authorId,
-    )}?page=${page}&pageSize=${pageSize}`;
-
-    const response = await axios.get<{ items: Book[]; totalItems: number }>(
+    const url = `${routes.booksByAuthor}/${encodeURIComponent(String(authorId))}?page=${page}&pageSize=${pageSize}`;
+    const response = await http.get<PagedResult<BookListItemType>>(
       url,
-      getAuthConfig(token),
+      getAuthConfig(token, signal),
     );
 
     return response.data;
-  } catch {
-    throw new Error(errors.search.badRequest);
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.search.badRequest);
+    throw error;
   }
 }
 
-export async function details(id: string, token: string, isAdmin: boolean) {
+export async function details(id: number, token: string, isAdmin: boolean, signal?: AbortSignal) {
   try {
-    const url = `${isAdmin ? baseAdminUrl : baseUrl}${routes.book}/${id}`;
-    const response = await axios.get<Book>(url, getAuthConfig(token));
+    const url = `${routes.book}/${id}`;
+    const httpClient = isAdmin ? httpAdmin : http;
+    const response = await httpClient.get<BookDetailsResponse>(url, getAuthConfig(token, signal));
 
     return response.data;
-  } catch {
-    throw new Error(errors.book.notfound);
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.book.notFound);
+    throw error;
   }
 }
 
-export async function create(book: Book, token: string) {
+export async function create(book: BookUpsertPayload, token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.book}`;
-    const response = await axios.post<{ id: string }>(url, book, getAuthConfig(token));
+    const url = `${routes.book}`;
+    const response = await httpAdmin.post<{ id: number }>(url, book, getAuthConfig(token, signal));
 
     return response.data.id;
-  } catch {
-    throw new Error(errors.book.create);
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.book.create);
+    throw error;
   }
 }
 
-export async function edit(id: number, book: Book, token: string) {
+export async function edit(
+  id: number,
+  book: BookUpsertPayload,
+  token: string,
+  signal?: AbortSignal,
+) {
   try {
-    const url = `${baseUrl}${routes.book}/${id}`;
-    await axios.put(url, book, getAuthConfig(token));
+    const url = `${routes.book}/${id}`;
+    await httpAdmin.put(url, book, getAuthConfig(token, signal));
 
     return true;
-  } catch {
-    throw new Error(errors.book.edit);
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.book.edit);
+    throw error;
   }
 }
 
-export async function remove(id: number, token: string) {
+export async function remove(id: number, token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.book}/${id}`;
-    await axios.delete(url, getAuthConfig(token));
+    const url = `${routes.book}/${id}`;
+    await httpAdmin.delete(url, getAuthConfig(token, signal));
 
     return true;
-  } catch {
-    throw new Error(errors.book.delete);
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.book.delete);
+    throw error;
   }
 }
 
-export async function approve(id: number, token: string) {
+export async function approve(id: number, token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseAdminUrl}${routes.book}/${id}/approve`;
-    await axios.patch(url, null, getAuthConfig(token));
-  } catch {
-    throw new Error(errors.book.approve);
+    const url = `${routes.book}/${id}/approve`;
+    await httpAdmin.patch<void>(url, null, getAuthConfig(token, signal));
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.book.approve);
+    throw error;
   }
 }
 
-export async function reject(id: number, token: string) {
+export async function reject(id: number, token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseAdminUrl}${routes.book}/${id}/reject`;
-    await axios.patch(url, null, getAuthConfig(token));
-  } catch {
-    throw new Error(errors.book.reject);
+    const url = `${routes.book}/${id}/reject`;
+    await httpAdmin.patch<void>(url, null, getAuthConfig(token, signal));
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.book.reject);
+    throw error;
   }
 }

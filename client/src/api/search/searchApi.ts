@@ -8,7 +8,7 @@ import type { BookSearchResult } from './types/bookSearchResult';
 import type { ChatSearchResult } from './types/chatResultSearch';
 import type { AuthorSearchResult } from './types/authorSearchResult';
 import type { ProfileSearchResult } from './types/profileSearchResult';
-import type { ArticleSummary } from '../article/types/article.type';
+import type { ArticleSummary } from '../article/types/article';
 
 async function search<T>(
   route: string,

@@ -9,7 +9,6 @@ import image from '../../../assets/images/no-books-found.png';
 
 import './AuthorList.css';
 import { useDebounce } from '../../../hooks/common/useDebounce';
-import type { Author } from '../../../api/author/types/author.type';
 import type { AuthorSearchResult } from '../../../api/search/types/authorSearchResult';
 import AuthorListItem from '../author-list-item/AuthorListItem';
 

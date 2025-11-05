@@ -11,7 +11,6 @@ import {
   MDBCardText,
   MDBIcon,
 } from 'mdb-react-ui-kit';
-import { format } from 'date-fns';
 
 import * as hooks from '../../../hooks/useAuthor';
 import { routes } from '../../../common/constants/api';
@@ -22,16 +21,28 @@ import DeleteModal from '../../common/delete-modal/DeleteModal';
 import './AuthorDetails.css';
 import { UserContext } from '../../../contexts/user/userContext';
 import ApproveRejectButtons from './approve-reject-buttons/ApproveRejectButtons';
-import BookListItem from '../../book/book-list-item/BooksListItem';
+import BookListItem from '../../book/book-list-item/BookListItem';
 import { RenderStars } from '../../common/render-stars/renderStars';
+import { calculateAge, formatIsoDate, parseId } from '../../../common/functions/utils';
+import type { AuthorTopBook } from '../../../api/author/types/author';
 
 const AuthorDetails: FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+
+  let parsedId: number | null = null;
+  try {
+    parsedId = parseId(id);
+  } catch {}
+
+  if (parsedId == null) {
+    return <div>Invalid author id.</div>;
+  }
+
   const { token, isAdmin, userId } = useContext(UserContext);
 
-  const { author, isFetching } = hooks.useDetails(id!);
-  const { showModal, toggleModal, deleteHandler } = hooks.useRemove(id!, token, author?.name);
+  const { author, isFetching } = hooks.useDetails(parsedId);
+  const { showModal, toggleModal, deleteHandler } = hooks.useRemove(parsedId, token, author?.name);
 
   if (isFetching || !author) {
     return <DefaultSpinner />;
@@ -68,21 +79,16 @@ const AuthorDetails: FC = () => {
                   <MDBCardText className="author-biography">{author.biography}</MDBCardText>
                   <MDBCardText className="text-muted">
                     <strong>Born:</strong>{' '}
-                    {author.bornAt ? format(new Date(author.bornAt), 'MMM dd, yyyy') : 'Unknown'}
+                    {author.bornAt ? formatIsoDate(author.bornAt, 'Unknown') : 'Unknown'}
                     {author.bornAt && !author.diedAt
-                      ? ` (${
-                          new Date().getFullYear() - new Date(author.bornAt).getFullYear()
-                        } years old)`
+                      ? ` (${calculateAge(author.bornAt)} years old)`
                       : ''}
                   </MDBCardText>
                   {author.diedAt && (
                     <MDBCardText className="text-muted">
-                      <strong>Died:</strong> {format(new Date(author.diedAt), 'MMM dd, yyyy')}
+                      <strong>Died:</strong> {formatIsoDate(author.diedAt, 'Unknown')}
                       {author.bornAt &&
-                        ` (${
-                          new Date(author.diedAt).getFullYear() -
-                          new Date(author.bornAt).getFullYear()
-                        } years old)`}
+                        ` (${calculateAge(author.bornAt, author.diedAt)} years old)`}
                     </MDBCardText>
                   )}
                 </MDBCol>
@@ -137,7 +143,7 @@ const AuthorDetails: FC = () => {
                   <MDBCardTitle className="author-section-title">Top Books</MDBCardTitle>
                   {author.topBooks && author.topBooks.length > 0 ? (
                     <>
-                      {author.topBooks.map((b) => (
+                      {author.topBooks.map((b: AuthorTopBook) => (
                         <BookListItem key={b.id} {...b} />
                       ))}
                       <div className="d-flex justify-content-center mt-3">

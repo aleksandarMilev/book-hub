@@ -4,43 +4,54 @@ import { useNavigate } from 'react-router-dom';
 import * as api from '../api/genre/genreApi';
 import { routes } from '../common/constants/api';
 import { UserContext } from '../contexts/user/userContext';
-import type { GenreName } from '../api/genre/types/genreName';
-import type { GenreDetails } from '../api/genre/types/genreDetails';
+import type { Genre, GenreDetails } from '../api/genre/types/genre';
 
-export function useGenres() {
-  const { token } = useContext(UserContext);
+export function useAll() {
   const navigate = useNavigate();
+  const { token } = useContext(UserContext);
 
-  const [genres, setGenres] = useState<GenreName[]>([]);
-  const [isFetching, setIsFetching] = useState(false);
+  const [genres, setGenres] = useState<Genre[]>([]);
+  const [isFetching, setIsFetching] = useState<boolean>(false);
 
-  const fetchData = useCallback(async () => {
-    if (!token) {
-      return;
-    }
+  const fetchData = useCallback(
+    async (signal?: AbortSignal) => {
+      if (!token) {
+        return;
+      }
 
-    try {
-      setIsFetching(true);
-      const data = await api.all(token);
-      setGenres(data);
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to load genres.';
-      navigate(routes.badRequest, { state: { message } });
-    } finally {
-      setIsFetching(false);
-    }
-  }, [token, navigate]);
+      try {
+        setIsFetching(true);
+
+        const data = await api.all(token, signal);
+
+        setGenres(data ?? []);
+      } catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError') {
+          return;
+        }
+
+        const message = error instanceof Error ? error.message : 'Failed to load genres.';
+        navigate(routes.badRequest, { state: { message } });
+      } finally {
+        setIsFetching(false);
+      }
+    },
+    [token, navigate],
+  );
 
   useEffect(() => {
-    void fetchData();
+    const controller = new AbortController();
+    void fetchData(controller.signal);
+
+    return () => controller.abort();
   }, [fetchData]);
 
   return { genres, isFetching, refetch: fetchData };
 }
 
-export function useSearchGenres(genres: GenreName[], selectedGenres: GenreName[]) {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filteredGenres, setFilteredGenres] = useState<GenreName[]>([]);
+export function useSearch(genres: Genre[], selectedGenres: any[]) {
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [filteredGenres, setFilteredGenres] = useState<any[]>([]);
 
   useEffect(() => {
     if (searchTerm.trim() === '') {
@@ -50,9 +61,9 @@ export function useSearchGenres(genres: GenreName[], selectedGenres: GenreName[]
 
     const lowerTerm = searchTerm.toLowerCase();
     const filtered = genres.filter(
-      (g) =>
+      (g: any) =>
         g.name.toLowerCase().includes(lowerTerm) &&
-        !selectedGenres.some((selected) => selected.id === g.id),
+        !selectedGenres.some((selected: any) => selected.id === g.id),
     );
 
     setFilteredGenres(filtered);
@@ -66,31 +77,43 @@ export function useSearchGenres(genres: GenreName[], selectedGenres: GenreName[]
 }
 
 export function useDetails(id: number) {
-  const { token } = useContext(UserContext);
   const navigate = useNavigate();
+  const { token } = useContext(UserContext);
 
   const [genre, setGenre] = useState<GenreDetails | null>(null);
-  const [isFetching, setIsFetching] = useState(false);
+  const [isFetching, setIsFetching] = useState<boolean>(false);
 
-  const fetchData = useCallback(async () => {
-    if (!token || !id) {
-      return;
-    }
+  const fetchData = useCallback(
+    async (signal?: AbortSignal) => {
+      if (!token || !id) {
+        return;
+      }
 
-    try {
-      setIsFetching(true);
-      const data = await api.details(id, token);
-      setGenre(data);
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to load genre details.';
-      navigate(routes.badRequest, { state: { message } });
-    } finally {
-      setIsFetching(false);
-    }
-  }, [id, token, navigate]);
+      try {
+        setIsFetching(true);
+
+        const data = await api.details(id, token, signal);
+
+        setGenre(data);
+      } catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError') {
+          return;
+        }
+
+        const message = error instanceof Error ? error.message : 'Failed to load genre details.';
+        navigate(routes.badRequest, { state: { message } });
+      } finally {
+        setIsFetching(false);
+      }
+    },
+    [id, token, navigate],
+  );
 
   useEffect(() => {
-    void fetchData();
+    const controller = new AbortController();
+    void fetchData(controller.signal);
+
+    return () => controller.abort();
   }, [fetchData]);
 
   return { genre, isFetching, refetch: fetchData };

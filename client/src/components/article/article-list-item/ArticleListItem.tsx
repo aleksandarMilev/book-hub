@@ -12,8 +12,8 @@ import {
 
 import { routes } from '../../../common/constants/api';
 import './ArticleListItem.css';
-import type { ArticleSummary } from '../../../api/article/types/article.type';
 import { formatIsoDate } from '../../../common/functions/utils';
+import type { ArticleSummary } from '../../../api/article/types/article';
 
 const ArticleListItem: FC<ArticleSummary> = ({ id, title, introduction, imageUrl, createdOn }) => {
   return (

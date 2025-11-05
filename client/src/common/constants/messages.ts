@@ -83,7 +83,7 @@ export const errors = {
     approve: baseMessages.approve.replace('{entity}', 'book'),
     reject: baseMessages.reject.replace('{entity}', 'book'),
     topThree: baseMessages.topThree.replace('{entityPlural}', 'books'),
-    notfound: baseMessages.notFound.replace('{entity}', 'book'),
+    notFound: baseMessages.notFound.replace('{entity}', 'book'),
     create: baseMessages.create.replace('{entity}', 'book'),
     edit: baseMessages.edit.replace('{entity}', 'book'),
     delete: baseMessages.delete.replace('{entity}', 'book'),
@@ -110,5 +110,6 @@ export const errors = {
     edit: baseMessages.edit.replace('{entity}', 'review'),
     delete: baseMessages.delete.replace('{entity}', 'review'),
     vote: 'An error occurred while processing your vote. Please try again later.',
+    list: 'Failed to load reviews.',
   },
 };

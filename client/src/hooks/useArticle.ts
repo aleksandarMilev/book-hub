@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import * as api from '../api/article/articleApi';
 import { routes } from '../common/constants/api';
 import { UserContext } from '../contexts/user/userContext';
-import type { Article, ArticleInput } from '../api/article/types/article.type';
 import { useMessage } from '../contexts/message/messageContext';
+import type { Article, ArticleInput } from '../api/article/types/article';
 
 export function useDetails(id: number) {
   const { token } = useContext(UserContext);
@@ -42,18 +42,21 @@ export function useDetails(id: number) {
 }
 
 export function useCreate() {
-  const { token } = useContext(UserContext);
   const navigate = useNavigate();
+  const { token } = useContext(UserContext);
 
   return useCallback(
     async (articleData: ArticleInput) => {
-      const articleToSend = { ...articleData, imageUrl: articleData.imageUrl || null };
+      const articleToSend: ArticleInput = {
+        ...articleData,
+        imageUrl: articleData.imageUrl || null,
+      };
       try {
         return await api.create(articleToSend, token);
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Failed to create article.';
-
         navigate(routes.badRequest, { state: { message } });
+
         throw error;
       }
     },
@@ -62,12 +65,15 @@ export function useCreate() {
 }
 
 export function useEdit() {
-  const { token } = useContext(UserContext);
   const navigate = useNavigate();
+  const { token } = useContext(UserContext);
 
   return useCallback(
     async (id: number, articleData: ArticleInput) => {
-      const articleToSend = { ...articleData, imageUrl: articleData.imageUrl || null };
+      const articleToSend: ArticleInput = {
+        ...articleData,
+        imageUrl: articleData.imageUrl || null,
+      };
       try {
         const success = await api.edit(id, articleToSend, token);
         if (!success) {
@@ -77,7 +83,6 @@ export function useEdit() {
         return true;
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Failed to edit article.';
-
         navigate(routes.badRequest, { state: { message } });
         throw error;
       }

@@ -1,9 +1,8 @@
-import axios, { HttpStatusCode } from 'axios';
-import { baseUrl, routes } from '../../common/constants/api';
+import { HttpStatusCode } from 'axios';
+import { routes } from '../../common/constants/api';
 import { errors } from '../../common/constants/messages';
-import { getAuthConfig } from '../common/utils';
-import type { PagedReadingList } from './types/pagedReadingList';
-import type { ReadingListError } from './types/readingListError';
+import { getAuthConfig, returnIfRequestCanceled } from '../common/utils';
+import { http } from '../common/http';
 
 export async function get(
   userId: string,
@@ -11,52 +10,63 @@ export async function get(
   status: string,
   page?: number | null,
   pageSize?: number | null,
+  signal?: AbortSignal,
 ) {
   try {
     const params: Record<string, string | number> = { userId, status };
-    if (page) {
+
+    if (page != null) {
+      params.page = page;
       params.pageIndex = page;
     }
 
-    if (pageSize) {
+    if (pageSize != null) {
       params.pageSize = pageSize;
     }
 
-    const url = `${baseUrl}${routes.readingList}`;
-    const response = await axios.get<PagedReadingList>(url, {
-      ...getAuthConfig(token),
+    const url = `${routes.readingList}`;
+    const response = await http.get<any>(url, {
+      ...getAuthConfig(token, signal),
       params,
     });
 
     return response.data;
-  } catch {
-    throw new Error(errors.readingList.currentlyReading);
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.readingList.currentlyReading);
+    throw error;
   }
 }
 
-export async function add(bookId: number, status: string, token: string) {
+export async function add(bookId: number, status: string, token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.readingList}`;
-    await axios.post(url, { bookId, status }, getAuthConfig(token));
+    const url = `${routes.readingList}`;
+    await http.post(url, { bookId, status }, getAuthConfig(token, signal));
 
     return null;
   } catch (error: any) {
-    if (error.response?.status === HttpStatusCode.BadRequest && error.response.data) {
-      return error.response.data as ReadingListError;
+    try {
+      returnIfRequestCanceled(error, errors.readingList.add);
+    } catch (error) {
+      throw error;
+    }
+
+    if (error?.response?.status === HttpStatusCode.BadRequest && error.response.data) {
+      return error.response.data as any;
     }
 
     throw new Error(errors.readingList.add);
   }
 }
 
-export async function remove(bookId: number, status: string, token: string) {
+export async function remove(bookId: number, status: string, token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.readingList}`;
-    await axios.delete(url, {
-      ...getAuthConfig(token),
+    const url = `${routes.readingList}`;
+    await http.delete(url, {
+      ...getAuthConfig(token, signal),
       data: { bookId, status },
     });
-  } catch {
-    throw new Error(errors.readingList.add);
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.readingList.remove);
+    throw error;
   }
 }

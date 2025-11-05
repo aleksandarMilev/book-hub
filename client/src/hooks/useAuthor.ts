@@ -5,12 +5,18 @@ import * as api from '../api/author/authorApi';
 import { routes } from '../common/constants/api';
 import { UserContext } from '../contexts/user/userContext';
 import { useMessage } from '../contexts/message/messageContext';
-import type { Author, AuthorInput, AuthorDetails } from '../api/author/types/author.type';
+import type {
+  Author,
+  AuthorDetails,
+  AuthorInput,
+  AuthorName,
+  UseAuthorApprovalProps,
+} from '../api/author/types/author';
 
 export function useTopThree() {
   const { token } = useContext(UserContext);
 
-  const [authors, setAuthors] = useState<Author[]>([]);
+  const [authors, setAuthors] = useState<AuthorDetails[]>([]);
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -40,10 +46,10 @@ export function useTopThree() {
 }
 
 export function useNames() {
+  const navigate = useNavigate();
   const { token } = useContext(UserContext);
 
-  const navigate = useNavigate();
-  const [authors, setAuthors] = useState<Author[]>([]);
+  const [authors, setAuthors] = useState<AuthorName[]>([]);
   const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
@@ -51,6 +57,7 @@ export function useNames() {
     const fetchData = async () => {
       try {
         setIsFetching(true);
+
         const data = await api.names(token, controller.signal);
         if (data) {
           setAuthors(data);
@@ -70,9 +77,9 @@ export function useNames() {
   return { authors, isFetching };
 }
 
-export function useSearch(authors: Author[]) {
+export function useSearchNames(authors: AuthorName[]) {
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredAuthors, setFilteredAuthors] = useState<Author[]>([]);
+  const [filteredAuthors, setFilteredAuthors] = useState<AuthorName[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
@@ -107,7 +114,7 @@ export function useSearch(authors: Author[]) {
   };
 }
 
-export function useDetails(id: string) {
+export function useDetails(id: number) {
   const navigate = useNavigate();
   const { token, isAdmin } = useContext(UserContext);
 
@@ -191,10 +198,11 @@ export function useEdit() {
   return editHandler;
 }
 
-export const useRemove = (id: string, token: string, name?: string) => {
+export const useRemove = (id: number, token: string, name?: string) => {
   const navigate = useNavigate();
-  const [showModal, setShowModal] = useState(false);
   const { showMessage } = useMessage();
+
+  const [showModal, setShowModal] = useState(false);
 
   const toggleModal = useCallback(() => setShowModal((prev) => !prev), []);
 
@@ -218,3 +226,37 @@ export const useRemove = (id: string, token: string, name?: string) => {
 
   return { showModal, toggleModal, deleteHandler };
 };
+
+export function useAuthorApproval({
+  authorId,
+  authorName,
+  token,
+  onSuccess,
+}: UseAuthorApprovalProps) {
+  const navigate = useNavigate();
+
+  const approveHandler = useCallback(async () => {
+    try {
+      await api.approve(authorId, token);
+
+      onSuccess(`${authorName} was successfully approved!`, true);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Approval failed.';
+      onSuccess(message, false);
+    }
+  }, [authorId, token, authorName, onSuccess]);
+
+  const rejectHandler = useCallback(async () => {
+    try {
+      await api.reject(authorId, token);
+
+      onSuccess(`${authorName} was successfully rejected!`, true);
+      navigate(routes.home);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Rejection failed.';
+      onSuccess(message, false);
+    }
+  }, [authorId, token, authorName, onSuccess, navigate]);
+
+  return { approveHandler, rejectHandler };
+}

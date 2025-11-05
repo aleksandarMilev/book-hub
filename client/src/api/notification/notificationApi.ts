@@ -1,48 +1,60 @@
-import axios from 'axios';
-import { baseUrl, routes } from '../../common/constants/api';
+import { routes } from '../../common/constants/api';
 import { errors } from '../../common/constants/messages';
-import { getAuthConfig } from '../common/utils';
+import { http } from '../common/http';
+import { getAuthConfig, returnIfRequestCanceled } from '../common/utils';
 import type { NotificationType } from './types/notification';
 import type { PagedNotifications } from './types/pageNotification';
 
-export async function lastThree(token: string) {
+export async function lastThree(token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.lastThreeNotifications}`;
-    const response = await axios.get<NotificationType[]>(url, getAuthConfig(token));
+    const url = `${routes.lastThreeNotifications}`;
+    const response = await http.get<NotificationType[]>(url, getAuthConfig(token, signal));
 
     return response.data;
-  } catch {
-    throw new Error(errors.notification.lastThree);
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.notification.lastThree);
+    throw error;
   }
 }
 
-export async function all(token: string, pageIndex: number, pageSize: number) {
+export async function all(
+  token: string,
+  pageIndex: number,
+  pageSize: number,
+  signal?: AbortSignal,
+) {
   try {
-    const url = `${baseUrl}${routes.notification}?pageIndex=${pageIndex}&pageSize=${pageSize}`;
-    const response = await axios.get<PagedNotifications>(url, getAuthConfig(token));
+    const url = `${routes.notification}?pageIndex=${pageIndex}&pageSize=${pageSize}`;
+    const response = await http.get<PagedNotifications>(url, getAuthConfig(token, signal));
 
     return response.data;
-  } catch {
-    throw new Error(errors.notification.all);
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.notification.all);
+    throw error;
   }
 }
 
-export async function markAsRead(id: number, token: string) {
+export async function markAsRead(id: number, token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.notification}/${id}/read`;
-    await axios.patch(url, null, getAuthConfig(token));
-  } catch {
-    throw new Error(errors.notification.markAsRead);
+    const url = `${routes.notification}/${id}/read`;
+    await http.patch<void>(url, null, getAuthConfig(token, signal));
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.notification.markAsRead);
+    throw error;
   }
 }
 
-export async function remove(id: number, token: string) {
+export async function remove(id: number, token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.notification}/${id}`;
-    await axios.delete(url, getAuthConfig(token));
+    const url = `${routes.notification}/${id}`;
+    await http.delete<void>(url, getAuthConfig(token, signal));
 
     return true;
-  } catch {
+  } catch (error) {
+    if ((error as any)?.name === 'CanceledError') {
+      throw error;
+    }
+
     return false;
   }
 }

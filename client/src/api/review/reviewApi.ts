@@ -1,66 +1,96 @@
-import axios from 'axios';
-import { baseUrl, routes } from '../../common/constants/api';
+import { routes } from '../../common/constants/api';
 import { errors } from '../../common/constants/messages';
-import type { CreateReview } from './types/createReview';
-import { getAuthConfig } from '../common/utils';
-import type { Review } from './types/review';
-import type { VoteRequest } from './types/voteRequest';
+import { getAuthConfig, returnIfRequestCanceled } from '../common/utils';
+import { http } from '../common/http';
+import type { Review, ReviewInput } from './types/review';
 
-export async function create(review: CreateReview, token: string) {
+export async function all(
+  bookId: number,
+  pageIndex: number,
+  pageSize: number,
+  token: string,
+  signal?: AbortSignal,
+) {
   try {
-    const url = `${baseUrl}${routes.review}`;
-    const response = await axios.post<Review>(url, review, getAuthConfig(token));
+    const url = `${routes.review}/${bookId}?pageIndex=${pageIndex}&pageSize=${pageSize}`;
+    const response = await http.get<{ items: Review[]; totalItems: number }>(
+      url,
+      getAuthConfig(token, signal),
+    );
 
     return response.data;
-  } catch {
-    throw new Error(errors.review.create);
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.review.list);
+    throw error;
   }
 }
 
-export async function edit(id: number, review: CreateReview, token: string) {
+export async function create(review: ReviewInput, token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.review}/${id}`;
-    await axios.put(url, review, getAuthConfig(token));
+    const url = `${routes.review}`;
+    const response = await http.post<any>(url, review, getAuthConfig(token, signal));
 
-    return true;
-  } catch {
-    throw new Error(errors.review.edit);
+    return response.data;
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.review.create);
+    throw error;
   }
 }
 
-export async function remove(id: number, token: string) {
+export async function edit(id: number, review: ReviewInput, token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.review}/${id}`;
-    await axios.delete(url, getAuthConfig(token));
+    const url = `${routes.review}/${id}`;
+    await http.put(url, review, getAuthConfig(token, signal));
 
     return true;
-  } catch {
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.review.edit);
+    throw error;
+  }
+}
+
+export async function remove(id: number, token: string, signal?: AbortSignal) {
+  try {
+    const url = `${routes.review}/${id}`;
+    await http.delete(url, getAuthConfig(token, signal));
+
+    return true;
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.review.delete);
+    throw error;
+  }
+}
+
+export async function upvote(id: number, token: string, signal?: AbortSignal) {
+  try {
+    const url = `${routes.vote}`;
+    const vote: any = { reviewId: id, isUpvote: true };
+
+    await http.post(url, vote, getAuthConfig(token, signal));
+
+    return true;
+  } catch (error) {
+    if ((error as any)?.name === 'CanceledError') {
+      throw error;
+    }
+
     return false;
   }
 }
 
-export async function upvote(id: number, token: string) {
+export async function downvote(id: number, token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.vote}`;
-    const vote: VoteRequest = { reviewId: id, isUpvote: true };
+    const url = `${routes.vote}`;
+    const vote: any = { reviewId: id, isUpvote: false };
 
-    await axios.post(url, vote, getAuthConfig(token));
+    await http.post(url, vote, getAuthConfig(token, signal));
 
     return true;
-  } catch {
-    return false;
-  }
-}
+  } catch (error) {
+    if ((error as any)?.name === 'CanceledError') {
+      throw error;
+    }
 
-export async function downvote(id: number, token: string) {
-  try {
-    const url = `${baseUrl}${routes.vote}`;
-    const vote: VoteRequest = { reviewId: id, isUpvote: false };
-
-    await axios.post(url, vote, getAuthConfig(token));
-
-    return true;
-  } catch {
     return false;
   }
 }
