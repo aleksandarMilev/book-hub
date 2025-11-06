@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { MDBBtn, MDBContainer, MDBRow, MDBCol, MDBInput, MDBCheckbox } from 'mdb-react-ui-kit';
 import { routes } from '../../../common/constants/api';
 import loginImage from '../../../assets/images/login.webp';
-import './Login.css';
 import { useLoginFormik } from './formik/useLoginFormik';
 
 const Login: FC = () => {

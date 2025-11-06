@@ -1,28 +1,25 @@
-import { type FC, useState, type ChangeEvent } from 'react';
+import { useState, type ChangeEvent, type FC } from 'react';
 import { FaSearch } from 'react-icons/fa';
-
+import * as useSearch from '../../../hooks/useSearch';
 import { pagination } from '../../../common/constants/defaultValues';
-import * as hooks from '../../../hooks/useSearch';
+import { useDebounce } from '../../../hooks/common/useDebounce';
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
 import Pagination from '../../common/pagination/Pagination';
 import image from '../../../assets/images/no-books-found.png';
+import ChatListItem from '../chat-list-item/ChatListItem';
 
-import { useDebounce } from '../../../hooks/common/useDebounce';
-import type { AuthorSearchResult } from '../../../api/search/types/authorSearchResult';
-import AuthorListItem from '../author-list-item/AuthorListItem';
-
-const AuthorList: FC = () => {
+const ChatList: FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const debouncedSearchTerm = useDebounce(searchTerm);
+  const debouncedSearch = useDebounce(searchTerm);
 
   const [page, setPage] = useState(pagination.defaultPageIndex);
   const pageSize = pagination.defaultPageSize;
 
   const {
-    items: authors,
+    items: chats,
     totalItems,
     isFetching,
-  } = hooks.useSearchAuthors(debouncedSearchTerm, page, pageSize);
+  } = useSearch.useSearchChats(debouncedSearch, page, pageSize);
 
   const totalPages = Math.ceil(totalItems / pageSize) || 1;
 
@@ -47,12 +44,16 @@ const AuthorList: FC = () => {
             <input
               type="text"
               className="form-control search-input"
-              placeholder="Search authors..."
+              placeholder="Search chats..."
               value={searchTerm}
               onChange={handleSearchChange}
               disabled={isFetching}
             />
-            <button className="btn btn-light search-btn" disabled={isFetching}>
+            <button
+              className="btn btn-light search-btn"
+              disabled={isFetching}
+              aria-label="Search chats"
+            >
               <FaSearch size={20} />
             </button>
           </div>
@@ -63,12 +64,11 @@ const AuthorList: FC = () => {
         <div className="col-md-10">
           {isFetching ? (
             <DefaultSpinner />
-          ) : authors.length > 0 ? (
+          ) : chats.length > 0 ? (
             <>
-              {authors.map((author: AuthorSearchResult) => (
-                <AuthorListItem key={author.id} {...author} />
+              {chats.map((c: any) => (
+                <ChatListItem key={c.id} {...c} />
               ))}
-
               <Pagination
                 page={page}
                 totalPages={totalPages}
@@ -80,12 +80,12 @@ const AuthorList: FC = () => {
             <div className="d-flex flex-column align-items-center justify-content-center mt-5">
               <img
                 src={image}
-                alt="No authors found"
+                alt="No chats found"
                 className="mb-4 clickable"
                 style={{ maxWidth: '200px', opacity: 0.7, cursor: 'pointer' }}
                 onClick={() => setSearchTerm('')}
               />
-              <h5 className="text-muted">We couldn't find any authors</h5>
+              <h5 className="text-muted">We couldn't find any chats</h5>
               <p className="text-muted text-center" style={{ maxWidth: '400px' }}>
                 Try adjusting your search terms or exploring our collection for more options.
               </p>
@@ -97,4 +97,4 @@ const AuthorList: FC = () => {
   );
 };
 
-export default AuthorList;
+export default ChatList;

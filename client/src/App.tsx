@@ -31,6 +31,14 @@ import Login from './components/identity/login/Login';
 import Logout from './components/identity/logout/Logout';
 import Register from './components/identity/register/Register';
 import NotificationList from './components/notifications/notification-list/NotificationList';
+import ProfileList from './components/profile/profile-list/ProfileList';
+import ProfileDetails from './components/profile/profile-details/ProfileDetails';
+import CreateProfile from './components/profile/create-profile/CreateProfile';
+import EditProfile from './components/profile/edit-profile/EditProfile';
+import ChatList from './components/chat/chat-list/ChatList';
+import ChatDetails from './components/chat/chat-details/ChatDetails';
+import CreateChat from './components/chat/create-chat/CreateChat';
+import EditChat from './components/chat/edit-chat/EditChat';
 
 export default function App() {
   return (

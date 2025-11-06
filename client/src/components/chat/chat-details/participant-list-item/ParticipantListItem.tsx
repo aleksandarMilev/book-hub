@@ -1,27 +1,28 @@
-import { MDBCardImage, MDBIcon } from "mdb-react-ui-kit";
+import { MDBCardImage, MDBIcon } from 'mdb-react-ui-kit';
+import type { FC } from 'react';
+import type { Participant } from '../../../../api/chat/types/chat';
 
-export default function ParticipantListItem({
-  participant,
-  index,
-  onProfileClickHandler,
-  onDeleteHandler,
-  currentUserIsChatCreator,
-}) {
+const ParticipantListItem: FC<{
+  participant: Participant;
+  index: number;
+  onProfileClickHandler: (id: string) => void;
+  onDeleteHandler: (id: string, firstName: string) => void;
+  currentUserIsChatCreator: boolean;
+}> = ({ participant, index, onProfileClickHandler, onDeleteHandler, currentUserIsChatCreator }) => {
   return (
     <li
-      key={participant.id}
       className="d-flex align-items-center mb-3 profile-item"
       onClick={() => onProfileClickHandler(participant.id)}
     >
       <MDBCardImage
-        src={participant.imageUrl}
+        src={participant.imageUrl || ''}
         alt={participant.firstName}
         style={{
-          width: "40px",
-          height: "40px",
-          borderRadius: "50%",
-          objectFit: "cover",
-          marginRight: "10px",
+          width: '40px',
+          height: '40px',
+          borderRadius: '50%',
+          objectFit: 'cover',
+          marginRight: '10px',
         }}
       />
       <span>
@@ -29,7 +30,7 @@ export default function ParticipantListItem({
           <>
             <strong>
               {participant.firstName} {participant.lastName}
-            </strong>{" "}
+            </strong>{' '}
             <span className="text-muted">(Chat Creator)</span>
           </>
         ) : (
@@ -40,7 +41,7 @@ export default function ParticipantListItem({
                 fas
                 icon="times"
                 className="ms-2 cursor-pointer"
-                onClick={(e) => {
+                onClick={(e: any) => {
                   e.stopPropagation();
                   onDeleteHandler(participant.id, participant.firstName);
                 }}
@@ -51,4 +52,6 @@ export default function ParticipantListItem({
       </span>
     </li>
   );
-}
+};
+
+export default ParticipantListItem;

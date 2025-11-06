@@ -12,7 +12,7 @@ import './TopUsers.css';
 const TopUsers: FC = () => {
   const navigate = useNavigate();
   const { userId } = useContext(UserContext);
-  const { profiles, isFetching, error } = hooks.useTopThree();
+  const { profiles, isFetching, error } = hooks.useTopProfiles();
 
   if (isFetching || !profiles) {
     return <DefaultSpinner />;

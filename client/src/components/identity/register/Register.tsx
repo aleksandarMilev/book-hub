@@ -12,7 +12,6 @@ import {
 } from 'mdb-react-ui-kit';
 import { useRegisterFormik } from './formik/useRegisterFormik';
 import registerImage from '../../../assets/images/register.webp';
-import './Register.css';
 
 const Register: FC = () => {
   const formik = useRegisterFormik();

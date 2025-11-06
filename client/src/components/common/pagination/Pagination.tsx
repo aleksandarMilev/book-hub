@@ -1,6 +1,5 @@
 import { type FC } from 'react';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
-import './Pagination.css';
 import type { PaginationProps } from './types/paginationProps';
 
 const Pagination: FC<PaginationProps> = ({ page, totalPages, disabled = false, onPageChange }) => {
