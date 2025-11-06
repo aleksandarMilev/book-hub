@@ -1,0 +1,2 @@
+echo "Type-check & tests before push..."
+npm run typecheck

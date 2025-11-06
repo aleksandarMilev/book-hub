@@ -19,7 +19,9 @@
     "types": ["vite/client"],
     "verbatimModuleSyntax": true,
     "exactOptionalPropertyTypes": true,
-    "useUnknownInCatchVariables": true
+    "useUnknownInCatchVariables": true,
+    "noImplicitReturns": true,
+    "skipDefaultLibCheck": true
   },
   "include": [
     "src/**/*.ts",
