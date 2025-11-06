@@ -1,19 +1,18 @@
-import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { FaUser, FaLock, FaUnlock } from "react-icons/fa";
+import { useContext, type FC } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FaUser, FaLock, FaUnlock } from 'react-icons/fa';
+import { routes } from '../../../common/constants/api';
+import { UserContext } from '../../../contexts/user/userContext';
+import './ProfileListItem.css';
+import type { ProfileListItemProps } from '../../../api/profile/types/profile';
 
-import { routes } from "../../../common/constants/api";
-import { UserContext } from "../../../contexts/userContext";
-
-import "./ProfileListItem.css";
-
-export default function ProfileListItem({
+const ProfileListItem: FC<ProfileListItemProps> = ({
   id: profileId,
   imageUrl,
   firstName,
   lastName,
   isPrivate,
-}) {
+}) => {
   const navigate = useNavigate();
   const { userId } = useContext(UserContext);
 
@@ -33,9 +32,7 @@ export default function ProfileListItem({
             alt={`${firstName} ${lastName}`}
           />
         ) : (
-          <div className="profile-list-item-placeholder rounded-circle">
-            No Image
-          </div>
+          <div className="profile-list-item-placeholder rounded-circle">No Image</div>
         )}
       </div>
       <div className="col-md-6 col-8 mt-1 profile-list-item-content">
@@ -57,17 +54,15 @@ export default function ProfileListItem({
           )}
         </h6>
       </div>
-
       <div className="col-md-3 d-flex align-items-center justify-content-center mt-1">
         <div className="d-flex flex-column align-items-center">
-          <button
-            onClick={onClickHandler}
-            className="btn btn-sm btn-primary profile-list-item-btn"
-          >
+          <button onClick={onClickHandler} className="btn btn-sm btn-primary profile-list-item-btn">
             View Profile
           </button>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default ProfileListItem;

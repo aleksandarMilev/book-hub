@@ -1,102 +1,111 @@
-import axios, { HttpStatusCode } from 'axios';
-import { baseUrl, baseAdminUrl, routes } from '../../common/constants/api';
+import { routes } from '../../common/constants/api';
 import { errors } from '../../common/constants/messages';
-import { getAuthConfig } from '../common/utils';
-import type { BaseProfile } from './types/baseProfile';
-import type { Profile } from './types/profile';
-import type { CreateProfile } from './types/createProfile';
+import { getAuthConfig, returnIfRequestCanceled } from '../common/utils';
+import { http, httpAdmin } from '../common/http';
+import type { Profile, ProfileInput, ProfileSummary } from './types/profile';
+import { HttpStatusCode } from 'axios';
 
-export async function names(token: string) {
+export async function names(token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.profile}`;
-    const response = await axios.get<BaseProfile[]>(url, getAuthConfig(token));
+    const url = `${routes.profile}`;
+    const { data } = await http.get<ProfileSummary[]>(url, getAuthConfig(token, signal));
 
-    return response.data;
-  } catch {
-    throw new Error(errors.profile.names);
+    return data;
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.profile.names);
+    throw error;
   }
 }
 
-export async function hasProfile(token: string) {
+export async function hasProfile(token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.hasProfile}`;
-    const response = await axios.get<boolean>(url, getAuthConfig(token));
+    const url = `${routes.hasProfile}`;
+    const { data } = await http.get<boolean>(url, getAuthConfig(token, signal));
 
-    return response.data;
-  } catch {
-    throw new Error(errors.profile.get);
+    return data;
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.profile.get);
+    throw error;
   }
 }
 
-export async function topThree() {
+export async function topThree(signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.topProfiles}`;
-    const response = await axios.get<Profile[]>(url);
+    const url = `${routes.topProfiles}`;
+    const config = signal ? { signal } : undefined;
+    const { data } = await http.get<ProfileSummary[]>(url, config);
 
-    return response.data;
-  } catch {
-    throw new Error(errors.profile.topThree);
+    return data;
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.profile.topThree);
+    throw error;
   }
 }
 
-export async function mine(token: string) {
+export async function mine(token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.mineProfile}`;
-    const response = await axios.get<Profile>(url, getAuthConfig(token));
+    const url = `${routes.mineProfile}`;
+    const { data } = await http.get<Profile>(url, getAuthConfig(token, signal));
 
-    return response.data;
+    return data;
   } catch (error: any) {
     if (error?.response?.status === HttpStatusCode.NotFound) {
       return null;
     }
 
-    throw new Error(errors.profile.get);
+    returnIfRequestCanceled(error, errors.profile.get);
+    throw error;
   }
 }
 
-export async function other(id: string, token: string) {
+export async function other(id: string, token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.profile}/${id}`;
-    const response = await axios.get<BaseProfile | Profile>(url, getAuthConfig(token));
+    const url = `${routes.profile}/${id}`;
+    const { data } = await http.get<Profile>(url, getAuthConfig(token, signal));
 
-    return response.data;
-  } catch {
-    throw new Error(errors.profile.getOther);
+    return data;
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.profile.getOther);
+    throw error;
   }
 }
 
-export async function create(profile: CreateProfile, token: string) {
+export async function create(profile: ProfileInput, token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.profile}`;
-    await axios.post(url, profile, getAuthConfig(token));
-  } catch {
-    throw new Error(errors.profile.create);
+    const url = `${routes.profile}`;
+    await http.post(url, profile, getAuthConfig(token, signal));
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.profile.create);
+    throw error;
   }
 }
 
-export async function edit(profile: CreateProfile, token: string) {
+export async function edit(profile: ProfileInput, token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.profile}`;
-    await axios.put(url, profile, getAuthConfig(token));
-  } catch {
-    throw new Error(errors.profile.edit);
+    const url = `${routes.profile}`;
+    await http.put(url, profile, getAuthConfig(token, signal));
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.profile.edit);
+    throw error;
   }
 }
 
-export async function remove(token: string) {
+export async function remove(token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.profile}`;
-    await axios.delete(url, getAuthConfig(token));
-  } catch {
-    throw new Error(errors.profile.delete);
+    const url = `${routes.profile}`;
+    await http.delete(url, getAuthConfig(token, signal));
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.profile.delete);
+    throw error;
   }
 }
 
-export async function removeAsAdmin(id: string, token: string) {
+export async function removeAsAdmin(id: string, token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseAdminUrl}${routes.profile}/${id}`;
-    await axios.delete(url, getAuthConfig(token));
-  } catch {
-    throw new Error(errors.profile.delete);
+    const url = `${routes.profile}/${id}`;
+    await httpAdmin.delete(url, getAuthConfig(token, signal));
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.profile.delete);
+    throw error;
   }
 }
