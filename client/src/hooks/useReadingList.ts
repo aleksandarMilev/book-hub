@@ -4,11 +4,11 @@ import { UserContext } from '../contexts/user/userContext';
 import type { ReadingListItem, ReadingStatus } from '../api/readingList/types/readingList';
 
 export function useList(
-  userIdParam: string,
   status: ReadingStatus,
   page: number | null = null,
   pageSize: number | null = null,
   isPrivate = false,
+  userIdParam?: string,
 ) {
   const { token, userId } = useContext(UserContext);
   const [readingList, setReadingList] = useState<ReadingListItem[]>([]);
@@ -31,7 +31,7 @@ export function useList(
       try {
         setIsFetching(true);
 
-        const result = await api.get(userIdParam, token, status!, page, pageSize, signal);
+        const result = await api.get(userIdParam!, token, status!, page, pageSize, signal);
 
         setReadingList(result.items ?? []);
         setTotalItems(result.totalItems ?? 0);
