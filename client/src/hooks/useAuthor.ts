@@ -2,16 +2,16 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import * as api from '../api/author/authorApi';
-import { routes } from '../common/constants/api';
-import { UserContext } from '../contexts/user/userContext';
-import { useMessage } from '../contexts/message/messageContext';
 import type {
-  Author,
   AuthorDetails,
   AuthorInput,
   AuthorName,
   UseAuthorApprovalProps,
 } from '../api/author/types/author';
+import { routes } from '../common/constants/api';
+import { useMessage } from '../contexts/message/messageContext';
+import { UserContext } from '../contexts/user/userContext';
+
 
 export function useTopThree() {
   const { token } = useContext(UserContext);

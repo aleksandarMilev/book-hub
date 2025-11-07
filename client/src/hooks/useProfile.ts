@@ -1,12 +1,15 @@
+import { format } from 'date-fns';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { format } from 'date-fns';
-import * as api from '../api/profile/profileApi';
+
 import * as chatHooks from './useChat';
 import * as readingListHooks from './useReadingList';
+
+import * as api from '../api/profile/profileApi';
+import type { Profile, ProfileInput, ProfileSummary } from '../api/profile/types/profile';
 import { routes } from '../common/constants/api';
 import { UserContext } from '../contexts/user/userContext';
-import type { Profile, ProfileInput, ProfileSummary } from '../api/profile/types/profile';
+
 
 function toInput(profile: Profile): ProfileInput {
   return {

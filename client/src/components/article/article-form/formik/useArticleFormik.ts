@@ -1,10 +1,13 @@
-import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
+import { useNavigate } from 'react-router-dom';
+
+import type { Article, ArticleInput } from '../../../../api/article/types/article';
+import { routes } from '../../../../common/constants/api';
 import { useMessage } from '../../../../contexts/message/messageContext';
 import * as hooks from '../../../../hooks/useArticle';
+
 import { articleSchema } from '../validation/articleSchema';
-import { routes } from '../../../../common/constants/api';
-import type { Article, ArticleInput } from '../../../../api/article/types/article';
+
 
 export const useArticleFormik = ({
   article = null,
@@ -41,8 +44,9 @@ export const useArticleFormik = ({
           navigate(`${routes.article}/${id}`, { replace: true });
           resetForm();
         }
-      } catch (error: any) {
-        showMessage(error.message, false);
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Operation failed!';
+        showMessage(message, false);
       }
     },
   });

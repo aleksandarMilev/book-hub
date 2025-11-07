@@ -1,42 +1,37 @@
-import { type FC, useContext } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { FaEdit, FaTrash } from 'react-icons/fa';
 import {
-  MDBContainer,
-  MDBRow,
-  MDBCol,
   MDBCard,
   MDBCardBody,
-  MDBCardTitle,
   MDBCardText,
+  MDBCardTitle,
+  MDBCol,
+  MDBContainer,
   MDBIcon,
+  MDBRow,
 } from 'mdb-react-ui-kit';
+import { useContext, type FC } from 'react';
+import { FaEdit, FaTrash } from 'react-icons/fa';
+import { Link, useParams } from 'react-router-dom';
 
-import * as hooks from '../../../hooks/useArticle';
 import { routes } from '../../../common/constants/api';
-
+import { formatIsoDate, parseId } from '../../../common/functions/utils';
+import { UserContext } from '../../../contexts/user/userContext';
+import * as hooks from '../../../hooks/useArticle';
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
 import DeleteModal from '../../common/delete-modal/DeleteModal';
-import { UserContext } from '../../../contexts/user/userContext';
-import { formatIsoDate, parseId } from '../../../common/functions/utils';
 
 import './ArticleDetails.css';
 
 const ArticleDetails: FC = () => {
   const { id } = useParams<{ id: string }>();
-  let parsedId: number | null = null;
-
-  try {
-    parsedId = parseId(id);
-  } catch {}
-
-  if (parsedId == null) {
-    return <div>Invalid article id.</div>;
-  }
+  let parsedId = parseId(id);
 
   const { isAdmin } = useContext(UserContext);
   const { article, isFetching, error } = hooks.useDetails(parsedId);
   const { showModal, toggleModal, deleteHandler } = hooks.useRemove(parsedId, article?.title);
+
+  if (parsedId == null) {
+    return <div>Invalid article id.</div>;
+  }
 
   if (error) {
     return <div className="alert alert-danger">{error}</div>;

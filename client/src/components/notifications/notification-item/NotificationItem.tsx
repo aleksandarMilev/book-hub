@@ -1,10 +1,12 @@
-import { type FC } from 'react';
 import { format } from 'date-fns';
-import { FaTrashAlt } from 'react-icons/fa';
 import { MDBBtn } from 'mdb-react-ui-kit';
-import DeleteModal from '../../common/delete-modal/DeleteModal';
+import { type FC } from 'react';
+import { FaTrashAlt } from 'react-icons/fa';
+
 import type { NotificationType } from '../../../api/notification/types/notification';
 import * as hooks from '../../../hooks/useNotification';
+import DeleteModal from '../../common/delete-modal/DeleteModal';
+
 
 const NotificationItem: FC<{
   notification: NotificationType;

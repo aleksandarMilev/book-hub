@@ -1,10 +1,12 @@
 import type { FC } from 'react';
 import { useParams } from 'react-router-dom';
 
-import * as hooks from '../../../hooks/useBook';
-import BookForm from '../book-form/BookForm';
-import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
 import { parseId } from '../../../common/functions/utils';
+import * as hooks from '../../../hooks/useBook';
+import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
+
+import BookForm from '../book-form/BookForm';
+
 
 const EditBook: FC = () => {
   const { id } = useParams<{ id: string }>();

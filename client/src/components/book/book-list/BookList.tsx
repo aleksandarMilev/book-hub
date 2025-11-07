@@ -1,18 +1,18 @@
 import { type FC, useState, type ChangeEvent } from 'react';
-import { useLocation } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa';
+import { useLocation } from 'react-router-dom';
 
+import type { LocationState } from '../../../api/book/types/book';
+import image from '../../../assets/images/no-books-found.png';
 import { pagination } from '../../../common/constants/defaultValues';
 import * as bookHooks from '../../../hooks/useBook';
 import * as searchHooks from '../../../hooks/useSearch';
-
-import BookListItem from '../book-list-item/BookListItem';
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
 import Pagination from '../../common/pagination/Pagination';
 
-import image from '../../../assets/images/no-books-found.png';
+import BookListItem from '../book-list-item/BookListItem';
+
 import './BookList.css';
-import type { LocationState } from '../../../api/book/types/book';
 
 const BookList: FC = () => {
   const location = useLocation() as { state: LocationState };

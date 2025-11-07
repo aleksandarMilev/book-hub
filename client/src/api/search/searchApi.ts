@@ -1,14 +1,18 @@
 import axios from 'axios';
-import { baseUrl, routes } from '../../common/constants/api';
-import { errors } from '../../common/constants/messages';
-import { pagination } from '../../common/constants/defaultValues';
-import type { PagedResult } from '../common/types/pagedResults';
-import { getAuthConfig, returnIfRequestCanceled } from '../common/utils';
+
+import type { AuthorSearchResult } from './types/authorSearchResult';
 import type { BookSearchResult } from './types/bookSearchResult';
 import type { ChatSearchResult } from './types/chatResultSearch';
-import type { AuthorSearchResult } from './types/authorSearchResult';
 import type { ProfileSearchResult } from './types/profileSearchResult';
+
+import { baseUrl, routes } from '../../common/constants/api';
+import { pagination } from '../../common/constants/defaultValues';
+import { errors } from '../../common/constants/messages';
+
+
 import type { ArticleSummary } from '../article/types/article';
+import type { PagedResult } from '../common/types/pagedResults';
+import { getAuthConfig, returnIfRequestCanceled } from '../common/utils';
 
 async function search<T>(
   route: string,
@@ -30,6 +34,7 @@ async function search<T>(
     return response.data;
   } catch (error) {
     returnIfRequestCanceled(error, errors.search.badRequest);
+    throw error;
   }
 }
 

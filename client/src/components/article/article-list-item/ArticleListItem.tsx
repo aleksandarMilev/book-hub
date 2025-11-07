@@ -1,18 +1,19 @@
-import type { FC } from 'react';
-import { Link } from 'react-router-dom';
 import {
-  MDBRow,
-  MDBCol,
   MDBCard,
   MDBCardBody,
   MDBCardImage,
   MDBCardText,
   MDBCardTitle,
+  MDBCol,
+  MDBRow,
 } from 'mdb-react-ui-kit';
+import type { FC } from 'react';
+import { Link } from 'react-router-dom';
 
 import { routes } from '../../../common/constants/api';
-import './ArticleListItem.css';
 import { formatIsoDate } from '../../../common/functions/utils';
+import './ArticleListItem.css';
+
 import type { ArticleSummary } from '../../../api/article/types/article';
 
 const ArticleListItem: FC<ArticleSummary> = ({ id, title, introduction, imageUrl, createdOn }) => {

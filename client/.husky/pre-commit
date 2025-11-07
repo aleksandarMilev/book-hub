@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+cd "$(git rev-parse --show-toplevel)/client" || exit 1
+
+echo "Running lint-staged..."
+# npx lint-staged

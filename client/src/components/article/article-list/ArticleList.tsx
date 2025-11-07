@@ -1,14 +1,15 @@
-import { type FC, useState, type ChangeEvent } from 'react';
+import { useState, type ChangeEvent, type FC } from 'react';
 import { FaSearch } from 'react-icons/fa';
 
+import type { ArticleSummary } from '../../../api/article/types/article';
+import image from '../../../assets/images/no-books-found.png';
 import { pagination } from '../../../common/constants/defaultValues';
 import * as hooks from '../../../hooks/useSearch';
+import { useDebounce } from '../../../shared/hooks/useDebounce';
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
-import image from '../../../assets/images/no-books-found.png';
-import ArticleListItem from '../article-list-item/ArticleListItem';
-import { useDebounce } from '../../../hooks/common/useDebounce';
 import Pagination from '../../common/pagination/Pagination';
-import type { ArticleSummary } from '../../../api/article/types/article';
+
+import ArticleListItem from '../article-list-item/ArticleListItem';
 
 const ArticleList: FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -86,7 +87,7 @@ const ArticleList: FC = () => {
                 style={{ maxWidth: '200px', opacity: 0.7, cursor: 'pointer' }}
                 onClick={() => setSearchTerm('')}
               />
-              <h5 className="text-muted">We couldn't find any articles</h5>
+              <h5 className="text-muted">{`We couldn't find any articles`}</h5>
               <p className="text-muted text-center" style={{ maxWidth: '400px' }}>
                 Try adjusting your search terms or exploring our collection for more options.
               </p>

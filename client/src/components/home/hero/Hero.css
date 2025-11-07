@@ -1,7 +1,7 @@
 .hero-container {
   padding: 5rem;
   text-align: center;
-  background-image: url("../../../assets/images/hero.jpg");
+  background-image: url('./assets/hero.jpg');
   background-size: cover;
   background-position: center;
   height: 600px;

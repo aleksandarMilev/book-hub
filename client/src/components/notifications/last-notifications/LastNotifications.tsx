@@ -1,10 +1,12 @@
 import type { FC, MouseEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import { Dropdown, Badge } from 'react-bootstrap';
 import { FaBell } from 'react-icons/fa';
-import * as hooks from '../../../hooks/useNotification';
+import { Link, useNavigate } from 'react-router-dom';
+
 import { routes } from '../../../common/constants/api';
+import * as hooks from '../../../hooks/useNotification';
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
+
 import './LastNotifications.css';
 import LastNotificationsListItem from '../last-notifications-list-item/LastNotificationsListItem';
 

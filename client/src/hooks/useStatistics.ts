@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+
 import * as api from '../api/statistics/statisticsApi';
 import type { Statistics } from '../api/statistics/types/statistics';
 

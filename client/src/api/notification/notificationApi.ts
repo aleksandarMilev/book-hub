@@ -1,9 +1,11 @@
-import { routes } from '../../common/constants/api';
-import { errors } from '../../common/constants/messages';
-import { http } from '../common/http';
-import { getAuthConfig, returnIfRequestCanceled } from '../common/utils';
 import type { NotificationType } from './types/notification';
 import type { PagedNotifications } from './types/pageNotification';
+
+import { routes } from '../../common/constants/api';
+import { errors } from '../../common/constants/messages';
+
+import { http } from '../common/http';
+import { getAuthConfig, returnIfRequestCanceled } from '../common/utils';
 
 export async function lastThree(token: string, signal?: AbortSignal) {
   try {
@@ -50,8 +52,8 @@ export async function remove(id: number, token: string, signal?: AbortSignal) {
     await http.delete<void>(url, getAuthConfig(token, signal));
 
     return true;
-  } catch (error) {
-    if ((error as any)?.name === 'CanceledError') {
+  } catch (error: unknown) {
+    if (error instanceof Error && error.name === 'CanceledError') {
       throw error;
     }
 

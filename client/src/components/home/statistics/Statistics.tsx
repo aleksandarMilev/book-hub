@@ -1,5 +1,4 @@
 import { type FC, useContext } from 'react';
-import { Link } from 'react-router-dom';
 import CountUp from 'react-countup';
 import {
   FaUsers,
@@ -10,11 +9,11 @@ import {
   FaNewspaper,
   FaBookReader,
 } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 import { routes } from '../../../common/constants/api';
 import { UserContext } from '../../../contexts/user/userContext';
 import * as hooks from '../../../hooks/useStatistics';
-
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
 
 import './Statistics.css';

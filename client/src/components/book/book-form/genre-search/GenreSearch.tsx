@@ -1,4 +1,5 @@
 import type { FC } from 'react';
+
 import { useSearch } from '../../../../hooks/useGenre';
 
 import './GenreSearch.css';

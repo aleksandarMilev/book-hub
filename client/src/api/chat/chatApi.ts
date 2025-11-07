@@ -1,85 +1,110 @@
-import axios from 'axios';
-import { baseUrl, routes } from '../../common/constants/api';
+import type {
+  Chat,
+  ChatInput,
+  ChatSummary,
+  Message,
+  MessageInput,
+  Participant,
+} from './types/chat';
+
+import { routes } from '../../common/constants/api';
 import { errors } from '../../common/constants/messages';
-import { getAuthConfig } from '../common/utils';
-import type { ChatDetails } from './types/chatDetails';
-import type { Chat } from './types/chat';
-import type { ChatMessage } from './types/chatMessage';
 
-export async function details(chatId: number, token: string) {
+import { http } from '../common/http';
+import { getAuthConfig, returnIfRequestCanceled } from '../common/utils';
+
+
+export async function details(chatId: number, token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.chat}/${chatId}`;
-    const response = await axios.get<ChatDetails>(url, getAuthConfig(token));
+    const url = `${routes.chat}/${chatId}`;
+    const { data } = await http.get<Chat>(url, getAuthConfig(token, signal));
 
-    return response.data;
-  } catch {
-    throw new Error(errors.chat.details);
+    return data;
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.chat.details);
+    throw error;
   }
 }
 
-export async function chatsNotJoined(userId: string, token: string) {
+export async function chatsNotJoined(userId: string, token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.chatsNotJoined}/?userId=${userId}`;
-    const response = await axios.get<Chat[]>(url, getAuthConfig(token));
+    const url = `${routes.chatsNotJoined}/?userId=${userId}`;
+    const { data } = await http.get<ChatSummary[]>(url, getAuthConfig(token, signal));
 
-    return response.data;
-  } catch {
-    throw new Error(errors.chat.names);
+    return data;
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.chat.names);
+    throw error;
   }
 }
 
-export async function hasAccess(chatId: number, userId: string, token: string): Promise<boolean> {
+export async function hasAccess(
+  chatId: number,
+  userId: string,
+  token: string,
+  signal?: AbortSignal,
+) {
   try {
-    const url = `${baseUrl}${routes.chat}/${chatId}/access/${userId}`;
-    const response = await axios.get<boolean>(url, getAuthConfig(token));
+    const url = `${routes.chat}/${chatId}/access/${userId}`;
+    const { data } = await http.get<boolean>(url, getAuthConfig(token, signal));
 
-    return response.data;
-  } catch {
-    throw new Error(errors.chat.details);
+    return data;
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.chat.details);
+    throw error;
   }
 }
 
-export async function userIsInvited(chatId: number, userId: string, token: string) {
+export async function userIsInvited(
+  chatId: number,
+  userId: string,
+  token: string,
+  signal?: AbortSignal,
+) {
   try {
-    const url = `${baseUrl}${routes.chat}/${chatId}/invited/${userId}`;
-    const response = await axios.get<boolean>(url, getAuthConfig(token));
+    const url = `${routes.chat}/${chatId}/invited/${userId}`;
+    const { data } = await http.get<boolean>(url, getAuthConfig(token, signal));
 
-    return response.data;
-  } catch {
-    throw new Error(errors.chat.details);
+    return data;
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.chat.details);
+    throw error;
   }
 }
 
-export async function create(chat: Partial<Chat>, token: string) {
+export async function create(chat: ChatInput, token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.chat}`;
-    const response = await axios.post<number>(url, chat, getAuthConfig(token));
+    const url = `${routes.chat}`;
+    const { data } = await http.post<number>(url, chat, getAuthConfig(token, signal));
 
-    return response.data;
-  } catch {
-    throw new Error(errors.chat.create);
+    return data;
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.chat.create);
+    throw error;
   }
 }
 
-export async function edit(chatId: number, chat: Partial<Chat>, token: string): Promise<boolean> {
+export async function edit(chatId: number, chat: ChatInput, token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.chat}/${chatId}`;
-    await axios.put(url, chat, getAuthConfig(token));
+    const url = `${routes.chat}/${chatId}`;
+    await http.put(url, chat, getAuthConfig(token, signal));
 
     return true;
-  } catch {
-    throw new Error(errors.chat.edit);
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.chat.edit);
+    throw error;
   }
 }
 
-export async function remove(chatId: number, token: string): Promise<boolean> {
+export async function remove(chatId: number, token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.chat}/${chatId}`;
-    await axios.delete(url, getAuthConfig(token));
+    const url = `${routes.chat}/${chatId}`;
+    await http.delete(url, getAuthConfig(token, signal));
 
     return true;
-  } catch {
-    throw new Error(errors.chat.delete);
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.chat.delete);
+    throw error;
   }
 }
 
@@ -88,12 +113,14 @@ export async function inviteUserToChat(
   chatName: string,
   userId: string,
   token: string,
+  signal?: AbortSignal,
 ) {
   try {
-    const url = `${baseUrl}${routes.chat}/${chatId}/invite`;
-    await axios.post(url, { userId, chatName }, getAuthConfig(token));
-  } catch {
-    throw new Error(errors.chat.addUser);
+    const url = `${routes.chat}/${chatId}/invite`;
+    await http.post(url, { userId, chatName }, getAuthConfig(token, signal));
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.chat.addUser);
+    throw error;
   }
 }
 
@@ -102,12 +129,14 @@ export async function reject(
   chatName: string,
   chatCreatorId: string,
   token: string,
+  signal?: AbortSignal,
 ) {
   try {
-    const url = `${baseUrl}${routes.rejectChatInvitation}`;
-    await axios.post(url, { chatId, chatName, chatCreatorId }, getAuthConfig(token));
-  } catch {
-    throw new Error(errors.chat.reject);
+    const url = `${routes.rejectChatInvitation}`;
+    await http.post(url, { chatId, chatName, chatCreatorId }, getAuthConfig(token, signal));
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.chat.reject);
+    throw error;
   }
 }
 
@@ -116,57 +145,73 @@ export async function accept(
   chatName: string,
   chatCreatorId: string,
   token: string,
+  signal?: AbortSignal,
 ) {
   try {
-    const url = `${baseUrl}${routes.acceptChatInvitation}`;
-    const response = await axios.post(
+    const url = `${routes.acceptChatInvitation}`;
+    const { data } = await http.post<Participant>(
       url,
       { chatId, chatName, chatCreatorId },
-      getAuthConfig(token),
+      getAuthConfig(token, signal),
     );
 
-    return response.data;
-  } catch {
-    throw new Error(errors.chat.accept);
+    return data;
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.chat.accept);
+    throw error;
   }
 }
 
-export async function removeUser(chatId: number, userToRemoveId: string, token: string) {
+export async function removeUser(
+  chatId: number,
+  userToRemoveId: string,
+  token: string,
+  signal?: AbortSignal,
+) {
   try {
-    const url = `${baseUrl}${routes.removeChatUser}?chatId=${chatId}&userId=${userToRemoveId}`;
-    await axios.delete(url, getAuthConfig(token));
-  } catch {
-    throw new Error(errors.chat.removeUser);
+    const url = `${routes.removeChatUser}?chatId=${chatId}&userId=${userToRemoveId}`;
+    await http.delete(url, getAuthConfig(token, signal));
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.chat.removeUser);
+    throw error;
   }
 }
 
-export async function createMessage(message: Partial<ChatMessage>, token: string) {
+export async function createMessage(message: MessageInput, token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.chatMessage}`;
-    const response = await axios.post<ChatMessage>(url, message, getAuthConfig(token));
+    const url = `${routes.chatMessage}`;
+    const { data } = await http.post<Message>(url, message, getAuthConfig(token, signal));
 
-    return response.data;
-  } catch {
-    throw new Error(errors.chat.createMessage);
+    return data;
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.chat.createMessage);
+    throw error;
   }
 }
 
-export async function editMessage(messageId: number, message: Partial<ChatMessage>, token: string) {
+export async function editMessage(
+  messageId: number,
+  message: MessageInput,
+  token: string,
+  signal?: AbortSignal,
+) {
   try {
-    const url = `${baseUrl}${routes.chatMessage}/${messageId}`;
-    const response = await axios.put<ChatMessage>(url, message, getAuthConfig(token));
+    const url = `${routes.chatMessage}/${messageId}`;
+    const { data } = await http.put<Message>(url, message, getAuthConfig(token, signal));
 
-    return response.data;
-  } catch {
-    throw new Error(errors.chat.editMessage);
+    return data;
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.chat.editMessage);
+    throw error;
   }
 }
 
-export async function removeMessage(id: number, token: string): Promise<void> {
+export async function removeMessage(id: number, token: string, signal?: AbortSignal) {
   try {
-    const url = `${baseUrl}${routes.chatMessage}/${id}`;
-    await axios.delete(url, getAuthConfig(token));
-  } catch {
-    throw new Error(errors.chat.deleteMessage);
+    const url = `${routes.chatMessage}/${id}`;
+    await http.delete(url, getAuthConfig(token, signal));
+  } catch (error) {
+    returnIfRequestCanceled(error, errors.chat.deleteMessage);
+    throw error;
   }
 }

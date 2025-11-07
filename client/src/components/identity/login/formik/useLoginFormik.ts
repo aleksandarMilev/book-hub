@@ -1,9 +1,11 @@
-import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
-import * as useIdentity from '../../../../hooks/useIdentity';
-import { routes } from '../../../../common/constants/api';
-import { loginSchema } from '../validation/loginSchema';
+import { useNavigate } from 'react-router-dom';
+
 import { loginInitialValues, type LoginFormValues } from '../../../../api/identity/types/identity';
+import { routes } from '../../../../common/constants/api';
+import * as useIdentity from '../../../../hooks/useIdentity';
+
+import { loginSchema } from '../validation/loginSchema';
 
 export const useLoginFormik = () => {
   const navigate = useNavigate();

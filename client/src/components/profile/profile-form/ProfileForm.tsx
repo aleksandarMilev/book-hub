@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import {
   MDBBtn,
   MDBContainer,
@@ -8,6 +7,8 @@ import {
   MDBCol,
   MDBInput,
 } from 'mdb-react-ui-kit';
+import type { FC } from 'react';
+
 import { useProfileFormik } from './formik/useProfileFormik';
 import type { Profile } from '../../../api/profile/types/profile';
 import './ProfileForm.css';

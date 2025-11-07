@@ -1,6 +1,3 @@
-import { type FC, useContext } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { FaEdit, FaTrash } from 'react-icons/fa';
 import {
   MDBContainer,
   MDBRow,
@@ -11,20 +8,23 @@ import {
   MDBCardText,
   MDBIcon,
 } from 'mdb-react-ui-kit';
+import { type FC, useContext } from 'react';
+import { FaEdit, FaTrash } from 'react-icons/fa';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 
-import * as hooks from '../../../hooks/useAuthor';
+import ApproveRejectButtons from './approve-reject-buttons/ApproveRejectButtons';
+import type { AuthorTopBook } from '../../../api/author/types/author';
 import { routes } from '../../../common/constants/api';
-
+import { calculateAge, formatIsoDate, parseId } from '../../../common/functions/utils';
+import { UserContext } from '../../../contexts/user/userContext';
+import * as hooks from '../../../hooks/useAuthor';
+import BookListItem from '../../book/book-list-item/BookListItem';
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
 import DeleteModal from '../../common/delete-modal/DeleteModal';
 
 import './AuthorDetails.css';
-import { UserContext } from '../../../contexts/user/userContext';
-import ApproveRejectButtons from './approve-reject-buttons/ApproveRejectButtons';
-import BookListItem from '../../book/book-list-item/BookListItem';
 import { RenderStars } from '../../common/render-stars/renderStars';
-import { calculateAge, formatIsoDate, parseId } from '../../../common/functions/utils';
-import type { AuthorTopBook } from '../../../api/author/types/author';
+
 
 const AuthorDetails: FC = () => {
   const navigate = useNavigate();

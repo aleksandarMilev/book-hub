@@ -1,8 +1,9 @@
-import type { Dispatch, SetStateAction } from 'react';
 import type { FormikProps } from 'formik';
+import type { Dispatch, SetStateAction } from 'react';
+
 import type { AuthorDetails } from '../../author/types/author';
-import type { ReadingStatus } from '../../readingList/types/readingList';
 import type { Genre } from '../../genre/types/genre';
+import type { ReadingStatus } from '../../readingList/types/readingList';
 import type { Review } from '../../review/types/review';
 
 interface BookCore {

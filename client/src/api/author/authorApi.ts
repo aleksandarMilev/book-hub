@@ -1,8 +1,11 @@
+import type { Author, AuthorDetails, AuthorInput, AuthorName } from './types/author';
+
 import { routes } from '../../common/constants/api';
 import { errors } from '../../common/constants/messages';
-import { getAuthConfig, returnIfRequestCanceled } from '../common/utils';
+
 import { http, httpAdmin } from '../common/http';
-import type { Author, AuthorDetails, AuthorInput, AuthorName } from './types/author';
+import { getAuthConfig, returnIfRequestCanceled } from '../common/utils';
+
 
 export async function names(token: string, signal?: AbortSignal) {
   try {

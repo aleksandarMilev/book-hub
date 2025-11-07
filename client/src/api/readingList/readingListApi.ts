@@ -1,8 +1,10 @@
-import { HttpStatusCode } from 'axios';
+import { HttpStatusCode, isAxiosError } from 'axios';
+
 import { routes } from '../../common/constants/api';
 import { errors } from '../../common/constants/messages';
-import { getAuthConfig, returnIfRequestCanceled } from '../common/utils';
+
 import { http } from '../common/http';
+import { getAuthConfig, returnIfRequestCanceled } from '../common/utils';
 
 export async function get(
   userId: string,
@@ -43,15 +45,19 @@ export async function add(bookId: number, status: string, token: string, signal?
     await http.post(url, { bookId, status }, getAuthConfig(token, signal));
 
     return null;
-  } catch (error: any) {
+  } catch (error: unknown) {
     try {
       returnIfRequestCanceled(error, errors.readingList.add);
     } catch (error) {
       throw error;
     }
 
-    if (error?.response?.status === HttpStatusCode.BadRequest && error.response.data) {
-      return error.response.data as any;
+    if (
+      isAxiosError(error) &&
+      error?.response?.status === HttpStatusCode.BadRequest &&
+      error.response.data
+    ) {
+      return error.response.data;
     }
 
     throw new Error(errors.readingList.add);

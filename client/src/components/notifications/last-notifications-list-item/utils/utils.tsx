@@ -1,4 +1,5 @@
 import { FaBook, FaUser } from 'react-icons/fa';
+
 import { routes } from '../../../../common/constants/api';
 
 export const getIcon = (resourceType: string) => {

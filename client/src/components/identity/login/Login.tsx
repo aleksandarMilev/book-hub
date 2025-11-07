@@ -1,10 +1,11 @@
+import { MDBBtn, MDBCheckbox, MDBCol, MDBContainer, MDBInput, MDBRow } from 'mdb-react-ui-kit';
 import { type FC } from 'react';
 import { Link } from 'react-router-dom';
-import { MDBBtn, MDBContainer, MDBRow, MDBCol, MDBInput, MDBCheckbox } from 'mdb-react-ui-kit';
-import { routes } from '../../../common/constants/api';
-import loginImage from '../../../assets/images/login.webp';
-import './Login.css';
-import { useLoginFormik } from './formik/useLoginFormik';
+
+import { useLoginFormik } from '@/components/identity/login/formik/useLoginFormik';
+import { routes } from '@/shared/lib/constants/api';
+
+import image from './assets/login.webp';
 
 const Login: FC = () => {
   const formik = useLoginFormik();
@@ -14,7 +15,7 @@ const Login: FC = () => {
       <MDBRow>
         <MDBCol col="10" md="6">
           <img
-            src={loginImage}
+            src={image}
             className="img-fluid"
             alt="Login"
             style={{ width: '100%', height: 'auto', display: 'block' }}
@@ -64,7 +65,7 @@ const Login: FC = () => {
                 Login
               </MDBBtn>
               <p className="small fw-bold mt-2 pt-1 mb-2">
-                Don't have an account?
+                {"Don't have an account?"}
                 <Link to={routes.register} className="link-danger">
                   {' '}
                   Register

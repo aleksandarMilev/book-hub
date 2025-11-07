@@ -1,8 +1,10 @@
 import { useContext, type FC } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { FaUser, FaLock, FaUnlock } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+
 import { routes } from '../../../common/constants/api';
 import { UserContext } from '../../../contexts/user/userContext';
+
 import './ProfileListItem.css';
 import type { ProfileListItemProps } from '../../../api/profile/types/profile';
 

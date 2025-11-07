@@ -1,9 +1,10 @@
 import { type FC } from 'react';
 
-import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
-import ReviewListItem from '../review-list-item/ReviewListItem';
-import Pagination from '../../common/pagination/Pagination'; // ✅ import shared component
 import { useReviewList } from '../../../hooks/useReview';
+import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
+import Pagination from '../../common/pagination/Pagination'; // ✅ import shared component
+
+import ReviewListItem from '../review-list-item/ReviewListItem';
 
 import './ReviewList.css';
 

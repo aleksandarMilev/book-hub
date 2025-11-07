@@ -1,9 +1,11 @@
 import { type FC, useState } from 'react';
+
 import { pagination } from '../../../common/constants/defaultValues';
 import * as hooks from '../../../hooks/useNotification';
-import NotificationItem from '../notification-item/NotificationItem';
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
 import Pagination from '../../common/pagination/Pagination';
+
+import NotificationItem from '../notification-item/NotificationItem';
 import './NotificationList.css';
 
 const NotificationList: FC = () => {

@@ -1,4 +1,5 @@
 import type { FC } from 'react';
+
 import { useSearchNames } from '../../../../hooks/useAuthor';
 
 import './AuthorSearch.css';

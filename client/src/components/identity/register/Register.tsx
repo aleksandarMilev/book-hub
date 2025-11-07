@@ -1,18 +1,18 @@
-import { type FC } from 'react';
 import {
   MDBBtn,
-  MDBContainer,
-  MDBRow,
-  MDBCol,
   MDBCard,
   MDBCardBody,
   MDBCardImage,
-  MDBInput,
+  MDBCol,
+  MDBContainer,
   MDBIcon,
+  MDBInput,
+  MDBRow,
 } from 'mdb-react-ui-kit';
-import { useRegisterFormik } from './formik/useRegisterFormik';
-import registerImage from '../../../assets/images/register.webp';
-import './Register.css';
+import { type FC } from 'react';
+
+import image from '@/assets/register.webp';
+import { useRegisterFormik } from '@/components/identity/register/formik/useRegisterFormik';
 
 const Register: FC = () => {
   const formik = useRegisterFormik();
@@ -87,7 +87,7 @@ const Register: FC = () => {
               </form>
             </MDBCol>
             <MDBCol md="10" lg="6" className="order-1 order-lg-2 d-flex align-items-center">
-              <MDBCardImage src={registerImage} fluid alt="Register" />
+              <MDBCardImage src={image} fluid alt="Register" />
             </MDBCol>
           </MDBRow>
         </MDBCardBody>

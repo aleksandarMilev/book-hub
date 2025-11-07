@@ -1,28 +1,31 @@
-import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import './ProfileDetails.css';
+
+import defaultProfilePicture from '@assets/default-profile-picture.png';
 import {
-  faPhone,
   faBirthdayCake,
-  faUser,
+  faBook,
+  faBookReader,
+  faChartBar,
+  faComment,
+  faEdit,
   faGlobe,
   faLock,
-  faEdit,
-  faTrashAlt,
+  faPhone,
   faPlus,
-  faBook,
-  faComment,
-  faChartBar,
-  faBookReader,
+  faTrashAlt,
+  faUser,
 } from '@fortawesome/free-solid-svg-icons';
-import * as profileHooks from '../../../hooks/useProfile';
-import * as chatHooks from '../../../hooks/useChat';
-import { routes } from '../../../common/constants/api';
-import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
-import DeleteModal from '../../common/delete-modal/DeleteModal';
-import defaultProfilePicture from '../../../assets/images/default-profile-picture.png';
-import './ProfileDetails.css';
-import BookListItem from '../../book/book-list-item/BookListItem';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from 'react-router-dom';
+
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import DeleteModal from '@/shared/components/delete-modal/DeleteModal';
+import { routes } from '@/shared/lib/constants/api';
+
 import { useMessage } from '../../../contexts/message/messageContext';
+import * as chatHooks from '../../../hooks/useChat';
+import * as profileHooks from '../../../hooks/useProfile';
+import BookListItem from '../../book/book-list-item/BookListItem';
 
 const ProfileDetails = () => {
   const {
@@ -282,8 +285,9 @@ const ProfileDetails = () => {
           try {
             await deleteHandler();
             showMessage('The profile was successfully deleted!', true);
-          } catch (err: any) {
-            showMessage(err?.message ?? 'Failed to delete profile.', false);
+          } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : 'Failed to delete profile.';
+            showMessage(message, false);
           }
         }}
       />

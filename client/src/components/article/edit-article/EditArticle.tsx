@@ -1,18 +1,17 @@
 import type { FC } from 'react';
 import { useParams } from 'react-router-dom';
 
-import * as hooks from '../../../hooks/useArticle';
-import ArticleForm from '../article-form/ArticleForm';
-import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
 import { parseId } from '../../../common/functions/utils';
+import * as hooks from '../../../hooks/useArticle';
+import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
+
+import ArticleForm from '../article-form/ArticleForm';
+
 
 const EditArticle: FC = () => {
   const { id } = useParams<{ id: string }>();
-  let parsedId: number | null = null;
+  let parsedId = parseId(id);
 
-  try {
-    parsedId = parseId(id);
-  } catch {}
   if (parsedId == null) {
     return <div>Invalid article id.</div>;
   }
