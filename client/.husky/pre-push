@@ -1,2 +1,5 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
 echo "Type-check & tests before push..."
 npm run typecheck
