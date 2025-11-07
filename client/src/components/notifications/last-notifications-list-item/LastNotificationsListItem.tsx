@@ -1,8 +1,10 @@
+import { format } from 'date-fns';
 import { type FC } from 'react';
 import { Dropdown } from 'react-bootstrap';
-import { format } from 'date-fns';
+
 import { getIcon } from './utils/utils';
 import type { NotificationType } from '../../../api/notification/types/notification';
+
 import './LastNotificationsListItem.css';
 import * as hooks from '../../../hooks/useNotification';
 

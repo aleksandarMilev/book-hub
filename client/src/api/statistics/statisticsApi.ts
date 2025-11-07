@@ -1,7 +1,10 @@
 import axios from 'axios';
+
+import type { Statistics } from './types/statistics';
+
 import { baseUrl, routes } from '../../common/constants/api';
 import { errors } from '../../common/constants/messages';
-import type { Statistics } from './types/statistics';
+
 
 export async function all() {
   try {

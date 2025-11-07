@@ -1,8 +1,11 @@
+import type { Article, ArticleInput } from './types/article';
+
 import { routes } from '../../common/constants/api';
 import { errors } from '../../common/constants/messages';
-import { getAuthConfig, returnIfRequestCanceled } from '../common/utils';
+
 import { http, httpAdmin } from '../common/http';
-import type { Article, ArticleInput } from './types/article';
+import { getAuthConfig, returnIfRequestCanceled } from '../common/utils';
+
 
 export async function details(id: number, token: string, signal?: AbortSignal) {
   try {

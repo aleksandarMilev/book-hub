@@ -1,12 +1,14 @@
-import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
-import * as useIdentity from '../../../../hooks/useIdentity';
-import { routes } from '../../../../common/constants/api';
-import { registerSchema } from '../validation/registerSchema';
+import { useNavigate } from 'react-router-dom';
+
 import {
   registerInitialValues,
   type RegisterFormValues,
 } from '../../../../api/identity/types/identity';
+import { routes } from '../../../../common/constants/api';
+import * as useIdentity from '../../../../hooks/useIdentity';
+
+import { registerSchema } from '../validation/registerSchema';
 
 export const useRegisterFormik = () => {
   const navigate = useNavigate();

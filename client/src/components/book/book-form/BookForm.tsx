@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+
 import {
   MDBBtn,
   MDBContainer,
@@ -9,14 +9,15 @@ import {
   MDBCol,
   MDBInput,
 } from 'mdb-react-ui-kit';
+import type { FC } from 'react';
 
 import bookImage from '../../../assets/images/create-book.jpg';
 
 import './BookForm.css';
-import type { BookFormProps } from '../../../api/book/types/book';
 import AuthorSearch from './author-search/AuthorSearch';
-import GenreSearch from './genre-search/GenreSearch';
 import { useBookFormik } from './formik/useBookFormik';
+import GenreSearch from './genre-search/GenreSearch';
+import type { BookFormProps } from '../../../api/book/types/book';
 
 const BookForm: FC<BookFormProps> = ({ bookData = null, isEditMode = false }) => {
   const {

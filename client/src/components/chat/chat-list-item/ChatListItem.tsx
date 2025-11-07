@@ -1,6 +1,7 @@
+import { MDBIcon } from 'mdb-react-ui-kit';
 import { useContext, type FC } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { MDBIcon } from 'mdb-react-ui-kit';
+
 import { routes } from '../../../common/constants/api';
 import { UserContext } from '../../../contexts/user/userContext';
 import DeleteModal from '../../common/delete-modal/DeleteModal';

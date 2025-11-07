@@ -1,15 +1,16 @@
 import { useState, type FC } from 'react';
-import { useLocation } from 'react-router-dom';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
+import { useLocation } from 'react-router-dom';
 
-import * as hooks from '../../hooks/useReadingList';
+import noBooksImage from '../../assets/images/no-books-found.png';
 import { pagination, readingListStatus } from '../../common/constants/defaultValues';
+import * as hooks from '../../hooks/useReadingList';
 
 import DefaultSpinner from '../common/default-spinner/DefaultSpinner';
-import noBooksImage from '../../assets/images/no-books-found.png';
 
 import './ReadingList.css';
 import BookListItem from '../book/book-list-item/BookListItem';
+
 import type { ReadingStatus } from '../../api/readingList/types/readingList';
 
 const ReadingList: FC = () => {

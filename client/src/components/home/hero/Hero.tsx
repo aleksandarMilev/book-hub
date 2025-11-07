@@ -1,6 +1,6 @@
+import { MDBBtn } from 'mdb-react-ui-kit';
 import { type FC } from 'react';
 import { Link } from 'react-router-dom';
-import { MDBBtn } from 'mdb-react-ui-kit';
 
 import { routes } from '../../../common/constants/api';
 import './Hero.css';

@@ -2,13 +2,14 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import * as api from '../api/notification/notificationApi';
+import type { NotificationType } from '../api/notification/types/notification';
 import { routes } from '../common/constants/api';
 import { pagination } from '../common/constants/defaultValues';
-import { UserContext } from '../contexts/user/userContext';
-import type { NotificationType } from '../api/notification/types/notification';
-import { mapResourceRoute } from '../components/notifications/last-notifications-list-item/utils/utils';
 import { errors } from '../common/constants/messages';
+import { mapResourceRoute } from '../components/notifications/last-notifications-list-item/utils/utils';
 import { useMessage } from '../contexts/message/messageContext';
+import { UserContext } from '../contexts/user/userContext';
+
 
 export function useLastThree() {
   const { token } = useContext(UserContext);

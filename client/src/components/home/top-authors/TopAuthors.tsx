@@ -1,11 +1,10 @@
-import { type FC } from 'react';
-import { Link } from 'react-router-dom';
 import { MDBBtn, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
+import { type FC } from 'react';
 import { FaBookReader } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
-import * as hooks from '../../../hooks/useAuthor';
 import { routes } from '../../../common/constants/api';
-
+import * as hooks from '../../../hooks/useAuthor';
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
 
 import './TopAuthors.css';

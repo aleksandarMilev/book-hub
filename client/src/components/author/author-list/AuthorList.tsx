@@ -1,15 +1,16 @@
 import { type FC, useState, type ChangeEvent } from 'react';
 import { FaSearch } from 'react-icons/fa';
 
+import type { AuthorSearchResult } from '../../../api/search/types/authorSearchResult';
+import image from '../../../assets/images/no-books-found.png';
 import { pagination } from '../../../common/constants/defaultValues';
+import { useDebounce } from '../../../hooks/common/useDebounce';
 import * as hooks from '../../../hooks/useSearch';
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
 import Pagination from '../../common/pagination/Pagination';
-import image from '../../../assets/images/no-books-found.png';
 
-import { useDebounce } from '../../../hooks/common/useDebounce';
-import type { AuthorSearchResult } from '../../../api/search/types/authorSearchResult';
 import AuthorListItem from '../author-list-item/AuthorListItem';
+
 
 const AuthorList: FC = () => {
   const [searchTerm, setSearchTerm] = useState('');

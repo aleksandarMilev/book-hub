@@ -1,5 +1,5 @@
-import type { FC } from 'react';
 import { MDBFooter, MDBContainer, MDBRow, MDBCol, MDBIcon } from 'mdb-react-ui-kit';
+import type { FC } from 'react';
 import './Footer.css';
 
 const Footer: FC = () => {

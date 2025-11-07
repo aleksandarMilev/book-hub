@@ -4,6 +4,7 @@ import { Navigate, useParams } from 'react-router-dom';
 import * as api from '../../../../api/chat/chatApi';
 import { routes } from '../../../../common/constants/api';
 import { UserContext } from '../../../../contexts/user/userContext';
+
 import type { Props } from '../types/props.type';
 
 export default function ChatRoute({ element }: Props) {

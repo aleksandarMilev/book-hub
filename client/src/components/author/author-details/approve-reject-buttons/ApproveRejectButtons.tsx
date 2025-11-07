@@ -1,6 +1,8 @@
 import { useState, type FC } from 'react';
-import { useAuthorApproval } from '../../../../hooks/useAuthor';
+
 import type { ApproveRejectButtonsProps } from '../../../../api/author/types/author';
+import { useAuthorApproval } from '../../../../hooks/useAuthor';
+
 
 const ApproveRejectButtons: FC<ApproveRejectButtonsProps> = ({
   authorId,

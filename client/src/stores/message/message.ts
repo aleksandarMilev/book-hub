@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+
 import type { MessageState } from './types/messageState.type';
 import type { TimeoutHandle } from './types/timeoutHandle.type';
 

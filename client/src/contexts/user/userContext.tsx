@@ -1,7 +1,9 @@
 import { createContext, useCallback, useMemo, type PropsWithChildren } from 'react';
-import type { User } from '../../stores/auth/types/user.type';
-import { selectIsAuthenticated, selectUser, useAuthStore } from '../../stores/auth/auth';
+
 import type { UserContextValue } from './types/userContextValue.type';
+
+import { selectIsAuthenticated, selectUser, useAuthStore } from '../../stores/auth/auth';
+import type { User } from '../../stores/auth/types/user.type';
 
 export const UserContext = createContext<UserContextValue>({
   userId: '',

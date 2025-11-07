@@ -1,8 +1,11 @@
 import type { FC } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { routes } from '../../../common/constants/api';
-import image from '../../../assets/images/not-found.webp';
+
 import type { ErrorComponentLocationState } from './types/errorComponentLocationState';
+
+import image from '../../../assets/images/not-found.webp';
+import { routes } from '../../../common/constants/api';
+
 
 const NotFound: FC = () => {
   const location = useLocation();

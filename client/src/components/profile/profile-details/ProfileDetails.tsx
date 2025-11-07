@@ -1,5 +1,3 @@
-import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faPhone,
   faBirthdayCake,
@@ -14,15 +12,18 @@ import {
   faChartBar,
   faBookReader,
 } from '@fortawesome/free-solid-svg-icons';
-import * as profileHooks from '../../../hooks/useProfile';
-import * as chatHooks from '../../../hooks/useChat';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from 'react-router-dom';
+
+import defaultProfilePicture from '../../../assets/images/default-profile-picture.png';
 import { routes } from '../../../common/constants/api';
+import { useMessage } from '../../../contexts/message/messageContext';
+import * as chatHooks from '../../../hooks/useChat';
+import * as profileHooks from '../../../hooks/useProfile';
+import BookListItem from '../../book/book-list-item/BookListItem';
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
 import DeleteModal from '../../common/delete-modal/DeleteModal';
-import defaultProfilePicture from '../../../assets/images/default-profile-picture.png';
 import './ProfileDetails.css';
-import BookListItem from '../../book/book-list-item/BookListItem';
-import { useMessage } from '../../../contexts/message/messageContext';
 
 const ProfileDetails = () => {
   const {

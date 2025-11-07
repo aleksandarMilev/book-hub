@@ -1,10 +1,11 @@
 import { type FC } from 'react';
 import { useParams } from 'react-router-dom';
 
-import * as hooks from '../../../hooks/useAuthor';
-import AuthorForm from '../author-form/AuthorForm';
-import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
 import { parseId } from '../../../common/functions/utils';
+import * as hooks from '../../../hooks/useAuthor';
+import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
+
+import AuthorForm from '../author-form/AuthorForm';
 
 const EditAuthor: FC = () => {
   const { id } = useParams<{ id: string }>();

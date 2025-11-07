@@ -1,5 +1,6 @@
 import { MDBCardImage, MDBIcon } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
+
 import type { Participant } from '../../../../api/chat/types/chat';
 
 const ParticipantListItem: FC<{

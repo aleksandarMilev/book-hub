@@ -1,6 +1,6 @@
-import type { FC } from 'react';
-import { MDBTextArea, MDBBtn } from 'mdb-react-ui-kit';
 import type { FormikProps } from 'formik';
+import { MDBTextArea, MDBBtn } from 'mdb-react-ui-kit';
+import type { FC } from 'react';
 
 const SendForm: FC<{
   formik: FormikProps<{

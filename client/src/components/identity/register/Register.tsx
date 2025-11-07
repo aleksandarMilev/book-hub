@@ -1,4 +1,3 @@
-import { type FC } from 'react';
 import {
   MDBBtn,
   MDBContainer,
@@ -10,6 +9,8 @@ import {
   MDBInput,
   MDBIcon,
 } from 'mdb-react-ui-kit';
+import { type FC } from 'react';
+
 import { useRegisterFormik } from './formik/useRegisterFormik';
 import registerImage from '../../../assets/images/register.webp';
 

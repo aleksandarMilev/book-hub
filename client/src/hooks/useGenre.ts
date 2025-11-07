@@ -2,9 +2,10 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import * as api from '../api/genre/genreApi';
+import type { Genre, GenreDetails } from '../api/genre/types/genre';
 import { routes } from '../common/constants/api';
 import { UserContext } from '../contexts/user/userContext';
-import type { Genre, GenreDetails } from '../api/genre/types/genre';
+
 
 export function useAll() {
   const navigate = useNavigate();

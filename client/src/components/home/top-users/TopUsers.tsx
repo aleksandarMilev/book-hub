@@ -1,10 +1,9 @@
 import { useContext, type FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import * as hooks from '../../../hooks/useProfile';
 import { routes } from '../../../common/constants/api';
 import { UserContext } from '../../../contexts/user/userContext';
-
+import * as hooks from '../../../hooks/useProfile';
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
 
 import './TopUsers.css';

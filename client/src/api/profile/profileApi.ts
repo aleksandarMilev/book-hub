@@ -1,9 +1,12 @@
+import { HttpStatusCode, isAxiosError } from 'axios';
+
+import type { Profile, ProfileInput, ProfileSummary } from './types/profile';
+
 import { routes } from '../../common/constants/api';
 import { errors } from '../../common/constants/messages';
-import { getAuthConfig, returnIfRequestCanceled } from '../common/utils';
+
 import { http, httpAdmin } from '../common/http';
-import type { Profile, ProfileInput, ProfileSummary } from './types/profile';
-import { HttpStatusCode } from 'axios';
+import { getAuthConfig, returnIfRequestCanceled } from '../common/utils';
 
 export async function names(token: string, signal?: AbortSignal) {
   try {
@@ -48,8 +51,8 @@ export async function mine(token: string, signal?: AbortSignal) {
     const { data } = await http.get<Profile>(url, getAuthConfig(token, signal));
 
     return data;
-  } catch (error: any) {
-    if (error?.response?.status === HttpStatusCode.NotFound) {
+  } catch (error: unknown) {
+    if (isAxiosError(error) && error.response?.status === HttpStatusCode.NotFound) {
       return null;
     }
 

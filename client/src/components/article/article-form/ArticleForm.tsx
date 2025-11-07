@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import {
   MDBBtn,
   MDBContainer,
@@ -8,6 +7,7 @@ import {
   MDBCol,
   MDBInput,
 } from 'mdb-react-ui-kit';
+import type { FC } from 'react';
 
 import { useArticleFormik } from './formik/useArticleFormik';
 import type { Article } from '../../../api/article/types/article';

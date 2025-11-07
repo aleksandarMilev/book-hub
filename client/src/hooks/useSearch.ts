@@ -1,16 +1,17 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import * as api from '../api/search/searchApi';
-import { pagination } from '../common/constants/defaultValues';
-import { routes } from '../common/constants/api';
-import { UserContext } from '../contexts/user/userContext';
+
+import type { ArticleSummary } from '../api/article/types/article';
 import type { PagedResult } from '../api/common/types/pagedResults';
+import * as api from '../api/search/searchApi';
+import type { AuthorSearchResult } from '../api/search/types/authorSearchResult';
 import type { BookSearchResult } from '../api/search/types/bookSearchResult';
 import type { ChatSearchResult } from '../api/search/types/chatResultSearch';
-import type { AuthorSearchResult } from '../api/search/types/authorSearchResult';
 import type { ProfileSearchResult } from '../api/search/types/profileSearchResult';
-import type { ArticleSummary } from '../api/article/types/article';
+import { routes } from '../common/constants/api';
+import { pagination } from '../common/constants/defaultValues';
+import { UserContext } from '../contexts/user/userContext';
 
 function useSearch<T>(
   search: (

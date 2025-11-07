@@ -1,11 +1,13 @@
 import { useState, type ChangeEvent, type FC } from 'react';
 import { FaSearch } from 'react-icons/fa';
-import * as useSearch from '../../../hooks/useSearch';
+
+import image from '../../../assets/images/no-books-found.png';
 import { pagination } from '../../../common/constants/defaultValues';
 import { useDebounce } from '../../../hooks/common/useDebounce';
+import * as useSearch from '../../../hooks/useSearch';
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
 import Pagination from '../../common/pagination/Pagination';
-import image from '../../../assets/images/no-books-found.png';
+
 import ChatListItem from '../chat-list-item/ChatListItem';
 
 const ChatList: FC = () => {

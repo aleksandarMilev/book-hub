@@ -1,8 +1,11 @@
 import type { FC } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { routes } from '../../../common/constants/api';
-import image from '../../../assets/images/forbidden.png';
+
 import type { ErrorComponentLocationState } from './types/errorComponentLocationState';
+
+import image from '../../../assets/images/forbidden.png';
+import { routes } from '../../../common/constants/api';
+
 
 const AccessDenied: FC = () => {
   const location = useLocation();

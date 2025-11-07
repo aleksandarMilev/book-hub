@@ -1,13 +1,16 @@
 import { type FC, useState, type ChangeEvent } from 'react';
 import { FaSearch } from 'react-icons/fa';
+
+import type { ProfileListItemProps } from '../../../api/profile/types/profile';
+import image from '../../../assets/images/no-books-found.png';
 import { pagination } from '../../../common/constants/defaultValues';
+import { useDebounce } from '../../../hooks/common/useDebounce';
 import * as hooks from '../../../hooks/useSearch';
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
 import Pagination from '../../common/pagination/Pagination';
-import { useDebounce } from '../../../hooks/common/useDebounce';
-import image from '../../../assets/images/no-books-found.png';
+
 import ProfileListItem from '../profile-list-item/ProfileListItem';
-import type { ProfileListItemProps } from '../../../api/profile/types/profile';
+
 
 const ProfileList: FC = () => {
   const [searchTerm, setSearchTerm] = useState('');

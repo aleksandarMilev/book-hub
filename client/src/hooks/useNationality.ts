@@ -2,9 +2,10 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import * as api from '../api/nationality/nationalityApi';
+import type { Nationality } from '../api/nationality/types/nationality';
 import { routes } from '../common/constants/api';
 import { UserContext } from '../contexts/user/userContext';
-import type { Nationality } from '../api/nationality/types/nationality';
+
 
 export function useNationalities() {
   const { token } = useContext(UserContext);

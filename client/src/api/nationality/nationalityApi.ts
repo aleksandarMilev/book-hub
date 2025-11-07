@@ -1,8 +1,12 @@
 import axios from 'axios';
+
+import type { Nationality } from './types/nationality';
+
 import { baseUrl, routes } from '../../common/constants/api';
 import { errors } from '../../common/constants/messages';
+
 import { getAuthConfig } from '../common/utils';
-import type { Nationality } from './types/nationality';
+
 
 export async function all(token: string) {
   try {

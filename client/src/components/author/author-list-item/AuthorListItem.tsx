@@ -1,9 +1,9 @@
 import { type FC } from 'react';
-import { Link } from 'react-router-dom';
 import { FaUser, FaPenFancy } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
-import { RenderStars } from '../../common/render-stars/renderStars';
 import { routes } from '../../../common/constants/api';
+import { RenderStars } from '../../common/render-stars/renderStars';
 import './AuthorListItem.css';
 
 import type { AuthorSearchResult } from '../../../api/search/types/authorSearchResult';

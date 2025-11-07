@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+
 import {
   MDBCardImage,
   MDBContainer,
@@ -8,13 +8,15 @@ import {
   MDBCardHeader,
   MDBCardBody,
 } from 'mdb-react-ui-kit';
+import type { FC } from 'react';
+
 import * as hooks from '../../../hooks/useChat';
 import ChatButtons from './chat-buttons/ChatButtons';
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
 import './ChatDetails.css';
-import SendForm from './send-form/SendForm';
 import Message from './message/Message';
 import ParticipantListItem from './participant-list-item/ParticipantListItem';
+import SendForm from './send-form/SendForm';
 
 const ChatDetails: FC = () => {
   const {

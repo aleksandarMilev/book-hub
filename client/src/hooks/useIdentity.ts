@@ -1,13 +1,13 @@
-import { useCallback, useContext } from 'react';
 import { jwtDecode } from 'jwt-decode';
+import { useCallback, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import * as profileApi from '../api/profile/profileApi';
 import * as identityApi from '../api/identity/identityApi';
-import { UserContext } from '../contexts/user/userContext';
-import { routes } from '../common/constants/api';
-import type { User } from '../stores/auth/types/user.type';
 import type { DecodedToken, LoginResponse } from '../api/identity/types/identity';
+import * as profileApi from '../api/profile/profileApi';
+import { routes } from '../common/constants/api';
+import { UserContext } from '../contexts/user/userContext';
+import type { User } from '../stores/auth/types/user.type';
 
 export function useLogin() {
   const navigate = useNavigate();

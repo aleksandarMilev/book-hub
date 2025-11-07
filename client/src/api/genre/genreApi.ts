@@ -1,8 +1,11 @@
+import type { Genre, GenreDetails } from './types/genre';
+
 import { routes } from '../../common/constants/api';
 import { errors } from '../../common/constants/messages';
+
 import { http } from '../common/http';
 import { getAuthConfig, returnIfRequestCanceled } from '../common/utils';
-import type { Genre, GenreDetails } from './types/genre';
+
 
 export async function all(token: string, signal?: AbortSignal) {
   try {

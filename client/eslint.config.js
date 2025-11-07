@@ -1,16 +1,16 @@
 import js from '@eslint/js';
-import globals from 'globals';
-import react from 'eslint-plugin-react';
-import reactHooks from 'eslint-plugin-react-hooks';
-import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsparser from '@typescript-eslint/parser';
 import prettier from 'eslint-config-prettier';
 import importPlugin from 'eslint-plugin-import';
+import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
 import unusedImports from 'eslint-plugin-unused-imports';
+import globals from 'globals';
 
 export default [
-  { ignores: ['dist'] },
+  { ignores: ['**/dist/**', 'dist', '**/node_modules/**'] },
   prettier,
   {
     files: ['**/*.{js,jsx}'],
@@ -36,11 +36,16 @@ export default [
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       'unused-imports/no-unused-imports': 'warn',
       'import/order': [
-        'warn',
+        'error',
         {
-          groups: ['builtin', 'external', 'internal', ['parent', 'sibling', 'index'], 'type'],
-          'newlines-between': 'always',
-          alphabetize: { order: 'asc', caseInsensitive: true },
+          groups: ['builtin', 'external', 'internal', ['parent', 'sibling', 'index']],
+          'newlines-between': 'ignore',
+          alphabetize: { order: 'ignore', caseInsensitive: true },
+          pathGroups: [
+            { pattern: './types/**', group: 'sibling', position: 'before' },
+            { pattern: '../**', group: 'parent', position: 'after' },
+          ],
+          pathGroupsExcludedImportTypes: ['type'],
         },
       ],
     },
@@ -79,11 +84,16 @@ export default [
       ],
       'no-unused-vars': 'off',
       'import/order': [
-        'warn',
+        'error',
         {
-          groups: ['builtin', 'external', 'internal', ['parent', 'sibling', 'index'], 'type'],
-          'newlines-between': 'always',
-          alphabetize: { order: 'asc', caseInsensitive: true },
+          groups: ['builtin', 'external', 'internal', ['parent', 'sibling', 'index']],
+          'newlines-between': 'ignore',
+          alphabetize: { order: 'ignore', caseInsensitive: true },
+          pathGroups: [
+            { pattern: './types/**', group: 'sibling', position: 'before' },
+            { pattern: '../**', group: 'parent', position: 'after' },
+          ],
+          pathGroupsExcludedImportTypes: ['type'],
         },
       ],
       'unused-imports/no-unused-imports': 'warn',

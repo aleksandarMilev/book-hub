@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import {
   MDBBtn,
   MDBContainer,
@@ -9,11 +8,13 @@ import {
   MDBCol,
   MDBInput,
 } from 'mdb-react-ui-kit';
+import type { FC } from 'react';
 
-import image from '../../../assets/images/create-author.jpg';
+
+import { useAuthorFormik } from './formik/useAuthorFormik';
 import GenderRadio from './gender-radio/GenderRadio';
 import NationalitySearch from './nationality-search/NationalitySearch';
-import { useAuthorFormik } from './formik/useAuthorFormik';
+import image from '../../../assets/images/create-author.jpg';
 import * as nationalityHooks from '../../../hooks/useNationality';
 
 import './AuthorForm.css';

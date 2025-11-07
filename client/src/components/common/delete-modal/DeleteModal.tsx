@@ -1,6 +1,8 @@
 import type { FC } from 'react';
 import { FaExclamationTriangle, FaTrashAlt } from 'react-icons/fa';
+
 import type { DeleteModalProps } from './types/deleteModalProps';
+
 
 const DeleteModal: FC<DeleteModalProps> = ({ showModal, toggleModal, deleteHandler }) => (
   <div

@@ -1,11 +1,10 @@
-import type { FC, MouseEvent } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 import { MDBTypography, MDBCardText, MDBBtn } from 'mdb-react-ui-kit';
+import type { FC } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 
-import * as useGenre from '../../../hooks/useGenre';
 import { routes } from '../../../common/constants/api';
 import { parseId } from '../../../common/functions/utils';
-
+import * as useGenre from '../../../hooks/useGenre';
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
 
 import './GenreDetails.css';

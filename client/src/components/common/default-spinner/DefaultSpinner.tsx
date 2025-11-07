@@ -2,6 +2,7 @@ import type { FC } from 'react';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 
+
 const DefaultSpinner: FC = () => (
   <>
     <Button variant="primary" disabled>

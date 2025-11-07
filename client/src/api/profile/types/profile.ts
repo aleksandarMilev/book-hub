@@ -25,7 +25,7 @@ export interface ProfileSummary extends BaseProfileFields {
   id: string;
 }
 
-export interface ProfileStats extends ProfileStatsFields {}
+export type ProfileStats = ProfileStatsFields;
 
 export interface Profile
   extends ProfileSummary,

@@ -1,11 +1,11 @@
-import { useContext, useState, type FC } from 'react';
 import { MDBIcon, MDBBtn } from 'mdb-react-ui-kit';
+import { useContext, useState, type FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { UserContext } from '../../../contexts/user/userContext';
-import { RenderStars } from '../../common/render-stars/renderStars';
-import DeleteModal from '../../common/delete-modal/DeleteModal';
 import { useRemoveReview, useVoteHandlers } from '../../../hooks/useReview';
+import DeleteModal from '../../common/delete-modal/DeleteModal';
+import { RenderStars } from '../../common/render-stars/renderStars';
 
 import './ReviewListItem.css';
 

@@ -1,9 +1,8 @@
+import { useFormik } from 'formik';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+
 import * as api from '../api/chat/chatApi';
-import { routes } from '../common/constants/api';
-import { UserContext } from '../contexts/user/userContext';
-import { useMessage } from '../contexts/message/messageContext';
 import type {
   Chat,
   ChatInput,
@@ -13,9 +12,13 @@ import type {
   Message,
 } from '../api/chat/types/chat';
 import type { Message as MessageModel } from '../api/chat/types/chat';
-import { useFormik } from 'formik';
-import { chatSchema } from '../components/chat/chat-details/send-form/validation/chatSchema';
+import { routes } from '../common/constants/api';
 import { utcToLocal } from '../common/functions/utils';
+import { chatSchema } from '../components/chat/chat-details/send-form/validation/chatSchema';
+import { useMessage } from '../contexts/message/messageContext';
+import { UserContext } from '../contexts/user/userContext';
+
+
 
 export const useChatDetails = () => {
   const navigate = useNavigate();

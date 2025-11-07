@@ -1,8 +1,11 @@
+import type { LoginRequest, LoginResponse, RegisterRequest } from './types/identity';
+
 import { routes } from '../../common/constants/api';
 import { errors } from '../../common/constants/messages';
-import { returnIfRequestCanceled } from '../common/utils';
+
 import { http } from '../common/http';
-import type { LoginRequest, LoginResponse, RegisterRequest } from './types/identity';
+import { returnIfRequestCanceled } from '../common/utils';
+
 
 export async function register(
   username: string,
