@@ -1,3 +1,34 @@
 {
-  "cSpell.words": ["downvotes", "fontawesome", "nameid", "tsparser", "upvotes"]
+  "eslint.codeActionsOnSave.mode": "all",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"
+  },
+  "editor.formatOnSave": true,
+  "eslint.useFlatConfig": true,
+  "eslint.options": { "overrideConfigFile": "client/eslint.config.js" },
+  "eslint.workingDirectories": [
+    { "directory": "client", "changeProcessCWD": true },
+    { "directory": "server", "changeProcessCWD": true }
+  ],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "cSpell.words": [
+    "bookhub",
+    "couldn",
+    "deathdate",
+    "downvotes",
+    "fontawesome",
+    "nameid",
+    "nosniff",
+    "SAMEORIGIN",
+    "signalr",
+    "toplevel",
+    "tsparser",
+    "upvotes",
+    "VITE"
+  ]
 }
