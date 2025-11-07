@@ -4,8 +4,8 @@ import { FaSearch } from 'react-icons/fa';
 import type { ArticleSummary } from '../../../api/article/types/article';
 import image from '../../../assets/images/no-books-found.png';
 import { pagination } from '../../../common/constants/defaultValues';
-import { useDebounce } from '../../../hooks/common/useDebounce';
 import * as hooks from '../../../hooks/useSearch';
+import { useDebounce } from '../../../shared/hooks/useDebounce';
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
 import Pagination from '../../common/pagination/Pagination';
 

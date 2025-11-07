@@ -1,10 +1,9 @@
 import { MDBIcon } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
 
-import type { Message as MessageModel, Participant } from '../../../../api/chat/types/chat';
-import messageImage from '../../../../assets/images/message.webp';
-import { utcToLocal } from '../../../../common/functions/utils';
-
+import type { Message as MessageModel, Participant } from '@/api/chat/types/chat';
+import messageImage from '@/assets/message.webp';
+import { formatIsoDate } from '@/shared/lib/utils';
 
 const Message: FC<{
   message: MessageModel;
@@ -14,8 +13,8 @@ const Message: FC<{
   onDelete: (id: number) => void;
   onProfileClick: (id: string) => void;
 }> = ({ message, isSentByUser, sender, onEdit, onDelete, onProfileClick }) => {
-  const created = utcToLocal(message.createdOn);
-  const modified = message.modifiedOn ? utcToLocal(message.modifiedOn) : null;
+  const created = formatIsoDate(message.createdOn);
+  const modified = message.modifiedOn ? formatIsoDate(message.modifiedOn) : null;
 
   return (
     <div className={`d-flex flex-row justify-content-${isSentByUser ? 'end' : 'start'} mb-4`}>

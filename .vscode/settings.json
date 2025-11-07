@@ -1,11 +1,15 @@
 {
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "typescript.preferences.importModuleSpecifierEnding": "auto",
+  "javascript.preferences.importModuleSpecifier": "non-relative",
+  "javascript.preferences.importModuleSpecifierEnding": "auto",
   "eslint.codeActionsOnSave.mode": "all",
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "always"
+    "source.fixAll.eslint": "always",
+    "source.organizeImports": "always"
   },
   "editor.formatOnSave": true,
   "eslint.useFlatConfig": true,
-  "eslint.options": { "overrideConfigFile": "client/eslint.config.js" },
   "eslint.workingDirectories": [
     { "directory": "client", "changeProcessCWD": true },
     { "directory": "server", "changeProcessCWD": true }
@@ -22,6 +26,7 @@
     "deathdate",
     "downvotes",
     "fontawesome",
+    "KHUB",
     "nameid",
     "nosniff",
     "SAMEORIGIN",

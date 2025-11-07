@@ -1,23 +1,22 @@
+import './BookForm.css';
 
+import image from '@assets/create-book.jpg';
 import {
   MDBBtn,
-  MDBContainer,
   MDBCard,
   MDBCardBody,
   MDBCardImage,
-  MDBRow,
   MDBCol,
+  MDBContainer,
   MDBInput,
+  MDBRow,
 } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
 
-import bookImage from '../../../assets/images/create-book.jpg';
-
-import './BookForm.css';
+import type { BookFormProps } from '../../../api/book/types/book';
 import AuthorSearch from './author-search/AuthorSearch';
 import { useBookFormik } from './formik/useBookFormik';
 import GenreSearch from './genre-search/GenreSearch';
-import type { BookFormProps } from '../../../api/book/types/book';
 
 const BookForm: FC<BookFormProps> = ({ bookData = null, isEditMode = false }) => {
   const {
@@ -37,7 +36,7 @@ const BookForm: FC<BookFormProps> = ({ bookData = null, isEditMode = false }) =>
           <MDBCard className="my-4 book-form-card">
             <MDBRow className="g-0">
               <MDBCol md="6" className="book-form-image-col">
-                <MDBCardImage src={bookImage} alt="Book" className="book-form-image" fluid />
+                <MDBCardImage src={image} alt="Book" className="book-form-image" fluid />
               </MDBCol>
               <MDBCol md="6">
                 <MDBCardBody className="text-black d-flex flex-column justify-content-center">

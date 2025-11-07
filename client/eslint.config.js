@@ -7,6 +7,7 @@ import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import unusedImports from 'eslint-plugin-unused-imports';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import globals from 'globals';
 
 export default [
@@ -27,6 +28,7 @@ export default [
       'react-refresh': reactRefresh,
       import: importPlugin,
       'unused-imports': unusedImports,
+      'simple-import-sort': simpleImportSort, // ✅
     },
     rules: {
       ...js.configs.recommended.rules,
@@ -35,31 +37,16 @@ export default [
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       'unused-imports/no-unused-imports': 'warn',
-      'import/order': [
-        'error',
-        {
-          groups: ['builtin', 'external', 'internal', ['parent', 'sibling', 'index']],
-          'newlines-between': 'ignore',
-          alphabetize: { order: 'ignore', caseInsensitive: true },
-          pathGroups: [
-            { pattern: './types/**', group: 'sibling', position: 'before' },
-            { pattern: '../**', group: 'parent', position: 'after' },
-          ],
-          pathGroupsExcludedImportTypes: ['type'],
-        },
-      ],
+      'import/order': 'off',
+      'simple-import-sort/imports': 'warn',
+      'simple-import-sort/exports': 'warn',
     },
   },
   {
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       parser: tsparser,
-      parserOptions: {
-        ecmaVersion: 'latest',
-        sourceType: 'module',
-        ecmaFeatures: { jsx: true },
-        project: false,
-      },
+      parserOptions: { ecmaVersion: 'latest', sourceType: 'module', ecmaFeatures: { jsx: true } },
       globals: globals.browser,
     },
     settings: { react: { version: '18.3' } },
@@ -70,6 +57,7 @@ export default [
       'react-refresh': reactRefresh,
       import: importPlugin,
       'unused-imports': unusedImports,
+      'simple-import-sort': simpleImportSort,
     },
     rules: {
       ...js.configs.recommended.rules,
@@ -77,26 +65,17 @@ export default [
       ...react.configs['jsx-runtime'].rules,
       ...reactHooks.configs.recommended.rules,
       ...tseslint.configs.recommended.rules,
+
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       '@typescript-eslint/no-unused-vars': [
         'warn',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ],
       'no-unused-vars': 'off',
-      'import/order': [
-        'error',
-        {
-          groups: ['builtin', 'external', 'internal', ['parent', 'sibling', 'index']],
-          'newlines-between': 'ignore',
-          alphabetize: { order: 'ignore', caseInsensitive: true },
-          pathGroups: [
-            { pattern: './types/**', group: 'sibling', position: 'before' },
-            { pattern: '../**', group: 'parent', position: 'after' },
-          ],
-          pathGroupsExcludedImportTypes: ['type'],
-        },
-      ],
       'unused-imports/no-unused-imports': 'warn',
+      'import/order': 'off',
+      'simple-import-sort/imports': 'warn',
+      'simple-import-sort/exports': 'warn',
     },
   },
 ];

@@ -1,0 +1,8 @@
+import type { User } from '@/shared/stores/auth/types/user';
+
+export interface AuthState {
+  user: User | null;
+  setUser: (user: User | null) => void;
+  setHasProfile: (hasProfile: boolean) => void;
+  logout: () => void;
+}

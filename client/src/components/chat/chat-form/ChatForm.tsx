@@ -1,9 +1,10 @@
+import './ChatForm.css';
+
 import type { FC } from 'react';
 
-import { useChatFormik } from './formik/useChatFormik';
-import image from '../../../assets/images/chat.avif';
+import image from '@/chat.avif';
 
-import './ChatForm.css';
+import { useChatFormik } from './formik/useChatFormik';
 
 const ChatForm: FC<{ chatData?: any; isEditMode?: boolean }> = ({
   chatData = null,

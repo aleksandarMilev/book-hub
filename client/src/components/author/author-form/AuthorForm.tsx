@@ -1,24 +1,23 @@
+import './AuthorForm.css';
+
+import image from '@assets/create-author.jpg';
 import {
   MDBBtn,
-  MDBContainer,
   MDBCard,
   MDBCardBody,
   MDBCardImage,
-  MDBRow,
   MDBCol,
+  MDBContainer,
   MDBInput,
+  MDBRow,
 } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
 
-
+import type { AuthorFormProps } from '../../../api/author/types/author';
+import * as nationalityHooks from '../../../hooks/useNationality';
 import { useAuthorFormik } from './formik/useAuthorFormik';
 import GenderRadio from './gender-radio/GenderRadio';
 import NationalitySearch from './nationality-search/NationalitySearch';
-import image from '../../../assets/images/create-author.jpg';
-import * as nationalityHooks from '../../../hooks/useNationality';
-
-import './AuthorForm.css';
-import type { AuthorFormProps } from '../../../api/author/types/author';
 
 const AuthorForm: FC<AuthorFormProps> = ({ authorData = null, isEditMode = false }) => {
   const formik = useAuthorFormik({ authorData, isEditMode });
