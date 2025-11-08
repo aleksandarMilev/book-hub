@@ -1,7 +1,7 @@
 import type { CrudApi } from '@/shared/hooks/useCrud/types/crudApi';
 
-export interface CrudHookOptions<TCreate, TDetails> {
-  api: CrudApi<TCreate, TDetails>;
+export interface CrudHookOptions<TAll, TDetails, TCreate> {
+  api: CrudApi<TAll, TDetails, TCreate>;
   resourceName: string;
   errors: {
     all: string;

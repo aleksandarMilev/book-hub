@@ -13,14 +13,14 @@ import {
 } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-import * as hooks from '@/hooks/useStatistics';
+import * as hooks from '@/features/statistics/hooks/useCrud';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
 import { routes } from '@/shared/lib/constants/api';
 import { useAuth } from '@/shared/stores/auth/auth';
 
 const Statistics: FC = () => {
   const { isAuthenticated } = useAuth();
-  const { statistics, isFetching, error } = hooks.useStatistics();
+  const { data: statistics, isFetching, error } = hooks.useStatisticsDetails();
 
   if (isFetching || !statistics) {
     return <DefaultSpinner />;

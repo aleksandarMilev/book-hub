@@ -1,4 +1,9 @@
-import axios, { AxiosError, type AxiosRequestConfig, HttpStatusCode } from 'axios';
+import axios, {
+  AxiosError,
+  type AxiosRequestConfig,
+  type AxiosResponse,
+  HttpStatusCode,
+} from 'axios';
 
 import type { CrudClients } from '@/shared/api/types/crudClient';
 import { baseAdminUrl, baseUrl } from '@/shared/lib/constants/api';
@@ -9,8 +14,14 @@ export const httpClient = axios.create({ baseURL: baseUrl });
 export const httpAdminClient = axios.create({ baseURL: baseAdminUrl });
 
 export function createBaseApi<TAll = null, TDetails = null, TCreate = null>(
-  clients: CrudClients<TAll, TDetails, TCreate>,
-  baseRoute: string,
+  clients: CrudClients<TAll, TDetails, TCreate> & {
+    publicPost?: <TResponse = unknown>(
+      url: string,
+      data?: unknown,
+      config?: AxiosRequestConfig,
+    ) => Promise<AxiosResponse<TResponse>>;
+  },
+  baseRoute: string | { [key: string]: string },
   errorMessages: {
     all: string;
     byId: string;
@@ -20,17 +31,40 @@ export function createBaseApi<TAll = null, TDetails = null, TCreate = null>(
   },
 ) {
   return {
+    async publicPost<TRequest, TResponse>(
+      data: TRequest,
+      signal?: AbortSignal,
+      routeKey?: string,
+    ): Promise<TResponse> {
+      if (!clients.publicPost) {
+        throw new Error('publicPost() is not implemented!');
+      }
+
+      try {
+        const config: AxiosRequestConfig = {
+          headers: { 'Content-Type': 'application/json' },
+          ...(signal ? { signal } : {}),
+        };
+
+        const route = getRoute(baseRoute, routeKey);
+        const response = await clients.publicPost<TResponse>(route, data, config);
+
+        return response.data;
+      } catch (error) {
+        return handleRequestError(error, errorMessages.create);
+      }
+    },
+
     async all(token: string, signal?: AbortSignal) {
       if (!clients.all) {
         throw new Error('all() is not implemented!');
       }
 
       try {
-        const response = await clients.all<TAll>(`${baseRoute}`, getAuthConfig(token, signal));
-
+        const response = await clients.all<TAll>(getRoute(baseRoute), getAuthConfig(token, signal));
         return response.data;
       } catch (error) {
-        return handleRequestError(error, errorMessages.all); // return it to make TS happy
+        return handleRequestError(error, errorMessages.all);
       }
     },
 
@@ -41,7 +75,7 @@ export function createBaseApi<TAll = null, TDetails = null, TCreate = null>(
 
       try {
         const response = await clients.byId<TDetails>(
-          `${baseRoute}/${id}`,
+          `${getRoute(baseRoute)}/${id}`,
           getAuthConfig(token, signal),
         );
 
@@ -51,14 +85,14 @@ export function createBaseApi<TAll = null, TDetails = null, TCreate = null>(
       }
     },
 
-    async create(data: TCreate, token: string, signal?: AbortSignal) {
+    async create(data: TCreate, token: string, signal?: AbortSignal, routeKey?: string) {
       if (!clients.post) {
         throw new Error('create() is not implemented!');
       }
 
       try {
         const response = await clients.post<{ id: number }>(
-          baseRoute,
+          getRoute(baseRoute, routeKey),
           data,
           getAuthConfig(token, signal),
         );
@@ -75,7 +109,7 @@ export function createBaseApi<TAll = null, TDetails = null, TCreate = null>(
       }
 
       try {
-        await clients.put(`${baseRoute}/${id}`, data, getAuthConfig(token, signal));
+        await clients.put(`${getRoute(baseRoute)}/${id}`, data, getAuthConfig(token, signal));
         return true;
       } catch (error) {
         return handleRequestError(error, errorMessages.edit);
@@ -88,7 +122,7 @@ export function createBaseApi<TAll = null, TDetails = null, TCreate = null>(
       }
 
       try {
-        await clients.delete(`${baseRoute}/${id}`, getAuthConfig(token, signal));
+        await clients.delete(`${getRoute(baseRoute)}/${id}`, getAuthConfig(token, signal));
         return true;
       } catch (error) {
         return handleRequestError(error, errorMessages.delete);
@@ -96,6 +130,23 @@ export function createBaseApi<TAll = null, TDetails = null, TCreate = null>(
     },
   };
 }
+
+const getRoute = (baseRoute: string | { [key: string]: string }, key?: string) => {
+  if (typeof baseRoute === 'string') {
+    return baseRoute;
+  }
+
+  if (key && baseRoute[key]) {
+    return baseRoute[key];
+  }
+
+  const first = Object.values(baseRoute)[0];
+  if (first) {
+    return first;
+  }
+
+  throw new Error(`Unknown route key: ${key}`);
+};
 
 const getAuthConfig = (token: string, signal?: AbortSignal) => {
   const config: AxiosRequestConfig = {

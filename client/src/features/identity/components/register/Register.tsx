@@ -12,7 +12,7 @@ import {
 import { type FC } from 'react';
 
 import image from '@/assets/register.webp';
-import { useRegisterFormik } from '@/components/identity/register/formik/useRegisterFormik';
+import { useRegisterFormik } from '@/features/identity/components/register/formik/useRegisterFormik';
 
 const Register: FC = () => {
   const formik = useRegisterFormik();
