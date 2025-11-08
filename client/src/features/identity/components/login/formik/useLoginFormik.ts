@@ -1,22 +1,27 @@
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 
-import { loginInitialValues, type LoginFormValues } from '../../../../api/identity/types/identity';
-import { routes } from '../../../../common/constants/api';
-import * as useIdentity from '../../../../hooks/useIdentity';
+import { loginSchema } from '@/features/identity/components/login/validation/loginSchema';
+import * as hooks from '@/features/identity/hooks/useIdentity';
+import type { LoginRequest } from '@/features/identity/types/identity';
+import { routes } from '@/shared/lib/constants/api';
 
-import { loginSchema } from '../validation/loginSchema';
+const loginInitialValues = {
+  credentials: '',
+  password: '',
+  rememberMe: false,
+};
 
 export const useLoginFormik = () => {
   const navigate = useNavigate();
-  const loginHandler = useIdentity.useLogin();
+  const loginHandler = hooks.useLogin();
 
-  const formik = useFormik<LoginFormValues>({
+  const formik = useFormik<LoginRequest>({
     initialValues: loginInitialValues,
     validationSchema: loginSchema,
     onSubmit: async (values, { setErrors }) => {
       try {
-        await loginHandler(values.credentials, values.password, values.rememberMe);
+        await loginHandler(values);
         navigate(routes.home);
       } catch (error) {
         const message = error instanceof Error ? error.message : 'An error occurred';

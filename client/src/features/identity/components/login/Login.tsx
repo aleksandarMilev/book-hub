@@ -2,7 +2,7 @@ import { MDBBtn, MDBCheckbox, MDBCol, MDBContainer, MDBInput, MDBRow } from 'mdb
 import { type FC } from 'react';
 import { Link } from 'react-router-dom';
 
-import { useLoginFormik } from '@/components/identity/login/formik/useLoginFormik';
+import { useLoginFormik } from '@/features/identity/components/login/formik/useLoginFormik';
 import { routes } from '@/shared/lib/constants/api';
 
 import image from './assets/login.webp';

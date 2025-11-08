@@ -1,12 +1,12 @@
-import { useContext, useEffect, type FC } from 'react';
+import { type FC, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { routes } from '../../../common/constants/api';
-import { UserContext } from '../../../contexts/user/userContext';
+import { routes } from '@/shared/lib/constants/api';
+import { useAuth } from '@/shared/stores/auth/auth';
 
 const Logout: FC = () => {
+  const { logout } = useAuth();
   const navigate = useNavigate();
-  const { logout } = useContext(UserContext);
 
   useEffect(() => {
     logout();

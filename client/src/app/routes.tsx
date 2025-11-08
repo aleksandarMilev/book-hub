@@ -16,9 +16,9 @@ const Fallback = () => <Loading />;
 
 const Home = lazy(() => import('@/features/home/components/Home'));
 
-const Login = lazy(() => import('@/components/identity/login/Login'));
-const Register = lazy(() => import('@/components/identity/register/Register'));
-const Logout = lazy(() => import('@/components/identity/logout/Logout'));
+const Login = lazy(() => import('@/features/identity/components/login/Login'));
+const Register = lazy(() => import('@/features/identity/components/register/Register'));
+const Logout = lazy(() => import('@/features/identity/components/logout/Logout'));
 
 const ProfileList = lazy(() => import('@/components/profile/profile-list/ProfileList'));
 const ProfileDetails = lazy(() => import('@/components/profile/profile-details/ProfileDetails'));
