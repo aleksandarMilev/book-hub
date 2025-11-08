@@ -13,7 +13,7 @@ const EditArticle: FC = () => {
   const parsedId = toIntId(id);
   const disable = !parsedId;
 
-  const { article, isFetching, error } = hooks.useDetails(parsedId, disable);
+  const { data: article, isFetching, error } = hooks.useDetails(parsedId, disable);
 
   if (error) {
     return <ErrorRedirect error={error} />;
