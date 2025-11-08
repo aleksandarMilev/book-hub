@@ -1,14 +1,14 @@
-import { MDBBtn, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
+import './TopAuthors.css';
+
+import { MDBBtn, MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
 import { type FC } from 'react';
 import { FaBookReader } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-import { routes } from '../../../common/constants/api';
-import * as hooks from '../../../hooks/useAuthor';
-import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
-
-import './TopAuthors.css';
-import { RenderStars } from '../../common/render-stars/renderStars';
+import * as hooks from '@/hooks/useAuthor';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import { RenderStars } from '@/shared/components/render-stars/RenderStars';
+import { routes } from '@/shared/lib/constants/api';
 
 const TopAuthors: FC = () => {
   const { authors, isFetching, error } = hooks.useTopThree();

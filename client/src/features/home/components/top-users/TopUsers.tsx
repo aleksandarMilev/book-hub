@@ -1,16 +1,16 @@
-import { useContext, type FC } from 'react';
-import { useNavigate } from 'react-router-dom';
-
-import { routes } from '../../../common/constants/api';
-import { UserContext } from '../../../contexts/user/userContext';
-import * as hooks from '../../../hooks/useProfile';
-import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
-
 import './TopUsers.css';
 
+import { type FC } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import * as hooks from '@/hooks/useProfile';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import { routes } from '@/shared/lib/constants/api';
+import { useAuth } from '@/shared/stores/auth/auth';
+
 const TopUsers: FC = () => {
+  const { userId } = useAuth();
   const navigate = useNavigate();
-  const { userId } = useContext(UserContext);
   const { profiles, isFetching, error } = hooks.useTopProfiles();
 
   if (isFetching || !profiles) {

@@ -1,22 +1,22 @@
+import './TopBooks.css';
+
 import {
-  MDBCard,
-  MDBCardImage,
-  MDBCardBody,
-  MDBCardTitle,
-  MDBCardText,
-  MDBCardGroup,
   MDBBtn,
+  MDBCard,
+  MDBCardBody,
+  MDBCardGroup,
+  MDBCardImage,
+  MDBCardText,
+  MDBCardTitle,
 } from 'mdb-react-ui-kit';
 import { type FC } from 'react';
 import { FaBook, FaBookReader } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-import { routes } from '../../../common/constants/api';
-import * as hooks from '../../../hooks/useBook';
-import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
-
-import './TopBooks.css';
-import { RenderStars } from '../../common/render-stars/renderStars';
+import * as hooks from '@/hooks/useBook';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import { RenderStars } from '@/shared/components/render-stars/RenderStars';
+import { routes } from '@/shared/lib/constants/api';
 
 const TopBooks: FC = () => {
   const { books, isFetching, error } = hooks.useTopThree();

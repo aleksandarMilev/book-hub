@@ -14,7 +14,7 @@ import Loading from './Loading';
 
 const Fallback = () => <Loading />;
 
-const Home = lazy(() => import('@/components/home/Home'));
+const Home = lazy(() => import('@/features/home/components/Home'));
 
 const Login = lazy(() => import('@/components/identity/login/Login'));
 const Register = lazy(() => import('@/components/identity/register/Register'));
