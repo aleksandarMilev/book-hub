@@ -20,7 +20,7 @@ import { useAuth } from '@/shared/stores/auth/auth';
 
 const Statistics: FC = () => {
   const { isAuthenticated } = useAuth();
-  const { data: statistics, isFetching, error } = hooks.useStatisticsDetails();
+  const { data: statistics, isFetching, error } = hooks.useStatistics();
 
   if (isFetching || !statistics) {
     return <DefaultSpinner />;
@@ -31,7 +31,7 @@ const Statistics: FC = () => {
       <div className="d-flex flex-column align-items-center justify-content-center vh-50">
         <div className="text-center">
           <FaBookReader size={100} color="red" className="mb-3" />
-          <p className="lead">{error}</p>
+          <p className="lead">{error.message}</p>
         </div>
       </div>
     );
