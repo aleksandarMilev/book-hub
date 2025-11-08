@@ -10,13 +10,47 @@ import { useMessage } from '@/shared/stores/message/message';
 import { HttpError } from '@/shared/types/errors/httpError';
 import type { IntId } from '@/shared/types/intId';
 
-export function createCrudHooks<TCreate, TDetails>({
+export function createCrudHooks<TAll, TDetails, TCreate>({
   api,
   resourceName,
   errors,
-}: CrudHookOptions<TCreate, TDetails>) {
+}: CrudHookOptions<TAll, TDetails, TCreate>) {
+  function useAll(disable = false) {
+    const { token } = useAuth();
+
+    const [data, setData] = useState<TAll | null>(null);
+    const [isFetching, setIsFetching] = useState(false);
+    const [error, setError] = useState<HttpError | null>(null);
+
+    useEffect(() => {
+      if (disable) {
+        return;
+      }
+
+      const controller = new AbortController();
+      (async () => {
+        try {
+          setIsFetching(true);
+          const fetched = await api.all(token, controller.signal);
+          setData(fetched);
+        } catch (error) {
+          if (!IsCanceledError(error)) {
+            setError(error as HttpError);
+          }
+        } finally {
+          setIsFetching(false);
+        }
+      })();
+
+      return () => controller.abort();
+    }, [token, disable]);
+
+    return { data, isFetching, error };
+  }
+
   function useDetails(id: IntId | null, disable = false) {
     const { token } = useAuth();
+
     const [data, setData] = useState<TDetails | null>(null);
     const [isFetching, setIsFetching] = useState(false);
     const [error, setError] = useState<HttpError | null>(null);
@@ -126,5 +160,5 @@ export function createCrudHooks<TCreate, TDetails>({
     return { showModal, toggleModal, deleteHandler };
   }
 
-  return { useDetails, useCreate, useEdit, useRemove };
+  return { useAll, useDetails, useCreate, useEdit, useRemove };
 }
