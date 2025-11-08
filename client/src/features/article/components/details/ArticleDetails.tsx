@@ -12,30 +12,26 @@ import {
 } from 'mdb-react-ui-kit';
 import { type FC } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-import * as hooks from '@/features/article/hooks/useArticle';
+import { useDetailsPage } from '@/features/article/hooks/useDetailsPage';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
 import DeleteModal from '@/shared/components/delete-modal/DeleteModal';
 import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect';
 import { routes } from '@/shared/lib/constants/api';
-import { formatIsoDate, toIntId } from '@/shared/lib/utils';
-import { useAuth } from '@/shared/stores/auth/auth';
 
 const ArticleDetails: FC = () => {
-  const { id } = useParams<{ id: string }>();
-
-  const parsedId = toIntId(id);
-  const disable = !parsedId;
-
-  const { isAdmin } = useAuth();
-  const { data: article, isFetching, error } = hooks.useDetails(parsedId, disable);
-
-  const { showModal, toggleModal, deleteHandler } = hooks.useRemove(
-    parsedId,
-    disable,
-    article?.title,
-  );
+  const {
+    id,
+    isAdmin,
+    article,
+    formattedDate,
+    isFetching,
+    error,
+    showModal,
+    toggleModal,
+    deleteHandler,
+  } = useDetailsPage();
 
   if (error) {
     return <ErrorRedirect error={error} />;
@@ -54,9 +50,7 @@ const ArticleDetails: FC = () => {
               <MDBRow>
                 <MDBCol md="12">
                   <MDBCardTitle className="article-title">{article.title}</MDBCardTitle>
-                  <MDBCardText className="text-muted">
-                    {formatIsoDate(article.createdOn, 'Publish date unavailable')}
-                  </MDBCardText>
+                  <MDBCardText className="text-muted">{formattedDate}</MDBCardText>
                 </MDBCol>
               </MDBRow>
               <MDBRow>

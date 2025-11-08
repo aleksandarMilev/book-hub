@@ -5,7 +5,7 @@ import type { ArticleDetails, CreateArticle } from '@/features/article/types/art
 import { routes } from '@/shared/lib/constants/api';
 import { useMessage } from '@/shared/stores/message/message';
 
-import * as hooks from '../../../hooks/useArticle';
+import * as hooks from '../../../hooks/useCrud';
 import { articleSchema } from '../validation/articleSchema';
 
 export const useArticleFormik = ({

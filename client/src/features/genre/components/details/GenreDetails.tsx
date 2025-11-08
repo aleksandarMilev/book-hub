@@ -1,30 +1,23 @@
-import { MDBTypography, MDBCardText, MDBBtn } from 'mdb-react-ui-kit';
-import type { FC } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-
-import { routes } from '../../../common/constants/api';
-import { parseId } from '../../../common/functions/utils';
-import * as useGenre from '../../../hooks/useGenre';
-import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
-
 import './GenreDetails.css';
-import BookListItem from '../../book/book-list-item/BookListItem';
+
+import { MDBBtn, MDBCardText, MDBTypography } from 'mdb-react-ui-kit';
+import { type FC } from 'react';
+
+import BookListItem from '@/components/book/book-list-item/BookListItem';
+import { useGenreDetailsPage } from '@/features/genre/hooks/useGenreDetailsPage';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect';
 
 const GenreDetails: FC = () => {
-  const navigate = useNavigate();
-  const { id } = useParams<{ id: string }>();
+  const { genre, isFetching, error, handleAllBooksClick } = useGenreDetailsPage();
 
-  const parsedId = parseId(id);
-  const { genre, isFetching } = useGenre.useDetails(parsedId);
+  if (error) {
+    return <ErrorRedirect error={error} />;
+  }
 
   if (isFetching || !genre) {
     return <DefaultSpinner />;
   }
-
-  const handleAllBooksClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    navigate(routes.book, { state: { genreId: parsedId, genreName: genre.name } });
-  };
 
   return (
     <div className="container genre-details mt-5">
@@ -53,7 +46,7 @@ const GenreDetails: FC = () => {
         </MDBTypography>
         {genre.topBooks && genre.topBooks.length > 0 ? (
           <>
-            {genre.topBooks.map((b: any) => (
+            {genre.topBooks.map((b) => (
               <BookListItem key={b.id} {...b} />
             ))}
             <div className="d-flex justify-content-center mt-3">

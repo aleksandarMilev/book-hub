@@ -1,25 +1,25 @@
-import { type FC, useContext } from 'react';
+import './Statistics.css';
+
+import { type FC } from 'react';
 import CountUp from 'react-countup';
 import {
-  FaUsers,
   FaBook,
-  FaUserTie,
-  FaCommentDots,
-  FaTags,
-  FaNewspaper,
   FaBookReader,
+  FaCommentDots,
+  FaNewspaper,
+  FaTags,
+  FaUsers,
+  FaUserTie,
 } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-import { routes } from '../../../common/constants/api';
-import { UserContext } from '../../../contexts/user/userContext';
-import * as hooks from '../../../hooks/useStatistics';
-import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
-
-import './Statistics.css';
+import * as hooks from '@/hooks/useStatistics';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import { routes } from '@/shared/lib/constants/api';
+import { useAuth } from '@/shared/stores/auth/auth';
 
 const Statistics: FC = () => {
-  const { isAuthenticated } = useContext(UserContext);
+  const { isAuthenticated } = useAuth();
   const { statistics, isFetching, error } = hooks.useStatistics();
 
   if (isFetching || !statistics) {

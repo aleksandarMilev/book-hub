@@ -1,13 +1,5 @@
 import { HttpStatusCode, isAxiosError } from 'axios';
 
-import type { Profile, ProfileInput, ProfileSummary } from './types/profile';
-
-import { routes } from '../../common/constants/api';
-import { errors } from '../../common/constants/messages';
-
-import { http, httpAdmin } from '../common/http';
-import { getAuthConfig, returnIfRequestCanceled } from '../common/utils';
-
 export async function names(token: string, signal?: AbortSignal) {
   try {
     const url = `${routes.profile}`;

@@ -25,7 +25,7 @@ export function createCrudHooks<TCreate, TDetails>({
       if (disable || !id) {
         setError(
           HttpError.with()
-            .message(errors.notFound ?? `${resourceName} not found`)
+            .message(errors.byId ?? `${resourceName} not found`)
             .andName(`${resourceName} Error`)
             .andStatus(HttpStatusCode.NotFound)
             .create(),
