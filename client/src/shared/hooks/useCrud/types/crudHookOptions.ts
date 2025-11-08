@@ -4,10 +4,10 @@ export interface CrudHookOptions<TCreate, TDetails> {
   api: CrudApi<TCreate, TDetails>;
   resourceName: string;
   errors: {
-    get: string;
+    all: string;
+    byId: string;
     create: string;
     edit: string;
     delete: string;
-    notFound?: string;
   };
 }

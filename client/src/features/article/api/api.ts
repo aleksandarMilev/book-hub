@@ -3,9 +3,9 @@ import { createBaseApi, httpAdminClient, httpClient } from '@/shared/api/http';
 import { routes } from '@/shared/lib/constants/api';
 import { errors } from '@/shared/lib/constants/errorMessages';
 
-const api = createBaseApi<CreateArticle, ArticleDetails>(
+const api = createBaseApi<null, ArticleDetails, CreateArticle>(
   {
-    get: httpClient.get,
+    byId: httpClient.get,
     post: httpAdminClient.post,
     put: httpAdminClient.put,
     delete: httpAdminClient.delete,

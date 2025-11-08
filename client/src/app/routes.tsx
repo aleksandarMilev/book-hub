@@ -33,7 +33,7 @@ const EditBook = lazy(() => import('@/components/book/edit-book/EditBook'));
 const ReadingList = lazy(() => import('@/components/reading-list/ReadingList'));
 const ReviewList = lazy(() => import('@/components/review/review-list/ReviewList'));
 
-const GenreDetails = lazy(() => import('@/components/genre/genre-details/GenreDetails'));
+const GenreDetails = lazy(() => import('@/features/genre/components/details/GenreDetails'));
 
 const AuthorList = lazy(() => import('@/components/author/author-list/AuthorList'));
 const AuthorDetails = lazy(() => import('@/components/author/author-details/AuthorDetails'));
@@ -42,12 +42,10 @@ const EditAuthor = lazy(() => import('@/components/author/edit-author/EditAuthor
 
 const ArticleList = lazy(() => import('@/features/article/components/list/ArticleList'));
 const ArticleDetails = lazy(() => import('@/features/article/components/details/ArticleDetails'));
-const CreateArticle = lazy(
-  () => import('@/features/article/components/create/CreateArticle'),
-);
-const EditArticle = lazy(() => import('@/features/article/components/edit-article/EditArticle'));
+const CreateArticle = lazy(() => import('@/features/article/components/create/CreateArticle'));
+const EditArticle = lazy(() => import('@/features/article/components/edit/EditArticle'));
 
-const NotificationList = lazy(@/features/article/components/article/EditArticle
+const NotificationList = lazy(
   () => import('@/components/notifications/notification-list/NotificationList'),
 );
 

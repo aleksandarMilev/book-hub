@@ -1,18 +1,17 @@
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 
-import type { ArticleDetails, CreateArticle } from '@/features/article/types/article';
-import { routes } from '@/shared/lib/constants/api';
-import { useMessage } from '@/shared/stores/message/message';
-
-import * as hooks from '../../../hooks/useCrud';
+import type { Article, ArticleInput } from '../../../../api/article/types/article';
+import { routes } from '../../../../common/constants/api';
+import { useMessage } from '../../../../contexts/message/messageContext';
+import * as hooks from '../../../../features/article/hooks/useCrud';
 import { articleSchema } from '../validation/articleSchema';
 
 export const useArticleFormik = ({
   article = null,
   isEditMode = false,
 }: {
-  article?: ArticleDetails | null;
+  article?: Article | null;
   isEditMode?: boolean;
 }) => {
   const navigate = useNavigate();
@@ -21,7 +20,7 @@ export const useArticleFormik = ({
   const createHandler = hooks.useCreate();
   const editHandler = hooks.useEdit();
 
-  const formik = useFormik<CreateArticle & { imageUrl: string }>({
+  const formik = useFormik<ArticleInput & { imageUrl: string }>({
     initialValues: {
       title: article?.title || '',
       introduction: article?.introduction || '',
@@ -34,7 +33,7 @@ export const useArticleFormik = ({
         if (isEditMode && article?.id) {
           await editHandler(article.id, values);
 
-          showMessage(`${article.title || 'This article'} was successfully updated!`, true);
+          showMessage(`${article.title || 'This article'} was successfully edited!`, true);
           navigate(`${routes.article}/${article.id}`, { replace: true });
         } else {
           const id = await createHandler(values);
@@ -43,7 +42,7 @@ export const useArticleFormik = ({
           navigate(`${routes.article}/${id}`, { replace: true });
           resetForm();
         }
-      } catch (error) {
+      } catch (error: unknown) {
         const message = error instanceof Error ? error.message : 'Operation failed!';
         showMessage(message, false);
       }

@@ -8,31 +8,54 @@ import { HttpError } from '@/shared/types/errors/httpError';
 export const httpClient = axios.create({ baseURL: baseUrl });
 export const httpAdminClient = axios.create({ baseURL: baseAdminUrl });
 
-export function createBaseApi<TCreate, TDetails>(
-  clients: CrudClients<TDetails, TCreate>,
+export function createBaseApi<TAll = null, TDetails = null, TCreate = null>(
+  clients: CrudClients<TAll, TDetails, TCreate>,
   baseRoute: string,
   errorMessages: {
-    get: string;
+    all: string;
+    byId: string;
     create: string;
     edit: string;
     delete: string;
   },
 ) {
   return {
-    async details(id: number, token: string, signal?: AbortSignal) {
+    async all(token: string, signal?: AbortSignal) {
+      if (!clients.all) {
+        throw new Error('all() is not implemented!');
+      }
+
       try {
-        const response = await clients.get<TDetails>(
+        const response = await clients.all<TAll>(`${baseRoute}`, getAuthConfig(token, signal));
+
+        return response.data;
+      } catch (error) {
+        return handleRequestError(error, errorMessages.all); // return it to make TS happy
+      }
+    },
+
+    async details(id: number, token: string, signal?: AbortSignal) {
+      if (!clients.byId) {
+        throw new Error('byId() is not implemented!');
+      }
+
+      try {
+        const response = await clients.byId<TDetails>(
           `${baseRoute}/${id}`,
           getAuthConfig(token, signal),
         );
 
         return response.data;
       } catch (error) {
-        return handleRequestError(error, errorMessages.get); // return to make ts happy
+        return handleRequestError(error, errorMessages.byId);
       }
     },
 
     async create(data: TCreate, token: string, signal?: AbortSignal) {
+      if (!clients.post) {
+        throw new Error('create() is not implemented!');
+      }
+
       try {
         const response = await clients.post<{ id: number }>(
           baseRoute,
@@ -47,6 +70,10 @@ export function createBaseApi<TCreate, TDetails>(
     },
 
     async edit(id: number, data: TCreate, token: string, signal?: AbortSignal) {
+      if (!clients.put) {
+        throw new Error('edit() is not implemented!');
+      }
+
       try {
         await clients.put(`${baseRoute}/${id}`, data, getAuthConfig(token, signal));
         return true;
@@ -56,6 +83,10 @@ export function createBaseApi<TCreate, TDetails>(
     },
 
     async remove(id: number, token: string, signal?: AbortSignal) {
+      if (!clients.delete) {
+        throw new Error('remove() is not implemented!');
+      }
+
       try {
         await clients.delete(`${baseRoute}/${id}`, getAuthConfig(token, signal));
         return true;

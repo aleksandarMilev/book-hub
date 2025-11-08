@@ -1,4 +1,4 @@
-import api from '@/features/article/api/articleApi';
+import api from '@/features/article/api/api';
 import { createCrudHooks } from '@/shared/hooks/useCrud/useCrud';
 import { errors } from '@/shared/lib/constants/errorMessages';
 
