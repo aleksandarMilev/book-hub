@@ -1,15 +1,15 @@
-import { useState, type ChangeEvent, type FC } from 'react';
+import { type ChangeEvent, type FC, useState } from 'react';
+import { Pagination } from 'react-bootstrap';
 import { FaSearch } from 'react-icons/fa';
 
-import type { ArticleSummary } from '../../../api/article/types/article';
-import image from '../../../assets/images/no-books-found.png';
-import { pagination } from '../../../common/constants/defaultValues';
-import * as hooks from '../../../hooks/useSearch';
-import { useDebounce } from '../../../shared/hooks/useDebounce';
-import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
-import Pagination from '../../common/pagination/Pagination';
+import type { ArticleSummary } from '@/features/article/types/article';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import { pagination } from '@/shared/lib/constants/defaultValues';
 
-import ArticleListItem from '../article-list-item/ArticleListItem';
+import * as hooks from '../../../../hooks/useSearch';
+import { useDebounce } from '../../../../shared/hooks/useDebounce';
+import image from '../../../assets/images/no-books-found.png';
+import ArticleListItem from '../list-item/ArticleListItem';
 
 const ArticleList: FC = () => {
   const [searchTerm, setSearchTerm] = useState('');

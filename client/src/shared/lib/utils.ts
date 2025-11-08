@@ -1,13 +1,24 @@
 import { format } from 'date-fns';
 
-export const parseId = (idAsString?: string) => {
-  const id = Number(idAsString);
-  if (!Number.isInteger(id) || id <= 0) {
-    throw new Error('Invalid id.');
+import type { IntId } from '@/shared/types/intId';
+
+export function toIntId(value: unknown): IntId | null {
+  let num: number;
+
+  if (typeof value === 'number') {
+    num = value;
+  } else if (typeof value === 'string') {
+    num = Number(value);
+  } else {
+    num = NaN;
   }
 
-  return id;
-};
+  if (Number.isInteger(num) && num > 0) {
+    return num as IntId;
+  } else {
+    return null;
+  }
+}
 
 export const formatIsoDate = (iso?: string | null, fallback = 'Unknown date') =>
   iso ? format(new Date(iso), 'dd MMM yyyy') : fallback;
@@ -25,4 +36,27 @@ export const calculateAge = (bornAtISO: string, endISO?: string) => {
   }
 
   return age;
+};
+
+export const IsError = (error: unknown): error is Error => {
+  return error instanceof Error;
+};
+
+export const IsDomException = (error: unknown): error is DOMException => {
+  return error instanceof DOMException;
+};
+
+export const IsAbortError = (error: unknown): error is DOMException | Error => {
+  return (
+    (IsError(error) && error.name === 'AbortError') ||
+    (IsDomException(error) && error.name === 'AbortError')
+  );
+};
+
+export const IsCanceledError = (error: unknown): error is Error => {
+  return IsError(error) && error.name === 'CanceledError';
+};
+
+export const IsDomAbortError = (error: unknown): error is DOMException => {
+  return IsDomException(error) && error.name === 'AbortError';
 };

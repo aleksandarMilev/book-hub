@@ -1,3 +1,5 @@
+import './ArticleDetails.css';
+
 import {
   MDBCard,
   MDBCardBody,
@@ -8,33 +10,34 @@ import {
   MDBIcon,
   MDBRow,
 } from 'mdb-react-ui-kit';
-import { useContext, type FC } from 'react';
+import { type FC } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { Link, useParams } from 'react-router-dom';
 
-import { routes } from '../../../common/constants/api';
-import { formatIsoDate, parseId } from '../../../common/functions/utils';
-import { UserContext } from '../../../contexts/user/userContext';
-import * as hooks from '../../../hooks/useArticle';
-import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
-import DeleteModal from '../../common/delete-modal/DeleteModal';
-
-import './ArticleDetails.css';
+import * as hooks from '@/features/article/hooks/useArticle';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import DeleteModal from '@/shared/components/delete-modal/DeleteModal';
+import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect';
+import { routes } from '@/shared/lib/constants/api';
+import { formatIsoDate, toIntId } from '@/shared/lib/utils';
+import { useAuth } from '@/shared/stores/auth/auth';
 
 const ArticleDetails: FC = () => {
   const { id } = useParams<{ id: string }>();
-  let parsedId = parseId(id);
 
-  const { isAdmin } = useContext(UserContext);
-  const { article, isFetching, error } = hooks.useDetails(parsedId);
-  const { showModal, toggleModal, deleteHandler } = hooks.useRemove(parsedId, article?.title);
+  const parsedId = toIntId(id);
+  const disable = !parsedId;
 
-  if (parsedId == null) {
-    return <div>Invalid article id.</div>;
-  }
+  const { isAdmin } = useAuth();
+  const { article, isFetching, error } = hooks.useDetails(parsedId, disable);
+  const { showModal, toggleModal, deleteHandler } = hooks.useRemove(
+    parsedId,
+    disable,
+    article?.title,
+  );
 
   if (error) {
-    return <div className="alert alert-danger">{error}</div>;
+    return <ErrorRedirect error={error} />;
   }
 
   if (isFetching || !article) {
