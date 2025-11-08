@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import type { ErrorComponentLocationState } from '@/shared/components/errors/types/errorComponentLocationState';
 import { routes } from '@/shared/lib/constants/api';
 
-import image from '.not-found.webp';
+import image from './not-found.webp';
 
 const NotFound: FC = () => {
   const location = useLocation();

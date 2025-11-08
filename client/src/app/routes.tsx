@@ -40,12 +40,14 @@ const AuthorDetails = lazy(() => import('@/components/author/author-details/Auth
 const CreateAuthor = lazy(() => import('@/components/author/create-author/CreateAuthor'));
 const EditAuthor = lazy(() => import('@/components/author/edit-author/EditAuthor'));
 
-const ArticleList = lazy(() => import('@/components/article/article-list/ArticleList'));
-const ArticleDetails = lazy(() => import('@/components/article/article-details/ArticleDetails'));
-const CreateArticle = lazy(() => import('@/components/article/create-article/CreateArticle'));
-const EditArticle = lazy(() => import('@/components/article/edit-article/EditArticle'));
+const ArticleList = lazy(() => import('@/features/article/components/list/ArticleList'));
+const ArticleDetails = lazy(() => import('@/features/article/components/details/ArticleDetails'));
+const CreateArticle = lazy(
+  () => import('@/features/article/components/create/CreateArticle'),
+);
+const EditArticle = lazy(() => import('@/features/article/components/edit-article/EditArticle'));
 
-const NotificationList = lazy(
+const NotificationList = lazy(@/features/article/components/article/EditArticle
   () => import('@/components/notifications/notification-list/NotificationList'),
 );
 

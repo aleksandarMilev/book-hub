@@ -1,4 +1,7 @@
-import axios, { type AxiosRequestConfig } from 'axios';
+import axios, { AxiosError, type AxiosRequestConfig, HttpStatusCode } from 'axios';
+
+import { IsCanceledError, IsError } from '@/shared/lib/utils';
+import { HttpError } from '@/shared/types/errors/httpError';
 
 export function getAuthConfig(token: string, signal?: AbortSignal): AxiosRequestConfig {
   const config: AxiosRequestConfig = {
@@ -15,13 +18,16 @@ export function getAuthConfig(token: string, signal?: AbortSignal): AxiosRequest
   return config;
 }
 
-export function returnIfRequestCanceled(error: unknown, message: string): void {
-  const isRequestCanceled =
-    axios.isCancel?.(error) || (error instanceof Error && error.name === 'CanceledError');
-
+export function handleRequestError(error: unknown, message: string): never {
+  const isRequestCanceled = axios.isCancel?.(error) || (IsError(error) && IsCanceledError(error));
   if (isRequestCanceled) {
     throw error;
   }
 
-  throw new Error(message);
+  const axiosError = error as AxiosError;
+  throw HttpError.with()
+    .message(message)
+    .andName('Article Error')
+    .andStatus(axiosError.response?.status ?? HttpStatusCode.BadRequest)
+    .create();
 }

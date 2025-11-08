@@ -1,4 +1,4 @@
-const baseMessages = {
+export const baseErrors = {
   general: 'Something went wrong. Please refresh the page or try again later!',
   create:
     "Oops! We couldn't create your {entity}. Please try again later or contact support if the issue persists.",
@@ -29,7 +29,7 @@ export const errors = {
       'Something went wrong while removing the book from your list. Please refresh the page or try again later!',
   },
   notification: {
-    markAsRead: baseMessages.general,
+    markAsRead: baseErrors.general,
     delete:
       "Oops! We couldn't delete this notification. Please try again later or contact support if the issue persists.",
     all: 'Something went wrong while loading your notifications. Please refresh the page or try again later!',
@@ -37,56 +37,57 @@ export const errors = {
       "Apologies, we're experiencing issues and can't display your notifications at the moment. Please try again later or contact us for assistance.",
   },
   profile: {
-    names: baseMessages.namesBadRequest.replace('{entity}', 'user'),
-    topThree: baseMessages.topThree.replace('{entityPlural}', 'users'),
+    names: baseErrors.namesBadRequest.replace('{entity}', 'user'),
+    topThree: baseErrors.topThree.replace('{entityPlural}', 'users'),
     get: 'Something went wrong while loading your profile. Please refresh the page or try again later!',
     getOther:
       'Something went wrong while loading this profile. Please refresh the page or try again later!',
-    create: baseMessages.create.replace('{entity}', 'profile'),
-    edit: baseMessages.edit.replace('{entity}', 'profile'),
-    delete: baseMessages.delete.replace('{entity}', 'profile'),
+    create: baseErrors.create.replace('{entity}', 'profile'),
+    edit: baseErrors.edit.replace('{entity}', 'profile'),
+    delete: baseErrors.delete.replace('{entity}', 'profile'),
   },
   article: {
     get: 'Something went wrong while loading this article. Please refresh the page or try again later!',
-    create: baseMessages.create.replace('{entity}', 'article'),
-    edit: baseMessages.edit.replace('{entity}', 'article'),
-    delete: baseMessages.delete.replace('{entity}', 'article'),
+    create: baseErrors.create.replace('{entity}', 'article'),
+    edit: baseErrors.edit.replace('{entity}', 'article'),
+    delete: baseErrors.delete.replace('{entity}', 'article'),
+    notFound: baseErrors.notFound.replace('{entity}', 'article'),
   },
   author: {
-    approve: baseMessages.approve.replace('{entity}', 'author'),
-    reject: baseMessages.reject.replace('{entity}', 'author'),
-    topThree: baseMessages.topThree.replace('{entityPlural}', 'authors'),
-    namesBadRequest: baseMessages.namesBadRequest.replace('{entity}', 'author'),
-    notFound: baseMessages.notFound.replace('{entity}', 'author'),
+    approve: baseErrors.approve.replace('{entity}', 'author'),
+    reject: baseErrors.reject.replace('{entity}', 'author'),
+    topThree: baseErrors.topThree.replace('{entityPlural}', 'authors'),
+    namesBadRequest: baseErrors.namesBadRequest.replace('{entity}', 'author'),
+    notFound: baseErrors.notFound.replace('{entity}', 'author'),
     create:
       "We're sorry, something went wrong while creating the author. Please try again later. If the issue persists, contact support for assistance.",
     edit: "We're sorry, something went wrong while updating the author's details. Please try again later. If the issue persists, contact support for assistance.",
-    delete: baseMessages.delete.replace('{entity}', 'author'),
+    delete: baseErrors.delete.replace('{entity}', 'author'),
   },
   genre: {
-    details: baseMessages.notFound.replace('{entity}', 'genre'),
-    namesBadRequest: baseMessages.namesBadRequest.replace('{entity}', 'genre'),
+    details: baseErrors.notFound.replace('{entity}', 'genre'),
+    namesBadRequest: baseErrors.namesBadRequest.replace('{entity}', 'genre'),
   },
   identity: {
     register: 'Something went wrong while creating your account. Please try again later.',
     login: 'Login failed. Please check your username and password and try again.',
   },
   nationality: {
-    namesBadRequest: baseMessages.namesBadRequest.replace('{entity}', 'nationality'),
+    namesBadRequest: baseErrors.namesBadRequest.replace('{entity}', 'nationality'),
   },
   search: {
     badRequest:
       "We couldn't complete your search. Please try again, refresh the page, or check back later. If the issue persists, contact support. Thank you for your patience!",
-    topThree: baseMessages.topThree.replace('{entityPlural}', 'picks'),
+    topThree: baseErrors.topThree.replace('{entityPlural}', 'picks'),
   },
   book: {
-    approve: baseMessages.approve.replace('{entity}', 'book'),
-    reject: baseMessages.reject.replace('{entity}', 'book'),
-    topThree: baseMessages.topThree.replace('{entityPlural}', 'books'),
-    notFound: baseMessages.notFound.replace('{entity}', 'book'),
-    create: baseMessages.create.replace('{entity}', 'book'),
-    edit: baseMessages.edit.replace('{entity}', 'book'),
-    delete: baseMessages.delete.replace('{entity}', 'book'),
+    approve: baseErrors.approve.replace('{entity}', 'book'),
+    reject: baseErrors.reject.replace('{entity}', 'book'),
+    topThree: baseErrors.topThree.replace('{entityPlural}', 'books'),
+    notFound: baseErrors.notFound.replace('{entity}', 'book'),
+    create: baseErrors.create.replace('{entity}', 'book'),
+    edit: baseErrors.edit.replace('{entity}', 'book'),
+    delete: baseErrors.delete.replace('{entity}', 'book'),
   },
   chat: {
     removeUser:
@@ -99,16 +100,16 @@ export const errors = {
     details: 'Something went wrong while loading this chat. Please try again later.',
     names:
       'Something went wrong while loading your chats. Please refresh the page or try again later!',
-    create: baseMessages.create.replace('{entity}', 'chat'),
-    edit: baseMessages.edit.replace('{entity}', 'chat'),
-    delete: baseMessages.delete.replace('{entity}', 'chat'),
+    create: baseErrors.create.replace('{entity}', 'chat'),
+    edit: baseErrors.edit.replace('{entity}', 'chat'),
+    delete: baseErrors.delete.replace('{entity}', 'chat'),
     addUser:
       'Something went wrong while adding this user to the chat. Please refresh the page or try again later!',
   },
   review: {
-    create: baseMessages.create.replace('{entity}', 'review'),
-    edit: baseMessages.edit.replace('{entity}', 'review'),
-    delete: baseMessages.delete.replace('{entity}', 'review'),
+    create: baseErrors.create.replace('{entity}', 'review'),
+    edit: baseErrors.edit.replace('{entity}', 'review'),
+    delete: baseErrors.delete.replace('{entity}', 'review'),
     vote: 'An error occurred while processing your vote. Please try again later.',
     list: 'Failed to load reviews.',
   },
