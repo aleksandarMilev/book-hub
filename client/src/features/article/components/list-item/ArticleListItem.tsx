@@ -1,3 +1,5 @@
+import './ArticleListItem.css';
+
 import {
   MDBCard,
   MDBCardBody,
@@ -9,12 +11,6 @@ import {
 } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
 import { Link } from 'react-router-dom';
-
-import { routes } from '../../../common/constants/api';
-import { formatIsoDate } from '../../../common/functions/utils';
-import './ArticleListItem.css';
-
-import type { ArticleSummary } from '../../../api/article/types/article';
 
 const ArticleListItem: FC<ArticleSummary> = ({ id, title, introduction, imageUrl, createdOn }) => {
   return (

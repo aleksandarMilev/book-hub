@@ -29,7 +29,8 @@ const ArticleDetails: FC = () => {
   const disable = !parsedId;
 
   const { isAdmin } = useAuth();
-  const { article, isFetching, error } = hooks.useDetails(parsedId, disable);
+  const { data: article, isFetching, error } = hooks.useDetails(parsedId, disable);
+
   const { showModal, toggleModal, deleteHandler } = hooks.useRemove(
     parsedId,
     disable,
