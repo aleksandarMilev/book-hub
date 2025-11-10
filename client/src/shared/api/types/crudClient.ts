@@ -1,17 +1,31 @@
 import type { AxiosRequestConfig, AxiosResponse } from 'axios';
 
-export interface CrudClients<TAll, TDetails, TCreate> {
-  all?: <T = TAll>(url: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<T>>;
-  byId?: <T = TDetails>(url: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<T>>;
-  post?: <T = { id: number }>(
+export type CrudClients<_TAll = unknown, _TDetails = unknown, _TCreate = unknown> = {
+  all?: <TResponse = unknown>(
     url: string,
-    data?: TCreate,
     config?: AxiosRequestConfig,
-  ) => Promise<AxiosResponse<T>>;
-  put?: <T = void>(
+  ) => Promise<AxiosResponse<TResponse>>;
+  byId?: <TResponse = unknown>(
     url: string,
-    data?: TCreate,
     config?: AxiosRequestConfig,
-  ) => Promise<AxiosResponse<T>>;
-  delete?: <T = void>(url: string, config?: AxiosRequestConfig) => Promise<AxiosResponse<T>>;
-}
+  ) => Promise<AxiosResponse<TResponse>>;
+  post?: <TResponse = unknown>(
+    url: string,
+    data?: unknown,
+    config?: AxiosRequestConfig,
+  ) => Promise<AxiosResponse<TResponse>>;
+  put?: <TResponse = unknown>(
+    url: string,
+    data?: unknown,
+    config?: AxiosRequestConfig,
+  ) => Promise<AxiosResponse<TResponse>>;
+  delete?: <TResponse = unknown>(
+    url: string,
+    config?: AxiosRequestConfig,
+  ) => Promise<AxiosResponse<TResponse>>;
+  publicPost?: <TResponse = unknown>(
+    url: string,
+    data?: unknown,
+    config?: AxiosRequestConfig,
+  ) => Promise<AxiosResponse<TResponse>>;
+};
