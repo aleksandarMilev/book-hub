@@ -13,36 +13,54 @@ import {
   httpClient,
 } from '@/shared/api/utils';
 
+export default <TAll = null, TDetails = null, TCreate = null>() =>
+  new BaseApiBuilder<TAll, TDetails, TCreate>();
+
 class BaseApiBuilder<TAll = null, TDetails = null, TCreate = null, R extends Routes = string> {
   private _clients: CrudClients<TAll, TDetails, TCreate> = {};
   private _routes!: R;
   private _errors!: ErrorMessages;
 
-  withGetClient(client?: AxiosInstance['get']) {
+  with() {
+    return this;
+  }
+
+  and() {
+    return this;
+  }
+
+  getClient(client?: AxiosInstance['get']) {
     this._clients.all = client ?? httpClient.get;
     this._clients.byId = client ?? httpClient.get;
 
     return this;
   }
 
-  withPostClient(client?: AxiosInstance['post']) {
+  postClient(client?: AxiosInstance['post']) {
     this._clients.post = client ?? httpAdminClient.post;
 
     return this;
   }
 
-  withPutClient(client?: AxiosInstance['put']) {
+  putClient(client?: AxiosInstance['put']) {
     this._clients.put = client ?? httpAdminClient.put;
 
     return this;
   }
 
-  withDeleteClient(client?: AxiosInstance['delete']) {
+  deleteClient(client?: AxiosInstance['delete']) {
     this._clients.delete = client ?? httpAdminClient.delete;
 
     return this;
   }
-  withPublicPostClient(client?: AxiosInstance['post']) {
+
+  patchClient(client?: AxiosInstance['patch']) {
+    this._clients.patch = client ?? httpAdminClient.patch;
+
+    return this;
+  }
+
+  publicPostClient(client?: AxiosInstance['post']) {
     this._clients.publicPost = client ?? httpClient.post;
 
     return this;
@@ -54,19 +72,19 @@ class BaseApiBuilder<TAll = null, TDetails = null, TCreate = null, R extends Rou
     return this;
   }
 
-  withRoutes<NR extends Routes>(routes: NR) {
+  routes<NR extends Routes>(routes: NR) {
     (this as unknown as BaseApiBuilder<TAll, TDetails, TCreate, NR>)._routes = routes;
 
     return this as unknown as BaseApiBuilder<TAll, TDetails, TCreate, NR>;
   }
 
-  withErrors(errors: ErrorMessages) {
+  errors(errors: ErrorMessages) {
     this._errors = errors;
 
     return this;
   }
 
-  build(): BuiltApi<TAll, TDetails, TCreate, R> {
+  create(): BuiltApi<TAll, TDetails, TCreate, R> {
     const clients = this._clients;
     const routes = this._routes;
     const errors = this._errors;
@@ -192,9 +210,30 @@ class BaseApiBuilder<TAll = null, TDetails = null, TCreate = null, R extends Rou
           return handleRequestError(error, errors.delete);
         }
       },
+
+      async patch(
+        id: number,
+        data: TCreate,
+        token: string,
+        signal?: AbortSignal,
+        routeKey?: RouteKey<R>,
+      ) {
+        if (!clients.patch) {
+          throw new Error('patch() is not implemented!');
+        }
+
+        try {
+          await clients.patch(
+            `${getRoute(routes, routeKey)}/${id}`,
+            data,
+            getAuthConfig(token, signal),
+          );
+
+          return true as const;
+        } catch (error) {
+          return handleRequestError(error, errors.edit);
+        }
+      },
     };
   }
 }
-
-export const createBaseApi = <TAll = null, TDetails = null, TCreate = null>() =>
-  new BaseApiBuilder<TAll, TDetails, TCreate>();

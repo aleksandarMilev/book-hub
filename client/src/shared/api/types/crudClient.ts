@@ -19,6 +19,11 @@ export type CrudClients<_TAll = unknown, _TDetails = unknown, _TCreate = unknown
     data?: unknown,
     config?: AxiosRequestConfig,
   ) => Promise<AxiosResponse<TResponse>>;
+  patch?: <TResponse = unknown>(
+    url: string,
+    data?: unknown,
+    config?: AxiosRequestConfig,
+  ) => Promise<AxiosResponse<TResponse>>;
   delete?: <TResponse = unknown>(
     url: string,
     config?: AxiosRequestConfig,

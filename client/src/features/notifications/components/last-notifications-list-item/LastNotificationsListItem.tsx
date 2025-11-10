@@ -1,22 +1,19 @@
+import './LastNotificationsListItem.css';
+
 import { format } from 'date-fns';
 import { type FC } from 'react';
 import { Dropdown } from 'react-bootstrap';
 
-import { getIcon } from './utils/utils';
-import type { NotificationType } from '../../../api/notification/types/notification';
+import * as hooks from '@/features/notifications/hooks/useCrud';
+import type { NotificationType } from '@/features/notifications/types/notification';
 
-import './LastNotificationsListItem.css';
-import * as hooks from '../../../hooks/useNotification';
+import { getIcon } from './utils/utils';
 
 const LastNotificationsListItem: FC<{
   notification: NotificationType;
   refetchNotifications: () => void | Promise<void>;
 }> = ({ notification, refetchNotifications }) => {
   const { onClickHandler } = hooks.useClickHandler(notification, refetchNotifications);
-
-  const notificationClass = notification.isRead
-    ? 'notification-item-read'
-    : 'notification-item-unread';
 
   return (
     <Dropdown.Item key={notification.id} onClick={onClickHandler} className="notification-item">
@@ -31,7 +28,11 @@ const LastNotificationsListItem: FC<{
         </small>
       </div>
       <div className="notification-footer">
-        <span className={`notification-status ${notificationClass}`}>
+        <span
+          className={`notification-status ${
+            notification.isRead ? 'notification-item-read' : 'notification-item-unread'
+          }`}
+        >
           {notification.isRead ? 'Read' : 'Unread'}
         </span>
       </div>

@@ -46,7 +46,7 @@ const CreateArticle = lazy(() => import('@/features/article/components/create/Cr
 const EditArticle = lazy(() => import('@/features/article/components/edit/EditArticle'));
 
 const NotificationList = lazy(
-  () => import('@/components/notifications/notification-list/NotificationList'),
+  () => import('@/features/notifications/components/notification-list/NotificationList'),
 );
 
 const ChatList = lazy(() => import('@/components/chat/chat-list/ChatList'));

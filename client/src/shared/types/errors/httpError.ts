@@ -17,17 +17,25 @@ export class HttpError extends Error {
       private _name = 'Http Error';
       private _status = HttpStatusCode.BadRequest;
 
+      with() {
+        return this;
+      }
+
+      and() {
+        return this;
+      }
+
       message(message: string) {
         this._message = message;
         return this;
       }
 
-      andName(name: string) {
+      name(name: string) {
         this._name = name;
         return this;
       }
 
-      andStatus(status: number) {
+      status(status: number) {
         this._status = status;
         return this;
       }
