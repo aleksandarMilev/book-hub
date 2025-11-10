@@ -1,18 +1,17 @@
+import './LastNotifications.css';
+
 import type { FC, MouseEvent } from 'react';
-import { Dropdown, Badge } from 'react-bootstrap';
+import { Badge, Dropdown } from 'react-bootstrap';
 import { FaBell } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { routes } from '../../../common/constants/api';
-import * as hooks from '../../../hooks/useNotification';
-import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
+import * as hooks from '@/features/notifications/hooks/useCrud';
 
-import './LastNotifications.css';
 import LastNotificationsListItem from '../last-notifications-list-item/LastNotificationsListItem';
 
 const LastNotifications: FC = () => {
   const navigate = useNavigate();
-  const { notifications, isFetching, refetch } = hooks.useLastThree();
+  const { notifications, isFetching, refetch } = hooks.use();
 
   const unreadNotifications = notifications.filter((n) => !n.isRead);
 

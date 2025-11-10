@@ -60,8 +60,10 @@ export function createCrudHooks<TAll, TDetails, TCreate>({
         setError(
           HttpError.with()
             .message(errors.byId ?? `${resourceName} not found`)
-            .andName(`${resourceName} Error`)
-            .andStatus(HttpStatusCode.NotFound)
+            .and()
+            .name(`${resourceName} Error`)
+            .and()
+            .status(HttpStatusCode.NotFound)
             .create(),
         );
         return;
@@ -73,9 +75,9 @@ export function createCrudHooks<TAll, TDetails, TCreate>({
           setIsFetching(true);
           const fetched = await api.details(id, token, controller.signal);
           setData(fetched);
-        } catch (err) {
-          if (!IsCanceledError(err)) {
-            setError(err as HttpError);
+        } catch (error) {
+          if (!IsCanceledError(error)) {
+            setError(error as HttpError);
           }
         } finally {
           setIsFetching(false);
@@ -99,6 +101,7 @@ export function createCrudHooks<TAll, TDetails, TCreate>({
         } catch (error) {
           const message = IsError(error) ? error.message : errors.create;
           navigate(routes.badRequest, { state: { message } });
+
           throw error;
         }
       },
@@ -117,6 +120,7 @@ export function createCrudHooks<TAll, TDetails, TCreate>({
         } catch (error) {
           const message = IsError(error) ? error.message : errors.edit;
           navigate(routes.badRequest, { state: { message } });
+
           throw error;
         }
       },
@@ -133,7 +137,9 @@ export function createCrudHooks<TAll, TDetails, TCreate>({
     const toggleModal = useCallback(() => setShowModal((prev) => !prev), []);
 
     const deleteHandler = useCallback(async () => {
-      if (disable || !id) return;
+      if (disable || !id) {
+        return;
+      }
 
       if (!showModal) {
         toggleModal();
@@ -160,5 +166,28 @@ export function createCrudHooks<TAll, TDetails, TCreate>({
     return { showModal, toggleModal, deleteHandler };
   }
 
-  return { useAll, useDetails, useCreate, useEdit, useRemove };
+  function usePatch() {
+    const { token } = useAuth();
+    const navigate = useNavigate();
+
+    return useCallback(
+      async (id: number, data: TCreate) => {
+        if (!api.patch) {
+          throw new Error('patch() is not implemented!');
+        }
+
+        try {
+          return await api.patch(id, data, token);
+        } catch (error) {
+          const message = IsError(error) ? error.message : errors.edit;
+          navigate(routes.badRequest, { state: { message } });
+
+          throw error;
+        }
+      },
+      [token, navigate],
+    );
+  }
+
+  return { useAll, useDetails, useCreate, useEdit, useRemove, usePatch };
 }

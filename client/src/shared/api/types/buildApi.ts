@@ -28,6 +28,13 @@ export type BuiltApi<TAll, TDetails, TCreate, R extends Routes> = {
     signal?: AbortSignal,
     routeKey?: RouteKey<R>,
   ) => Promise<true>;
+  patch: (
+    id: number,
+    data: TCreate,
+    token: string,
+    signal?: AbortSignal,
+    routeKey?: RouteKey<R>,
+  ) => Promise<true>;
   publicPost: <TRequest, TResponse>(
     data: TRequest,
     signal?: AbortSignal,

@@ -3,10 +3,8 @@ import { MDBBtn } from 'mdb-react-ui-kit';
 import { type FC } from 'react';
 import { FaTrashAlt } from 'react-icons/fa';
 
-import type { NotificationType } from '../../../api/notification/types/notification';
-import * as hooks from '../../../hooks/useNotification';
-import DeleteModal from '../../common/delete-modal/DeleteModal';
-
+import * as hooks from '@/features/notifications/hooks/useCrud';
+import type { NotificationType } from '@/features/notifications/types/notification';
 
 const NotificationItem: FC<{
   notification: NotificationType;

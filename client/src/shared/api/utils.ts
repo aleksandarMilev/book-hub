@@ -51,7 +51,7 @@ export const handleRequestError = (error: unknown, message: string): never => {
   const axiosError = error as AxiosError;
   throw HttpError.with()
     .message(message)
-    .andName('Error')
-    .andStatus(axiosError.response?.status ?? HttpStatusCode.BadRequest)
+    .name('Error')
+    .status(axiosError.response?.status ?? HttpStatusCode.BadRequest)
     .create();
 };

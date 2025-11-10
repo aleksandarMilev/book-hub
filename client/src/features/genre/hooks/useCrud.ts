@@ -1,9 +1,13 @@
 import api from '@/features/genre/api/api';
-import { createCrudHooks } from '@/shared/hooks/useCrud/useCrud';
+import type { GenreDetails, GenreName } from '@/features/genre/types/genre';
+import baseCrudBuilder from '@/shared/hooks/useCrud/baseCrudBuilder';
 import { errors } from '@/shared/lib/constants/errorMessages';
 
-export const { useDetails } = createCrudHooks({
-  api,
-  resourceName: 'Genre',
-  errors: errors.genre,
-});
+export const { useDetails } = baseCrudBuilder<GenreName, GenreDetails, null>()
+  .with()
+  .api(api)
+  .and()
+  .resource('Genre')
+  .and()
+  .errors(errors.genre)
+  .create();

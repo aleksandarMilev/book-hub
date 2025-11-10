@@ -4,7 +4,7 @@ import { type FC, useState } from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-import LastNotifications from '@/components/notifications/last-notifications/LastNotifications';
+import LastNotifications from '@/features/notifications/components/last-notifications/LastNotifications';
 import { routes } from '@/shared/lib/constants/api';
 import { useAuth } from '@/shared/stores/auth/auth';
 

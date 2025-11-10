@@ -4,4 +4,5 @@ export interface CrudApi<TAll, TDetails, TCreate> {
   create: (data: TCreate, token: string, signal?: AbortSignal) => Promise<number>;
   edit: (id: number, data: TCreate, token: string, signal?: AbortSignal) => Promise<boolean>;
   remove: (id: number, token: string, signal?: AbortSignal) => Promise<boolean>;
+  patch?: (id: number, data: TCreate, token: string, signal?: AbortSignal) => Promise<boolean>;
 }
