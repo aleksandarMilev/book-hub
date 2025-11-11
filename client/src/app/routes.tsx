@@ -31,7 +31,7 @@ const CreateBook = lazy(() => import('@/components/book/create-book/CreateBook')
 const EditBook = lazy(() => import('@/components/book/edit-book/EditBook'));
 
 const ReadingList = lazy(() => import('@/components/reading-list/ReadingList'));
-const ReviewList = lazy(() => import('@/components/review/review-list/ReviewList'));
+const ReviewList = lazy(() => import('@/features/review/components/review-list/ReviewList'));
 
 const GenreDetails = lazy(() => import('@/features/genre/components/details/GenreDetails'));
 

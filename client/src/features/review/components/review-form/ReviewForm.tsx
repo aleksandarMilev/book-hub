@@ -1,15 +1,17 @@
-import { MDBTextArea, MDBBtn, MDBIcon } from 'mdb-react-ui-kit';
-import type { FC, Dispatch, SetStateAction } from 'react';
-
-
 import './ReviewForm.css';
-import { useReviewFormik } from './formik/useReviewFormik';
+
+import { MDBBtn, MDBIcon, MDBTextArea } from 'mdb-react-ui-kit';
+import type React from 'react';
+import type { Dispatch, FC, SetStateAction } from 'react';
+
+import { useReviewFormik } from '@/features/review/components/review-form/formik/useReviewFormik';
+import type { Review } from '@/features/review/types/review';
 
 const ReviewForm: FC<{
   bookId: number;
   refreshReviews: () => void | Promise<void>;
   setIsReviewCreatedOrEdited: Dispatch<SetStateAction<boolean>>;
-  existingReview?: any | null;
+  existingReview?: Review | null;
 }> = ({ bookId, refreshReviews, setIsReviewCreatedOrEdited, existingReview = null }) => {
   const { formik, rating, handleRating, isEditMode } = useReviewFormik({
     bookId,

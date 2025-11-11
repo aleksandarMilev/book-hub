@@ -1,12 +1,11 @@
+import './ReviewList.css';
+
 import { type FC } from 'react';
 
-import { useReviewList } from '../../../hooks/useReview';
-import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
-import Pagination from '../../common/pagination/Pagination'; // ✅ import shared component
-
-import ReviewListItem from '../review-list-item/ReviewListItem';
-
-import './ReviewList.css';
+import ReviewListItem from '@/features/review/components/review-list-item/ReviewListItem';
+import { useAll } from '@/features/review/hooks/useCrud';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import Pagination from '@/shared/components/pagination/Pagination';
 
 const ReviewList: FC = () => {
   const {
@@ -18,7 +17,7 @@ const ReviewList: FC = () => {
     handleNextPage,
     handlePreviousPage,
     fetchData,
-  } = useReviewList();
+  } = useAll();
 
   if (isFetching) {
     return <DefaultSpinner />;

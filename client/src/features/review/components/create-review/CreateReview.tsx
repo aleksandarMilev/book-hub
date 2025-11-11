@@ -1,7 +1,6 @@
-import type { FC, Dispatch, SetStateAction } from 'react';
+import type { Dispatch, FC, SetStateAction } from 'react';
 
-import ReviewForm from '../review-form/ReviewForm';
-
+import ReviewForm from '@/features/review/components/review-form/ReviewForm';
 
 const CreateReview: FC<{
   bookId: number;

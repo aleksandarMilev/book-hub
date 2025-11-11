@@ -1,20 +1,20 @@
-import { MDBIcon, MDBBtn } from 'mdb-react-ui-kit';
-import { useContext, useState, type FC } from 'react';
-import { useNavigate } from 'react-router-dom';
-
-import { UserContext } from '../../../contexts/user/userContext';
-import { useRemoveReview, useVoteHandlers } from '../../../hooks/useReview';
-import DeleteModal from '../../common/delete-modal/DeleteModal';
-import { RenderStars } from '../../common/render-stars/renderStars';
-
 import './ReviewListItem.css';
 
+import { MDBBtn, MDBIcon } from 'mdb-react-ui-kit';
+import { type FC, useState } from 'react';
+
+import { useRemove } from '@/features/review/hooks/useCrud';
+import { useVoteHandlers } from '@/features/review/hooks/useVote';
+import type { Review } from '@/features/review/types/review';
+import DeleteModal from '@/shared/components/delete-modal/DeleteModal';
+import { RenderStars } from '@/shared/components/render-stars/RenderStars';
+import { useAuth } from '@/shared/stores/auth/auth';
+
 const ReviewListItem: FC<{
-  review: any;
+  review: Review;
   onVote: () => void | Promise<void>;
 }> = ({ review, onVote }) => {
-  const navigate = useNavigate();
-  const { userId, token, hasProfile } = useContext(UserContext);
+  const { userId, hasProfile } = useAuth();
   const { id, content, rating, creatorId, createdBy, upvotes, downvotes } = review;
 
   const [upvoteClicked, setUpvoteClicked] = useState(false);
@@ -22,7 +22,7 @@ const ReviewListItem: FC<{
   const [upvoteCount, setUpvoteCount] = useState<number>(upvotes ?? 0);
   const [downvoteCount, setDownvoteCount] = useState<number>(downvotes ?? 0);
 
-  const { showModal, toggleModal, deleteHandler } = useRemoveReview(id, onVote);
+  const { showModal, toggleModal, deleteHandler } = useRemove(id, onVote);
   const { handleUpvote, handleDownvote } = useVoteHandlers({
     id,
     hasProfile,

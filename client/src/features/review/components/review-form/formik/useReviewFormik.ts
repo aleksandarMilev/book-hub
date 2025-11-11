@@ -1,11 +1,11 @@
 import { useFormik } from 'formik';
+import type React from 'react';
 import { useState } from 'react';
 
-import type { Review, ReviewInput } from '../../../../api/review/types/review';
-import * as hooks from '../../../../hooks/useReview';
+import { useCreate, useEdit } from '@/features/review/hooks/useCrud';
+import type { CreateReview, Review } from '@/features/review/types/review';
 
 import { reviewSchema } from '../validation/reviewSchema';
-
 
 export const useReviewFormik = ({
   bookId,
@@ -21,8 +21,8 @@ export const useReviewFormik = ({
   const isEditMode = !!existingReview;
   const [rating, setRating] = useState<number>(existingReview?.rating || 0);
 
-  const createReview = hooks.useCreateReview();
-  const editReview = hooks.useEditReview();
+  const createReview = useCreate();
+  const editReview = useEdit();
 
   const formik = useFormik<{
     content: string;
@@ -38,7 +38,7 @@ export const useReviewFormik = ({
     validationSchema: reviewSchema,
     onSubmit: async (values, { setErrors, resetForm, setSubmitting }) => {
       try {
-        const payload: ReviewInput = { ...values, bookId };
+        const payload: CreateReview = { ...values, bookId };
 
         if (isEditMode) {
           const success = await editReview(existingReview!.id, payload);

@@ -47,5 +47,11 @@ export const errors = {
   ),
   book: createEntityErrors('book'),
   chat: createEntityErrors('chat'),
-  review: createEntityErrors('review'),
+  review: {
+    ...createEntityErrors('review'),
+    vote: {
+      up: 'Something went wrong will processing your upvote',
+      down: 'Something went wrong will processing your downvote',
+    },
+  },
 };
