@@ -1,22 +1,21 @@
-import { useContext, type FC } from 'react';
-import { FaUser, FaLock, FaUnlock } from 'react-icons/fa';
+import './ProfileListItem.css';
+
+import { type FC } from 'react';
+import { FaLock, FaUnlock, FaUser } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
-import { routes } from '../../../common/constants/api';
-import { UserContext } from '../../../contexts/user/userContext';
+import { routes } from '@/shared/lib/constants/api';
+import { useAuth } from '@/shared/stores/auth/auth';
 
-import './ProfileListItem.css';
-import type { ProfileListItemProps } from '../../../api/profile/types/profile';
-
-const ProfileListItem: FC<ProfileListItemProps> = ({
-  id: profileId,
-  imageUrl,
-  firstName,
-  lastName,
-  isPrivate,
-}) => {
+const ProfileListItem: FC<{
+  id: string;
+  imageUrl: string;
+  firstName: string;
+  lastName: string;
+  isPrivate: boolean;
+}> = ({ id: profileId, imageUrl, firstName, lastName, isPrivate }) => {
+  const { userId } = useAuth();
   const navigate = useNavigate();
-  const { userId } = useContext(UserContext);
 
   const onClickHandler = () => {
     navigate(routes.profile, {
@@ -32,6 +31,10 @@ const ProfileListItem: FC<ProfileListItemProps> = ({
             className="img-fluid img-responsive rounded-circle profile-list-item-image"
             src={imageUrl}
             alt={`${firstName} ${lastName}`}
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src =
+                'https://via.placeholder.com/160?text=No+Image';
+            }}
           />
         ) : (
           <div className="profile-list-item-placeholder rounded-circle">No Image</div>

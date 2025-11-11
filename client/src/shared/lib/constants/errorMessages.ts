@@ -35,7 +35,10 @@ export const errors = {
     lastThree:
       'Something went wrong while loading your last notifications. Please refresh the page or try again later!',
   },
-  profile: createEntityErrors('profile'),
+  profile: {
+    ...createEntityErrors('profile'),
+    topThree: "We couldn't load top users.",
+  },
   article: createEntityErrors('article'),
   author: createEntityErrors('author'),
   genre: createEntityErrors('genre'),

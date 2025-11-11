@@ -18,14 +18,17 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 
+import BookListItem from '@/components/book/book-list-item/BookListItem';
+import { useDetails } from '@/features/profile/hooks/useCrud';
+import type { PrivateProfile, Profile } from '@/features/profile/types/profile';
+import { useInviteToChat } from '@/hooks/useChat';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
 import DeleteModal from '@/shared/components/delete-modal/DeleteModal';
 import { routes } from '@/shared/lib/constants/api';
+import { useMessage } from '@/shared/stores/message/message';
 
-import { useMessage } from '../../../contexts/message/messageContext';
-import * as chatHooks from '../../../hooks/useChat';
-import * as profileHooks from '../../../hooks/useProfile';
-import BookListItem from '../../book/book-list-item/BookListItem';
+const isFullProfile = (profile: Profile | PrivateProfile | null | undefined): profile is Profile =>
+  !!profile && 'phoneNumber' in profile;
 
 const ProfileDetails = () => {
   const {
@@ -45,14 +48,16 @@ const ProfileDetails = () => {
     onNavigateToRead,
     profileLoading,
     refetchChats,
-  } = profileHooks.useDetails();
+  } = useDetails();
 
   const { showMessage } = useMessage();
-  const inviteToChat = chatHooks.useInviteToChat(refetchChats);
+  const inviteToChat = useInviteToChat(refetchChats);
 
   if (profileLoading) {
     return <DefaultSpinner />;
   }
+
+  const full = isFullProfile(profile) ? profile : null;
 
   return (
     <div className="profile-details container-fluid">
@@ -67,6 +72,7 @@ const ProfileDetails = () => {
                     Delete
                   </button>
                 )}
+
                 <div className="d-flex flex-column align-items-center text-center">
                   <img
                     src={profile?.imageUrl || defaultProfilePicture}
@@ -78,6 +84,7 @@ const ProfileDetails = () => {
                     <h4>{profile ? `${profile.firstName} ${profile.lastName}` : 'Your Name'}</h4>
                   </div>
                 </div>
+
                 {canSeePrivate ? (
                   <>
                     <hr className="my-4" />
@@ -88,37 +95,36 @@ const ProfileDetails = () => {
                           Phone Number
                         </h6>
                         <span className="text-secondary">
-                          {profile?.phoneNumber || 'Your phone number'}
+                          {full ? full.phoneNumber || 'Your phone number' : 'Your phone number'}
                         </span>
                       </li>
+
                       <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                         <h6 className="mb-0">
                           <FontAwesomeIcon icon={faBirthdayCake} className="me-2 text-danger" />
                           Date of Birth
                         </h6>
                         <span className="text-secondary">
-                          {profile?.dateOfBirth || 'Your date of birth'}
+                          {full ? full.dateOfBirth || 'Your date of birth' : 'Your date of birth'}
                         </span>
                       </li>
+
                       <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                         <h6 className="mb-0">
                           <FontAwesomeIcon icon={faGlobe} className="me-2 text-info" />
                           Website
                         </h6>
                         <span className="text-secondary">
-                          {profile?.socialMediaUrl ? (
-                            <a
-                              href={profile.socialMediaUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {profile.socialMediaUrl}
+                          {full && full.socialMediaUrl ? (
+                            <a href={full.socialMediaUrl} target="_blank" rel="noopener noreferrer">
+                              {full.socialMediaUrl}
                             </a>
                           ) : (
                             'Your website URL'
                           )}
                         </span>
                       </li>
+
                       <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                         <h6 className="mb-0">
                           <FontAwesomeIcon icon={faLock} className="me-2 text-warning" />
@@ -129,6 +135,7 @@ const ProfileDetails = () => {
                         </span>
                       </li>
                     </ul>
+
                     <hr className="my-4" />
                     <div className="list-group-item d-flex flex-column align-items-start">
                       <h6 className="mb-0">
@@ -136,13 +143,14 @@ const ProfileDetails = () => {
                         Biography
                       </h6>
                       <span className="text-secondary mt-2">
-                        {profile?.biography ? (
-                          <p className="bio-text">{profile.biography}</p>
+                        {full && full.biography ? (
+                          <p className="bio-text">{full.biography}</p>
                         ) : (
                           'Your biography'
                         )}
                       </span>
                     </div>
+
                     <hr className="my-4" />
                     <div className="statistics-section">
                       <h6 className="mb-0">
@@ -155,21 +163,25 @@ const ProfileDetails = () => {
                             <FontAwesomeIcon icon={faBook} className="me-2 text-info" />
                             Books Created:
                           </span>
-                          <span className="stat-value">{profile?.createdBooksCount ?? 0}</span>
+                          <span className="stat-value">
+                            {full ? (full.createdBooksCount ?? 0) : 0}
+                          </span>
                         </div>
                         <div className="stat-item">
                           <span className="stat-label">
                             <FontAwesomeIcon icon={faUser} className="me-2 text-success" />
                             Authors Created:
                           </span>
-                          <span className="stat-value">{profile?.createdAuthorsCount ?? 0}</span>
+                          <span className="stat-value">
+                            {full ? (full.createdAuthorsCount ?? 0) : 0}
+                          </span>
                         </div>
                         <div className="stat-item">
                           <span className="stat-label">
                             <FontAwesomeIcon icon={faComment} className="me-2 text-warning" />
                             Reviews Written:
                           </span>
-                          <span className="stat-value">{profile?.reviewsCount ?? 0}</span>
+                          <span className="stat-value">{full ? (full.reviewsCount ?? 0) : 0}</span>
                         </div>
                         <div className="stat-item">
                           <span className="stat-label">
@@ -177,7 +189,7 @@ const ProfileDetails = () => {
                             Currently Reading:
                           </span>
                           <span className="stat-value">
-                            {profile?.currentlyReadingBooksCount ?? 0}
+                            {full ? (full.currentlyReadingBooksCount ?? 0) : 0}
                           </span>
                         </div>
                         <div className="stat-item">
@@ -185,17 +197,22 @@ const ProfileDetails = () => {
                             <FontAwesomeIcon icon={faBookReader} className="me-2 text-warning" />
                             Want to Read:
                           </span>
-                          <span className="stat-value">{profile?.toReadBooksCount ?? 0}</span>
+                          <span className="stat-value">
+                            {full ? (full.toReadBooksCount ?? 0) : 0}
+                          </span>
                         </div>
                         <div className="stat-item">
                           <span className="stat-label">
                             <FontAwesomeIcon icon={faBookReader} className="me-2 text-warning" />
                             Read:
                           </span>
-                          <span className="stat-value">{profile?.readBooksCount ?? 0}</span>
+                          <span className="stat-value">
+                            {full ? (full.readBooksCount ?? 0) : 0}
+                          </span>
                         </div>
                       </div>
                     </div>
+
                     <hr className="my-4" />
                     <div className="d-flex justify-content-around mt-3">
                       {profile && userId !== profile.id && !profile.isPrivate && (
@@ -221,6 +238,7 @@ const ProfileDetails = () => {
                           </div>
                         </section>
                       )}
+
                       {profile && userId === profile.id && (
                         <>
                           <Link to={routes.editProfile} className="btn btn-outline-primary">
@@ -237,6 +255,7 @@ const ProfileDetails = () => {
                           </button>
                         </>
                       )}
+
                       {!profile && (
                         <Link to={routes.createProfile} className="btn btn-outline-success">
                           <FontAwesomeIcon icon={faPlus} className="me-2" />
@@ -244,6 +263,7 @@ const ProfileDetails = () => {
                         </Link>
                       )}
                     </div>
+
                     {profile && (
                       <>
                         {readingLoading ? (
@@ -259,11 +279,12 @@ const ProfileDetails = () => {
                               : 'No currently reading books'}
                           </div>
                         )}
+
                         <div onClick={onNavigateToRead} className="book-stats favorite-stats">
-                          To Read ({profile?.toReadBooksCount ?? 0})
+                          To Read ({full ? (full.toReadBooksCount ?? 0) : 0})
                         </div>
                         <div onClick={onNavigateRead} className="book-stats read-stats">
-                          Read ({profile?.readBooksCount ?? 0})
+                          Read ({full ? (full.readBooksCount ?? 0) : 0})
                         </div>
                       </>
                     )}
@@ -278,6 +299,7 @@ const ProfileDetails = () => {
           </div>
         </div>
       </div>
+
       <DeleteModal
         showModal={showModal}
         toggleModal={toggleModal}

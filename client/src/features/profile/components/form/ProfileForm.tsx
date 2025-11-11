@@ -1,17 +1,18 @@
+import './ProfileForm.css';
+
 import {
   MDBBtn,
-  MDBContainer,
   MDBCard,
   MDBCardBody,
-  MDBRow,
   MDBCol,
+  MDBContainer,
   MDBInput,
+  MDBRow,
 } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
 
-import { useProfileFormik } from './formik/useProfileFormik';
-import type { Profile } from '../../../api/profile/types/profile';
-import './ProfileForm.css';
+import { useProfileFormik } from '@/features/profile/components/form/formik/useProfileFormik';
+import type { Profile } from '@/features/profile/types/profile';
 
 const ProfileForm: FC<{ profile?: Profile | null; isEditMode?: boolean }> = ({
   profile = null,
@@ -78,7 +79,7 @@ const ProfileForm: FC<{ profile?: Profile | null; isEditMode?: boolean }> = ({
                         id="imageUrl"
                         type="text"
                         value={formik.values.imageUrl ?? ''}
-                        onChange={(e) => formik.setFieldValue('imageUrl', e.target.value || null)}
+                        onChange={(e) => formik.setFieldValue('imageUrl', e.target.value || '')}
                         onBlur={formik.handleBlur}
                         className={
                           formik.touched.imageUrl && formik.errors.imageUrl ? 'is-invalid' : ''

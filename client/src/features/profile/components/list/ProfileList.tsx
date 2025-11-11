@@ -1,15 +1,13 @@
-import { useState, type ChangeEvent, type FC } from 'react';
+import { type ChangeEvent, type FC, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 
-import type { ProfileListItemProps } from '../../../api/profile/types/profile';
-import image from '../../../assets/images/no-books-found.png';
-import { pagination } from '../../../common/constants/defaultValues';
-import * as hooks from '../../../hooks/useSearch';
-import { useDebounce } from '../../../shared/hooks/useDebounce';
-import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
-import Pagination from '../../common/pagination/Pagination';
-
-import ProfileListItem from '../profile-list-item/ProfileListItem';
+import ProfileListItem from '@/features/profile/components/list-item/ProfileListItem';
+import noUsersImage from '@/features/profile/components/list/assets/no-users-found.avif';
+import { useSearchProfiles } from '@/features/search/hooks/useCrud';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import Pagination from '@/shared/components/pagination/Pagination';
+import { useDebounce } from '@/shared/hooks/useDebounce';
+import { pagination } from '@/shared/lib/constants/defaultValues';
 
 const ProfileList: FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -22,7 +20,7 @@ const ProfileList: FC = () => {
     items: profiles,
     totalItems,
     isFetching,
-  } = hooks.useSearchProfiles(debouncedSearchTerm, page, pageSize);
+  } = useSearchProfiles(debouncedSearchTerm, page, pageSize);
 
   const totalPages = Math.ceil(totalItems / pageSize) || 1;
 
@@ -66,14 +64,13 @@ const ProfileList: FC = () => {
           ) : profiles.length > 0 ? (
             <>
               {profiles.map((p) => {
-                const mapped: ProfileListItemProps = {
+                const mapped = {
                   id: p.id.toString(),
-                  imageUrl: p.imageUrl ?? null,
-                  firstName: p.username,
-                  lastName: '',
-                  isPrivate: false,
+                  imageUrl: p.imageUrl ?? '',
+                  firstName: p.firstName,
+                  lastName: p.lastName,
+                  isPrivate: p.isPrivate,
                 };
-
                 return <ProfileListItem key={mapped.id} {...mapped} />;
               })}
               <Pagination
@@ -86,13 +83,13 @@ const ProfileList: FC = () => {
           ) : (
             <div className="d-flex flex-column align-items-center justify-content-center mt-5">
               <img
-                src={image}
+                src={noUsersImage}
                 alt="No users found"
                 className="mb-4 clickable"
                 style={{ maxWidth: '200px', opacity: 0.7, cursor: 'pointer' }}
                 onClick={() => setSearchTerm('')}
               />
-              <h5 className="text-muted">We couldn't find any users</h5>
+              <h5 className="text-muted">{"We couldn't find any users"}</h5>
               <p className="text-muted text-center" style={{ maxWidth: '400px' }}>
                 Try adjusting your search terms or exploring our collection for more options.
               </p>

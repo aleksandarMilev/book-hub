@@ -1,3 +1,4 @@
+import { HttpStatusCode, isAxiosError } from 'axios';
 import { format } from 'date-fns';
 
 import type { IntId } from '@/shared/types/intId';
@@ -59,4 +60,8 @@ export const IsCanceledError = (error: unknown): error is Error => {
 
 export const IsDomAbortError = (error: unknown): error is DOMException => {
   return IsDomException(error) && error.name === 'AbortError';
+};
+
+export const isNotFoundError = (error: unknown): error is Error => {
+  return isAxiosError(error) && error.response?.status === HttpStatusCode.NotFound;
 };
