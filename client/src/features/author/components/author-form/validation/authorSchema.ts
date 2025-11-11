@@ -39,7 +39,7 @@ export const authorSchema = Yup.object({
     .min(Yup.ref('bornAt'), messages.deathBeforeBirth)
     .nullable(),
   gender: Yup.string().required(messages.required('Gender')),
-  nationality: Yup.string().nullable(),
+  nationality: Yup.number().nullable(),
   biography: Yup.string()
     .min(constraints.biography.min, messages.min('Biography', constraints.biography.min))
     .max(constraints.biography.max, messages.max('Biography', constraints.biography.max))

@@ -1,21 +1,21 @@
-import type { Author, AuthorDetails, AuthorInput, AuthorName } from './types/author';
-
-import { routes } from '../../common/constants/api';
-import { errors } from '../../common/constants/messages';
-
-import { http, httpAdmin } from '../common/http';
-import { getAuthConfig, returnIfRequestCanceled } from '../common/utils';
-
+import type {
+  Author,
+  AuthorDetails,
+  AuthorNames,
+  CreateAuthor,
+} from '@/features/author/types/author';
+import { getAuthConfig, http, httpAdmin, processError } from '@/shared/api/http';
+import { routes } from '@/shared/lib/constants/api';
+import { baseErrors, errors } from '@/shared/lib/constants/errorMessages';
 
 export async function names(token: string, signal?: AbortSignal) {
   try {
     const url = `${routes.authorNames}`;
-    const response = await http.get<AuthorName[]>(url, getAuthConfig(token, signal));
+    const response = await http.get<AuthorNames[]>(url, getAuthConfig(token, signal));
 
     return response.data;
   } catch (error) {
-    returnIfRequestCanceled(error, errors.author.namesBadRequest);
-    throw error;
+    processError(error, errors.author.all);
   }
 }
 
@@ -26,8 +26,7 @@ export async function topThree(token: string, signal?: AbortSignal) {
 
     return response.data;
   } catch (error) {
-    returnIfRequestCanceled(error, errors.author.topThree);
-    throw error;
+    processError(error, errors.author.topThree);
   }
 }
 
@@ -39,44 +38,38 @@ export async function details(id: number, token: string, isAdmin: boolean, signa
 
     return response.data;
   } catch (error) {
-    returnIfRequestCanceled(error, errors.author.notFound);
-    throw error;
+    processError(error, errors.author.byId);
   }
 }
 
-export async function create(author: AuthorInput, token: string, signal?: AbortSignal) {
+export async function create(author: CreateAuthor, token: string, signal?: AbortSignal) {
   try {
     const url = `${routes.author}`;
-    const response = await httpAdmin.post<{ id: number }>(
-      url,
-      author,
-      getAuthConfig(token, signal),
-    );
+    const response = await http.post<{ id: number }>(url, author, getAuthConfig(token, signal));
 
     return response.data.id;
   } catch (error) {
-    returnIfRequestCanceled(error, errors.author.create);
-    throw error;
+    processError(error, errors.author.create);
   }
 }
 
-export async function edit(id: number, author: AuthorInput, token: string, signal?: AbortSignal) {
+export async function edit(id: number, author: CreateAuthor, token: string, signal?: AbortSignal) {
   try {
     const url = `${routes.author}/${id}`;
-    await httpAdmin.put(url, author, getAuthConfig(token, signal));
+    await http.put(url, author, getAuthConfig(token, signal));
   } catch (error) {
-    returnIfRequestCanceled(error, errors.author.edit);
-    throw error;
+    processError(error, errors.author.edit);
   }
 }
 
 export async function remove(id: number, token: string, signal?: AbortSignal) {
   try {
     const url = `${routes.author}/${id}`;
-    await httpAdmin.delete(url, getAuthConfig(token, signal));
+    await http.delete(url, getAuthConfig(token, signal));
+
+    return true;
   } catch (error) {
-    returnIfRequestCanceled(error, errors.author.delete);
-    throw error;
+    processError(error, errors.author.delete);
   }
 }
 
@@ -84,9 +77,10 @@ export async function approve(id: number, token: string, signal?: AbortSignal) {
   try {
     const url = `${routes.author}/${id}/approve`;
     await httpAdmin.patch<void>(url, null, getAuthConfig(token, signal));
+
+    return true;
   } catch (error) {
-    returnIfRequestCanceled(error, errors.author.approve);
-    throw error;
+    processError(error, baseErrors.general);
   }
 }
 
@@ -94,8 +88,9 @@ export async function reject(id: number, token: string, signal?: AbortSignal) {
   try {
     const url = `${routes.author}/${id}/reject`;
     await httpAdmin.patch<void>(url, null, getAuthConfig(token, signal));
+
+    return true;
   } catch (error) {
-    returnIfRequestCanceled(error, errors.author.reject);
-    throw error;
+    processError(error, baseErrors.general);
   }
 }

@@ -1,14 +1,20 @@
-import { type FC } from 'react';
-import { FaUser, FaPenFancy } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
-
-import { routes } from '../../../common/constants/api';
-import { RenderStars } from '../../common/render-stars/renderStars';
 import './AuthorListItem.css';
 
-import type { AuthorSearchResult } from '../../../api/search/types/authorSearchResult';
+import { type FC } from 'react';
+import { FaPenFancy, FaUser } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
-const AuthorListItem: FC<AuthorSearchResult> = ({ id, name, imageUrl, averageRating, penName }) => {
+import type { AuthorsSearchResult } from '@/features/search/types/search';
+import { RenderStars } from '@/shared/components/render-stars/RenderStars';
+import { routes } from '@/shared/lib/constants/api';
+
+const AuthorListItem: FC<AuthorsSearchResult> = ({
+  id,
+  name,
+  imageUrl,
+  averageRating,
+  penName,
+}) => {
   return (
     <div className="row p-3 bg-light border rounded mb-3 shadow-sm author-list-item">
       <div className="col-md-3 col-4 mt-1 d-flex justify-content-center align-items-center">

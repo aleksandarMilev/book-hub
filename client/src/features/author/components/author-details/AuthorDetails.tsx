@@ -1,48 +1,48 @@
+import './AuthorDetails.css';
+
 import {
-  MDBContainer,
-  MDBRow,
-  MDBCol,
   MDBCard,
   MDBCardBody,
-  MDBCardTitle,
   MDBCardText,
+  MDBCardTitle,
+  MDBCol,
+  MDBContainer,
   MDBIcon,
+  MDBRow,
 } from 'mdb-react-ui-kit';
-import { type FC, useContext } from 'react';
+import { type FC } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-import ApproveRejectButtons from './approve-reject-buttons/ApproveRejectButtons';
-import type { AuthorTopBook } from '../../../api/author/types/author';
-import { routes } from '../../../common/constants/api';
-import { calculateAge, formatIsoDate, parseId } from '../../../common/functions/utils';
-import { UserContext } from '../../../contexts/user/userContext';
-import * as hooks from '../../../hooks/useAuthor';
-import BookListItem from '../../book/book-list-item/BookListItem';
-import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
-import DeleteModal from '../../common/delete-modal/DeleteModal';
-
-import './AuthorDetails.css';
-import { RenderStars } from '../../common/render-stars/renderStars';
-
+import BookListItem from '@/components/book/book-list-item/BookListItem';
+import ApproveRejectButtons from '@/features/author/components/author-details/approve-reject-buttons/ApproveRejectButtons';
+import { useDetailsPage } from '@/features/author/hooks/useDetailsPage';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import DeleteModal from '@/shared/components/delete-modal/DeleteModal';
+import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect';
+import { RenderStars } from '@/shared/components/render-stars/RenderStars';
+import { routes } from '@/shared/lib/constants/api';
+import { calculateAge, formatIsoDate } from '@/shared/lib/utils';
 
 const AuthorDetails: FC = () => {
-  const navigate = useNavigate();
-  const { id } = useParams<{ id: string }>();
+  const {
+    parsedId,
+    token,
+    isAdmin,
+    userId,
+    author,
+    isFetching,
+    error,
+    showModal,
+    toggleModal,
+    deleteHandler,
+    navigate,
+    showMessage,
+  } = useDetailsPage();
 
-  let parsedId: number | null = null;
-  try {
-    parsedId = parseId(id);
-  } catch {}
-
-  if (parsedId == null) {
-    return <div>Invalid author id.</div>;
+  if (error) {
+    return <ErrorRedirect error={error} />;
   }
-
-  const { token, isAdmin, userId } = useContext(UserContext);
-
-  const { author, isFetching } = hooks.useDetails(parsedId);
-  const { showModal, toggleModal, deleteHandler } = hooks.useRemove(parsedId, token, author?.name);
 
   if (isFetching || !author) {
     return <DefaultSpinner />;
@@ -98,8 +98,6 @@ const AuthorDetails: FC = () => {
                   <div className="author-meta d-flex align-items-center">
                     <MDBIcon fas icon="star" className="me-2" />
                     <span className="me-2">Rating:</span>
-                    //Argument of type 'number' is not assignable to parameter of type
-                    'Props'.ts(2345)
                     <RenderStars rating={author.averageRating ?? 0} />
                   </div>
                 </MDBCol>
@@ -113,7 +111,7 @@ const AuthorDetails: FC = () => {
               {(isCreator || isAdmin) && (
                 <div className="d-flex gap-2 mt-4">
                   <Link
-                    to={`${routes.editAuthor}/${id}`}
+                    to={`${routes.editAuthor}/${parsedId}`}
                     className="btn btn-warning d-flex align-items-center gap-2"
                   >
                     <FaEdit /> Edit
@@ -134,7 +132,7 @@ const AuthorDetails: FC = () => {
                     authorName={author.name}
                     initialIsApproved={author.isApproved ?? false}
                     token={token}
-                    onSuccess={() => {}}
+                    onSuccess={(msg, success) => showMessage(msg, !!success)}
                   />
                 </div>
               )}
@@ -143,7 +141,7 @@ const AuthorDetails: FC = () => {
                   <MDBCardTitle className="author-section-title">Top Books</MDBCardTitle>
                   {author.topBooks && author.topBooks.length > 0 ? (
                     <>
-                      {author.topBooks.map((b: AuthorTopBook) => (
+                      {author.topBooks.map((b) => (
                         <BookListItem key={b.id} {...b} />
                       ))}
                       <div className="d-flex justify-content-center mt-3">
@@ -152,7 +150,7 @@ const AuthorDetails: FC = () => {
                           className="btn btn-primary"
                           onClick={() =>
                             navigate(routes.book, {
-                              state: { authorId: id, authorName: author.name },
+                              state: { authorId: author.id, authorName: author.name },
                             })
                           }
                         >
