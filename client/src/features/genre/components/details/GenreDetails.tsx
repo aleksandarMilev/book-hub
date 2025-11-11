@@ -32,7 +32,7 @@ const GenreDetails: FC = () => {
               />
             </div>
           )}
-          <div className={`col-md-${genre.imageUrl ? '8' : '12'}`}>
+          <div className={'col-md-8'}>
             <div className="card-body">
               <h1 className="card-title text-primary">{genre.name}</h1>
               <p className="card-text text-muted">{genre.description}</p>

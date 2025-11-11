@@ -5,13 +5,13 @@ import { type FC } from 'react';
 import { FaBookReader } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-import * as hooks from '@/hooks/useAuthor';
+import { useTopThree } from '@/hooks/useAuthor';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
 import { RenderStars } from '@/shared/components/render-stars/RenderStars';
 import { routes } from '@/shared/lib/constants/api';
 
 const TopAuthors: FC = () => {
-  const { authors, isFetching, error } = hooks.useTopThree();
+  const { authors, isFetching, error } = useTopThree();
 
   if (isFetching) {
     return <DefaultSpinner />;
@@ -27,7 +27,6 @@ const TopAuthors: FC = () => {
       </div>
     );
   }
-
   if (!authors?.length) {
     return (
       <div className="d-flex flex-column align-items-center justify-content-center vh-50">

@@ -1,13 +1,125 @@
-import api from '@/features/genre/api/api';
-import type { GenreDetails, GenreName } from '@/features/genre/types/genre';
-import baseCrudBuilder from '@/shared/hooks/useCrud/baseCrudBuilder';
-import { errors } from '@/shared/lib/constants/errorMessages';
+import { HttpStatusCode } from 'axios';
+import { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-export const { useDetails } = baseCrudBuilder<GenreName, GenreDetails, null>()
-  .with()
-  .api(api)
-  .and()
-  .resource('Genre')
-  .and()
-  .errors(errors.genre)
-  .create();
+import * as api from '@/features/genre/api/api';
+import type { GenreDetails, GenreName } from '@/features/genre/types/genre';
+import { routes } from '@/shared/lib/constants/api';
+import { errors } from '@/shared/lib/constants/errorMessages';
+import { IsCanceledError } from '@/shared/lib/utils';
+import { useAuth } from '@/shared/stores/auth/auth';
+import { HttpError } from '@/shared/types/errors/httpError';
+import type { IntId } from '@/shared/types/intId';
+
+export const useAll = () => {
+  const { token } = useAuth();
+  const navigate = useNavigate();
+
+  const [genres, setGenres] = useState<GenreName[]>([]);
+  const [isFetching, setIsFetching] = useState<boolean>(false);
+
+  const fetchData = useCallback(
+    async (signal?: AbortSignal) => {
+      if (!token) {
+        return;
+      }
+
+      try {
+        setIsFetching(true);
+        const data = await api.all(token, signal);
+        setGenres(data);
+      } catch (error) {
+        if (IsCanceledError(error)) {
+          return;
+        }
+
+        const message = error instanceof Error ? error.message : 'Failed to load genres.';
+        navigate(routes.badRequest, { state: { message } });
+      } finally {
+        setIsFetching(false);
+      }
+    },
+    [token, navigate],
+  );
+
+  useEffect(() => {
+    const controller = new AbortController();
+    void fetchData(controller.signal);
+
+    return () => controller.abort();
+  }, [fetchData]);
+
+  return { genres, isFetching, refetch: fetchData };
+};
+
+export const useDetails = (id: IntId | null, disable = false) => {
+  const { token } = useAuth();
+
+  const [genre, setGenre] = useState<GenreDetails | null>(null);
+  const [isFetching, setIsFetching] = useState(false);
+  const [error, setError] = useState<HttpError | null>(null);
+
+  useEffect(() => {
+    if (disable || !id) {
+      setError(
+        HttpError.with()
+          .message(errors.genre.byId)
+          .and()
+          .name('Genre Error')
+          .and()
+          .status(HttpStatusCode.NotFound)
+          .create(),
+      );
+
+      return;
+    }
+
+    const controller = new AbortController();
+    (async () => {
+      try {
+        setIsFetching(true);
+        const data = await api.details(id, token, controller.signal);
+        setGenre(data ?? []);
+      } catch (error) {
+        if (IsCanceledError(error)) {
+          return;
+        }
+
+        setError(error as HttpError);
+      } finally {
+        setIsFetching(false);
+      }
+    })();
+
+    return () => controller.abort();
+  }, [id, token, disable]);
+
+  return { genre, isFetching, error };
+};
+
+export const useSearch = (genres: GenreName[], selectedGenres: GenreName[]) => {
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [filteredGenres, setFilteredGenres] = useState<GenreName[]>([]);
+
+  useEffect(() => {
+    if (searchTerm.trim() === '') {
+      setFilteredGenres([]);
+      return;
+    }
+
+    const lowerTerm = searchTerm.toLowerCase();
+    const filtered = genres.filter(
+      (g) =>
+        g.name.toLowerCase().includes(lowerTerm) &&
+        !selectedGenres.some((selected) => selected.id === g.id),
+    );
+
+    setFilteredGenres(filtered);
+  }, [searchTerm, genres, selectedGenres]);
+
+  const updateSearchTerm = useCallback((term: string) => {
+    setSearchTerm(term);
+  }, []);
+
+  return { searchTerm, filteredGenres, updateSearchTerm };
+};

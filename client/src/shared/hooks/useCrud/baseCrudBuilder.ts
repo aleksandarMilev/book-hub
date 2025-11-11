@@ -45,15 +45,15 @@ class CrudHooksBuilder<TAll, TDetails, TCreate> {
 
   create() {
     if (!this._api) {
-      throw new Error('API is required. Use .api(...)');
+      throw new Error('API is required! Use .api(...)');
     }
 
     if (!this._resource) {
-      throw new Error('Resource name is required. Use .resource(...)');
+      throw new Error('Resource name is required! Use .resource(...)');
     }
 
     if (!this._errors) {
-      throw new Error('Error messages are required. Use .errors(...)');
+      throw new Error('Error messages are required! Use .errors(...)');
     }
 
     return createCrudHooks<TAll, TDetails, TCreate>({

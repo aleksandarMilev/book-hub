@@ -13,14 +13,14 @@ import {
 } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-import * as hooks from '@/features/statistics/hooks/useCrud';
+import { useStatistics } from '@/features/statistics/hooks/useCrud';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
 import { routes } from '@/shared/lib/constants/api';
 import { useAuth } from '@/shared/stores/auth/auth';
 
 const Statistics: FC = () => {
   const { isAuthenticated } = useAuth();
-  const { data: statistics, isFetching, error } = hooks.useStatistics();
+  const { statistics, isFetching, error } = useStatistics();
 
   if (isFetching || !statistics) {
     return <DefaultSpinner />;
@@ -31,12 +31,11 @@ const Statistics: FC = () => {
       <div className="d-flex flex-column align-items-center justify-content-center vh-50">
         <div className="text-center">
           <FaBookReader size={100} color="red" className="mb-3" />
-          <p className="lead">{error.message}</p>
+          <p className="lead">{error}</p>
         </div>
       </div>
     );
   }
-
   return (
     <div className="statistics-container">
       <h2 className="statistics-title">Welcome to BookHub!</h2>

@@ -27,11 +27,16 @@ export function createCrudHooks<TAll, TDetails, TCreate>({
         return;
       }
 
+      const all = api.all;
+      if (!all) {
+        throw new Error('all() is not implemented!');
+      }
+
       const controller = new AbortController();
       (async () => {
         try {
           setIsFetching(true);
-          const fetched = await api.all(token, controller.signal);
+          const fetched = await all(token, controller.signal);
           setData(fetched);
         } catch (error) {
           if (!IsCanceledError(error)) {
@@ -43,7 +48,7 @@ export function createCrudHooks<TAll, TDetails, TCreate>({
       })();
 
       return () => controller.abort();
-    }, [token, disable]);
+    }, [token, disable, data, isFetching]);
 
     return { data, isFetching, error };
   }
@@ -66,14 +71,20 @@ export function createCrudHooks<TAll, TDetails, TCreate>({
             .status(HttpStatusCode.NotFound)
             .create(),
         );
+
         return;
+      }
+
+      const details = api.details;
+      if (!details) {
+        throw new Error('details() is not implemented!');
       }
 
       const controller = new AbortController();
       (async () => {
         try {
           setIsFetching(true);
-          const fetched = await api.details(id, token, controller.signal);
+          const fetched = await details(id, token, controller.signal);
           setData(fetched);
         } catch (error) {
           if (!IsCanceledError(error)) {
@@ -85,7 +96,7 @@ export function createCrudHooks<TAll, TDetails, TCreate>({
       })();
 
       return () => controller.abort();
-    }, [id, token, disable]);
+    }, [id, token, disable, data, isFetching, error]);
 
     return { data, isFetching, error };
   }
@@ -94,10 +105,15 @@ export function createCrudHooks<TAll, TDetails, TCreate>({
     const { token } = useAuth();
     const navigate = useNavigate();
 
+    const create = api.create;
+    if (!create) {
+      throw new Error('create() is not implemented!');
+    }
+
     return useCallback(
       async (data: TCreate) => {
         try {
-          return await api.create(data, token);
+          return await create(data, token);
         } catch (error) {
           const message = IsError(error) ? error.message : errors.create;
           navigate(routes.badRequest, { state: { message } });
@@ -105,7 +121,7 @@ export function createCrudHooks<TAll, TDetails, TCreate>({
           throw error;
         }
       },
-      [token, navigate],
+      [token, navigate, create],
     );
   }
 
@@ -113,10 +129,15 @@ export function createCrudHooks<TAll, TDetails, TCreate>({
     const { token } = useAuth();
     const navigate = useNavigate();
 
+    const edit = api.edit;
+    if (!edit) {
+      throw new Error('edit() is not implemented!');
+    }
+
     return useCallback(
       async (id: number, data: TCreate) => {
         try {
-          return await api.edit(id, data, token);
+          return await edit(id, data, token);
         } catch (error) {
           const message = IsError(error) ? error.message : errors.edit;
           navigate(routes.badRequest, { state: { message } });
@@ -124,7 +145,7 @@ export function createCrudHooks<TAll, TDetails, TCreate>({
           throw error;
         }
       },
-      [token, navigate],
+      [token, navigate, edit],
     );
   }
 
@@ -141,6 +162,11 @@ export function createCrudHooks<TAll, TDetails, TCreate>({
         return;
       }
 
+      const remove = api.remove;
+      if (!remove) {
+        throw new Error('remove() is not implemented!');
+      }
+
       if (!showModal) {
         toggleModal();
         return;
@@ -148,14 +174,14 @@ export function createCrudHooks<TAll, TDetails, TCreate>({
 
       const controller = new AbortController();
       try {
-        await api.remove(id, token, controller.signal);
+        await remove(id, token, controller.signal);
 
         showMessage(`${title || resourceName} was successfully deleted!`, true);
         navigate(routes.home);
       } catch (error) {
         if (!IsCanceledError(error)) {
           const message = IsError(error) ? error.message : errors.delete;
-          showMessage(message, false);
+          showMessage(message ?? 'Delete failed!', false);
         }
       } finally {
         toggleModal();
@@ -170,14 +196,15 @@ export function createCrudHooks<TAll, TDetails, TCreate>({
     const { token } = useAuth();
     const navigate = useNavigate();
 
+    const patch = api.patch;
+    if (!patch) {
+      throw new Error('patch() is not implemented!');
+    }
+
     return useCallback(
       async (id: number, data: TCreate) => {
-        if (!api.patch) {
-          throw new Error('patch() is not implemented!');
-        }
-
         try {
-          return await api.patch(id, data, token);
+          return await patch(id, data, token);
         } catch (error) {
           const message = IsError(error) ? error.message : errors.edit;
           navigate(routes.badRequest, { state: { message } });
@@ -185,7 +212,7 @@ export function createCrudHooks<TAll, TDetails, TCreate>({
           throw error;
         }
       },
-      [token, navigate],
+      [token, navigate, patch],
     );
   }
 

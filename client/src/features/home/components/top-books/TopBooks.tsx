@@ -13,13 +13,13 @@ import { type FC } from 'react';
 import { FaBook, FaBookReader } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-import * as hooks from '@/hooks/useBook';
+import { useTopThree } from '@/hooks/useBook';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
 import { RenderStars } from '@/shared/components/render-stars/RenderStars';
 import { routes } from '@/shared/lib/constants/api';
 
 const TopBooks: FC = () => {
-  const { books, isFetching, error } = hooks.useTopThree();
+  const { books, isFetching, error } = useTopThree();
 
   if (isFetching) {
     return <DefaultSpinner />;

@@ -1,58 +1,101 @@
 import { jwtDecode } from 'jwt-decode';
+import { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import * as profileApi from '@/api/profile/profileApi';
-import identityApi from '@/features/identity/api/api';
-import type {
-  DecodedToken,
-  LoginRequest,
-  LoginResponse,
-  RegisterRequest,
-} from '@/features/identity/types/identity';
-import { usePublicPost } from '@/shared/hooks/usePublicPost';
+import * as identityApi from '@/features/identity/api/api';
+import type { DecodedToken, LoginResponse } from '@/features/identity/types/identity';
+import { routes } from '@/shared/lib/constants/api';
+import { IsDomAbortError, IsError } from '@/shared/lib/utils';
 import { useAuth } from '@/shared/stores/auth/auth';
 import type { User } from '@/shared/stores/auth/types/user';
 
-export function useLogin() {
+export const useLogin = () => {
+  const navigate = useNavigate();
   const { changeAuthenticationState } = useAuth();
 
-  return usePublicPost<LoginRequest, LoginResponse>(
-    (data, signal) => identityApi.publicPost<LoginRequest, LoginResponse>(data, signal, 'login'),
-    'Login failed.',
-    async (result) => {
-      const decoded = jwtDecode<DecodedToken>(result.token);
-      const user: User = {
-        userId: decoded.nameid,
-        username: decoded.unique_name,
-        email: decoded.email,
-        token: result.token,
-        isAdmin: Boolean(decoded.role),
-        hasProfile: await profileApi.hasProfile(result.token),
-      };
+  const onLogin = useCallback(
+    async (credentials: string, password: string, rememberMe: boolean) => {
+      const controller = new AbortController();
 
-      changeAuthenticationState(user);
+      try {
+        const result: LoginResponse = await identityApi.login(
+          credentials,
+          password,
+          rememberMe,
+          controller.signal,
+        );
+
+        const decoded = jwtDecode<DecodedToken>(result.token);
+
+        const user: User = {
+          userId: decoded.nameid,
+          username: decoded.unique_name,
+          email: decoded.email,
+          token: result.token,
+          isAdmin: Boolean(decoded.role),
+          hasProfile: await profileApi.hasProfile(result.token),
+        };
+
+        changeAuthenticationState(user);
+      } catch (error) {
+        if (IsDomAbortError(error)) {
+          return;
+        }
+
+        const message = IsError(error) ? error.message : 'Login failed!';
+        navigate(routes.badRequest, { state: { message } });
+      }
+
+      return () => controller.abort();
     },
+    [changeAuthenticationState, navigate],
   );
-}
 
-export function useRegister() {
+  return onLogin;
+};
+
+export const useRegister = () => {
+  const navigate = useNavigate();
   const { changeAuthenticationState } = useAuth();
 
-  return usePublicPost<RegisterRequest, LoginResponse>(
-    (data, signal) =>
-      identityApi.publicPost<RegisterRequest, LoginResponse>(data, signal, 'register'),
-    'Registration failed.',
-    async (result) => {
-      const decoded = jwtDecode<DecodedToken>(result.token);
-      const user: User = {
-        userId: decoded.nameid,
-        username: decoded.unique_name,
-        email: decoded.email,
-        token: result.token,
-        isAdmin: Boolean(decoded.role),
-        hasProfile: await profileApi.hasProfile(result.token),
-      };
+  const onRegister = useCallback(
+    async (username: string, email: string, password: string) => {
+      const controller = new AbortController();
 
-      changeAuthenticationState(user);
+      try {
+        const result: LoginResponse = await identityApi.register(
+          username,
+          email,
+          password,
+          controller.signal,
+        );
+
+        const decoded = jwtDecode<DecodedToken>(result.token);
+
+        const user: User = {
+          userId: decoded.nameid,
+          username: decoded.unique_name,
+          email: decoded.email,
+          token: result.token,
+          isAdmin: Boolean(decoded.role),
+          hasProfile: await profileApi.hasProfile(result.token),
+        };
+
+        changeAuthenticationState(user);
+      } catch (error) {
+        if (IsDomAbortError(error)) {
+          return;
+        }
+
+        const message = IsError(error) ? error.message : 'Registration failed!';
+        navigate(routes.badRequest, { state: { message } });
+      }
+
+      return () => controller.abort();
     },
+    [changeAuthenticationState, navigate],
   );
-}
+
+  return onRegister;
+};

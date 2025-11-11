@@ -1,43 +1,24 @@
-import { type ChangeEvent, type FC, useState } from 'react';
-import { Pagination } from 'react-bootstrap';
+import { type FC } from 'react';
 import { FaSearch } from 'react-icons/fa';
 
-import type { ArticleSummary } from '@/features/article/types/article';
+import { useListPage } from '@/features/article/hooks/useListPage';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
-import { pagination } from '@/shared/lib/constants/defaultValues';
+import Pagination from '@/shared/components/pagination/Pagination';
 
-import * as hooks from '../../../../hooks/useSearch';
-import { useDebounce } from '../../../../shared/hooks/useDebounce';
 import image from '../../../assets/images/no-books-found.png';
 import ArticleListItem from '../list-item/ArticleListItem';
 
 const ArticleList: FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const debouncedSearchTerm = useDebounce(searchTerm);
-
-  const [page, setPage] = useState(pagination.defaultPageIndex);
-  const pageSize = pagination.defaultPageSize;
-
   const {
-    items: articles,
-    totalItems,
+    articles,
     isFetching,
-  } = hooks.useSearchArticles(debouncedSearchTerm, page, pageSize);
-
-  const totalPages = Math.ceil(totalItems / pageSize) || 1;
-
-  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-    setPage(pagination.defaultPageIndex);
-  };
-
-  const handlePageChange = (newPage: number) => {
-    if (newPage < 1 || newPage > totalPages) {
-      return;
-    }
-
-    setPage(newPage);
-  };
+    searchTerm,
+    setSearchTerm,
+    page,
+    totalPages,
+    handlePageChange,
+    handleSearchChange,
+  } = useListPage();
 
   return (
     <div className="container mt-5 mb-5">
@@ -68,7 +49,7 @@ const ArticleList: FC = () => {
             <DefaultSpinner />
           ) : articles.length > 0 ? (
             <>
-              {articles.map((article: ArticleSummary) => (
+              {articles.map((article) => (
                 <ArticleListItem key={article.id} {...article} />
               ))}
               <Pagination
