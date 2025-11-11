@@ -1,17 +1,19 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-
-import type { ArticleSummary } from '../api/article/types/article';
-import type { PagedResult } from '../api/common/types/pagedResults';
-import * as api from '../api/search/searchApi';
-import type { AuthorSearchResult } from '../api/search/types/authorSearchResult';
-import type { BookSearchResult } from '../api/search/types/bookSearchResult';
-import type { ChatSearchResult } from '../api/search/types/chatResultSearch';
-import type { ProfileSearchResult } from '../api/search/types/profileSearchResult';
-import { routes } from '../common/constants/api';
-import { pagination } from '../common/constants/defaultValues';
-import { UserContext } from '../contexts/user/userContext';
+import * as api from '@/features/search/api/api';
+import type {
+  ArticlesSearchResult,
+  AuthorsSearchResult,
+  BooksSearchResult,
+  ChatsSearchResult,
+  ProfilesSearchResult,
+} from '@/features/search/types/search';
+import { routes } from '@/shared/lib/constants/api';
+import { pagination } from '@/shared/lib/constants/defaultValues';
+import { IsCanceledError, IsError } from '@/shared/lib/utils';
+import { useAuth } from '@/shared/stores/auth/auth';
+import type { PaginatedResult } from '@/shared/types/paginatedResult';
 
 function useSearch<T>(
   search: (
@@ -20,12 +22,12 @@ function useSearch<T>(
     page: number,
     pageSize: number,
     signal?: AbortSignal,
-  ) => Promise<PagedResult<T> | undefined>,
+  ) => Promise<PaginatedResult<T>>,
   searchTerm: string,
   page: number = pagination.defaultPageIndex,
   pageSize: number = pagination.defaultPageSize,
 ) {
-  const { token } = useContext(UserContext);
+  const { token } = useAuth();
   const navigate = useNavigate();
 
   const [items, setItems] = useState<T[]>([]);
@@ -34,31 +36,34 @@ function useSearch<T>(
 
   const fetchData = useCallback(
     async (signal?: AbortSignal) => {
+      if (!token) {
+        return;
+      }
+
       try {
         setIsFetching(true);
 
         const data = await search(token, searchTerm || '', page, pageSize, signal);
-        if (!data) {
+
+        setItems(data.items ?? []);
+        setTotalItems(data.totalItems ?? 0);
+      } catch (error) {
+        if (IsCanceledError(error)) {
           return;
         }
 
-        setItems(data.items);
-        setTotalItems(data.totalItems);
-      } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to load search results.';
+        const message = IsError(error) ? error.message : 'Failed to load search results.';
         navigate(routes.badRequest, { state: { message } });
       } finally {
         setIsFetching(false);
       }
     },
-    [token, searchTerm, page, pageSize, search, navigate],
+    [token, search, searchTerm, page, pageSize, navigate],
   );
 
   useEffect(() => {
     const controller = new AbortController();
-
     void fetchData(controller.signal);
-
     return () => controller.abort();
   }, [fetchData]);
 
@@ -70,7 +75,7 @@ export function useSearchBooks(
   page: number = pagination.defaultPageIndex,
   pageSize: number = pagination.defaultPageSize,
 ) {
-  return useSearch<BookSearchResult>(api.searchBooks, searchTerm, page, pageSize);
+  return useSearch<BooksSearchResult>(api.searchBooks, searchTerm, page, pageSize);
 }
 
 export function useSearchChats(
@@ -78,7 +83,7 @@ export function useSearchChats(
   page: number = pagination.defaultPageIndex,
   pageSize: number = pagination.defaultPageSize,
 ) {
-  return useSearch<ChatSearchResult>(api.searchChats, searchTerm, page, pageSize);
+  return useSearch<ChatsSearchResult>(api.searchChats, searchTerm, page, pageSize);
 }
 
 export function useSearchAuthors(
@@ -86,7 +91,7 @@ export function useSearchAuthors(
   page: number = pagination.defaultPageIndex,
   pageSize: number = pagination.defaultPageSize,
 ) {
-  return useSearch<AuthorSearchResult>(api.searchAuthors, searchTerm, page, pageSize);
+  return useSearch<AuthorsSearchResult>(api.searchAuthors, searchTerm, page, pageSize);
 }
 
 export function useSearchProfiles(
@@ -94,7 +99,7 @@ export function useSearchProfiles(
   page: number = pagination.defaultPageIndex,
   pageSize: number = pagination.defaultPageSize,
 ) {
-  return useSearch<ProfileSearchResult>(api.searchProfiles, searchTerm, page, pageSize);
+  return useSearch<ProfilesSearchResult>(api.searchProfiles, searchTerm, page, pageSize);
 }
 
 export function useSearchArticles(
@@ -102,5 +107,5 @@ export function useSearchArticles(
   page: number = pagination.defaultPageIndex,
   pageSize: number = pagination.defaultPageSize,
 ) {
-  return useSearch<ArticleSummary>(api.searchArticles, searchTerm, page, pageSize);
+  return useSearch<ArticlesSearchResult>(api.searchArticles, searchTerm, page, pageSize);
 }

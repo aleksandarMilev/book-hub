@@ -1,18 +1,17 @@
 import axios from 'axios';
 
-import type { AuthorSearchResult } from './types/authorSearchResult';
-import type { BookSearchResult } from './types/bookSearchResult';
-import type { ChatSearchResult } from './types/chatResultSearch';
-import type { ProfileSearchResult } from './types/profileSearchResult';
-
-import { baseUrl, routes } from '../../common/constants/api';
-import { pagination } from '../../common/constants/defaultValues';
-import { errors } from '../../common/constants/messages';
-
-
-import type { ArticleSummary } from '../article/types/article';
-import type { PagedResult } from '../common/types/pagedResults';
-import { getAuthConfig, returnIfRequestCanceled } from '../common/utils';
+import type {
+  ArticlesSearchResult,
+  AuthorsSearchResult,
+  BooksSearchResult,
+  ChatsSearchResult,
+  ProfilesSearchResult,
+} from '@/features/search/types/search';
+import { getAuthConfig, processError } from '@/shared/api/http';
+import { baseUrl, routes } from '@/shared/lib/constants/api';
+import { pagination } from '@/shared/lib/constants/defaultValues';
+import { errors } from '@/shared/lib/constants/errorMessages';
+import type { PaginatedResult } from '@/shared/types/paginatedResult';
 
 async function search<T>(
   route: string,
@@ -21,20 +20,18 @@ async function search<T>(
   page: number = pagination.defaultPageIndex,
   pageSize: number = pagination.defaultPageSize,
   signal?: AbortSignal,
-): Promise<PagedResult<T> | undefined> {
+): Promise<PaginatedResult<T>> {
   try {
     const url = `${baseUrl}${route}`;
     const params = { searchTerm, page, pageSize };
-
-    const response = await axios.get<PagedResult<T>>(url, {
+    const response = await axios.get<PaginatedResult<T>>(url, {
       ...getAuthConfig(token, signal),
       params,
     });
 
     return response.data;
   } catch (error) {
-    returnIfRequestCanceled(error, errors.search.badRequest);
-    throw error;
+    processError(error, errors.search.all);
   }
 }
 
@@ -45,7 +42,7 @@ export async function searchBooks(
   pageSize: number = pagination.defaultPageSize,
   signal?: AbortSignal,
 ) {
-  return search<BookSearchResult>(routes.searchBooks, token, searchTerm, page, pageSize, signal);
+  return search<BooksSearchResult>(routes.searchBooks, token, searchTerm, page, pageSize, signal);
 }
 
 export async function searchChats(
@@ -55,7 +52,7 @@ export async function searchChats(
   pageSize: number = pagination.defaultPageSize,
   signal?: AbortSignal,
 ) {
-  return search<ChatSearchResult>(routes.searchChats, token, searchTerm, page, pageSize, signal);
+  return search<ChatsSearchResult>(routes.searchChats, token, searchTerm, page, pageSize, signal);
 }
 
 export async function searchAuthors(
@@ -65,7 +62,7 @@ export async function searchAuthors(
   pageSize: number = pagination.defaultPageSize,
   signal?: AbortSignal,
 ) {
-  return search<AuthorSearchResult>(
+  return search<AuthorsSearchResult>(
     routes.searchAuthors,
     token,
     searchTerm,
@@ -82,7 +79,7 @@ export async function searchProfiles(
   pageSize: number = pagination.defaultPageSize,
   signal?: AbortSignal,
 ) {
-  return search<ProfileSearchResult>(
+  return search<ProfilesSearchResult>(
     routes.searchProfiles,
     token,
     searchTerm,
@@ -99,5 +96,12 @@ export async function searchArticles(
   pageSize: number = pagination.defaultPageSize,
   signal?: AbortSignal,
 ) {
-  return search<ArticleSummary>(routes.searchArticles, token, searchTerm, page, pageSize, signal);
+  return search<ArticlesSearchResult>(
+    routes.searchArticles,
+    token,
+    searchTerm,
+    page,
+    pageSize,
+    signal,
+  );
 }

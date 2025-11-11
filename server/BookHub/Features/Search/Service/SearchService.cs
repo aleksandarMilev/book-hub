@@ -171,7 +171,7 @@
                 .ToListAsync();
 
             return new PaginatedModel<SearchChatServiceModel>(
-                chatModels,
+                paginatedChats,
                 total,
                 page,
                 pageSize);
