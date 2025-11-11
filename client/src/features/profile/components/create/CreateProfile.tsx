@@ -1,0 +1,7 @@
+import type { FC } from 'react';
+
+import ProfileForm from '@/features/profile/components/form/ProfileForm';
+
+const CreateProfile: FC = () => <ProfileForm />;
+
+export default CreateProfile;

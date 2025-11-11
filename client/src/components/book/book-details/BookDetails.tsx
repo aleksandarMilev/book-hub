@@ -1,18 +1,18 @@
-import { MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody } from 'mdb-react-ui-kit';
+import { MDBCard, MDBCardBody, MDBCol, MDBContainer, MDBRow } from 'mdb-react-ui-kit';
 import { type FC, useContext, useEffect, useRef, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
-import BookFullInfo from './book-full-info/BookFullInfo';
 import { routes } from '../../../common/constants/api';
 import { parseId } from '../../../common/functions/utils';
 import { UserContext } from '../../../contexts/user/userContext';
+import CreateReview from '../../../features/review/components/create-review/CreateReview';
+import EditReview from '../../../features/review/components/edit-review/EditReview';
+import ReviewListItem from '../../../features/review/components/review-list-item/ReviewListItem';
 import * as hooks from '../../../hooks/useBook';
 import AuthorIntroduction from '../../author/author-introduction/AuthorIntroduction';
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
 import DeleteModal from '../../common/delete-modal/DeleteModal';
-import CreateReview from '../../review/create-review/CreateReview';
-import EditReview from '../../review/edit-review/EditReview';
-import ReviewListItem from '../../review/review-list-item/ReviewListItem';
+import BookFullInfo from './book-full-info/BookFullInfo';
 
 import './BookDetails.css';
 
