@@ -1,9 +1,10 @@
+import type { FormikProps } from 'formik';
 import { MDBRadio } from 'mdb-react-ui-kit';
-import type { FC, ChangeEvent } from 'react';
+import type { ChangeEvent, FC } from 'react';
 
-import type { GenderRadioProps } from '../../../../api/author/types/author';
+import type { AuthorFormValues } from '@/features/author/components/author-form/formik/useAuthorFormik';
 
-const GenderRadio: FC<GenderRadioProps> = ({ formik }) => {
+const GenderRadio: FC<{ formik: FormikProps<AuthorFormValues> }> = ({ formik }) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     formik.handleChange(e);
   };

@@ -35,6 +35,7 @@ export const useDetails = (id: IntId | null, disable = false) => {
     }
 
     const controller = new AbortController();
+
     (async () => {
       try {
         setIsFetching(true);
@@ -124,6 +125,7 @@ export const useRemove = (id: IntId | null, disable = false, title?: string) => 
     }
 
     const controller = new AbortController();
+
     try {
       await api.remove(id, token, controller.signal);
 

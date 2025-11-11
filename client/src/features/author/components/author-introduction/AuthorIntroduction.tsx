@@ -1,13 +1,13 @@
+import './AuthorIntroduction.css';
+
 import type { FC } from 'react';
 import { FaBook } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-import { routes } from '../../../common/constants/api';
+import type { Author } from '@/features/author/types/author';
+import { routes } from '@/shared/lib/constants/api';
 
-import './AuthorIntroduction.css';
-import type { AuthorIntroductionProps } from '../../../api/book/types/book';
-
-const AuthorIntroduction: FC<AuthorIntroductionProps> = ({ author }) => {
+const AuthorIntroduction: FC<{ author?: Author | null }> = ({ author }) => {
   if (!author) {
     return (
       <div className="author-intro-card">

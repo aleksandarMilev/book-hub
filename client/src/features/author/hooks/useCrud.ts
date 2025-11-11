@@ -1,22 +1,26 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { HttpStatusCode } from 'axios';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import * as api from '../api/author/authorApi';
+import * as api from '@/features/author/api/api';
 import type {
+  Author,
   AuthorDetails,
-  AuthorInput,
-  AuthorName,
-  UseAuthorApprovalProps,
-} from '../api/author/types/author';
-import { routes } from '../common/constants/api';
-import { useMessage } from '../contexts/message/messageContext';
-import { UserContext } from '../contexts/user/userContext';
+  AuthorNames,
+  CreateAuthor,
+} from '@/features/author/types/author';
+import { routes } from '@/shared/lib/constants/api';
+import { errors } from '@/shared/lib/constants/errorMessages';
+import { IsCanceledError, IsError } from '@/shared/lib/utils';
+import { useAuth } from '@/shared/stores/auth/auth';
+import { useMessage } from '@/shared/stores/message/message';
+import { HttpError } from '@/shared/types/errors/httpError';
+import type { IntId } from '@/shared/types/intId';
 
+export const useTopThree = () => {
+  const { token } = useAuth();
 
-export function useTopThree() {
-  const { token } = useContext(UserContext);
-
-  const [authors, setAuthors] = useState<AuthorDetails[]>([]);
+  const [authors, setAuthors] = useState<Author[]>([]);
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -43,13 +47,13 @@ export function useTopThree() {
   }, [token]);
 
   return { authors, isFetching, error };
-}
+};
 
-export function useNames() {
+export const useNames = () => {
+  const { token } = useAuth();
   const navigate = useNavigate();
-  const { token } = useContext(UserContext);
 
-  const [authors, setAuthors] = useState<AuthorName[]>([]);
+  const [authors, setAuthors] = useState<AuthorNames[]>([]);
   const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
@@ -75,11 +79,11 @@ export function useNames() {
   }, [token, navigate]);
 
   return { authors, isFetching };
-}
+};
 
-export function useSearchNames(authors: AuthorName[]) {
+export const useSearchNames = (authors: AuthorNames[]) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredAuthors, setFilteredAuthors] = useState<AuthorName[]>([]);
+  const [filteredAuthors, setFilteredAuthors] = useState<AuthorNames[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
@@ -112,52 +116,65 @@ export function useSearchNames(authors: AuthorName[]) {
     selectAuthor,
     showDropdownOnFocus,
   };
-}
+};
 
-export function useDetails(id: number) {
+export const useDetails = (id: IntId | null, disable = false) => {
   const navigate = useNavigate();
-  const { token, isAdmin } = useContext(UserContext);
+  const { token, isAdmin } = useAuth();
 
   const [author, setAuthor] = useState<AuthorDetails | null>(null);
   const [isFetching, setIsFetching] = useState(false);
+  const [error, setError] = useState<HttpError | null>(null);
 
   useEffect(() => {
+    if (disable || !id) {
+      setError(
+        HttpError.with()
+          .message(errors.author.byId)
+          .and()
+          .name('Author Error')
+          .and()
+          .status(HttpStatusCode.NotFound)
+          .create(),
+      );
+
+      return;
+    }
+
     const controller = new AbortController();
-    const fetchData = async () => {
+
+    (async () => {
       try {
         setIsFetching(true);
-
         const data = await api.details(id, token, isAdmin, controller.signal);
-        if (!data) {
+        setAuthor(data);
+      } catch (error) {
+        if (IsCanceledError(error)) {
           return;
         }
 
-        setAuthor(data);
-      } catch (error) {
-        const message = error instanceof Error ? error.message : 'Author not found.';
-        navigate(routes.notFound, { state: { message } });
+        setError(error as HttpError);
       } finally {
         setIsFetching(false);
       }
-    };
+    })();
 
-    void fetchData();
     return () => controller.abort();
-  }, [id, token, isAdmin, navigate]);
+  }, [id, token, isAdmin, navigate, disable]);
 
-  return { author, isFetching };
-}
+  return { author, isFetching, error };
+};
 
-export function useCreate() {
-  const { token } = useContext(UserContext);
+export const useCreate = () => {
+  const { token } = useAuth();
   const navigate = useNavigate();
 
   const createHandler = useCallback(
-    async (authorData: AuthorInput) => {
-      const authorToSend: AuthorInput = {
+    async (authorData: CreateAuthor) => {
+      const authorToSend: CreateAuthor = {
         ...authorData,
-        penName: authorData.penName || null,
-        imageUrl: authorData.imageUrl || null,
+        penName: authorData.penName || '',
+        imageUrl: authorData.imageUrl || '',
       };
 
       try {
@@ -165,24 +182,26 @@ export function useCreate() {
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Failed to create author.';
         navigate(routes.badRequest, { state: { message } });
+
+        return undefined;
       }
     },
     [token, navigate],
   );
 
   return createHandler;
-}
+};
 
-export function useEdit() {
-  const { token } = useContext(UserContext);
+export const useEdit = () => {
+  const { token } = useAuth();
   const navigate = useNavigate();
 
   const editHandler = useCallback(
-    async (id: number, authorData: AuthorInput) => {
-      const authorToSend: AuthorInput = {
+    async (id: number, authorData: CreateAuthor) => {
+      const authorToSend: CreateAuthor = {
         ...authorData,
-        penName: authorData.penName || null,
-        imageUrl: authorData.imageUrl || null,
+        penName: authorData.penName || '',
+        imageUrl: authorData.imageUrl || '',
       };
 
       try {
@@ -196,67 +215,45 @@ export function useEdit() {
   );
 
   return editHandler;
-}
+};
 
-export const useRemove = (id: number, token: string, name?: string) => {
+export const useRemove = (id: IntId | null, disable = false, name?: string) => {
+  const { token } = useAuth();
   const navigate = useNavigate();
   const { showMessage } = useMessage();
 
   const [showModal, setShowModal] = useState(false);
-
   const toggleModal = useCallback(() => setShowModal((prev) => !prev), []);
 
   const deleteHandler = useCallback(async () => {
-    if (showModal) {
-      try {
-        await api.remove(id, token);
-
-        showMessage(`${name || 'This author'} was successfully deleted!`, true);
-        navigate(routes.home);
-      } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to delete author.';
-        showMessage(message, false);
-      } finally {
-        toggleModal();
-      }
-    } else {
-      toggleModal();
+    if (disable || !id) {
+      return;
     }
-  }, [showModal, id, token, name, navigate, showMessage, toggleModal]);
+
+    if (!showModal) {
+      toggleModal();
+      return;
+    }
+
+    const controller = new AbortController();
+
+    try {
+      await api.remove(id, token);
+
+      showMessage(`${name || 'This author'} was successfully deleted!`, true);
+      navigate(routes.home);
+    } catch (error) {
+      if (IsCanceledError(error)) {
+        return;
+      }
+
+      const message = IsError(error) ? error.message : 'Failed to delete author.';
+      showMessage(message, false);
+    } finally {
+      toggleModal();
+      controller.abort();
+    }
+  }, [showModal, id, token, name, navigate, showMessage, toggleModal, disable]);
 
   return { showModal, toggleModal, deleteHandler };
 };
-
-export function useAuthorApproval({
-  authorId,
-  authorName,
-  token,
-  onSuccess,
-}: UseAuthorApprovalProps) {
-  const navigate = useNavigate();
-
-  const approveHandler = useCallback(async () => {
-    try {
-      await api.approve(authorId, token);
-
-      onSuccess(`${authorName} was successfully approved!`, true);
-    } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : 'Approval failed.';
-      onSuccess(message, false);
-    }
-  }, [authorId, token, authorName, onSuccess]);
-
-  const rejectHandler = useCallback(async () => {
-    try {
-      await api.reject(authorId, token);
-
-      onSuccess(`${authorName} was successfully rejected!`, true);
-      navigate(routes.home);
-    } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : 'Rejection failed.';
-      onSuccess(message, false);
-    }
-  }, [authorId, token, authorName, onSuccess, navigate]);
-
-  return { approveHandler, rejectHandler };
-}

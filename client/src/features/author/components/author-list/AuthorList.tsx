@@ -1,15 +1,13 @@
-import { useState, type ChangeEvent, type FC } from 'react';
+import { type ChangeEvent, type FC, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 
-import type { AuthorSearchResult } from '../../../api/search/types/authorSearchResult';
-import image from '../../../assets/images/no-books-found.png';
-import { pagination } from '../../../common/constants/defaultValues';
-import * as hooks from '../../../hooks/useSearch';
-import { useDebounce } from '../../../shared/hooks/useDebounce';
-import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
-import Pagination from '../../common/pagination/Pagination';
-
-import AuthorListItem from '../author-list-item/AuthorListItem';
+import image from '@/assets/images/no-books-found.png';
+import AuthorListItem from '@/features/author/components/author-list-item/AuthorListItem';
+import { useSearchAuthors } from '@/features/search/hooks/useCrud';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import Pagination from '@/shared/components/pagination/Pagination';
+import { useDebounce } from '@/shared/hooks/useDebounce';
+import { pagination } from '@/shared/lib/constants/defaultValues';
 
 const AuthorList: FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -22,7 +20,7 @@ const AuthorList: FC = () => {
     items: authors,
     totalItems,
     isFetching,
-  } = hooks.useSearchAuthors(debouncedSearchTerm, page, pageSize);
+  } = useSearchAuthors(debouncedSearchTerm, page, pageSize);
 
   const totalPages = Math.ceil(totalItems / pageSize) || 1;
 
@@ -65,7 +63,7 @@ const AuthorList: FC = () => {
             <DefaultSpinner />
           ) : authors.length > 0 ? (
             <>
-              {authors.map((author: AuthorSearchResult) => (
+              {authors.map((author) => (
                 <AuthorListItem key={author.id} {...author} />
               ))}
 
@@ -85,7 +83,7 @@ const AuthorList: FC = () => {
                 style={{ maxWidth: '200px', opacity: 0.7, cursor: 'pointer' }}
                 onClick={() => setSearchTerm('')}
               />
-              <h5 className="text-muted">We couldn't find any authors</h5>
+              <h5 className="text-muted">{"We couldn't find any authors"}</h5>
               <p className="text-muted text-center" style={{ maxWidth: '400px' }}>
                 Try adjusting your search terms or exploring our collection for more options.
               </p>

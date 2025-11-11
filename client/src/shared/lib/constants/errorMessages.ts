@@ -40,8 +40,10 @@ export const errors = {
     topThree: "We couldn't load top users.",
   },
   article: createEntityErrors('article'),
-  author: createEntityErrors('author'),
-  genre: createEntityErrors('genre'),
+  author: {
+    ...createEntityErrors('author'),
+    topThree: "We couldn't load top authors.",
+  },
   identity: createEntityErrors('account'),
   nationality: createEntityErrors('nationality'),
   search: createEntityErrors(

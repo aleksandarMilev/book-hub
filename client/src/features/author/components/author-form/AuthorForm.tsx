@@ -1,6 +1,7 @@
 import './AuthorForm.css';
 
 import image from '@assets/create-author.jpg';
+import type { FormikProps } from 'formik';
 import {
   MDBBtn,
   MDBCard,
@@ -13,15 +14,19 @@ import {
 } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
 
-import type { AuthorFormProps } from '../../../api/author/types/author';
-import * as nationalityHooks from '../../../hooks/useNationality';
-import { useAuthorFormik } from './formik/useAuthorFormik';
+import type { AuthorDetails } from '@/features/author/types/author';
+import { useAll } from '@/features/nationality/hooks/useCrud';
+
+import { type AuthorFormValues, useAuthorFormik } from './formik/useAuthorFormik';
 import GenderRadio from './gender-radio/GenderRadio';
 import NationalitySearch from './nationality-search/NationalitySearch';
 
-const AuthorForm: FC<AuthorFormProps> = ({ authorData = null, isEditMode = false }) => {
+const AuthorForm: FC<{ authorData?: AuthorDetails | null; isEditMode?: boolean }> = ({
+  authorData = null,
+  isEditMode = false,
+}) => {
   const formik = useAuthorFormik({ authorData, isEditMode });
-  const { nationalities, isFetching } = nationalityHooks.useNationalities();
+  const { nationalities, isFetching } = useAll();
 
   return (
     <MDBContainer fluid className="author-form-container">
@@ -113,11 +118,11 @@ const AuthorForm: FC<AuthorFormProps> = ({ authorData = null, isEditMode = false
                         }
                       />
                     </MDBCol>
-                    <GenderRadio formik={formik as any} />
+                    <GenderRadio formik={formik as FormikProps<AuthorFormValues>} />
                     <NationalitySearch
                       nationalities={nationalities}
                       loading={isFetching}
-                      formik={formik as any}
+                      formik={formik as FormikProps<AuthorFormValues>}
                     />
                     <MDBCol md="12">
                       {formik.touched.biography && formik.errors.biography && (

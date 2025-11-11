@@ -1,10 +1,15 @@
-import type { FC, ChangeEvent } from 'react';
+import type { FormikProps } from 'formik';
+import type { ChangeEvent, FC } from 'react';
 
-import type { NationalitySearchProps } from '../../../../api/author/types/author';
-import { useSearchNationalities } from '../../../../hooks/useNationality';
+import type { AuthorFormValues } from '@/features/author/components/author-form/formik/useAuthorFormik';
+import { useSearchNationalities } from '@/features/nationality/hooks/useCrud';
+import type { Nationality } from '@/features/nationality/types/nationality';
 
-
-const NationalitySearch: FC<NationalitySearchProps> = ({ nationalities, loading, formik }) => {
+const NationalitySearch: FC<{
+  nationalities: Nationality[];
+  loading: boolean;
+  formik: FormikProps<AuthorFormValues>;
+}> = ({ nationalities, loading, formik }) => {
   const {
     searchTerm,
     filteredNationalities,
@@ -21,7 +26,7 @@ const NationalitySearch: FC<NationalitySearchProps> = ({ nationalities, loading,
   return (
     <div className="mb-4">
       <h6 className="fw-bold mb-2">
-        Nationality: <span className="fw-normal">(select "unknown" if you are not sure)</span>
+        Nationality: <span className="fw-normal">{'(select "unknown" if you are not sure)'}</span>
       </h6>
       <input
         type="text"
