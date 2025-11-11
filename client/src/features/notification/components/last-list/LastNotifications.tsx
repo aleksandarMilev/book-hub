@@ -1,24 +1,18 @@
 import './LastNotifications.css';
 
-import type { FC, MouseEvent } from 'react';
+import type { FC } from 'react';
 import { Badge, Dropdown } from 'react-bootstrap';
 import { FaBell } from 'react-icons/fa';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-import * as hooks from '@/features/notifications/hooks/useCrud';
-
-import LastNotificationsListItem from '../last-notifications-list-item/LastNotificationsListItem';
+import LastNotificationsListItem from '@/features/notification/components/last-item/LastNotificationsListItem';
+import { useLastThree } from '@/features/notification/hooks/useCrud';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import { routes } from '@/shared/lib/constants/api';
 
 const LastNotifications: FC = () => {
-  const navigate = useNavigate();
-  const { notifications, isFetching, refetch } = hooks.use();
-
+  const { notifications, isFetching, refetch } = useLastThree();
   const unreadNotifications = notifications.filter((n) => !n.isRead);
-
-  const onClickHandler = (e: MouseEvent) => {
-    e.preventDefault();
-    navigate(routes.notification);
-  };
 
   if (isFetching) {
     return <DefaultSpinner />;
@@ -43,7 +37,9 @@ const LastNotifications: FC = () => {
           <Dropdown.Item>No new notifications</Dropdown.Item>
         )}
         <Link to={routes.notification}>
-          <Dropdown.Item onClick={onClickHandler}>All</Dropdown.Item>
+          <Dropdown.Item as={Link} to={routes.notification}>
+            All
+          </Dropdown.Item>
         </Link>
       </Dropdown.Menu>
     </Dropdown>

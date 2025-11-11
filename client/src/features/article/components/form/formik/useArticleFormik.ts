@@ -1,12 +1,12 @@
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 
+import { articleSchema } from '@/features/article/components/form/validation/articleSchema';
+import { useCreate, useEdit } from '@/features/article/hooks/useCrud';
 import type { ArticleDetails, CreateArticle } from '@/features/article/types/article';
 import { routes } from '@/shared/lib/constants/api';
+import { IsError } from '@/shared/lib/utils';
 import { useMessage } from '@/shared/stores/message/message';
-
-import * as hooks from '../../../hooks/useCrud';
-import { articleSchema } from '../validation/articleSchema';
 
 export const useArticleFormik = ({
   article = null,
@@ -18,8 +18,8 @@ export const useArticleFormik = ({
   const navigate = useNavigate();
   const { showMessage } = useMessage();
 
-  const createHandler = hooks.useCreate();
-  const editHandler = hooks.useEdit();
+  const createHandler = useCreate();
+  const editHandler = useEdit();
 
   const formik = useFormik<CreateArticle & { imageUrl: string }>({
     initialValues: {
@@ -44,7 +44,7 @@ export const useArticleFormik = ({
           resetForm();
         }
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Operation failed!';
+        const message = IsError(error) ? error.message : 'Operation failed!';
         showMessage(message, false);
       }
     },

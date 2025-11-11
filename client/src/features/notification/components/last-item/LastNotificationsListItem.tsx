@@ -4,8 +4,9 @@ import { format } from 'date-fns';
 import { type FC } from 'react';
 import { Dropdown } from 'react-bootstrap';
 
-import * as hooks from '@/features/notifications/hooks/useCrud';
-import type { NotificationType } from '@/features/notifications/types/notification';
+import type { ResourceType } from '@/features/notification/components/last-item/types/resourceType';
+import { useClickHandler } from '@/features/notification/hooks/useClickHandler';
+import type { NotificationType } from '@/features/notification/types/notification';
 
 import { getIcon } from './utils/utils';
 
@@ -13,12 +14,14 @@ const LastNotificationsListItem: FC<{
   notification: NotificationType;
   refetchNotifications: () => void | Promise<void>;
 }> = ({ notification, refetchNotifications }) => {
-  const { onClickHandler } = hooks.useClickHandler(notification, refetchNotifications);
+  const { onClickHandler } = useClickHandler(notification, refetchNotifications);
 
   return (
     <Dropdown.Item key={notification.id} onClick={onClickHandler} className="notification-item">
       <div className="notification-header">
-        <span className="notification-icon-wrapper">{getIcon(notification.resourceType)}</span>
+        <span className="notification-icon-wrapper">
+          {getIcon(notification.resourceType as ResourceType)}
+        </span>
         <strong className="resource-type">{notification.resourceType}:</strong>
       </div>
       <div className="notification-message">{notification.message}</div>

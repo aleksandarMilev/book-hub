@@ -1,13 +1,32 @@
-import api from '@/features/statistics/api/api';
-import type { Statistics } from '@/features/statistics/types/statistics';
-import baseCrudBuilder from '@/shared/hooks/useCrud/baseCrudBuilder';
-import { errors } from '@/shared/lib/constants/errorMessages';
+import { useCallback, useEffect, useState } from 'react';
 
-export const { useAll: useStatistics } = baseCrudBuilder<Statistics, null, null>()
-  .with()
-  .api(api)
-  .and()
-  .resource('Statistics')
-  .and()
-  .errors(errors.statistics)
-  .create();
+import * as api from '@/features/statistics/api/api';
+import type { Statistics } from '@/features/statistics/types/statistics';
+import { IsError } from '@/shared/lib/utils';
+
+export function useStatistics() {
+  const [statistics, setStatistics] = useState<Statistics | null>(null);
+  const [isFetching, setIsFetching] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchData = useCallback(async () => {
+    try {
+      setIsFetching(true);
+      const result = await api.all();
+
+      setStatistics(result);
+      setError(null);
+    } catch (error) {
+      const message = IsError(error) ? error.message : 'Failed to load statistics.';
+      setError(message);
+    } finally {
+      setIsFetching(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void fetchData();
+  }, [fetchData]);
+
+  return { statistics, isFetching, error, refetch: fetchData };
+}

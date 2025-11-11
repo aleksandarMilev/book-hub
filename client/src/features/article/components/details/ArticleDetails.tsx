@@ -55,17 +55,7 @@ const ArticleDetails: FC = () => {
               </MDBRow>
               <MDBRow>
                 <MDBCol md="12" className="article-image-container">
-                  {article.imageUrl ? (
-                    <img src={article.imageUrl} alt={article.title} className="article-image" />
-                  ) : (
-                    <div
-                      className="article-image-placeholder"
-                      role="img"
-                      aria-label="No image available"
-                    >
-                      No Image Available
-                    </div>
-                  )}
+                  {article.imageUrl}
                 </MDBCol>
               </MDBRow>
               <MDBRow>
@@ -102,11 +92,13 @@ const ArticleDetails: FC = () => {
                 </div>
               )}
             </MDBCardBody>
-            <DeleteModal
-              showModal={showModal}
-              toggleModal={toggleModal}
-              deleteHandler={deleteHandler}
-            />
+            {isAdmin && (
+              <DeleteModal
+                showModal={showModal}
+                toggleModal={toggleModal}
+                deleteHandler={deleteHandler}
+              />
+            )}
           </MDBCard>
         </MDBCol>
       </MDBRow>

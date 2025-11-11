@@ -12,7 +12,11 @@ import {
 import type { FC } from 'react';
 import { Link } from 'react-router-dom';
 
-const ArticleListItem: FC<ArticleSummary> = ({ id, title, introduction, imageUrl, createdOn }) => {
+import type { ArticleDetails } from '@/features/article/types/article';
+import { routes } from '@/shared/lib/constants/api';
+import { formatIsoDate } from '@/shared/lib/utils';
+
+const ArticleListItem: FC<ArticleDetails> = ({ id, title, introduction, imageUrl, createdOn }) => {
   return (
     <MDBCard className="mb-4 article-list-item shadow-sm">
       <MDBRow className="g-0">

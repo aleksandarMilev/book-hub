@@ -25,7 +25,12 @@ export const errors = {
     'reading list item',
     'Something went wrong while loading your reading list. Please refresh the page or try again later!',
   ),
-  notification: createEntityErrors('notification'),
+  notification: {
+    ...createEntityErrors('notification'),
+    markAsRead: baseErrors.general,
+    lastThree:
+      'Something went wrong while loading your last notifications. Please refresh the page or try again later!',
+  },
   profile: createEntityErrors('profile'),
   article: createEntityErrors('article'),
   author: createEntityErrors('author'),

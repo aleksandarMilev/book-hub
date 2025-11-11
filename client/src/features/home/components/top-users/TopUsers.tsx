@@ -3,7 +3,7 @@ import './TopUsers.css';
 import { type FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import * as hooks from '@/hooks/useProfile';
+import { useTopProfiles } from '@/hooks/useProfile';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
 import { routes } from '@/shared/lib/constants/api';
 import { useAuth } from '@/shared/stores/auth/auth';
@@ -11,7 +11,7 @@ import { useAuth } from '@/shared/stores/auth/auth';
 const TopUsers: FC = () => {
   const { userId } = useAuth();
   const navigate = useNavigate();
-  const { profiles, isFetching, error } = hooks.useTopProfiles();
+  const { profiles, isFetching, error } = useTopProfiles();
 
   if (isFetching || !profiles) {
     return <DefaultSpinner />;

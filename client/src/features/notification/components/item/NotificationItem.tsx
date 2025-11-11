@@ -3,15 +3,17 @@ import { MDBBtn } from 'mdb-react-ui-kit';
 import { type FC } from 'react';
 import { FaTrashAlt } from 'react-icons/fa';
 
-import * as hooks from '@/features/notifications/hooks/useCrud';
-import type { NotificationType } from '@/features/notifications/types/notification';
+import { useClickHandler } from '@/features/notification/hooks/useClickHandler';
+import { useRemove } from '@/features/notification/hooks/useCrud';
+import type { NotificationType } from '@/features/notification/types/notification';
+import DeleteModal from '@/shared/components/delete-modal/DeleteModal';
 
 const NotificationItem: FC<{
   notification: NotificationType;
   refetch: () => void | Promise<void>;
 }> = ({ notification, refetch }) => {
-  const { showModal, toggleModal, deleteHandler } = hooks.useRemove(notification.id, refetch);
-  const { onClickHandler } = hooks.useClickHandler(notification, refetch);
+  const { showModal, toggleModal, deleteHandler } = useRemove(notification.id, refetch);
+  const { onClickHandler } = useClickHandler(notification, refetch);
 
   return (
     <li

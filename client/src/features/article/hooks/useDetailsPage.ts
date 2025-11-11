@@ -4,13 +4,13 @@ import * as hooks from '@/features/article/hooks/useCrud';
 import { formatIsoDate, toIntId } from '@/shared/lib/utils';
 import { useAuth } from '@/shared/stores/auth/auth';
 
-export function useDetailsPage() {
+export const useDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const parsedId = toIntId(id);
   const disable = !parsedId;
 
   const { isAdmin } = useAuth();
-  const { data: article, isFetching, error } = hooks.useDetails(parsedId, disable);
+  const { article, isFetching, error } = hooks.useDetails(parsedId, disable);
   const { showModal, toggleModal, deleteHandler } = hooks.useRemove(
     parsedId,
     disable,
@@ -32,4 +32,4 @@ export function useDetailsPage() {
     toggleModal,
     deleteHandler,
   };
-}
+};

@@ -2,23 +2,26 @@ import './NotificationList.css';
 
 import { type FC, useState } from 'react';
 
-import * as hooks from '@/features/notifications/hooks/useCrud';
+import { useAll } from '@/features/notification/hooks/useCrud';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
 import Pagination from '@/shared/components/pagination/Pagination';
 import { pagination } from '@/shared/lib/constants/defaultValues';
 
-import NotificationItem from '../notification-item/NotificationItem';
+import NotificationItem from '../item/NotificationItem';
 
 const NotificationList: FC = () => {
   const [page, setPage] = useState<number>(pagination.defaultPageIndex);
   const pageSize = pagination.defaultPageSize;
 
-  const { notifications, totalItems, isFetching, refetch } = hooks.useAll(page, pageSize);
+  const { notifications, totalItems, isFetching, refetch } = useAll(page, pageSize);
 
   const totalPages = Math.ceil(totalItems / pageSize) || 1;
 
   const handlePageChange = (newPage: number) => {
-    if (newPage < 1 || newPage > totalPages) return;
+    if (newPage < 1 || newPage > totalPages) {
+      return;
+    }
+
     setPage(newPage);
   };
 

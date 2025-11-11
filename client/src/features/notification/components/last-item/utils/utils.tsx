@@ -1,8 +1,9 @@
 import { FaBook, FaUser } from 'react-icons/fa';
 
-import { routes } from '../../../../common/constants/api';
+import type { ResourceType } from '@/features/notification/components/last-item/types/resourceType';
+import { routes } from '@/shared/lib/constants/api';
 
-export const getIcon = (resourceType: string) => {
+export const getIcon = (resourceType: ResourceType) => {
   switch (resourceType) {
     case 'Book':
       return <FaBook className="notification-icon" />;
@@ -13,13 +14,13 @@ export const getIcon = (resourceType: string) => {
   }
 };
 
-export const mapResourceRoute = (resourceType: string) => {
+export const mapResourceRoute = (resourceType: ResourceType) => {
   switch (resourceType) {
     case 'Book':
       return routes.book;
     case 'Author':
       return routes.author;
     default:
-      return '/';
+      return routes.home;
   }
 };
