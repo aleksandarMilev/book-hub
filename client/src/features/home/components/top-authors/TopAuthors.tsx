@@ -42,46 +42,48 @@ const TopAuthors: FC = () => {
   return (
     <>
       <h2 className="text-center my-5 top-authors-title">Top Authors</h2>
-      <MDBTable align="middle" className="table-striped">
-        <MDBTableHead>
-          <tr className="table-header">
-            <th scope="col">Author</th>
-            <th scope="col">Total Books</th>
-            <th scope="col">Rating</th>
-            <th scope="col" />
-          </tr>
-        </MDBTableHead>
-        <MDBTableBody>
-          {authors.map((a) => (
-            <tr key={a.id} className="author-row">
-              <td>
-                <div className="d-flex align-items-center">
-                  <img src={a.imageUrl ?? undefined} alt={a.name} className="author-image me-3" />
-                  <div>
-                    <p className="author-name mb-1">{a.name}</p>
-                  </div>
-                </div>
-              </td>
-              <td>{a.booksCount}</td>
-              <td>
-                <RenderStars rating={a.averageRating ?? 0} />
-              </td>
-              <td>
-                <MDBBtn
-                  tag={Link}
-                  to={`${routes.author}/${a.id}`}
-                  color="dark"
-                  rounded
-                  size="lg"
-                  className="view-button"
-                >
-                  View
-                </MDBBtn>
-              </td>
+      <div className="authors-wrapper">
+        <MDBTable align="middle" className="table-striped">
+          <MDBTableHead>
+            <tr className="table-header">
+              <th scope="col">Author</th>
+              <th scope="col">Total Books</th>
+              <th scope="col">Rating</th>
+              <th scope="col" />
             </tr>
-          ))}
-        </MDBTableBody>
-      </MDBTable>
+          </MDBTableHead>
+          <MDBTableBody>
+            {authors.map((a) => (
+              <tr key={a.id} className="author-row">
+                <td>
+                  <div className="d-flex align-items-center">
+                    <img src={a.imageUrl ?? undefined} alt={a.name} className="author-image me-3" />
+                    <div>
+                      <p className="author-name mb-1">{a.name}</p>
+                    </div>
+                  </div>
+                </td>
+                <td>{a.booksCount}</td>
+                <td className="rating-cell">
+                  <RenderStars rating={a.averageRating ?? 0} />
+                </td>
+                <td>
+                  <MDBBtn
+                    tag={Link}
+                    to={`${routes.author}/${a.id}`}
+                    color="dark"
+                    rounded
+                    size="lg"
+                    className="view-button"
+                  >
+                    View
+                  </MDBBtn>
+                </td>
+              </tr>
+            ))}
+          </MDBTableBody>
+        </MDBTable>
+      </div>
     </>
   );
 };

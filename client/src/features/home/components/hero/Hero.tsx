@@ -13,7 +13,7 @@ const Hero: FC = () => {
         <div className="hero-content">
           <div className="hero-text">
             <h2 className="hero-subtitle">Find Your Next Great Read Today</h2>
-            <MDBBtn tag={Link} to={routes.book} outline size="lg" className="hero-button">
+            <MDBBtn tag={Link} to={routes.book} size="lg" className="hero-button">
               View Books
             </MDBBtn>
           </div>

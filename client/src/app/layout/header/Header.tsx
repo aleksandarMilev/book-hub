@@ -13,71 +13,98 @@ const Header: FC = () => {
   const { isAuthenticated, isAdmin, username } = useAuth();
 
   const handleToggle = () => setExpanded((prev) => !prev);
+  const closeMenu = () => setExpanded(false);
 
   return (
-    <header>
-      <Navbar expand="lg" bg="light" variant="light" expanded={expanded}>
+    <header className="navbar-custom">
+      <Navbar
+        expand="lg"
+        bg="light"
+        variant="light"
+        expanded={expanded}
+        className="shadow-sm fancy-navbar"
+      >
         <Container fluid>
-          <Navbar.Toggle aria-controls="responsive-navbar-nav" onClick={handleToggle} />
+          <Navbar.Brand as={Link} to={routes.home} className="brand-title">
+            📚 BookHub
+          </Navbar.Brand>
+          <Navbar.Toggle
+            aria-controls="responsive-navbar-nav"
+            onClick={handleToggle}
+            className="custom-toggler"
+          />
           <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav className="me-auto">
-              <Nav.Link as={Link} to={routes.home}>
+            <Nav className="me-auto main-links">
+              <Nav.Link as={Link} to={routes.home} onClick={closeMenu}>
                 Home
               </Nav.Link>
-              <Nav.Link as={Link} to={routes.book}>
+              <Nav.Link as={Link} to={routes.book} onClick={closeMenu}>
                 Books
               </Nav.Link>
-              <Nav.Link as={Link} to={routes.author}>
+              <Nav.Link as={Link} to={routes.author} onClick={closeMenu}>
                 Authors
               </Nav.Link>
-              <Nav.Link as={Link} to={routes.articles}>
+              <Nav.Link as={Link} to={routes.articles} onClick={closeMenu}>
                 Articles
               </Nav.Link>
-              <Nav.Link as={Link} to={routes.chats}>
+              <Nav.Link as={Link} to={routes.chats} onClick={closeMenu}>
                 Chats
               </Nav.Link>
-              <Nav.Link as={Link} to={routes.profiles}>
+              <Nav.Link as={Link} to={routes.profiles} onClick={closeMenu}>
                 Users
               </Nav.Link>
-              <Nav.Link as={Link} to={routes.createBook}>
+              <Nav.Link as={Link} to={routes.createBook} onClick={closeMenu}>
                 Create Book
               </Nav.Link>
-              <Nav.Link as={Link} to={routes.createAuthor}>
+              <Nav.Link as={Link} to={routes.createAuthor} onClick={closeMenu}>
                 Create Author
               </Nav.Link>
               {!isAdmin && (
-                <Nav.Link as={Link} to={routes.createChat}>
+                <Nav.Link as={Link} to={routes.createChat} onClick={closeMenu}>
                   Create Chat
                 </Nav.Link>
               )}
               {isAdmin && (
-                <Nav.Link as={Link} to={routes.admin.createArticle}>
+                <Nav.Link as={Link} to={routes.admin.createArticle} onClick={closeMenu}>
                   Create Article
                 </Nav.Link>
               )}
             </Nav>
-            <Nav className="ms-auto">
+            <Nav className="ms-auto auth-section">
               {isAuthenticated && <LastNotifications />}
               {isAuthenticated ? (
                 <>
-                  <Nav.Item>
-                    <span className="nav-link fw-bold navbar-user">Hello, {username}!</span>
-                  </Nav.Item>
+                  <span className="nav-link fw-bold navbar-user">Hello, {username}!</span>
                   {!isAdmin && (
-                    <Nav.Link as={Link} to={routes.profile}>
+                    <Nav.Link
+                      as={Link}
+                      to={routes.profile}
+                      onClick={closeMenu}
+                      className="btn-pill"
+                    >
                       My Profile
                     </Nav.Link>
                   )}
-                  <Nav.Link as={Link} to={routes.logout}>
+                  <Nav.Link
+                    as={Link}
+                    to={routes.logout}
+                    onClick={closeMenu}
+                    className="btn-pill danger"
+                  >
                     Logout
                   </Nav.Link>
                 </>
               ) : (
                 <>
-                  <Nav.Link as={Link} to={routes.register}>
+                  <Nav.Link as={Link} to={routes.register} onClick={closeMenu} className="btn-pill">
                     Register
                   </Nav.Link>
-                  <Nav.Link as={Link} to={routes.login}>
+                  <Nav.Link
+                    as={Link}
+                    to={routes.login}
+                    onClick={closeMenu}
+                    className="btn-pill highlight"
+                  >
                     Login
                   </Nav.Link>
                 </>

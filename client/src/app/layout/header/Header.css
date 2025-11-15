@@ -1,9 +1,106 @@
-.navbar-custom {
-  font-family: "Edu AU VIC WA NT Pre", cursive;
+.fancy-navbar {
+  border-radius: 0 0 16px 16px;
+  padding: 0.7rem 1rem;
+  background: linear-gradient(90deg, #6ea8fe, #9a6bff, #ff6ec7) !important;
+  color: white !important;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+
+.brand-title {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: #ffffff !important;
+  font-family: 'Poppins', sans-serif;
+  letter-spacing: 0.5px;
+  transition: transform 0.3s ease;
+}
+
+.brand-title:hover {
+  transform: scale(1.07);
+}
+
+.main-links .nav-link {
+  font-size: 1.05rem;
+  margin-right: 0.6rem;
+  padding: 0.55rem 1rem;
+  border-radius: 8px;
+  color: #ffffffd9 !important;
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.main-links .nav-link:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff !important;
+  transform: translateY(-2px);
+}
+
+.auth-section .nav-link {
+  font-size: 0.95rem;
+  color: white !important;
+}
+
+.btn-pill {
+  padding: 0.4rem 1rem !important;
+  border-radius: 25px !important;
+  background: rgba(255, 255, 255, 0.25) !important;
+  color: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+
+.btn-pill:hover {
+  background: rgba(255, 255, 255, 0.45) !important;
+  transform: translateY(-2px);
+}
+
+.btn-pill.highlight {
+  background: #ffe28a !important;
+  color: #000 !important;
+}
+
+.btn-pill.highlight:hover {
+  background: #ffd258 !important;
+}
+
+.btn-pill.danger {
+  background: #ff8a8a !important;
+}
+
+.btn-pill.danger:hover {
+  background: #ff6464 !important;
 }
 
 .navbar-user {
-  font-size: 1.2em;
+  font-size: 1.15rem;
   font-style: italic;
-  color: black;
+  color: #ffffff !important;
+}
+
+@media (max-width: 991px) {
+  .main-links .nav-link {
+    margin: 0.3rem 0;
+    padding-left: 1rem;
+  }
+
+  .auth-section {
+    margin-top: 1rem;
+  }
+}
+
+.custom-toggler {
+  filter: brightness(2);
+}
+
+.custom-toggler:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.custom-toggler .navbar-toggler-icon {
+  filter: brightness(4);
 }

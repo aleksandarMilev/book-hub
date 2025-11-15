@@ -69,20 +69,19 @@ const TopBooks: FC = () => {
               <MDBCardText>
                 <RenderStars rating={b.averageRating ?? 0} />
               </MDBCardText>
-              <MDBCardText>
-                <strong>Genres:</strong>{' '}
-                {b.genres && b.genres.length > 0 ? (
-                  b.genres.map((g, i) => (
-                    <Link key={g.id} to={`${routes.genres}/${g.id}`} className="genre-link">
-                      <span className="genre-item">
-                        {g.name}
-                        {i < b.genres.length - 1 ? ', ' : ''}
-                      </span>
-                    </Link>
-                  ))
-                ) : (
-                  <span>No genres available</span>
-                )}
+              <MDBCardText className="genres-wrapper">
+                <strong>Genres:</strong>
+                <div className="genre-list">
+                  {b.genres && b.genres.length > 0 ? (
+                    b.genres.map((g) => (
+                      <Link key={g.id} to={`${routes.genres}/${g.id}`} className="genre-link">
+                        <span className="genre-item">{g.name}</span>
+                      </Link>
+                    ))
+                  ) : (
+                    <span>No genres available</span>
+                  )}
+                </div>
               </MDBCardText>
               <MDBBtn
                 tag={Link}
