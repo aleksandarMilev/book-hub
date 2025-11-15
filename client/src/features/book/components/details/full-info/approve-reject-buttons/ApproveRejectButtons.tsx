@@ -1,6 +1,6 @@
-import { useState, type FC } from 'react';
+import { type FC, useState } from 'react';
 
-import { useApproval } from '../../../../../hooks/useBook';
+import { useApproval } from '@/features/book/hooks/useApproval';
 
 export const ApproveRejectButtons: FC<{
   id: number;
@@ -9,7 +9,7 @@ export const ApproveRejectButtons: FC<{
   showMessage: (message: string, success?: boolean) => void;
 }> = ({ id, initialIsApproved, token, showMessage }) => {
   const [isApproved, setIsApproved] = useState(initialIsApproved);
-  const { approveHandler, rejectHandler } = useApproval({ id, token, showMessage });
+  const { approveHandler, rejectHandler } = useApproval(id, token, showMessage);
 
   const handleApprove = async () => {
     const success = await approveHandler();

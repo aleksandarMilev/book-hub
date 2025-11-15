@@ -4,7 +4,7 @@ import './ReadingList.css';
 import { type FC } from 'react';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
-import BookListItem from '@/components/book/book-list-item/BookListItem';
+import BookListItem from '@/features/book/components/list-item/BookListItem';
 import { getTitle, getTotalPages } from '@/features/reading-list/components/list/utils/utils';
 import { useReadingListPage } from '@/features/reading-list/hooks/useReadingListPage';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';

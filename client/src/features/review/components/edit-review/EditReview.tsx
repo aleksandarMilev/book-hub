@@ -2,9 +2,10 @@ import type { Dispatch, FC, SetStateAction } from 'react';
 
 import ReviewForm from '@/features/review/components/review-form/ReviewForm';
 import type { Review } from '@/features/review/types/review';
+import type { IntId } from '@/shared/types/intId';
 
 const EditReview: FC<{
-  bookId: number;
+  bookId: IntId;
   refreshReviews: () => void | Promise<void>;
   existingReview: Review;
   setIsReviewEdited: Dispatch<SetStateAction<boolean>>;

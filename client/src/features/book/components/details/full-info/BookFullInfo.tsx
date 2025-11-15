@@ -1,21 +1,31 @@
+import './BookFullInfo.css';
+
+import type React from 'react';
 import type { FC } from 'react';
-import { useContext } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-import type { BookFullInfoProps } from '../../../../api/book/types/book';
-import { formatIsoDate } from '../../../../common/functions/utils';
+import type { BookDetails } from '@/features/book/types/book';
+import { toUiStatus } from '@/features/reading-list/types/readingList';
+import { RenderStars } from '@/shared/components/render-stars/RenderStars';
+import { routes } from '@/shared/lib/constants/api';
+import { formatIsoDate } from '@/shared/lib/utils';
+import { useAuth } from '@/shared/stores/auth/auth';
+import { useMessage } from '@/shared/stores/message/message';
+import type { IntId } from '@/shared/types/intId';
 
-import './BookFullInfo.css';
 import { ApproveRejectButtons } from './approve-reject-buttons/ApproveRejectButtons';
 import { ReadingListButtons } from './reading-list-buttons/ReadingListButtons';
-import { routes } from '../../../../common/constants/api';
-import { useMessage } from '../../../../contexts/message/messageContext';
-import { UserContext } from '../../../../contexts/user/userContext';
-import { RenderStars } from '../../../common/render-stars/renderStars';
 
-
-const BookFullInfo: FC<BookFullInfoProps> = ({
+const BookFullInfo: FC<{
+  book: BookDetails;
+  descriptionPreview: string;
+  showFullDescription: boolean;
+  setShowFullDescription: React.Dispatch<React.SetStateAction<boolean>>;
+  isCreator: boolean;
+  deleteHandler: () => void;
+  id: IntId;
+}> = ({
   book,
   descriptionPreview,
   showFullDescription,
@@ -25,7 +35,7 @@ const BookFullInfo: FC<BookFullInfoProps> = ({
   id,
 }) => {
   const { showMessage } = useMessage();
-  const { isAdmin, token, hasProfile } = useContext(UserContext);
+  const { isAdmin, token, hasProfile } = useAuth();
 
   const formattedDate = book.publishedDate
     ? formatIsoDate(book.publishedDate, 'Publication date unknown')
@@ -98,7 +108,7 @@ const BookFullInfo: FC<BookFullInfoProps> = ({
               ) : hasProfile ? (
                 <ReadingListButtons
                   bookId={book.id}
-                  initialReadingStatus={book.readingStatus ?? null}
+                  initialReadingStatus={toUiStatus(book.readingStatus ?? null)}
                   token={token}
                   showMessage={showMessage}
                 />

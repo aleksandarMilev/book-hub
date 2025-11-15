@@ -1,19 +1,20 @@
 
+import './ChatDetails.css';
+
 import {
+  MDBCard,
+  MDBCardBody,
+  MDBCardHeader,
   MDBCardImage,
+  MDBCol,
   MDBContainer,
   MDBRow,
-  MDBCol,
-  MDBCard,
-  MDBCardHeader,
-  MDBCardBody,
 } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
 
 import * as hooks from '../../../hooks/useChat';
-import ChatButtons from './chat-buttons/ChatButtons';
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
-import './ChatDetails.css';
+import ChatButtons from './chat-buttons/ChatButtons';
 import Message from './message/Message';
 import ParticipantListItem from './participant-list-item/ParticipantListItem';
 import SendForm from './send-form/SendForm';

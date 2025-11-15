@@ -3,7 +3,7 @@ import './GenreDetails.css';
 import { MDBBtn, MDBCardText, MDBTypography } from 'mdb-react-ui-kit';
 import { type FC } from 'react';
 
-import BookListItem from '@/components/book/book-list-item/BookListItem';
+import BookListItem from '@/features/book/components/list-item/BookListItem';
 import { useGenreDetailsPage } from '@/features/genre/hooks/useGenreDetailsPage';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
 import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect';

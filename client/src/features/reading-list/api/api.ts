@@ -1,4 +1,4 @@
-import type { Book } from '@/features/book/book';
+import type { Book } from '@/features/book/types/book';
 import type { ReadingStatusAPI } from '@/features/reading-list/types/readingList';
 import { getAuthConfig, http, processError } from '@/shared/api/http';
 import { routes } from '@/shared/lib/constants/api';

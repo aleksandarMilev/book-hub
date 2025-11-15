@@ -1,22 +1,22 @@
+import './BookListItem.css';
+
 import { type FC } from 'react';
-import { FaBook, FaUser, FaTag } from 'react-icons/fa';
+import { FaBook, FaTag, FaUser } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-import { routes } from '../../../common/constants/api';
+import type { GenreName } from '@/features/genre/types/genre';
+import { RenderStars } from '@/shared/components/render-stars/RenderStars';
+import { routes } from '@/shared/lib/constants/api';
 
-import './BookListItem.css';
-import { RenderStars } from '../../common/render-stars/renderStars';
-import type { BookListItemProps } from '../../../api/book/types/book';
-
-const BookListItem: FC<BookListItemProps> = ({
-  id,
-  imageUrl,
-  title,
-  authorName,
-  shortDescription,
-  averageRating = 0,
-  genres,
-}) => {
+const BookListItem: FC<{
+  id: number;
+  imageUrl: string;
+  title: string;
+  authorName: string;
+  shortDescription: string;
+  averageRating: number;
+  genres: GenreName[];
+}> = ({ id, imageUrl, title, authorName, shortDescription, averageRating = 0, genres }) => {
   return (
     <div className="row p-3 bg-light border rounded mb-3 shadow-sm book-list-item">
       <div className="col-md-3 col-4 mt-1 d-flex justify-content-center align-items-center">

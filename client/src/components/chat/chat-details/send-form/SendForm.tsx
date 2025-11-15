@@ -1,5 +1,5 @@
 import type { FormikProps } from 'formik';
-import { MDBTextArea, MDBBtn } from 'mdb-react-ui-kit';
+import { MDBBtn,MDBTextArea } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
 
 const SendForm: FC<{

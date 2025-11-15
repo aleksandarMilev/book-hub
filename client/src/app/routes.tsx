@@ -20,15 +20,15 @@ const Login = lazy(() => import('@/features/identity/components/login/Login'));
 const Register = lazy(() => import('@/features/identity/components/register/Register'));
 const Logout = lazy(() => import('@/features/identity/components/logout/Logout'));
 
-const ProfileList = lazy(() => import('@/features/profile/list/ProfileList'));
+const ProfileList = lazy(() => import('@/features/profile/components/list/ProfileList'));
 const ProfileDetails = lazy(() => import('@/features/profile/components/details/ProfileDetails'));
-const CreateProfile = lazy(() => import('@/features/profile/create/CreateProfile'));
-const EditProfile = lazy(() => import('@/features/profile/edit/EditProfile'));
+const CreateProfile = lazy(() => import('@/features/profile/components/create/CreateProfile'));
+const EditProfile = lazy(() => import('@/features/profile/components/edit/EditProfile'));
 
-const BookList = lazy(() => import('@/components/book/book-list/BookList'));
-const BookDetails = lazy(() => import('@/components/book/book-details/BookDetails'));
-const CreateBook = lazy(() => import('@/components/book/create-book/CreateBook'));
-const EditBook = lazy(() => import('@/components/book/edit-book/EditBook'));
+const BookList = lazy(() => import('@/features/book/components/list/BookList'));
+const BookDetails = lazy(() => import('@/features/book/components/details/BookDetails'));
+const CreateBook = lazy(() => import('@/features/book/components/create/CreateBook'));
+const EditBook = lazy(() => import('@/features/book/components/edit/EditBook'));
 
 const ReadingList = lazy(() => import('@/features/reading-list/components/list/ReadingList'));
 const ReviewList = lazy(() => import('@/features/review/components/review-list/ReviewList'));

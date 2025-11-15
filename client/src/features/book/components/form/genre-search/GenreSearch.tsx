@@ -1,20 +1,23 @@
+import './GenreSearch.css';
+
+import type { FormikProps } from 'formik';
+import type React from 'react';
 import type { FC } from 'react';
 
-import { useSearch } from '../../../../hooks/useGenre';
+import type { BookFormValues } from '@/features/book/components/form/formik/useBookFormik';
+import { useSearch } from '@/features/genre/hooks/useCrud';
+import type { GenreName } from '@/features/genre/types/genre';
 
-import './GenreSearch.css';
-import type { GenreSearchProps, NamedEntity } from '../../../../api/book/types/book';
-
-const GenreSearch: FC<GenreSearchProps> = ({
-  genres,
-  loading,
-  formik,
-  selectedGenres,
-  setSelectedGenres,
-}) => {
+const GenreSearch: FC<{
+  genres: GenreName[];
+  loading: boolean;
+  formik: FormikProps<BookFormValues>;
+  selectedGenres: GenreName[];
+  setSelectedGenres: React.Dispatch<React.SetStateAction<GenreName[]>>;
+}> = ({ genres, loading, formik, selectedGenres, setSelectedGenres }) => {
   const { searchTerm, filteredGenres, updateSearchTerm } = useSearch(genres, selectedGenres);
 
-  const selectGenre = (genre: NamedEntity) => {
+  const selectGenre = (genre: GenreName) => {
     if (selectedGenres.some((g) => g.id === genre.id)) {
       updateSearchTerm('');
       return;
@@ -31,7 +34,7 @@ const GenreSearch: FC<GenreSearchProps> = ({
     updateSearchTerm('');
   };
 
-  const removeGenre = (genre: NamedEntity) => {
+  const removeGenre = (genre: GenreName) => {
     const newSelected = selectedGenres.filter((g) => g.id !== genre.id);
     setSelectedGenres(newSelected);
 

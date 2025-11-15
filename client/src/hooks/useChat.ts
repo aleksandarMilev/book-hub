@@ -7,9 +7,9 @@ import type {
   Chat,
   ChatInput,
   ChatSummary,
+  Message,
   MessageInput,
   Participant,
-  Message,
 } from '../api/chat/types/chat';
 import type { Message as MessageModel } from '../api/chat/types/chat';
 import { routes } from '../common/constants/api';

@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type FC } from 'react';
+import { type ChangeEvent, type FC,useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 
 import image from '../../../assets/images/no-books-found.png';
@@ -7,7 +7,6 @@ import * as useSearch from '../../../hooks/useSearch';
 import { useDebounce } from '../../../shared/hooks/useDebounce';
 import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
 import Pagination from '../../common/pagination/Pagination';
-
 import ChatListItem from '../chat-list-item/ChatListItem';
 
 const ChatList: FC = () => {

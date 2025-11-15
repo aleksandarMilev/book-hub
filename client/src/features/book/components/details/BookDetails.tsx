@@ -1,52 +1,43 @@
-import { MDBCard, MDBCardBody, MDBCol, MDBContainer, MDBRow } from 'mdb-react-ui-kit';
-import { type FC, useContext, useEffect, useRef, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-
-import { routes } from '../../../common/constants/api';
-import { parseId } from '../../../common/functions/utils';
-import { UserContext } from '../../../contexts/user/userContext';
-import AuthorIntroduction from '../../../features/author/components/author-introduction/AuthorIntroduction';
-import CreateReview from '../../../features/review/components/create-review/CreateReview';
-import EditReview from '../../../features/review/components/edit-review/EditReview';
-import ReviewListItem from '../../../features/review/components/review-list-item/ReviewListItem';
-import * as hooks from '../../../hooks/useBook';
-import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
-import DeleteModal from '../../common/delete-modal/DeleteModal';
-import BookFullInfo from './book-full-info/BookFullInfo';
-
 import './BookDetails.css';
 
+import { MDBCard, MDBCardBody, MDBCol, MDBContainer, MDBRow } from 'mdb-react-ui-kit';
+import { type FC } from 'react';
+import { Link } from 'react-router-dom';
+
+import AuthorIntroduction from '@/features/author/components/author-introduction/AuthorIntroduction';
+import BookFullInfo from '@/features/book/components/details/full-info/BookFullInfo';
+import { useDetailsPage } from '@/features/book/hooks/useDetailsPage';
+import CreateReview from '@/features/review/components/create-review/CreateReview';
+import EditReview from '@/features/review/components/edit-review/EditReview';
+import ReviewListItem from '@/features/review/components/review-list-item/ReviewListItem';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import DeleteModal from '@/shared/components/delete-modal/DeleteModal';
+import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect';
+import { routes } from '@/shared/lib/constants/api';
+
 const BookDetails: FC = () => {
-  const { id } = useParams<{ id: string }>();
-  let parsedId: number | null = null;
+  const {
+    showFullDescription,
+    userId,
+    hasProfile,
+    isAdmin,
+    error,
+    isFetching,
+    book,
+    setShowFullDescription,
+    toggleModal,
+    parsedId,
+    setIsReviewEdited,
+    refreshBook,
+    firstReviewRef,
+    showModal,
+    deleteHandler,
+    setIsReviewCreated,
+  } = useDetailsPage();
 
-  try {
-    parsedId = parseId(id);
-  } catch {}
-
-  if (parsedId == null) {
-    return <div>Invalid book id.</div>;
+  if (error) {
+    return <ErrorRedirect error={error} />;
   }
-
-  const firstReviewRef = useRef<HTMLDivElement | null>(null);
-  const [showFullDescription, setShowFullDescription] = useState(false);
-
-  const { userId, hasProfile, isAdmin } = useContext(UserContext);
-
-  const { book, isFetching, refreshBook } = hooks.useFullInfo(parsedId);
-  const { showModal, toggleModal, deleteHandler } = hooks.useRemove(parsedId, book?.title);
-
-  const [isReviewCreated, setIsReviewCreated] = useState(false);
-  const [isReviewEdited, setIsReviewEdited] = useState(false);
-
-  useEffect(() => {
-    if ((isReviewCreated || isReviewEdited) && firstReviewRef.current) {
-      firstReviewRef.current.scrollIntoView({ behavior: 'smooth' });
-
-      setIsReviewCreated(false);
-      setIsReviewEdited(false);
-    }
-  }, [isReviewCreated, isReviewEdited, book?.reviews]);
 
   if (isFetching || !book) {
     return <DefaultSpinner />;
@@ -55,7 +46,7 @@ const BookDetails: FC = () => {
   const isCreator = String(userId) === String(book.creatorId);
   const previewTextLength = 200;
   const descriptionPreview = (book.longDescription ?? '').slice(0, previewTextLength);
-  const existingReview = book.reviews?.find((r: any) => String(r.creatorId) === String(userId));
+  const existingReview = book.reviews?.find((r) => String(r.creatorId) === String(userId));
 
   return (
     <MDBContainer className="my-5">
@@ -70,21 +61,21 @@ const BookDetails: FC = () => {
                 setShowFullDescription={setShowFullDescription}
                 isCreator={isCreator}
                 deleteHandler={toggleModal}
-                id={parsedId}
+                id={parsedId!}
               />
-              <AuthorIntroduction author={book.author} />
+              <AuthorIntroduction author={book.author!} />
               {!isAdmin && hasProfile ? (
                 <>
                   {!existingReview && (
                     <CreateReview
-                      bookId={parsedId}
+                      bookId={parsedId!}
                       refreshReviews={refreshBook}
                       setIsReviewCreated={setIsReviewCreated}
                     />
                   )}
                   {existingReview && (
                     <EditReview
-                      bookId={parsedId}
+                      bookId={parsedId!}
                       existingReview={existingReview}
                       setIsReviewEdited={setIsReviewEdited}
                       refreshReviews={refreshBook}
@@ -106,8 +97,8 @@ const BookDetails: FC = () => {
               <div className="reviews-section mt-4 text-center">
                 <h5 className="reviews-title">Reviews</h5>
                 {book.reviews && book.reviews.length > 0 ? (
-                  book.reviews.map((r: any, index: number) => (
-                    <div ref={index === 0 ? firstReviewRef : null} key={r.id}>
+                  book.reviews.map((r, i) => (
+                    <div ref={i === 0 ? firstReviewRef : null} key={r.id}>
                       <ReviewListItem review={r} onVote={refreshBook} />
                     </div>
                   ))

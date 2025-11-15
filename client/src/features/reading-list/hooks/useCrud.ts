@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import type { Book } from '@/features/book/book';
+import type { Book } from '@/features/book/types/book';
 import * as api from '@/features/reading-list/api/api';
 import { type ReadingStatusUI, toApiStatus } from '@/features/reading-list/types/readingList';
 import { IsCanceledError, IsError } from '@/shared/lib/utils';
