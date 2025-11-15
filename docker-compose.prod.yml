@@ -5,7 +5,7 @@ services:
     restart: always
     environment:
       ACCEPT_EULA: "y"
-      MSSQL_SA_PASSWORD: "!Passw0rd"
+      MSSQL_SA_PASSWORD: ${SA_PASSWORD}
     ports:
       - "1433:1433"
     networks:
@@ -16,7 +16,7 @@ services:
   server:
     build:
       context: .
-      dockerfile: server/BookHub/dockerfile
+      dockerfile: server/BookHub/Dockerfile.prod
     container_name: server
     depends_on:
       - sqlserver
@@ -24,26 +24,27 @@ services:
       - "8080:8080"
       - "8081:8081"
     environment:
-      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=BookHub;User Id=sa;Password=!Passw0rd;TrustServerCertificate=True;
-      - Admin__Password=admin1234
-      - Admin__Email=admin@mail.com
-      - ApplicationSettings__Secret=A_very_strong_secret_key_that_is_at_least_16_characters_long
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=${DB_NAME};User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True;
+      - Admin__Password=${ADMIN_PASSWORD}
+      - Admin__Email=${ADMIN_EMAIL}
+      - ApplicationSettings__Secret=${APP_SECRET}
     networks:
       - backend
 
   client:
     build:
       context: ./client
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
+      args:
+        VITE_REACT_APP_SERVER_URL: "http://server:8080"
     container_name: client
-    ports:
-      - "80:80"
-    environment:
-      - VITE_REACT_APP_SERVER_URL=http://localhost:8080
-    networks:
-      - backend
     depends_on:
       - server
+    ports:
+      - "80:80"
+    networks:
+      - backend
 
 networks:
   backend:

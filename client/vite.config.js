@@ -9,4 +9,16 @@ export default defineConfig({
     globals: true,
     setupFiles: './src/setupTests.ts',
   },
+  server: {
+    host: true,
+    port: 5173,
+    strictPort: true,
+    watch: {
+      usePolling: true,
+      interval: 100,
+    },
+    hmr: {
+      host: 'localhost',
+    },
+  },
 });

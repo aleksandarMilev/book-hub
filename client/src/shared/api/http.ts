@@ -20,6 +20,20 @@ export function getAuthConfig(token: string, signal?: AbortSignal): AxiosRequest
   return config;
 }
 
+export function getPublicConfig(signal?: AbortSignal): AxiosRequestConfig {
+  const config: AxiosRequestConfig = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  if (signal) {
+    config.signal = signal;
+  }
+
+  return config;
+}
+
 export function processError(error: unknown, message: string): never {
   const isRequestCanceled =
     axios.isCancel?.(error) || (error instanceof Error && error.name === 'CanceledError');

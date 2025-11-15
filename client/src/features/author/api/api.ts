@@ -4,7 +4,13 @@ import type {
   AuthorNames,
   CreateAuthor,
 } from '@/features/author/types/author.js';
-import { getAuthConfig, http, httpAdmin, processError } from '@/shared/api/http.js';
+import {
+  getAuthConfig,
+  getPublicConfig,
+  http,
+  httpAdmin,
+  processError,
+} from '@/shared/api/http.js';
 import { routes } from '@/shared/lib/constants/api.js';
 import { baseErrors, errors } from '@/shared/lib/constants/errorMessages.js';
 
@@ -19,12 +25,12 @@ export async function names(token: string, signal?: AbortSignal) {
   }
 }
 
-export async function topThree(token: string, signal?: AbortSignal) {
+export async function topThree(signal?: AbortSignal) {
   try {
     const url = `${routes.topThreeAuthors}`;
-    const response = await http.get<Author[]>(url, getAuthConfig(token, signal));
+    const { data } = await http.get<Author[]>(url, getPublicConfig(signal));
 
-    return response.data;
+    return data;
   } catch (error) {
     processError(error, errors.author.topThree);
   }
