@@ -1,4 +1,4 @@
-import type { Book } from '@/features/book/book';
+import type { Book } from '@/features/book/types/book';
 import type { Nationality } from '@/features/nationality/types/nationality';
 
 export type Author = {

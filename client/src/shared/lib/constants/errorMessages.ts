@@ -21,6 +21,7 @@ export const baseErrors = {
 
 export const errors = {
   statistics: createEntityErrors('statistic'),
+  genre: createEntityErrors('genre'),
   readingList: {
     ...createEntityErrors(
       'reading list item',
@@ -50,7 +51,10 @@ export const errors = {
     'search result',
     'Something went wrong while loading search results. Please refresh the page or try again later!',
   ),
-  book: createEntityErrors('book'),
+  book: {
+    ...createEntityErrors('book'),
+    topThree: "We couldn't load top books.",
+  },
   chat: createEntityErrors('chat'),
   review: {
     ...createEntityErrors('review'),

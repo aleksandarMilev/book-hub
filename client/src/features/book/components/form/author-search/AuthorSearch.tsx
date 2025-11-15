@@ -1,11 +1,17 @@
+import './AuthorSearch.css';
+
+import type { FormikProps } from 'formik';
 import type { FC } from 'react';
 
-import { useSearchNames } from '../../../../hooks/useAuthor';
+import { useSearchNames } from '@/features/author/hooks/useCrud';
+import type { AuthorNames } from '@/features/author/types/author';
+import type { BookFormValues } from '@/features/book/components/form/formik/useBookFormik';
 
-import './AuthorSearch.css';
-import type { AuthorSearchProps } from '../../../../api/book/types/book';
-
-const AuthorSearch: FC<AuthorSearchProps> = ({ authors, loading, formik }) => {
+const AuthorSearch: FC<{
+  authors: AuthorNames[];
+  loading: boolean;
+  formik: FormikProps<BookFormValues>;
+}> = ({ authors, loading, formik }) => {
   const {
     searchTerm,
     filteredAuthors,

@@ -1,21 +1,20 @@
-import { type FC, useState, type ChangeEvent } from 'react';
+import './BookList.css';
+
+import { type ChangeEvent, type FC, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
 
-import type { LocationState } from '../../../api/book/types/book';
+import BookListItem from '@/features/book/components/list-item/BookListItem';
+import { useByAuthor, useByGenre } from '@/features/book/hooks/useCrud';
+import { useSearchBooks } from '@/features/search/hooks/useCrud';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import Pagination from '@/shared/components/pagination/Pagination';
+import { pagination } from '@/shared/lib/constants/defaultValues';
+
 import image from '../../../assets/images/no-books-found.png';
-import { pagination } from '../../../common/constants/defaultValues';
-import * as bookHooks from '../../../hooks/useBook';
-import * as searchHooks from '../../../hooks/useSearch';
-import DefaultSpinner from '../../common/default-spinner/DefaultSpinner';
-import Pagination from '../../common/pagination/Pagination';
-
-import BookListItem from '../book-list-item/BookListItem';
-
-import './BookList.css';
 
 const BookList: FC = () => {
-  const location = useLocation() as { state: LocationState };
+  const location = useLocation();
 
   const genreId = location?.state?.genreId;
   const genreName = location?.state?.genreName;
@@ -27,13 +26,9 @@ const BookList: FC = () => {
   const [page, setPage] = useState(pagination.defaultPageIndex);
   const pageSize = pagination.defaultPageSize;
 
-  const byGenre = genreId ? bookHooks.useByGenre(genreId, page, pageSize) : undefined;
-
-  const byAuthor =
-    !genreId && authorId ? bookHooks.useByAuthor(authorId, page, pageSize) : undefined;
-
-  const bySearch =
-    !genreId && !authorId ? searchHooks.useSearchBooks(searchTerm, page, pageSize) : undefined;
+  const byGenre = useByGenre(genreId, page, pageSize, !!genreId);
+  const byAuthor = useByAuthor(authorId, page, pageSize, !genreId && !!authorId);
+  const bySearch = useSearchBooks(searchTerm, page, pageSize, !genreId && !authorId);
 
   const books = byGenre?.books ?? byAuthor?.books ?? bySearch?.items ?? [];
   const totalItems = byGenre?.totalItems ?? byAuthor?.totalItems ?? bySearch?.totalItems ?? 0;
@@ -46,7 +41,10 @@ const BookList: FC = () => {
   };
 
   const handlePageChange = (newPage: number) => {
-    if (newPage < 1 || newPage > totalPages) return;
+    if (newPage < 1 || newPage > totalPages) {
+      return;
+    }
+
     setPage(newPage);
   };
 
@@ -113,7 +111,7 @@ const BookList: FC = () => {
                 className="mb-4"
                 style={{ maxWidth: '200px', opacity: 0.7 }}
               />
-              <h5 className="text-muted">We couldn't find any books</h5>
+              <h5 className="text-muted">{"We couldn't find any books"}</h5>
               <p className="text-muted text-center" style={{ maxWidth: '400px' }}>
                 Try adjusting your search terms or exploring our collection for more options.
               </p>

@@ -1,25 +1,21 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { HttpStatusCode } from 'axios';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import * as api from '../api/book/bookApi';
-import type {
-  BookDetailsResponse,
-  BookFormValues,
-  BookListItemType,
-  BookUpsertPayload,
-  UseBookApprovalProps,
-} from '../api/book/types/book';
-import { routes } from '../common/constants/api';
-import { pagination } from '../common/constants/defaultValues';
-import { errors } from '../common/constants/messages';
-import { useMessage } from '../contexts/message/messageContext';
-import { UserContext } from '../contexts/user/userContext';
-
+import * as api from '@/features/book/api/api';
+import type { Book, BookDetails, CreateBook } from '@/features/book/types/book';
+import { routes } from '@/shared/lib/constants/api';
+import { pagination } from '@/shared/lib/constants/defaultValues';
+import { errors } from '@/shared/lib/constants/errorMessages';
+import { IsCanceledError, IsError } from '@/shared/lib/utils';
+import { useAuth } from '@/shared/stores/auth/auth';
+import { useMessage } from '@/shared/stores/message/message';
+import { HttpError } from '@/shared/types/errors/httpError';
+import type { IntId } from '@/shared/types/intId';
 
 export function useTopThree() {
-  const { token } = useContext(UserContext);
-
-  const [books, setBooks] = useState<BookListItemType[]>([]);
+  const { token } = useAuth();
+  const [books, setBooks] = useState<Book[]>([]);
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -41,7 +37,7 @@ export function useTopThree() {
           return;
         }
 
-        const message = error instanceof Error ? error.message : errors.book.topThree;
+        const message = IsError(error) ? error.message : errors.book.topThree;
         setError(message);
       } finally {
         setIsFetching(false);
@@ -58,16 +54,17 @@ export function useByGenre(
   genreId: string | number,
   page: number = pagination.defaultPageIndex,
   pageSize: number = pagination.defaultPageSize,
+  enabled: boolean,
 ) {
+  const { token } = useAuth();
   const navigate = useNavigate();
-  const { token } = useContext(UserContext);
 
-  const [books, setBooks] = useState<BookListItemType[]>([]);
+  const [books, setBooks] = useState<Book[]>([]);
   const [totalItems, setTotalItems] = useState<number>(0);
   const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
-    if (!token || !genreId) {
+    if (!token || !genreId || !enabled) {
       return;
     }
 
@@ -80,11 +77,11 @@ export function useByGenre(
         setBooks(result.items);
         setTotalItems(result.totalItems);
       } catch (error) {
-        if (error instanceof DOMException && error.name === 'AbortError') {
+        if (IsCanceledError(error)) {
           return;
         }
 
-        const message = error instanceof Error ? error.message : errors.search.badRequest;
+        const message = IsError(error) ? error.message : errors.book.all;
         navigate(routes.badRequest, { state: { message } });
       } finally {
         setIsFetching(false);
@@ -92,7 +89,7 @@ export function useByGenre(
     })();
 
     return () => controller.abort();
-  }, [genreId, page, pageSize, token, navigate]);
+  }, [genreId, page, pageSize, token, navigate, enabled]);
 
   return { books, totalItems, isFetching };
 }
@@ -101,20 +98,22 @@ export function useByAuthor(
   authorId: string | number,
   page: number = pagination.defaultPageIndex,
   pageSize: number = pagination.defaultPageSize,
+  enabled: boolean,
 ) {
+  const { token } = useAuth();
   const navigate = useNavigate();
-  const { token } = useContext(UserContext);
 
-  const [books, setBooks] = useState<BookListItemType[]>([]);
+  const [books, setBooks] = useState<Book[]>([]);
   const [totalItems, setTotalItems] = useState<number>(0);
   const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
-    if (!token || !authorId) {
+    if (!token || !authorId || !enabled) {
       return;
     }
 
     const controller = new AbortController();
+
     (async () => {
       try {
         setIsFetching(true);
@@ -134,7 +133,7 @@ export function useByAuthor(
           return;
         }
 
-        const message = error instanceof Error ? error.message : errors.search.badRequest;
+        const message = IsError(error) ? error.message : errors.book.all;
         navigate(routes.badRequest, { state: { message } });
       } finally {
         setIsFetching(false);
@@ -142,53 +141,65 @@ export function useByAuthor(
     })();
 
     return () => controller.abort();
-  }, [authorId, page, pageSize, token, navigate]);
+  }, [authorId, page, pageSize, token, navigate, enabled]);
 
   return { books, totalItems, isFetching };
 }
 
-export function useFullInfo(id: number) {
-  const navigate = useNavigate();
-  const { token, isAdmin } = useContext(UserContext);
+export function useFullInfo(id: IntId | null, disable = false) {
+  const { token, isAdmin } = useAuth();
 
-  const [book, setBook] = useState<BookDetailsResponse | null>(null);
+  const [book, setBook] = useState<BookDetails | null>(null);
   const [isFetching, setIsFetching] = useState(false);
+  const [error, setError] = useState<HttpError | null>(null);
 
   const fetchData = useCallback(async () => {
-    if (!token || !id) {
+    if (disable || !id) {
+      setError(
+        HttpError.with()
+          .message(errors.book.byId)
+          .and()
+          .name('Book Error')
+          .and()
+          .status(HttpStatusCode.NotFound)
+          .create(),
+      );
+
       return;
     }
 
     const controller = new AbortController();
+
     try {
       setIsFetching(true);
       const data = await api.details(id, token, isAdmin, controller.signal);
       setBook(data);
     } catch (error) {
-      if (error instanceof DOMException && error.name === 'AbortError') {
+      if (IsCanceledError(error)) {
         return;
       }
 
-      navigate(routes.notFound, { state: { message: errors.book.notFound } });
+      setError(error as HttpError);
     } finally {
       setIsFetching(false);
+      controller.abort();
     }
-  }, [id, token, isAdmin, navigate]);
+  }, [id, token, isAdmin, disable]);
 
   useEffect(() => {
     void fetchData();
   }, [fetchData]);
 
-  return { book, isFetching, refreshBook: fetchData };
+  return { book, isFetching, error, refreshBook: fetchData };
 }
 
 export function useCreate() {
+  const { token } = useAuth();
   const navigate = useNavigate();
-  const { token } = useContext(UserContext);
 
   const createHandler = useCallback(
-    async (bookData: BookFormValues) => {
-      const bookToSend: BookUpsertPayload = {
+    async (bookData: CreateBook) => {
+      const bookToSend: CreateBook = {
         ...bookData,
         imageUrl: bookData.imageUrl || null,
         authorId: bookData.authorId || null,
@@ -200,6 +211,8 @@ export function useCreate() {
       } catch (error) {
         const message = error instanceof Error ? error.message : errors.book.create;
         navigate(routes.badRequest, { state: { message } });
+
+        return undefined;
       }
     },
     [token, navigate],
@@ -209,12 +222,12 @@ export function useCreate() {
 }
 
 export function useEdit() {
+  const { token } = useAuth();
   const navigate = useNavigate();
-  const { token } = useContext(UserContext);
 
   const editHandler = useCallback(
-    async (id: number, bookData: BookFormValues) => {
-      const bookToSend: BookUpsertPayload = {
+    async (id: number, bookData: CreateBook) => {
+      const bookToSend: CreateBook = {
         ...bookData,
         imageUrl: bookData.imageUrl || null,
         authorId: bookData.authorId || null,
@@ -226,6 +239,8 @@ export function useEdit() {
       } catch (error) {
         const message = error instanceof Error ? error.message : errors.book.edit;
         navigate(routes.badRequest, { state: { message } });
+
+        return undefined;
       }
     },
     [token, navigate],
@@ -234,63 +249,43 @@ export function useEdit() {
   return editHandler;
 }
 
-export const useRemove = (id: number, title?: string) => {
+export const useRemove = (id: IntId | null, disable = false, title?: string) => {
+  const { token } = useAuth();
   const navigate = useNavigate();
   const { showMessage } = useMessage();
-  const { token } = useContext(UserContext);
 
   const [showModal, setShowModal] = useState(false);
   const toggleModal = useCallback(() => setShowModal((prev) => !prev), []);
 
   const deleteHandler = useCallback(async () => {
-    if (showModal) {
-      try {
-        await api.remove(id, token);
-
-        showMessage(`${title || 'This book'} was successfully deleted!`, true);
-        navigate(routes.book);
-      } catch (error) {
-        const message = error instanceof Error ? error.message : errors.book.delete;
-        showMessage(message, false);
-      } finally {
-        toggleModal();
-      }
-    } else {
-      toggleModal();
+    if (disable || !id) {
+      return;
     }
-  }, [showModal, id, token, title, navigate, showMessage, toggleModal]);
+
+    if (!showModal) {
+      toggleModal();
+      return;
+    }
+
+    const controller = new AbortController();
+
+    try {
+      await api.remove(id, token, controller.signal);
+
+      showMessage(`${title || 'This book'} was successfully deleted!`, true);
+      navigate(routes.home);
+    } catch (error) {
+      if (IsCanceledError(error)) {
+        return;
+      }
+
+      const message = IsError(error) ? error.message : errors.book.delete;
+      showMessage(message, false);
+    } finally {
+      toggleModal();
+      controller.abort();
+    }
+  }, [showModal, id, token, title, navigate, showMessage, toggleModal, disable]);
 
   return { showModal, toggleModal, deleteHandler };
 };
-
-export function useApproval({ id, token, showMessage }: UseBookApprovalProps) {
-  const navigate = useNavigate();
-
-  const approveHandler = useCallback(async () => {
-    try {
-      await api.approve(id, token);
-
-      showMessage('You have successfully approved the book!', true);
-      return true;
-    } catch {
-      showMessage('Error approving the book. Please try again!', false);
-      return false;
-    }
-  }, [id, token, showMessage]);
-
-  const rejectHandler = useCallback(async () => {
-    try {
-      await api.reject(id, token);
-
-      showMessage('You have successfully rejected the book!', true);
-      navigate(routes.home);
-
-      return true;
-    } catch {
-      showMessage('Error rejecting the book. Please try again!', false);
-      return false;
-    }
-  }, [id, token, showMessage, navigate]);
-
-  return { approveHandler, rejectHandler };
-}

@@ -1,4 +1,4 @@
-import type { Book } from '@/features/book/book';
+import type { Book } from '@/features/book/types/book';
 
 export interface GenreName {
   id: number;

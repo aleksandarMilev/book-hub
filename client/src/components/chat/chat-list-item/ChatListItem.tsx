@@ -1,12 +1,13 @@
+import './ChatListItem.css';
+
 import { MDBIcon } from 'mdb-react-ui-kit';
-import { useContext, type FC } from 'react';
+import { type FC,useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { routes } from '../../../common/constants/api';
 import { UserContext } from '../../../contexts/user/userContext';
-import DeleteModal from '../../common/delete-modal/DeleteModal';
-import './ChatListItem.css';
 import * as hooks from '../../../hooks/useChat';
+import DeleteModal from '../../common/delete-modal/DeleteModal';
 
 const ChatListItem: FC<{
   id: number;

@@ -26,6 +26,7 @@ function useSearch<T>(
   searchTerm: string,
   page: number = pagination.defaultPageIndex,
   pageSize: number = pagination.defaultPageSize,
+  enabled: boolean = true,
 ) {
   const { token } = useAuth();
   const navigate = useNavigate();
@@ -36,7 +37,7 @@ function useSearch<T>(
 
   const fetchData = useCallback(
     async (signal?: AbortSignal) => {
-      if (!token) {
+      if (!token || enabled) {
         return;
       }
 
@@ -58,7 +59,7 @@ function useSearch<T>(
         setIsFetching(false);
       }
     },
-    [token, search, searchTerm, page, pageSize, navigate],
+    [token, search, searchTerm, page, pageSize, navigate, enabled],
   );
 
   useEffect(() => {
@@ -74,8 +75,9 @@ export function useSearchBooks(
   searchTerm: string,
   page: number = pagination.defaultPageIndex,
   pageSize: number = pagination.defaultPageSize,
+  enabled: boolean,
 ) {
-  return useSearch<BooksSearchResult>(api.searchBooks, searchTerm, page, pageSize);
+  return useSearch<BooksSearchResult>(api.searchBooks, searchTerm, page, pageSize, enabled);
 }
 
 export function useSearchChats(

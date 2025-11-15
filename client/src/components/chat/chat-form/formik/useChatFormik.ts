@@ -5,7 +5,6 @@ import type { ChatInput } from '../../../../api/chat/types/chat';
 import { routes } from '../../../../common/constants/api';
 import { useMessage } from '../../../../contexts/message/messageContext';
 import * as hooks from '../../../../hooks/useChat';
-
 import { chatSchema } from '../validation/chatSchema';
 
 

@@ -14,9 +14,9 @@ import { type FC } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-import BookListItem from '@/components/book/book-list-item/BookListItem';
 import ApproveRejectButtons from '@/features/author/components/author-details/approve-reject-buttons/ApproveRejectButtons';
 import { useDetailsPage } from '@/features/author/hooks/useDetailsPage';
+import BookListItem from '@/features/book/components/list-item/BookListItem';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
 import DeleteModal from '@/shared/components/delete-modal/DeleteModal';
 import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect';

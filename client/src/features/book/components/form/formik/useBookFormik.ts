@@ -1,30 +1,46 @@
 import { useFormik } from 'formik';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import type { BookFormProps, BookFormValues, NamedEntity } from '../../../../api/book/types/book';
-import { routes } from '../../../../common/constants/api';
-import { useMessage } from '../../../../contexts/message/messageContext';
-import { UserContext } from '../../../../contexts/user/userContext';
-import * as useAuthor from '../../../../hooks/useAuthor';
-import * as useBook from '../../../../hooks/useBook';
-import * as useGenre from '../../../../hooks/useGenre';
+import { useNames } from '@/features/author/hooks/useCrud';
+import { useCreate, useEdit } from '@/features/book/hooks/useCrud';
+import type { BookDetails } from '@/features/book/types/book';
+import { useAll } from '@/features/genre/hooks/useCrud';
+import type { GenreName } from '@/features/genre/types/genre';
+import { routes } from '@/shared/lib/constants/api';
+import { useAuth } from '@/shared/stores/auth/auth';
+import { useMessage } from '@/shared/stores/message/message';
 
 import { bookSchema } from '../validation/bookSchema';
 
+export interface BookFormValues {
+  title: string;
+  authorId: number | null;
+  imageUrl: string;
+  publishedDate: string;
+  shortDescription: string;
+  longDescription: string;
+  genres: number[];
+}
 
-export const useBookFormik = ({ bookData = null, isEditMode = false }: BookFormProps) => {
+export const useBookFormik = ({
+  bookData = null,
+  isEditMode = false,
+}: {
+  bookData?: BookDetails | null;
+  isEditMode?: boolean;
+}) => {
+  const { isAdmin } = useAuth();
   const navigate = useNavigate();
-  const { isAdmin } = useContext(UserContext);
   const { showMessage } = useMessage();
 
-  const createHandler = useBook.useCreate();
-  const editHandler = useBook.useEdit();
+  const createHandler = useCreate();
+  const editHandler = useEdit();
 
-  const { authors, isFetching: authorsLoading } = useAuthor.useNames();
-  const { genres, isFetching: genresLoading } = useGenre.useAll();
+  const { authors, isFetching: authorsLoading } = useNames();
+  const { genres, isFetching: genresLoading } = useAll();
 
-  const [selectedGenres, setSelectedGenres] = useState<NamedEntity[]>([]);
+  const [selectedGenres, setSelectedGenres] = useState<GenreName[]>([]);
 
   useEffect(() => {
     if (bookData?.genres) {
@@ -35,7 +51,7 @@ export const useBookFormik = ({ bookData = null, isEditMode = false }: BookFormP
   const formik = useFormik<BookFormValues>({
     initialValues: {
       title: bookData?.title ?? '',
-      authorId: (bookData?.authorId as number | null) ?? null,
+      authorId: (bookData?.author?.id as number | null) ?? null,
       imageUrl: bookData?.imageUrl ?? '',
       publishedDate: bookData?.publishedDate ?? '',
       shortDescription: bookData?.shortDescription ?? '',

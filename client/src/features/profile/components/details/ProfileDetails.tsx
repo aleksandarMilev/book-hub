@@ -18,7 +18,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 
-import BookListItem from '@/components/book/book-list-item/BookListItem';
+import BookListItem from '@/features/book/components/list-item/BookListItem';
 import { useDetails } from '@/features/profile/hooks/useCrud';
 import type { PrivateProfile, Profile } from '@/features/profile/types/profile';
 import { useInviteToChat } from '@/hooks/useChat';

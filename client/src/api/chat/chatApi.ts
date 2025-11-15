@@ -1,3 +1,7 @@
+import { routes } from '../../common/constants/api';
+import { errors } from '../../common/constants/messages';
+import { http } from '../common/http';
+import { getAuthConfig, returnIfRequestCanceled } from '../common/utils';
 import type {
   Chat,
   ChatInput,
@@ -6,12 +10,6 @@ import type {
   MessageInput,
   Participant,
 } from './types/chat';
-
-import { routes } from '../../common/constants/api';
-import { errors } from '../../common/constants/messages';
-
-import { http } from '../common/http';
-import { getAuthConfig, returnIfRequestCanceled } from '../common/utils';
 
 
 export async function details(chatId: number, token: string, signal?: AbortSignal) {
