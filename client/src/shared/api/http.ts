@@ -1,6 +1,6 @@
 import axios, { type AxiosRequestConfig } from 'axios';
 
-import { baseAdminUrl, baseUrl } from '@/shared/lib/constants/api';
+import { baseAdminUrl, baseUrl } from '@/shared/lib/constants/api.js';
 
 export const http = axios.create({ baseURL: baseUrl });
 export const httpAdmin = axios.create({ baseURL: baseAdminUrl });
@@ -9,6 +9,20 @@ export function getAuthConfig(token: string, signal?: AbortSignal): AxiosRequest
   const config: AxiosRequestConfig = {
     headers: {
       Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  };
+
+  if (signal) {
+    config.signal = signal;
+  }
+
+  return config;
+}
+
+export function getPublicConfig(signal?: AbortSignal): AxiosRequestConfig {
+  const config: AxiosRequestConfig = {
+    headers: {
       'Content-Type': 'application/json',
     },
   };

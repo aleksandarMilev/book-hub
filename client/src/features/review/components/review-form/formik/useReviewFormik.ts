@@ -2,10 +2,10 @@ import { useFormik } from 'formik';
 import type React from 'react';
 import { useState } from 'react';
 
-import { useCreate, useEdit } from '@/features/review/hooks/useCrud';
-import type { CreateReview, Review } from '@/features/review/types/review';
+import { useCreate, useEdit } from '@/features/review/hooks/useCrud.js';
+import type { CreateReview, Review } from '@/features/review/types/review.js';
 
-import { reviewSchema } from '../validation/reviewSchema';
+import { reviewSchema } from '../validation/reviewSchema.js';
 
 export const useReviewFormik = ({
   bookId,

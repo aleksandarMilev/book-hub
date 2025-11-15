@@ -1,0 +1,54 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    restart: always
+    environment:
+      ACCEPT_EULA: "y"
+      MSSQL_SA_PASSWORD: ${SA_PASSWORD}
+    ports:
+      - "1433:1433"
+    networks:
+      - backend
+    volumes:
+      - sql_data:/var/opt/mssql
+
+  server:
+    build:
+      context: .
+      dockerfile: server/BookHub/Dockerfile.prod
+    container_name: server
+    depends_on:
+      - sqlserver
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=${DB_NAME};User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True;
+      - Admin__Password=${ADMIN_PASSWORD}
+      - Admin__Email=${ADMIN_EMAIL}
+      - ApplicationSettings__Secret=${APP_SECRET}
+    networks:
+      - backend
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.prod
+      args:
+        VITE_REACT_APP_SERVER_URL: "http://server:8080"
+    container_name: client
+    depends_on:
+      - server
+    ports:
+      - "80:80"
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  sql_data:

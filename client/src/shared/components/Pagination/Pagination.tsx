@@ -1,9 +1,12 @@
 import { type FC } from 'react';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
-import type { PaginationProps } from '@/shared/components/pagination/types/paginationProps';
-
-const Pagination: FC<PaginationProps> = ({ page, totalPages, disabled = false, onPageChange }) => {
+const Pagination: FC<{
+  page: number;
+  totalPages: number;
+  disabled?: boolean;
+  onPageChange: (newPage: number) => void;
+}> = ({ page, totalPages, disabled = false, onPageChange }) => {
   const handlePrevious = () => {
     if (page > 1) {
       onPageChange(page - 1);

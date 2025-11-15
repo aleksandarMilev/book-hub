@@ -1,7 +1,7 @@
 import { HttpStatusCode, isAxiosError } from 'axios';
 import { format } from 'date-fns';
 
-import type { IntId } from '@/shared/types/intId';
+import type { IntId } from '@/shared/types/intId.js';
 
 export function toIntId(value: unknown): IntId | null {
   let num: number;

@@ -1,8 +1,8 @@
 import { type FC, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { routes } from '@/shared/lib/constants/api';
-import { useAuth } from '@/shared/stores/auth/auth';
+import { routes } from '@/shared/lib/constants/api.js';
+import { useAuth } from '@/shared/stores/auth/auth.js';
 
 const Logout: FC = () => {
   const { logout } = useAuth();

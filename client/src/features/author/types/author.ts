@@ -1,5 +1,5 @@
-import type { Book } from '@/features/book/types/book';
-import type { Nationality } from '@/features/nationality/types/nationality';
+import type { Book } from '@/features/book/types/book.js';
+import type { Nationality } from '@/features/nationality/types/nationality.js';
 
 export type Author = {
   id: number;

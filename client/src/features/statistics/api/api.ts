@@ -1,7 +1,7 @@
-import type { Statistics } from '@/features/statistics/types/statistics';
-import { http, processError } from '@/shared/api/http';
-import { baseUrl, routes } from '@/shared/lib/constants/api';
-import { errors } from '@/shared/lib/constants/errorMessages';
+import type { Statistics } from '@/features/statistics/types/statistics.js';
+import { http, processError } from '@/shared/api/http.js';
+import { baseUrl, routes } from '@/shared/lib/constants/api.js';
+import { errors } from '@/shared/lib/constants/errorMessages.js';
 
 export async function all() {
   try {

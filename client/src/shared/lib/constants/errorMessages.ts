@@ -55,7 +55,11 @@ export const errors = {
     ...createEntityErrors('book'),
     topThree: "We couldn't load top books.",
   },
-  chat: createEntityErrors('chat'),
+  chat: {
+    ...createEntityErrors('chat'),
+    removeUser: 'Something went wrong while removing the user from the chat.',
+  },
+  chatMessage: createEntityErrors('chat message'),
   review: {
     ...createEntityErrors('review'),
     vote: {

@@ -1,8 +1,8 @@
 import { type ChangeEvent, useState } from 'react';
 
-import * as searchHooks from '@/hooks/useSearch';
-import { useDebounce } from '@/shared/hooks/useDebounce';
-import { pagination } from '@/shared/lib/constants/defaultValues';
+import { useSearchArticles } from '@/features/search/hooks/useCrud.js';
+import { useDebounce } from '@/shared/hooks/useDebounce.js';
+import { pagination } from '@/shared/lib/constants/defaultValues.js';
 
 export const useListPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -15,7 +15,7 @@ export const useListPage = () => {
     items: articles,
     totalItems,
     isFetching,
-  } = searchHooks.useSearchArticles(debouncedSearchTerm, page, pageSize);
+  } = useSearchArticles(debouncedSearchTerm, page, pageSize);
 
   const totalPages = Math.ceil(totalItems / pageSize) || 1;
 

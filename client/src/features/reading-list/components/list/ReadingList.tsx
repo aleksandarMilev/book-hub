@@ -1,15 +1,13 @@
-// features/reading-list/components/list/ReadingList.tsx
 import './ReadingList.css';
 
 import { type FC } from 'react';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
-import BookListItem from '@/features/book/components/list-item/BookListItem';
-import { getTitle, getTotalPages } from '@/features/reading-list/components/list/utils/utils';
-import { useReadingListPage } from '@/features/reading-list/hooks/useReadingListPage';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
-
-import noBooksImage from '../../assets/images/no-books-found.png';
+import noBooksImage from '@/assets/images/no-books-found.png';
+import BookListItem from '@/features/book/components/list-item/BookListItem.js';
+import { getTitle, getTotalPages } from '@/features/reading-list/components/list/utils/utils.js';
+import { useReadingListPage } from '@/features/reading-list/hooks/useReadingListPage.js';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
 
 const ReadingList: FC = () => {
   const {

@@ -1,59 +1,92 @@
 .hero-container {
-  padding: 5rem;
-  text-align: center;
+  position: relative;
+  height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-image: url('./assets/hero.jpg');
   background-size: cover;
   background-position: center;
-  height: 600px;
-  position: relative;
+  overflow: hidden;
 }
 
 .hero-mask {
-  background-color: rgba(0, 0, 0, 0.6);
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(110, 168, 254, 0.55),
+    rgba(154, 107, 255, 0.55),
+    rgba(255, 110, 199, 0.55)
+  );
+  backdrop-filter: blur(2px);
   z-index: 1;
 }
 
 .hero-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  z-index: 2;
   position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 2rem;
+  animation: fadeUp 1.2s ease forwards;
+  opacity: 0;
 }
 
 .hero-text {
+  padding: 2rem 2.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  backdrop-filter: blur(6px);
   color: white;
-  z-index: 2;
-}
-
-.hero-title {
-  margin-bottom: 1rem;
+  max-width: 600px;
+  margin: auto;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
 }
 
 .hero-subtitle {
-  margin-bottom: 1rem;
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
 }
 
 .hero-button {
-  outline: none;
   font-size: 1.25rem;
-  z-index: 2;
-  background-color: #007bff;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
+  padding: 12px 26px;
+  border-radius: 50px;
+  border: none !important;
+  background: linear-gradient(90deg, #6ea8fe, #9a6bff, #ff6ec7) !important;
+  color: #fff !important;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .hero-button:hover {
-  background-color: #0056b3;
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(255, 110, 199, 0.4);
+}
+
+@keyframes fadeUp {
+  from {
+    transform: translateY(25px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-container {
+    height: 450px;
+  }
+
+  .hero-subtitle {
+    font-size: 1.6rem;
+  }
+
+  .hero-text {
+    padding: 1.5rem 1.2rem;
+  }
 }

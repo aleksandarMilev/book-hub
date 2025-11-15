@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { routes } from '@/shared/lib/constants/api';
-import { IsDomAbortError, IsError } from '@/shared/lib/utils';
+import { routes } from '@/shared/lib/constants/api.js';
+import { IsCanceledError, IsError } from '@/shared/lib/utils.js';
 
 export function usePublicPost<TRequest, TResponse>(
   requestFunction: (data: TRequest, signal?: AbortSignal) => Promise<TResponse>,
@@ -18,7 +18,7 @@ export function usePublicPost<TRequest, TResponse>(
         const result = await requestFunction(data, controller.signal);
         await onSuccess?.(result);
       } catch (error) {
-        if (IsDomAbortError(error)) {
+        if (IsCanceledError(error)) {
           return;
         }
 

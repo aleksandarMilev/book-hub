@@ -1,8 +1,8 @@
 import { useParams } from 'react-router-dom';
 
-import { useDetails, useRemove } from '@/features/article/hooks/useCrud';
-import { formatIsoDate, toIntId } from '@/shared/lib/utils';
-import { useAuth } from '@/shared/stores/auth/auth';
+import { useDetails, useRemove } from '@/features/article/hooks/useCrud.js';
+import { formatIsoDate, toIntId } from '@/shared/lib/utils.js';
+import { useAuth } from '@/shared/stores/auth/auth.js';
 
 export const useDetailsPage = () => {
   const { id } = useParams<{ id: string }>();

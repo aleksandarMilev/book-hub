@@ -1,4 +1,4 @@
-import type { User } from '@/shared/stores/auth/types/user';
+import type { User } from '@/shared/stores/auth/types/user.js';
 
 export type AuthView = {
   userId: string;

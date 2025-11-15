@@ -2,9 +2,9 @@ import { HttpStatusCode } from 'axios';
 import type { FC } from 'react';
 import { Navigate } from 'react-router-dom';
 
-import type { ErrorComponentLocationState } from '@/shared/components/errors/types/errorComponentLocationState';
-import { routes } from '@/shared/lib/constants/api';
-import type { HttpError } from '@/shared/types/errors/httpError';
+import type { ErrorComponentLocationState } from '@/shared/components/errors/types/errorComponentLocationState.js';
+import { routes } from '@/shared/lib/constants/api.js';
+import type { HttpError } from '@/shared/types/errors/httpError.js';
 
 export const ErrorRedirect: FC<{ error: HttpError }> = ({ error }) => {
   let redirectPath = routes.badRequest;

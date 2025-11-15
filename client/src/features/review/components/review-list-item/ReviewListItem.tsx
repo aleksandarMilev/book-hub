@@ -3,12 +3,12 @@ import './ReviewListItem.css';
 import { MDBBtn, MDBIcon } from 'mdb-react-ui-kit';
 import { type FC, useState } from 'react';
 
-import { useRemove } from '@/features/review/hooks/useCrud';
-import { useVoteHandlers } from '@/features/review/hooks/useVote';
-import type { Review } from '@/features/review/types/review';
-import DeleteModal from '@/shared/components/delete-modal/DeleteModal';
-import { RenderStars } from '@/shared/components/render-stars/RenderStars';
-import { useAuth } from '@/shared/stores/auth/auth';
+import { useRemove } from '@/features/review/hooks/useCrud.js';
+import { useVoteHandlers } from '@/features/review/hooks/useVote.js';
+import type { Review } from '@/features/review/types/review.js';
+import DeleteModal from '@/shared/components/delete-modal/DeleteModal.js';
+import { RenderStars } from '@/shared/components/render-stars/RenderStars.js';
+import { useAuth } from '@/shared/stores/auth/auth.js';
 
 const ReviewListItem: FC<{
   review: Review;

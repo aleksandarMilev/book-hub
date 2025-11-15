@@ -1,9 +1,9 @@
-import type { Book } from '@/features/book/types/book';
-import type { ReadingStatusAPI } from '@/features/reading-list/types/readingList';
-import { getAuthConfig, http, processError } from '@/shared/api/http';
-import { routes } from '@/shared/lib/constants/api';
-import { errors } from '@/shared/lib/constants/errorMessages';
-import type { PaginatedResult } from '@/shared/types/paginatedResult';
+import type { Book } from '@/features/book/types/book.js';
+import type { ReadingStatusAPI } from '@/features/reading-list/types/readingList.js';
+import { getAuthConfig, http, processError } from '@/shared/api/http.js';
+import { routes } from '@/shared/lib/constants/api.js';
+import { errors } from '@/shared/lib/constants/errorMessages.js';
+import type { PaginatedResult } from '@/shared/types/paginatedResult.js';
 
 export async function get(
   userId: string,
@@ -14,7 +14,7 @@ export async function get(
   signal?: AbortSignal,
 ) {
   try {
-    const params: Record<string, string | number> = { userId, status };
+    const params: Record<string, string | number | null> = { userId, status };
     if (pageIndex != null) {
       params.pageIndex = pageIndex;
     }

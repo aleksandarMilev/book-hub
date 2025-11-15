@@ -1,6 +1,6 @@
-import type { Author } from '@/features/author/types/author';
-import type { GenreName } from '@/features/genre/types/genre';
-import type { Review } from '@/features/review/types/review';
+import type { Author } from '@/features/author/types/author.js';
+import type { GenreName } from '@/features/genre/types/genre.js';
+import type { Review } from '@/features/review/types/review.js';
 
 export interface Book {
   id: number;

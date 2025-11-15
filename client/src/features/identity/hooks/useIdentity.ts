@@ -2,13 +2,13 @@ import { jwtDecode } from 'jwt-decode';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import * as profileApi from '@/api/profile/profileApi';
-import * as identityApi from '@/features/identity/api/api';
-import type { DecodedToken, LoginResponse } from '@/features/identity/types/identity';
-import { routes } from '@/shared/lib/constants/api';
-import { IsDomAbortError, IsError } from '@/shared/lib/utils';
-import { useAuth } from '@/shared/stores/auth/auth';
-import type { User } from '@/shared/stores/auth/types/user';
+import * as identityApi from '@/features/identity/api/api.js';
+import type { DecodedToken, LoginResponse } from '@/features/identity/types/identity.js';
+import * as profileApi from '@/features/profile/api/api.js';
+import { routes } from '@/shared/lib/constants/api.js';
+import { IsDomAbortError, IsError } from '@/shared/lib/utils.js';
+import { useAuth } from '@/shared/stores/auth/auth.js';
+import type { User } from '@/shared/stores/auth/types/user.js';
 
 export const useLogin = () => {
   const navigate = useNavigate();

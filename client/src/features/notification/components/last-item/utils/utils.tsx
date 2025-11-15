@@ -1,7 +1,7 @@
 import { FaBook, FaUser } from 'react-icons/fa';
 
-import type { ResourceType } from '@/features/notification/components/last-item/types/resourceType';
-import { routes } from '@/shared/lib/constants/api';
+import type { ResourceType } from '@/features/notification/components/last-item/types/resourceType.js';
+import { routes } from '@/shared/lib/constants/api.js';
 
 export const getIcon = (resourceType: ResourceType) => {
   switch (resourceType) {

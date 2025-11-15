@@ -2,16 +2,15 @@ import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useNames } from '@/features/author/hooks/useCrud';
-import { useCreate, useEdit } from '@/features/book/hooks/useCrud';
-import type { BookDetails } from '@/features/book/types/book';
-import { useAll } from '@/features/genre/hooks/useCrud';
-import type { GenreName } from '@/features/genre/types/genre';
-import { routes } from '@/shared/lib/constants/api';
-import { useAuth } from '@/shared/stores/auth/auth';
-import { useMessage } from '@/shared/stores/message/message';
-
-import { bookSchema } from '../validation/bookSchema';
+import { useNames } from '@/features/author/hooks/useCrud.js';
+import { bookSchema } from '@/features/book/components/form/validation/bookSchema.js';
+import { useCreate, useEdit } from '@/features/book/hooks/useCrud.js';
+import type { BookDetails } from '@/features/book/types/book.js';
+import { useAll } from '@/features/genre/hooks/useCrud.js';
+import type { GenreName } from '@/features/genre/types/genre.js';
+import { routes } from '@/shared/lib/constants/api.js';
+import { useAuth } from '@/shared/stores/auth/auth.js';
+import { useMessage } from '@/shared/stores/message/message.js';
 
 export interface BookFormValues {
   title: string;

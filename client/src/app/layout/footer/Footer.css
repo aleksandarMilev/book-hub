@@ -1,46 +1,100 @@
-html,
-body {
-  height: 100%;
-  margin: 0;
+.footer-wrapper {
+  background: linear-gradient(180deg, #ffe6ff, #f0e5ff, #e0efff);
+  padding-top: 1.5rem;
+  margin-top: 12vh;
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+  box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.15);
 }
 
-body {
+.footer-social {
+  padding: 1.2rem 0;
+  background: linear-gradient(90deg, #ff7ad3, #ba76ff, #6ea8fe);
+  color: white;
+}
+
+.social-container {
   display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1rem;
 }
 
-#root {
-  flex-grow: 1;
+.social-text {
+  font-weight: 500;
 }
 
-footer {
-  flex-shrink: 0;
-  width: 100%;
+.social-links {
+  display: flex;
+  gap: 1rem;
 }
 
-footer .footer-section {
-  background-color: rgba(0, 0, 0, 0.05);
-  padding: 1rem 0;
+.social-link {
+  font-size: 1.3rem;
+  color: white !important;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.social-link:hover {
+  transform: translateY(-4px);
+  opacity: 0.85;
+}
+
+.footer-content {
+  padding: 2rem 1rem;
+}
+
+.footer-column {
+  max-width: 350px;
+}
+
+.footer-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #3a2c5a;
+  margin-bottom: 1rem;
+}
+
+.footer-description {
+  color: #444;
+}
+
+.footer-bottom {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(6px);
   text-align: center;
-  position: relative;
-  bottom: 0;
-  width: 100%;
-  margin-top: auto;
+  padding: 1rem 0;
+  font-size: 0.95rem;
+  color: #333;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.social-links a {
-  margin-right: 1rem;
+.footer-link {
+  font-weight: 600;
+  color: #6a3dff;
+  text-decoration: none !important;
+  transition:
+    color 0.3s ease,
+    opacity 0.3s ease;
 }
 
-.social-links a:last-child {
-  margin-right: 0;
+.footer-link:hover {
+  color: #a600ff;
+  opacity: 0.85;
 }
 
-footer {
-  flex-shrink: 0;
-}
+/* Responsive */
+@media (max-width: 768px) {
+  .social-container {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
 
-footer {
-  margin-top: 15vh;
+  .footer-column {
+    text-align: center;
+  }
 }

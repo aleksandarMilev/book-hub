@@ -1,4 +1,4 @@
-import type { GenreName } from '@/features/genre/types/genre';
+import type { GenreName } from '@/features/genre/types/genre.js';
 
 export type ArticlesSearchResult = {
   id: number;

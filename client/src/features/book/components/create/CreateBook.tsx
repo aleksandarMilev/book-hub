@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 
-import BookForm from '../form/BookForm';
+import BookForm from '@/features/book/components/form/BookForm.js';
 
 const CreateBook: FC = () => <BookForm />;
 

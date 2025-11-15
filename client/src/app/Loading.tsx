@@ -1,4 +1,4 @@
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
 
 export default function Loading() {
   return (

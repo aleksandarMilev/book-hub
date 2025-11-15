@@ -3,10 +3,10 @@ import './GenreDetails.css';
 import { MDBBtn, MDBCardText, MDBTypography } from 'mdb-react-ui-kit';
 import { type FC } from 'react';
 
-import BookListItem from '@/features/book/components/list-item/BookListItem';
-import { useGenreDetailsPage } from '@/features/genre/hooks/useGenreDetailsPage';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
-import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect';
+import BookListItem from '@/features/book/components/list-item/BookListItem.js';
+import { useGenreDetailsPage } from '@/features/genre/hooks/useGenreDetailsPage.js';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
+import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect.js';
 
 const GenreDetails: FC = () => {
   const { genre, isFetching, error, handleAllBooksClick } = useGenreDetailsPage();

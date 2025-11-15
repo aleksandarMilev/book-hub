@@ -12,11 +12,17 @@ import {
 import type { FC } from 'react';
 import { Link } from 'react-router-dom';
 
-import type { ArticleDetails } from '@/features/article/types/article';
-import { routes } from '@/shared/lib/constants/api';
-import { formatIsoDate } from '@/shared/lib/utils';
+import type { ArticlesSearchResult } from '@/features/search/types/search.js';
+import { routes } from '@/shared/lib/constants/api.js';
+import { formatIsoDate } from '@/shared/lib/utils.js';
 
-const ArticleListItem: FC<ArticleDetails> = ({ id, title, introduction, imageUrl, createdOn }) => {
+const ArticleListItem: FC<ArticlesSearchResult> = ({
+  id,
+  title,
+  introduction,
+  imageUrl,
+  createdOn,
+}) => {
   return (
     <MDBCard className="mb-4 article-list-item shadow-sm">
       <MDBRow className="g-0">
@@ -26,7 +32,7 @@ const ArticleListItem: FC<ArticleDetails> = ({ id, title, introduction, imageUrl
               src={imageUrl}
               alt={title}
               className="article-item-image"
-              onError={(e) => {
+              onError={(e: Event) => {
                 (e.target as HTMLImageElement).src =
                   'https://via.placeholder.com/300x200?text=No+Image';
               }}

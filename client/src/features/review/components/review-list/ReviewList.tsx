@@ -2,10 +2,10 @@ import './ReviewList.css';
 
 import { type FC } from 'react';
 
-import ReviewListItem from '@/features/review/components/review-list-item/ReviewListItem';
-import { useAll } from '@/features/review/hooks/useCrud';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
-import Pagination from '@/shared/components/pagination/Pagination';
+import ReviewListItem from '@/features/review/components/review-list-item/ReviewListItem.js';
+import { useAll } from '@/features/review/hooks/useCrud.js';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
+import Pagination from '@/shared/components/pagination/Pagination.js';
 
 const ReviewList: FC = () => {
   const {

@@ -9,8 +9,8 @@ import {
 } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
 
-import { useArticleFormik } from '@/features/article/components/form/formik/useArticleFormik';
-import type { ArticleDetails } from '@/features/article/types/article';
+import { useArticleFormik } from '@/features/article/components/form/formik/useArticleFormik.js';
+import type { ArticleDetails } from '@/features/article/types/article.js';
 
 const ArticleForm: FC<{
   article?: ArticleDetails | null;

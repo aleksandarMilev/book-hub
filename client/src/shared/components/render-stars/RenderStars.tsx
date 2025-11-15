@@ -1,9 +1,9 @@
 import type { FC } from 'react';
 import { FaRegStar, FaStar } from 'react-icons/fa';
 
-import type { RenderStarsProps } from '@/shared/components/render-stars/types/renderStarsProps';
-
-export const RenderStars: FC<RenderStarsProps> = ({ rating }) => {
+export const RenderStars: FC<{
+  rating: number;
+}> = ({ rating }) => {
   const filledStars = Math.round(rating);
   const totalStars = 5;
 

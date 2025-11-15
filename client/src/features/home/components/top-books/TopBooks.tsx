@@ -13,10 +13,10 @@ import { type FC } from 'react';
 import { FaBook, FaBookReader } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-import { useTopThree } from '@/hooks/useBook';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
-import { RenderStars } from '@/shared/components/render-stars/RenderStars';
-import { routes } from '@/shared/lib/constants/api';
+import { useTopThree } from '@/features/book/hooks/useCrud.js';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
+import { RenderStars } from '@/shared/components/render-stars/RenderStars.js';
+import { routes } from '@/shared/lib/constants/api.js';
 
 const TopBooks: FC = () => {
   const { books, isFetching, error } = useTopThree();
@@ -69,20 +69,19 @@ const TopBooks: FC = () => {
               <MDBCardText>
                 <RenderStars rating={b.averageRating ?? 0} />
               </MDBCardText>
-              <MDBCardText>
-                <strong>Genres:</strong>{' '}
-                {b.genres && b.genres.length > 0 ? (
-                  b.genres.map((g, i) => (
-                    <Link key={g.id} to={`${routes.genres}/${g.id}`} className="genre-link">
-                      <span className="genre-item">
-                        {g.name}
-                        {i < b.genres.length - 1 ? ', ' : ''}
-                      </span>
-                    </Link>
-                  ))
-                ) : (
-                  <span>No genres available</span>
-                )}
+              <MDBCardText className="genres-wrapper">
+                <strong>Genres:</strong>
+                <div className="genre-list">
+                  {b.genres && b.genres.length > 0 ? (
+                    b.genres.map((g) => (
+                      <Link key={g.id} to={`${routes.genres}/${g.id}`} className="genre-link">
+                        <span className="genre-item">{g.name}</span>
+                      </Link>
+                    ))
+                  ) : (
+                    <span>No genres available</span>
+                  )}
+                </div>
               </MDBCardText>
               <MDBBtn
                 tag={Link}

@@ -2,38 +2,35 @@ import { HttpStatusCode } from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import * as api from '@/features/book/api/api';
-import type { Book, BookDetails, CreateBook } from '@/features/book/types/book';
-import { routes } from '@/shared/lib/constants/api';
-import { pagination } from '@/shared/lib/constants/defaultValues';
-import { errors } from '@/shared/lib/constants/errorMessages';
-import { IsCanceledError, IsError } from '@/shared/lib/utils';
-import { useAuth } from '@/shared/stores/auth/auth';
-import { useMessage } from '@/shared/stores/message/message';
-import { HttpError } from '@/shared/types/errors/httpError';
-import type { IntId } from '@/shared/types/intId';
+import * as api from '@/features/book/api/api.js';
+import type { Book, BookDetails, CreateBook } from '@/features/book/types/book.js';
+import { routes } from '@/shared/lib/constants/api.js';
+import { pagination } from '@/shared/lib/constants/defaultValues.js';
+import { errors } from '@/shared/lib/constants/errorMessages.js';
+import { IsCanceledError, IsError } from '@/shared/lib/utils.js';
+import { useAuth } from '@/shared/stores/auth/auth.js';
+import { useMessage } from '@/shared/stores/message/message.js';
+import { HttpError } from '@/shared/types/errors/httpError.js';
+import type { IntId } from '@/shared/types/intId.js';
 
 export function useTopThree() {
-  const { token } = useAuth();
   const [books, setBooks] = useState<Book[]>([]);
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!token) {
-      return;
-    }
-
     const controller = new AbortController();
+
     (async () => {
       try {
         setIsFetching(true);
         setError(null);
 
-        const data = await api.topThree(token, controller.signal);
+        const data = await api.topThree(controller.signal);
+        console.log(data);
         setBooks(data);
       } catch (error) {
-        if (error instanceof DOMException && error.name === 'AbortError') {
+        if (IsCanceledError(error)) {
           return;
         }
 
@@ -45,7 +42,7 @@ export function useTopThree() {
     })();
 
     return () => controller.abort();
-  }, [token]);
+  }, []);
 
   return { books, isFetching, error };
 }
@@ -129,7 +126,7 @@ export function useByAuthor(
         setBooks(result.items);
         setTotalItems(result.totalItems);
       } catch (error) {
-        if (error instanceof DOMException && error.name === 'AbortError') {
+        if (IsCanceledError(error)) {
           return;
         }
 
@@ -209,7 +206,7 @@ export function useCreate() {
       try {
         return await api.create(bookToSend, token);
       } catch (error) {
-        const message = error instanceof Error ? error.message : errors.book.create;
+        const message = IsError(error) ? error.message : errors.book.create;
         navigate(routes.badRequest, { state: { message } });
 
         return undefined;
@@ -237,7 +234,7 @@ export function useEdit() {
       try {
         return await api.edit(id, bookToSend, token);
       } catch (error) {
-        const message = error instanceof Error ? error.message : errors.book.edit;
+        const message = IsError(error) ? error.message : errors.book.edit;
         navigate(routes.badRequest, { state: { message } });
 
         return undefined;

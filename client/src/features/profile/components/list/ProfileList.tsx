@@ -2,12 +2,12 @@ import { type ChangeEvent, type FC, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 
 import noUsersImage from '@/features/profile/components/list/assets/no-users-found.avif';
-import ProfileListItem from '@/features/profile/components/list-item/ProfileListItem';
-import { useSearchProfiles } from '@/features/search/hooks/useCrud';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
-import Pagination from '@/shared/components/pagination/Pagination';
-import { useDebounce } from '@/shared/hooks/useDebounce';
-import { pagination } from '@/shared/lib/constants/defaultValues';
+import ProfileListItem from '@/features/profile/components/list-item/ProfileListItem.js';
+import { useSearchProfiles } from '@/features/search/hooks/useCrud.js';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
+import Pagination from '@/shared/components/pagination/Pagination.js';
+import { useDebounce } from '@/shared/hooks/useDebounce.js';
+import { pagination } from '@/shared/lib/constants/defaultValues.js';
 
 const ProfileList: FC = () => {
   const [searchTerm, setSearchTerm] = useState('');

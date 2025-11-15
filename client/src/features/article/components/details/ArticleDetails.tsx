@@ -14,11 +14,11 @@ import { type FC } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-import { useDetailsPage } from '@/features/article/hooks/useDetailsPage';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
-import DeleteModal from '@/shared/components/delete-modal/DeleteModal';
-import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect';
-import { routes } from '@/shared/lib/constants/api';
+import { useDetailsPage } from '@/features/article/hooks/useDetailsPage.js';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.jsx';
+import DeleteModal from '@/shared/components/delete-modal/DeleteModal.jsx';
+import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect.jsx';
+import { routes } from '@/shared/lib/constants/api.js';
 
 const ArticleDetails: FC = () => {
   const {

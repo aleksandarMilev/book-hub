@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import * as api from '@/features/review/api/api';
-import type { CreateReview, Review } from '@/features/review/types/review';
-import { routes } from '@/shared/lib/constants/api';
-import { pagination } from '@/shared/lib/constants/defaultValues';
-import { errors } from '@/shared/lib/constants/errorMessages';
-import { IsCanceledError, IsError, toIntId } from '@/shared/lib/utils';
-import { useAuth } from '@/shared/stores/auth/auth';
-import { useMessage } from '@/shared/stores/message/message';
+import * as api from '@/features/review/api/api.js';
+import type { CreateReview, Review } from '@/features/review/types/review.js';
+import { routes } from '@/shared/lib/constants/api.js';
+import { pagination } from '@/shared/lib/constants/defaultValues.js';
+import { errors } from '@/shared/lib/constants/errorMessages.js';
+import { IsCanceledError, IsError, toIntId } from '@/shared/lib/utils.js';
+import { useAuth } from '@/shared/stores/auth/auth.js';
+import { useMessage } from '@/shared/stores/message/message.js';
 
 export const useAll = () => {
   const { token } = useAuth();

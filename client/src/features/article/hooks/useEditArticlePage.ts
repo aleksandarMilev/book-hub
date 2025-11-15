@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 
-import * as hooks from '@/features/article/hooks/useCrud';
-import { toIntId } from '@/shared/lib/utils';
+import * as hooks from '@/features/article/hooks/useCrud.js';
+import { toIntId } from '@/shared/lib/utils.js';
 
 export const useEditArticlePage = () => {
   const { id } = useParams<{ id: string }>();

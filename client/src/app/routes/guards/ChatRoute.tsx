@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 
-import * as api from '@/api/chat/chatApi';
-import type { JsxElementProps } from '@/app/types/jsxElementProps';
-import { routes } from '@/shared/lib/constants/api';
-import { useAuth } from '@/shared/stores/auth/auth';
+import type { JsxElementProps } from '@/app/types/jsxElementProps.js';
+import * as api from '@/features/chat/api/api.js';
+import { routes } from '@/shared/lib/constants/api.js';
+import { useAuth } from '@/shared/stores/auth/auth.js';
 
 export default function ChatRoute({ element }: JsxElementProps) {
   const { id } = useParams<{ id: string }>();

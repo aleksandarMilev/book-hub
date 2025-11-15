@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { useList } from '@/features/reading-list/hooks/useCrud';
-import type { ReadingStatusUI } from '@/features/reading-list/types/readingList';
-import { pagination } from '@/shared/lib/constants/defaultValues';
+import { useList } from '@/features/reading-list/hooks/useCrud.js';
+import type { ReadingStatusUI } from '@/features/reading-list/types/readingList.js';
+import { pagination } from '@/shared/lib/constants/defaultValues.js';
 
 export const useReadingListPage = () => {
   const location = useLocation();

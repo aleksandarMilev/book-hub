@@ -2,24 +2,22 @@ import { HttpStatusCode } from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import * as api from '@/features/author/api/api';
+import * as api from '@/features/author/api/api.js';
 import type {
   Author,
   AuthorDetails,
   AuthorNames,
   CreateAuthor,
-} from '@/features/author/types/author';
-import { routes } from '@/shared/lib/constants/api';
-import { errors } from '@/shared/lib/constants/errorMessages';
-import { IsCanceledError, IsError } from '@/shared/lib/utils';
-import { useAuth } from '@/shared/stores/auth/auth';
-import { useMessage } from '@/shared/stores/message/message';
-import { HttpError } from '@/shared/types/errors/httpError';
-import type { IntId } from '@/shared/types/intId';
+} from '@/features/author/types/author.js';
+import { routes } from '@/shared/lib/constants/api.js';
+import { errors } from '@/shared/lib/constants/errorMessages.js';
+import { IsCanceledError, IsError } from '@/shared/lib/utils.js';
+import { useAuth } from '@/shared/stores/auth/auth.js';
+import { useMessage } from '@/shared/stores/message/message.js';
+import { HttpError } from '@/shared/types/errors/httpError.js';
+import type { IntId } from '@/shared/types/intId.js';
 
 export const useTopThree = () => {
-  const { token } = useAuth();
-
   const [authors, setAuthors] = useState<Author[]>([]);
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -30,12 +28,16 @@ export const useTopThree = () => {
       try {
         setIsFetching(true);
 
-        const data = await api.topThree(token, controller.signal);
+        const data = await api.topThree(controller.signal);
         if (data) {
           setAuthors(data);
         }
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to load authors.';
+        if (IsCanceledError(error)) {
+          return;
+        }
+
+        const message = IsError(error) ? error.message : 'Failed to load authors.';
         setError(message);
       } finally {
         setIsFetching(false);
@@ -44,7 +46,7 @@ export const useTopThree = () => {
 
     void fetchAuthors();
     return () => controller.abort();
-  }, [token]);
+  }, []);
 
   return { authors, isFetching, error };
 };
@@ -67,7 +69,11 @@ export const useNames = () => {
           setAuthors(data);
         }
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to load author names.';
+        if (IsCanceledError(error)) {
+          return;
+        }
+
+        const message = IsError(error) ? error.message : 'Failed to load author names.';
         navigate(routes.badRequest, { state: { message } });
       } finally {
         setIsFetching(false);
@@ -119,33 +125,31 @@ export const useSearchNames = (authors: AuthorNames[]) => {
 };
 
 export const useDetails = (id: IntId | null, disable = false) => {
-  const navigate = useNavigate();
   const { token, isAdmin } = useAuth();
-
   const [author, setAuthor] = useState<AuthorDetails | null>(null);
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState<HttpError | null>(null);
 
   useEffect(() => {
-    if (disable || !id) {
-      setError(
-        HttpError.with()
-          .message(errors.author.byId)
-          .and()
-          .name('Author Error')
-          .and()
-          .status(HttpStatusCode.NotFound)
-          .create(),
-      );
-
-      return;
-    }
-
     const controller = new AbortController();
 
-    (async () => {
+    const fetchData = async () => {
       try {
         setIsFetching(true);
+
+        if (disable || !id) {
+          setError(
+            HttpError.with()
+              .message(errors.author.byId)
+              .and()
+              .name('Author Error')
+              .and()
+              .status(HttpStatusCode.NotFound)
+              .create(),
+          );
+          return;
+        }
+
         const data = await api.details(id, token, isAdmin, controller.signal);
         setAuthor(data);
       } catch (error) {
@@ -157,10 +161,12 @@ export const useDetails = (id: IntId | null, disable = false) => {
       } finally {
         setIsFetching(false);
       }
-    })();
+    };
+
+    void fetchData();
 
     return () => controller.abort();
-  }, [id, token, isAdmin, navigate, disable]);
+  }, [id, token, isAdmin, disable]);
 
   return { author, isFetching, error };
 };
@@ -180,7 +186,7 @@ export const useCreate = () => {
       try {
         return await api.create(authorToSend, token);
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to create author.';
+        const message = IsError(error) ? error.message : 'Failed to create author.';
         navigate(routes.badRequest, { state: { message } });
 
         return undefined;
@@ -207,7 +213,7 @@ export const useEdit = () => {
       try {
         await api.edit(id, authorToSend, token);
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to edit author.';
+        const message = IsError(error) ? error.message : 'Failed to edit author.';
         navigate(routes.badRequest, { state: { message } });
       }
     },

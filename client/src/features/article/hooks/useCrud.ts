@@ -2,15 +2,15 @@ import { HttpStatusCode } from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import * as api from '@/features/article/api/api';
-import type { ArticleDetails, CreateArticle } from '@/features/article/types/article';
-import { routes } from '@/shared/lib/constants/api';
-import { errors } from '@/shared/lib/constants/errorMessages';
-import { IsCanceledError, IsError } from '@/shared/lib/utils';
-import { useAuth } from '@/shared/stores/auth/auth';
-import { useMessage } from '@/shared/stores/message/message';
-import { HttpError } from '@/shared/types/errors/httpError';
-import type { IntId } from '@/shared/types/intId';
+import * as api from '@/features/article/api/api.js';
+import type { ArticleDetails, CreateArticle } from '@/features/article/types/article.js';
+import { routes } from '@/shared/lib/constants/api.js';
+import { errors } from '@/shared/lib/constants/errorMessages.js';
+import { IsCanceledError, IsError } from '@/shared/lib/utils.js';
+import { useAuth } from '@/shared/stores/auth/auth.js';
+import { useMessage } from '@/shared/stores/message/message.js';
+import { HttpError } from '@/shared/types/errors/httpError.js';
+import type { IntId } from '@/shared/types/intId.js';
 
 export const useDetails = (id: IntId | null, disable = false) => {
   const { token } = useAuth();

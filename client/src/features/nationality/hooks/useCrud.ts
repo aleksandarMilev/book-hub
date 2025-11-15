@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import * as api from '@/features/nationality/api/api';
-import type { Nationality } from '@/features/nationality/types/nationality';
-import { useDebounce } from '@/shared/hooks/useDebounce';
-import { routes } from '@/shared/lib/constants/api';
-import { IsCanceledError, IsError } from '@/shared/lib/utils';
-import { useAuth } from '@/shared/stores/auth/auth';
+import * as api from '@/features/nationality/api/api.js';
+import type { Nationality } from '@/features/nationality/types/nationality.js';
+import { useDebounce } from '@/shared/hooks/useDebounce.js';
+import { routes } from '@/shared/lib/constants/api.js';
+import { IsCanceledError, IsError } from '@/shared/lib/utils.js';
+import { useAuth } from '@/shared/stores/auth/auth.js';
 
 export function useAll() {
   const { token } = useAuth();
