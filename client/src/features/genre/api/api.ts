@@ -1,7 +1,7 @@
-import type { GenreDetails, GenreName } from '@/features/genre/types/genre';
-import { getAuthConfig, http, processError } from '@/shared/api/http';
-import { routes } from '@/shared/lib/constants/api';
-import { errors } from '@/shared/lib/constants/errorMessages';
+import type { GenreDetails, GenreName } from '@/features/genre/types/genre.js';
+import { getAuthConfig, http, processError } from '@/shared/api/http.js';
+import { routes } from '@/shared/lib/constants/api.js';
+import { errors } from '@/shared/lib/constants/errorMessages.js';
 
 export const all = async (token: string, signal?: AbortSignal) => {
   try {

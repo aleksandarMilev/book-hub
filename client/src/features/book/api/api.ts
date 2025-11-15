@@ -1,10 +1,10 @@
-import { getAuthConfig, http, httpAdmin, processError } from '@/shared/api/http';
-import { routes } from '@/shared/lib/constants/api';
-import { pagination } from '@/shared/lib/constants/defaultValues';
-import { baseErrors, errors } from '@/shared/lib/constants/errorMessages';
-import type { PaginatedResult } from '@/shared/types/paginatedResult';
+import { getAuthConfig, http, httpAdmin, processError } from '@/shared/api/http.js';
+import { routes } from '@/shared/lib/constants/api.js';
+import { pagination } from '@/shared/lib/constants/defaultValues.js';
+import { baseErrors, errors } from '@/shared/lib/constants/errorMessages.js';
+import type { PaginatedResult } from '@/shared/types/paginatedResult.js';
 
-import type { Book, BookDetails, CreateBook } from '../types/book';
+import type { Book, BookDetails, CreateBook } from '../types/book.js';
 
 export const topThree = async (token: string, signal?: AbortSignal) => {
   try {

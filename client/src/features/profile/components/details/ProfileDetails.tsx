@@ -1,6 +1,5 @@
 import './ProfileDetails.css';
 
-import defaultProfilePicture from '@assets/default-profile-picture.png';
 import {
   faBirthdayCake,
   faBook,
@@ -18,14 +17,16 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 
-import BookListItem from '@/features/book/components/list-item/BookListItem';
-import { useDetails } from '@/features/profile/hooks/useCrud';
-import type { PrivateProfile, Profile } from '@/features/profile/types/profile';
-import { useInviteToChat } from '@/hooks/useChat';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
-import DeleteModal from '@/shared/components/delete-modal/DeleteModal';
-import { routes } from '@/shared/lib/constants/api';
-import { useMessage } from '@/shared/stores/message/message';
+import BookListItem from '@/features/book/components/list-item/BookListItem.js';
+import { useInviteToChat } from '@/features/chat/hooks/useCrud.js';
+import defaultProfilePicture from '@/features/profile/components/details/assets/default-profile-picture.png';
+import { useDetails } from '@/features/profile/hooks/useCrud.js';
+import type { PrivateProfile, Profile } from '@/features/profile/types/profile.js';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
+import DeleteModal from '@/shared/components/delete-modal/DeleteModal.js';
+import { routes } from '@/shared/lib/constants/api.js';
+import { IsError } from '@/shared/lib/utils.js';
+import { useMessage } from '@/shared/stores/message/message.js';
 
 const isFullProfile = (profile: Profile | PrivateProfile | null | undefined): profile is Profile =>
   !!profile && 'phoneNumber' in profile;
@@ -72,7 +73,6 @@ const ProfileDetails = () => {
                     Delete
                   </button>
                 )}
-
                 <div className="d-flex flex-column align-items-center text-center">
                   <img
                     src={profile?.imageUrl || defaultProfilePicture}
@@ -84,7 +84,6 @@ const ProfileDetails = () => {
                     <h4>{profile ? `${profile.firstName} ${profile.lastName}` : 'Your Name'}</h4>
                   </div>
                 </div>
-
                 {canSeePrivate ? (
                   <>
                     <hr className="my-4" />
@@ -98,7 +97,6 @@ const ProfileDetails = () => {
                           {full ? full.phoneNumber || 'Your phone number' : 'Your phone number'}
                         </span>
                       </li>
-
                       <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                         <h6 className="mb-0">
                           <FontAwesomeIcon icon={faBirthdayCake} className="me-2 text-danger" />
@@ -108,7 +106,6 @@ const ProfileDetails = () => {
                           {full ? full.dateOfBirth || 'Your date of birth' : 'Your date of birth'}
                         </span>
                       </li>
-
                       <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                         <h6 className="mb-0">
                           <FontAwesomeIcon icon={faGlobe} className="me-2 text-info" />
@@ -124,7 +121,6 @@ const ProfileDetails = () => {
                           )}
                         </span>
                       </li>
-
                       <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                         <h6 className="mb-0">
                           <FontAwesomeIcon icon={faLock} className="me-2 text-warning" />
@@ -135,7 +131,6 @@ const ProfileDetails = () => {
                         </span>
                       </li>
                     </ul>
-
                     <hr className="my-4" />
                     <div className="list-group-item d-flex flex-column align-items-start">
                       <h6 className="mb-0">
@@ -150,7 +145,6 @@ const ProfileDetails = () => {
                         )}
                       </span>
                     </div>
-
                     <hr className="my-4" />
                     <div className="statistics-section">
                       <h6 className="mb-0">
@@ -212,7 +206,6 @@ const ProfileDetails = () => {
                         </div>
                       </div>
                     </div>
-
                     <hr className="my-4" />
                     <div className="d-flex justify-content-around mt-3">
                       {profile && userId !== profile.id && !profile.isPrivate && (
@@ -238,7 +231,6 @@ const ProfileDetails = () => {
                           </div>
                         </section>
                       )}
-
                       {profile && userId === profile.id && (
                         <>
                           <Link to={routes.editProfile} className="btn btn-outline-primary">
@@ -255,7 +247,6 @@ const ProfileDetails = () => {
                           </button>
                         </>
                       )}
-
                       {!profile && (
                         <Link to={routes.createProfile} className="btn btn-outline-success">
                           <FontAwesomeIcon icon={faPlus} className="me-2" />
@@ -263,7 +254,6 @@ const ProfileDetails = () => {
                         </Link>
                       )}
                     </div>
-
                     {profile && (
                       <>
                         {readingLoading ? (
@@ -279,7 +269,6 @@ const ProfileDetails = () => {
                               : 'No currently reading books'}
                           </div>
                         )}
-
                         <div onClick={onNavigateToRead} className="book-stats favorite-stats">
                           To Read ({full ? (full.toReadBooksCount ?? 0) : 0})
                         </div>
@@ -299,7 +288,6 @@ const ProfileDetails = () => {
           </div>
         </div>
       </div>
-
       <DeleteModal
         showModal={showModal}
         toggleModal={toggleModal}
@@ -307,8 +295,8 @@ const ProfileDetails = () => {
           try {
             await deleteHandler();
             showMessage('The profile was successfully deleted!', true);
-          } catch (error: unknown) {
-            const message = error instanceof Error ? error.message : 'Failed to delete profile.';
+          } catch (error) {
+            const message = IsError(error) ? error.message : 'Failed to delete profile.';
             showMessage(message, false);
           }
         }}

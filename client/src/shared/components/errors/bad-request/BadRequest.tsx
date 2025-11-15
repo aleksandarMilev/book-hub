@@ -1,8 +1,8 @@
 import type { FC } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-import type { ErrorComponentLocationState } from '@/shared/components/errors/types/errorComponentLocationState';
-import { routes } from '@/shared/lib/constants/api';
+import type { ErrorComponentLocationState } from '@/shared/components/errors/types/errorComponentLocationState.js';
+import { routes } from '@/shared/lib/constants/api.js';
 
 import image from './bad-request.png';
 

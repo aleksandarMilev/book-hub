@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { useFullInfo, useRemove } from '@/features/book/hooks/useCrud';
-import { toIntId } from '@/shared/lib/utils';
-import { useAuth } from '@/shared/stores/auth/auth';
+import { useFullInfo, useRemove } from '@/features/book/hooks/useCrud.js';
+import { toIntId } from '@/shared/lib/utils.js';
+import { useAuth } from '@/shared/stores/auth/auth.js';
 
 export const useDetailsPage = () => {
   const { id } = useParams<{ id: string }>();

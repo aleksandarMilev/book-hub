@@ -1,7 +1,7 @@
 import { type Dispatch, type SetStateAction, useCallback } from 'react';
 
-import * as api from '@/features/review/api/api';
-import { useAuth } from '@/shared/stores/auth/auth';
+import * as api from '@/features/review/api/api.js';
+import { useAuth } from '@/shared/stores/auth/auth.js';
 
 export const useUpvote = () => {
   const { token } = useAuth();

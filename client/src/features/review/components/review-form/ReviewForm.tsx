@@ -4,8 +4,8 @@ import { MDBBtn, MDBIcon, MDBTextArea } from 'mdb-react-ui-kit';
 import type React from 'react';
 import type { Dispatch, FC, SetStateAction } from 'react';
 
-import { useReviewFormik } from '@/features/review/components/review-form/formik/useReviewFormik';
-import type { Review } from '@/features/review/types/review';
+import { useReviewFormik } from '@/features/review/components/review-form/formik/useReviewFormik.js';
+import type { Review } from '@/features/review/types/review.js';
 
 const ReviewForm: FC<{
   bookId: number;

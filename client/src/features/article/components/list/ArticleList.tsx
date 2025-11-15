@@ -1,12 +1,11 @@
 import { type FC } from 'react';
 import { FaSearch } from 'react-icons/fa';
 
-import { useListPage } from '@/features/article/hooks/useListPage';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
-import Pagination from '@/shared/components/pagination/Pagination';
-
-import image from '../../../assets/images/no-books-found.png';
-import ArticleListItem from '../list-item/ArticleListItem';
+import image from '@/assets/images/no-books-found.png';
+import ArticleListItem from '@/features/article/components/list-item/ArticleListItem.js';
+import { useListPage } from '@/features/article/hooks/useListPage.js';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.jsx';
+import Pagination from '@/shared/components/pagination/Pagination.jsx';
 
 const ArticleList: FC = () => {
   const {

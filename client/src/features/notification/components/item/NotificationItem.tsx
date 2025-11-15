@@ -3,10 +3,10 @@ import { MDBBtn } from 'mdb-react-ui-kit';
 import { type FC } from 'react';
 import { FaTrashAlt } from 'react-icons/fa';
 
-import { useClickHandler } from '@/features/notification/hooks/useClickHandler';
-import { useRemove } from '@/features/notification/hooks/useCrud';
-import type { NotificationType } from '@/features/notification/types/notification';
-import DeleteModal from '@/shared/components/delete-modal/DeleteModal';
+import { useClickHandler } from '@/features/notification/hooks/useClickHandler.js';
+import { useRemove } from '@/features/notification/hooks/useCrud.js';
+import type { NotificationType } from '@/features/notification/types/notification.js';
+import DeleteModal from '@/shared/components/delete-modal/DeleteModal.js';
 
 const NotificationItem: FC<{
   notification: NotificationType;

@@ -4,7 +4,7 @@ import { MDBBtn } from 'mdb-react-ui-kit';
 import { type FC } from 'react';
 import { Link } from 'react-router-dom';
 
-import { routes } from '@/shared/lib/constants/api';
+import { routes } from '@/shared/lib/constants/api.js';
 
 const Hero: FC = () => {
   return (

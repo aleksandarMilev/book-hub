@@ -1,9 +1,9 @@
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import * as api from '@/features/author/api/api';
-import { routes } from '@/shared/lib/constants/api';
-import { IsError } from '@/shared/lib/utils';
+import * as api from '@/features/author/api/api.js';
+import { routes } from '@/shared/lib/constants/api.js';
+import { IsError } from '@/shared/lib/utils.js';
 
 export const useAuthorApproval = ({
   authorId,

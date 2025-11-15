@@ -1,6 +1,6 @@
 import { type FC, useState } from 'react';
 
-import { useApproval } from '@/features/book/hooks/useApproval';
+import { useApproval } from '@/features/book/hooks/useApproval.js';
 
 export const ApproveRejectButtons: FC<{
   id: number;

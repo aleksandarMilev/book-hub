@@ -9,10 +9,11 @@ import {
   MDBInput,
   MDBRow,
 } from 'mdb-react-ui-kit';
+import type React from 'react';
 import type { FC } from 'react';
 
-import { useProfileFormik } from '@/features/profile/components/form/formik/useProfileFormik';
-import type { Profile } from '@/features/profile/types/profile';
+import { useProfileFormik } from '@/features/profile/components/form/formik/useProfileFormik.js';
+import type { Profile } from '@/features/profile/types/profile.js';
 
 const ProfileForm: FC<{ profile?: Profile | null; isEditMode?: boolean }> = ({
   profile = null,
@@ -79,7 +80,9 @@ const ProfileForm: FC<{ profile?: Profile | null; isEditMode?: boolean }> = ({
                         id="imageUrl"
                         type="text"
                         value={formik.values.imageUrl ?? ''}
-                        onChange={(e) => formik.setFieldValue('imageUrl', e.target.value || '')}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          formik.setFieldValue('imageUrl', e.target?.value ?? '')
+                        }
                         onBlur={formik.handleBlur}
                         className={
                           formik.touched.imageUrl && formik.errors.imageUrl ? 'is-invalid' : ''
@@ -139,7 +142,7 @@ const ProfileForm: FC<{ profile?: Profile | null; isEditMode?: boolean }> = ({
                         id="socialMediaUrl"
                         type="text"
                         value={formik.values.socialMediaUrl ?? ''}
-                        onChange={(e) =>
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                           formik.setFieldValue('socialMediaUrl', e.target.value || null)
                         }
                         onBlur={formik.handleBlur}

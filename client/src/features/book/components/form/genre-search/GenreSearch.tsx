@@ -4,9 +4,9 @@ import type { FormikProps } from 'formik';
 import type React from 'react';
 import type { FC } from 'react';
 
-import type { BookFormValues } from '@/features/book/components/form/formik/useBookFormik';
-import { useSearch } from '@/features/genre/hooks/useCrud';
-import type { GenreName } from '@/features/genre/types/genre';
+import type { BookFormValues } from '@/features/book/components/form/formik/useBookFormik.js';
+import { useSearch } from '@/features/genre/hooks/useCrud.js';
+import type { GenreName } from '@/features/genre/types/genre.js';
 
 const GenreSearch: FC<{
   genres: GenreName[];

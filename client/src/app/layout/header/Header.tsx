@@ -4,9 +4,9 @@ import { type FC, useState } from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-import LastNotifications from '@/features/notifications/components/last-notifications/LastNotifications';
-import { routes } from '@/shared/lib/constants/api';
-import { useAuth } from '@/shared/stores/auth/auth';
+import LastNotifications from '@/features/notification/components/last-list/LastNotifications.js';
+import { routes } from '@/shared/lib/constants/api.js';
+import { useAuth } from '@/shared/stores/auth/auth.js';
 
 const Header: FC = () => {
   const [expanded, setExpanded] = useState<boolean>(false);

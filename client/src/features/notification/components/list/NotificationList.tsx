@@ -2,12 +2,12 @@ import './NotificationList.css';
 
 import { type FC, useState } from 'react';
 
-import { useAll } from '@/features/notification/hooks/useCrud';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
-import Pagination from '@/shared/components/pagination/Pagination';
-import { pagination } from '@/shared/lib/constants/defaultValues';
+import { useAll } from '@/features/notification/hooks/useCrud.js';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
+import Pagination from '@/shared/components/pagination/Pagination.js';
+import { pagination } from '@/shared/lib/constants/defaultValues.js';
 
-import NotificationItem from '../item/NotificationItem';
+import NotificationItem from '../item/NotificationItem.js';
 
 const NotificationList: FC = () => {
   const [page, setPage] = useState<number>(pagination.defaultPageIndex);

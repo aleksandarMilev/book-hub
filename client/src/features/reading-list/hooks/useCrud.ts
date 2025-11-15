@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import type { Book } from '@/features/book/types/book';
-import * as api from '@/features/reading-list/api/api';
-import { type ReadingStatusUI, toApiStatus } from '@/features/reading-list/types/readingList';
-import { IsCanceledError, IsError } from '@/shared/lib/utils';
-import { useAuth } from '@/shared/stores/auth/auth';
+import type { Book } from '@/features/book/types/book.js';
+import * as api from '@/features/reading-list/api/api.js';
+import { type ReadingStatusUI, toApiStatus } from '@/features/reading-list/types/readingList.js';
+import { IsCanceledError, IsError } from '@/shared/lib/utils.js';
+import { useAuth } from '@/shared/stores/auth/auth.js';
 
 export function useList(
   statusUI: ReadingStatusUI,

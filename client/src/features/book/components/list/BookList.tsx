@@ -4,14 +4,13 @@ import { type ChangeEvent, type FC, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
 
-import BookListItem from '@/features/book/components/list-item/BookListItem';
-import { useByAuthor, useByGenre } from '@/features/book/hooks/useCrud';
-import { useSearchBooks } from '@/features/search/hooks/useCrud';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
-import Pagination from '@/shared/components/pagination/Pagination';
-import { pagination } from '@/shared/lib/constants/defaultValues';
-
-import image from '../../../assets/images/no-books-found.png';
+import image from '@/assets/images/no-books-found.png';
+import BookListItem from '@/features/book/components/list-item/BookListItem.js';
+import { useByAuthor, useByGenre } from '@/features/book/hooks/useCrud.js';
+import { useSearchBooks } from '@/features/search/hooks/useCrud.js';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
+import Pagination from '@/shared/components/pagination/Pagination.js';
+import { pagination } from '@/shared/lib/constants/defaultValues.js';
 
 const BookList: FC = () => {
   const location = useLocation();

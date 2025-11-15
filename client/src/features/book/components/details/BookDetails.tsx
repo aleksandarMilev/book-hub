@@ -4,16 +4,16 @@ import { MDBCard, MDBCardBody, MDBCol, MDBContainer, MDBRow } from 'mdb-react-ui
 import { type FC } from 'react';
 import { Link } from 'react-router-dom';
 
-import AuthorIntroduction from '@/features/author/components/author-introduction/AuthorIntroduction';
-import BookFullInfo from '@/features/book/components/details/full-info/BookFullInfo';
-import { useDetailsPage } from '@/features/book/hooks/useDetailsPage';
-import CreateReview from '@/features/review/components/create-review/CreateReview';
-import EditReview from '@/features/review/components/edit-review/EditReview';
-import ReviewListItem from '@/features/review/components/review-list-item/ReviewListItem';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
-import DeleteModal from '@/shared/components/delete-modal/DeleteModal';
-import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect';
-import { routes } from '@/shared/lib/constants/api';
+import AuthorIntroduction from '@/features/author/components/introduction/AuthorIntroduction.js';
+import BookFullInfo from '@/features/book/components/details/full-info/BookFullInfo.js';
+import { useDetailsPage } from '@/features/book/hooks/useDetailsPage.js';
+import CreateReview from '@/features/review/components/create-review/CreateReview.js';
+import EditReview from '@/features/review/components/edit-review/EditReview.js';
+import ReviewListItem from '@/features/review/components/review-list-item/ReviewListItem.js';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
+import DeleteModal from '@/shared/components/delete-modal/DeleteModal.js';
+import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect.js';
+import { routes } from '@/shared/lib/constants/api.js';
 
 const BookDetails: FC = () => {
   const {

@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import * as api from '@/features/notification/api/api';
-import type { NotificationType } from '@/features/notification/types/notification';
-import { routes } from '@/shared/lib/constants/api';
-import { pagination } from '@/shared/lib/constants/defaultValues';
-import { errors } from '@/shared/lib/constants/errorMessages';
-import { IsCanceledError, IsError } from '@/shared/lib/utils';
-import { useAuth } from '@/shared/stores/auth/auth';
-import { useMessage } from '@/shared/stores/message/message';
+import * as api from '@/features/notification/api/api.js';
+import type { NotificationType } from '@/features/notification/types/notification.js';
+import { routes } from '@/shared/lib/constants/api.js';
+import { pagination } from '@/shared/lib/constants/defaultValues.js';
+import { errors } from '@/shared/lib/constants/errorMessages.js';
+import { IsCanceledError, IsError } from '@/shared/lib/utils.js';
+import { useAuth } from '@/shared/stores/auth/auth.js';
+import { useMessage } from '@/shared/stores/message/message.js';
 
 export const useLastThree = () => {
   const { token } = useAuth();

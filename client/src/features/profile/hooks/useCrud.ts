@@ -2,13 +2,13 @@ import { format } from 'date-fns';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import * as api from '@/features/profile/api/api';
-import type { CreateProfile, PrivateProfile, Profile } from '@/features/profile/types/profile';
-import { useList } from '@/features/reading-list/hooks/useCrud';
-import { useChatsNotJoined } from '@/hooks/useChat';
-import { routes } from '@/shared/lib/constants/api';
-import { IsCanceledError, IsError } from '@/shared/lib/utils';
-import { useAuth } from '@/shared/stores/auth/auth';
+import { useChatsNotJoined } from '@/features/chat/hooks/useCrud.js';
+import * as api from '@/features/profile/api/api.js';
+import type { CreateProfile, PrivateProfile, Profile } from '@/features/profile/types/profile.js';
+import { useList } from '@/features/reading-list/hooks/useCrud.js';
+import { routes } from '@/shared/lib/constants/api.js';
+import { IsCanceledError, IsError } from '@/shared/lib/utils.js';
+import { useAuth } from '@/shared/stores/auth/auth.js';
 
 const isFullProfile = (profile: Profile | PrivateProfile | null): profile is Profile =>
   !!profile && 'phoneNumber' in profile;

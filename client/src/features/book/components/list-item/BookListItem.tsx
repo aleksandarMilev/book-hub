@@ -4,15 +4,15 @@ import { type FC } from 'react';
 import { FaBook, FaTag, FaUser } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-import type { GenreName } from '@/features/genre/types/genre';
-import { RenderStars } from '@/shared/components/render-stars/RenderStars';
-import { routes } from '@/shared/lib/constants/api';
+import type { GenreName } from '@/features/genre/types/genre.js';
+import { RenderStars } from '@/shared/components/render-stars/RenderStars.js';
+import { routes } from '@/shared/lib/constants/api.js';
 
 const BookListItem: FC<{
   id: number;
   imageUrl: string;
   title: string;
-  authorName: string;
+  authorName?: string | null;
   shortDescription: string;
   averageRating: number;
   genres: GenreName[];

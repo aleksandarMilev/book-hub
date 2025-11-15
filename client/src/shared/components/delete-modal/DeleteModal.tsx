@@ -1,9 +1,11 @@
 import type { FC } from 'react';
 import { FaExclamationTriangle, FaTrashAlt } from 'react-icons/fa';
 
-import type { DeleteModalProps } from '@/shared/components/delete-modal/types/deleteModalProps';
-
-const DeleteModal: FC<DeleteModalProps> = ({ showModal, toggleModal, deleteHandler }) => (
+const DeleteModal: FC<{
+  showModal: boolean;
+  toggleModal: () => void;
+  deleteHandler: () => void;
+}> = ({ showModal, toggleModal, deleteHandler }) => (
   <div
     className={`modal fade ${showModal ? 'show d-block' : ''}`}
     tabIndex={-1}

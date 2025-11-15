@@ -5,10 +5,10 @@ import { Badge, Dropdown } from 'react-bootstrap';
 import { FaBell } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-import LastNotificationsListItem from '@/features/notification/components/last-item/LastNotificationsListItem';
-import { useLastThree } from '@/features/notification/hooks/useCrud';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
-import { routes } from '@/shared/lib/constants/api';
+import LastNotificationsListItem from '@/features/notification/components/last-item/LastNotificationsListItem.js';
+import { useLastThree } from '@/features/notification/hooks/useCrud.js';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
+import { routes } from '@/shared/lib/constants/api.js';
 
 const LastNotifications: FC = () => {
   const { notifications, isFetching, refetch } = useLastThree();

@@ -1,8 +1,8 @@
-import type { CreateReview, Review, VoteRequest } from '@/features/review/types/review';
-import { getAuthConfig, http, processError } from '@/shared/api/http';
-import { routes } from '@/shared/lib/constants/api';
-import { errors } from '@/shared/lib/constants/errorMessages';
-import type { PaginatedResult } from '@/shared/types/paginatedResult';
+import type { CreateReview, Review, VoteRequest } from '@/features/review/types/review.js';
+import { getAuthConfig, http, processError } from '@/shared/api/http.js';
+import { routes } from '@/shared/lib/constants/api.js';
+import { errors } from '@/shared/lib/constants/errorMessages.js';
+import type { PaginatedResult } from '@/shared/types/paginatedResult.js';
 
 export async function all(
   bookId: number,

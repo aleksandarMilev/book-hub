@@ -1,7 +1,7 @@
-import type { Nationality } from '@/features/nationality/types/nationality';
-import { getAuthConfig, http, processError } from '@/shared/api/http';
-import { baseUrl, routes } from '@/shared/lib/constants/api';
-import { errors } from '@/shared/lib/constants/errorMessages';
+import type { Nationality } from '@/features/nationality/types/nationality.js';
+import { getAuthConfig, http, processError } from '@/shared/api/http.js';
+import { baseUrl, routes } from '@/shared/lib/constants/api.js';
+import { errors } from '@/shared/lib/constants/errorMessages.js';
 
 export async function all(token: string, signal?: AbortSignal) {
   try {

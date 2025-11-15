@@ -3,9 +3,9 @@ import './AuthorSearch.css';
 import type { FormikProps } from 'formik';
 import type { FC } from 'react';
 
-import { useSearchNames } from '@/features/author/hooks/useCrud';
-import type { AuthorNames } from '@/features/author/types/author';
-import type { BookFormValues } from '@/features/book/components/form/formik/useBookFormik';
+import { useSearchNames } from '@/features/author/hooks/useCrud.js';
+import type { AuthorNames } from '@/features/author/types/author.js';
+import type { BookFormValues } from '@/features/book/components/form/formik/useBookFormik.js';
 
 const AuthorSearch: FC<{
   authors: AuthorNames[];

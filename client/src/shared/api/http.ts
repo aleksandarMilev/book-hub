@@ -1,6 +1,6 @@
 import axios, { type AxiosRequestConfig } from 'axios';
 
-import { baseAdminUrl, baseUrl } from '@/shared/lib/constants/api';
+import { baseAdminUrl, baseUrl } from '@/shared/lib/constants/api.js';
 
 export const http = axios.create({ baseURL: baseUrl });
 export const httpAdmin = axios.create({ baseURL: baseAdminUrl });

@@ -2,16 +2,16 @@ import { HttpStatusCode } from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import * as api from '@/features/book/api/api';
-import type { Book, BookDetails, CreateBook } from '@/features/book/types/book';
-import { routes } from '@/shared/lib/constants/api';
-import { pagination } from '@/shared/lib/constants/defaultValues';
-import { errors } from '@/shared/lib/constants/errorMessages';
-import { IsCanceledError, IsError } from '@/shared/lib/utils';
-import { useAuth } from '@/shared/stores/auth/auth';
-import { useMessage } from '@/shared/stores/message/message';
-import { HttpError } from '@/shared/types/errors/httpError';
-import type { IntId } from '@/shared/types/intId';
+import * as api from '@/features/book/api/api.js';
+import type { Book, BookDetails, CreateBook } from '@/features/book/types/book.js';
+import { routes } from '@/shared/lib/constants/api.js';
+import { pagination } from '@/shared/lib/constants/defaultValues.js';
+import { errors } from '@/shared/lib/constants/errorMessages.js';
+import { IsCanceledError, IsError } from '@/shared/lib/utils.js';
+import { useAuth } from '@/shared/stores/auth/auth.js';
+import { useMessage } from '@/shared/stores/message/message.js';
+import { HttpError } from '@/shared/types/errors/httpError.js';
+import type { IntId } from '@/shared/types/intId.js';
 
 export function useTopThree() {
   const { token } = useAuth();

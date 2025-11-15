@@ -3,10 +3,10 @@ import './TopUsers.css';
 import { type FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useTopProfiles } from '@/hooks/useProfile';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
-import { routes } from '@/shared/lib/constants/api';
-import { useAuth } from '@/shared/stores/auth/auth';
+import { useTopProfiles } from '@/features/profile/hooks/useCrud.js';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
+import { routes } from '@/shared/lib/constants/api.js';
+import { useAuth } from '@/shared/stores/auth/auth.js';
 
 const TopUsers: FC = () => {
   const { userId } = useAuth();

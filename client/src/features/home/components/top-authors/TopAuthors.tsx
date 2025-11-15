@@ -5,10 +5,10 @@ import { type FC } from 'react';
 import { FaBookReader } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-import { useTopThree } from '@/hooks/useAuthor';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
-import { RenderStars } from '@/shared/components/render-stars/RenderStars';
-import { routes } from '@/shared/lib/constants/api';
+import { useTopThree } from '@/features/author/hooks/useCrud.js';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
+import { RenderStars } from '@/shared/components/render-stars/RenderStars.js';
+import { routes } from '@/shared/lib/constants/api.js';
 
 const TopAuthors: FC = () => {
   const { authors, isFetching, error } = useTopThree();

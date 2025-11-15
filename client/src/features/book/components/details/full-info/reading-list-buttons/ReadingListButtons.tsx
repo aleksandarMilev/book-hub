@@ -1,7 +1,7 @@
 import { type FC, useState } from 'react';
 
-import { useListActions } from '@/features/reading-list/hooks/useCrud';
-import type { ReadingStatusUI } from '@/features/reading-list/types/readingList';
+import { useListActions } from '@/features/reading-list/hooks/useCrud.js';
+import type { ReadingStatusUI } from '@/features/reading-list/types/readingList.js';
 
 export const ReadingListButtons: FC<{
   bookId: number;

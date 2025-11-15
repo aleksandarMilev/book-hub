@@ -1,12 +1,12 @@
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 
-import { profileSchema } from '@/features/profile/components/form/validation/profileSchema';
-import { useCreate, useEdit } from '@/features/profile/hooks/useCrud';
-import type { CreateProfile, Profile } from '@/features/profile/types/profile';
-import { routes } from '@/shared/lib/constants/api';
-import { IsError } from '@/shared/lib/utils';
-import { useMessage } from '@/shared/stores/message/message';
+import { profileSchema } from '@/features/profile/components/form/validation/profileSchema.js';
+import { useCreate, useEdit } from '@/features/profile/hooks/useCrud.js';
+import type { CreateProfile, Profile } from '@/features/profile/types/profile.js';
+import { routes } from '@/shared/lib/constants/api.js';
+import { IsError } from '@/shared/lib/utils.js';
+import { useMessage } from '@/shared/stores/message/message.js';
 
 export const useProfileFormik = ({
   profile = null,

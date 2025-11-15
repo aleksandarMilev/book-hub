@@ -1,7 +1,7 @@
-import type { ArticleDetails, CreateArticle } from '@/features/article/types/article';
-import { getAuthConfig, http, httpAdmin, processError } from '@/shared/api/http';
-import { routes } from '@/shared/lib/constants/api';
-import { errors } from '@/shared/lib/constants/errorMessages';
+import type { ArticleDetails, CreateArticle } from '@/features/article/types/article.js';
+import { getAuthConfig, http, httpAdmin, processError } from '@/shared/api/http.js';
+import { routes } from '@/shared/lib/constants/api.js';
+import { errors } from '@/shared/lib/constants/errorMessages.js';
 
 export const details = async (id: number, token: string, signal?: AbortSignal) => {
   try {

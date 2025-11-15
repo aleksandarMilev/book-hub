@@ -3,10 +3,10 @@ import type {
   AuthorDetails,
   AuthorNames,
   CreateAuthor,
-} from '@/features/author/types/author';
-import { getAuthConfig, http, httpAdmin, processError } from '@/shared/api/http';
-import { routes } from '@/shared/lib/constants/api';
-import { baseErrors, errors } from '@/shared/lib/constants/errorMessages';
+} from '@/features/author/types/author.js';
+import { getAuthConfig, http, httpAdmin, processError } from '@/shared/api/http.js';
+import { routes } from '@/shared/lib/constants/api.js';
+import { baseErrors, errors } from '@/shared/lib/constants/errorMessages.js';
 
 export async function names(token: string, signal?: AbortSignal) {
   try {

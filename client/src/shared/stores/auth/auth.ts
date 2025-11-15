@@ -3,8 +3,8 @@ import { shallow } from 'zustand/shallow';
 import { createWithEqualityFn } from 'zustand/traditional';
 import type { StateCreator } from 'zustand/vanilla';
 
-import type { AuthState } from './types/authState';
-import type { AuthView } from './types/authView';
+import type { AuthState } from './types/authState.js';
+import type { AuthView } from './types/authView.js';
 
 const creator: StateCreator<AuthState> = (set) => ({
   user: null,

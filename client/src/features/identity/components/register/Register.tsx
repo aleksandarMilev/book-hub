@@ -11,8 +11,8 @@ import {
 } from 'mdb-react-ui-kit';
 import { type FC } from 'react';
 
-import image from '@/assets/register.webp';
-import { useRegisterFormik } from '@/features/identity/components/register/formik/useRegisterFormik';
+import image from '@/features/identity/components/register/assets/register.webp';
+import { useRegisterFormik } from '@/features/identity/components/register/formik/useRegisterFormik.js';
 
 const Register: FC = () => {
   const formik = useRegisterFormik();

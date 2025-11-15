@@ -1,6 +1,5 @@
 import './BookForm.css';
 
-import image from '@assets/create-book.jpg';
 import {
   MDBBtn,
   MDBCard,
@@ -13,10 +12,11 @@ import {
 } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
 
-import AuthorSearch from '@/features/book/components/form/author-search/AuthorSearch';
-import { useBookFormik } from '@/features/book/components/form/formik/useBookFormik';
-import GenreSearch from '@/features/book/components/form/genre-search/GenreSearch';
-import type { BookDetails } from '@/features/book/types/book';
+import image from '@/features/book/components/form/assets/create-book.jpg';
+import AuthorSearch from '@/features/book/components/form/author-search/AuthorSearch.js';
+import { useBookFormik } from '@/features/book/components/form/formik/useBookFormik.js';
+import GenreSearch from '@/features/book/components/form/genre-search/GenreSearch.js';
+import type { BookDetails } from '@/features/book/types/book.js';
 
 const BookForm: FC<{
   bookData?: BookDetails | null;

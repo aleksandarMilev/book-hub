@@ -1,12 +1,12 @@
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 
-import { articleSchema } from '@/features/article/components/form/validation/articleSchema';
-import { useCreate, useEdit } from '@/features/article/hooks/useCrud';
-import type { ArticleDetails, CreateArticle } from '@/features/article/types/article';
-import { routes } from '@/shared/lib/constants/api';
-import { IsError } from '@/shared/lib/utils';
-import { useMessage } from '@/shared/stores/message/message';
+import { articleSchema } from '@/features/article/components/form/validation/articleSchema.js';
+import { useCreate, useEdit } from '@/features/article/hooks/useCrud.js';
+import type { ArticleDetails, CreateArticle } from '@/features/article/types/article.js';
+import { routes } from '@/shared/lib/constants/api.js';
+import { IsError } from '@/shared/lib/utils.js';
+import { useMessage } from '@/shared/stores/message/message.js';
 
 export const useArticleFormik = ({
   article = null,

@@ -1,9 +1,9 @@
 import type { FC } from 'react';
 
-import ArticleForm from '@/features/article/components/form/ArticleForm';
-import { useEditArticlePage } from '@/features/article/hooks/useEditArticlePage';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
-import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect';
+import ArticleForm from '@/features/article/components/form/ArticleForm.jsx';
+import { useEditArticlePage } from '@/features/article/hooks/useEditArticlePage.js';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.jsx';
+import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect.jsx';
 
 const EditArticle: FC = () => {
   const { article, isFetching, error } = useEditArticlePage();

@@ -4,11 +4,11 @@ import { format } from 'date-fns';
 import { type FC } from 'react';
 import { Dropdown } from 'react-bootstrap';
 
-import type { ResourceType } from '@/features/notification/components/last-item/types/resourceType';
-import { useClickHandler } from '@/features/notification/hooks/useClickHandler';
-import type { NotificationType } from '@/features/notification/types/notification';
+import type { ResourceType } from '@/features/notification/components/last-item/types/resourceType.js';
+import { useClickHandler } from '@/features/notification/hooks/useClickHandler.js';
+import type { NotificationType } from '@/features/notification/types/notification.js';
 
-import { getIcon } from './utils/utils';
+import { getIcon } from './utils/utils.js';
 
 const LastNotificationsListItem: FC<{
   notification: NotificationType;

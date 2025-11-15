@@ -6,12 +6,12 @@ import type {
   BooksSearchResult,
   ChatsSearchResult,
   ProfilesSearchResult,
-} from '@/features/search/types/search';
-import { getAuthConfig, processError } from '@/shared/api/http';
-import { baseUrl, routes } from '@/shared/lib/constants/api';
-import { pagination } from '@/shared/lib/constants/defaultValues';
-import { errors } from '@/shared/lib/constants/errorMessages';
-import type { PaginatedResult } from '@/shared/types/paginatedResult';
+} from '@/features/search/types/search.js';
+import { getAuthConfig, processError } from '@/shared/api/http.js';
+import { baseUrl, routes } from '@/shared/lib/constants/api.js';
+import { pagination } from '@/shared/lib/constants/defaultValues.js';
+import { errors } from '@/shared/lib/constants/errorMessages.js';
+import type { PaginatedResult } from '@/shared/types/paginatedResult.js';
 
 async function search<T>(
   route: string,

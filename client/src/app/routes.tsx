@@ -3,60 +3,63 @@
 import React, { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
-import AdminRoute from '@/app/routes/guards/AdminRoute';
-import AuthenticatedRoute from '@/app/routes/guards/AuthenticatedRoute';
-import ChatRoute from '@/app/routes/guards/ChatRoute';
-import ProfileRoute from '@/app/routes/guards/ProfileRoute';
-import { routes } from '@/shared/lib/constants/api';
-
-import App from './App';
-import Loading from './Loading';
+import App from '@/app/App.js';
+import Loading from '@/app/Loading.js';
+import AdminRoute from '@/app/routes/guards/AdminRoute.js';
+import AuthenticatedRoute from '@/app/routes/guards/AuthenticatedRoute.js';
+import ChatRoute from '@/app/routes/guards/ChatRoute.js';
+import ProfileRoute from '@/app/routes/guards/ProfileRoute.js';
+import { routes } from '@/shared/lib/constants/api.js';
 
 const Fallback = () => <Loading />;
 
-const Home = lazy(() => import('@/features/home/components/Home'));
+const Home = lazy(() => import('@/features/home/components/Home.jsx'));
 
-const Login = lazy(() => import('@/features/identity/components/login/Login'));
-const Register = lazy(() => import('@/features/identity/components/register/Register'));
-const Logout = lazy(() => import('@/features/identity/components/logout/Logout'));
+const Login = lazy(() => import('@/features/identity/components/login/Login.jsx'));
+const Register = lazy(() => import('@/features/identity/components/register/Register.jsx'));
+const Logout = lazy(() => import('@/features/identity/components/logout/Logout.jsx'));
 
-const ProfileList = lazy(() => import('@/features/profile/components/list/ProfileList'));
-const ProfileDetails = lazy(() => import('@/features/profile/components/details/ProfileDetails'));
-const CreateProfile = lazy(() => import('@/features/profile/components/create/CreateProfile'));
-const EditProfile = lazy(() => import('@/features/profile/components/edit/EditProfile'));
-
-const BookList = lazy(() => import('@/features/book/components/list/BookList'));
-const BookDetails = lazy(() => import('@/features/book/components/details/BookDetails'));
-const CreateBook = lazy(() => import('@/features/book/components/create/CreateBook'));
-const EditBook = lazy(() => import('@/features/book/components/edit/EditBook'));
-
-const ReadingList = lazy(() => import('@/features/reading-list/components/list/ReadingList'));
-const ReviewList = lazy(() => import('@/features/review/components/review-list/ReviewList'));
-
-const GenreDetails = lazy(() => import('@/features/genre/components/details/GenreDetails'));
-
-const AuthorList = lazy(() => import('@/features/author/components/author-list/AuthorList'));
-const AuthorDetails = lazy(
-  () => import('@/features/author/components/author-details/AuthorDetails'),
+const ProfileList = lazy(() => import('@/features/profile/components/list/ProfileList.jsx'));
+const ProfileDetails = lazy(
+  () => import('@/features/profile/components/details/ProfileDetails.jsx'),
 );
-const CreateAuthor = lazy(() => import('@/features/author/components/create-author/CreateAuthor'));
-const EditAuthor = lazy(() => import('@/features/author/components/edit-author/EditAuthor'));
+const CreateProfile = lazy(() => import('@/features/profile/components/create/CreateProfile.jsx'));
+const EditProfile = lazy(() => import('@/features/profile/components/edit/EditProfile.jsx'));
 
-const ArticleList = lazy(() => import('@/features/article/components/list/ArticleList'));
-const ArticleDetails = lazy(() => import('@/features/article/components/details/ArticleDetails'));
-const CreateArticle = lazy(() => import('@/features/article/components/create/CreateArticle'));
-const EditArticle = lazy(() => import('@/features/article/components/edit/EditArticle'));
+const BookList = lazy(() => import('@/features/book/components/list/BookList.jsx'));
+const BookDetails = lazy(() => import('@/features/book/components/details/BookDetails.jsx'));
+const CreateBook = lazy(() => import('@/features/book/components/create/CreateBook.jsx'));
+const EditBook = lazy(() => import('@/features/book/components/edit/EditBook.jsx'));
+
+const ReadingList = lazy(() => import('@/features/reading-list/components/list/ReadingList.jsx'));
+const ReviewList = lazy(() => import('@/features/review/components/review-list/ReviewList.jsx'));
+
+const GenreDetails = lazy(() => import('@/features/genre/components/details/GenreDetails.jsx'));
+
+const AuthorList = lazy(() => import('@/features/author/components/list/AuthorList.js'));
+const AuthorDetails = lazy(() => import('@/features/author/components/details/AuthorDetails.js'));
+const CreateAuthor = lazy(() => import('@/features/author/components/create/CreateAuthor.js'));
+const EditAuthor = lazy(() => import('@/features/author/components/edit/EditAuthor.js'));
+
+const ArticleList = lazy(() => import('@/features/article/components/list/ArticleList.jsx'));
+const ArticleDetails = lazy(
+  () => import('@/features/article/components/details/ArticleDetails.jsx'),
+);
+const CreateArticle = lazy(() => import('@/features/article/components/create/CreateArticle.jsx'));
+const EditArticle = lazy(() => import('@/features/article/components/edit/EditArticle.jsx'));
 
 const NotificationList = lazy(
-  () => import('@/features/notification/components/list/NotificationList'),
+  () => import('@/features/notification/components/list/NotificationList.jsx'),
 );
 
-const ChatList = lazy(() => import('@/components/chat/chat-list/ChatList'));
-const ChatDetails = lazy(() => import('@/components/chat/chat-details/ChatDetails'));
+const ChatList = lazy(() => import('@/features/chat/components/list/ChatList.jsx'));
+const ChatDetails = lazy(() => import('@/features/chat/components/details/ChatDetails.jsx'));
 
-const BadRequest = lazy(() => import('@/shared/components/errors/bad-request/BadRequest'));
-const NotFound = lazy(() => import('@/shared/components/errors/not-found/NotFound'));
-const AccessDenied = lazy(() => import('@/shared/components/errors/access-denied/AccessDenied'));
+const BadRequest = lazy(() => import('@/shared/components/errors/bad-request/BadRequest.jsx'));
+const NotFound = lazy(() => import('@/shared/components/errors/not-found/NotFound.jsx'));
+const AccessDenied = lazy(
+  () => import('@/shared/components/errors/access-denied/AccessDenied.jsx'),
+);
 
 const withSuspense = (element: React.JSX.Element) => (
   <Suspense fallback={<Fallback />}>{element}</Suspense>
