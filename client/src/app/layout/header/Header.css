@@ -1,31 +1,52 @@
+.navbar-custom {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
 .fancy-navbar {
-  border-radius: 0 0 16px 16px;
-  padding: 0.7rem 1rem;
+  border-radius: 0 0 18px 18px;
+  padding: 0.65rem 1rem;
   background: linear-gradient(90deg, #6ea8fe, #9a6bff, #ff6ec7) !important;
   color: white !important;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  animation: fadeDown 0.45s ease-out;
+}
+
+@keyframes fadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .brand-title {
-  font-size: 1.7rem;
+  font-size: 1.75rem;
   font-weight: 800;
-  color: #ffffff !important;
+  color: #fff !important;
+  letter-spacing: 0.4px;
   font-family: 'Poppins', sans-serif;
-  letter-spacing: 0.5px;
-  transition: transform 0.3s ease;
+  transition: transform 0.25s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 
 .brand-title:hover {
-  transform: scale(1.07);
+  transform: scale(1.06);
 }
 
 .main-links .nav-link {
   font-size: 1.05rem;
-  margin-right: 0.6rem;
-  padding: 0.55rem 1rem;
-  border-radius: 8px;
-  color: #ffffffd9 !important;
+  margin-right: 0.3rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 10px;
+  color: #ffffffc8 !important;
   transition:
     background 0.25s ease,
     color 0.25s ease,
@@ -33,34 +54,40 @@
 }
 
 .main-links .nav-link:hover {
-  background: rgba(255, 255, 255, 0.15);
-  color: #ffffff !important;
-  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff !important;
+  transform: translateY(-1px);
 }
 
-.auth-section .nav-link {
-  font-size: 0.95rem;
-  color: white !important;
+.main-links .nav-link.active {
+  background: rgba(255, 255, 255, 0.28) !important;
+  color: #fff !important;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.35);
 }
 
 .btn-pill {
-  padding: 0.4rem 1rem !important;
-  border-radius: 25px !important;
-  background: rgba(255, 255, 255, 0.25) !important;
-  color: white !important;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: all 0.3s ease;
-  backdrop-filter: blur(4px);
+  padding: 0.42rem 1rem !important;
+  border-radius: 30px !important;
+  background: rgba(255, 255, 255, 0.22) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+
+  backdrop-filter: blur(6px);
+  transition:
+    background 0.3s ease,
+    transform 0.3s ease;
 }
 
 .btn-pill:hover {
-  background: rgba(255, 255, 255, 0.45) !important;
+  background: rgba(255, 255, 255, 0.35) !important;
   transform: translateY(-2px);
 }
 
 .btn-pill.highlight {
   background: #ffe28a !important;
-  color: #000 !important;
+  color: #2b1c00 !important;
+  font-weight: 600;
 }
 
 .btn-pill.highlight:hover {
@@ -68,37 +95,37 @@
 }
 
 .btn-pill.danger {
-  background: #ff8a8a !important;
+  background: #f78b8b !important;
 }
 
 .btn-pill.danger:hover {
-  background: #ff6464 !important;
+  background: #ff6666 !important;
 }
 
 .navbar-user {
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-style: italic;
-  color: #ffffff !important;
+  color: #fff !important;
+  margin-right: 0.7rem;
+}
+
+.auth-section > * {
+  margin-left: 0.4rem;
 }
 
 @media (max-width: 991px) {
   .main-links .nav-link {
-    margin: 0.3rem 0;
+    margin: 0.35rem 0;
     padding-left: 1rem;
   }
 
   .auth-section {
-    margin-top: 1rem;
+    margin-top: 0.8rem;
   }
 }
 
 .custom-toggler {
-  filter: brightness(2);
-}
-
-.custom-toggler:focus {
-  outline: none !important;
-  box-shadow: none !important;
+  filter: brightness(2.3);
 }
 
 .custom-toggler .navbar-toggler-icon {

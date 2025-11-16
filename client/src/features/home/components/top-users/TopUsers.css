@@ -1,5 +1,5 @@
 .top-users-container {
-  margin: 40px auto;
+  margin: 50px auto;
   max-width: 1200px;
   padding: 0 20px;
   text-align: center;
@@ -25,23 +25,25 @@
 
 .top-user-card {
   width: 100%;
-  max-width: 350px;
-  padding: 20px;
+  max-width: 360px;
+  padding: 22px;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 0.42);
+  backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   cursor: pointer;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
   transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
 }
 
 .top-user-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.16);
 }
 
 .user-image {
@@ -49,8 +51,10 @@
   height: 90px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid rgba(255, 255, 255, 0.7);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  border: 3px solid rgba(255, 255, 255, 0.65);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+
   margin-right: 18px;
 }
 
@@ -72,12 +76,20 @@
 .user-info p {
   margin: 4px 0;
   font-size: 0.95rem;
-  color: #4f4f4f;
+  color: #404040;
 }
 
 @media (max-width: 768px) {
   .top-user-card {
     max-width: 100%;
-    flex-direction: row;
+  }
+
+  .user-image {
+    width: 70px;
+    height: 70px;
+  }
+
+  .user-info h4 {
+    font-size: 1.1rem;
   }
 }

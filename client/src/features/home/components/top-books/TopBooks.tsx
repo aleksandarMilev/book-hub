@@ -66,7 +66,7 @@ const TopBooks: FC = () => {
                 <strong>By:</strong> {b.authorName}
               </MDBCardText>
               <MDBCardText>{b.shortDescription}</MDBCardText>
-              <MDBCardText>
+              <MDBCardText className="rating-text">
                 <RenderStars rating={b.averageRating ?? 0} />
               </MDBCardText>
               <MDBCardText className="genres-wrapper">
@@ -83,16 +83,9 @@ const TopBooks: FC = () => {
                   )}
                 </div>
               </MDBCardText>
-              <MDBBtn
-                tag={Link}
-                to={`${routes.book}/${b.id}`}
-                color="dark"
-                rounded
-                size="sm"
-                className="view-button"
-              >
+              <Link to={`${routes.book}/${b.id}`} className="book-view-button">
                 View
-              </MDBBtn>
+              </Link>
             </MDBCardBody>
           </MDBCard>
         ))}

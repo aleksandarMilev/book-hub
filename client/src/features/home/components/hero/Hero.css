@@ -1,6 +1,6 @@
 .hero-container {
   position: relative;
-  height: 600px;
+  height: 580px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -8,85 +8,162 @@
   background-size: cover;
   background-position: center;
   overflow: hidden;
+  animation: heroFadeIn 1s ease;
 }
 
-.hero-mask {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(110, 168, 254, 0.55),
-    rgba(154, 107, 255, 0.55),
-    rgba(255, 110, 199, 0.55)
-  );
-  backdrop-filter: blur(2px);
-  z-index: 1;
-}
-
-.hero-content {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-  padding: 2rem;
-  animation: fadeUp 1.2s ease forwards;
-  opacity: 0;
-}
-
-.hero-text {
-  padding: 2rem 2.5rem;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 16px;
-  backdrop-filter: blur(6px);
-  color: white;
-  max-width: 600px;
-  margin: auto;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
-}
-
-.hero-subtitle {
-  font-size: 2.2rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-}
-
-.hero-button {
-  font-size: 1.25rem;
-  padding: 12px 26px;
-  border-radius: 50px;
-  border: none !important;
-  background: linear-gradient(90deg, #6ea8fe, #9a6bff, #ff6ec7) !important;
-  color: #fff !important;
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-}
-
-.hero-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(255, 110, 199, 0.4);
-}
-
-@keyframes fadeUp {
+@keyframes heroFadeIn {
   from {
-    transform: translateY(25px);
     opacity: 0;
   }
   to {
-    transform: translateY(0px);
     opacity: 1;
   }
 }
 
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    rgba(110, 168, 254, 0.18),
+    rgba(154, 107, 255, 0.15),
+    rgba(255, 110, 199, 0.18)
+  );
+  backdrop-filter: blur(1.5px);
+  z-index: 1;
+}
+
+.hero-glow {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.25;
+  z-index: 1;
+}
+
+.hero-glow.one {
+  background: #ff6ec7;
+  top: 15%;
+  left: 15%;
+}
+
+.hero-glow.two {
+  background: #6ea8fe;
+  bottom: 10%;
+  right: 15%;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 5;
+  text-align: center;
+  animation: fadeUp 0.9s ease forwards;
+  opacity: 0;
+}
+
+@keyframes fadeUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.hero-box {
+  padding: 2rem 2.5rem;
+  max-width: 620px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  border-radius: 18px;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.18);
+  color: white;
+}
+
+.hero-title {
+  font-size: 2.4rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+}
+
+.hero-subtitle {
+  font-size: 1.15rem;
+  margin-bottom: 1.7rem;
+  opacity: 0.9;
+}
+
+.hero-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 0.9rem;
+}
+
+.hero-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 26px;
+  border-radius: 40px;
+  font-size: 1rem;
+  line-height: 1.2;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  box-shadow: none;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.hero-button-main {
+  background: linear-gradient(90deg, #6ea8fe, #9a6bff);
+  color: #fff;
+}
+
+.hero-button-secondary {
+  background: rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #fff;
+  backdrop-filter: blur(4px);
+}
+
+.hero-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+.hero-button:active,
+.hero-button:focus {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  outline: none;
+}
+
+.hero-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(110, 168, 254, 0.7);
+}
+
 @media (max-width: 768px) {
   .hero-container {
-    height: 450px;
+    height: 430px;
+  }
+
+  .hero-title {
+    font-size: 1.85rem;
   }
 
   .hero-subtitle {
-    font-size: 1.6rem;
+    font-size: 1.05rem;
   }
 
-  .hero-text {
-    padding: 1.5rem 1.2rem;
+  .hero-buttons {
+    flex-direction: column;
   }
 }

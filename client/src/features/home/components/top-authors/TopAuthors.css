@@ -1,142 +1,184 @@
 .authors-wrapper {
-  max-width: 1100px;
+  max-width: 1300px;
   margin: 0 auto;
   padding: 0 1.2rem;
 }
 
 .top-authors-title {
   font-family: 'Poppins', sans-serif;
-  font-size: 2.6rem;
+  font-size: 2.7rem;
   font-weight: 800;
-  color: #3b2c4f;
   text-align: center;
-  margin-bottom: 2rem;
   background: linear-gradient(90deg, #6ea8fe, #9a6bff, #ff6ec7);
-  background-clip: text;
   -webkit-background-clip: text;
+  background-clip: text;
   color: transparent;
+  margin-bottom: 2.2rem;
+  letter-spacing: 1px;
 }
 
 .table-striped {
-  background: rgba(255, 255, 255, 0.45);
-  backdrop-filter: blur(10px);
-  border-radius: 14px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.16);
+  backdrop-filter: blur(6px);
+  padding: 0.3rem 0.6rem;
+}
+
+.table-striped td {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  color: #3f3f3f;
+  vertical-align: middle;
 }
 
 .table-header {
-  background: rgba(255, 255, 255, 0.6) !important;
+  background: rgba(230, 230, 255, 0.85) !important;
   font-family: 'Poppins', sans-serif;
   font-size: 1.15rem;
+  font-weight: 700;
+  color: #2c2c2c;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.table-header th {
+  padding: 1rem 1.5rem;
+}
+
+.table-striped th:nth-child(2),
+.table-striped td:nth-child(2),
+.table-striped th:nth-child(3),
+.table-striped td:nth-child(3) {
+  text-align: center;
+}
+
+.table-striped td:nth-child(2) {
+  font-size: 1.1rem;
   font-weight: 600;
-  color: #3f3f3f;
-  letter-spacing: 0.5px;
+  color: #383838;
 }
 
 .author-row {
   transition:
-    background 0.35s ease,
+    background 0.25s ease,
     transform 0.25s ease;
+  animation: fadeSlide 0.5s ease forwards;
+  opacity: 0;
 }
 
 .author-row:hover {
-  background: rgba(255, 255, 255, 0.55);
-  transform: translateX(4px);
+  background: rgba(240, 240, 255, 0.75);
+  transform: translateX(6px);
+}
+
+.author-row:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.author-row:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.author-row:nth-child(3) {
+  animation-delay: 0.25s;
 }
 
 .author-image {
-  width: 70px;
-  height: 70px;
+  width: 78px;
+  height: 78px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid rgba(255, 255, 255, 0.6);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  border: 3px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .author-name {
   font-family: 'Poppins', sans-serif;
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 0;
+  font-size: 1.33rem;
+  font-weight: 700;
   background: linear-gradient(90deg, #7f5bff, #ff6ec7);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-}
-
-.view-button {
-  border-radius: 30px !important;
-  font-size: 1rem;
-  font-weight: 600;
-
-  background: linear-gradient(90deg, #6ea8fe, #9a6bff, #ff6ec7) !important;
-  border: none !important;
-  color: #ffffff !important;
-  padding: 0.6rem 1.2rem;
-
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
-}
-
-.view-button:active {
-  transform: translateY(0);
-  box-shadow: 0 3px 8px rgba(255, 110, 199, 0.2);
-}
-
-.view-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(255, 110, 199, 0.35);
-}
-
-.table-striped tbody tr:nth-of-type(odd) {
-  background-color: rgba(255, 255, 255, 0.35);
-}
-
-.rating-column {
-  width: 180px;
-  text-align: center;
-}
-
-.view-button.btn,
-.view-button.btn-lg,
-.view-button.btn:active,
-.view-button.btn-lg:active {
-  padding: 0.6rem 1.2rem !important;
-  transform: none !important;
-  box-shadow: none !important;
+  margin-bottom: 0;
 }
 
 .rating-cell {
-  text-align: left !important;
+  text-align: center !important;
   padding-left: 0 !important;
+  white-space: nowrap;
 }
 
 .rating-cell > * {
   display: inline-flex !important;
   align-items: center !important;
+  justify-content: center;
+  gap: 0.35rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #4a4a4a;
 }
 
-.author-row {
-  animation: fadeSlide 0.6s ease forwards;
-  opacity: 0;
+.rating-cell span {
+  font-weight: 700;
+  color: #f39c12;
 }
 
-.author-row:nth-child(1) {
-  animation-delay: 0.1s;
+.rating-cell svg {
+  width: 22px !important;
+  height: 22px !important;
+  color: #ffbf47 !important;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15));
 }
-.author-row:nth-child(2) {
-  animation-delay: 0.2s;
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(255, 255, 255, 0.8);
 }
-.author-row:nth-child(3) {
-  animation-delay: 0.3s;
+
+.view-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.25rem;
+  border-radius: 32px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  background: linear-gradient(90deg, #6ea8fe, #9a6bff, #ff6ec7);
+  color: #ffffff;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  line-height: 1.2;
+  box-shadow: none;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+.view-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(110, 168, 254, 0.55);
+  text-decoration: none;
+}
+
+.view-button:active,
+.view-button:focus {
+  transform: translateY(0);
+  box-shadow: 0 3px 10px rgba(110, 168, 254, 0.35);
+  outline: none;
+}
+
+.view-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(110, 168, 254, 0.7);
 }
 
 @keyframes fadeSlide {
   from {
     opacity: 0;
-    transform: translateY(15px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -145,13 +187,26 @@
 }
 
 @media (max-width: 768px) {
+  .author-image {
+    width: 58px;
+    height: 58px;
+  }
+
   .author-name {
     font-size: 1.1rem;
   }
 
-  .author-image {
-    width: 55px;
-    height: 55px;
+  .table-striped td:nth-child(2) {
+    font-size: 1.05rem;
+  }
+
+  .rating-cell > * {
+    font-size: 1.05rem;
+  }
+
+  .rating-cell svg {
+    width: 18px !important;
+    height: 18px !important;
   }
 
   .view-button {
