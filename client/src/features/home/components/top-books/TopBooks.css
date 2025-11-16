@@ -27,7 +27,6 @@
   backdrop-filter: blur(8px);
   background: rgba(255, 255, 255, 0.55);
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
-
   transition:
     transform 0.3s ease,
     box-shadow 0.3s ease;
@@ -67,6 +66,30 @@
   color: #4f4f4f;
 }
 
+.rating-text {
+  margin-top: 0.4rem;
+}
+
+.rating-text > * {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.35rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #444;
+}
+
+.rating-text span {
+  font-weight: 700;
+  color: #f39c12;
+}
+
+.rating-text svg {
+  width: 18px !important;
+  height: 18px !important;
+  color: #ffbf47 !important;
+}
+
 .genre-list {
   margin-top: 10px;
   display: flex;
@@ -95,24 +118,6 @@
   color: #fff;
 }
 
-.view-button {
-  margin-top: 0.5rem;
-  padding: 0.45rem 1.2rem !important;
-  border-radius: 25px !important;
-  background: linear-gradient(90deg, #6ea8fe, #9a6bff, #ff6ec7) !important;
-  border: none !important;
-  color: white !important;
-
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
-}
-
-.view-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(255, 110, 199, 0.35);
-}
-
 .genre-link {
   text-decoration: none !important;
   color: inherit !important;
@@ -128,6 +133,47 @@
 
 .genres-wrapper {
   margin: 12px 0 14px 0;
+}
+
+.book-view-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.5rem;
+  padding: 0.45rem 1.2rem;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(90deg, #6ea8fe, #9a6bff, #ff6ec7);
+  color: #ffffff;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  line-height: 1.2;
+  box-shadow: none;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+.book-view-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 110, 199, 0.35);
+  text-decoration: none;
+}
+
+.book-view-button:active,
+.book-view-button:focus {
+  transform: translateY(0);
+  box-shadow: 0 3px 10px rgba(110, 168, 254, 0.35);
+  outline: none;
+}
+
+.book-view-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(110, 168, 254, 0.7);
 }
 
 @media (max-width: 768px) {

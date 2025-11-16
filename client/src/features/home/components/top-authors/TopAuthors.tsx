@@ -1,6 +1,6 @@
 import './TopAuthors.css';
 
-import { MDBBtn, MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
+import { MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
 import { type FC } from 'react';
 import { FaBookReader } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
@@ -68,16 +68,9 @@ const TopAuthors: FC = () => {
                   <RenderStars rating={a.averageRating ?? 0} />
                 </td>
                 <td>
-                  <MDBBtn
-                    tag={Link}
-                    to={`${routes.author}/${a.id}`}
-                    color="dark"
-                    rounded
-                    size="lg"
-                    className="view-button"
-                  >
+                  <Link to={`${routes.author}/${a.id}`} className="view-button">
                     View
-                  </MDBBtn>
+                  </Link>
                 </td>
               </tr>
             ))}
