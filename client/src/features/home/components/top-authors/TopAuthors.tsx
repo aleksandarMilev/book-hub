@@ -7,35 +7,29 @@ import { Link } from 'react-router-dom';
 
 import { useTopThree } from '@/features/author/hooks/useCrud.js';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
+import EmptyState from '@/shared/components/empty-state/EmptyState.js';
+import HomePageError from '@/shared/components/errors/home-page/HomePageError.js';
 import { RenderStars } from '@/shared/components/render-stars/RenderStars.js';
 import { routes } from '@/shared/lib/constants/api.js';
 
 const TopAuthors: FC = () => {
   const { authors, isFetching, error } = useTopThree();
 
+  if (error) {
+    return <HomePageError message={error} />;
+  }
+
   if (isFetching) {
     return <DefaultSpinner />;
   }
 
-  if (error) {
-    return (
-      <div className="d-flex flex-column align-items-center justify-content-center vh-50">
-        <div className="text-center">
-          <FaBookReader size={100} color="red" className="mb-3" />
-          <p className="lead">{error}</p>
-        </div>
-      </div>
-    );
-  }
-
   if (!authors?.length) {
     return (
-      <div className="d-flex flex-column align-items-center justify-content-center vh-50">
-        <div className="text-center">
-          <FaBookReader size={80} className="mb-3 text-muted" />
-          <p className="lead text-muted">No authors found.</p>
-        </div>
-      </div>
+      <EmptyState
+        icon={<FaBookReader />}
+        title="No Authors Found"
+        message="There are no top authors available yet."
+      />
     );
   }
 

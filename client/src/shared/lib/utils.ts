@@ -3,6 +3,8 @@ import { format } from 'date-fns';
 
 import type { IntId } from '@/shared/types/intId.js';
 
+export const sleep = (ms = 2_000) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+
 export function toIntId(value: unknown): IntId | null {
   let num: number;
 

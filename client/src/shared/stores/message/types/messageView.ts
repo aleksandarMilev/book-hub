@@ -3,4 +3,5 @@ export type MessageView = {
   clearMessage: () => void;
   isShowing: boolean;
   isSuccess: boolean;
+  message: string | null;
 };

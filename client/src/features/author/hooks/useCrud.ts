@@ -24,6 +24,7 @@ export const useTopThree = () => {
 
   useEffect(() => {
     const controller = new AbortController();
+
     const fetchAuthors = async () => {
       try {
         setIsFetching(true);

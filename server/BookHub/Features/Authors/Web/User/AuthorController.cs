@@ -22,7 +22,7 @@
         [AllowAnonymous]
         [HttpGet(Author.Top)]
         public async Task<ActionResult<IEnumerable<AuthorServiceModel>>> TopThree()
-           => this.Ok(await this.service.TopThree());
+            => this.Ok(await this.service.TopThree());
 
         [HttpGet(Author.Names)]
         public async Task<ActionResult<IEnumerable<AuthorNamesServiceModel>>> Names()

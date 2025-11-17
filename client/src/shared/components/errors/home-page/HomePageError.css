@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+.error-block-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 280px;
+  width: 100%;
+  text-align: center;
+}
+
+.error-block {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(10px);
+  border-radius: 18px;
+  padding: 30px 38px;
+  max-width: 420px;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.16);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  animation: fadeInError 0.65s ease;
+}
+
+@keyframes fadeInError {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.error-icon {
+  font-size: 3.6rem;
+  background: linear-gradient(90deg, #ff6b6b, #ff9f9f);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  animation: iconPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+
+.error-message {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  color: #444;
+  margin: 0;
+}
+
+.error-retry-btn {
+  margin-top: 6px;
+  padding: 10px 22px;
+  border-radius: 30px;
+  border: none;
+  background: linear-gradient(90deg, #6ea8fe, #9a6bff);
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.error-retry-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(154, 107, 255, 0.35);
+}

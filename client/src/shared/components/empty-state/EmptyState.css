@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+.empty-state-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 320px;
+  text-align: center;
+}
+
+.empty-state-card {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(10px);
+  border-radius: 18px;
+  padding: 32px 40px;
+  max-width: 420px;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.16);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  animation: fadeUpEmpty 0.7s ease;
+}
+
+@keyframes fadeUpEmpty {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.empty-state-icon > * {
+  font-size: 3.6rem;
+  background: linear-gradient(90deg, #9a6bff, #ff6ec7);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: floatIconES 2.8s ease-in-out infinite;
+}
+
+@keyframes floatIconES {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.95;
+  }
+  50% {
+    transform: translateY(-8px);
+    opacity: 1;
+  }
+}
+
+.empty-state-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #3b2c4f;
+  margin: 0;
+}
+
+.empty-state-message {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.05rem;
+  color: #555;
+  margin: 0;
+}
+
+.empty-state-button {
+  margin-top: 12px;
+  padding: 10px 22px;
+  background: linear-gradient(90deg, #6ea8fe, #9a6bff);
+  color: #fff;
+  border: none;
+  border-radius: 32px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.empty-state-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(154, 107, 255, 0.35);
+}

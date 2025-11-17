@@ -5,16 +5,16 @@ import { errors } from '@/shared/lib/constants/errorMessages.js';
 import { IsCanceledError, IsError } from '@/shared/lib/utils.js';
 import type { PaginatedResult } from '@/shared/types/paginatedResult.js';
 
-export async function lastThree(token: string, signal?: AbortSignal) {
+export const lastThree = async (token: string, signal?: AbortSignal) => {
   try {
     const url = `${routes.lastThreeNotifications}`;
-    const response = await http.get<NotificationType[]>(url, getAuthConfig(token, signal));
+    const { data } = await http.get<NotificationType[]>(url, getAuthConfig(token, signal));
 
-    return response.data;
+    return data;
   } catch (error) {
     processError(error, errors.notification.lastThree);
   }
-}
+};
 
 export async function all(
   token: string,

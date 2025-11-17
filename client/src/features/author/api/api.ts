@@ -25,7 +25,7 @@ export async function names(token: string, signal?: AbortSignal) {
   }
 }
 
-export async function topThree(signal?: AbortSignal) {
+export const topThree = async (signal?: AbortSignal) => {
   try {
     const url = `${routes.topThreeAuthors}`;
     const { data } = await http.get<Author[]>(url, getPublicConfig(signal));
@@ -34,7 +34,7 @@ export async function topThree(signal?: AbortSignal) {
   } catch (error) {
     processError(error, errors.author.topThree);
   }
-}
+};
 
 export async function details(id: number, token: string, isAdmin: boolean, signal?: AbortSignal) {
   try {

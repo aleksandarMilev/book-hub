@@ -27,7 +27,6 @@ export function useTopThree() {
         setError(null);
 
         const data = await api.topThree(controller.signal);
-        console.log(data);
         setBooks(data);
       } catch (error) {
         if (IsCanceledError(error)) {
