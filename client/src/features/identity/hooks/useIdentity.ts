@@ -6,12 +6,14 @@ import * as identityApi from '@/features/identity/api/api.js';
 import type { DecodedToken, LoginResponse } from '@/features/identity/types/identity.js';
 import * as profileApi from '@/features/profile/api/api.js';
 import { routes } from '@/shared/lib/constants/api.js';
-import { IsDomAbortError, IsError } from '@/shared/lib/utils.js';
+import { IsCanceledError, IsError } from '@/shared/lib/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 import type { User } from '@/shared/stores/auth/types/user.js';
+import { useMessage } from '@/shared/stores/message/message.js';
 
 export const useLogin = () => {
   const navigate = useNavigate();
+  const { showMessage } = useMessage();
   const { changeAuthenticationState } = useAuth();
 
   const onLogin = useCallback(
@@ -38,8 +40,9 @@ export const useLogin = () => {
         };
 
         changeAuthenticationState(user);
+        showMessage(`Welcome, ${user.username}!`, true);
       } catch (error) {
-        if (IsDomAbortError(error)) {
+        if (IsCanceledError(error)) {
           return;
         }
 
@@ -49,7 +52,7 @@ export const useLogin = () => {
 
       return () => controller.abort();
     },
-    [changeAuthenticationState, navigate],
+    [changeAuthenticationState, navigate, showMessage],
   );
 
   return onLogin;
@@ -57,6 +60,7 @@ export const useLogin = () => {
 
 export const useRegister = () => {
   const navigate = useNavigate();
+  const { showMessage } = useMessage();
   const { changeAuthenticationState } = useAuth();
 
   const onRegister = useCallback(
@@ -83,8 +87,9 @@ export const useRegister = () => {
         };
 
         changeAuthenticationState(user);
+        showMessage(`Welcome, ${user.username}!`, true);
       } catch (error) {
-        if (IsDomAbortError(error)) {
+        if (IsCanceledError(error)) {
           return;
         }
 
@@ -94,7 +99,7 @@ export const useRegister = () => {
 
       return () => controller.abort();
     },
-    [changeAuthenticationState, navigate],
+    [changeAuthenticationState, navigate, showMessage],
   );
 
   return onRegister;

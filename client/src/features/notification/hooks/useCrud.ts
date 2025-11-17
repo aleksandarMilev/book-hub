@@ -32,7 +32,6 @@ export const useLastThree = () => {
           return;
         }
 
-        console.log('we should show an error');
         const message = IsError(error) ? error.message : 'Failed to load notifications.';
         showMessage(message, false);
       } finally {
