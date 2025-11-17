@@ -12,7 +12,7 @@ import { useMessage } from '@/shared/stores/message/message.js';
 
 export const useLastThree = () => {
   const { token } = useAuth();
-  const navigate = useNavigate();
+  const { showMessage } = useMessage();
 
   const [notifications, setNotifications] = useState<NotificationType[]>([]);
   const [isFetching, setIsFetching] = useState(false);
@@ -32,13 +32,14 @@ export const useLastThree = () => {
           return;
         }
 
+        console.log('we should show an error');
         const message = IsError(error) ? error.message : 'Failed to load notifications.';
-        navigate(routes.badRequest, { state: { message } });
+        showMessage(message, false);
       } finally {
         setIsFetching(false);
       }
     },
-    [token, navigate],
+    [token, showMessage],
   );
 
   useEffect(() => {

@@ -12,7 +12,7 @@ const useMessageStore = createWithEqualityFn<MessageState>()(
     message: null,
     isSuccess: true,
 
-    show: (message, isSuccess = true, durationMs = 5_000) => {
+    show: (message, isSuccess = true, durationMs = 7_500) => {
       if (hideTimer) {
         clearTimeout(hideTimer);
         hideTimer = null;
@@ -45,6 +45,7 @@ export const useMessage = (): MessageView =>
       clearMessage: state.clear,
       isShowing: Boolean(state.message),
       isSuccess: state.isSuccess,
+      message: state.message,
     }),
     shallow,
   );

@@ -3,13 +3,13 @@ import { http, processError } from '@/shared/api/http.js';
 import { baseUrl, routes } from '@/shared/lib/constants/api.js';
 import { errors } from '@/shared/lib/constants/errorMessages.js';
 
-export async function all() {
+export const all = async () => {
   try {
     const url = `${baseUrl}${routes.statistics}`;
-    const response = await http.get<Statistics>(url);
+    const { data } = await http.get<Statistics>(url);
 
-    return response.data;
+    return data;
   } catch (error) {
     processError(error, errors.statistics.all);
   }
-}
+};

@@ -1,0 +1,39 @@
+.spinner-wrapper {
+  width: 100%;
+  height: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 18px;
+}
+
+.bookhub-spinner {
+  width: 55px;
+  height: 55px;
+  border: 4px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #9a6bff;
+  border-right-color: #6ea8fe;
+  border-bottom-color: #ff6ec7;
+  border-radius: 50%;
+  animation: spinnerRotate 1.1s linear infinite;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 14px rgba(154, 107, 255, 0.4);
+}
+
+@keyframes spinnerRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  color: #555;
+  opacity: 0.8;
+}

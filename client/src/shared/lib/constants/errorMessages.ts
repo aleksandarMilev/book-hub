@@ -20,7 +20,9 @@ export const baseErrors = {
 };
 
 export const errors = {
-  statistics: createEntityErrors('statistic'),
+  statistics: {
+    all: 'Something went wrong while loading our statistics. Please, refresh the page or try again later.',
+  },
   genre: createEntityErrors('genre'),
   readingList: {
     ...createEntityErrors(

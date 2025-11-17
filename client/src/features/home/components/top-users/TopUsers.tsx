@@ -1,41 +1,31 @@
 import './TopUsers.css';
 
 import { type FC } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { FaBookReader } from 'react-icons/fa';
 
-import { useTopProfiles } from '@/features/profile/hooks/useCrud.js';
+import { useTopProfilesPage } from '@/features/home/hooks/useTopProfilesPage.js';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { useAuth } from '@/shared/stores/auth/auth.js';
+import EmptyState from '@/shared/components/empty-state/EmptyState.js';
+import HomePageError from '@/shared/components/errors/home-page/HomePageError.js';
 
 const TopUsers: FC = () => {
-  const { userId } = useAuth();
-  const navigate = useNavigate();
-  const { profiles, isFetching, error } = useTopProfiles();
+  const { profiles, isFetching, error, onProfileClickHandler } = useTopProfilesPage();
 
-  if (isFetching || !profiles) {
+  if (error) {
+    return <HomePageError message={error} />;
+  }
+
+  if (isFetching) {
     return <DefaultSpinner />;
   }
 
-  if (error) {
-    return (
-      <div className="d-flex flex-column align-items-center justify-content-center vh-50">
-        <p className="lead text-danger">Error loading top users. Please try again later.</p>
-      </div>
-    );
-  }
-
-  const onClickHandler = (profileId: string): void => {
-    navigate(routes.profile, {
-      state: { id: profileId === userId ? null : profileId },
-    });
-  };
-
   if (!profiles?.length) {
     return (
-      <div className="d-flex flex-column align-items-center justify-content-center vh-50">
-        <p className="lead text-muted">No top users found.</p>
-      </div>
+      <EmptyState
+        icon={<FaBookReader />}
+        title="No Profiles Found"
+        message="There are no top users available yet."
+      />
     );
   }
 
@@ -47,10 +37,10 @@ const TopUsers: FC = () => {
           <div
             key={p.id}
             className="top-user-card"
-            onClick={() => onClickHandler(p.id)}
+            onClick={() => onProfileClickHandler(p.id)}
             role="button"
             tabIndex={0}
-            onKeyDown={(e) => e.key === 'Enter' && onClickHandler(p.id)}
+            onKeyDown={(e) => e.key === 'Enter' && onProfileClickHandler(p.id)}
           >
             <img src={p.imageUrl} alt={`${p.firstName} ${p.lastName}`} className="user-image" />
             <div className="user-info">
