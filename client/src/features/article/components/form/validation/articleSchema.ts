@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 const constraints = {
   title: { min: 10, max: 100 },
   introduction: { min: 10, max: 500 },
-  content: { min: 100, max: 5_000 },
+  content: { min: 100, max: 50_000 },
 };
 
 const messages = {

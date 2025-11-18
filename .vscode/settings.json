@@ -3,12 +3,6 @@
   "typescript.preferences.importModuleSpecifierEnding": "auto",
   "javascript.preferences.importModuleSpecifier": "non-relative",
   "javascript.preferences.importModuleSpecifierEnding": "auto",
-  "eslint.codeActionsOnSave.mode": "all",
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "always",
-    "source.organizeImports": "always"
-  },
-  "editor.formatOnSave": true,
   "eslint.useFlatConfig": true,
   "eslint.workingDirectories": [
     { "directory": "client", "changeProcessCWD": true },
@@ -20,21 +14,72 @@
     "typescript",
     "typescriptreact"
   ],
+  "eslint.codeActionsOnSave.mode": "all",
   "cSpell.words": [
+    "Approvable",
+    "Aragorn",
+    "Arrakis",
+    "Atreides",
+    "Baggins",
+    "Beeblebrox",
     "bookhub",
+    "Boromir",
+    "Bram",
     "couldn",
+    "Curley's",
     "deathdate",
     "downvotes",
     "fontawesome",
+    "Fremen",
+    "Gamgee",
+    "Gimli",
+    "Gollum",
+    "Gondor",
     "goodreads",
+    "Harker",
+    "Helsing",
+    "Hercule",
+    "Hermione",
+    "Horcruxes",
     "KHUB",
+    "Legolas",
+    "Lennie",
+    "Ludovico's",
+    "Mordor",
+    "Nadsat",
     "nameid",
     "nosniff",
+    "Ratchett",
     "SAMEORIGIN",
+    "Samwise",
+    "Sauron",
+    "Sematary",
     "signalr",
+    "Telescreens",
+    "thoughtcrime",
     "toplevel",
     "tsparser",
     "upvotes",
-    "VITE"
-  ]
+    "VITE",
+    "Vogon",
+    "wizarding",
+    "Zaphod"
+  ],
+
+  "[csharp]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "always",
+      "source.fixAll": "always"
+    }
+  },
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "always",
+    "source.fixAll.eslint": "always",
+    "source.fixAll": "always"
+  },
+  "omnisharp.enableEditorConfigSupport": true,
+  "omnisharp.useModernNet": true
 }

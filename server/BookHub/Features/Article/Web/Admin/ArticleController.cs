@@ -1,44 +1,53 @@
 ﻿namespace BookHub.Features.Article.Web.Admin
 {
     using Areas.Admin.Web;
-    using AutoMapper;
+    using BookHub.Features.Article.Service.Models;
     using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Mvc;
     using Models;
     using Service;
-    using Service.Models;
+    using Shared;
 
     using static Common.ApiRoutes;
+    using static Shared.Constants.RouteNames;
 
-    public class ArticleController(
-        IArticleService service,
-        IMapper mapper) : AdminApiController
+    public class ArticleController(IArticleService service) : AdminApiController
     {
-        private readonly IArticleService service = service;
-        private readonly IMapper mapper = mapper;
-
         [HttpPost]
-        public async Task<ActionResult<int>> Create(CreateArticleWebModel webModel)
+        public async Task<ActionResult<ArticleDetailsServiceModel>> Create(
+            CreateArticleWebModel webModel,
+            CancellationToken token = default)
         {
-            var serviceModel = this.mapper.Map<CreateArticleServiceModel>(webModel);
-            var id = await this.service.Create(serviceModel);
+            var serviceModel = webModel.ToServiceModel();
+            var createdArticle = await service.Create(serviceModel, token);
 
-            return this.Created(nameof(this.Create), id);
+            return CreatedAtRoute(
+                routeName: DetailsRouteName,
+                routeValues: new { id = createdArticle.Id },
+                value: createdArticle);
         }
 
         [HttpPut(Id)]
-        public async Task<ActionResult> Edit(int id, CreateArticleWebModel webModel)
+        public async Task<ActionResult> Edit(
+            string id,
+            CreateArticleWebModel webModel,
+            CancellationToken token = default)
         {
-            var serviceModel = this.mapper.Map<CreateArticleServiceModel>(webModel);
-            var result = await this.service.Edit(id, serviceModel);
+            var serviceModel = webModel.ToServiceModel();
+            var result = await service.Edit(
+                id,
+                serviceModel,
+                token);
 
             return this.NoContentOrBadRequest(result);
         }
 
         [HttpDelete(Id)]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(
+            string id,
+            CancellationToken token = default)
         {
-            var result = await this.service.Delete(id);
+            var result = await service.Delete(id, token);
 
             return this.NoContentOrBadRequest(result);
         }

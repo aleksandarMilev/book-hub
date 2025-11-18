@@ -1,0 +1,73 @@
+.bh-stars {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Inter', sans-serif;
+}
+
+.bh-stars-number {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-right: 4px;
+  background: linear-gradient(90deg, #7f5bff, #ff6ec7);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bh-star {
+  font-size: 1.25rem;
+  transition:
+    transform 0.25s ease,
+    filter 0.25s ease;
+}
+
+.bh-star.filled {
+  background: linear-gradient(120deg, #ffca3a, #ff9f1c);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 1px 3px rgba(255, 200, 80, 0.4));
+}
+
+.bh-star.empty {
+  color: #bfbfbf;
+}
+
+.bh-star:hover {
+  transform: scale(1.15) translateY(-2px);
+  filter: drop-shadow(0 4px 10px rgba(255, 200, 80, 0.45));
+  cursor: default;
+}
+
+.bh-star {
+  opacity: 0;
+  animation: starPop 0.4s ease forwards;
+}
+
+.bh-star:nth-child(2) {
+  animation-delay: 0.05s;
+}
+.bh-star:nth-child(3) {
+  animation-delay: 0.1s;
+}
+.bh-star:nth-child(4) {
+  animation-delay: 0.15s;
+}
+.bh-star:nth-child(5) {
+  animation-delay: 0.2s;
+}
+.bh-star:nth-child(6) {
+  animation-delay: 0.25s;
+}
+
+@keyframes starPop {
+  from {
+    transform: scale(0.65) translateY(4px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}

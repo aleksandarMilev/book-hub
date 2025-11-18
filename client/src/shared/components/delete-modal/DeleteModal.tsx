@@ -1,3 +1,5 @@
+import './DeleteModal.css';
+
 import type { FC } from 'react';
 import { FaExclamationTriangle, FaTrashAlt } from 'react-icons/fa';
 
@@ -5,49 +7,37 @@ const DeleteModal: FC<{
   showModal: boolean;
   toggleModal: () => void;
   deleteHandler: () => void;
-}> = ({ showModal, toggleModal, deleteHandler }) => (
-  <div
-    className={`modal fade ${showModal ? 'show d-block' : ''}`}
-    tabIndex={-1}
-    aria-labelledby="deleteModalLabel"
-    aria-hidden={!showModal}
-    role="dialog"
-  >
-    <div className="modal-dialog modal-dialog-centered">
-      <div className="modal-content">
-        <div className="modal-header bg-warning text-white">
-          <h5 className="modal-title" id="deleteModalLabel">
-            <FaExclamationTriangle className="me-2" /> Confirm Deletion
-          </h5>
-          <button
-            type="button"
-            className="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-            onClick={toggleModal}
-          ></button>
-        </div>
-        <div className="modal-body">
-          <p className="text-center mb-0">
-            Are you sure you want to delete this? This action cannot be undone.
-          </p>
-        </div>
-        <div className="modal-footer">
-          <button
-            type="button"
-            className="btn btn-secondary"
-            data-bs-dismiss="modal"
-            onClick={toggleModal}
-          >
-            Cancel
-          </button>
-          <button type="button" className="btn btn-danger" onClick={deleteHandler}>
-            <FaTrashAlt className="me-2" /> Delete
-          </button>
+  title?: string;
+  message?: string;
+}> = ({
+  showModal,
+  toggleModal,
+  deleteHandler,
+  title = 'Confirm Deletion',
+  message = 'Are you sure you want to delete this item? This action cannot be undone.',
+}) => {
+  return (
+    <>
+      {showModal && <div className="delete-backdrop" onClick={toggleModal} />}
+      <div className={`delete-modal ${showModal ? 'show' : ''}`} role="dialog" aria-modal="true">
+        <div className="delete-modal-content">
+          <div className="delete-modal-icon">
+            <FaExclamationTriangle />
+          </div>
+          <h3 className="delete-modal-title">{title}</h3>
+          <p className="delete-modal-message">{message}</p>
+          <div className="delete-modal-actions">
+            <button className="delete-btn cancel" onClick={toggleModal}>
+              Cancel
+            </button>
+            <button className="delete-btn confirm" onClick={deleteHandler}>
+              <FaTrashAlt className="me-2" /> Delete
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-);
+    </>
+  );
+};
 
 export default DeleteModal;

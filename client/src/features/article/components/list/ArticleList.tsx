@@ -1,11 +1,13 @@
-import { type FC } from 'react';
+import './ArticleList.css';
+
+import type { FC } from 'react';
 import { FaSearch } from 'react-icons/fa';
 
-import image from '@/assets/images/no-books-found.png';
+import emptyImg from '@/assets/images/no-books-found.png';
 import ArticleListItem from '@/features/article/components/list-item/ArticleListItem.js';
 import { useListPage } from '@/features/article/hooks/useListPage.js';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.jsx';
-import Pagination from '@/shared/components/pagination/Pagination.jsx';
+import Pagination from '@/shared/components/pagination/Pagination.js';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
 
 const ArticleList: FC = () => {
   const {
@@ -17,63 +19,46 @@ const ArticleList: FC = () => {
     totalPages,
     handlePageChange,
     handleSearchChange,
+    showEmpty,
   } = useListPage();
 
   return (
-    <div className="container mt-5 mb-5">
-      <div className="row mb-4">
-        <div className="col-md-10 mx-auto d-flex">
-          <div className="search-bar-container d-flex w-100">
-            <input
-              type="text"
-              className="form-control search-input"
-              placeholder="Search articles..."
-              value={searchTerm}
-              onChange={handleSearchChange}
-              disabled={isFetching}
-            />
-            <button
-              className="btn btn-light search-btn"
-              disabled={isFetching}
-              aria-label="Search articles"
-            >
-              <FaSearch size={20} />
-            </button>
-          </div>
+    <div className="article-list-page container">
+      <div className="search-wrapper">
+        <div className="search-bar">
+          <FaSearch className="search-icon" />
+          <input
+            type="text"
+            placeholder="Search articles..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
         </div>
       </div>
-      <div className="d-flex justify-content-center row">
-        <div className="col-md-10">
-          {isFetching ? (
-            <DefaultSpinner />
-          ) : articles.length > 0 ? (
-            <>
+      <div className="articles-container">
+        {isFetching && <DefaultSpinner />}
+        {!isFetching && !showEmpty && (
+          <>
+            <div className="articles-list">
               {articles.map((article) => (
                 <ArticleListItem key={article.id} {...article} />
               ))}
-              <Pagination
-                page={page}
-                totalPages={totalPages}
-                disabled={isFetching}
-                onPageChange={handlePageChange}
-              />
-            </>
-          ) : (
-            <div className="d-flex flex-column align-items-center justify-content-center mt-5">
-              <img
-                src={image}
-                alt="No articles found"
-                className="mb-4 clickable"
-                style={{ maxWidth: '200px', opacity: 0.7, cursor: 'pointer' }}
-                onClick={() => setSearchTerm('')}
-              />
-              <h5 className="text-muted">{`We couldn't find any articles`}</h5>
-              <p className="text-muted text-center" style={{ maxWidth: '400px' }}>
-                Try adjusting your search terms or exploring our collection for more options.
-              </p>
             </div>
-          )}
-        </div>
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              disabled={isFetching}
+              onPageChange={handlePageChange}
+            />
+          </>
+        )}
+        {showEmpty && (
+          <div className="empty-state">
+            <img src={emptyImg} alt="No articles" onClick={() => setSearchTerm('')} />
+            <h4>No articles found</h4>
+            <p>Try different keywords or clear your search to explore the full article library.</p>
+          </div>
+        )}
       </div>
     </div>
   );

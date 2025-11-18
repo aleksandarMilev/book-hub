@@ -1,4 +1,6 @@
-import { type FC } from 'react';
+import './Pagination.css';
+
+import type { FC } from 'react';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 const Pagination: FC<{
@@ -7,43 +9,33 @@ const Pagination: FC<{
   disabled?: boolean;
   onPageChange: (newPage: number) => void;
 }> = ({ page, totalPages, disabled = false, onPageChange }) => {
-  const handlePrevious = () => {
-    if (page > 1) {
-      onPageChange(page - 1);
-    }
-  };
+  if (totalPages <= 1) return null;
 
-  const handleNext = () => {
-    if (page < totalPages) {
-      onPageChange(page + 1);
-    }
-  };
-
-  if (totalPages <= 1) {
-    return null;
-  }
+  const prev = () => page > 1 && onPageChange(page - 1);
+  const next = () => page < totalPages && onPageChange(page + 1);
 
   return (
-    <div className="pagination-container d-flex justify-content-center mt-4 align-items-center">
+    <div className="bh-pagination">
       <button
-        className="btn pagination-btn me-3"
-        onClick={handlePrevious}
+        className="bh-page-btn"
+        onClick={prev}
         disabled={page === 1 || disabled}
         aria-label="Previous page"
       >
-        <FaArrowLeft /> Previous
+        <FaArrowLeft /> <span>Previous</span>
       </button>
-      <div className="pagination-info">
-        <span className="current-page fw-bold">{page}</span> /{' '}
-        <span className="total-pages">{totalPages}</span>
+      <div className="bh-page-counter">
+        <span className="current">{page}</span>
+        <span className="divider">/</span>
+        <span className="total">{totalPages}</span>
       </div>
       <button
-        className="btn pagination-btn ms-3"
-        onClick={handleNext}
+        className="bh-page-btn"
+        onClick={next}
         disabled={page === totalPages || disabled}
         aria-label="Next page"
       >
-        Next <FaArrowRight />
+        <span>Next</span> <FaArrowRight />
       </button>
     </div>
   );

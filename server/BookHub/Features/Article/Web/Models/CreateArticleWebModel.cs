@@ -2,7 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    using static Shared.ValidationConstants;
+    using static Shared.Constants.ValidationConstants;
 
     public class CreateArticleWebModel
     {

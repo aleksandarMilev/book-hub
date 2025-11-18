@@ -6,14 +6,16 @@
     using Service.Models;
 
     using static Common.ApiRoutes;
+    using static Shared.Constants.RouteNames;
 
     [Authorize]
     public class ArticleController(IArticleService service) : ApiController
     {
-        private readonly IArticleService service = service;
-
-        [HttpGet(Id)]
-        public async Task<ActionResult<ArticleDetailsServiceModel>> Details(int id)
-            => this.Ok(await this.service.Details(id));
+        // We should provide name here so we can construct the location header easier in the admin controller
+        [HttpGet(Id, Name = DetailsRouteName)]
+        public async Task<ActionResult<ArticleDetailsServiceModel>> Details(
+            string id,
+            CancellationToken token = default)
+            => this.Ok(await service.Details(id, token));
     }
 }

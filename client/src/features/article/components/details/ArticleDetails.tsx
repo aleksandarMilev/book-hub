@@ -10,14 +10,16 @@ import {
   MDBIcon,
   MDBRow,
 } from 'mdb-react-ui-kit';
-import { type FC } from 'react';
+import type { FC } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 import { useDetailsPage } from '@/features/article/hooks/useDetailsPage.js';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.jsx';
-import DeleteModal from '@/shared/components/delete-modal/DeleteModal.jsx';
-import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect.jsx';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
+import DeleteModal from '@/shared/components/delete-modal/DeleteModal.js';
+import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect.js';
 import { routes } from '@/shared/lib/constants/api.js';
 
 const ArticleDetails: FC = () => {
@@ -42,38 +44,48 @@ const ArticleDetails: FC = () => {
   }
 
   return (
-    <MDBContainer className="my-5">
-      <MDBRow>
-        <MDBCol md="8" className="my-col">
-          <MDBCard>
-            <MDBCardBody>
+    <MDBContainer className="article-details-page my-5">
+      <MDBRow className="justify-content-center">
+        <MDBCol lg="9" className="article-details-col">
+          <MDBCard className="article-details-card">
+            <MDBCardBody className="article-details-body">
               <MDBRow>
                 <MDBCol md="12">
-                  <MDBCardTitle className="article-title">{article.title}</MDBCardTitle>
-                  <MDBCardText className="text-muted">{formattedDate}</MDBCardText>
-                </MDBCol>
-              </MDBRow>
-              <MDBRow>
-                <MDBCol md="12" className="article-image-container">
-                  {article.imageUrl}
+                  <MDBCardTitle className="article-details-title">{article.title}</MDBCardTitle>
+                  <MDBCardText className="article-details-meta">{formattedDate}</MDBCardText>
                 </MDBCol>
               </MDBRow>
               <MDBRow>
                 <MDBCol md="12">
-                  <MDBCardText className="article-introduction">{article.introduction}</MDBCardText>
-                  <MDBCardText className="article-content">{article.content}</MDBCardText>
+                  <div className="article-details-image-wrapper">
+                    <img
+                      src={article.imageUrl}
+                      alt={article.title}
+                      className="article-details-image"
+                    />
+                  </div>
                 </MDBCol>
               </MDBRow>
-              <MDBRow className="mt-4">
+              <MDBRow>
+                <MDBCol md="12">
+                  <MDBCardText className="article-details-intro">
+                    {article.introduction}
+                  </MDBCardText>
+                  <div className="article-details-content">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{article.content}</ReactMarkdown>
+                  </div>
+                </MDBCol>
+              </MDBRow>
+              <MDBRow className="article-details-bottom-meta">
                 <MDBCol md="6">
-                  <div className="article-meta">
+                  <div className="article-details-meta">
                     <MDBIcon fas icon="eye" className="me-2" />
                     {article.views ?? 0} Views
                   </div>
                 </MDBCol>
               </MDBRow>
               {isAdmin && (
-                <div className="d-flex gap-2 mt-4">
+                <div className="d-flex gap-2 article-details-actions">
                   <Link
                     to={`${routes.admin.editArticle}/${id}`}
                     aria-label="Edit article"

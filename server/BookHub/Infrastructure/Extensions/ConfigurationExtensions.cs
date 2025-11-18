@@ -11,15 +11,21 @@
         public static string GetConnectionString(this IConfiguration configuration) 
             => configuration
                 .GetConnectionString(ConnectionString)
-                ?? throw new InvalidOperationException(string.Format(SectionNotFoundMessage, ConnectionString));
+                ?? throw new InvalidOperationException(string.Format(
+                    SectionNotFoundMessage,
+                    ConnectionString));
 
         public static string GetAdminEmail(this IConfiguration configuration)
             => configuration[AdminEmail]
-                ?? throw new InvalidOperationException(string.Format(SectionNotFoundMessage, AdminEmail));
+                ?? throw new InvalidOperationException(string.Format(
+                    SectionNotFoundMessage,
+                    AdminEmail));
 
         public static string GetAdminPassword(this IConfiguration configuration)
             => configuration[AdminPassword]
-                ?? throw new InvalidOperationException(string.Format(SectionNotFoundMessage, AdminPassword));
+                ?? throw new InvalidOperationException(string.Format(
+                    SectionNotFoundMessage,
+                    AdminPassword));
 
         public static string GetAppSettings(this IConfiguration configuration)
             => configuration

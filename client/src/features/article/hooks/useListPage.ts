@@ -32,6 +32,8 @@ export const useListPage = () => {
     setPage(newPage);
   };
 
+  const showEmpty = !isFetching && articles.length === 0;
+
   return {
     articles,
     isFetching,
@@ -41,5 +43,6 @@ export const useListPage = () => {
     totalPages,
     handleSearchChange,
     handlePageChange,
+    showEmpty,
   };
 };

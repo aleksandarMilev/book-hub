@@ -23,8 +23,6 @@
         DbContextOptions<BookHubDbContext> options, 
         ICurrentUserService userService) : IdentityDbContext<User>(options)
     {
-        private readonly ICurrentUserService userService = userService;
-
         public DbSet<Book> Books { get; init; }
 
         public DbSet<Genre> Genres { get; init; }
@@ -85,9 +83,10 @@
                 .ForEach(e =>
                 {
                     var utcNow = DateTime.UtcNow;
-                    var username = this.userService.GetUsername();
+                    var username = userService.GetUsername();
 
-                    if (e.State == EntityState.Deleted && e.Entity is IDeletableEntity deletableEntity)
+                    if (e.State == EntityState.Deleted && 
+                        e.Entity is IDeletableEntity deletableEntity)
                     {
                         deletableEntity.DeletedOn = utcNow;
                         deletableEntity.DeletedBy = username;
@@ -123,7 +122,7 @@
                     var entityClrType = entityType.ClrType;
                     var filterExpression = BuildFilterExpression(entityClrType);
 
-                    if (filterExpression != null)
+                    if (filterExpression is not null)
                     {
                         modelBuilder.Entity(entityClrType).HasQueryFilter(filterExpression);
                     }
@@ -137,22 +136,33 @@
 
             if (typeof(IDeletableEntity).IsAssignableFrom(entityType))
             {
-                var isDeletedProperty = Expression.Property(parameter, nameof(IDeletableEntity.IsDeleted));
-                var isNotDeleted = Expression.Equal(isDeletedProperty, Expression.Constant(false));
+                var isDeletedProperty = Expression.Property(
+                    parameter,
+                    nameof(IDeletableEntity.IsDeleted));
+
+                var isNotDeleted = Expression.Equal(
+                    isDeletedProperty,
+                    Expression.Constant(false));
+
                 combinedFilter = isNotDeleted;
             }
 
             if (typeof(IApprovableEntity).IsAssignableFrom(entityType))
             {
-                var isApprovedProperty = Expression.Property(parameter, nameof(IApprovableEntity.IsApproved));
-                var isApproved = Expression.Equal(isApprovedProperty, Expression.Constant(true));
+                var isApprovedProperty = Expression.Property(
+                    parameter,
+                    nameof(IApprovableEntity.IsApproved));
 
-                combinedFilter = combinedFilter == null
+                var isApproved = Expression.Equal(
+                    isApprovedProperty,
+                    Expression.Constant(true));
+
+                combinedFilter = combinedFilter is null
                     ? isApproved
                     : Expression.AndAlso(combinedFilter, isApproved);
             }
 
-            return combinedFilter == null
+            return combinedFilter is null
                 ? null
                 : Expression.Lambda(combinedFilter, parameter);
         }
