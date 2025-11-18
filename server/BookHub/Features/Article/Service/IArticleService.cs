@@ -6,12 +6,21 @@
 
     public interface IArticleService : ITransientService
     {
-        Task<ArticleDetailsServiceModel?> Details(int id);
+        Task<ArticleDetailsServiceModel?> Details(
+            string id,
+            CancellationToken token);
 
-        Task<int> Create(CreateArticleServiceModel model);
+        Task<ArticleDetailsServiceModel> Create(
+            CreateArticleServiceModel model,
+            CancellationToken token);
 
-        Task<Result> Edit(int id, CreateArticleServiceModel model);
+        Task<Result> Edit(
+            string id,
+            CreateArticleServiceModel model,
+            CancellationToken token);
 
-        Task<Result> Delete(int id);
+        Task<Result> Delete(
+            string id,
+            CancellationToken token);
     }
 }

@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+.bh-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  margin-top: 28px;
+  font-family: 'Inter', sans-serif;
+  animation: fadeUpPagination 0.5s ease;
+}
+
+@keyframes fadeUpPagination {
+  from {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.bh-page-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 30px;
+  border: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  background: linear-gradient(90deg, #6ea8fe, #9a6bff);
+  color: #fff;
+  cursor: pointer;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    opacity 0.25s ease;
+}
+
+.bh-page-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(110, 168, 254, 0.35);
+}
+
+.bh-page-btn:disabled {
+  background: rgba(180, 180, 180, 0.35);
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+  box-shadow: none;
+}
+
+.bh-page-counter {
+  display: flex;
+  align-items: center;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #3b2c4f;
+}
+
+.bh-page-counter .current {
+  font-size: 1.35rem;
+  background: linear-gradient(90deg, #7f5bff, #ff6ec7);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bh-page-counter .divider {
+  margin: 0 6px;
+  color: #888;
+}
+
+.bh-page-counter .total {
+  color: #555;
+}

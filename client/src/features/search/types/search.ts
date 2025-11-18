@@ -1,7 +1,7 @@
 import type { GenreName } from '@/features/genre/types/genre.js';
 
 export type ArticlesSearchResult = {
-  id: number;
+  id: string;
   title: string;
   introduction: string;
   imageUrl: string;

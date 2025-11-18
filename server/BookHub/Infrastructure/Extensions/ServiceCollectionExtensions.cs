@@ -98,7 +98,7 @@
 
         public static IServiceCollection AddSwagger(this IServiceCollection services)
         {
-            var apiInfo = new OpenApiInfo()
+            var apiInfo = new OpenApiInfo
             {
                 Title = "My BookHub API",
                 Version = "v1"

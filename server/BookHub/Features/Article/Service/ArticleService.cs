@@ -1,111 +1,123 @@
 ﻿namespace BookHub.Features.Article.Service
 {
-    using AutoMapper;
     using BookHub.Data;
     using Data.Models;
     using Infrastructure.Services;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Logging;
     using Models;
+    using Shared;
 
     using static Common.ErrorMessage;
+    using static Shared.Constants.DefaultValues;
 
     public class ArticleService(
         BookHubDbContext data,
-        ICurrentUserService userService,
-        IMapper mapper) : IArticleService
+        ILogger<ArticleService> logger) : IArticleService
     {
-        private const string DefaultImageUrl = "https://img.freepik.com/free-photo/bookmark-books-arrangement-top-view_23-2149894335.jpg";
-
-        private readonly BookHubDbContext data = data;
-        private readonly ICurrentUserService userService = userService;
-        private readonly IMapper mapper = mapper;
-
-        public async Task<ArticleDetailsServiceModel?> Details(int id)
+        public async Task<ArticleDetailsServiceModel?> Details(
+            string id,
+            CancellationToken token = default)
         {
-            var article = await this.data
-                .Articles
-                .FindAsync(id);
+            var rowsAffected = await data.Articles
+                .Where(a => a.Id == id)
+                .ExecuteUpdateAsync(s => s
+                    .SetProperty(a => a.Views, a => a.Views + 1),
+                    token);
 
-            if (article is null) 
+            if (rowsAffected == 0)
             {
                 return null;
             }
 
-            article.Views++;
-            await this.data.SaveChangesAsync();
-
-            return this.mapper.Map<ArticleDetailsServiceModel>(article);
-        }
-
-        public async Task<int> Create(CreateArticleServiceModel model)
-        {
-            model.ImageUrl ??= DefaultImageUrl;
-
-            var article = this.mapper.Map<Article>(model);
-
-            this.data.Add(article);
-            await this.data.SaveChangesAsync();
-
-            return article.Id;
-        }
-
-        public async Task<Result> Edit(int id, CreateArticleServiceModel model)
-        {
-            var article = await this.data
-                 .Articles
-                 .FindAsync(id);
-
-            if (article is null)
+            var dbModel = await this.GetByIdAsNoTracking(id, token);
+            if (dbModel is null)
             {
-                return string.Format(
-                    DbEntityNotFound, 
-                    nameof(Article), 
-                    id);
+                return null;
             }
 
-            if (!this.userService.IsAdmin())
+            return dbModel.ToDetailsServiceModel();
+        }
+
+        public async Task<ArticleDetailsServiceModel> Create(
+            CreateArticleServiceModel serviceModel,
+            CancellationToken token = default)
+        {
+            var dbModel = serviceModel.ToDbModel();
+            SetDefaultImageIfNull(dbModel);
+
+            data.Add(dbModel);
+            await data.SaveChangesAsync(token);
+
+            logger.LogInformation(
+                "New {article} with Id: {id} was created.", nameof(Article), dbModel.Id);
+
+            return dbModel.ToDetailsServiceModel();
+        }
+
+        public async Task<Result> Edit(
+            string id,
+            CreateArticleServiceModel serviceModel,
+            CancellationToken token = default)
+        {
+            var dbModel = await this.GetById(id, token);
+            if (dbModel is null)
             {
-                return string.Format(
-                    UnauthorizedDbEntityAction,
-                    this.userService.GetUsername(),
-                    nameof(Article),
-                    id);
+                return LogAndReturnNotFoundMessage(id);
             }
 
-            model.ImageUrl ??= DefaultImageUrl;
-            this.mapper.Map(model, article);
+            serviceModel.UpdateDbModel(dbModel);
+            SetDefaultImageIfNull(dbModel);
 
-            await this.data.SaveChangesAsync();
+            await data.SaveChangesAsync(token);
+
+            logger.LogInformation(
+                "{article} with Id: {id} was updated.", nameof(Article), dbModel.Id);
 
             return true;
         }
 
-        public async Task<Result> Delete(int id)
+        public async Task<Result> Delete(
+            string id,
+            CancellationToken token = default)
         {
-            var article = await this.data
-                  .Articles
-                  .FindAsync(id);
-
-            if (article is null)
+            var dbModel = await this.GetById(id, token);
+            if (dbModel is null)
             {
-                return string.Format(
-                    DbEntityNotFound,
-                    nameof(Article),
-                    id);
+                return LogAndReturnNotFoundMessage(id);
             }
 
-            if (!this.userService.IsAdmin())
-            {
-                return string.Format(
-                    UnauthorizedDbEntityAction,
-                    this.userService.GetUsername(),
-                    nameof(Article),
-                    id);
-            }
+            data.Remove(dbModel);
+            await data.SaveChangesAsync(token);
 
-            this.data.Remove(article);
-            await this.data.SaveChangesAsync();
+            logger.LogInformation(
+                "{article} with Id: {id} was deleted.", nameof(Article), dbModel.Id);
 
             return true;
         }
+
+        private async Task<Article?> GetById(
+            string id,
+            CancellationToken token = default)
+            => await data
+                .Articles
+                .FindAsync([id], token);
+
+        private async Task<Article?> GetByIdAsNoTracking(
+            string id,
+            CancellationToken token = default)
+            => await data
+                .Articles
+                .AsNoTracking()
+                .FirstOrDefaultAsync(a => a.Id == id, token);
+
+        private string LogAndReturnNotFoundMessage(string id)
+        {
+            logger.LogWarning(DbEntityNotFoundTemplate, nameof(Article), id);
+            return string.Format(DbEntityNotFound, nameof(Article), id);
+        }
+
+        private static void SetDefaultImageIfNull(Article article)
+            => article.ImageUrl ??= DefaultImageUrl;
     }
 }

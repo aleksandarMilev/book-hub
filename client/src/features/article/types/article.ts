@@ -6,7 +6,11 @@ export interface CreateArticle {
 }
 
 export interface ArticleDetails extends CreateArticle {
-  id: number;
+  id: string;
   createdOn: string;
   views: number;
+  title: string;
+  introduction: string;
+  content: string;
+  imageUrl: string;
 }

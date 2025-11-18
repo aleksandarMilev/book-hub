@@ -11,7 +11,8 @@
 
         public async Task<string> GetId()
         {
-            var admin = await this.userManager.FindByEmailAsync(AdminEmail);
+            //TODO: change the approach with the admin role feature
+            var admin = await this.userManager.FindByEmailAsync("foo");
 
             return admin is null 
                 ? throw new InvalidOperationException("Admin not found!") 

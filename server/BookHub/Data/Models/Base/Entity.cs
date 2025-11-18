@@ -2,7 +2,7 @@
 {
     public abstract class Entity<TKey> : IEntity
     {
-        public TKey Id { get; set ; }
+        public TKey Id { get; set; } = default!;
 
         public DateTime CreatedOn { get; set; }
 

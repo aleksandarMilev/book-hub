@@ -2,7 +2,7 @@
 {
     public class ArticleDetailsServiceModel : CreateArticleServiceModel
     {
-        public int Id { get; init; }
+        public string Id { get; init; } = null!;
 
         public DateTime CreatedOn { get; init; }
 

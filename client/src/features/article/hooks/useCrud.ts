@@ -10,17 +10,15 @@ import { IsCanceledError, IsError } from '@/shared/lib/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 import { useMessage } from '@/shared/stores/message/message.js';
 import { HttpError } from '@/shared/types/errors/httpError.js';
-import type { IntId } from '@/shared/types/intId.js';
 
-export const useDetails = (id: IntId | null, disable = false) => {
+export const useDetails = (id?: string) => {
   const { token } = useAuth();
-
   const [article, setArticle] = useState<ArticleDetails | null>(null);
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState<HttpError | null>(null);
 
   useEffect(() => {
-    if (disable || !id) {
+    if (!id) {
       setError(
         HttpError.with()
           .message(errors.article.byId)
@@ -53,7 +51,7 @@ export const useDetails = (id: IntId | null, disable = false) => {
     })();
 
     return () => controller.abort();
-  }, [id, token, disable]);
+  }, [id, token]);
 
   return { article, isFetching, error };
 };
@@ -87,7 +85,7 @@ export const useEdit = () => {
   const navigate = useNavigate();
 
   return useCallback(
-    async (id: number, data: CreateArticle) => {
+    async (id: string, data: CreateArticle) => {
       const articleToSend: CreateArticle = {
         ...data,
         imageUrl: data.imageUrl || null,
@@ -106,16 +104,15 @@ export const useEdit = () => {
   );
 };
 
-export const useRemove = (id: IntId | null, disable = false, title?: string) => {
+export const useRemove = (id?: string, title?: string) => {
   const { token } = useAuth();
   const navigate = useNavigate();
   const { showMessage } = useMessage();
-
   const [showModal, setShowModal] = useState(false);
   const toggleModal = useCallback(() => setShowModal((prev) => !prev), []);
 
   const deleteHandler = useCallback(async () => {
-    if (disable || !id) {
+    if (!id) {
       return;
     }
 
@@ -142,7 +139,7 @@ export const useRemove = (id: IntId | null, disable = false, title?: string) => 
       toggleModal();
       controller.abort();
     }
-  }, [showModal, id, token, title, navigate, showMessage, toggleModal, disable]);
+  }, [showModal, id, token, title, navigate, showMessage, toggleModal]);
 
   return { showModal, toggleModal, deleteHandler };
 };

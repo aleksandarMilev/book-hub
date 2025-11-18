@@ -30,8 +30,7 @@ app
     .UseAuthentication()
     .UseAuthorization()
     .UseAppEndpoints()
-    .UseSwaggerUI()
-    .UseMigrations()
-    .UseAdminRole(builder.Configuration);
+    .UseSwaggerUI();
 
+await app.UseMigrations();
 await app.RunAsync();

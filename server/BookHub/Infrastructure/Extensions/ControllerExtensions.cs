@@ -14,7 +14,12 @@
                 return controller.NoContent();
             }
 
-            return controller.BadRequest(new { errorMessage = result.ErrorMessage });
+            var errorObject = new
+            {
+                errorMessage = result.ErrorMessage
+            };
+
+            return controller.BadRequest(errorObject);
         }
     }
 }

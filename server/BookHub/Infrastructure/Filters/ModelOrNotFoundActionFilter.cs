@@ -10,8 +10,7 @@
             if (context.Result is ObjectResult result)
             {
                 var model = result.Value;
-
-                if (model == null)
+                if (model is null)
                 {
                     context.Result = new NotFoundResult();
                 }
