@@ -1,6 +1,6 @@
 import './Pagination.css';
 
-import type { FC } from 'react';
+import { useEffect, type FC } from 'react';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 const Pagination: FC<{
@@ -9,10 +9,25 @@ const Pagination: FC<{
   disabled?: boolean;
   onPageChange: (newPage: number) => void;
 }> = ({ page, totalPages, disabled = false, onPageChange }) => {
-  if (totalPages <= 1) return null;
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [page]);
 
-  const prev = () => page > 1 && onPageChange(page - 1);
-  const next = () => page < totalPages && onPageChange(page + 1);
+  if (totalPages <= 1) {
+    return null;
+  }
+
+  const prev = () => {
+    if (page > 1) {
+      onPageChange(page - 1);
+    }
+  };
+
+  const next = () => {
+    if (page < totalPages) {
+      onPageChange(page + 1);
+    }
+  };
 
   return (
     <div className="bh-pagination">

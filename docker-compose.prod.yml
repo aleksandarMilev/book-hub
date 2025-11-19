@@ -26,8 +26,6 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=${DB_NAME};User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True;
-      - Admin__Password=${ADMIN_PASSWORD}
-      - Admin__Email=${ADMIN_EMAIL}
       - ApplicationSettings__Secret=${APP_SECRET}
     networks:
       - backend

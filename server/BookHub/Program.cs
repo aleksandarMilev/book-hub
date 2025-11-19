@@ -19,7 +19,8 @@ if (builder.Environment.IsDevelopment())
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+var envIsDev = app.Environment.IsDevelopment();
+if (envIsDev)
 {
     app.UseDeveloperExceptionPage();
 }
@@ -32,5 +33,10 @@ app
     .UseAppEndpoints()
     .UseSwaggerUI();
 
-await app.UseMigrations();
+if (envIsDev)
+{
+    await app.UseMigrations();
+    await app.UseAdminRole();
+}
+
 await app.RunAsync();

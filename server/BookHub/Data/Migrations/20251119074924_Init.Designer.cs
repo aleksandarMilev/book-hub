@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookHub.Data.Migrations
 {
     [DbContext(typeof(BookHubDbContext))]
-    [Migration("20251119065824_Init")]
+    [Migration("20251119074924_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -2839,14 +2839,14 @@ namespace BookHub.Data.Migrations
                         {
                             Id = "user1Id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f5486b99-36a4-4aca-acc9-5238d9857a28",
+                            ConcurrencyStamp = "50b5255a-c0b0-4450-9895-e7df81c9ca87",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user1@mail.com",
                             EmailConfirmed = false,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "9819230a-c34a-4995-b4a4-c45948f0a085",
+                            SecurityStamp = "deaad583-2c7a-4b7f-bdb4-d12f2c44683a",
                             TwoFactorEnabled = false,
                             UserName = "user1name"
                         },
@@ -2854,14 +2854,14 @@ namespace BookHub.Data.Migrations
                         {
                             Id = "user2Id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "1dd3cdd6-6d7a-4d0d-8b56-903ddd9feb7d",
+                            ConcurrencyStamp = "460da244-ad32-4c9e-8a98-00d0a3c9ffa8",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user2@mail.com",
                             EmailConfirmed = false,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "a5aebe49-f7f3-4fe4-ab96-885ac8a6ca85",
+                            SecurityStamp = "3bebdde4-2e1e-496c-bc2c-48d18b617e1e",
                             TwoFactorEnabled = false,
                             UserName = "user2name"
                         },
@@ -2869,14 +2869,14 @@ namespace BookHub.Data.Migrations
                         {
                             Id = "user3Id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3b031afe-2966-4e9e-acdf-512c5c61c292",
+                            ConcurrencyStamp = "65eb3aa5-4656-48b6-90fd-a3f7a8f04dd6",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user3@mail.com",
                             EmailConfirmed = false,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "81f443a9-5666-4844-8400-615033ebb3b3",
+                            SecurityStamp = "2eea65b3-f2b3-4190-b3d2-948f49fd3da0",
                             TwoFactorEnabled = false,
                             UserName = "user3name"
                         },
@@ -2884,14 +2884,14 @@ namespace BookHub.Data.Migrations
                         {
                             Id = "user4Id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ca9a0a65-5980-4477-9d05-b02466c4f127",
+                            ConcurrencyStamp = "48fac34e-bff2-424a-8f2b-7381ad281a25",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user4@mail.com",
                             EmailConfirmed = false,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "1d6bb644-1ec2-4a7b-b21c-6d27ca19a2f0",
+                            SecurityStamp = "9a6cef68-616d-4713-af2f-df6149b5a0d1",
                             TwoFactorEnabled = false,
                             UserName = "user4name"
                         },
@@ -2899,14 +2899,14 @@ namespace BookHub.Data.Migrations
                         {
                             Id = "user5Id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "636021bf-d3f5-4154-ba25-e6fc105bd75e",
+                            ConcurrencyStamp = "37c6bc56-0f38-4e17-9504-051783e2c137",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user5@mail.com",
                             EmailConfirmed = false,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "9157494f-4049-4542-96d7-67b5227513ae",
+                            SecurityStamp = "aed755f7-beb1-46e1-802f-d1d6e7b934c6",
                             TwoFactorEnabled = false,
                             UserName = "user5name"
                         },
@@ -2914,14 +2914,14 @@ namespace BookHub.Data.Migrations
                         {
                             Id = "user6Id",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ca45f14b-1f59-4186-ad7d-15b37184fd53",
+                            ConcurrencyStamp = "648a0674-a8b2-49b9-8f5a-625c5ab3217b",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user6@mail.com",
                             EmailConfirmed = false,
                             IsDeleted = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "1dc83c2e-fb95-4ff8-ae36-224566a53a80",
+                            SecurityStamp = "67adedc5-62ba-4d71-8cdd-a42fc39dd902",
                             TwoFactorEnabled = false,
                             UserName = "user6name"
                         });
