@@ -1,9 +1,9 @@
 ﻿namespace BookHub.Features.Article.Data.Seed
 {
 
-using Models;
+    using Models;
 
-public static class ArticleSeeder
+    public static class ArticleSeeder
     {
         private static readonly DateTime SeedCreationDate = new(2_025, 11, 18, 8, 0, 0, DateTimeKind.Utc);
 
@@ -12,7 +12,7 @@ public static class ArticleSeeder
             [
                 new()
                 {
-                    Id = "fc3e6180-1cdc-4d4b-a73a-b377e056858f",
+                    Id = new Guid("fc3e6180-1cdc-4d4b-a73a-b377e056858f"),
                     Title = "Exploring the Haunting Depths of Pet Sematary",
                     Introduction = "A tale of love, loss, and the chilling cost of defying death.",
                     Content =
@@ -43,7 +43,7 @@ public static class ArticleSeeder
                 },
                 new()
                 {
-                    Id = "4dc82468-3ef8-4095-acec-f437ff49fdf8",
+                    Id = new Guid("4dc82468-3ef8-4095-acec-f437ff49fdf8"),
                     Title = "The Epic Conclusion: Harry Potter and the Deathly Hallows",
                     Introduction = "The battle against Voldemort reaches its thrilling and emotional finale.",
                     Content =
@@ -70,7 +70,7 @@ public static class ArticleSeeder
                 },
                 new()
                 {
-                    Id = "9f88193b-e7e6-4121-bff9-545e17538f62",
+                    Id = new Guid("9f88193b-e7e6-4121-bff9-545e17538f62"),
                     Title = "The Timeless Epic: The Lord of the Rings",
                     Introduction = "A journey of courage, friendship, and the fight against overwhelming darkness.",
                     Content =
@@ -97,7 +97,7 @@ public static class ArticleSeeder
                 },
                 new()
                 {
-                    Id = "f05ef3c3-907b-421e-b2a5-5184f143d760",
+                    Id = new Guid("f05ef3c3-907b-421e-b2a5-5184f143d760"),
                     Title = "The Haunting Legacy of The Shining",
                     Introduction = "A chilling exploration of isolation, madness, and the supernatural, The Shining takes readers deep into the heart of terror.",
                     Content =
@@ -126,7 +126,7 @@ public static class ArticleSeeder
                 },
                 new()
                 {
-                    Id = "12cec952-9906-485e-ad93-16616f0dda34",
+                    Id = new Guid("12cec952-9906-485e-ad93-16616f0dda34"),
                     Title = "The Dystopian Reality of 1984",
                     Introduction = "A chilling exploration of totalitarianism, surveillance, and the loss of individuality, 1984 presents a terrifying vision of the future.",
                     Content =
@@ -155,7 +155,7 @@ public static class ArticleSeeder
                 },
                 new()
                 {
-                    Id = "d6acd91e-dc51-487f-8a06-ac43672a34ce",
+                    Id = new Guid("d6acd91e-dc51-487f-8a06-ac43672a34ce"),
                     Title = "The Eternal Horror of Dracula: A Deep Dive into Gothic Terror",
                     Introduction = "A chilling exploration of darkness, fear, and the supernatural, Dracula by Bram Stoker unravels a tale of obsession, seduction, and the eternal battle between life and death.",
                     Content =
@@ -188,7 +188,7 @@ public static class ArticleSeeder
                 },
                 new()
                 {
-                    Id = "4dfb4e71-8c22-4ff6-95c3-03b5160ffbf4",
+                    Id = new Guid("4dfb4e71-8c22-4ff6-95c3-03b5160ffbf4"),
                     Title = "The Dystopian Horror of A Clockwork Orange: A Deep Dive into Violence and Free Will",
                     Introduction = "A dark and thought-provoking exploration of free will, violence, and societal control, A Clockwork Orange by Anthony Burgess challenges perceptions of morality and human nature.",
                     Content =
@@ -219,7 +219,7 @@ public static class ArticleSeeder
                 },
                 new()
                 {
-                    Id = "7574e568-22b9-45d8-b4f1-4b2046e8aa78",
+                    Id = new Guid("7574e568-22b9-45d8-b4f1-4b2046e8aa78"),
                     Title = "Murder on the Orient Express: A Masterclass in Mystery and Morality",
                     Introduction = "Agatha Christie’s Murder on the Orient Express is a classic detective novel that remains one of the most iconic works in the mystery genre. With Hercule Poirot at the helm, the story takes readers on a journey through the labyrinth of human motives, justice, and revenge, all set against the opulent backdrop of a luxurious train ride.",
                     Content =
@@ -242,7 +242,7 @@ public static class ArticleSeeder
                 },
                 new()
                 {
-                    Id = "f53a6daa-0fcc-47b0-848e-80a292ef56ba",
+                    Id = new Guid("f53a6daa-0fcc-47b0-848e-80a292ef56ba"),
                     Title = "Of Mice and Men: The Tragic Story of Friendship and Dreams",
                     Introduction = "John Steinbeck's Of Mice and Men is a poignant tale of friendship, dreams, and the harsh realities of the American Depression. It chronicles the lives of two displaced migrant workers, George and Lennie, who dream of a better life, yet struggle against the societal and economic forces that limit their aspirations.",
                     Content =
@@ -265,7 +265,7 @@ public static class ArticleSeeder
                 },
                 new()
                 {
-                    Id = "37ec9627-7ee6-4f9b-88c2-b1dce968513a",
+                    Id = new Guid("37ec9627-7ee6-4f9b-88c2-b1dce968513a"),
                     Title = "Dune: The Epic Tale of Power, Ecology, and Human Destiny",
                     Introduction = "Frank Herbert's *Dune* is a monumental science fiction saga that explores the complex interplay of politics, religion, and ecology on the desert planet of Arrakis. The novel delves into the struggle for control of the universe's most valuable substance, the spice melange, while exploring themes of leadership, destiny, and environmentalism.",
                     Content =
@@ -290,7 +290,7 @@ public static class ArticleSeeder
                 },
                 new()
                 {
-                    Id = "096eae4a-4b8b-4b53-a2cb-86b0ed1c17e4",
+                    Id = new Guid("096eae4a-4b8b-4b53-a2cb-86b0ed1c17e4"),
                     Title = "The Hitchhiker's Guide to the Galaxy: A Journey Through Absurdity and Wit",
                     Introduction = "Douglas Adams' The Hitchhiker's Guide to the Galaxy is a classic blend of science fiction, absurdity, and humor. The story follows Arthur Dent as he is suddenly swept off Earth just before its destruction, leading to a wild and philosophical adventure through space.",
                     Content =

@@ -29,7 +29,7 @@
 
         [HttpPut(Id)]
         public async Task<ActionResult> Edit(
-            string id,
+            Guid id,
             CreateArticleWebModel webModel,
             CancellationToken token = default)
         {
@@ -44,7 +44,7 @@
 
         [HttpDelete(Id)]
         public async Task<ActionResult> Delete(
-            string id,
+            Guid id,
             CancellationToken token = default)
         {
             var result = await service.Delete(id, token);

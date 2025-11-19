@@ -3,6 +3,7 @@ import './Footer.css';
 import { MDBCol, MDBContainer, MDBFooter, MDBIcon, MDBRow } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
 import { Link } from 'react-router-dom';
+
 import { routes } from '@/shared/lib/constants/api.js';
 
 const Footer: FC = () => {

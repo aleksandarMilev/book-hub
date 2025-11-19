@@ -11,10 +11,10 @@ import {
   MDBRow,
 } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import ReactMarkdown from 'react-markdown';
 import { Link } from 'react-router-dom';
+import remarkGfm from 'remark-gfm';
 
 import { useDetailsPage } from '@/features/article/hooks/useDetailsPage.js';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';

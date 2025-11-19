@@ -7,7 +7,7 @@
     public interface IArticleService : ITransientService
     {
         Task<ArticleDetailsServiceModel?> Details(
-            string id,
+            Guid id,
             CancellationToken token);
 
         Task<ArticleDetailsServiceModel> Create(
@@ -15,12 +15,12 @@
             CancellationToken token);
 
         Task<Result> Edit(
-            string id,
+            Guid id,
             CreateArticleServiceModel model,
             CancellationToken token);
 
         Task<Result> Delete(
-            string id,
+            Guid id,
             CancellationToken token);
     }
 }
