@@ -7,10 +7,9 @@ import { pagination } from '@/shared/lib/constants/defaultValues.js';
 export const useListPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm);
-
   const [page, setPage] = useState(pagination.defaultPageIndex);
-  const pageSize = pagination.defaultPageSize;
 
+  const pageSize = pagination.defaultPageSize;
   const {
     items: articles,
     totalItems,

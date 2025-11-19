@@ -4,6 +4,7 @@ const constraints = {
   title: { min: 10, max: 100 },
   introduction: { min: 10, max: 500 },
   content: { min: 100, max: 50_000 },
+  url: { min: 10, max: 2_000 },
 };
 
 const messages = {
@@ -23,12 +24,16 @@ export const articleSchema = Yup.object({
     .max(constraints.introduction.max, messages.max('Introduction', constraints.introduction.max))
     .required(messages.required('Introduction')),
   imageUrl: Yup.string()
-    .transform((v) => (v === '' ? null : v))
-    .url(messages.url)
+    .transform((value, originalValue) => (originalValue === '' ? null : value))
     .nullable()
-    .notRequired(),
+    .notRequired()
+    .url(messages.url)
+    .min(constraints.url.min, messages.min('Image URL', constraints.url.min))
+    .max(constraints.url.max, messages.max('Image URL', constraints.url.max)),
   content: Yup.string()
     .min(constraints.content.min, messages.min('Content', constraints.content.min))
     .max(constraints.content.max, messages.max('Content', constraints.content.max))
     .required(messages.required('Content')),
 });
+
+export type ArticleFormValues = Yup.InferType<typeof articleSchema>;

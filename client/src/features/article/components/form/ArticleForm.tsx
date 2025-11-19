@@ -6,10 +6,12 @@ import type { FC } from 'react';
 import { useArticleFormik } from '@/features/article/components/form/formik/useArticleFormik.js';
 import type { ArticleDetails } from '@/features/article/types/article.js';
 
-const ArticleForm: FC<{
+type Props = {
   article?: ArticleDetails | null;
   isEditMode?: boolean;
-}> = ({ article = null, isEditMode = false }) => {
+};
+
+const ArticleForm: FC<Props> = ({ article = null, isEditMode = false }) => {
   const formik = useArticleFormik({ article, isEditMode });
 
   return (
