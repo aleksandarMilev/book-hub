@@ -5,8 +5,8 @@ import { formatIsoDate } from '@/shared/lib/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 
 export const useDetailsPage = () => {
-  const { id } = useParams<{ id: string }>();
   const { isAdmin } = useAuth();
+  const { id } = useParams<{ id: string }>();
   const { article, isFetching, error } = useDetails(id);
   const { showModal, toggleModal, deleteHandler } = useRemove(id, article?.title);
 

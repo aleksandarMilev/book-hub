@@ -14,7 +14,7 @@
         // We should provide name here so we can construct the location header easier in the admin controller
         [HttpGet(Id, Name = DetailsRouteName)]
         public async Task<ActionResult<ArticleDetailsServiceModel>> Details(
-            string id,
+            Guid id,
             CancellationToken token = default)
             => this.Ok(await service.Details(id, token));
     }

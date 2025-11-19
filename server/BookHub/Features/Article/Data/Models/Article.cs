@@ -5,7 +5,7 @@
 
     using static Shared.Constants.ValidationConstants;
 
-    public class Article : DeletableEntity<string>
+    public class Article : DeletableEntity<Guid>
     {
         [Required]
         [MaxLength(TitleMaxLength)]

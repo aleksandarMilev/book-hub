@@ -6,8 +6,8 @@ import { FaSearch } from 'react-icons/fa';
 import emptyImg from '@/assets/images/no-books-found.png';
 import ArticleListItem from '@/features/article/components/list-item/ArticleListItem.js';
 import { useListPage } from '@/features/article/hooks/useListPage.js';
-import Pagination from '@/shared/components/pagination/Pagination.js';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
+import Pagination from '@/shared/components/pagination/Pagination.js';
 
 const ArticleList: FC = () => {
   const {

@@ -16,7 +16,7 @@
         ILogger<ArticleService> logger) : IArticleService
     {
         public async Task<ArticleDetailsServiceModel?> Details(
-            string id,
+            Guid id,
             CancellationToken token = default)
         {
             var rowsAffected = await data.Articles
@@ -56,7 +56,7 @@
         }
 
         public async Task<Result> Edit(
-            string id,
+            Guid id,
             CreateArticleServiceModel serviceModel,
             CancellationToken token = default)
         {
@@ -78,7 +78,7 @@
         }
 
         public async Task<Result> Delete(
-            string id,
+            Guid id,
             CancellationToken token = default)
         {
             var dbModel = await this.GetById(id, token);
@@ -97,21 +97,21 @@
         }
 
         private async Task<Article?> GetById(
-            string id,
+            Guid id,
             CancellationToken token = default)
             => await data
                 .Articles
                 .FindAsync([id], token);
 
         private async Task<Article?> GetByIdAsNoTracking(
-            string id,
+            Guid id,
             CancellationToken token = default)
             => await data
                 .Articles
                 .AsNoTracking()
                 .FirstOrDefaultAsync(a => a.Id == id, token);
 
-        private string LogAndReturnNotFoundMessage(string id)
+        private string LogAndReturnNotFoundMessage(Guid id)
         {
             logger.LogWarning(DbEntityNotFoundTemplate, nameof(Article), id);
             return string.Format(DbEntityNotFound, nameof(Article), id);

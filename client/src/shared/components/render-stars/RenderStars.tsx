@@ -1,6 +1,7 @@
 import './RenderStars.css';
+
 import type { FC } from 'react';
-import { FaStar, FaRegStar } from 'react-icons/fa';
+import { FaRegStar,FaStar } from 'react-icons/fa';
 
 export const RenderStars: FC<{
   rating: number;

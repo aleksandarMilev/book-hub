@@ -1,13 +1,20 @@
 ﻿namespace BookHub.Infrastructure.Extensions
 {
     using Data;
+    using Features.Identity.Data.Models;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
+
+    using static Common.Constants;
 
     public static class AppBuilderExtensions
     {
-       public static async Task<IApplicationBuilder> UseMigrations(
-           this IApplicationBuilder app)
-       {
+        private static readonly string AdminEmail = "admin@mail.com";
+        private static readonly string AdminPassword = "admin1234";
+
+        public static async Task<IApplicationBuilder> UseMigrations(
+            this IApplicationBuilder app)
+        {
             using var services = app.ApplicationServices.CreateScope();
             var data = services.ServiceProvider.GetRequiredService<BookHubDbContext>();
 
@@ -39,5 +46,35 @@
                      opt.AllowAnyHeader();
                      opt.AllowAnyMethod();
                  });
+
+        public static async Task<IApplicationBuilder> UseAdminRole(
+            this IApplicationBuilder app)
+        {
+            using var serviceScope = app.ApplicationServices.CreateScope();
+            var services = serviceScope.ServiceProvider;
+
+            var userManager = services.GetRequiredService<UserManager<User>>();
+            var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+            if (await roleManager.RoleExistsAsync(AdminRoleName))
+            {
+                return app;
+            }
+
+            var role = new IdentityRole() { Name = AdminRoleName };
+
+            await roleManager.CreateAsync(role);
+
+            var user = new User()
+            {
+                Email = AdminEmail,
+                UserName = AdminRoleName
+            };
+
+            await userManager.CreateAsync(user, AdminPassword);
+            await userManager.AddToRoleAsync(user, role.Name);
+
+            return app;
+        }      
     }
 }
