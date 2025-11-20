@@ -2,6 +2,7 @@
 {
     using System.Linq.Expressions;
     using System.Reflection;
+    using BookHub.Infrastructure.Services.CurrentUser;
     using Features.Article.Data.Models;
     using Features.Authors.Data.Models;
     using Features.Book.Data.Models;
@@ -41,7 +42,7 @@
 
         public DbSet<UserProfile> Profiles { get; init; }
 
-        public DbSet<Article> Articles { get; init; }
+        public DbSet<ArticleDbModel> Articles { get; init; }
 
         public DbSet<Notification> Notifications { get; init; }
 

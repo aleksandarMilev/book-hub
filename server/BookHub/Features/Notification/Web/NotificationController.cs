@@ -6,8 +6,8 @@
     using Service;
     using Service.Models;
 
-    using static Common.ApiRoutes;
-    using static Common.DefaultValues;
+    using static Common.Constants.ApiRoutes;
+    using static Common.Constants.DefaultValues;
 
     [Authorize]
     public class NotificationController(INotificationService service) : ApiController

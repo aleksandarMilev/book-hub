@@ -1,6 +1,7 @@
 ﻿namespace BookHub.Features.Review.Service
 {
     using BookHub.Data;
+    using BookHub.Infrastructure.Services.CurrentUser;
     using Data.Models;
     using Infrastructure.Services;
     using Microsoft.EntityFrameworkCore;

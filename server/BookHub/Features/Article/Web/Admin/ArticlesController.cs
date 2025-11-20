@@ -8,7 +8,7 @@
     using Service;
     using Shared;
 
-    using static Common.ApiRoutes;
+    using static Common.Constants.ApiRoutes;
     using static Shared.Constants.RouteNames;
 
     public class ArticlesController(IArticlesService service) : AdminApiController

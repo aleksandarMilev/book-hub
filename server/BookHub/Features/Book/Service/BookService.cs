@@ -7,14 +7,15 @@
     using Data.Models;
     using Features.UserProfile.Data.Models;
     using Infrastructure.Extensions;
-    using Infrastructure.Services;
+    using Infrastructure.Services.CurrentUser;
+    using Infrastructure.Services.Result;
     using Mapper;
     using Microsoft.EntityFrameworkCore;
     using Models;
     using Notification.Service;
     using UserProfile.Service;
 
-    using static Common.ErrorMessage;
+    using static Common.Constants.ErrorMessages;
 
     public class BookService(
         BookHubDbContext data,

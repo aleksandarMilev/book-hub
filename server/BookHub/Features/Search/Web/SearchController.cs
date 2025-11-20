@@ -5,7 +5,7 @@
     using Service;
     using Service.Models;
 
-    using static Common.DefaultValues;
+    using static Common.Constants.DefaultValues;
 
     [Authorize]
     public class SearchController(ISearchService service) : ApiController

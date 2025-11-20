@@ -3,13 +3,15 @@
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using BookHub.Data;
+    using BookHub.Infrastructure.Services.CurrentUser;
+    using BookHub.Infrastructure.Services.Result;
     using Chat.Data.Models;
     using Data.Models;
     using Infrastructure.Services;
     using Microsoft.EntityFrameworkCore;
     using Service.Models;
 
-    using static Common.ErrorMessage;
+    using static Common.Constants.ErrorMessages;
     using static Constants;
     using static Constants.Messages;
 

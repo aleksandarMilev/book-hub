@@ -1,10 +1,10 @@
 import type { ArticleDetails, CreateArticle } from '@/features/article/types/article.js';
 import {
-  getAuthConfig,
-  getAuthConfigForFile,
-  http,
-  httpAdmin,
-  processError,
+    getAuthConfig,
+    getAuthConfigForFile,
+    http,
+    httpAdmin,
+    processError,
 } from '@/shared/api/http.js';
 import { routes } from '@/shared/lib/constants/api.js';
 import { errors } from '@/shared/lib/constants/errorMessages.js';

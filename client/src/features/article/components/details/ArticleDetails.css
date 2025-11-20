@@ -36,17 +36,16 @@
   margin: 1.8rem 0 0.6rem;
   border-radius: 16px;
   overflow: hidden;
-  max-height: 420px;
+  max-height: none;
 }
 
 .article-details-image {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  object-fit: contain;
   display: block;
   transition: transform 0.35s ease;
 }
-
 .article-details-image-wrapper:hover .article-details-image {
   transform: scale(1.03);
 }

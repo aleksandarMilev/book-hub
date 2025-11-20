@@ -1,6 +1,8 @@
 ﻿namespace BookHub.Features.Chat.Web
 {
     using AutoMapper;
+    using BookHub.Infrastructure.Services.CurrentUser;
+    using BookHub.Infrastructure.Services.Result;
     using Infrastructure.Extensions;
     using Infrastructure.Services;
     using Microsoft.AspNetCore.Mvc;
@@ -8,7 +10,7 @@
     using Service;
     using Service.Models;
 
-    using static Common.ApiRoutes;
+    using static Common.Constants.ApiRoutes;
 
     public class ChatMessageController(
         IChatMessageService service,

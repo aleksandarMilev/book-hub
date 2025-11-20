@@ -9,7 +9,7 @@
 
         public static class DefaultValues
         {
-            public const string DefaultImagePath = "/images/articles/default.avif";
+            public const string DefaultImagePath = "/images/articles/default.jpg";
         }
 
         public static class ValidationConstants

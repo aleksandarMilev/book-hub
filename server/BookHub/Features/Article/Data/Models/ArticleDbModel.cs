@@ -2,10 +2,14 @@
 {
     using System.ComponentModel.DataAnnotations;
     using BookHub.Data.Models.Base;
+    using Common.Models.Image;
+    using Microsoft.EntityFrameworkCore;
 
     using static Shared.Constants.ValidationConstants;
 
-    public class Article : DeletableEntity<Guid>
+    public class ArticleDbModel:
+        DeletableEntity<Guid>,
+        IImageDdModel
     {
         [Required]
         [MaxLength(TitleMaxLength)]
@@ -19,7 +23,7 @@
         [MaxLength(ContentMaxLength)]
         public string Content { get; set; } = null!;
 
-        public string? ImagePath { get; set; }
+        public string ImagePath { get; set; } = null!;
 
         public int Views { get; set; }
     }

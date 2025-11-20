@@ -4,6 +4,8 @@
     using AutoMapper.QueryableExtensions;
     using Book.Service.Models;
     using BookHub.Data;
+    using BookHub.Infrastructure.Services.CurrentUser;
+    using BookHub.Infrastructure.Services.Result;
     using Data.Models;
     using Infrastructure.Services;
     using Microsoft.EntityFrameworkCore;

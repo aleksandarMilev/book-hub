@@ -1,14 +1,14 @@
-﻿namespace BookHub.Infrastructure.Services
+﻿namespace BookHub.Infrastructure.Services.Result
 {
     public class Result
     {
         public Result(bool succeeded)
-            => this.Succeeded = succeeded;
+            => Succeeded = succeeded;
 
         public Result(string errorMessage)
         {
-            this.Succeeded = false;
-            this.ErrorMessage = errorMessage;
+            Succeeded = false;
+            ErrorMessage = errorMessage;
         }
 
         public bool Succeeded { get; init; }

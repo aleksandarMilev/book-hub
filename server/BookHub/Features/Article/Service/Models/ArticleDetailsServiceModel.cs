@@ -8,6 +8,6 @@
 
         public int Views { get; init; }
 
-        public string? ImagePath { get; init; }
+        public string ImagePath { get; init; } = null!;
     }
 }

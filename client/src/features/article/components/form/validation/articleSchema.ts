@@ -12,6 +12,10 @@ const messages = {
   max: (field: string, max: number) => `${field} must be less than ${max} characters`,
 };
 
+const MAX_IMAGE_SIZE_BYTES = 2 * 1_024 * 1_024;
+const ALLOWED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.webp', '.avif'] as const;
+const ALLOWED_CONTENT_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/avif'] as const;
+
 export const articleSchema = Yup.object({
   title: Yup.string()
     .min(constraints.title.min, messages.min('Title', constraints.title.min))
@@ -25,8 +29,33 @@ export const articleSchema = Yup.object({
     .min(constraints.content.min, messages.min('Content', constraints.content.min))
     .max(constraints.content.max, messages.max('Content', constraints.content.max))
     .required(messages.required('Content')),
+  image: Yup.mixed<File>()
+    .nullable()
+    .test('fileSize', 'Image must be smaller than 2 MB.', (file) => {
+      if (!file) {
+        return true;
+      }
+
+      return file.size <= MAX_IMAGE_SIZE_BYTES;
+    })
+    .test('fileType', `Invalid image type. Allowed: ${ALLOWED_EXTENSIONS.join(', ')}`, (file) => {
+      if (!file) {
+        return true;
+      }
+
+      const isAllowedType = ALLOWED_CONTENT_TYPES.includes(
+        file.type as (typeof ALLOWED_CONTENT_TYPES)[number],
+      );
+
+      if (isAllowedType) {
+        return true;
+      }
+
+      const lowerName = file.name.toLowerCase();
+      const hasValidExtension = ALLOWED_EXTENSIONS.some((ext) => lowerName.endsWith(ext));
+
+      return hasValidExtension;
+    }),
 });
 
-export type ArticleFormValues = Yup.InferType<typeof articleSchema> & {
-  image: File | null;
-};
+export type ArticleFormValues = Yup.InferType<typeof articleSchema>;

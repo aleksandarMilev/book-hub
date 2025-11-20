@@ -1,4 +1,4 @@
-﻿namespace BookHub.Infrastructure.Services
+﻿namespace BookHub.Infrastructure.Services.CurrentUser
 {
     using ServiceLifetimes;
 

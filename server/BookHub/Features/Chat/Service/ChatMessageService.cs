@@ -2,12 +2,14 @@
 {
     using AutoMapper;
     using BookHub.Data;
+    using BookHub.Infrastructure.Services.CurrentUser;
+    using BookHub.Infrastructure.Services.Result;
     using Data.Models;
     using Infrastructure.Services;
     using Microsoft.EntityFrameworkCore;
     using Service.Models;
 
-    using static Common.ErrorMessage;
+    using static Common.Constants.ErrorMessages;
 
     public class ChatMessageService(
         BookHubDbContext data,

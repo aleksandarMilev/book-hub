@@ -1,6 +1,8 @@
 ﻿namespace BookHub.Features.Article.Service.Models
 {
-    public class CreateArticleServiceModel
+    using Common.Models.Image;
+
+    public class CreateArticleServiceModel : IImageServiceModel
     {
         public string Title { get; init; } = null!;
 
@@ -8,6 +10,6 @@
 
         public string Content { get; init; } = null!;
 
-        public IFormFile? Image { get; init; }
+        public IFormFile? Image { get; set; }
     }
 }

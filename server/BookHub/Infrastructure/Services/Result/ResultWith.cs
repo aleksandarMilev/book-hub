@@ -1,4 +1,4 @@
-﻿namespace BookHub.Infrastructure.Services
+﻿namespace BookHub.Infrastructure.Services.Result
 {
     public class ResultWith<T>
     {
@@ -7,9 +7,9 @@
             T? data = default,
             string? errorMessage = null)
         {
-            this.Succeeded = succeeded;
-            this.Data = data;
-            this.ErrorMessage = errorMessage;
+            Succeeded = succeeded;
+            Data = data;
+            ErrorMessage = errorMessage;
         }
 
         public bool Succeeded { get; init; }

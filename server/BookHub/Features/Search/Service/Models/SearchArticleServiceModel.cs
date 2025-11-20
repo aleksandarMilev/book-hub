@@ -8,6 +8,8 @@
 
         public string Introduction { get; init; } = null!;
 
+        public int Views { get; set; }
+
         public string? ImagePath { get; init; }
 
         public DateTime CreatedOn { get; init; }
