@@ -4,23 +4,24 @@
     using Infrastructure.Services.ServiceLifetimes;
     using Models;
 
-    public interface IArticleService : ITransientService
+    public interface IArticlesService : ITransientService
     {
         Task<ArticleDetailsServiceModel?> Details(
             Guid id,
-            CancellationToken token);
+            bool isEditMode = false,
+            CancellationToken token = default);
 
         Task<ArticleDetailsServiceModel> Create(
             CreateArticleServiceModel model,
-            CancellationToken token);
+            CancellationToken token = default);
 
         Task<Result> Edit(
             Guid id,
             CreateArticleServiceModel model,
-            CancellationToken token);
+            CancellationToken token = default);
 
         Task<Result> Delete(
             Guid id,
-            CancellationToken token);
+            CancellationToken token = default);
     }
 }

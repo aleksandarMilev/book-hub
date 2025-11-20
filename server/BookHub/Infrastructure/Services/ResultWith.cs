@@ -2,7 +2,10 @@
 {
     public class ResultWith<T>
     {
-        private ResultWith(bool succeeded, T? data = default, string? errorMessage = null)
+        private ResultWith(
+            bool succeeded,
+            T? data = default,
+            string? errorMessage = null)
         {
             this.Succeeded = succeeded;
             this.Data = data;

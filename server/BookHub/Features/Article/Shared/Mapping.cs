@@ -1,5 +1,6 @@
 ﻿namespace BookHub.Features.Article.Shared
 {
+    using System.Linq.Expressions;
     using Data.Models;
     using Service.Models;
     using Web.Models;
@@ -13,7 +14,7 @@
                 Title = webModel.Title,
                 Introduction = webModel.Introduction,
                 Content = webModel.Content,
-                ImageUrl = webModel.ImageUrl,
+                Image = webModel.Image,
             };
 
         public static Article ToDbModel(
@@ -23,7 +24,6 @@
                 Title = serviceModel.Title,
                 Introduction = serviceModel.Introduction,
                 Content = serviceModel.Content,
-                ImageUrl = serviceModel.ImageUrl,
             };
 
         public static void UpdateDbModel(
@@ -33,8 +33,19 @@
             dbModel.Title = serviceModel.Title;
             dbModel.Introduction = serviceModel.Introduction;
             dbModel.Content = serviceModel.Content;
-            dbModel.ImageUrl = serviceModel.ImageUrl;
         }
+
+        public static Expression<Func<Article, ArticleDetailsServiceModel>> ToDetailsServiceModelExpression =>
+            dbModel => new ArticleDetailsServiceModel
+            {
+                Id = dbModel.Id,
+                CreatedOn = dbModel.CreatedOn,
+                Views = dbModel.Views,
+                Title = dbModel.Title,
+                Introduction = dbModel.Introduction,
+                Content = dbModel.Content,
+                ImagePath = dbModel.ImagePath,
+            };
 
         public static ArticleDetailsServiceModel ToDetailsServiceModel(
             this Article dbModel)
@@ -46,7 +57,7 @@
                 Title = dbModel.Title,
                 Introduction = dbModel.Introduction,
                 Content = dbModel.Content,
-                ImageUrl = dbModel.ImageUrl,
+                ImagePath = dbModel.ImagePath,
             };
     }
 }

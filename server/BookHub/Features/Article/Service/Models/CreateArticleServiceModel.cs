@@ -8,6 +8,6 @@
 
         public string Content { get; init; } = null!;
 
-        public string? ImageUrl { get; set; }
+        public IFormFile? Image { get; init; }
     }
 }

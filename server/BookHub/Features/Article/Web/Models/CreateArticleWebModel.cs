@@ -24,9 +24,6 @@
             MinimumLength = ContentMinLength)]
         public string Content { get; init; } = null!;
 
-        [StringLength(
-            UrlMaxLength,
-            MinimumLength = UrlMinLength)]
-        public string? ImageUrl { get; init; }
+        public IFormFile? Image { get; init; }
     }
 }

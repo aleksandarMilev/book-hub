@@ -1,6 +1,6 @@
 import './Pagination.css';
 
-import { useEffect, type FC } from 'react';
+import { type FC,useEffect } from 'react';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 const Pagination: FC<{

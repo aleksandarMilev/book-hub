@@ -9,7 +9,7 @@
 
         public static class DefaultValues
         {
-            public const string DefaultImageUrl = "https://img.freepik.com/free-photo/bookmark-books-arrangement-top-view_23-2149894335.jpg";
+            public const string DefaultImagePath = "/images/articles/default.avif";
         }
 
         public static class ValidationConstants
@@ -22,9 +22,6 @@
 
             public const int ContentMinLength = 100;
             public const int ContentMaxLength = 50_000;
-
-            public const int UrlMinLength = 10;
-            public const int UrlMaxLength = 2_000;
         }
     }
 }

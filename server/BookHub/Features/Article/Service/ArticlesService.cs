@@ -11,32 +11,34 @@
     using static Common.ErrorMessage;
     using static Shared.Constants.DefaultValues;
 
-    public class ArticleService(
+    public class ArticlesService(
         BookHubDbContext data,
-        ILogger<ArticleService> logger) : IArticleService
+        ILogger<ArticlesService> logger) : IArticlesService
     {
         public async Task<ArticleDetailsServiceModel?> Details(
             Guid id,
+            bool isEditMode = false,
             CancellationToken token = default)
         {
-            var rowsAffected = await data.Articles
-                .Where(a => a.Id == id)
-                .ExecuteUpdateAsync(s => s
-                    .SetProperty(a => a.Views, a => a.Views + 1),
-                    token);
-
-            if (rowsAffected == 0)
+            if (!isEditMode)
             {
-                return null;
+                var rowsAffected = await data
+                    .Articles
+                    .Where(a => a.Id == id)
+                    .ExecuteUpdateAsync(s => s
+                        .SetProperty(a => a.Views, a => a.Views + 1),
+                        token);
+
+                if (rowsAffected == 0)
+                {
+                    return null;
+                }
             }
 
-            var dbModel = await this.GetByIdAsNoTracking(id, token);
-            if (dbModel is null)
-            {
-                return null;
-            }
-
-            return dbModel.ToDetailsServiceModel();
+            return await data
+                .Articles
+                .Select(Mapping.ToDetailsServiceModelExpression)
+                .FirstOrDefaultAsync(a => a.Id == id, token);
         }
 
         public async Task<ArticleDetailsServiceModel> Create(
@@ -44,7 +46,15 @@
             CancellationToken token = default)
         {
             var dbModel = serviceModel.ToDbModel();
-            SetDefaultImageIfNull(dbModel);
+
+            if (serviceModel.Image is not null)
+            {
+                await SaveImageFile(serviceModel, dbModel, token);
+            }
+            else
+            {
+                dbModel.ImagePath = DefaultImagePath;
+            }
 
             data.Add(dbModel);
             await data.SaveChangesAsync(token);
@@ -60,14 +70,18 @@
             CreateArticleServiceModel serviceModel,
             CancellationToken token = default)
         {
-            var dbModel = await this.GetById(id, token);
+            var dbModel = await this.GetDbModel(id, token);
             if (dbModel is null)
             {
                 return LogAndReturnNotFoundMessage(id);
             }
 
             serviceModel.UpdateDbModel(dbModel);
-            SetDefaultImageIfNull(dbModel);
+
+            if (serviceModel.Image is not null)
+            {
+                await SaveImageFile(serviceModel, dbModel, token);
+            }
 
             await data.SaveChangesAsync(token);
 
@@ -77,11 +91,12 @@
             return true;
         }
 
+
         public async Task<Result> Delete(
             Guid id,
             CancellationToken token = default)
         {
-            var dbModel = await this.GetById(id, token);
+            var dbModel = await this.GetDbModel(id, token);
             if (dbModel is null)
             {
                 return LogAndReturnNotFoundMessage(id);
@@ -96,20 +111,12 @@
             return true;
         }
 
-        private async Task<Article?> GetById(
+        private async Task<Article?> GetDbModel(
             Guid id,
             CancellationToken token = default)
             => await data
                 .Articles
                 .FindAsync([id], token);
-
-        private async Task<Article?> GetByIdAsNoTracking(
-            Guid id,
-            CancellationToken token = default)
-            => await data
-                .Articles
-                .AsNoTracking()
-                .FirstOrDefaultAsync(a => a.Id == id, token);
 
         private string LogAndReturnNotFoundMessage(Guid id)
         {
@@ -117,7 +124,20 @@
             return string.Format(DbEntityNotFound, nameof(Article), id);
         }
 
-        private static void SetDefaultImageIfNull(Article article)
-            => article.ImageUrl ??= DefaultImageUrl;
+        private static async Task SaveImageFile(
+            CreateArticleServiceModel serviceModel,
+            Article dbModel,
+            CancellationToken token = default)
+        {
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(serviceModel.Image!.FileName)}";
+            var filePath = Path.Combine("wwwroot", "images", "articles", fileName);
+
+            Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
+
+            await using var stream = new FileStream(filePath, FileMode.Create);
+            await serviceModel.Image.CopyToAsync(stream, token);
+
+            dbModel.ImagePath = $"/images/articles/{fileName}";
+        }
     }
 }

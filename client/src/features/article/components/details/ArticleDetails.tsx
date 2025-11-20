@@ -21,6 +21,7 @@ import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.j
 import DeleteModal from '@/shared/components/delete-modal/DeleteModal.js';
 import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect.js';
 import { routes } from '@/shared/lib/constants/api.js';
+import { getImageUrl } from '@/shared/lib/utils.js';
 
 const ArticleDetails: FC = () => {
   const {
@@ -59,7 +60,7 @@ const ArticleDetails: FC = () => {
                 <MDBCol md="12">
                   <div className="article-details-image-wrapper">
                     <img
-                      src={article.imageUrl}
+                      src={getImageUrl(article.imagePath, 'articles')}
                       alt={article.title}
                       className="article-details-image"
                     />

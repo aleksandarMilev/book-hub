@@ -27,6 +27,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Production
       - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=${DB_NAME};User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True;
       - ApplicationSettings__Secret=${APP_SECRET}
+    volumes:
+      - server_uploads:/app/wwwroot
     networks:
       - backend
 
@@ -50,3 +52,4 @@ networks:
 
 volumes:
   sql_data:
+  server_uploads:

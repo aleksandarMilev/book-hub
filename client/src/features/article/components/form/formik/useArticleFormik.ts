@@ -2,8 +2,8 @@ import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 
 import {
-  articleSchema,
   type ArticleFormValues,
+  articleSchema,
 } from '@/features/article/components/form/validation/articleSchema.js';
 import { useCreate, useEdit } from '@/features/article/hooks/useCrud.js';
 import type { ArticleDetails, CreateArticle } from '@/features/article/types/article.js';
@@ -27,8 +27,8 @@ export const useArticleFormik = ({ article = null, isEditMode = false }: Props) 
     initialValues: {
       title: article?.title ?? '',
       introduction: article?.introduction ?? '',
-      imageUrl: article?.imageUrl ?? '',
       content: article?.content ?? '',
+      image: null,
     },
     validationSchema: articleSchema,
     onSubmit: async (values, { resetForm }) => {
@@ -38,19 +38,19 @@ export const useArticleFormik = ({ article = null, isEditMode = false }: Props) 
           title: castValues.title,
           introduction: castValues.introduction,
           content: castValues.content,
-          imageUrl: castValues.imageUrl ?? null,
+          image: castValues.image,
         };
 
         if (isEditMode && article?.id) {
           await editHandler(article.id, payload);
 
           showMessage(`${article.title || 'This article'} was successfully updated!`, true);
-          navigate(`${routes.article}/${article.id}`, { replace: true });
+          navigate(`${routes.articles}/${article.id}`, { replace: true });
         } else {
           const id = await createHandler(payload);
 
           showMessage(`${payload.title || 'This article'} was successfully created!`, true);
-          navigate(`${routes.article}/${id}`, { replace: true });
+          navigate(`${routes.articles}/${id}`, { replace: true });
           resetForm();
         }
       } catch (error) {

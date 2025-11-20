@@ -154,7 +154,7 @@ export const router = createBrowserRouter([
         element: withSuspense(<AdminRoute element={<EditArticle />} />),
       },
       {
-        path: `${routes.article}/:id`,
+        path: `${routes.articles}/:id`,
         element: withSuspense(<AuthenticatedRoute element={<ArticleDetails />} />),
       },
 
