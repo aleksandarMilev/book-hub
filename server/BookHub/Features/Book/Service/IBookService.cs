@@ -3,6 +3,7 @@
     using Models;
     using Infrastructure.Services;
     using Infrastructure.Services.ServiceLifetimes;
+    using BookHub.Infrastructure.Services.Result;
 
     public interface IBookService : ITransientService
     {

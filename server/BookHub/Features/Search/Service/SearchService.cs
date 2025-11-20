@@ -2,6 +2,7 @@
 {
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
+    using BookHub.Infrastructure.Services.CurrentUser;
     using Data;
     using Infrastructure.Services;
     using Microsoft.EntityFrameworkCore;
@@ -66,7 +67,9 @@
                 );
             }
 
-            articles = articles.OrderByDescending(b => b.CreatedOn);
+            articles = articles
+                .OrderByDescending(a => a.Views)
+                .ThenByDescending(b => b.CreatedOn);
 
             var totalArticles = await articles.CountAsync();
             var paginatedArticles = await articles

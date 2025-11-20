@@ -5,7 +5,7 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
 
-    using static Common.Constants;
+    using static Common.Constants.Names;
 
     public static class AppBuilderExtensions
     {

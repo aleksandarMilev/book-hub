@@ -1,6 +1,6 @@
 import './ArticleForm.css';
 
-import { MDBCard, MDBCardBody, MDBCol, MDBContainer, MDBInput, MDBRow } from 'mdb-react-ui-kit';
+import { MDBCard, MDBCardBody, MDBCol, MDBContainer, MDBRow } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
 
 import { useArticleFormik } from '@/features/article/components/form/formik/useArticleFormik.js';
@@ -29,31 +29,37 @@ const ArticleForm: FC<Props> = ({ article = null, isEditMode = false }) => {
                     {formik.touched.title && formik.errors.title && (
                       <div className="article-form-error">{formik.errors.title}</div>
                     )}
-                    <MDBInput
-                      wrapperClass="mb-4 article-form-input"
-                      label="Article Title *"
-                      size="lg"
-                      id="title"
-                      type="text"
-                      {...formik.getFieldProps('title')}
-                      className={formik.touched.title && formik.errors.title ? 'is-invalid' : ''}
-                    />
+                    <div className="mb-4 article-form-input">
+                      <label htmlFor="title" className="form-label">
+                        Article Title *
+                      </label>
+                      <input
+                        id="title"
+                        type="text"
+                        className={`form-control form-control-lg ${
+                          formik.touched.title && formik.errors.title ? 'is-invalid' : ''
+                        }`}
+                        {...formik.getFieldProps('title')}
+                      />
+                    </div>
                     {formik.touched.introduction && formik.errors.introduction && (
                       <div className="article-form-error">{formik.errors.introduction}</div>
                     )}
-                    <MDBInput
-                      wrapperClass="mb-4 article-form-input"
-                      label="Article Introduction *"
-                      size="lg"
-                      id="introduction"
-                      type="text"
-                      {...formik.getFieldProps('introduction')}
-                      className={
-                        formik.touched.introduction && formik.errors.introduction
-                          ? 'is-invalid'
-                          : ''
-                      }
-                    />
+                    <div className="mb-4 article-form-input">
+                      <label htmlFor="introduction" className="form-label">
+                        Article Introduction *
+                      </label>
+                      <input
+                        id="introduction"
+                        type="text"
+                        className={`form-control form-control-lg ${
+                          formik.touched.introduction && formik.errors.introduction
+                            ? 'is-invalid'
+                            : ''
+                        }`}
+                        {...formik.getFieldProps('introduction')}
+                      />
+                    </div>
                     <div className="mb-4 article-form-input">
                       <label htmlFor="image" className="form-label">
                         Image (optional)
@@ -62,24 +68,31 @@ const ArticleForm: FC<Props> = ({ article = null, isEditMode = false }) => {
                         id="image"
                         name="image"
                         type="file"
-                        accept="image/*"
+                        accept=".jpg,.jpeg,.png,.webp,.avif"
                         className="form-control"
                         onChange={(event) => {
                           const file = event.currentTarget.files?.[0] ?? null;
                           formik.setFieldValue('image', file);
+                          formik.setFieldTouched('image', true, false);
                         }}
                       />
+                      {formik.touched.image && formik.errors.image && (
+                        <div className="article-form-error">{formik.errors.image}</div>
+                      )}
                     </div>
                     {formik.touched.content && formik.errors.content && (
                       <div className="article-form-error">{formik.errors.content}</div>
                     )}
+                    <label htmlFor="content" className="form-label">
+                      Content *
+                    </label>
                     <textarea
                       id="content"
                       rows={18}
-                      {...formik.getFieldProps('content')}
                       className={`form-control article-form-textarea ${
                         formik.touched.content && formik.errors.content ? 'is-invalid' : ''
                       }`}
+                      {...formik.getFieldProps('content')}
                       placeholder="Write the content of your article here... *"
                     />
                     <div className="article-form-actions">

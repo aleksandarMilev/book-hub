@@ -1,5 +1,6 @@
 ﻿namespace BookHub.Features.Article.Service
 {
+    using BookHub.Infrastructure.Services.Result;
     using Infrastructure.Services;
     using Infrastructure.Services.ServiceLifetimes;
     using Models;

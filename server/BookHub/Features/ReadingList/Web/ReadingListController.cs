@@ -7,7 +7,7 @@
     using Models;
     using Service;
 
-    using static Common.DefaultValues;
+    using static Common.Constants.DefaultValues;
 
     [Authorize]
     public class ReadingListController(IReadingListService service) : ApiController

@@ -1,21 +1,21 @@
-﻿namespace BookHub.Infrastructure.Services
+﻿namespace BookHub.Infrastructure.Services.CurrentUser
 {
     using System.Security.Claims;
     using Extensions;
 
-    using static Common.Constants;
+    using static Common.Constants.Names;
 
     public class CurrentUserService(IHttpContextAccessor httpContext) : ICurrentUserService
     {
         private readonly ClaimsPrincipal user = httpContext.HttpContext?.User!;
 
         public string? GetUsername()
-            => this.user?.Identity?.Name;
+            => user?.Identity?.Name;
 
         public string? GetId()
-            => this.user?.GetId();
+            => user?.GetId();
 
         public bool IsAdmin()
-            => this.user.IsInRole(AdminRoleName);
+            => user.IsInRole(AdminRoleName);
     }
 }

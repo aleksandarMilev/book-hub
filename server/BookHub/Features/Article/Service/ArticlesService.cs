@@ -2,17 +2,20 @@
 {
     using BookHub.Data;
     using Data.Models;
-    using Infrastructure.Services;
+    using Infrastructure.Services.ImageWriter;
+    using Infrastructure.Services.Result;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
     using Models;
     using Shared;
 
-    using static Common.ErrorMessage;
+    using static Common.Constants.ErrorMessages;
+    using static Common.Constants.Names;
     using static Shared.Constants.DefaultValues;
 
     public class ArticlesService(
         BookHubDbContext data,
+        IImageWriter imageWriter,
         ILogger<ArticlesService> logger) : IArticlesService
     {
         public async Task<ArticleDetailsServiceModel?> Details(
@@ -25,8 +28,9 @@
                 var rowsAffected = await data
                     .Articles
                     .Where(a => a.Id == id)
-                    .ExecuteUpdateAsync(s => s
-                        .SetProperty(a => a.Views, a => a.Views + 1),
+                    .ExecuteUpdateAsync(
+                        s => s.SetProperty
+                            (a => a.Views, a => a.Views + 1),
                         token);
 
                 if (rowsAffected == 0)
@@ -47,20 +51,21 @@
         {
             var dbModel = serviceModel.ToDbModel();
 
-            if (serviceModel.Image is not null)
-            {
-                await SaveImageFile(serviceModel, dbModel, token);
-            }
-            else
-            {
-                dbModel.ImagePath = DefaultImagePath;
-            }
+            await imageWriter.Write(
+                dbModel.Id,
+                ArticlesImagePathPrefix,
+                dbModel,
+                serviceModel,
+                DefaultImagePath,
+                token);
 
             data.Add(dbModel);
             await data.SaveChangesAsync(token);
 
             logger.LogInformation(
-                "New {article} with Id: {id} was created.", nameof(Article), dbModel.Id);
+                "New {article} with Id: {id} was created.",
+                ArticlesFeature,
+                dbModel.Id);
 
             return dbModel.ToDetailsServiceModel();
         }
@@ -76,17 +81,34 @@
                 return LogAndReturnNotFoundMessage(id);
             }
 
+            var oldImagePath = dbModel.ImagePath;
+            var isNewImageUploaded = serviceModel.Image is not null;
+
             serviceModel.UpdateDbModel(dbModel);
 
-            if (serviceModel.Image is not null)
+            await imageWriter.Write(
+                dbModel.Id,
+                ArticlesImagePathPrefix,
+                dbModel,
+                serviceModel,
+                null,
+                token);
+
+            if (isNewImageUploaded)
             {
-                await SaveImageFile(serviceModel, dbModel, token);
+                imageWriter.Delete(
+                    id,
+                    ArticlesFeature,
+                    oldImagePath,
+                    DefaultImagePath);
             }
 
             await data.SaveChangesAsync(token);
 
             logger.LogInformation(
-                "{article} with Id: {id} was updated.", nameof(Article), dbModel.Id);
+                "{article} with Id: {id} was updated.",
+                ArticlesFeature,
+                dbModel.Id);
 
             return true;
         }
@@ -106,12 +128,14 @@
             await data.SaveChangesAsync(token);
 
             logger.LogInformation(
-                "{article} with Id: {id} was deleted.", nameof(Article), dbModel.Id);
+                "{article} with Id: {id} was deleted.",
+                ArticlesFeature,
+                dbModel.Id);
 
             return true;
         }
 
-        private async Task<Article?> GetDbModel(
+        private async Task<ArticleDbModel?> GetDbModel(
             Guid id,
             CancellationToken token = default)
             => await data
@@ -120,24 +144,15 @@
 
         private string LogAndReturnNotFoundMessage(Guid id)
         {
-            logger.LogWarning(DbEntityNotFoundTemplate, nameof(Article), id);
-            return string.Format(DbEntityNotFound, nameof(Article), id);
-        }
+            logger.LogWarning(
+                DbEntityNotFoundTemplate,
+                ArticlesFeature,
+                id);
 
-        private static async Task SaveImageFile(
-            CreateArticleServiceModel serviceModel,
-            Article dbModel,
-            CancellationToken token = default)
-        {
-            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(serviceModel.Image!.FileName)}";
-            var filePath = Path.Combine("wwwroot", "images", "articles", fileName);
-
-            Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
-
-            await using var stream = new FileStream(filePath, FileMode.Create);
-            await serviceModel.Image.CopyToAsync(stream, token);
-
-            dbModel.ImagePath = $"/images/articles/{fileName}";
+            return string.Format(
+                DbEntityNotFound,
+                ArticlesFeature,
+                id);
         }
     }
 }

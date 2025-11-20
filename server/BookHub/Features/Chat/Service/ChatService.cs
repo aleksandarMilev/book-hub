@@ -4,15 +4,16 @@
     using AutoMapper.QueryableExtensions;
     using BookHub.Data;
     using BookHub.Data.Models.Shared.ChatUser;
+    using Infrastructure.Services.CurrentUser;
+    using Infrastructure.Services.Result;
     using Data.Models;
-    using Infrastructure.Services;
     using Microsoft.Data.SqlClient;
     using Microsoft.EntityFrameworkCore;
     using Notification.Service;
     using Service.Models;
     using UserProfile.Service.Models;
 
-    using static Common.ErrorMessage;
+    using static Common.Constants.ErrorMessages;
 
     public class ChatService(
         BookHubDbContext data,

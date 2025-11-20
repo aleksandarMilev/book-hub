@@ -5,7 +5,7 @@
     using Service;
     using Service.Models;
 
-    using static Common.ApiRoutes;
+    using static Common.Constants.ApiRoutes;
     using static Shared.Constants.RouteNames;
 
     [Authorize]

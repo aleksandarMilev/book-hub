@@ -8,7 +8,7 @@
     using Service.Models;
 
     using static ApiRoutes;
-    using static Common.ApiRoutes;
+    using static Common.Constants.ApiRoutes;
 
     [Authorize]
     public class AuthorController(IAuthorService service) : AdminApiController

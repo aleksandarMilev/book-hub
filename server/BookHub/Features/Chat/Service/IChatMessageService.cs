@@ -1,5 +1,6 @@
 ﻿namespace BookHub.Features.Chat.Service
 {
+    using BookHub.Infrastructure.Services.Result;
     using Infrastructure.Services;
     using Infrastructure.Services.ServiceLifetimes;
     using Service.Models;

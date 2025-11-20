@@ -3,17 +3,18 @@
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using BookHub.Data;
-    using Common;
+    using Common.Exceptions;
     using Data.Models;
     using Features.Authors.Data.Models;
     using Features.Book.Data.Models;
     using Features.UserProfile.Data.Models;
-    using Infrastructure.Services;
+    using Infrastructure.Services.CurrentUser;
+    using Infrastructure.Services.Result;
     using Microsoft.EntityFrameworkCore;
     using Models;
     using UserProfile.Service;
 
-    using static Common.ErrorMessage;
+    using static Common.Constants.ErrorMessages;
 
     public class ReviewService(
         BookHubDbContext data,

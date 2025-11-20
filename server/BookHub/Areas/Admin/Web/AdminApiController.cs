@@ -3,7 +3,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
-    using static BookHub.Common.Constants;
+    using static BookHub.Common.Constants.Names;
 
     [ApiController]
     [Area(AdminRoleName)]

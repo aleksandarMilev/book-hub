@@ -5,9 +5,9 @@
     using Models;
     using Seed;
 
-    public class ArticleConfiguration : IEntityTypeConfiguration<Article>
+    public class ArticleConfiguration : IEntityTypeConfiguration<ArticleDbModel>
     {
-        public void Configure(EntityTypeBuilder<Article> builder)
+        public void Configure(EntityTypeBuilder<ArticleDbModel> builder)
             => builder.HasData(ArticleSeeder.Seed());
     }
 }

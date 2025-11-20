@@ -4,6 +4,8 @@
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using BookHub.Data;
+    using BookHub.Infrastructure.Services.CurrentUser;
+    using BookHub.Infrastructure.Services.Result;
     using Data.Models;
     using Features.UserProfile.Data.Models;
     using Infrastructure.Extensions;
@@ -13,7 +15,7 @@
     using Notification.Service;
     using UserProfile.Service;
 
-    using static Common.ErrorMessage;
+    using static Common.Constants.ErrorMessages;
 
     public class AuthorService(
         BookHubDbContext data,

@@ -2,7 +2,7 @@
 {
     using AutoMapper;
     using Infrastructure.Extensions;
-    using Infrastructure.Services;
+    using Infrastructure.Services.Result;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Models;
@@ -10,7 +10,7 @@
     using Service.Models;
     using UserProfile.Service.Models;
 
-    using static Common.ApiRoutes;
+    using static Common.Constants.ApiRoutes;
 
     [Authorize]
     public class ChatController(

@@ -7,7 +7,7 @@
     using Service;
     using Service.Models;
 
-    using static Common.ApiRoutes;
+    using static Common.Constants.ApiRoutes;
 
     [Authorize]
     public class BookController(IBookService service) : AdminApiController

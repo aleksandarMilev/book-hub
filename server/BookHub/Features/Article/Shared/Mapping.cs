@@ -17,7 +17,7 @@
                 Image = webModel.Image,
             };
 
-        public static Article ToDbModel(
+        public static ArticleDbModel ToDbModel(
             this CreateArticleServiceModel serviceModel)
             => new()
             {
@@ -28,14 +28,14 @@
 
         public static void UpdateDbModel(
             this CreateArticleServiceModel serviceModel,
-            Article dbModel)
+            ArticleDbModel dbModel)
         {
             dbModel.Title = serviceModel.Title;
             dbModel.Introduction = serviceModel.Introduction;
             dbModel.Content = serviceModel.Content;
         }
 
-        public static Expression<Func<Article, ArticleDetailsServiceModel>> ToDetailsServiceModelExpression =>
+        public static Expression<Func<ArticleDbModel, ArticleDetailsServiceModel>> ToDetailsServiceModelExpression =>
             dbModel => new ArticleDetailsServiceModel
             {
                 Id = dbModel.Id,
@@ -48,7 +48,7 @@
             };
 
         public static ArticleDetailsServiceModel ToDetailsServiceModel(
-            this Article dbModel)
+            this ArticleDbModel dbModel)
             => new()
             {
                 Id = dbModel.Id,

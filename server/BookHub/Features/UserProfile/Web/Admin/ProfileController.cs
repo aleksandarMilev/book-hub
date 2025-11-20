@@ -5,7 +5,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Service;
 
-    using static Common.ApiRoutes;
+    using static Common.Constants.ApiRoutes;
 
     public class ProfileController(IProfileService service) : AdminApiController
     {

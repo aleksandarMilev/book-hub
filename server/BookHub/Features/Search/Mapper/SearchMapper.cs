@@ -20,7 +20,7 @@
                  .ForMember(dest => dest.Genres, opt => opt.MapFrom(src => src.BooksGenres.Select(bg => bg.Genre)))
                  .ForMember(dest => dest.AuthorName, opt => opt.MapFrom(src => src.Author == null ? null : src.Author.Name));
 
-            this.CreateMap<Article, SearchArticleServiceModel>();
+            this.CreateMap<ArticleDbModel, SearchArticleServiceModel>();
 
             this.CreateMap<Author, SearchAuthorServiceModel>();
 

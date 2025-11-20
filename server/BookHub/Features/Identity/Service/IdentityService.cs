@@ -4,13 +4,13 @@
     using System.Security.Claims;
     using System.Text;
     using Data.Models;
-    using Infrastructure.Services;
+    using Infrastructure.Services.Result;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
 
+    using static Common.Constants.Names;
     using static Constants;
-    using static Common.Constants;
 
     public class IdentityService(
         UserManager<User> userManager,

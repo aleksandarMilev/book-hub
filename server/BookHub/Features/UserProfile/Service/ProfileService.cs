@@ -3,13 +3,14 @@
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using BookHub.Data;
-    using Common;
+    using Common.Exceptions;
     using Data.Models;
-    using Infrastructure.Services;
+    using Infrastructure.Services.CurrentUser;
+    using Infrastructure.Services.Result;
     using Microsoft.EntityFrameworkCore;
     using Models;
 
-    using static Common.ErrorMessage;
+    using static Common.Constants.ErrorMessages;
     using static Shared.ValidationConstants;
 
     public class ProfileService(
