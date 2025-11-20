@@ -37,7 +37,7 @@
 
                     Pet Sematary stands as one of King's most deeply emotional works. It is a story that reminds us of the importance of embracing life's fleeting moments and coming to terms with our own mortality. Though the novel is often categorized as a horror story, its true horror lies not in the supernatural events, but in the internal struggles of the characters - in their desperate attempts to avoid facing the unavoidable. King's writing is a masterclass in creating tension and unease, building dread not just through external events, but through the complex emotional landscapes of his characters. The novel's haunting final scenes linger long after the last page is turned, leaving readers to reflect on the true meaning of life, love, and loss.
                     """,
-                    ImageUrl = "https://thedailytexan.com/wp-content/uploads/2023/09/pet_sematary_bloodlines_4press-1200x800.jpg",
+                    ImagePath = "/images/articles/pet.jpg",
                     Views = 0,
                     CreatedOn = SeedCreationDate
                 },
@@ -64,7 +64,7 @@
 
                     Ultimately, Harry Potter and the Deathly Hallows is a story of hope—hope in the face of fear, in the face of evil, and in the face of the unknown. It is a story about growing up, about making choices, and about the power of love to overcome even the darkest forces. Rowling's storytelling is masterful, blending action, emotion, and depth in a way that resonates with readers of all ages. As the final chapter in the Harry Potter series, The Deathly Hallows delivers a powerful message: no matter how dark the world may seem, love and loyalty will always light the way.
                     """,
-                    ImageUrl = "https://choicefineart.com/cdn/shop/products/book-7-harry-potter-and-the-deathly-hallows-311816.jpg?v=1688079541",
+                    ImagePath = "/images/articles/harry.jpg",
                     Views = 0,
                     CreatedOn = SeedCreationDate
                 },
@@ -91,7 +91,7 @@
 
                     In the end, The Lord of the Rings is a story about the enduring power of friendship, the consequences of wielding great power, and the importance of selflessness, sacrifice, and hope. Tolkien's work transcends the boundaries of fantasy literature, offering a timeless and deeply resonant narrative that continues to captivate readers of all ages. Whether it is the humble courage of Frodo, the noble sacrifice of Aragorn, or the steadfast loyalty of Sam, The Lord of the Rings reminds us that in the face of darkness, there is always a light to guide us—if we are brave enough to seek it.
                     """,
-                    ImageUrl = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEibI7_-Az0QVZhhwZO_PcgrNRK7RYnS7JPiddt_LvTC8NTgTzzYcaagGBLR6KtgY1J_VyZzS6HhL7MW9x1h-rioISPanc-daPbdgnZCQQb48PNELDt9gbQlohCJuXGHgritNS_3Ff08oUhs/w1200-h630-p-k-no-nu/acetolkien.jpg",
+                    ImagePath = "/images/articles/lord.jpg",
                     Views = 0,
                     CreatedOn = SeedCreationDate
                 },
@@ -120,7 +120,7 @@
 
                     In the end, The Shining is a story about the fragility of the human mind, the destructive nature of addiction, and the dangerous consequences of isolation. Stephen King's novel delves into the darkness of the human soul, showing how the line between reality and madness can blur in the face of intense fear and pressure. It remains one of King’s most haunting and enduring works, cementing his reputation as the master of psychological horror. Whether it's the suffocating atmosphere of the Overlook or the chilling unraveling of Jack Torrance's sanity, The Shining continues to captivate and terrify readers, proving that sometimes the greatest horror lies not in what we see, but in what we cannot escape from within.
                     """,
-                    ImageUrl = "https://kcopera.org/wp-content/uploads/2024/03/the-shining-recording-page-banner.jpg",
+                    ImagePath = "/images/articles/shining.jpg",
                     Views = 0,
                     CreatedOn = SeedCreationDate
                 },
@@ -149,7 +149,7 @@
 
                     In the end, 1984 is not just a warning about a specific future but an exploration of the enduring struggle between freedom and oppression. Orwell’s chilling narrative of Winston’s life under Big Brother’s watchful eye remains a powerful and thought-provoking work, urging readers to consider the value of truth, individuality, and liberty in the face of ever-growing authoritarianism.
                     """,
-                    ImageUrl = "https://s3.amazonaws.com/adg-bucket/1984-george-orwell/3423-medium.jpg",
+                    ImagePath = "/images/articles/1984.jpg",
                     Views = 0,
                     CreatedOn = SeedCreationDate
                 },
@@ -182,7 +182,7 @@
 
                     Ultimately, Dracula is more than just a horror novel. It is a reflection on the nature of good and evil, the dangers of unchecked power, and the fear of the unknown. Bram Stoker’s masterpiece has become a timeless work of gothic fiction, influencing countless adaptations and interpretations. Its exploration of desire, fear, and the supernatural continues to resonate with readers today, making Dracula a novel that stands as both a product of its time and an ever-relevant commentary on the darkness that exists within humanity. Its tale of terror, love, and sacrifice remains a chilling reminder of the eternal struggle between the forces of darkness and the light of human resilience.
                     """,
-                    ImageUrl = "https://miro.medium.com/v2/resize:fit:1000/1*3US2qS3OLXELxVA0AEVZxQ.jpeg",
+                    ImagePath = "/images/articles/dracula.jpg",
                     Views = 0,
                     CreatedOn = SeedCreationDate
                 },
@@ -213,7 +213,7 @@
 
                     A Clockwork Orange continues to resonate today as a powerful exploration of violence, control, and the power of individual choice. Its controversial themes, innovative language, and unforgettable characters have made it a defining work in the dystopian genre, ensuring its place as one of the most influential novels of the 20th century.
                     """,
-                    ImageUrl = "https://portsmouthreview.com/wp-content/uploads/2019/01/clockworkorange-1160x774.png",
+                    ImagePath = "/images/articles/clock.jpg",
                     Views = 0,
                     CreatedOn = SeedCreationDate
                 },
@@ -236,7 +236,7 @@
 
                     Murder on the Orient Express has remained a beloved classic for decades, inspiring numerous adaptations in film, television, and theater. Its themes of morality, justice, and revenge continue to resonate with readers, making it an essential work in the detective genre. Agatha Christie’s iconic writing and the unforgettable twists of this tale ensure that it remains a definitive example of the mystery novel.
                     """,
-                    ImageUrl = "https://images-na.ssl-images-amazon.com/images/I/81voh8NSRSL._AC_UL210_SR210,210_.jpg",
+                    ImagePath = "/images/articles/orient.jpg",
                     Views = 0,
                     CreatedOn = SeedCreationDate
                 },
@@ -259,7 +259,7 @@
 
                     Ultimately, Of Mice and Men is a tale about the fragility of human dreams and the deep need for companionship, making it a timeless classic that resonates with readers across generations. Steinbeck’s masterful storytelling and deep empathy for his characters ensure the novel’s place in the canon of American literature.
                     """,
-                    ImageUrl = "https://m.media-amazon.com/images/I/81nuvmpbEdL._AC_UF1000,1000_QL80_.jpg",
+                    ImagePath = "/images/articles/mice.jpg",
                     Views = 0,
                     CreatedOn = SeedCreationDate
                 },
@@ -284,7 +284,7 @@
 
                     Ultimately, Dune is a tale of survival, leadership, and the burden of destiny. It is a novel that encourages readers to reflect on the power dynamics within our own societies and the ways in which human beings relate to the environment and to each other. Frank Herbert’s Dune continues to inspire readers and adaptations, solidifying its place as a landmark achievement in science fiction literature.
                     """,
-                    ImageUrl = "https://i.etsystatic.com/16102212/r/il/2482ff/2771009725/il_570xN.2771009725_chlb.jpg",
+                    ImagePath = "/images/articles/dune.avif",
                     Views = 0,
                     CreatedOn = SeedCreationDate
                 },
@@ -305,7 +305,7 @@
 
                     In conclusion, The Hitchhiker's Guide to the Galaxy is more than just a science fiction novel—it’s a literary treasure that encourages readers to laugh, think, and reflect on the absurdity of life. Its timeless humor and deep questions about existence continue to resonate with readers around the world, making it a must-read for fans of science fiction and comedy alike.
                     """,
-                    ImageUrl = "https://cdn2.penguin.com.au/covers/original/9780434023394.jpg",
+                    ImagePath = "/images/articles/galaxy.jpg",
                     Views = 0,
                     CreatedOn = SeedCreationDate
                 }

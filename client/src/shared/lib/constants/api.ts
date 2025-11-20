@@ -3,6 +3,7 @@ export const baseAdminUrl = baseUrl + '/administrator';
 
 export const routes = {
   home: '/',
+  articles: '/articles',
   register: '/identity/register',
   login: '/identity/login',
   logout: '/identity/logout',
@@ -37,8 +38,6 @@ export const routes = {
   badRequest: '/error/bad-request',
   notFound: '/error/not-found',
   accessDenied: '/access-denied',
-  article: '/article',
-  articles: '/articles',
   readingList: '/readingList',
   notification: '/notification',
   lastThreeNotifications: '/notification/last',

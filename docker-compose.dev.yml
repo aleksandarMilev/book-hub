@@ -29,6 +29,7 @@ services:
       - ApplicationSettings__Secret=${APP_SECRET}
     volumes:
       - ./server:/src/server
+      - ./server/BookHub/wwwroot:/src/server/BookHub/wwwroot
     networks:
       - backend
 

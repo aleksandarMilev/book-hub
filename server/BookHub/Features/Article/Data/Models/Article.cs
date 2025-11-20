@@ -19,8 +19,7 @@
         [MaxLength(ContentMaxLength)]
         public string Content { get; set; } = null!;
 
-        [MaxLength(UrlMaxLength)]
-        public string? ImageUrl { get; set; }
+        public string? ImagePath { get; set; }
 
         public int Views { get; set; }
     }

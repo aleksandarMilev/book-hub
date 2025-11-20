@@ -20,6 +20,19 @@ export function getAuthConfig(token: string, signal?: AbortSignal): AxiosRequest
   return config;
 }
 
+export const getAuthConfigForFile = (token: string, signal?: AbortSignal) => {
+  const config = getAuthConfig(token, signal);
+  const fileConfig = {
+    ...config,
+    headers: {
+      ...(config.headers ?? {}),
+      'Content-Type': 'multipart/form-data',
+    },
+  };
+
+  return fileConfig;
+};
+
 export function getPublicConfig(signal?: AbortSignal): AxiosRequestConfig {
   const config: AxiosRequestConfig = {
     headers: {

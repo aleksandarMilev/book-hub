@@ -33,7 +33,7 @@
                 .UseSwagger()
                 .UseSwaggerUI(opt =>
                 {
-                    opt.SwaggerEndpoint("swagger/v1/swagger.json", "My BookHub API");
+                    opt.SwaggerEndpoint("swagger/v1/swagger.json", "BookHub API");
                     opt.RoutePrefix = string.Empty;
                 });
 

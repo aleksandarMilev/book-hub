@@ -27,6 +27,7 @@ if (envIsDev)
 
 app
     .UseRouting()
+    .UseStaticFiles()
     .UseAllowedCors()
     .UseAuthentication()
     .UseAuthorization()
@@ -38,5 +39,11 @@ if (envIsDev)
     await app.UseMigrations();
     await app.UseAdminRole();
 }
+
+var logger = app.Logger;
+var url = Environment.GetEnvironmentVariable("DOTNET_URLS")
+    ?? Environment.GetEnvironmentVariable("ASPNETCORE_URLS");
+
+logger.LogInformation("Server is listening on: {Url}", url);
 
 await app.RunAsync();

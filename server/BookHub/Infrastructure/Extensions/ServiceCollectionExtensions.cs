@@ -15,7 +15,6 @@
     public static class ServiceCollectionExtensions
     {
         private const int AccountLockoutTimeSpan = 15;
-
         private const int MaxFailedLoginAttempts = 3;
 
         public static IServiceCollection AddAppSettings(
@@ -52,7 +51,6 @@
                     opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(AccountLockoutTimeSpan); 
                     opt.Lockout.MaxFailedAccessAttempts = MaxFailedLoginAttempts; 
                     opt.Lockout.AllowedForNewUsers = true;
-
                     opt.User.RequireUniqueEmail = true;
                     opt.Password.RequireUppercase = false;
                     opt.Password.RequireLowercase = false;
@@ -124,7 +122,7 @@
                     Implementation = t
 
                 })
-                .Where(t => t.Service != null)
+                .Where(t => t.Service is not null)
                 .ToList()
                 .ForEach(t =>
                 {

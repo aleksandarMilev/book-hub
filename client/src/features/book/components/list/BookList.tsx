@@ -27,7 +27,7 @@ const BookList: FC = () => {
 
   const byGenre = useByGenre(genreId, page, pageSize, !!genreId);
   const byAuthor = useByAuthor(authorId, page, pageSize, !genreId && !!authorId);
-  const bySearch = useSearchBooks(searchTerm, page, pageSize, !genreId && !authorId);
+  const bySearch = useSearchBooks(searchTerm, page, pageSize);
 
   const books = byGenre?.books ?? byAuthor?.books ?? bySearch?.items ?? [];
   const totalItems = byGenre?.totalItems ?? byAuthor?.totalItems ?? bySearch?.totalItems ?? 0;

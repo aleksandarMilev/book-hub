@@ -4,7 +4,7 @@ export type ArticlesSearchResult = {
   id: string;
   title: string;
   introduction: string;
-  imageUrl: string;
+  imagePath: string;
   createdOn: string;
 };
 

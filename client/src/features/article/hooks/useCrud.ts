@@ -11,7 +11,7 @@ import { useAuth } from '@/shared/stores/auth/auth.js';
 import { useMessage } from '@/shared/stores/message/message.js';
 import { HttpError } from '@/shared/types/errors/httpError.js';
 
-export const useDetails = (id?: string) => {
+export const useDetails = (id?: string, isEditMode = false) => {
   const { token } = useAuth();
   const [article, setArticle] = useState<ArticleDetails | null>(null);
   const [isFetching, setIsFetching] = useState(false);
@@ -37,7 +37,10 @@ export const useDetails = (id?: string) => {
     (async () => {
       try {
         setIsFetching(true);
-        const data = await api.details(id, token, controller.signal);
+        const data = isEditMode
+          ? await api.detailsForEdit(id, token, controller.signal)
+          : await api.details(id, token, controller.signal);
+
         setArticle(data);
       } catch (error) {
         if (IsCanceledError(error)) {
@@ -51,7 +54,7 @@ export const useDetails = (id?: string) => {
     })();
 
     return () => controller.abort();
-  }, [id, token]);
+  }, [id, token, isEditMode]);
 
   return { article, isFetching, error };
 };
@@ -62,13 +65,8 @@ export const useCreate = () => {
 
   return useCallback(
     async (data: CreateArticle) => {
-      const articleToSend: CreateArticle = {
-        ...data,
-        imageUrl: data.imageUrl || null,
-      };
-
       try {
-        return await api.create(articleToSend, token);
+        return await api.create(data, token);
       } catch (error) {
         const message = IsError(error) ? error.message : errors.article.create;
         navigate(routes.badRequest, { state: { message } });
@@ -86,13 +84,8 @@ export const useEdit = () => {
 
   return useCallback(
     async (id: string, data: CreateArticle) => {
-      const articleToSend: CreateArticle = {
-        ...data,
-        imageUrl: data.imageUrl || null,
-      };
-
       try {
-        return await api.edit(id, articleToSend, token);
+        return await api.edit(id, data, token);
       } catch (error) {
         const message = IsError(error) ? error.message : errors.article.edit;
         navigate(routes.badRequest, { state: { message } });

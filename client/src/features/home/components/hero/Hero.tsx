@@ -1,6 +1,6 @@
 import './Hero.css';
 
-import { FC } from 'react';
+import type { FC } from 'react';
 import { Link } from 'react-router-dom';
 
 import { routes } from '@/shared/lib/constants/api.js';

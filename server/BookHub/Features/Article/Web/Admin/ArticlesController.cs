@@ -11,8 +11,14 @@
     using static Common.ApiRoutes;
     using static Shared.Constants.RouteNames;
 
-    public class ArticleController(IArticleService service) : AdminApiController
+    public class ArticlesController(IArticlesService service) : AdminApiController
     {
+        [HttpGet(Id)]
+        public async Task<ActionResult<ArticleDetailsServiceModel>> DetailsForEdit(
+            Guid id,
+            CancellationToken token = default)
+            => this.Ok(await service.Details(id, true, token));
+
         [HttpPost]
         public async Task<ActionResult<ArticleDetailsServiceModel>> Create(
             CreateArticleWebModel webModel,

@@ -1,7 +1,20 @@
 import { HttpStatusCode, isAxiosError } from 'axios';
 import { format } from 'date-fns';
 
+import { baseUrl } from '@/shared/lib/constants/api.js';
 import type { IntId } from '@/shared/types/intId.js';
+
+export const getImageUrl = (imagePath: string, resource: string) => {
+  if (!imagePath) {
+    return `${baseUrl}/images/${resource}/default.avif`;
+  }
+
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath;
+  }
+
+  return `${baseUrl}${imagePath.startsWith('/') ? imagePath : `/${imagePath}`}`;
+};
 
 export const sleep = (ms = 2_000) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 

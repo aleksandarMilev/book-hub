@@ -1,4 +1,5 @@
 import { Component, type ReactNode } from 'react';
+
 import errorIllustration from './err-b.webp';
 
 type Props = {

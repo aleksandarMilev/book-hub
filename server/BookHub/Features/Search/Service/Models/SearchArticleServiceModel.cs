@@ -8,7 +8,7 @@
 
         public string Introduction { get; init; } = null!;
 
-        public string? ImageUrl { get; init; }
+        public string? ImagePath { get; init; }
 
         public DateTime CreatedOn { get; init; }
     }

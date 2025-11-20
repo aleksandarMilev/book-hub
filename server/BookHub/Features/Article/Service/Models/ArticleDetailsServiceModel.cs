@@ -7,5 +7,7 @@
         public DateTime CreatedOn { get; init; }
 
         public int Views { get; init; }
+
+        public string? ImagePath { get; init; }
     }
 }

@@ -54,20 +54,22 @@ const ArticleForm: FC<Props> = ({ article = null, isEditMode = false }) => {
                           : ''
                       }
                     />
-                    {formik.touched.imageUrl && formik.errors.imageUrl && (
-                      <div className="article-form-error">{formik.errors.imageUrl}</div>
-                    )}
-                    <MDBInput
-                      wrapperClass="mb-4 article-form-input"
-                      label="Image URL"
-                      size="lg"
-                      id="imageUrl"
-                      type="text"
-                      {...formik.getFieldProps('imageUrl')}
-                      className={
-                        formik.touched.imageUrl && formik.errors.imageUrl ? 'is-invalid' : ''
-                      }
-                    />
+                    <div className="mb-4 article-form-input">
+                      <label htmlFor="image" className="form-label">
+                        Image (optional)
+                      </label>
+                      <input
+                        id="image"
+                        name="image"
+                        type="file"
+                        accept="image/*"
+                        className="form-control"
+                        onChange={(event) => {
+                          const file = event.currentTarget.files?.[0] ?? null;
+                          formik.setFieldValue('image', file);
+                        }}
+                      />
+                    </div>
                     {formik.touched.content && formik.errors.content && (
                       <div className="article-form-error">{formik.errors.content}</div>
                     )}
