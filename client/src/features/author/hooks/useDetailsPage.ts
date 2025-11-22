@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { useDetails, useRemove } from '@/features/author/hooks/useCrud.js';
-import { toIntId } from '@/shared/lib/utils.js';
+import { toIntId } from '@/shared/lib/utils/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 import { useMessage } from '@/shared/stores/message/message.js';
 

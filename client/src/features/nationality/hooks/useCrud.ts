@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 
 import * as api from '@/features/nationality/api/api.js';
 import type { Nationality } from '@/features/nationality/types/nationality.js';
-import { useDebounce } from '@/shared/hooks/useDebounce.js';
+import { useDebounce } from '@/shared/hooks/debounce/useDebounce.js';
 import { routes } from '@/shared/lib/constants/api.js';
-import { IsCanceledError, IsError } from '@/shared/lib/utils.js';
+import { IsCanceledError, IsError } from '@/shared/lib/utils/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 
 export function useAll() {

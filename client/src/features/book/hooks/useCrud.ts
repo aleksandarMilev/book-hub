@@ -7,7 +7,7 @@ import type { Book, BookDetails, CreateBook } from '@/features/book/types/book.j
 import { routes } from '@/shared/lib/constants/api.js';
 import { pagination } from '@/shared/lib/constants/defaultValues.js';
 import { errors } from '@/shared/lib/constants/errorMessages.js';
-import { IsCanceledError, IsError } from '@/shared/lib/utils.js';
+import { IsCanceledError, IsError } from '@/shared/lib/utils/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 import { useMessage } from '@/shared/stores/message/message.js';
 import { HttpError } from '@/shared/types/errors/httpError.js';

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 import * as api from '@/features/statistics/api/api.js';
 import type { Statistics } from '@/features/statistics/types/statistics.js';
-import { IsError } from '@/shared/lib/utils.js';
+import { IsError } from '@/shared/lib/utils/utils.js';
 
 export function useStatistics() {
   const [statistics, setStatistics] = useState<Statistics | null>(null);

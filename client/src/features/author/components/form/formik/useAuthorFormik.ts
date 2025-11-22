@@ -5,7 +5,7 @@ import { authorSchema } from '@/features/author/components/form/validation/autho
 import { useCreate, useEdit } from '@/features/author/hooks/useCrud.js';
 import type { AuthorDetails, CreateAuthor } from '@/features/author/types/author.js';
 import { routes } from '@/shared/lib/constants/api.js';
-import { IsError } from '@/shared/lib/utils.js';
+import { IsError } from '@/shared/lib/utils/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 import { useMessage } from '@/shared/stores/message/message.js';
 

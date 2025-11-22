@@ -7,7 +7,7 @@ import * as api from '@/features/profile/api/api.js';
 import type { CreateProfile, PrivateProfile, Profile } from '@/features/profile/types/profile.js';
 import { useList } from '@/features/reading-list/hooks/useCrud.js';
 import { routes } from '@/shared/lib/constants/api.js';
-import { IsCanceledError, IsError } from '@/shared/lib/utils.js';
+import { IsCanceledError, IsError } from '@/shared/lib/utils/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 
 const isFullProfile = (profile: Profile | PrivateProfile | null): profile is Profile =>

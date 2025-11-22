@@ -2,7 +2,7 @@ import type { CreateProfile, PrivateProfile, Profile } from '@/features/profile/
 import { getAuthConfig, http, httpAdmin, processError } from '@/shared/api/http.js';
 import { routes } from '@/shared/lib/constants/api.js';
 import { baseErrors, errors } from '@/shared/lib/constants/errorMessages.js';
-import { isNotFoundError } from '@/shared/lib/utils.js';
+import { isNotFoundError } from '@/shared/lib/utils/utils.js';
 
 export const hasProfile = async (token: string, signal?: AbortSignal) => {
   try {

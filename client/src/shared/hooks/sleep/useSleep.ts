@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { sleep } from '@/shared/lib/utils.js';
+import { sleep } from '@/shared/lib/utils/utils.js';
 
 export const useSleep = (ms: number = 2_000) => {
   useEffect(() => {

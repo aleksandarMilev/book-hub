@@ -2,7 +2,7 @@ export interface CreateArticle {
   title: string;
   introduction: string;
   content: string;
-  image?: File | null;
+  image?: File | null | undefined;
 }
 
 export interface ArticleDetails {

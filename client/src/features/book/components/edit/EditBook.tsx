@@ -5,7 +5,7 @@ import BookForm from '@/features/book/components/form/BookForm.js';
 import { useFullInfo } from '@/features/book/hooks/useCrud.js';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
 import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect.js';
-import { toIntId } from '@/shared/lib/utils.js';
+import { toIntId } from '@/shared/lib/utils/utils.js';
 
 const EditBook: FC = () => {
   const { id } = useParams<{ id: string }>();

@@ -2,7 +2,7 @@ import type { NotificationType } from '@/features/notification/types/notificatio
 import { getAuthConfig, http, processError } from '@/shared/api/http.js';
 import { routes } from '@/shared/lib/constants/api.js';
 import { errors } from '@/shared/lib/constants/errorMessages.js';
-import { IsCanceledError, IsError } from '@/shared/lib/utils.js';
+import { IsCanceledError, IsError } from '@/shared/lib/utils/utils.js';
 import type { PaginatedResult } from '@/shared/types/paginatedResult.js';
 
 export const lastThree = async (token: string, signal?: AbortSignal) => {

@@ -5,7 +5,7 @@ import { loginSchema } from '@/features/identity/components/login/validation/log
 import { useLogin } from '@/features/identity/hooks/useIdentity.js';
 import type { LoginRequest } from '@/features/identity/types/identity.js';
 import { routes } from '@/shared/lib/constants/api.js';
-import { IsError } from '@/shared/lib/utils.js';
+import { IsError } from '@/shared/lib/utils/utils.js';
 
 const loginInitialValues = {
   credentials: '',

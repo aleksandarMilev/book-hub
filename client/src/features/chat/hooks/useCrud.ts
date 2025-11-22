@@ -14,7 +14,7 @@ import type {
 } from '@/features/chat/types/chat.js';
 import type { PrivateProfile } from '@/features/profile/types/profile.js';
 import { routes } from '@/shared/lib/constants/api.js';
-import { formatIsoDate, IsCanceledError, IsError } from '@/shared/lib/utils.js';
+import { formatIsoDate, IsCanceledError, IsError } from '@/shared/lib/utils/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 import { useMessage } from '@/shared/stores/message/message.js';
 

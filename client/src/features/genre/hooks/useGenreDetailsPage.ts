@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { useDetails } from '@/features/genre/hooks/useCrud.js';
 import { routes } from '@/shared/lib/constants/api.js';
-import { toIntId } from '@/shared/lib/utils.js';
+import { toIntId } from '@/shared/lib/utils/utils.js';
 
 export const useGenreDetailsPage = () => {
   const navigate = useNavigate();
