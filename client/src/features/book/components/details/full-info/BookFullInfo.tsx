@@ -9,7 +9,7 @@ import type { BookDetails } from '@/features/book/types/book.js';
 import { toUiStatus } from '@/features/reading-list/types/readingList.js';
 import { RenderStars } from '@/shared/components/render-stars/RenderStars.js';
 import { routes } from '@/shared/lib/constants/api.js';
-import { formatIsoDate } from '@/shared/lib/utils.js';
+import { formatIsoDate } from '@/shared/lib/utils/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 import { useMessage } from '@/shared/stores/message/message.js';
 import type { IntId } from '@/shared/types/intId.js';

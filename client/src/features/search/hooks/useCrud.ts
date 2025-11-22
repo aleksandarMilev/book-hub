@@ -11,7 +11,7 @@ import type {
 } from '@/features/search/types/search.js';
 import { routes } from '@/shared/lib/constants/api.js';
 import { pagination } from '@/shared/lib/constants/defaultValues.js';
-import { IsCanceledError, IsError } from '@/shared/lib/utils.js';
+import { IsCanceledError, IsError } from '@/shared/lib/utils/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 import type { PaginatedResult } from '@/shared/types/paginatedResult.js';
 

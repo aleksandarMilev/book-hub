@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import type { ArticlesSearchResult } from '@/features/search/types/search.js';
 import { routes } from '@/shared/lib/constants/api.js';
-import { formatIsoDate, getImageUrl } from '@/shared/lib/utils.js';
+import { formatIsoDate, getImageUrl } from '@/shared/lib/utils/utils.js';
 
 const ArticleListItem: FC<ArticlesSearchResult> = ({
   id,

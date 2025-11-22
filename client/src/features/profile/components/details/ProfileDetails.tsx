@@ -25,7 +25,7 @@ import type { PrivateProfile, Profile } from '@/features/profile/types/profile.j
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
 import DeleteModal from '@/shared/components/delete-modal/DeleteModal.js';
 import { routes } from '@/shared/lib/constants/api.js';
-import { IsError } from '@/shared/lib/utils.js';
+import { IsError } from '@/shared/lib/utils/utils.js';
 import { useMessage } from '@/shared/stores/message/message.js';
 
 const isFullProfile = (profile: Profile | PrivateProfile | null | undefined): profile is Profile =>

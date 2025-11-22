@@ -4,11 +4,11 @@ import React, { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
 import App from '@/app/App.js';
-import Loading from '@/app/Loading.js';
-import AdminRoute from '@/app/routes/guards/AdminRoute.js';
-import AuthenticatedRoute from '@/app/routes/guards/AuthenticatedRoute.js';
-import ChatRoute from '@/app/routes/guards/ChatRoute.js';
-import ProfileRoute from '@/app/routes/guards/ProfileRoute.js';
+import Loading from '@/app/layout/loading/Loading.js';
+import AdminRoute from '@/app/routes/guards/admin/AdminRoute.js';
+import AuthenticatedRoute from '@/app/routes/guards/authenticated/AuthenticatedRoute.js';
+import ChatRoute from '@/app/routes/guards/chat/ChatRoute.js';
+import ProfileRoute from '@/app/routes/guards/profle/ProfileRoute.js';
 import { routes } from '@/shared/lib/constants/api.js';
 
 const Fallback = () => <Loading />;

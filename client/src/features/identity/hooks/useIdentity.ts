@@ -6,7 +6,7 @@ import * as identityApi from '@/features/identity/api/api.js';
 import type { DecodedToken, LoginResponse } from '@/features/identity/types/identity.js';
 import * as profileApi from '@/features/profile/api/api.js';
 import { routes } from '@/shared/lib/constants/api.js';
-import { IsCanceledError, IsError } from '@/shared/lib/utils.js';
+import { IsCanceledError, IsError } from '@/shared/lib/utils/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 import type { User } from '@/shared/stores/auth/types/user.js';
 import { useMessage } from '@/shared/stores/message/message.js';

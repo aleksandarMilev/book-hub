@@ -5,7 +5,7 @@ import { registerSchema } from '@/features/identity/components/register/validati
 import { useRegister } from '@/features/identity/hooks/useIdentity.js';
 import type { RegisterFormValues } from '@/features/identity/types/identity.js';
 import { routes } from '@/shared/lib/constants/api.js';
-import { IsError } from '@/shared/lib/utils.js';
+import { IsError } from '@/shared/lib/utils/utils.js';
 
 const registerInitialValues = {
   username: '',

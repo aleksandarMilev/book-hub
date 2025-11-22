@@ -8,7 +8,7 @@ import {
 import { useCreate, useEdit } from '@/features/article/hooks/useCrud.js';
 import type { ArticleDetails, CreateArticle } from '@/features/article/types/article.js';
 import { routes } from '@/shared/lib/constants/api.js';
-import { IsError } from '@/shared/lib/utils.js';
+import { IsError } from '@/shared/lib/utils/utils.js';
 import { useMessage } from '@/shared/stores/message/message.js';
 
 type Props = {

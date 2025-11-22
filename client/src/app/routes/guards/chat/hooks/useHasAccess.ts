@@ -1,16 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Navigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
-import type { JsxElementProps } from '@/app/types/jsxElementProps.js';
 import * as api from '@/features/chat/api/api.js';
-import { routes } from '@/shared/lib/constants/api.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 
-export default function ChatRoute({ element }: JsxElementProps) {
+export const useHasAccess = () => {
   const { id } = useParams<{ id: string }>();
   const [isLoading, setIsLoading] = useState(true);
   const [hasAccess, setHasAccess] = useState(false);
-
   const { token, isAuthenticated, userId } = useAuth();
 
   useEffect(() => {
@@ -25,13 +22,5 @@ export default function ChatRoute({ element }: JsxElementProps) {
       .finally(() => setIsLoading(false));
   }, [id, userId, token]);
 
-  if (!isAuthenticated) {
-    return <Navigate to={routes.login} replace />;
-  }
-
-  if (!hasAccess && !isLoading) {
-    return <Navigate to={routes.home} replace />;
-  }
-
-  return element;
-}
+  return { isAuthenticated, hasAccess, isLoading };
+};

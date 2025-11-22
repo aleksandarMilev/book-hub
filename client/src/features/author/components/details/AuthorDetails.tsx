@@ -22,7 +22,7 @@ import DeleteModal from '@/shared/components/delete-modal/DeleteModal.js';
 import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect.js';
 import { RenderStars } from '@/shared/components/render-stars/RenderStars.js';
 import { routes } from '@/shared/lib/constants/api.js';
-import { calculateAge, formatIsoDate } from '@/shared/lib/utils.js';
+import { calculateAge, formatIsoDate } from '@/shared/lib/utils/utils.js';
 
 const AuthorDetails: FC = () => {
   const {

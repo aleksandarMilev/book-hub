@@ -1,7 +1,7 @@
 import { type ChangeEvent, useState } from 'react';
 
 import { useSearchArticles } from '@/features/search/hooks/useCrud.js';
-import { useDebounce } from '@/shared/hooks/useDebounce.js';
+import { useDebounce } from '@/shared/hooks/debounce/useDebounce.js';
 import { pagination } from '@/shared/lib/constants/defaultValues.js';
 
 export const useListPage = () => {

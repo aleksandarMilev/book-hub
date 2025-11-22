@@ -9,7 +9,6 @@ import { routes } from '@/shared/lib/constants/api.js';
 const Footer: FC = () => {
   return (
     <MDBFooter className="footer-wrapper text-center text-lg-start text-muted">
-      {/* SOCIAL BAR */}
       <section className="footer-social border-bottom">
         <div className="social-container">
           <span className="social-text d-none d-lg-block">Get connected with us:</span>
@@ -32,7 +31,6 @@ const Footer: FC = () => {
       <section className="footer-content">
         <MDBContainer className="mt-5">
           <MDBRow className="mt-3 justify-content-center">
-            {/* ABOUT */}
             <MDBCol md="3" lg="3" className="footer-column mb-4">
               <h6 className="footer-title">
                 <MDBIcon icon="book" className="me-2" />
@@ -108,8 +106,6 @@ const Footer: FC = () => {
           </MDBRow>
         </MDBContainer>
       </section>
-
-      {/* COPYRIGHT */}
       <div className="footer-bottom">
         © {new Date().getFullYear()} BookHub ·{' '}
         <a

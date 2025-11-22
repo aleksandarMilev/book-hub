@@ -6,7 +6,7 @@ import AuthorListItem from '@/features/author/components/list-item/AuthorListIte
 import { useSearchAuthors } from '@/features/search/hooks/useCrud.js';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
 import Pagination from '@/shared/components/pagination/Pagination.js';
-import { useDebounce } from '@/shared/hooks/useDebounce.js';
+import { useDebounce } from '@/shared/hooks/debounce/useDebounce.js';
 import { pagination } from '@/shared/lib/constants/defaultValues.js';
 
 const AuthorList: FC = () => {

@@ -21,7 +21,7 @@ import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.j
 import DeleteModal from '@/shared/components/delete-modal/DeleteModal.js';
 import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect.js';
 import { routes } from '@/shared/lib/constants/api.js';
-import { getImageUrl } from '@/shared/lib/utils.js';
+import { getImageUrl } from '@/shared/lib/utils/utils.js';
 
 const ArticleDetails: FC = () => {
   const {

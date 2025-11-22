@@ -4,7 +4,7 @@ import type { FC } from 'react';
 import image from '@/features/chat/components/details/message/assets/message.webp';
 import type { ChatMessage } from '@/features/chat/types/chat.js';
 import type { PrivateProfile } from '@/features/profile/types/profile.js';
-import { formatIsoDate } from '@/shared/lib/utils.js';
+import { formatIsoDate } from '@/shared/lib/utils/utils.js';
 
 const Message: FC<{
   message: ChatMessage;

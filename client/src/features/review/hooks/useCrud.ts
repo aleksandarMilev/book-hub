@@ -6,7 +6,7 @@ import type { CreateReview, Review } from '@/features/review/types/review.js';
 import { routes } from '@/shared/lib/constants/api.js';
 import { pagination } from '@/shared/lib/constants/defaultValues.js';
 import { errors } from '@/shared/lib/constants/errorMessages.js';
-import { IsCanceledError, IsError, toIntId } from '@/shared/lib/utils.js';
+import { IsCanceledError, IsError, toIntId } from '@/shared/lib/utils/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 import { useMessage } from '@/shared/stores/message/message.js';
 

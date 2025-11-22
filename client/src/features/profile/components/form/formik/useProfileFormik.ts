@@ -5,7 +5,7 @@ import { profileSchema } from '@/features/profile/components/form/validation/pro
 import { useCreate, useEdit } from '@/features/profile/hooks/useCrud.js';
 import type { CreateProfile, Profile } from '@/features/profile/types/profile.js';
 import { routes } from '@/shared/lib/constants/api.js';
-import { IsError } from '@/shared/lib/utils.js';
+import { IsError } from '@/shared/lib/utils/utils.js';
 import { useMessage } from '@/shared/stores/message/message.js';
 
 export const useProfileFormik = ({
