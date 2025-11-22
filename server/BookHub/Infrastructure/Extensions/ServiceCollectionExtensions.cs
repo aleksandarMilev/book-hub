@@ -43,7 +43,8 @@
                 });
         }
 
-        public static IServiceCollection AddIdentity(this IServiceCollection services)
+        public static IServiceCollection AddIdentity(
+            this IServiceCollection services)
         {
             services
                 .AddIdentity<User, IdentityRole>(opt =>
@@ -94,7 +95,8 @@
             return services;
         }
 
-        public static IServiceCollection AddSwagger(this IServiceCollection services)
+        public static IServiceCollection AddSwagger(
+            this IServiceCollection services)
         {
             var apiInfo = new OpenApiInfo
             {
@@ -106,7 +108,8 @@
             return services;
         }
 
-        public static IServiceCollection AddServices(this IServiceCollection services)
+        public static IServiceCollection AddServices(
+            this IServiceCollection services)
         {
             var singletonInterfaceType = typeof(ISingletonService);
             var scopedInterfaceType = typeof(IScopedService);
@@ -145,7 +148,8 @@
             return services;
         }
 
-        public static IServiceCollection AddApiControllers(this IServiceCollection services)
+        public static IServiceCollection AddApiControllers(
+            this IServiceCollection services)
         {
             services
                 .AddControllers(opt =>
@@ -156,7 +160,18 @@
             return services;
         }
 
-        public static IServiceCollection AddAutoMapper(this IServiceCollection services)
+        public static IServiceCollection AddHealthcheck(
+            this IServiceCollection services)
+        {
+            services
+                .AddHealthChecks()
+                .AddDbContextCheck<BookHubDbContext>("Database");
+
+            return services;
+        }
+
+        public static IServiceCollection AddAutoMapper(
+            this IServiceCollection services)
             => services.AddAutoMapper(Assembly.GetExecutingAssembly());
     }
 }

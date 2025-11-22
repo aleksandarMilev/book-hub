@@ -23,9 +23,16 @@
             return app;
         }
 
-        public static IApplicationBuilder UseAppEndpoints(
-            this IApplicationBuilder app)
-            => app.UseEndpoints(e => e.MapControllers());
+        public static IApplicationBuilder UseAppEndpoints(this IApplicationBuilder app)
+        {
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapHealthChecks("/health");
+            });
+
+            return app;
+        }
 
         public static IApplicationBuilder UseSwaggerUI(
             this IApplicationBuilder app) 

@@ -19,6 +19,7 @@
     "Approvable",
     "Aragorn",
     "Arrakis",
+    "ASPNETCORE",
     "Atreides",
     "Baggins",
     "Beeblebrox",
@@ -37,6 +38,7 @@
     "Gondor",
     "goodreads",
     "Harker",
+    "healthcheck",
     "Helsing",
     "Hercule",
     "Hermione",
@@ -63,6 +65,7 @@
     "VITE",
     "Vogon",
     "wizarding",
+    "wwwroot",
     "Zaphod"
   ],
 

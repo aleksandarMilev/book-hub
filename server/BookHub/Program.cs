@@ -10,7 +10,8 @@ builder.Services
     .AddApiControllers()
     .AddServices()
     .AddAutoMapper()
-    .AddSwagger();
+    .AddSwagger()
+    .AddHealthcheck();
 
 if (builder.Environment.IsDevelopment())
 {
