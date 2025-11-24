@@ -10,7 +10,8 @@ builder.Services
     .AddApiControllers()
     .AddServices()
     .AddAutoMapper()
-    .AddSwagger();
+    .AddSwagger()
+    .AddHealthcheck();
 
 if (builder.Environment.IsDevelopment())
 {
@@ -31,11 +32,11 @@ app
     .UseAllowedCors()
     .UseAuthentication()
     .UseAuthorization()
-    .UseAppEndpoints()
-    .UseSwaggerUI();
+    .UseAppEndpoints();
 
 if (envIsDev)
 {
+    app.UseSwaggerUI();
     await app.UseMigrations();
     await app.UseAdminRole();
 }

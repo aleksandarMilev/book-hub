@@ -1,6 +1,7 @@
 import './Pagination.css';
 
-import { type FC,useEffect } from 'react';
+import { type FC, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 const Pagination: FC<{
@@ -9,6 +10,8 @@ const Pagination: FC<{
   disabled?: boolean;
   onPageChange: (newPage: number) => void;
 }> = ({ page, totalPages, disabled = false, onPageChange }) => {
+  const { t } = useTranslation('common');
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [page]);
@@ -35,9 +38,9 @@ const Pagination: FC<{
         className="bh-page-btn"
         onClick={prev}
         disabled={page === 1 || disabled}
-        aria-label="Previous page"
+        aria-label={t('pagination.ariaPrevious')}
       >
-        <FaArrowLeft /> <span>Previous</span>
+        <FaArrowLeft /> <span>{t('pagination.previous')}</span>
       </button>
       <div className="bh-page-counter">
         <span className="current">{page}</span>
@@ -48,9 +51,9 @@ const Pagination: FC<{
         className="bh-page-btn"
         onClick={next}
         disabled={page === totalPages || disabled}
-        aria-label="Next page"
+        aria-label={t('pagination.ariaNext')}
       >
-        <span>Next</span> <FaArrowRight />
+        <span>{t('pagination.next')}</span> <FaArrowRight />
       </button>
     </div>
   );

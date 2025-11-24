@@ -1,13 +1,12 @@
-﻿namespace BookHub.Infrastructure.Services.CurrentUser
+﻿namespace BookHub.Infrastructure.Services.CurrentUser;
+
+using ServiceLifetimes;
+
+public interface ICurrentUserService : IScopedService
 {
-    using ServiceLifetimes;
+    string? GetUsername();
 
-    public interface ICurrentUserService : IScopedService
-    {
-        string? GetUsername();
+    string? GetId();
 
-        string? GetId();
-
-        bool IsAdmin();
-    }
+    bool IsAdmin();
 }

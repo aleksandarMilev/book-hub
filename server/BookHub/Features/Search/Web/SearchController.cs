@@ -19,6 +19,7 @@
             int pageSize = DefaultPageSize)
             => this.Ok(await this.service.Books(searchTerm, page, pageSize));
 
+        [AllowAnonymous]
         [HttpGet(ApiRoutes.Articles)]
         public async Task<ActionResult<PaginatedModel<SearchArticleServiceModel>>> Articles(
             string? searchTerm,

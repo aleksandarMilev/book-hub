@@ -1,7 +1,6 @@
-﻿namespace BookHub.Common.Models.Image
+﻿namespace BookHub.Common.Models.Image;
+
+public interface IImageServiceModel
 {
-    public interface IImageServiceModel
-    {
-        IFormFile? Image { get; set; }
-    }
+    IFormFile? Image { get; set; }
 }

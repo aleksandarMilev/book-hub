@@ -14,6 +14,8 @@ import { HttpError } from '@/shared/types/errors/httpError.js';
 export const useDetails = (id?: string, isEditMode = false) => {
   const { token } = useAuth();
   const [article, setArticle] = useState<ArticleDetails | null>(null);
+  const [readingMinutes, setReadingMinutes] = useState<number>(0);
+
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState<HttpError | null>(null);
 
@@ -39,7 +41,10 @@ export const useDetails = (id?: string, isEditMode = false) => {
         setIsFetching(true);
         const data = isEditMode
           ? await api.detailsForEdit(id, token, controller.signal)
-          : await api.details(id, token, controller.signal);
+          : await api.details(id, controller.signal);
+
+        const words = data.content.trim().split(/\s+/).length;
+        setReadingMinutes(Math.max(1, Math.round(words / 220)));
 
         setArticle(data);
       } catch (error) {
@@ -56,7 +61,7 @@ export const useDetails = (id?: string, isEditMode = false) => {
     return () => controller.abort();
   }, [id, token, isEditMode]);
 
-  return { article, isFetching, error };
+  return { article, readingMinutes, isFetching, error };
 };
 
 export const useCreate = () => {

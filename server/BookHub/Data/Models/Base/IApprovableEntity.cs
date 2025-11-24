@@ -1,7 +1,6 @@
-﻿namespace BookHub.Data.Models.Base
+﻿namespace BookHub.Data.Models.Base;
+
+public interface IApprovableEntity
 {
-    public interface IApprovableEntity
-    {
-        bool IsApproved { get; }
-    }
+    bool IsApproved { get; }
 }

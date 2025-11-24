@@ -1,80 +1,90 @@
-﻿namespace BookHub.Infrastructure.Extensions
+﻿namespace BookHub.Infrastructure.Extensions;
+
+using Data;
+using Features.Identity.Data.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
+using static Common.Constants.Names;
+
+public static class AppBuilderExtensions
 {
-    using Data;
-    using Features.Identity.Data.Models;
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.EntityFrameworkCore;
+    private const string AdminEmail = "admin@mail.com";
+    private const string AdminPassword = "admin1234";
 
-    using static Common.Constants.Names;
-
-    public static class AppBuilderExtensions
+    public static async Task<IApplicationBuilder> UseMigrations(
+        this IApplicationBuilder app)
     {
-        private static readonly string AdminEmail = "admin@mail.com";
-        private static readonly string AdminPassword = "admin1234";
+        using var services = app.ApplicationServices.CreateScope();
+        var data = services.ServiceProvider.GetRequiredService<BookHubDbContext>();
 
-        public static async Task<IApplicationBuilder> UseMigrations(
-            this IApplicationBuilder app)
+        await data.Database.MigrateAsync();
+
+        return app;
+    }
+
+    public static IApplicationBuilder UseAppEndpoints(
+        this IApplicationBuilder app)
+    {
+        app.UseEndpoints(endpoints =>
         {
-            using var services = app.ApplicationServices.CreateScope();
-            var data = services.ServiceProvider.GetRequiredService<BookHubDbContext>();
+            endpoints.MapControllers();
+            endpoints.MapHealthChecks("/health");
+        });
 
-            await data.Database.MigrateAsync();
+        return app;
+    }
 
+    public static IApplicationBuilder UseSwaggerUI(
+        this IApplicationBuilder app) 
+        => app
+            .UseSwagger()
+            .UseSwaggerUI(opt =>
+            {
+                opt.SwaggerEndpoint("/swagger/v1/swagger.json", "BookHub API");
+                opt.RoutePrefix = string.Empty;
+            });
+
+    public static IApplicationBuilder UseAllowedCors(
+        this IApplicationBuilder app)
+        => app
+             .UseCors(opt =>
+             { 
+                 opt.AllowAnyOrigin();
+                 opt.AllowAnyHeader();
+                 opt.AllowAnyMethod();
+             });
+
+    public static async Task<IApplicationBuilder> UseAdminRole(
+        this IApplicationBuilder app)
+    {
+        using var serviceScope = app.ApplicationServices.CreateScope();
+        var services = serviceScope.ServiceProvider;
+
+        var userManager = services.GetRequiredService<UserManager<User>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+        if (await roleManager.RoleExistsAsync(AdminRoleName))
+        {
             return app;
         }
 
-        public static IApplicationBuilder UseAppEndpoints(
-            this IApplicationBuilder app)
-            => app.UseEndpoints(e => e.MapControllers());
+        var role = new IdentityRole
+        {   
+            Name = AdminRoleName 
+        };
 
-        public static IApplicationBuilder UseSwaggerUI(
-            this IApplicationBuilder app) 
-            => app
-                .UseSwagger()
-                .UseSwaggerUI(opt =>
-                {
-                    opt.SwaggerEndpoint("swagger/v1/swagger.json", "BookHub API");
-                    opt.RoutePrefix = string.Empty;
-                });
+        await roleManager.CreateAsync(role);
 
-        public static IApplicationBuilder UseAllowedCors(
-            this IApplicationBuilder app)
-            => app
-                 .UseCors(opt =>
-                 { 
-                     opt.AllowAnyOrigin();
-                     opt.AllowAnyHeader();
-                     opt.AllowAnyMethod();
-                 });
-
-        public static async Task<IApplicationBuilder> UseAdminRole(
-            this IApplicationBuilder app)
+        var user = new User
         {
-            using var serviceScope = app.ApplicationServices.CreateScope();
-            var services = serviceScope.ServiceProvider;
+            Email = AdminEmail,
+            UserName = AdminRoleName
+        };
 
-            var userManager = services.GetRequiredService<UserManager<User>>();
-            var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+        await userManager.CreateAsync(user, AdminPassword);
+        await userManager.AddToRoleAsync(user, role.Name);
 
-            if (await roleManager.RoleExistsAsync(AdminRoleName))
-            {
-                return app;
-            }
-
-            var role = new IdentityRole() { Name = AdminRoleName };
-
-            await roleManager.CreateAsync(role);
-
-            var user = new User()
-            {
-                Email = AdminEmail,
-                UserName = AdminRoleName
-            };
-
-            await userManager.CreateAsync(user, AdminPassword);
-            await userManager.AddToRoleAsync(user, role.Name);
-
-            return app;
-        }      
-    }
+        return app;
+    }      
 }

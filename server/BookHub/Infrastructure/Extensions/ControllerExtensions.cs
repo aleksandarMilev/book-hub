@@ -1,26 +1,24 @@
-﻿namespace BookHub.Infrastructure.Extensions
+﻿namespace BookHub.Infrastructure.Extensions;
+
+using Microsoft.AspNetCore.Mvc;
+using Services.Result;
+
+public static class ControllerExtensions
 {
-    using BookHub.Infrastructure.Services.Result;
-    using Microsoft.AspNetCore.Mvc;
-    using Services;
-
-    public static class ControllerExtensions
+    public static ActionResult NoContentOrBadRequest(
+        this ControllerBase controller, 
+        Result result)
     {
-        public static ActionResult NoContentOrBadRequest(
-            this ControllerBase controller, 
-            Result result)
+        if (result.Succeeded)
         {
-            if (result.Succeeded)
-            {
-                return controller.NoContent();
-            }
-
-            var errorObject = new
-            {
-                errorMessage = result.ErrorMessage
-            };
-
-            return controller.BadRequest(errorObject);
+            return controller.NoContent();
         }
+
+        var errorObject = new
+        {
+            errorMessage = result.ErrorMessage
+        };
+
+        return controller.BadRequest(errorObject);
     }
 }

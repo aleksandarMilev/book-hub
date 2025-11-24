@@ -2,6 +2,7 @@ import './TopAuthors.css';
 
 import { MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
 import { type FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FaBookReader } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
@@ -13,6 +14,7 @@ import { RenderStars } from '@/shared/components/render-stars/RenderStars.js';
 import { routes } from '@/shared/lib/constants/api.js';
 
 const TopAuthors: FC = () => {
+  const { t } = useTranslation('home');
   const { authors, isFetching, error } = useTopThree();
 
   if (error) {
@@ -27,22 +29,22 @@ const TopAuthors: FC = () => {
     return (
       <EmptyState
         icon={<FaBookReader />}
-        title="No Authors Found"
-        message="There are no top authors available yet."
+        title={t('topAuthors.emptyTitle')}
+        message={t('topAuthors.emptyMessage')}
       />
     );
   }
 
   return (
     <>
-      <h2 className="text-center my-5 top-authors-title">Top Authors</h2>
+      <h2 className="text-center my-5 top-authors-title">{t('topAuthors.title')}</h2>
       <div className="authors-wrapper">
         <MDBTable align="middle" className="table-striped">
           <MDBTableHead>
             <tr className="table-header">
-              <th scope="col">Author</th>
-              <th scope="col">Total Books</th>
-              <th scope="col">Rating</th>
+              <th scope="col">{t('topAuthors.table.author')}</th>
+              <th scope="col">{t('topAuthors.table.totalBooks')}</th>
+              <th scope="col">{t('topAuthors.table.rating')}</th>
               <th scope="col" />
             </tr>
           </MDBTableHead>
@@ -63,7 +65,7 @@ const TopAuthors: FC = () => {
                 </td>
                 <td>
                   <Link to={`${routes.author}/${a.id}`} className="view-button">
-                    View
+                    {t('topAuthors.table.view')}
                   </Link>
                 </td>
               </tr>

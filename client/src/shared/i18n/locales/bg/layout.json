@@ -1,0 +1,57 @@
+{
+  "brand": "BookHub",
+  "header": {
+    "nav": {
+      "home": "Начало",
+      "books": "Книги",
+      "authors": "Автори",
+      "articles": "Статии",
+      "chats": "Чатове",
+      "users": "Потребители",
+      "createBook": "Създай книга",
+      "createAuthor": "Създай автор",
+      "createChat": "Създай чат",
+      "createArticle": "Създай статия"
+    },
+    "auth": {
+      "hello": "Здравей, {{username}}!",
+      "myProfile": "Моят профил",
+      "logout": "Изход",
+      "register": "Регистрация",
+      "login": "Вход"
+    }
+  },
+  "footer": {
+    "social": {
+      "text": "Свържи се с нас:"
+    },
+    "about": {
+      "description1": "Открий книги, автори, статии и се присъедини към общност от запалени читатели.",
+      "description2": "Твоята следваща любима история те очаква."
+    },
+    "columns": {
+      "quickLinks": "Бързи връзки",
+      "forUsers": "За потребители",
+      "newsletter": "Бюлетин"
+    },
+    "links": {
+      "home": "Начало",
+      "books": "Книги",
+      "authors": "Автори",
+      "articles": "Статии",
+      "chats": "Чатове",
+      "myProfile": "Моят профил",
+      "topUsers": "Топ потребители",
+      "register": "Регистрация",
+      "login": "Вход"
+    },
+    "newsletter": {
+      "description": "Бъди в крак с новите книги и статии.",
+      "placeholder": "Твоят имейл",
+      "subscribe": "Абонирай се"
+    },
+    "bottom": {
+      "openSource": "Open Source проект"
+    }
+  }
+}

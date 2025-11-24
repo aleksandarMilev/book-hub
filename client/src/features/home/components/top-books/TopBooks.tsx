@@ -9,6 +9,7 @@ import {
   MDBCardTitle,
 } from 'mdb-react-ui-kit';
 import { type FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FaBook, FaBookReader } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
@@ -20,6 +21,7 @@ import { RenderStars } from '@/shared/components/render-stars/RenderStars.js';
 import { routes } from '@/shared/lib/constants/api.js';
 
 const TopBooks: FC = () => {
+  const { t } = useTranslation('home');
   const { books, isFetching, error } = useTopThree();
 
   if (error) {
@@ -34,21 +36,21 @@ const TopBooks: FC = () => {
     return (
       <EmptyState
         icon={<FaBookReader />}
-        title="No Books Found"
-        message="There are no top books available yet."
+        title={t('topBooks.emptyTitle')}
+        message={t('topBooks.emptyMessage')}
       />
     );
   }
 
   return (
     <div className="top-books-container">
-      <h2 className="top-books-title mb-4">Top Books</h2>
+      <h2 className="top-books-title mb-4">{t('topBooks.title')}</h2>
       <MDBCardGroup className="card-group">
         {books.map((b) => (
           <MDBCard key={b.id} className="top-book-card">
             <MDBCardImage
               src={b.imageUrl ?? undefined}
-              alt={`${b.title} cover`}
+              alt={t('topBooks.labels.bookCoverAlt', { title: b.title })}
               position="top"
               className="book-image"
             />
@@ -58,14 +60,14 @@ const TopBooks: FC = () => {
                 {b.title}
               </MDBCardTitle>
               <MDBCardText>
-                <strong>By:</strong> {b.authorName}
+                <strong>{t('topBooks.labels.by')}</strong> {b.authorName}
               </MDBCardText>
               <MDBCardText>{b.shortDescription}</MDBCardText>
               <MDBCardText className="rating-text">
                 <RenderStars rating={b.averageRating ?? 0} />
               </MDBCardText>
               <MDBCardText className="genres-wrapper">
-                <strong>Genres:</strong>
+                <strong>{t('topBooks.labels.genres')}</strong>
                 <div className="genre-list">
                   {b.genres && b.genres.length > 0 ? (
                     b.genres.map((g) => (
@@ -74,12 +76,12 @@ const TopBooks: FC = () => {
                       </Link>
                     ))
                   ) : (
-                    <span>No genres available</span>
+                    <span>{t('topBooks.labels.noGenres')}</span>
                   )}
                 </div>
               </MDBCardText>
               <Link to={`${routes.book}/${b.id}`} className="book-view-button">
-                View
+                {t('topBooks.labels.view')}
               </Link>
             </MDBCardBody>
           </MDBCard>

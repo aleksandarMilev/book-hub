@@ -1,19 +1,18 @@
-﻿namespace BookHub.Infrastructure.Filters
-{
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.Filters;
+﻿namespace BookHub.Infrastructure.Filters;
 
-    public class ModelOrNotFoundActionFilter : ActionFilterAttribute
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+
+public class ModelOrNotFoundActionFilter : ActionFilterAttribute
+{
+    public override void OnActionExecuted(ActionExecutedContext context)
     {
-        public override void OnActionExecuted(ActionExecutedContext context)
+        if (context.Result is ObjectResult result)
         {
-            if (context.Result is ObjectResult result)
+            var model = result.Value;
+            if (model is null)
             {
-                var model = result.Value;
-                if (model is null)
-                {
-                    context.Result = new NotFoundResult();
-                }
+                context.Result = new NotFoundResult();
             }
         }
     }

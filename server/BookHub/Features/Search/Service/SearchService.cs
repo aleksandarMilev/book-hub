@@ -5,6 +5,7 @@
     using BookHub.Infrastructure.Services.CurrentUser;
     using Data;
     using Infrastructure.Services;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.EntityFrameworkCore;
     using Models;
 
@@ -50,6 +51,7 @@
                 pageSize);
         }
 
+        [AllowAnonymous]
         public async Task<PaginatedModel<SearchArticleServiceModel>> Articles(
             string? searchTerm,
             int page,

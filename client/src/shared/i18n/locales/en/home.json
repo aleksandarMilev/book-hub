@@ -1,0 +1,72 @@
+{
+  "hero": {
+    "title": "Discover Amazing Stories",
+    "subtitle": "Explore books, create favorite author, read articles, and join a community of passionate readers.",
+    "primaryCta": "Browse Books",
+    "secondaryCta": "Join Our Community"
+  },
+  "statistics": {
+    "title": "Welcome to BookHub!",
+    "subtitle": "Dive Into a Universe of Books and Beyond",
+    "cards": {
+      "users": {
+        "prefix": "Over",
+        "suffix": "users have joined our community"
+      },
+      "books": {
+        "prefix": "More than",
+        "suffix": "books have been created"
+      },
+      "authors": {
+        "prefix": "Over",
+        "suffix": "authors have been added"
+      },
+      "reviews": {
+        "prefix": "A total of",
+        "suffix": "reviews have been written"
+      },
+      "genres": {
+        "prefix": "Choose from over",
+        "suffix": "different genres"
+      },
+      "articles": {
+        "prefix": "Read over",
+        "suffix": "articles on various topics"
+      }
+    },
+    "loginCta": "Join Now!"
+  },
+  "topAuthors": {
+    "title": "Top Authors",
+    "emptyTitle": "No Authors Found",
+    "emptyMessage": "There are no top authors available yet.",
+    "table": {
+      "author": "Author",
+      "totalBooks": "Total Books",
+      "rating": "Rating",
+      "view": "View"
+    }
+  },
+  "topBooks": {
+    "title": "Top Books",
+    "emptyTitle": "No Books Found",
+    "emptyMessage": "There are no top books available yet.",
+    "labels": {
+      "by": "By:",
+      "genres": "Genres:",
+      "noGenres": "No genres available",
+      "view": "View",
+      "bookCoverAlt": "{{title}} cover"
+    }
+  },
+  "topUsers": {
+    "title": "Top Users",
+    "emptyTitle": "No Profiles Found",
+    "emptyMessage": "There are no top users available yet.",
+    "labels": {
+      "booksCreated": "Books Created:",
+      "authorsCreated": "Authors Created:",
+      "reviewsWritten": "Reviews Written:"
+    }
+  }
+}

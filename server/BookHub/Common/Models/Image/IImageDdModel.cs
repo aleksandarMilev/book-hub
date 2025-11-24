@@ -1,7 +1,6 @@
-﻿namespace BookHub.Common.Models.Image
+﻿namespace BookHub.Common.Models.Image;
+
+public interface IImageDdModel
 {
-    public interface IImageDdModel
-    {
-        string ImagePath { get; set; }
-    }
+    string ImagePath { get; set; }
 }

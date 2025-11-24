@@ -11,6 +11,7 @@ import {
   MDBRow,
 } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import ReactMarkdown from 'react-markdown';
 import { Link } from 'react-router-dom';
@@ -24,10 +25,13 @@ import { routes } from '@/shared/lib/constants/api.js';
 import { getImageUrl } from '@/shared/lib/utils/utils.js';
 
 const ArticleDetails: FC = () => {
+  const { t } = useTranslation(['articles', 'layout']);
   const {
     id,
     isAdmin,
     article,
+    readingMinutes,
+    isUpdated,
     formattedDate,
     isFetching,
     error,
@@ -50,20 +54,49 @@ const ArticleDetails: FC = () => {
         <MDBCol lg="9" className="article-details-col">
           <MDBCard className="article-details-card">
             <MDBCardBody className="article-details-body">
+              <nav aria-label="breadcrumb" className="article-details-breadcrumb">
+                <ol className="breadcrumb mb-2">
+                  <li className="breadcrumb-item">
+                    <Link to={routes.home}>{t('articles:details.breadcrumb.home')}</Link>
+                  </li>
+                  <li className="breadcrumb-item">
+                    <Link to={routes.articles}>{t('articles:details.breadcrumb.list')}</Link>
+                  </li>
+                  <li className="breadcrumb-item active" aria-current="page">
+                    {article.title}
+                  </li>
+                </ol>
+              </nav>
               <MDBRow>
                 <MDBCol md="12">
                   <MDBCardTitle className="article-details-title">{article.title}</MDBCardTitle>
-                  <MDBCardText className="article-details-meta">{formattedDate}</MDBCardText>
+                  <MDBCardText className="article-details-meta">
+                    {formattedDate}
+                    {isUpdated &&
+                      ` ${t('articles:details.meta.separator')} ${t('articles:details.meta.updated')}`}
+                    {' ' + t('articles:details.meta.separator') + ' '}
+                    {t('articles:details.meta.readingMinutes', {
+                      count: readingMinutes,
+                    })}
+                    {' ' + t('articles:details.meta.separator') + ' '}
+                    {t('articles:details.meta.byTeam')}
+                  </MDBCardText>
                 </MDBCol>
               </MDBRow>
               <MDBRow>
                 <MDBCol md="12">
                   <div className="article-details-image-wrapper">
-                    <img
-                      src={getImageUrl(article.imagePath, 'articles')}
-                      alt={article.title}
-                      className="article-details-image"
-                    />
+                    {article.imagePath ? (
+                      <img
+                        src={getImageUrl(article.imagePath, 'articles')}
+                        alt={article.title}
+                        className="article-details-image"
+                      />
+                    ) : (
+                      <div className="article-details-image-placeholder">
+                        {t('articles:details.image.noImage')}
+                      </div>
+                    )}
                   </div>
                 </MDBCol>
               </MDBRow>
@@ -81,7 +114,7 @@ const ArticleDetails: FC = () => {
                 <MDBCol md="6">
                   <div className="article-details-meta">
                     <MDBIcon fas icon="eye" className="me-2" />
-                    {article.views ?? 0} Views
+                    {t('articles:details.views', { count: article.views ?? 0 })}
                   </div>
                 </MDBCol>
               </MDBRow>
@@ -89,18 +122,18 @@ const ArticleDetails: FC = () => {
                 <div className="d-flex gap-2 article-details-actions">
                   <Link
                     to={`${routes.admin.editArticle}/${id}`}
-                    aria-label="Edit article"
+                    aria-label={t('articles:details.actions.editLabel')}
                     className="btn btn-warning d-flex align-items-center gap-2"
                   >
-                    <FaEdit /> Edit
+                    <FaEdit /> {t('articles:details.actions.edit')}
                   </Link>
                   <button
                     type="button"
-                    aria-label="Delete article"
+                    aria-label={t('articles:details.actions.deleteLabel')}
                     className="btn btn-danger d-flex align-items-center gap-2"
                     onClick={deleteHandler}
                   >
-                    <FaTrash /> Delete
+                    <FaTrash /> {t('articles:details.actions.delete')}
                   </button>
                 </div>
               )}

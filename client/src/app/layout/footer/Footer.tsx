@@ -2,26 +2,38 @@ import './Footer.css';
 
 import { MDBCol, MDBContainer, MDBFooter, MDBIcon, MDBRow } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { routes } from '@/shared/lib/constants/api.js';
 
 const Footer: FC = () => {
+  const { t } = useTranslation('layout');
+
+  const socialItems = [
+    { icon: 'facebook-f', label: 'Facebook' },
+    { icon: 'twitter', label: 'Twitter' },
+    { icon: 'google', label: 'Google' },
+    { icon: 'instagram', label: 'Instagram' },
+    { icon: 'linkedin', label: 'LinkedIn' },
+    { icon: 'github', label: 'GitHub' },
+  ] as const;
+
+  const currentYear = new Date().getFullYear();
+
   return (
     <MDBFooter className="footer-wrapper text-center text-lg-start text-muted">
       <section className="footer-social border-bottom">
         <div className="social-container">
-          <span className="social-text d-none d-lg-block">Get connected with us:</span>
+          <span className="social-text d-none d-lg-block">{t('footer.social.text')}</span>
           <div className="social-links">
-            {[
-              { icon: 'facebook-f', label: 'Facebook' },
-              { icon: 'twitter', label: 'Twitter' },
-              { icon: 'google', label: 'Google' },
-              { icon: 'instagram', label: 'Instagram' },
-              { icon: 'linkedin', label: 'LinkedIn' },
-              { icon: 'github', label: 'GitHub' },
-            ].map(({ icon, label }) => (
-              <a key={icon} href="#" className="social-link" aria-label={`BookHub on ${label}`}>
+            {socialItems.map(({ icon, label }) => (
+              <a
+                key={icon}
+                href="#"
+                className="social-link"
+                aria-label={`${t('brand')} on ${label}`}
+              >
                 <MDBIcon fab icon={icon} />
               </a>
             ))}
@@ -34,72 +46,73 @@ const Footer: FC = () => {
             <MDBCol md="3" lg="3" className="footer-column mb-4">
               <h6 className="footer-title">
                 <MDBIcon icon="book" className="me-2" />
-                BookHub
+                {t('brand')}
               </h6>
-              <p className="footer-description">
-                Discover books, authors, articles, and join a vibrant community of passionate
-                readers.
-              </p>
-              <p className="footer-description">Your next great story awaits.</p>
+              <p className="footer-description">{t('footer.about.description1')}</p>
+              <p className="footer-description">{t('footer.about.description2')}</p>
             </MDBCol>
             <MDBCol md="2" lg="2" className="footer-column mb-4">
-              <h6 className="footer-title">Quick Links</h6>
+              <h6 className="footer-title">{t('footer.columns.quickLinks')}</h6>
               <p>
                 <Link to={routes.home} className="footer-link">
-                  Home
+                  {t('footer.links.home')}
                 </Link>
               </p>
               <p>
                 <Link to={routes.book} className="footer-link">
-                  Books
+                  {t('footer.links.books')}
                 </Link>
               </p>
               <p>
                 <Link to={routes.author} className="footer-link">
-                  Authors
+                  {t('footer.links.authors')}
                 </Link>
               </p>
               <p>
                 <Link to={routes.articles} className="footer-link">
-                  Articles
+                  {t('footer.links.articles')}
                 </Link>
               </p>
               <p>
                 <Link to={routes.chats} className="footer-link">
-                  Chats
+                  {t('footer.links.chats')}
                 </Link>
               </p>
             </MDBCol>
             <MDBCol md="2" lg="2" className="footer-column mb-4">
-              <h6 className="footer-title">For Users</h6>
+              <h6 className="footer-title">{t('footer.columns.forUsers')}</h6>
               <p>
                 <Link to={routes.profile} className="footer-link">
-                  My Profile
+                  {t('footer.links.myProfile')}
                 </Link>
               </p>
               <p>
                 <Link to={routes.profiles} className="footer-link">
-                  Top Users
+                  {t('footer.links.topUsers')}
                 </Link>
               </p>
               <p>
                 <Link to={routes.register} className="footer-link">
-                  Register
+                  {t('footer.links.register')}
                 </Link>
               </p>
               <p>
                 <Link to={routes.login} className="footer-link">
-                  Login
+                  {t('footer.links.login')}
                 </Link>
               </p>
             </MDBCol>
             <MDBCol md="4" lg="4" className="footer-column mb-md-0 mb-4">
-              <h6 className="footer-title">Newsletter</h6>
-              <p className="footer-description">Stay updated with new books and articles.</p>
+              <h6 className="footer-title">{t('footer.columns.newsletter')}</h6>
+              <p className="footer-description">{t('footer.newsletter.description')}</p>
               <form className="newsletter-form">
-                <input type="email" placeholder="Your email" className="newsletter-input" />
+                <input
+                  type="email"
+                  placeholder={t('footer.newsletter.placeholder')}
+                  className="newsletter-input"
+                />
                 <button type="submit" className="newsletter-button">
-                  Subscribe
+                  {t('footer.newsletter.subscribe')}
                 </button>
               </form>
             </MDBCol>
@@ -107,14 +120,14 @@ const Footer: FC = () => {
         </MDBContainer>
       </section>
       <div className="footer-bottom">
-        © {new Date().getFullYear()} BookHub ·{' '}
+        © {currentYear} {t('brand')} ·{' '}
         <a
           className="footer-link"
           href="https://github.com/aleksandarMilev/book-hub"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Open Source Project
+          {t('footer.bottom.openSource')}
         </a>
       </div>
     </MDBFooter>

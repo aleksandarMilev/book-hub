@@ -1,0 +1,73 @@
+{
+  "form": {
+    "titleCreate": "Create New Article",
+    "titleEdit": "Edit Article",
+    "labels": {
+      "title": "Article Title *",
+      "introduction": "Article Introduction *",
+      "image": "Image (optional)",
+      "content": "Content *"
+    },
+    "placeholders": {
+      "content": "Write the content of your article here... *"
+    },
+    "buttons": {
+      "reset": "Reset",
+      "submitCreate": "Submit Article",
+      "submitEdit": "Save Changes",
+      "submittingCreate": "Submitting...",
+      "submittingEdit": "Saving..."
+    },
+    "fallbackTitle": "this article",
+    "messages": {
+      "createSuccess": "The article \"{{title}}\" was successfully created!",
+      "updateSuccess": "The article \"{{title}}\" was successfully updated!",
+      "operationFailed": "Operation failed!"
+    }
+  },
+  "details": {
+    "breadcrumb": {
+      "home": "Home",
+      "list": "Articles"
+    },
+    "meta": {
+      "separator": "•",
+      "updated": "Updated",
+      "readingMinutes": "{{count}} min read",
+      "byTeam": "By BookHub Team"
+    },
+    "image": {
+      "noImage": "No image available"
+    },
+    "views": "{{count}} Views",
+    "actions": {
+      "edit": "Edit",
+      "editLabel": "Edit article",
+      "delete": "Delete",
+      "deleteLabel": "Delete article"
+    }
+  },
+  "list": {
+    "searchPlaceholder": "Search articles...",
+    "emptyAlt": "No articles",
+    "emptyTitle": "No articles found",
+    "emptyMessage": "Try different keywords or clear your search to explore the full article library.",
+    "dateUnavailable": "Published date not available.",
+    "publishedOn": "Published on {{date}}"
+  },
+  "validation": {
+    "fields": {
+      "title": "Title",
+      "introduction": "Introduction",
+      "content": "Content",
+      "image": "Image"
+    },
+    "required": "{{field}} is required",
+    "min": "{{field}} must be at least {{min}} characters long",
+    "max": "{{field}} must be less than {{max}} characters",
+    "image": {
+      "tooLarge": "Image must be smaller than 2 MB.",
+      "invalidType": "Invalid image type. Allowed: {{types}}"
+    }
+  }
+}

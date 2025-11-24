@@ -1,0 +1,57 @@
+{
+  "brand": "BookHub",
+  "header": {
+    "nav": {
+      "home": "Home",
+      "books": "Books",
+      "authors": "Authors",
+      "articles": "Articles",
+      "chats": "Chats",
+      "users": "Users",
+      "createBook": "Create Book",
+      "createAuthor": "Create Author",
+      "createChat": "Create Chat",
+      "createArticle": "Create Article"
+    },
+    "auth": {
+      "hello": "Hello, {{username}}!",
+      "myProfile": "My Profile",
+      "logout": "Logout",
+      "register": "Register",
+      "login": "Login"
+    }
+  },
+  "footer": {
+    "social": {
+      "text": "Get connected with us:"
+    },
+    "about": {
+      "description1": "Discover books, authors, articles, and join a vibrant community of passionate readers.",
+      "description2": "Your next great story awaits."
+    },
+    "columns": {
+      "quickLinks": "Quick Links",
+      "forUsers": "For Users",
+      "newsletter": "Newsletter"
+    },
+    "links": {
+      "home": "Home",
+      "books": "Books",
+      "authors": "Authors",
+      "articles": "Articles",
+      "chats": "Chats",
+      "myProfile": "My Profile",
+      "topUsers": "Top Users",
+      "register": "Register",
+      "login": "Login"
+    },
+    "newsletter": {
+      "description": "Stay updated with new books and articles.",
+      "placeholder": "Your email",
+      "subscribe": "Subscribe"
+    },
+    "bottom": {
+      "openSource": "Open Source Project"
+    }
+  }
+}

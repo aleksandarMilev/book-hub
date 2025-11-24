@@ -1,6 +1,7 @@
 import './TopUsers.css';
 
 import { type FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FaBookReader } from 'react-icons/fa';
 
 import { useTopProfilesPage } from '@/features/home/hooks/useTopProfilesPage.js';
@@ -9,6 +10,7 @@ import EmptyState from '@/shared/components/empty-state/EmptyState.js';
 import HomePageError from '@/shared/components/errors/home-page/HomePageError.js';
 
 const TopUsers: FC = () => {
+  const { t } = useTranslation('home');
   const { profiles, isFetching, error, onProfileClickHandler } = useTopProfilesPage();
 
   if (error) {
@@ -23,15 +25,15 @@ const TopUsers: FC = () => {
     return (
       <EmptyState
         icon={<FaBookReader />}
-        title="No Profiles Found"
-        message="There are no top users available yet."
+        title={t('topUsers.emptyTitle')}
+        message={t('topUsers.emptyMessage')}
       />
     );
   }
 
   return (
     <div className="top-users-container">
-      <h2 className="text-center my-4 top-users-title">Top Users</h2>
+      <h2 className="text-center my-4 top-users-title">{t('topUsers.title')}</h2>
       <div className="top-users-list">
         {profiles.map((p) => (
           <div
@@ -46,13 +48,13 @@ const TopUsers: FC = () => {
             <div className="user-info">
               <h4>{`${p.firstName} ${p.lastName}`}</h4>
               <p>
-                <strong>Books Created:</strong> {p.createdBooksCount}
+                <strong>{t('topUsers.labels.booksCreated')}</strong> {p.createdBooksCount}
               </p>
               <p>
-                <strong>Authors Created:</strong> {p.createdAuthorsCount}
+                <strong>{t('topUsers.labels.authorsCreated')}</strong> {p.createdAuthorsCount}
               </p>
               <p>
-                <strong>Reviews Written:</strong> {p.reviewsCount}
+                <strong>{t('topUsers.labels.reviewsWritten')}</strong> {p.reviewsCount}
               </p>
             </div>
           </div>
