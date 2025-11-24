@@ -1,7 +1,9 @@
+// src/app/layout/header/Header.tsx
 import './Header.css';
 
 import { type FC, useState } from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import LastNotifications from '@/features/notification/components/last-list/LastNotifications.js';
@@ -11,9 +13,19 @@ import { useAuth } from '@/shared/stores/auth/auth.js';
 const Header: FC = () => {
   const [expanded, setExpanded] = useState<boolean>(false);
   const { isAuthenticated, isAdmin, username } = useAuth();
+  const { t, i18n } = useTranslation('layout');
 
   const handleToggle = () => setExpanded((prev) => !prev);
   const closeMenu = () => setExpanded(false);
+
+  const currentLanguage = i18n.language;
+  const isBg = currentLanguage.startsWith('bg');
+  const isEn = currentLanguage.startsWith('en');
+
+  const changeLanguage = (lang: 'bg-BG' | 'en-US') => {
+    i18n.changeLanguage(lang);
+    localStorage.setItem('language', lang);
+  };
 
   return (
     <header className="navbar-custom">
@@ -26,7 +38,7 @@ const Header: FC = () => {
       >
         <Container fluid>
           <Navbar.Brand as={Link} to={routes.home} className="brand-title">
-            📚 BookHub
+            📚 {t('brand')}
           </Navbar.Brand>
           <Navbar.Toggle
             aria-controls="responsive-navbar-nav"
@@ -36,45 +48,65 @@ const Header: FC = () => {
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto main-links">
               <Nav.Link as={Link} to={routes.home} onClick={closeMenu}>
-                Home
+                {t('header.nav.home')}
               </Nav.Link>
               <Nav.Link as={Link} to={routes.book} onClick={closeMenu}>
-                Books
+                {t('header.nav.books')}
               </Nav.Link>
               <Nav.Link as={Link} to={routes.author} onClick={closeMenu}>
-                Authors
+                {t('header.nav.authors')}
               </Nav.Link>
               <Nav.Link as={Link} to={routes.articles} onClick={closeMenu}>
-                Articles
+                {t('header.nav.articles')}
               </Nav.Link>
               <Nav.Link as={Link} to={routes.chats} onClick={closeMenu}>
-                Chats
+                {t('header.nav.chats')}
               </Nav.Link>
               <Nav.Link as={Link} to={routes.profiles} onClick={closeMenu}>
-                Users
+                {t('header.nav.users')}
               </Nav.Link>
               <Nav.Link as={Link} to={routes.createBook} onClick={closeMenu}>
-                Create Book
+                {t('header.nav.createBook')}
               </Nav.Link>
               <Nav.Link as={Link} to={routes.createAuthor} onClick={closeMenu}>
-                Create Author
+                {t('header.nav.createAuthor')}
               </Nav.Link>
               {!isAdmin && (
                 <Nav.Link as={Link} to={routes.createChat} onClick={closeMenu}>
-                  Create Chat
+                  {t('header.nav.createChat')}
                 </Nav.Link>
               )}
               {isAdmin && (
                 <Nav.Link as={Link} to={routes.admin.createArticle} onClick={closeMenu}>
-                  Create Article
+                  {t('header.nav.createArticle')}
                 </Nav.Link>
               )}
             </Nav>
-            <Nav className="ms-auto auth-section">
+
+            <Nav className="ms-auto auth-section align-items-center">
+              <div className="language-switcher me-3">
+                <button
+                  type="button"
+                  className={`lang-btn ${isBg ? 'active' : ''}`}
+                  onClick={() => changeLanguage('bg-BG')}
+                >
+                  BG
+                </button>
+                <span className="lang-separator">|</span>
+                <button
+                  type="button"
+                  className={`lang-btn ${isEn ? 'active' : ''}`}
+                  onClick={() => changeLanguage('en-US')}
+                >
+                  EN
+                </button>
+              </div>
               {isAuthenticated && <LastNotifications />}
               {isAuthenticated ? (
                 <>
-                  <span className="nav-link fw-bold navbar-user">Hello, {username}!</span>
+                  <span className="nav-link fw-bold navbar-user">
+                    {t('header.auth.hello', { username })}
+                  </span>
                   {!isAdmin && (
                     <Nav.Link
                       as={Link}
@@ -82,7 +114,7 @@ const Header: FC = () => {
                       onClick={closeMenu}
                       className="btn-pill"
                     >
-                      My Profile
+                      {t('header.auth.myProfile')}
                     </Nav.Link>
                   )}
                   <Nav.Link
@@ -91,13 +123,13 @@ const Header: FC = () => {
                     onClick={closeMenu}
                     className="btn-pill danger"
                   >
-                    Logout
+                    {t('header.auth.logout')}
                   </Nav.Link>
                 </>
               ) : (
                 <>
                   <Nav.Link as={Link} to={routes.register} onClick={closeMenu} className="btn-pill">
-                    Register
+                    {t('header.auth.register')}
                   </Nav.Link>
                   <Nav.Link
                     as={Link}
@@ -105,7 +137,7 @@ const Header: FC = () => {
                     onClick={closeMenu}
                     className="btn-pill highlight"
                   >
-                    Login
+                    {t('header.auth.login')}
                   </Nav.Link>
                 </>
               )}

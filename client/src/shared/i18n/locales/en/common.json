@@ -1,0 +1,41 @@
+{
+  "spinner": {
+    "loading": "Loading..."
+  },
+  "buttons": {
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "goHome": "Go Home",
+    "tryAgain": "Try Again"
+  },
+  "deleteModal": {
+    "title": "Confirm Deletion",
+    "message": "Are you sure you want to delete this item? This action cannot be undone."
+  },
+  "errors": {
+    "accessDenied": {
+      "defaultMessage": "Sorry, you cannot access this resource.",
+      "oops": "Oops!",
+      "imageAlt": "Access denied illustration"
+    },
+    "badRequest": {
+      "defaultMessage": "Something went wrong with your request. Please try again.",
+      "oops": "Oops!",
+      "imageAlt": "Bad request illustration"
+    },
+    "notFound": {
+      "defaultMessage": "We couldn't find what you're looking for. Please check the URL or try again later.",
+      "oops": "Oops!",
+      "imageAlt": "Page not found illustration"
+    },
+    "homePage": {
+      "tryAgain": "Try Again"
+    }
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next",
+    "ariaPrevious": "Previous page",
+    "ariaNext": "Next page"
+  }
+}

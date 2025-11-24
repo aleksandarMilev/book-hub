@@ -131,3 +131,32 @@
 .custom-toggler .navbar-toggler-icon {
   filter: brightness(4);
 }
+
+.language-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.9rem;
+}
+
+.lang-btn {
+  border: none;
+  background: transparent;
+  padding: 2px 6px;
+  cursor: pointer;
+  font-weight: 600;
+  opacity: 0.7;
+}
+
+.lang-btn.active {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.lang-btn:focus {
+  outline: none;
+}
+
+.lang-separator {
+  opacity: 0.5;
+}

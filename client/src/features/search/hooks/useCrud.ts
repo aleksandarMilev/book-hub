@@ -17,10 +17,10 @@ import type { PaginatedResult } from '@/shared/types/paginatedResult.js';
 
 function useSearch<T>(
   search: (
-    token: string,
     searchTerm: string,
     page: number,
     pageSize: number,
+    token?: string,
     signal?: AbortSignal,
   ) => Promise<PaginatedResult<T>>,
   searchTerm: string,
@@ -36,14 +36,10 @@ function useSearch<T>(
 
   const fetchData = useCallback(
     async (signal?: AbortSignal) => {
-      if (!token) {
-        return;
-      }
-
       try {
         setIsFetching(true);
 
-        const data = await search(token, searchTerm || '', page, pageSize, signal);
+        const data = await search(searchTerm || '', page, pageSize, token, signal);
 
         setItems(data.items ?? []);
         setTotalItems(data.totalItems ?? 0);

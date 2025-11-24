@@ -10,7 +10,7 @@ export const useDetailsPage = () => {
   const { isAdmin } = useAuth();
   const navigate = useNavigate();
   const { id, slug } = useParams<{ id: string; slug: string }>();
-  const { article, isFetching, error } = useDetails(id);
+  const { article, readingMinutes, isFetching, error } = useDetails(id);
   const { showModal, toggleModal, deleteHandler } = useRemove(id, article?.title);
 
   useEffect(() => {
@@ -35,6 +35,7 @@ export const useDetailsPage = () => {
     id,
     isAdmin,
     article,
+    readingMinutes,
     isUpdated,
     formattedDate,
     isFetching,

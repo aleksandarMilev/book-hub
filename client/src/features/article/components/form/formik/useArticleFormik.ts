@@ -1,4 +1,5 @@
 import { useFormik } from 'formik';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -19,6 +20,7 @@ type Props = {
 export const useArticleFormik = ({ article = null, isEditMode = false }: Props) => {
   const navigate = useNavigate();
   const { showMessage } = useMessage();
+  const { t } = useTranslation('articles');
 
   const createHandler = useCreate();
   const editHandler = useEdit();
@@ -44,17 +46,19 @@ export const useArticleFormik = ({ article = null, isEditMode = false }: Props) 
         if (isEditMode && article?.id) {
           await editHandler(article.id, payload);
 
-          showMessage(`${article.title || 'This article'} was successfully updated!`, true);
+          const titleForMessage = article.title || t('form.fallbackTitle');
+          showMessage(t('form.messages.updateSuccess', { title: titleForMessage }), true);
           navigate(`${routes.articles}/${article.id}/${slugify(payload.title)}`, { replace: true });
         } else {
           const id = await createHandler(payload);
 
-          showMessage(`${payload.title || 'This article'} was successfully created!`, true);
+          const titleForMessage = payload.title || t('form.fallbackTitle');
+          showMessage(t('form.messages.createSuccess', { title: titleForMessage }), true);
           navigate(`${routes.articles}/${id}/${slugify(payload.title)}`, { replace: true });
           resetForm();
         }
       } catch (error) {
-        const message = IsError(error) ? error.message : 'Operation failed!';
+        const message = IsError(error) ? error.message : t('form.messages.operationFailed');
         showMessage(message, false);
       }
     },

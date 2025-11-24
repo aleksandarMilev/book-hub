@@ -1,6 +1,7 @@
 import './ArticleListItem.css';
 
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import type { ArticlesSearchResult } from '@/features/search/types/search.js';
@@ -14,6 +15,10 @@ const ArticleListItem: FC<ArticlesSearchResult> = ({
   imagePath,
   createdOn,
 }) => {
+  const { t } = useTranslation('articles');
+
+  const dateText = formatIsoDate(createdOn, t('list.dateUnavailable'));
+
   return (
     <div className="article-card fade-in">
       <div className="article-card-image-wrapper">
@@ -24,9 +29,7 @@ const ArticleListItem: FC<ArticlesSearchResult> = ({
           {title}
         </Link>
         <p className="article-card-intro">{introduction}</p>
-        <p className="article-card-date">
-          Published on {formatIsoDate(createdOn, 'Published date not available.')}
-        </p>
+        <p className="article-card-date">{t('list.publishedOn', { date: dateText })}</p>
       </div>
     </div>
   );

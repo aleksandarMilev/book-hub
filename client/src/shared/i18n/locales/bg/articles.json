@@ -1,0 +1,73 @@
+{
+  "form": {
+    "titleCreate": "Създаване на статия",
+    "titleEdit": "Редактиране на статия",
+    "labels": {
+      "title": "Заглавие на статията *",
+      "introduction": "Въведение към статията *",
+      "image": "Изображение (по избор)",
+      "content": "Съдържание *"
+    },
+    "placeholders": {
+      "content": "Въведи съдържанието на статията тук... *"
+    },
+    "buttons": {
+      "reset": "Нулирай",
+      "submitCreate": "Изпрати статията",
+      "submitEdit": "Запази промените",
+      "submittingCreate": "Изпращане...",
+      "submittingEdit": "Запазване..."
+    },
+    "fallbackTitle": "тази статия",
+    "messages": {
+      "createSuccess": "Статията „{{title}}“ беше създадена успешно!",
+      "updateSuccess": "Статията „{{title}}“ беше запазена успешно!",
+      "operationFailed": "Операцията не бе успешна!"
+    }
+  },
+  "details": {
+    "breadcrumb": {
+      "home": "Начало",
+      "list": "Статии"
+    },
+    "meta": {
+      "separator": "•",
+      "updated": "Обновена",
+      "readingMinutes": "{{count}} мин. четене",
+      "byTeam": "От екипа на BookHub"
+    },
+    "image": {
+      "noImage": "Няма налично изображение"
+    },
+    "views": "{{count}} преглеждания",
+    "actions": {
+      "edit": "Редактирай",
+      "editLabel": "Редактирай статията",
+      "delete": "Изтрий",
+      "deleteLabel": "Изтрий статията"
+    }
+  },
+  "list": {
+    "searchPlaceholder": "Търси в статиите...",
+    "emptyAlt": "Няма статии",
+    "emptyTitle": "Няма намерени статии",
+    "emptyMessage": "Опитай с други ключови думи или изчисти търсенето, за да видиш всички статии.",
+    "dateUnavailable": "Няма информация за датата на публикуване.",
+    "publishedOn": "Публикувана на {{date}}"
+  },
+  "validation": {
+    "fields": {
+      "title": "Заглавие",
+      "introduction": "Въведение",
+      "content": "Съдържание",
+      "image": "Изображение"
+    },
+    "required": "{{field}} е задължително поле",
+    "min": "{{field}} трябва да е поне {{min}} символа",
+    "max": "{{field}} трябва да е по-малко от {{max}} символа",
+    "image": {
+      "tooLarge": "Изображението трябва да е по-малко от 2 MB.",
+      "invalidType": "Невалиден тип изображение. Позволени: {{types}}"
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import './ArticleList.css';
 
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FaSearch } from 'react-icons/fa';
 
 import emptyImg from '@/assets/images/no-books-found.png';
@@ -10,6 +11,7 @@ import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.j
 import Pagination from '@/shared/components/pagination/Pagination.js';
 
 const ArticleList: FC = () => {
+  const { t } = useTranslation('articles');
   const {
     articles,
     isFetching,
@@ -29,7 +31,7 @@ const ArticleList: FC = () => {
           <FaSearch className="search-icon" />
           <input
             type="text"
-            placeholder="Search articles..."
+            placeholder={t('list.searchPlaceholder')}
             value={searchTerm}
             onChange={handleSearchChange}
           />
@@ -54,9 +56,9 @@ const ArticleList: FC = () => {
         )}
         {showEmpty && (
           <div className="empty-state">
-            <img src={emptyImg} alt="No articles" onClick={() => setSearchTerm('')} />
-            <h4>No articles found</h4>
-            <p>Try different keywords or clear your search to explore the full article library.</p>
+            <img src={emptyImg} alt={t('list.emptyAlt')} onClick={() => setSearchTerm('')} />
+            <h4>{t('list.emptyTitle')}</h4>
+            <p>{t('list.emptyMessage')}</p>
           </div>
         )}
       </div>

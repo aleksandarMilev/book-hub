@@ -2,6 +2,7 @@ import './ArticleForm.css';
 
 import { MDBCard, MDBCardBody, MDBCol, MDBContainer, MDBRow } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useArticleFormik } from '@/features/article/components/form/formik/useArticleFormik.js';
 import type { ArticleDetails } from '@/features/article/types/article.js';
@@ -12,7 +13,16 @@ type Props = {
 };
 
 const ArticleForm: FC<Props> = ({ article = null, isEditMode = false }) => {
+  const { t } = useTranslation('articles');
   const formik = useArticleFormik({ article, isEditMode });
+
+  const submitLabel = formik.isSubmitting
+    ? isEditMode
+      ? t('form.buttons.submittingEdit')
+      : t('form.buttons.submittingCreate')
+    : isEditMode
+      ? t('form.buttons.submitEdit')
+      : t('form.buttons.submitCreate');
 
   return (
     <div className="article-form-container">
@@ -22,7 +32,7 @@ const ArticleForm: FC<Props> = ({ article = null, isEditMode = false }) => {
             <MDBCard className="article-form-card my-4">
               <MDBCardBody className="text-black">
                 <h3 className="article-form-title">
-                  {isEditMode ? 'Edit Article' : 'Create New Article'}
+                  {isEditMode ? t('form.titleEdit') : t('form.titleCreate')}
                 </h3>
                 <form onSubmit={formik.handleSubmit}>
                   <fieldset disabled={formik.isSubmitting}>
@@ -31,7 +41,7 @@ const ArticleForm: FC<Props> = ({ article = null, isEditMode = false }) => {
                     )}
                     <div className="mb-4 article-form-input">
                       <label htmlFor="title" className="form-label">
-                        Article Title *
+                        {t('form.labels.title')}
                       </label>
                       <input
                         id="title"
@@ -47,7 +57,7 @@ const ArticleForm: FC<Props> = ({ article = null, isEditMode = false }) => {
                     )}
                     <div className="mb-4 article-form-input">
                       <label htmlFor="introduction" className="form-label">
-                        Article Introduction *
+                        {t('form.labels.introduction')}
                       </label>
                       <input
                         id="introduction"
@@ -62,7 +72,7 @@ const ArticleForm: FC<Props> = ({ article = null, isEditMode = false }) => {
                     </div>
                     <div className="mb-4 article-form-input">
                       <label htmlFor="image" className="form-label">
-                        Image (optional)
+                        {t('form.labels.image')}
                       </label>
                       <input
                         id="image"
@@ -84,7 +94,7 @@ const ArticleForm: FC<Props> = ({ article = null, isEditMode = false }) => {
                       <div className="article-form-error">{formik.errors.content}</div>
                     )}
                     <label htmlFor="content" className="form-label">
-                      Content *
+                      {t('form.labels.content')}
                     </label>
                     <textarea
                       id="content"
@@ -93,7 +103,7 @@ const ArticleForm: FC<Props> = ({ article = null, isEditMode = false }) => {
                         formik.touched.content && formik.errors.content ? 'is-invalid' : ''
                       }`}
                       {...formik.getFieldProps('content')}
-                      placeholder="Write the content of your article here... *"
+                      placeholder={t('form.placeholders.content')}
                     />
                     <div className="article-form-actions">
                       <button
@@ -102,20 +112,14 @@ const ArticleForm: FC<Props> = ({ article = null, isEditMode = false }) => {
                         onClick={formik.handleReset}
                         disabled={formik.isSubmitting}
                       >
-                        Reset
+                        {t('form.buttons.reset')}
                       </button>
                       <button
                         type="submit"
                         className="article-form-button article-form-submit"
                         disabled={formik.isSubmitting}
                       >
-                        {formik.isSubmitting
-                          ? isEditMode
-                            ? 'Saving...'
-                            : 'Submitting...'
-                          : isEditMode
-                            ? 'Save Changes'
-                            : 'Submit Article'}
+                        {submitLabel}
                       </button>
                     </div>
                   </fieldset>
