@@ -4,6 +4,14 @@ import { format } from 'date-fns';
 import { baseUrl } from '@/shared/lib/constants/api.js';
 import type { IntId } from '@/shared/types/intId.js';
 
+export const slugify = (value: string): string =>
+  value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
 export const getImageUrl = (imagePath: string, resource: string) => {
   if (!imagePath) {
     return `${baseUrl}/images/${resource}/default.avif`;

@@ -1,4 +1,3 @@
-﻿namespace BookHub.Infrastructure.Services.ServiceLifetimes
-{
-    public interface IScopedService { }
-}
+﻿namespace BookHub.Infrastructure.Services.ServiceLifetimes;
+
+public interface IScopedService { }

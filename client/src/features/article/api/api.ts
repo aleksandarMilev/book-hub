@@ -1,18 +1,19 @@
 import type { ArticleDetails, CreateArticle } from '@/features/article/types/article.js';
 import {
-    getAuthConfig,
-    getAuthConfigForFile,
-    http,
-    httpAdmin,
-    processError,
+  getAuthConfig,
+  getAuthConfigForFile,
+  getPublicConfig,
+  http,
+  httpAdmin,
+  processError,
 } from '@/shared/api/http.js';
 import { routes } from '@/shared/lib/constants/api.js';
 import { errors } from '@/shared/lib/constants/errorMessages.js';
 
-export const details = async (id: string, token: string, signal?: AbortSignal) => {
+export const details = async (id: string, signal?: AbortSignal) => {
   try {
     const url = `${routes.articles}/${id}`;
-    const { data } = await http.get<ArticleDetails>(url, getAuthConfig(token, signal));
+    const { data } = await http.get<ArticleDetails>(url, getPublicConfig(signal));
 
     return data;
   } catch (error) {

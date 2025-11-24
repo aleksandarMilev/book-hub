@@ -28,6 +28,7 @@ const ArticleDetails: FC = () => {
     id,
     isAdmin,
     article,
+    isUpdated,
     formattedDate,
     isFetching,
     error,
@@ -50,20 +51,44 @@ const ArticleDetails: FC = () => {
         <MDBCol lg="9" className="article-details-col">
           <MDBCard className="article-details-card">
             <MDBCardBody className="article-details-body">
+              <nav aria-label="breadcrumb" className="article-details-breadcrumb">
+                <ol className="breadcrumb mb-2">
+                  <li className="breadcrumb-item">
+                    <Link to={routes.home}>Home</Link>
+                  </li>
+                  <li className="breadcrumb-item">
+                    <Link to={routes.articles}>Articles</Link>
+                  </li>
+                  <li className="breadcrumb-item active" aria-current="page">
+                    {article.title}
+                  </li>
+                </ol>
+              </nav>
               <MDBRow>
                 <MDBCol md="12">
                   <MDBCardTitle className="article-details-title">{article.title}</MDBCardTitle>
-                  <MDBCardText className="article-details-meta">{formattedDate}</MDBCardText>
+                  <MDBCardText className="article-details-meta">
+                    {formattedDate}
+                    {isUpdated && ' • Updated'}
+                    {' • '}
+                    {article.readingMinutes} min read
+                    {' • '}
+                    By BookHub Team
+                  </MDBCardText>
                 </MDBCol>
               </MDBRow>
               <MDBRow>
                 <MDBCol md="12">
                   <div className="article-details-image-wrapper">
-                    <img
-                      src={getImageUrl(article.imagePath, 'articles')}
-                      alt={article.title}
-                      className="article-details-image"
-                    />
+                    {article.imagePath ? (
+                      <img
+                        src={getImageUrl(article.imagePath, 'articles')}
+                        alt={article.title}
+                        className="article-details-image"
+                      />
+                    ) : (
+                      <div className="article-details-image-placeholder">No image available</div>
+                    )}
                   </div>
                 </MDBCol>
               </MDBRow>

@@ -36,15 +36,16 @@
         }
 
         public static Expression<Func<ArticleDbModel, ArticleDetailsServiceModel>> ToDetailsServiceModelExpression =>
-            dbModel => new ArticleDetailsServiceModel
+            dbModel => new()
             {
                 Id = dbModel.Id,
-                CreatedOn = dbModel.CreatedOn,
                 Views = dbModel.Views,
                 Title = dbModel.Title,
                 Introduction = dbModel.Introduction,
                 Content = dbModel.Content,
                 ImagePath = dbModel.ImagePath,
+                CreatedOn = dbModel.CreatedOn,
+                ModifiedOn = dbModel.ModifiedOn
             };
 
         public static ArticleDetailsServiceModel ToDetailsServiceModel(
@@ -52,12 +53,13 @@
             => new()
             {
                 Id = dbModel.Id,
-                CreatedOn = dbModel.CreatedOn,
                 Views = dbModel.Views,
                 Title = dbModel.Title,
                 Introduction = dbModel.Introduction,
                 Content = dbModel.Content,
                 ImagePath = dbModel.ImagePath,
+                CreatedOn = dbModel.CreatedOn,
+                ModifiedOn = dbModel.ModifiedOn,
             };
     }
 }

@@ -32,11 +32,11 @@ app
     .UseAllowedCors()
     .UseAuthentication()
     .UseAuthorization()
-    .UseAppEndpoints()
-    .UseSwaggerUI();
+    .UseAppEndpoints();
 
 if (envIsDev)
 {
+    app.UseSwaggerUI();
     await app.UseMigrations();
     await app.UseAdminRole();
 }

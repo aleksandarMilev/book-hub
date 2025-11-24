@@ -7,10 +7,11 @@ export interface CreateArticle {
 
 export interface ArticleDetails {
   id: string;
-  createdOn: string;
   views: number;
   title: string;
   introduction: string;
   content: string;
   imagePath: string;
+  createdOn: string;
+  modifiedOn: string | null;
 }

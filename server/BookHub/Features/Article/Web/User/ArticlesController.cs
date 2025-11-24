@@ -8,9 +8,9 @@
     using static Common.Constants.ApiRoutes;
     using static Shared.Constants.RouteNames;
 
-    [Authorize]
     public class ArticlesController(IArticlesService service) : ApiController
     {
+        [AllowAnonymous]
         // We should provide name here so we can construct the location header easier in the admin controller
         [HttpGet(Id, Name = DetailsRouteName)]
         public async Task<ActionResult<ArticleDetailsServiceModel>> Details(

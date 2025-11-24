@@ -1,10 +1,9 @@
-﻿namespace BookHub
+﻿namespace BookHub;
+
+public class ApplicationSettings
 {
-    public class ApplicationSettings
-    {
-        public ApplicationSettings()
-            => this.Secret = default!;
-            
-        public string Secret { get; init; } = null!;
-    }
+    public ApplicationSettings()
+        => this.Secret = default!;
+        
+    public string Secret { get; init; } = null!;
 }

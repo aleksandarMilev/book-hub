@@ -8,7 +8,7 @@ import {
 import { useCreate, useEdit } from '@/features/article/hooks/useCrud.js';
 import type { ArticleDetails, CreateArticle } from '@/features/article/types/article.js';
 import { routes } from '@/shared/lib/constants/api.js';
-import { IsError } from '@/shared/lib/utils/utils.js';
+import { IsError, slugify } from '@/shared/lib/utils/utils.js';
 import { useMessage } from '@/shared/stores/message/message.js';
 
 type Props = {
@@ -45,12 +45,12 @@ export const useArticleFormik = ({ article = null, isEditMode = false }: Props) 
           await editHandler(article.id, payload);
 
           showMessage(`${article.title || 'This article'} was successfully updated!`, true);
-          navigate(`${routes.articles}/${article.id}`, { replace: true });
+          navigate(`${routes.articles}/${article.id}/${slugify(payload.title)}`, { replace: true });
         } else {
           const id = await createHandler(payload);
 
           showMessage(`${payload.title || 'This article'} was successfully created!`, true);
-          navigate(`${routes.articles}/${id}`, { replace: true });
+          navigate(`${routes.articles}/${id}/${slugify(payload.title)}`, { replace: true });
           resetForm();
         }
       } catch (error) {

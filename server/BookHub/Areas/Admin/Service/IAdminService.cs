@@ -1,9 +1,8 @@
-﻿namespace BookHub.Areas.Admin.Service
-{
-    using Infrastructure.Services.ServiceLifetimes;
+﻿namespace BookHub.Areas.Admin.Service;
 
-    public interface IAdminService : IScopedService
-    {
-        Task<string> GetId();
-    }
+using Infrastructure.Services.ServiceLifetimes;
+
+public interface IAdminService : IScopedService
+{
+    Task<string> GetId();
 }

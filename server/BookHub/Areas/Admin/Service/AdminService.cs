@@ -1,20 +1,21 @@
-﻿namespace BookHub.Areas.Admin.Service
+﻿namespace BookHub.Areas.Admin.Service;
+
+using Features.Identity.Data.Models;
+using Microsoft.AspNetCore.Identity;
+
+using static Common.Constants.Names;
+
+public class AdminService : IAdminService
 {
-    using Features.Identity.Data.Models;
-    using Microsoft.AspNetCore.Identity;
-
-    using static Common.Constants;
-
-    public class AdminService(UserManager<User> userManager) : IAdminService
+    public async Task<string> GetId()
     {
-        public async Task<string> GetId()
-        {
-            //TODO: change the approach with the admin role feature
-            var admin = await userManager.FindByEmailAsync("foo");
+        //var admin = await roleManager.FindByNameAsync(AdminRoleName);
 
-            return admin is null 
-                ? throw new InvalidOperationException("Admin not found!") 
-                : admin.Id;
-        }
+        //return admin is null 
+        //    ? throw new InvalidOperationException("Admin not found!") 
+        //    : admin.Id;
+
+        await Task.Delay(10);
+        return "foo";
     }
 }

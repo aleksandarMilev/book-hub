@@ -1,13 +1,12 @@
-﻿namespace BookHub.Areas.Admin.Web
-{
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
+﻿namespace BookHub.Areas.Admin.Web;
 
-    using static BookHub.Common.Constants.Names;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
-    [ApiController]
-    [Area(AdminRoleName)]
-    [Route("[area]/[controller]")]
-    [Authorize(Roles = AdminRoleName)]
-    public abstract class AdminApiController : ControllerBase { }
-}
+using static Common.Constants.Names;
+
+[ApiController]
+[Area(AdminRoleName)]
+[Route("[area]/[controller]")]
+[Authorize(Roles = AdminRoleName)]
+public abstract class AdminApiController : ControllerBase { }

@@ -1,11 +1,10 @@
-﻿namespace BookHub.Data.Models.Base
+﻿namespace BookHub.Data.Models.Base;
+
+public interface IDeletableEntity : IEntity
 {
-    public interface IDeletableEntity : IEntity
-    {
-        bool IsDeleted { get; set; }
+    bool IsDeleted { get; set; }
 
-        DateTime? DeletedOn { get; set; }
+    DateTime? DeletedOn { get; set; }
 
-        string? DeletedBy { get; set; }
-    }
+    string? DeletedBy { get; set; }
 }

@@ -143,7 +143,7 @@ export const router = createBrowserRouter([
 
       {
         path: routes.articles,
-        element: withSuspense(<AuthenticatedRoute element={<ArticleList />} />),
+        element: withSuspense(<ArticleList />),
       },
       {
         path: routes.admin.createArticle,
@@ -154,8 +154,8 @@ export const router = createBrowserRouter([
         element: withSuspense(<AdminRoute element={<EditArticle />} />),
       },
       {
-        path: `${routes.articles}/:id`,
-        element: withSuspense(<AuthenticatedRoute element={<ArticleDetails />} />),
+        path: `${routes.articles}/:id/:slug`,
+        element: withSuspense(<ArticleDetails />),
       },
 
       {
