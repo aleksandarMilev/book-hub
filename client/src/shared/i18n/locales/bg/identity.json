@@ -1,0 +1,49 @@
+{
+  "login": {
+    "title": "Вход",
+    "labels": {
+      "credentials": "Потребителско име или имейл",
+      "password": "Парола",
+      "rememberMe": "Запомни ме"
+    },
+    "buttons": {
+      "submit": "Вход"
+    },
+    "links": {
+      "noAccount": "Нямаш профил?",
+      "register": "Регистрация"
+    },
+    "validation": {
+      "credentialsRequired": "Потребителско име или имейл е задължително",
+      "passwordRequired": "Паролата е задължителна"
+    }
+  },
+  "register": {
+    "title": "Регистрация",
+    "labels": {
+      "username": "Потребителско име",
+      "email": "Имейл",
+      "password": "Парола",
+      "confirmPassword": "Повтори паролата"
+    },
+    "buttons": {
+      "submit": "Регистрация",
+      "submitting": "Регистриране..."
+    },
+    "validation": {
+      "usernameRequired": "Потребителското име е задължително",
+      "emailRequired": "Имейлът е задължителен",
+      "emailInvalid": "Невалиден формат на имейла",
+      "passwordRequired": "Паролата е задължителна",
+      "confirmPasswordRequired": "Моля потвърди паролата",
+      "passwordsMustMatch": "Паролите трябва да съвпадат"
+    }
+  },
+  "messages": {
+    "welcome": "Добре дошъл, {{username}}!",
+    "goodbye": "Довиждане, {{username}}.",
+    "loginFailed": "Входът беше неуспешен!",
+    "registrationFailed": "Регистрацията беше неуспешна!",
+    "unknownError": "Възникна грешка!"
+  }
+}

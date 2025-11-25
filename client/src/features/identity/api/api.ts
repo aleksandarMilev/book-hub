@@ -16,11 +16,11 @@ export const register = async (
   try {
     const url = `${routes.register}`;
     const payload: RegisterRequest = { username, email, password };
-    const response = await http.post<LoginResponse>(url, payload, getConfig(signal));
+    const { data } = await http.post<LoginResponse>(url, payload, getConfig(signal));
 
-    return response.data;
+    return data;
   } catch (error) {
-    processError(error, errors.identity.create);
+    processError(error, errors.identity.register);
   }
 };
 
@@ -33,11 +33,11 @@ export const login = async (
   try {
     const url = `${routes.login}`;
     const payload: LoginRequest = { credentials, password, rememberMe };
-    const response = await http.post<LoginResponse>(url, payload, getConfig(signal));
+    const { data } = await http.post<LoginResponse>(url, payload, getConfig(signal));
 
-    return response.data;
+    return data;
   } catch (error) {
-    processError(error, errors.identity.create);
+    processError(error, errors.identity.login);
   }
 };
 

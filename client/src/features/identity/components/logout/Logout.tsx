@@ -1,4 +1,5 @@
 import { type FC, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { routes } from '@/shared/lib/constants/api.js';
@@ -9,16 +10,21 @@ const Logout: FC = () => {
   const { logout, username } = useAuth();
   const navigate = useNavigate();
   const { showMessage } = useMessage();
+  const { t } = useTranslation('identity');
 
   useEffect(() => {
     const name = username;
 
     logout();
-    showMessage(`Goodbye, ${name}.`, true);
+    if (name) {
+      showMessage(t('messages.goodbye', { username: name }), true);
+    }
+
     navigate(routes.home);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return null;
 };
 

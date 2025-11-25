@@ -8,15 +8,16 @@ using Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Services.ServiceLifetimes;
 
+using static Features.Identity.Shared.Constants;
+
 public static class ServiceCollectionExtensions
 {
-    private const int AccountLockoutTimeSpan = 15;
-    private const int MaxFailedLoginAttempts = 3;
-
     public static IServiceCollection AddAppSettings(
         this IServiceCollection services, 
         IConfiguration configuration)
@@ -45,52 +46,87 @@ public static class ServiceCollectionExtensions
     }
 
     public static IServiceCollection AddIdentity(
-        this IServiceCollection services)
+        this IServiceCollection services,
+        IWebHostEnvironment env)
     {
         services
             .AddIdentity<User, IdentityRole>(opt =>
             {
-                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(AccountLockoutTimeSpan); 
-                opt.Lockout.MaxFailedAccessAttempts = MaxFailedLoginAttempts; 
-                opt.Lockout.AllowedForNewUsers = true;
                 opt.User.RequireUniqueEmail = true;
-                opt.Password.RequireUppercase = false;
-                opt.Password.RequireLowercase = false;
-                opt.Password.RequireNonAlphanumeric = false;
-                opt.Password.RequireDigit = false;
+                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(AccountLockoutTimeSpan);
+                opt.Lockout.MaxFailedAccessAttempts = MaxFailedLoginAttempts;
+
+                if (env.IsDevelopment())
+                {
+                    opt.Password.RequireDigit = false;
+                    opt.Password.RequireLowercase = false;
+                    opt.Password.RequireUppercase = false;
+                    opt.Password.RequireNonAlphanumeric = false;
+                    opt.Password.RequiredLength = 6;
+                }
+                else
+                {
+                    opt.Password.RequireDigit = true;
+                    opt.Password.RequireLowercase = true;
+                    opt.Password.RequireUppercase = true;
+                    opt.Password.RequireNonAlphanumeric = false;
+                    opt.Password.RequiredLength = 8;
+                }
             })
-            .AddEntityFrameworkStores<BookHubDbContext>();
+            .AddEntityFrameworkStores<BookHubDbContext>()
+            .AddDefaultTokenProviders();
 
         return services;
     }
 
     public static IServiceCollection AddJwtAuthentication(
         this IServiceCollection services,
-        IConfiguration configuration)
+        IConfiguration configuration,
+        IWebHostEnvironment env)
     {
-        var secret = Environment
-            .GetEnvironmentVariable("ApplicationSettings__Secret")
-            ?? configuration.GetAppSettings();
+        var appSettings = configuration
+            .GetSection(nameof(ApplicationSettings))
+            .Get<ApplicationSettings>()
+            ?? throw new InvalidOperationException("ApplicationSettings section is missing!");
 
-        var key = Encoding.ASCII.GetBytes(secret);
+        var key = Encoding.ASCII.GetBytes(appSettings.Secret);
 
         services
-            .AddAuthentication(opt =>
-            {
-                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(opt =>
             {
-                opt.RequireHttpsMetadata = false;
                 opt.SaveToken = true;
-                opt.TokenValidationParameters = new TokenValidationParameters()
+                if (env.IsDevelopment())
                 {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
+                    opt.RequireHttpsMetadata = false;
+                    opt.IncludeErrorDetails = true;
+
+                    opt.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateLifetime = true
+                    };
+                }
+                else
+                {
+                    opt.RequireHttpsMetadata = true;
+                    opt.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+
+                        ValidateIssuer = true,
+                        ValidIssuer = appSettings.Issuer,
+                        ValidateAudience = true,
+                        ValidAudience = appSettings.Audience,
+
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.FromMinutes(2)
+                    };
+                }
             });
 
         return services;

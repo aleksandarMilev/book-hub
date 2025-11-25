@@ -5,8 +5,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services
     .AddAppSettings(builder.Configuration)
     .AddDatabase(builder.Configuration)
-    .AddIdentity()
-    .AddJwtAuthentication(builder.Configuration)
+    .AddIdentity(builder.Environment)
+    .AddJwtAuthentication(
+        builder.Configuration,
+        builder.Environment)
     .AddApiControllers()
     .AddServices()
     .AddAutoMapper()
@@ -24,6 +26,12 @@ var envIsDev = app.Environment.IsDevelopment();
 if (envIsDev)
 {
     app.UseDeveloperExceptionPage();
+}
+else 
+{
+    app
+        .UseHsts()
+        .UseHttpsRedirection();
 }
 
 app

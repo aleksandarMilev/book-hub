@@ -20,6 +20,12 @@ export const baseErrors = {
 };
 
 export const errors = {
+  article: createEntityErrors('article'),
+  identity: {
+    login: 'Something went wrong while logging in. Please check your credentials and try again.',
+    register: 'Something went wrong while registering. Please try again later.',
+  },
+
   statistics: {
     all: 'Something went wrong while loading our statistics. Please, refresh the page or try again later.',
   },
@@ -42,12 +48,10 @@ export const errors = {
     ...createEntityErrors('profile'),
     topThree: "We couldn't load top users.",
   },
-  article: createEntityErrors('article'),
   author: {
     ...createEntityErrors('author'),
     topThree: "We couldn't load top authors.",
   },
-  identity: createEntityErrors('account'),
   nationality: createEntityErrors('nationality'),
   search: createEntityErrors(
     'search result',
