@@ -27,6 +27,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=${DB_NAME};User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True;
       - ApplicationSettings__Secret=${APP_SECRET}
+      - ApplicationSettings__Issuer=${ISSUER}
+      - ApplicationSettings__Audience=${AUDIENCE}
     volumes:
       - ./server:/src/server
       - ./server/BookHub/wwwroot:/src/server/BookHub/wwwroot

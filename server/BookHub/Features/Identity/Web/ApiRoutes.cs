@@ -1,9 +1,8 @@
-﻿namespace BookHub.Features.Identity.Web
-{
-    public class ApiRoutes
-    {
-        public const string Register = "register/";
+﻿namespace BookHub.Features.Identity.Web;
 
-        public const string Login = "login/";
-    }
+public static class ApiRoutes
+{
+    public const string Register = "register/";
+
+    public const string Login = "login/";
 }

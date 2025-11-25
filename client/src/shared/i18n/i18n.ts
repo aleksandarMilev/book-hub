@@ -19,6 +19,10 @@ const bgArticles = await import('@/shared/i18n/locales/bg/articles.json', {
   assert: { type: 'json' },
 }).then((mod) => mod.default);
 
+const bgIdentity = await import('@/shared/i18n/locales/bg/identity.json', {
+  assert: { type: 'json' },
+}).then((mod) => mod.default);
+
 const enLayout = await import('@/shared/i18n/locales/en/layout.json', {
   assert: { type: 'json' },
 }).then((mod) => mod.default);
@@ -32,6 +36,10 @@ const enHome = await import('@/shared/i18n/locales/en/home.json', {
 }).then((mod) => mod.default);
 
 const enArticles = await import('@/shared/i18n/locales/en/articles.json', {
+  assert: { type: 'json' },
+}).then((mod) => mod.default);
+
+const enIdentity = await import('@/shared/i18n/locales/en/identity.json', {
   assert: { type: 'json' },
 }).then((mod) => mod.default);
 
@@ -52,12 +60,14 @@ void i18n.use(initReactI18next).init({
       common: enCommon,
       home: enHome,
       articles: enArticles,
+      identity: enIdentity,
     },
     'bg-BG': {
       layout: bgLayout,
       common: bgCommon,
       home: bgHome,
       articles: bgArticles,
+      identity: bgIdentity,
     },
   },
 });

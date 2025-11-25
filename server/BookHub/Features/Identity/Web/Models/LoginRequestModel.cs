@@ -1,15 +1,14 @@
-﻿namespace BookHub.Features.Identity.Web.Models
+﻿namespace BookHub.Features.Identity.Web.Models;
+
+using System.ComponentModel.DataAnnotations;
+
+public class LoginRequestModel
 {
-    using System.ComponentModel.DataAnnotations;
+    [Required]
+    public string Credentials { get; init; } = null!;
 
-    public class LoginRequestModel
-    {
-        [Required]
-        public string Credentials { get; init; } = null!;
+    public bool RememberMe { get; init; } 
 
-        public bool RememberMe { get; init; } 
-
-        [Required]
-        public string Password { get; init; } = null!;
-    }
+    [Required]
+    public string Password { get; init; } = null!;
 }

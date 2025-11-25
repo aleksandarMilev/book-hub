@@ -1,7 +1,6 @@
-﻿namespace BookHub.Features.Identity.Web.Models
+﻿namespace BookHub.Features.Identity.Web.Models;
+
+public class LoginResponseModel(string token)
 {
-    public class LoginResponseModel(string token)
-    {
-        public string Token { get; init; } = token;
-    }
+    public string Token { get; init; } = token;
 }

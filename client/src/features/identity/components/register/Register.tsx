@@ -1,93 +1,132 @@
+import './Register.css';
+
 import {
-  MDBBtn,
   MDBCard,
   MDBCardBody,
   MDBCardImage,
   MDBCol,
   MDBContainer,
   MDBIcon,
-  MDBInput,
   MDBRow,
 } from 'mdb-react-ui-kit';
-import { type FC } from 'react';
+import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import image from '@/features/identity/components/register/assets/register.webp';
 import { useRegisterFormik } from '@/features/identity/components/register/formik/useRegisterFormik.js';
 
 const Register: FC = () => {
   const formik = useRegisterFormik();
+  const { t } = useTranslation('identity');
 
   return (
-    <MDBContainer fluid>
-      <MDBCard className="text-black m-5" style={{ borderRadius: '25px' }}>
-        <MDBCardBody>
-          <MDBRow>
+    <MDBContainer fluid className="register-page">
+      <MDBCard className="text-black register-card m-5">
+        <MDBCardBody className="register-body">
+          <MDBRow className="align-items-center">
             <MDBCol
               md="10"
               lg="6"
               className="order-2 order-lg-1 d-flex flex-column align-items-center"
             >
-              <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
-              <form onSubmit={formik.handleSubmit} className="w-100">
-                {formik.touched.username && formik.errors.username && (
-                  <div className="text-danger mb-3">{formik.errors.username}</div>
-                )}
-                <div className="d-flex flex-row align-items-center mb-4">
-                  <MDBIcon fas icon="user me-3" size="lg" />
-                  <MDBInput
-                    label="Your Name"
-                    id="username"
-                    type="text"
-                    {...formik.getFieldProps('username')}
-                    className="w-100"
-                  />
+              <h2 className="register-title">{t('register.title')}</h2>
+              <form onSubmit={formik.handleSubmit} className="w-100" noValidate>
+                <div className="auth-field">
+                  <label htmlFor="username" className="auth-label">
+                    {t('register.labels.username')}
+                  </label>
+                  {formik.touched.username && formik.errors.username && (
+                    <div className="auth-error">{formik.errors.username}</div>
+                  )}
+                  <div className="register-field-row">
+                    <MDBIcon fas icon="user" className="register-icon" />
+                    <input
+                      id="username"
+                      type="text"
+                      className={`auth-input ${
+                        formik.touched.username && formik.errors.username ? 'is-invalid' : ''
+                      }`}
+                      {...formik.getFieldProps('username')}
+                    />
+                  </div>
                 </div>
-                {formik.touched.email && formik.errors.email && (
-                  <div className="text-danger mb-3">{formik.errors.email}</div>
-                )}
-                <div className="d-flex flex-row align-items-center mb-4">
-                  <MDBIcon fas icon="envelope me-3" size="lg" />
-                  <MDBInput
-                    label="Your Email"
-                    id="email"
-                    type="email"
-                    {...formik.getFieldProps('email')}
-                    className="w-100"
-                  />
+                <div className="auth-field">
+                  <label htmlFor="email" className="auth-label">
+                    {t('register.labels.email')}
+                  </label>
+                  {formik.touched.email && formik.errors.email && (
+                    <div className="auth-error">{formik.errors.email}</div>
+                  )}
+                  <div className="register-field-row">
+                    <MDBIcon fas icon="envelope" className="register-icon" />
+                    <input
+                      id="email"
+                      type="email"
+                      className={`auth-input ${
+                        formik.touched.email && formik.errors.email ? 'is-invalid' : ''
+                      }`}
+                      {...formik.getFieldProps('email')}
+                    />
+                  </div>
                 </div>
-                {formik.touched.password && formik.errors.password && (
-                  <div className="text-danger mb-3">{formik.errors.password}</div>
-                )}
-                <div className="d-flex flex-row align-items-center mb-4">
-                  <MDBIcon fas icon="lock me-3" size="lg" />
-                  <MDBInput
-                    label="Password"
-                    id="password"
-                    type="password"
-                    {...formik.getFieldProps('password')}
-                    className="w-100"
-                  />
+                <div className="auth-field">
+                  <label htmlFor="password" className="auth-label">
+                    {t('register.labels.password')}
+                  </label>
+                  {formik.touched.password && formik.errors.password && (
+                    <div className="auth-error">{formik.errors.password}</div>
+                  )}
+                  <div className="register-field-row">
+                    <MDBIcon fas icon="lock" className="register-icon" />
+                    <input
+                      id="password"
+                      type="password"
+                      className={`auth-input ${
+                        formik.touched.password && formik.errors.password ? 'is-invalid' : ''
+                      }`}
+                      {...formik.getFieldProps('password')}
+                    />
+                  </div>
                 </div>
-                {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-                  <div className="text-danger mb-3">{formik.errors.confirmPassword}</div>
-                )}
-                <div className="d-flex flex-row align-items-center mb-4">
-                  <MDBIcon fas icon="key me-3" size="lg" />
-                  <MDBInput
-                    label="Repeat your password"
-                    id="confirmPassword"
-                    type="password"
-                    {...formik.getFieldProps('confirmPassword')}
-                    className="w-100"
-                  />
+                <div className="auth-field">
+                  <label htmlFor="confirmPassword" className="auth-label">
+                    {t('register.labels.confirmPassword')}
+                  </label>
+                  {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+                    <div className="auth-error">{formik.errors.confirmPassword}</div>
+                  )}
+                  <div className="register-field-row">
+                    <MDBIcon fas icon="key" className="register-icon" />
+                    <input
+                      id="confirmPassword"
+                      type="password"
+                      className={`auth-input ${
+                        formik.touched.confirmPassword && formik.errors.confirmPassword
+                          ? 'is-invalid'
+                          : ''
+                      }`}
+                      {...formik.getFieldProps('confirmPassword')}
+                    />
+                  </div>
                 </div>
-                <MDBBtn className="mb-4" size="lg" type="submit" disabled={formik.isSubmitting}>
-                  {formik.isSubmitting ? 'Registering...' : 'Register'}
-                </MDBBtn>
+                <button
+                  className="auth-submit-btn"
+                  type="submit"
+                  disabled={formik.isSubmitting}
+                  aria-busy={formik.isSubmitting}
+                >
+                  {formik.isSubmitting
+                    ? t('register.buttons.submitting')
+                    : t('register.buttons.submit')}
+                </button>
               </form>
             </MDBCol>
-            <MDBCol md="10" lg="6" className="order-1 order-lg-2 d-flex align-items-center">
-              <MDBCardImage src={image} fluid alt="Register" />
+            <MDBCol
+              md="10"
+              lg="6"
+              className="order-1 order-lg-2 d-flex align-items-center justify-content-center"
+            >
+              <MDBCardImage src={image} alt="Register" className="register-image" />
             </MDBCol>
           </MDBRow>
         </MDBCardBody>

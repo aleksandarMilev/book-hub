@@ -1,0 +1,49 @@
+{
+  "login": {
+    "title": "Sign in",
+    "labels": {
+      "credentials": "Username or Email",
+      "password": "Password",
+      "rememberMe": "Remember me"
+    },
+    "buttons": {
+      "submit": "Login"
+    },
+    "links": {
+      "noAccount": "Don't have an account?",
+      "register": "Register"
+    },
+    "validation": {
+      "credentialsRequired": "Username or Email is required",
+      "passwordRequired": "Password is required"
+    }
+  },
+  "register": {
+    "title": "Sign up",
+    "labels": {
+      "username": "Your Name",
+      "email": "Your Email",
+      "password": "Password",
+      "confirmPassword": "Repeat your password"
+    },
+    "buttons": {
+      "submit": "Register",
+      "submitting": "Registering..."
+    },
+    "validation": {
+      "usernameRequired": "Username is required",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Invalid email format",
+      "passwordRequired": "Password is required",
+      "confirmPasswordRequired": "Please confirm your password",
+      "passwordsMustMatch": "Passwords must match"
+    }
+  },
+  "messages": {
+    "welcome": "Welcome, {{username}}!",
+    "goodbye": "Goodbye, {{username}}.",
+    "loginFailed": "Login failed!",
+    "registrationFailed": "Registration failed!",
+    "unknownError": "An error occurred!"
+  }
+}

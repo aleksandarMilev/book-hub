@@ -1,43 +1,42 @@
-﻿namespace BookHub.Features.Identity.Web
+﻿namespace BookHub.Features.Identity.Web;
+
+using Microsoft.AspNetCore.Mvc;
+using Models;
+using Service;
+
+public class IdentityController(IIdentityService service) : ApiController
 {
-    using Microsoft.AspNetCore.Mvc;
-    using Models;
-    using Service;
+    private readonly IIdentityService service = service;
 
-    public class IdentityController(IIdentityService service) : ApiController
+    [HttpPost(ApiRoutes.Register)]
+    public async Task<ActionResult<LoginResponseModel>> Register(RegisterRequestModel model)
     {
-        private readonly IIdentityService service = service;
+        var result = await this.service.Register(
+            model.Email,
+            model.Username,
+            model.Password);
 
-        [HttpPost(ApiRoutes.Register)]
-        public async Task<ActionResult<LoginResponseModel>> Register(RegisterRequestModel model)
+        if (result.Succeeded)
         {
-            var result = await this.service.Register(
-                model.Email,
-                model.Username,
-                model.Password);
-
-            if (result.Succeeded)
-            {
-                return this.Ok(new LoginResponseModel(result.Data!));
-            }
-
-            return this.Unauthorized(new { errorMessage = result.ErrorMessage });
+            return this.Ok(new LoginResponseModel(result.Data!));
         }
 
-        [HttpPost(ApiRoutes.Login)]
-        public async Task<ActionResult<LoginResponseModel>> Login(LoginRequestModel model)
+        return this.Unauthorized(new { errorMessage = result.ErrorMessage });
+    }
+
+    [HttpPost(ApiRoutes.Login)]
+    public async Task<ActionResult<LoginResponseModel>> Login(LoginRequestModel model)
+    {
+        var result = await this.service.Login(
+             model.Credentials,
+             model.Password,
+             model.RememberMe);
+
+        if (result.Succeeded)
         {
-            var result = await this.service.Login(
-                 model.Credentials,
-                 model.Password,
-                 model.RememberMe);
-
-            if (result.Succeeded)
-            {
-                return this.Ok(new LoginResponseModel(result.Data!));
-            }
-
-            return this.Unauthorized(new { errorMessage = result.ErrorMessage });
+            return this.Ok(new LoginResponseModel(result.Data!));
         }
+
+        return this.Unauthorized(new { errorMessage = result.ErrorMessage });
     }
 }

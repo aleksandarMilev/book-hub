@@ -1,5 +1,8 @@
-import { MDBBtn, MDBCheckbox, MDBCol, MDBContainer, MDBInput, MDBRow } from 'mdb-react-ui-kit';
-import { type FC } from 'react';
+import './Login.css';
+
+import { MDBCheckbox, MDBCol, MDBContainer, MDBRow } from 'mdb-react-ui-kit';
+import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import image from '@/features/identity/components/login/assets/login.webp';
@@ -8,70 +11,76 @@ import { routes } from '@/shared/lib/constants/api.js';
 
 const Login: FC = () => {
   const formik = useLoginFormik();
+  const { t } = useTranslation('identity');
 
   return (
-    <MDBContainer fluid className="p-3 my-5 h-custom">
-      <MDBRow>
-        <MDBCol col="10" md="6">
-          <img
-            src={image}
-            className="img-fluid"
-            alt="Login"
-            style={{ width: '100%', height: 'auto', display: 'block' }}
-          />
+    <MDBContainer fluid className="login-page">
+      <MDBRow className="login-row">
+        <MDBCol md="6" className="login-image-wrapper">
+          <img src={image} className="login-image" alt="Login" />
         </MDBCol>
-        <MDBCol col="4" md="6" style={{ marginTop: '3.4em' }}>
-          <div className="d-flex flex-row align-items-center justify-content-center">
-            <p className="lead fw-normal mb-3 me-3">Sign in</p>
-          </div>
-          <form onSubmit={formik.handleSubmit}>
-            <div className="mb-4">
-              {formik.touched.credentials && formik.errors.credentials && (
-                <div className="text-danger mb-2">{formik.errors.credentials}</div>
-              )}
-              <MDBInput
-                label="Username or Email"
-                id="credentials"
-                type="text"
-                size="lg"
-                {...formik.getFieldProps('credentials')}
-              />
-            </div>
-            <div className="mb-4">
-              {formik.touched.password && formik.errors.password && (
-                <div className="text-danger mb-2">{formik.errors.password}</div>
-              )}
-              <MDBInput
-                label="Password"
-                id="password"
-                type="password"
-                size="lg"
-                {...formik.getFieldProps('password')}
-              />
-            </div>
-            <div className="d-flex justify-content-between mb-4">
-              <MDBCheckbox
-                id="rememberMe"
-                name="rememberMe"
-                label="Remember me"
-                checked={formik.values.rememberMe}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-            </div>
-            <div className="text-center text-md-start mt-4 pt-2">
-              <MDBBtn className="mb-0 px-5" size="lg" type="submit">
-                Login
-              </MDBBtn>
-              <p className="small fw-bold mt-2 pt-1 mb-2">
-                {"Don't have an account?"}
-                <Link to={routes.register} className="link-danger">
-                  {' '}
-                  Register
+        <MDBCol md="6" className="login-form-wrapper">
+          <div className="login-form-card">
+            <h2 className="login-title">{t('login.title')}</h2>
+            <form onSubmit={formik.handleSubmit} noValidate>
+              <div className="auth-field">
+                <label htmlFor="credentials" className="auth-label">
+                  {t('login.labels.credentials')}
+                </label>
+                {formik.touched.credentials && formik.errors.credentials && (
+                  <div className="auth-error">{formik.errors.credentials}</div>
+                )}
+                <input
+                  id="credentials"
+                  type="text"
+                  className={`auth-input ${
+                    formik.touched.credentials && formik.errors.credentials ? 'is-invalid' : ''
+                  }`}
+                  {...formik.getFieldProps('credentials')}
+                />
+              </div>
+              <div className="auth-field">
+                <label htmlFor="password" className="auth-label">
+                  {t('login.labels.password')}
+                </label>
+                {formik.touched.password && formik.errors.password && (
+                  <div className="auth-error">{formik.errors.password}</div>
+                )}
+                <input
+                  id="password"
+                  type="password"
+                  className={`auth-input ${
+                    formik.touched.password && formik.errors.password ? 'is-invalid' : ''
+                  }`}
+                  {...formik.getFieldProps('password')}
+                />
+              </div>
+              <div className="auth-remember">
+                <MDBCheckbox
+                  id="rememberMe"
+                  name="rememberMe"
+                  label={t('login.labels.rememberMe')}
+                  checked={formik.values.rememberMe}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+              </div>
+              <button
+                className="auth-submit-btn"
+                type="submit"
+                disabled={formik.isSubmitting}
+                aria-busy={formik.isSubmitting}
+              >
+                {t('login.buttons.submit')}
+              </button>
+              <p className="auth-secondary-text">
+                {t('login.links.noAccount')}{' '}
+                <Link to={routes.register} className="auth-secondary-link">
+                  {t('login.links.register')}
                 </Link>
               </p>
-            </div>
-          </form>
+            </form>
+          </div>
         </MDBCol>
       </MDBRow>
     </MDBContainer>

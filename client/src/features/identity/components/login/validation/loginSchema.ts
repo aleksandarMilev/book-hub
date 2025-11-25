@@ -1,7 +1,9 @@
+import type { TFunction } from 'i18next';
 import * as Yup from 'yup';
 
-export const loginSchema = Yup.object({
-  credentials: Yup.string().required('Username or Email is required'),
-  password: Yup.string().required('Password is required'),
-  rememberMe: Yup.boolean(),
-});
+export const createLoginSchema = (t: TFunction<'identity'>) =>
+  Yup.object({
+    credentials: Yup.string().required(t('login.validation.credentialsRequired')),
+    password: Yup.string().required(t('login.validation.passwordRequired')),
+    rememberMe: Yup.boolean(),
+  });
