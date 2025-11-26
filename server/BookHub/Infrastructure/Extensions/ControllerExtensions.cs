@@ -21,4 +21,23 @@ public static class ControllerExtensions
 
         return controller.BadRequest(errorObject);
     }
+
+    public static ActionResult OkOrBadRequest<TData, TResponse>(
+            this ControllerBase controller,
+            ResultWith<TData> result,
+            Func<TData, TResponse> selector)
+    {
+        if (result.Succeeded)
+        {
+            var response = selector(result.Data!);
+            return controller.Ok(response);
+        }
+
+        var errorObject = new
+        {
+            errorMessage = result.ErrorMessage
+        };
+
+        return controller.BadRequest(errorObject);
+    }
 }

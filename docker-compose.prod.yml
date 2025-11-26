@@ -26,9 +26,15 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=${DB_NAME};User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True;
-      - ApplicationSettings__Secret=${APP_SECRET}
-      - ApplicationSettings__Issuer=${ISSUER}
-      - ApplicationSettings__Audience=${AUDIENCE}
+      - JwtSettings__Secret=${APP_SECRET}
+      - JwtSettings__Issuer=${ISSUER}
+      - JwtSettings__Audience=${AUDIENCE}
+      - EmailSettings__Host=${SMTP_HOST}
+      - EmailSettings__Port=${SMTP_PORT}
+      - EmailSettings__UserName=${SMTP_USER}
+      - EmailSettings__Password=${SMTP_PASSWORD}
+      - EmailSettings__From=${SMTP_FROM}
+      - EmailSettings__UseSsl=${SMTP_USE_SSL}
     volumes:
       - server_uploads:/app/wwwroot
     networks:

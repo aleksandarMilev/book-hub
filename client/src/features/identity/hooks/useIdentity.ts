@@ -64,7 +64,7 @@ export const useRegister = () => {
           email: decoded.email,
           token: result.token,
           isAdmin: Boolean(decoded.role),
-          hasProfile: await profileApi.hasProfile(result.token),
+          hasProfile: false,
         };
 
         changeAuthenticationState(user);
@@ -74,8 +74,7 @@ export const useRegister = () => {
           return;
         }
 
-        const message = t('messages.registrationFailed');
-        throw new Error(message);
+        throw error;
       }
     },
     [changeAuthenticationState, showMessage, t],

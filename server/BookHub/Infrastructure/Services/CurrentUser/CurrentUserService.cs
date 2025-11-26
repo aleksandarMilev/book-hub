@@ -5,16 +5,16 @@ using Extensions;
 
 using static Common.Constants.Names;
 
-public class CurrentUserService(IHttpContextAccessor httpContext) : ICurrentUserService
+public class CurrentUserService(IHttpContextAccessor httpContextAccessor) : ICurrentUserService
 {
-    private readonly ClaimsPrincipal user = httpContext.HttpContext?.User!;
+    private ClaimsPrincipal? User => httpContextAccessor.HttpContext?.User;
 
     public string? GetUsername()
-        => user?.Identity?.Name;
+        => this.User?.Identity?.Name;
 
     public string? GetId()
-        => user?.GetId();
+        => this.User?.GetId();
 
     public bool IsAdmin()
-        => user.IsInRole(AdminRoleName);
+        => this.User?.IsInRole(AdminRoleName) ?? false;
 }

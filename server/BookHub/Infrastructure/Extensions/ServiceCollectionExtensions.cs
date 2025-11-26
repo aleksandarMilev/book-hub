@@ -9,20 +9,24 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Services.ServiceLifetimes;
+using Settings;
 
 using static Features.Identity.Shared.Constants;
 
 public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddAppSettings(
-        this IServiceCollection services, 
+        this IServiceCollection services,
         IConfiguration configuration)
-        => services.Configure<ApplicationSettings>(
-            configuration.GetSection(nameof(ApplicationSettings)));
+    {
+        AddJwtSettings(services, configuration);
+        AddEmailSettings(services, configuration);
+
+        return services;
+    }
 
     public static IServiceCollection AddDatabase(
         this IServiceCollection services, 
@@ -38,9 +42,9 @@ public static class ServiceCollectionExtensions
                 options
                  .UseSqlServer(connectionString, sqlOptions =>
                  {
-                    sqlOptions.MigrationsAssembly(
-                        typeof(BookHubDbContext).Assembly.FullName);
-                    sqlOptions.EnableRetryOnFailure();
+                     sqlOptions.MigrationsAssembly(
+                         typeof(BookHubDbContext).Assembly.FullName);
+                     sqlOptions.EnableRetryOnFailure();
                  });
             });
     }
@@ -50,7 +54,7 @@ public static class ServiceCollectionExtensions
         IWebHostEnvironment env)
     {
         services
-            .AddIdentity<User, IdentityRole>(opt =>
+            .AddIdentityCore<User>(opt =>
             {
                 opt.User.RequireUniqueEmail = true;
                 opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(AccountLockoutTimeSpan);
@@ -73,26 +77,33 @@ public static class ServiceCollectionExtensions
                     opt.Password.RequiredLength = 8;
                 }
             })
+            .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<BookHubDbContext>()
             .AddDefaultTokenProviders();
 
         return services;
     }
 
+
     public static IServiceCollection AddJwtAuthentication(
         this IServiceCollection services,
         IConfiguration configuration,
         IWebHostEnvironment env)
     {
-        var appSettings = configuration
-            .GetSection(nameof(ApplicationSettings))
-            .Get<ApplicationSettings>()
-            ?? throw new InvalidOperationException("ApplicationSettings section is missing!");
+        var settings = configuration
+            .GetSection(nameof(JwtSettings))
+            .Get<JwtSettings>()
+            ?? throw new InvalidOperationException("JwtSettings section is missing!");
 
-        var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+        var key = Encoding.ASCII.GetBytes(settings.Secret);
 
         services
-            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
             .AddJwtBearer(opt =>
             {
                 opt.SaveToken = true;
@@ -119,9 +130,9 @@ public static class ServiceCollectionExtensions
                         IssuerSigningKey = new SymmetricSecurityKey(key),
 
                         ValidateIssuer = true,
-                        ValidIssuer = appSettings.Issuer,
+                        ValidIssuer = settings.Issuer,
                         ValidateAudience = true,
-                        ValidAudience = appSettings.Audience,
+                        ValidAudience = settings.Audience,
 
                         ValidateLifetime = true,
                         ClockSkew = TimeSpan.FromMinutes(2)
@@ -210,4 +221,16 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddAutoMapper(
         this IServiceCollection services)
         => services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+    private static IServiceCollection AddJwtSettings(
+        this IServiceCollection services,
+        IConfiguration configuration)
+        => services.Configure<JwtSettings>(
+            configuration.GetSection(nameof(JwtSettings)));
+
+    private static IServiceCollection AddEmailSettings(
+        this IServiceCollection services,
+        IConfiguration configuration)
+        => services.Configure<EmailSettings>(
+            configuration.GetSection(nameof(EmailSettings)));
 }

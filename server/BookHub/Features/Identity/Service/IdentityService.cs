@@ -4,7 +4,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Data.Models;
+using Email;
 using Infrastructure.Services.Result;
+using Infrastructure.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -14,8 +16,12 @@ using static Shared.Constants;
 
 public class IdentityService(
     UserManager<User> userManager,
-    IOptions<ApplicationSettings> appSettings) : IIdentityService
+    IEmailSender emailSender,
+    ILogger<IdentityService> logger,
+    IOptions<JwtSettings> settings) : IIdentityService
 {
+    private readonly JwtSettings settings = settings.Value;
+
     public async Task<ResultWith<string>> Register(
         string email,
         string username,
@@ -28,14 +34,20 @@ public class IdentityService(
         };
 
         var result = await userManager.CreateAsync(user, password);
-
         if (result.Succeeded)
         {
             var token = this.GenerateJwtToken(
-                appSettings.Value.Secret,
+                this.settings.Secret,
                 user.Id,
-                user.UserName,
-                user.Email);
+                username,
+                email);
+
+            logger.LogInformation(
+                "User with email: {Email} and Username: {Username} successfully registered.",
+                email,
+                username);
+
+            await emailSender.SendWelcome(email, username);
 
             return ResultWith<string>.Success(token);
         }
@@ -71,9 +83,8 @@ public class IdentityService(
             await userManager.ResetAccessFailedCountAsync(user);
 
             var isAdmin = await userManager.IsInRoleAsync(user, AdminRoleName);
-
             var token = this.GenerateJwtToken(
-                appSettings.Value.Secret,
+                this.settings.Secret,
                 user.Id,
                 user.UserName!,
                 user.Email!,
@@ -123,8 +134,8 @@ public class IdentityService(
                 ? DateTime.UtcNow.AddDays(ExtendedTokenExpirationTime)
                 : DateTime.UtcNow.AddDays(DefaultTokenExpirationTime),
 
-            Issuer = appSettings.Value.Issuer,
-            Audience = appSettings.Value.Audience,
+            Issuer = this.settings.Issuer,
+            Audience = this.settings.Audience,
 
             SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(key),

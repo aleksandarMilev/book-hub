@@ -1,5 +1,6 @@
 ﻿namespace BookHub.Features.Identity.Web;
 
+using Infrastructure.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Service;
@@ -16,12 +17,9 @@ public class IdentityController(IIdentityService service) : ApiController
             model.Username,
             model.Password);
 
-        if (result.Succeeded)
-        {
-            return this.Ok(new LoginResponseModel(result.Data!));
-        }
-
-        return this.Unauthorized(new { errorMessage = result.ErrorMessage });
+        return this.OkOrBadRequest(
+            result,
+            token => new LoginResponseModel(token));
     }
 
     [HttpPost(ApiRoutes.Login)]
@@ -32,11 +30,8 @@ public class IdentityController(IIdentityService service) : ApiController
              model.Password,
              model.RememberMe);
 
-        if (result.Succeeded)
-        {
-            return this.Ok(new LoginResponseModel(result.Data!));
-        }
-
-        return this.Unauthorized(new { errorMessage = result.ErrorMessage });
+        return this.OkOrBadRequest(
+            result,
+            token => new LoginResponseModel(token));
     }
 }

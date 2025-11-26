@@ -60,7 +60,7 @@
         }
 
         public async Task<bool> HasProfile()
-            => await this.data
+             => await this.data
                 .Profiles
                 .AnyAsync(p => p.UserId == this.userService.GetId());
 

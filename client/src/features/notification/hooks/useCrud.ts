@@ -12,8 +12,6 @@ import { useMessage } from '@/shared/stores/message/message.js';
 
 export const useLastThree = () => {
   const { token } = useAuth();
-  const { showMessage } = useMessage();
-
   const [notifications, setNotifications] = useState<NotificationType[]>([]);
   const [isFetching, setIsFetching] = useState(false);
 
@@ -31,14 +29,11 @@ export const useLastThree = () => {
         if (IsCanceledError(error)) {
           return;
         }
-
-        const message = IsError(error) ? error.message : 'Failed to load notifications.';
-        showMessage(message, false);
       } finally {
         setIsFetching(false);
       }
     },
-    [token, showMessage],
+    [token],
   );
 
   useEffect(() => {
