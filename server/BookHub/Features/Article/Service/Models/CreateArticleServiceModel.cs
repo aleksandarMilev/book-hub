@@ -1,11 +1,11 @@
-﻿namespace BookHub.Features.Article.Service.Models
-{
-    using Common.Models.Image;
+﻿namespace BookHub.Features.Article.Service.Models;
 
-    public class CreateArticleServiceModel : 
-        ArticleServiceModel,
-        IImageServiceModel
-    {
-        public IFormFile? Image { get; set; }
-    }
+using Infrastructure.Services.ImageWriter.Models.Image;
+
+
+public class CreateArticleServiceModel : 
+    ArticleServiceModel,
+    IImageServiceModel
+{
+    public IFormFile? Image { get; set; }
 }

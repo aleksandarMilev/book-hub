@@ -1,30 +1,28 @@
-﻿namespace BookHub.Features.Article.Data.Models
+﻿namespace BookHub.Features.Article.Data.Models;
+
+using BookHub.Data.Models.Base;
+using Infrastructure.Services.ImageWriter.Models.Image;
+using System.ComponentModel.DataAnnotations;
+
+using static Shared.Constants.ValidationConstants;
+
+public class ArticleDbModel:
+    DeletableEntity<Guid>,
+    IImageDdModel
 {
-    using System.ComponentModel.DataAnnotations;
-    using BookHub.Data.Models.Base;
-    using Common.Models.Image;
-    using Microsoft.EntityFrameworkCore;
+    [Required]
+    [MaxLength(TitleMaxLength)]
+    public string Title { get; set; } = null!;
 
-    using static Shared.Constants.ValidationConstants;
+    [Required]
+    [MaxLength(IntroductionMaxLength)]
+    public string Introduction { get; set; } = null!;
 
-    public class ArticleDbModel:
-        DeletableEntity<Guid>,
-        IImageDdModel
-    {
-        [Required]
-        [MaxLength(TitleMaxLength)]
-        public string Title { get; set; } = null!;
+    [Required]
+    [MaxLength(ContentMaxLength)]
+    public string Content { get; set; } = null!;
 
-        [Required]
-        [MaxLength(IntroductionMaxLength)]
-        public string Introduction { get; set; } = null!;
+    public string ImagePath { get; set; } = null!;
 
-        [Required]
-        [MaxLength(ContentMaxLength)]
-        public string Content { get; set; } = null!;
-
-        public string ImagePath { get; set; } = null!;
-
-        public int Views { get; set; }
-    }
+    public int Views { get; set; }
 }

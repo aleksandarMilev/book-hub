@@ -1,4 +1,4 @@
-﻿namespace BookHub.Common.Models.Image;
+﻿namespace BookHub.Infrastructure.Services.ImageWriter.Models.Image;
 
 public interface IImageDdModel
 {

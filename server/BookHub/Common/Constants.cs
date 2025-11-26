@@ -30,4 +30,9 @@ public static class Constants
         public const string ArticlesFeature = "Article";
         public const string ArticlesImagePathPrefix = "articles";
     }
+
+    public static class Cors
+    {
+        public const string CorsPolicyName = "CorsPolicy";
+    }
 }

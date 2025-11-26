@@ -1,10 +1,10 @@
-﻿namespace BookHub;
+﻿namespace BookHub.Infrastructure.Settings;
 
-public class ApplicationSettings
+public class JwtSettings
 {
-    public ApplicationSettings()
+    public JwtSettings()
         => this.Secret = default!;
-        
+
     public string Secret { get; init; } = null!;
 
     public string Issuer { get; init; } = "BookHub";

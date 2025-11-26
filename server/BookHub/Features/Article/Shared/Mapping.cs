@@ -1,65 +1,64 @@
-﻿namespace BookHub.Features.Article.Shared
+﻿namespace BookHub.Features.Article.Shared;
+
+using System.Linq.Expressions;
+using Data.Models;
+using Service.Models;
+using Web.Models;
+
+public static class Mapping
 {
-    using System.Linq.Expressions;
-    using Data.Models;
-    using Service.Models;
-    using Web.Models;
+    public static CreateArticleServiceModel ToServiceModel(
+        this CreateArticleWebModel webModel)
+        => new()
+        { 
+            Title = webModel.Title,
+            Introduction = webModel.Introduction,
+            Content = webModel.Content,
+            Image = webModel.Image,
+        };
 
-    public static class Mapping
-    {
-        public static CreateArticleServiceModel ToServiceModel(
-            this CreateArticleWebModel webModel)
-            => new()
-            { 
-                Title = webModel.Title,
-                Introduction = webModel.Introduction,
-                Content = webModel.Content,
-                Image = webModel.Image,
-            };
-
-        public static ArticleDbModel ToDbModel(
-            this CreateArticleServiceModel serviceModel)
-            => new()
-            {
-                Title = serviceModel.Title,
-                Introduction = serviceModel.Introduction,
-                Content = serviceModel.Content,
-            };
-
-        public static void UpdateDbModel(
-            this CreateArticleServiceModel serviceModel,
-            ArticleDbModel dbModel)
+    public static ArticleDbModel ToDbModel(
+        this CreateArticleServiceModel serviceModel)
+        => new()
         {
-            dbModel.Title = serviceModel.Title;
-            dbModel.Introduction = serviceModel.Introduction;
-            dbModel.Content = serviceModel.Content;
-        }
+            Title = serviceModel.Title,
+            Introduction = serviceModel.Introduction,
+            Content = serviceModel.Content,
+        };
 
-        public static Expression<Func<ArticleDbModel, ArticleDetailsServiceModel>> ToDetailsServiceModelExpression =>
-            dbModel => new()
-            {
-                Id = dbModel.Id,
-                Views = dbModel.Views,
-                Title = dbModel.Title,
-                Introduction = dbModel.Introduction,
-                Content = dbModel.Content,
-                ImagePath = dbModel.ImagePath,
-                CreatedOn = dbModel.CreatedOn,
-                ModifiedOn = dbModel.ModifiedOn
-            };
-
-        public static ArticleDetailsServiceModel ToDetailsServiceModel(
-            this ArticleDbModel dbModel)
-            => new()
-            {
-                Id = dbModel.Id,
-                Views = dbModel.Views,
-                Title = dbModel.Title,
-                Introduction = dbModel.Introduction,
-                Content = dbModel.Content,
-                ImagePath = dbModel.ImagePath,
-                CreatedOn = dbModel.CreatedOn,
-                ModifiedOn = dbModel.ModifiedOn,
-            };
+    public static void UpdateDbModel(
+        this CreateArticleServiceModel serviceModel,
+        ArticleDbModel dbModel)
+    {
+        dbModel.Title = serviceModel.Title;
+        dbModel.Introduction = serviceModel.Introduction;
+        dbModel.Content = serviceModel.Content;
     }
+
+    public static Expression<Func<ArticleDbModel, ArticleDetailsServiceModel>> ToDetailsServiceModelExpression =>
+        dbModel => new()
+        {
+            Id = dbModel.Id,
+            Views = dbModel.Views,
+            Title = dbModel.Title,
+            Introduction = dbModel.Introduction,
+            Content = dbModel.Content,
+            ImagePath = dbModel.ImagePath,
+            CreatedOn = dbModel.CreatedOn,
+            ModifiedOn = dbModel.ModifiedOn
+        };
+
+    public static ArticleDetailsServiceModel ToDetailsServiceModel(
+        this ArticleDbModel dbModel)
+        => new()
+        {
+            Id = dbModel.Id,
+            Views = dbModel.Views,
+            Title = dbModel.Title,
+            Introduction = dbModel.Introduction,
+            Content = dbModel.Content,
+            ImagePath = dbModel.ImagePath,
+            CreatedOn = dbModel.CreatedOn,
+            ModifiedOn = dbModel.ModifiedOn,
+        };
 }

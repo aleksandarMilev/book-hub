@@ -1,6 +1,6 @@
 ﻿namespace BookHub.Infrastructure.Services.ImageWriter;
 
-using Common.Models.Image;
+using Models.Image;
 using Result;
 
 public class ImageWriter(
