@@ -6,12 +6,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 using static Common.Constants.Names;
+using static Common.Constants.Cors;
 
 public static class AppBuilderExtensions
 {
-    private const string AdminEmail = "admin@mail.com";
-    private const string AdminPassword = "admin1234";
-
     public static async Task<IApplicationBuilder> UseMigrations(
         this IApplicationBuilder app)
     {
@@ -41,19 +39,17 @@ public static class AppBuilderExtensions
             .UseSwagger()
             .UseSwaggerUI(opt =>
             {
-                opt.SwaggerEndpoint("/swagger/v1/swagger.json", "BookHub API");
+                const string Url = "/swagger/v1/swagger.json";
+                const string Name = "BookHub API";
+
+                opt.SwaggerEndpoint(Url, Name);
                 opt.RoutePrefix = string.Empty;
             });
 
     public static IApplicationBuilder UseAllowedCors(
         this IApplicationBuilder app)
-        => app
-             .UseCors(opt =>
-             { 
-                 opt.AllowAnyOrigin();
-                 opt.AllowAnyHeader();
-                 opt.AllowAnyMethod();
-             });
+        => app.UseCors(CorsPolicyName);
+
 
     public static async Task<IApplicationBuilder> UseAdminRole(
         this IApplicationBuilder app)
@@ -75,6 +71,9 @@ public static class AppBuilderExtensions
         };
 
         await roleManager.CreateAsync(role);
+
+        const string AdminEmail = "admin@mail.com";
+        const string AdminPassword = "admin1234";
 
         var user = new User
         {

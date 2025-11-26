@@ -4,6 +4,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
     .AddHttpContextAccessor()
+    .AddCorsPolicy(
+        builder.Configuration,
+        builder.Environment)
     .AddAppSettings(builder.Configuration)
     .AddDatabase(builder.Configuration)
     .AddIdentity(builder.Environment)

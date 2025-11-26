@@ -15,9 +15,55 @@ using Services.ServiceLifetimes;
 using Settings;
 
 using static Features.Identity.Shared.Constants;
+using static Common.Constants.Cors;
 
 public static class ServiceCollectionExtensions
 {
+    public static IServiceCollection AddCorsPolicy(
+        this IServiceCollection services,
+        IConfiguration configuration,
+        IWebHostEnvironment env)
+    {
+        const string ConfigSectionName = "Cors:AllowedOrigins";
+        var allowedOrigins = configuration[ConfigSectionName];
+
+        services.AddCors(options =>
+        {
+            options.AddPolicy(CorsPolicyName, policy =>
+            {
+                if (env.IsDevelopment())
+                {
+                    policy
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                }
+                else
+                {
+                    if (!string.IsNullOrWhiteSpace(allowedOrigins))
+                    {
+                        var origins = allowedOrigins
+                            .Split(
+                                ';',
+                                StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+                        policy
+                            .WithOrigins(origins)
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException(
+                            "Cors:AllowedOrigins is not configured for the current environment.");
+                    }
+                }
+            });
+        });
+
+        return services;
+    }
+
     public static IServiceCollection AddAppSettings(
         this IServiceCollection services,
         IConfiguration configuration)
@@ -32,9 +78,12 @@ public static class ServiceCollectionExtensions
         this IServiceCollection services, 
         IConfiguration configuration)
     {
+        const string DefaultConnectionSection = "ConnectionStrings__DefaultConnection";
+        const string DefaultConnection = "DefaultConnection";
+
         var connectionString = Environment
-            .GetEnvironmentVariable("ConnectionStrings__DefaultConnection")
-            ?? configuration.GetConnectionString("DefaultConnection");
+            .GetEnvironmentVariable(DefaultConnectionSection)
+            ?? configuration.GetConnectionString(DefaultConnection);
 
         return services
             .AddDbContext<BookHubDbContext>(options =>
@@ -62,19 +111,23 @@ public static class ServiceCollectionExtensions
 
                 if (env.IsDevelopment())
                 {
+                    const int RequiredDevLength = 6;
+
                     opt.Password.RequireDigit = false;
                     opt.Password.RequireLowercase = false;
                     opt.Password.RequireUppercase = false;
                     opt.Password.RequireNonAlphanumeric = false;
-                    opt.Password.RequiredLength = 6;
+                    opt.Password.RequiredLength = RequiredDevLength;
                 }
                 else
                 {
+                    const int RequiredProdLength = 8;
+
                     opt.Password.RequireDigit = true;
                     opt.Password.RequireLowercase = true;
                     opt.Password.RequireUppercase = true;
                     opt.Password.RequireNonAlphanumeric = false;
-                    opt.Password.RequiredLength = 8;
+                    opt.Password.RequiredLength = RequiredProdLength;
                 }
             })
             .AddRoles<IdentityRole>()
@@ -123,19 +176,19 @@ public static class ServiceCollectionExtensions
                 }
                 else
                 {
+                    const int ClockSkewMinutes = 2;
+
                     opt.RequireHttpsMetadata = true;
                     opt.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(key),
-
                         ValidateIssuer = true,
                         ValidIssuer = settings.Issuer,
                         ValidateAudience = true,
                         ValidAudience = settings.Audience,
-
                         ValidateLifetime = true,
-                        ClockSkew = TimeSpan.FromMinutes(2)
+                        ClockSkew = TimeSpan.FromMinutes(ClockSkewMinutes)
                     };
                 }
             });
@@ -146,10 +199,13 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddSwagger(
         this IServiceCollection services)
     {
+        const string Title = "My BookHub API";
+        const string Version = "v1";
+
         var apiInfo = new OpenApiInfo
         {
-            Title = "My BookHub API",
-            Version = "v1"
+            Title = Title,
+            Version = Version
         };
 
         services.AddSwaggerGen(c => c.SwaggerDoc("v1", apiInfo));
@@ -211,9 +267,11 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddHealthcheck(
         this IServiceCollection services)
     {
+        const string Name = "Database";
+
         services
             .AddHealthChecks()
-            .AddDbContextCheck<BookHubDbContext>("Database");
+            .AddDbContextCheck<BookHubDbContext>(Name);
 
         return services;
     }

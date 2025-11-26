@@ -1,29 +1,28 @@
-﻿namespace BookHub.Features.Article.Web.Models
+﻿namespace BookHub.Features.Article.Web.Models;
+
+using System.ComponentModel.DataAnnotations;
+
+using static Shared.Constants.ValidationConstants;
+
+public class CreateArticleWebModel
 {
-    using System.ComponentModel.DataAnnotations;
+    [Required]
+    [StringLength(
+        TitleMaxLength,
+        MinimumLength = TitleMinLength)]
+    public string Title { get; init; } = null!;
 
-    using static Shared.Constants.ValidationConstants;
+    [Required]
+    [StringLength(
+        IntroductionMaxLength,
+        MinimumLength = IntroductionMinLength)]
+    public string Introduction { get; init; } = null!;
 
-    public class CreateArticleWebModel
-    {
-        [Required]
-        [StringLength(
-            TitleMaxLength,
-            MinimumLength = TitleMinLength)]
-        public string Title { get; init; } = null!;
+    [Required]
+    [StringLength(
+        ContentMaxLength,
+        MinimumLength = ContentMinLength)]
+    public string Content { get; init; } = null!;
 
-        [Required]
-        [StringLength(
-            IntroductionMaxLength,
-            MinimumLength = IntroductionMinLength)]
-        public string Introduction { get; init; } = null!;
-
-        [Required]
-        [StringLength(
-            ContentMaxLength,
-            MinimumLength = ContentMinLength)]
-        public string Content { get; init; } = null!;
-
-        public IFormFile? Image { get; init; }
-    }
+    public IFormFile? Image { get; init; }
 }
