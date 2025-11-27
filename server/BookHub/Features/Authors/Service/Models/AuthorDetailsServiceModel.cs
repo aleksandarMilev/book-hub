@@ -1,23 +1,35 @@
-﻿namespace BookHub.Features.Authors.Service.Models
+﻿namespace BookHub.Features.Authors.Service.Models;
+
+using Book.Service.Models;
+using Shared;
+
+public class AuthorDetailsServiceModel
 {
-    using Book.Service.Models;
+    public Guid Id { get; init; }
 
-    public class AuthorDetailsServiceModel : AuthorServiceModel
-    {
-        public string? PenName { get; init; }
+    public int BooksCount { get; init; }
 
-        public NationalityServiceModel Nationality { get; init; } = null!;
+    public double AverageRating { get; init; }
 
-        public string Gender { get; init; } = null!;
+    public string Name { get; init; } = null!;
 
-        public string? BornAt { get; init; }
+    public string ImagePath { get; init; } = null!;
 
-        public string? DiedAt { get; init; }
+    public string Biography { get; init; } = null!;
 
-        public string? CreatorId { get; set; }
+    public string? PenName { get; init; }
 
-        public bool IsApproved { get; init; }
+    public Nationality Nationality { get; init; }
 
-        public ICollection<BookServiceModel> TopBooks { get; set; } = new List<BookServiceModel>();
-    }
+    public Gender Gender { get; init; }
+
+    public string? BornAt { get; init; }
+
+    public string? DiedAt { get; init; }
+
+    public string? CreatorId { get; set; }
+
+    public bool IsApproved { get; init; }
+
+    public ICollection<BookServiceModel> TopBooks { get; } = new List<BookServiceModel>();
 }

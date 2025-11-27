@@ -1,8 +1,9 @@
 ﻿namespace BookHub.Features.Authors.Web.Models
 {
     using System.ComponentModel.DataAnnotations;
+    using Shared;
 
-    using static Shared.ValidationConstants.Author;
+    using static Shared.Constants.Validation;
 
     public class CreateAuthorWebModel
     {
@@ -12,10 +13,7 @@
             MinimumLength = NameMinLength)]
         public string Name { get; init; } = null!;
 
-        [StringLength(
-            ImageUrlMaxLength,
-            MinimumLength = ImageUrlMinLength)]
-        public string? ImageUrl { get; init; }
+        public IFormFile? Image { get; init; }
 
         [Required]
         [StringLength(
@@ -28,9 +26,9 @@
             MinimumLength = PenNameMinLength)]
         public string? PenName { get; init; }
 
-        public int? NationalityId { get; init; }
+        public Nationality Nationality { get; init; } = Nationality.Unknown;
 
-        public string Gender { get; init; } = null!;
+        public Gender Gender { get; init; } = Gender.Other;
 
         public string? BornAt { get; init; }
 

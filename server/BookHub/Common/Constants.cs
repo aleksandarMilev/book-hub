@@ -26,9 +26,6 @@ public static class Constants
     public static class Names 
     {
         public const string AdminRoleName = "Administrator";
-
-        public const string ArticlesFeature = "Article";
-        public const string ArticlesImagePathPrefix = "articles";
     }
 
     public static class Cors

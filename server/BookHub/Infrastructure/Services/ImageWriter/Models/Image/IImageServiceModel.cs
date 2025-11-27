@@ -2,5 +2,5 @@
 
 public interface IImageServiceModel
 {
-    IFormFile? Image { get; set; }
+    IFormFile? Image { get; }
 }

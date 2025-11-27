@@ -1,17 +1,16 @@
-﻿namespace BookHub.Features.Authors.Service.Models
+﻿namespace BookHub.Features.Authors.Service.Models;
+
+public class AuthorServiceModel
 {
-    public class AuthorServiceModel
-    {
-        public int Id { get; init; }
+    public Guid Id { get; init; }
 
-        public string Name { get; init; } = null!;
+    public string Name { get; init; } = null!;
 
-        public string ImageUrl { get; init; } = null!;
+    public string ImagePath { get; init; } = null!;
 
-        public string Biography { get; init; } = null!;
+    public string Biography { get; init; } = null!;
 
-        public int BooksCount { get; init; }
+    public int BooksCount { get; init; }
 
-        public double AverageRating { get; init; }
-    }
+    public double AverageRating { get; init; }
 }

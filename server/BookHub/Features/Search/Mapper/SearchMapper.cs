@@ -22,7 +22,7 @@
 
             this.CreateMap<ArticleDbModel, SearchArticleServiceModel>();
 
-            this.CreateMap<Author, SearchAuthorServiceModel>();
+            this.CreateMap<AuthorDbModel, SearchAuthorServiceModel>();
 
             this.CreateMap<UserProfile, SearchProfileServiceModel>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.UserId));

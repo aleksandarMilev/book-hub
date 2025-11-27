@@ -1,13 +1,16 @@
-﻿namespace BookHub.Features.Authors.Data.Configuration
-{
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.Metadata.Builders;
-    using Models;
-    using Seed;
+﻿namespace BookHub.Features.Authors.Data.Configuration;
 
-    public class AuthorConfiguration : IEntityTypeConfiguration<Author>
-    {
-        public void Configure(EntityTypeBuilder<Author> builder)
-            => builder.HasData(AuthorsSeeder.Seed());
-    }
+using BookHub.Common;
+using BookHub.Data.Seeder;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Models;
+
+public class AuthorConfiguration : IEntityTypeConfiguration<AuthorDbModel>
+{
+    public void Configure(EntityTypeBuilder<AuthorDbModel> builder)
+        => Seeder.SeedFromJson(
+            builder,
+            FeatureNames.Authors.ToString(),
+            "authors_seed.json");
 }
