@@ -1,21 +1,22 @@
-﻿namespace BookHub.Features.Authors.Service.Models
+﻿namespace BookHub.Features.Authors.Service.Models;
+
+using Shared;
+
+public class CreateAuthorServiceModel
 {
-    public class CreateAuthorServiceModel
-    {
-        public string Name { get; init; } = null!;
+    public string Name { get; init; } = null!;
 
-        public string? ImageUrl { get; set; }
+    public IFormFile? Image { get; init; }
 
-        public string Biography { get; init; } = null!;
+    public string Biography { get; init; } = null!;
 
-        public string? PenName { get; init; }
+    public string? PenName { get; init; }
 
-        public int? NationalityId { get; init; }
+    public Nationality Nationality { get; init; }
 
-        public string Gender { get; init; } = null!;
+    public Gender Gender { get; init; }
 
-        public string? BornAt { get; init; }
+    public string? BornAt { get; init; }
 
-        public string? DiedAt { get; init; }
-    }
+    public string? DiedAt { get; init; }
 }

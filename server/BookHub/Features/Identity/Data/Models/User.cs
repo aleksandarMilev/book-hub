@@ -32,7 +32,7 @@ public class User : IdentityUser, IDeletableEntity
 
     public ICollection<Book> Books { get; } = new HashSet<Book>();
 
-    public ICollection<Author> Authors { get; } = new HashSet<Author>();
+    public ICollection<AuthorDbModel> Authors { get; } = new HashSet<AuthorDbModel>();
 
     public ICollection<Review> Reviews { get; } = new HashSet<Review>();
 

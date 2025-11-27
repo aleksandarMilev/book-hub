@@ -250,7 +250,7 @@
             var author = await this.data
                .Authors
                .FindAsync(authorId)
-               ?? throw new DbEntityNotFoundException<int?>(nameof(Author), authorId);
+               ?? throw new DbEntityNotFoundException<int?>(nameof(AuthorDbModel), authorId);
 
             double newAverageRating;
             var newRatingsCount = isDeleteMode

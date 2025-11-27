@@ -13,16 +13,14 @@
     [Authorize]
     public class AuthorController(IAuthorService service) : AdminApiController
     {
-        private readonly IAuthorService service = service;
-
         [HttpGet(Id)]
         public async Task<ActionResult<AuthorDetailsServiceModel>> Details(int id)
-          => this.Ok(await this.service.AdminDetails(id));
+          => this.Ok(await service.AdminDetails(id));
 
         [HttpPatch(Id + Author.Approve)]
         public async Task<ActionResult> Approve(int id)
         {
-            var result = await this.service.Approve(id);
+            var result = await service.Approve(id);
 
             return this.NoContentOrBadRequest(result);
         }
@@ -30,7 +28,7 @@
         [HttpPatch((Id + Author.Reject))]
         public async Task<ActionResult> Reject(int id)
         {
-            var result = await this.service.Reject(id);
+            var result = await service.Reject(id);
 
             return this.NoContentOrBadRequest(result);
         }

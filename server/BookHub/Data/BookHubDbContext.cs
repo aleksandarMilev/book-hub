@@ -2,7 +2,6 @@
 
 using System.Linq.Expressions;
 using System.Reflection;
-using BookHub.Infrastructure.Services.CurrentUser;
 using Features.Article.Data.Models;
 using Features.Authors.Data.Models;
 using Features.Book.Data.Models;
@@ -13,12 +12,13 @@ using Features.Notification.Data.Models;
 using Features.ReadingList.Data.Models;
 using Features.Review.Data.Models;
 using Features.UserProfile.Data.Models;
-using Infrastructure.Services;
+using Infrastructure.Services.CurrentUser;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Models.Base;
 using Models.Shared.BookGenre;
 using Models.Shared.ChatUser;
+
 
 public class BookHubDbContext(
     DbContextOptions<BookHubDbContext> options, 
@@ -32,9 +32,7 @@ public class BookHubDbContext(
 
     public DbSet<ReadingList> ReadingLists { get; init; }
 
-    public DbSet<Author> Authors { get; init; }
-
-    public DbSet<Nationality> Nationalities { get; init; }
+    public DbSet<AuthorDbModel> Authors { get; init; }
 
     public DbSet<Review> Reviews { get; init; }
 

@@ -38,7 +38,7 @@
         [ForeignKey(nameof(Author))]
         public int? AuthorId { get; set; }
 
-        public Author? Author { get; set; }
+        public AuthorDbModel? Author { get; set; }
 
         [ForeignKey(nameof(User))]
         public string? CreatorId { get; set; }

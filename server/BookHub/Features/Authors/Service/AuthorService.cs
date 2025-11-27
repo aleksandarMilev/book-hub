@@ -9,7 +9,6 @@
     using Data.Models;
     using Features.UserProfile.Data.Models;
     using Infrastructure.Extensions;
-    using Infrastructure.Services;
     using Microsoft.EntityFrameworkCore;
     using Models;
     using Notification.Service;
@@ -22,24 +21,15 @@
         ICurrentUserService userService,
         IAdminService adminService,
         INotificationService notificationService,
-        IProfileService profileService,
-        IMapper mapper) : IAuthorService
+        IProfileService profileService) : IAuthorService
     {
         private const string DefaultAuthorImageUrl = "https://famouswritingroutines.com/wp-content/uploads/2022/06/daily-word-counts-of-famous-authors-1140x761.jpg";
         private const string UnknownNationalityName = "Unknown";
-        private const int TopThreeCount = 3;
-
-        private readonly BookHubDbContext data = data;
-        private readonly ICurrentUserService userService = userService;
-        private readonly IAdminService adminService = adminService;
-        private readonly INotificationService notificationService = notificationService;
-        private readonly IProfileService profileService = profileService;
-        private readonly IMapper mapper = mapper;
 
         public async Task<IEnumerable<AuthorNamesServiceModel>> Names()
-          => await this.data
+          => await data
               .Authors
-              .Select(a => new AuthorNamesServiceModel() 
+              .Select(a => new AuthorNamesServiceModel 
               {
                   Id = a.Id,
                   Name = a.Name
@@ -47,21 +37,21 @@
               .ToListAsync();
 
         public async Task<IEnumerable<AuthorServiceModel>> TopThree()
-            => await this.data
+            => await data
                 .Authors
                 .ProjectTo<AuthorServiceModel>(this.mapper.ConfigurationProvider)
                 .OrderByDescending(a => a.AverageRating)
-                .Take(TopThreeCount)
+                .Take(3)
                 .ToListAsync();
 
-        public async Task<AuthorDetailsServiceModel?> Details(int id)
-            => await this.data
+        public async Task<AuthorDetailsServiceModel?> Details(Guid id)
+            => await data
                 .Authors
                 .ProjectTo<AuthorDetailsServiceModel>(this.mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(a => a.Id == id);
 
-        public async Task<AuthorDetailsServiceModel?> AdminDetails(int id)
-             => await this.data
+        public async Task<AuthorDetailsServiceModel?> AdminDetails(Guid id)
+             => await data
                  .Authors
                  .IgnoreQueryFilters()
                  .ApplyIsDeletedFilter()
@@ -72,11 +62,11 @@
         {
             model.ImageUrl ??= DefaultAuthorImageUrl;
 
-            var author = this.mapper.Map<Author>(model);
-            author.CreatorId = this.userService.GetId();
+            var author = this.mapper.Map<AuthorDbModel>(model);
+            author.CreatorId = userService.GetId();
             author.NationalityId = await this.MapNationalityToAuthor(model.NationalityId);
 
-            var isAdmin = this.userService.IsAdmin();
+            var isAdmin = userService.IsAdmin();
 
             if (isAdmin)
             {
@@ -90,7 +80,7 @@
             {
                 await this.notificationService.CreateOnEntityCreation(
                     author.Id,
-                    nameof(Author), 
+                    nameof(AuthorDbModel), 
                     author.Name,
                     await this.adminService.GetId());
             }
@@ -108,7 +98,7 @@
             {
                 return string.Format(
                     DbEntityNotFound,
-                    nameof(Author),
+                    nameof(AuthorDbModel),
                     id);
             }
 
@@ -117,7 +107,7 @@
                 return string.Format(
                     UnauthorizedDbEntityAction,
                     this.userService.GetUsername(),
-                    nameof(Author),
+                    nameof(AuthorDbModel),
                     id);
             }
 
@@ -142,7 +132,7 @@
             {
                 return string.Format(
                     DbEntityNotFound,
-                    nameof(Author),
+                    nameof(AuthorDbModel),
                     id);
             }
 
@@ -154,7 +144,7 @@
                 return string.Format(
                     UnauthorizedDbEntityAction,
                     this.userService.GetUsername(),
-                    nameof(Author),
+                    nameof(AuthorDbModel),
                     id);
             }
 
@@ -176,7 +166,7 @@
             {
                 return string.Format(
                     DbEntityNotFound,
-                    nameof(Author),
+                    nameof(AuthorDbModel),
                     id);
             }
 
@@ -185,7 +175,7 @@
                 return string.Format(
                     UnauthorizedDbEntityAction,
                     this.userService.GetUsername(),
-                    nameof(Author),
+                    nameof(AuthorDbModel),
                     id);
             }
 
@@ -194,7 +184,7 @@
 
             await this.notificationService.CreateOnEntityApprovalStatusChange(
                 id,
-                nameof(Author),
+                nameof(AuthorDbModel),
                 author.Name,
                 author.CreatorId!,
                 true);
@@ -219,7 +209,7 @@
             {
                 return string.Format(
                     DbEntityNotFound,
-                    nameof(Author),
+                    nameof(AuthorDbModel),
                     id);
             }
 
@@ -228,7 +218,7 @@
                 return string.Format(
                     UnauthorizedDbEntityAction,
                     this.userService.GetUsername(),
-                    nameof(Author),
+                    nameof(AuthorDbModel),
                     id);
             }
 
@@ -237,7 +227,7 @@
 
             await this.notificationService.CreateOnEntityApprovalStatusChange(
                 id,
-                nameof(Author),
+                nameof(AuthorDbModel),
                 author.Name,
                 author.CreatorId!,
                 false);
