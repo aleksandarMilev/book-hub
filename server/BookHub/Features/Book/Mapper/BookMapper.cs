@@ -11,7 +11,7 @@
         {
             this.CreateMap<CreateBookWebModel, CreateBookServiceModel>();
 
-            this.CreateMap<CreateBookServiceModel, Book>()
+            this.CreateMap<CreateBookServiceModel, BookDbModel>()
                 .ForMember(
                     dest => dest.PublishedDate,
                     opt => opt.MapFrom(

@@ -2,7 +2,7 @@ import type { FormikProps } from 'formik';
 import { MDBRadio } from 'mdb-react-ui-kit';
 import type { ChangeEvent, FC } from 'react';
 
-import type { AuthorFormValues } from '@/features/author/components/form/formik/useAuthorFormik.js';
+import type { AuthorFormValues } from '../validation/authorSchema.js';
 
 const GenderRadio: FC<{ formik: FormikProps<AuthorFormValues> }> = ({ formik }) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {

@@ -31,5 +31,5 @@ public class AuthorDetailsServiceModel
 
     public bool IsApproved { get; init; }
 
-    public ICollection<BookServiceModel> TopBooks { get; } = new List<BookServiceModel>();
+    public ICollection<BookServiceModel> TopBooks { get; init; } = new List<BookServiceModel>();
 }

@@ -9,7 +9,7 @@
     public static class ManualMapper
     {
         public static IQueryable<BookDetailsServiceModel> MapToDetailsModel(
-            this IQueryable<Book> books,
+            this IQueryable<BookDbModel> books,
             string userId)
                => books
                    .Select(b => new BookDetailsServiceModel()
@@ -39,7 +39,7 @@
                            {
                                Id = b.Author.Id,
                                Name = b.Author.Name,
-                               ImageUrl = b.Author.ImageUrl,
+                               ImagePath = b.Author.ImagePath,
                                Biography = b.Author.Biography,
                                BooksCount = b.Author.Books.Count(),
                                AverageRating = b.Author.AverageRating,
@@ -71,7 +71,7 @@
                             .FirstOrDefault()
                    });
 
-        public static IQueryable<BookServiceModel> ToServiceModel(this IQueryable<Book> books)
+        public static IQueryable<BookServiceModel> ToServiceModel(this IQueryable<BookDbModel> books)
             => books
                 .Select(b => new BookServiceModel()
                 {

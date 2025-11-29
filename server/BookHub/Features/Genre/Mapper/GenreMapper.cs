@@ -10,7 +10,7 @@
     {
         public GenreMapper()
         {
-            this.CreateMap<Book, BookServiceModel>();
+            this.CreateMap<BookDbModel, BookServiceModel>();
 
             this.CreateMap<Genre, GenreDetailsServiceModel>()
                 .ForMember(

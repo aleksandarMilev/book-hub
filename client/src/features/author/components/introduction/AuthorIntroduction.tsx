@@ -1,13 +1,17 @@
 import './AuthorIntroduction.css';
 
+import { t } from 'i18next';
 import type { FC } from 'react';
 import { FaBook } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 import type { Author } from '@/features/author/types/author.js';
 import { routes } from '@/shared/lib/constants/api.js';
+import { getImageUrl, slugify } from '@/shared/lib/utils/utils.js';
 
-const AuthorIntroduction: FC<{ author?: Author | null }> = ({ author }) => {
+type Props = { author?: Author | null };
+
+const AuthorIntroduction: FC<Props> = ({ author }) => {
   if (!author) {
     return (
       <div className="author-intro-card">
@@ -29,22 +33,16 @@ const AuthorIntroduction: FC<{ author?: Author | null }> = ({ author }) => {
       <h3 className="author-intro-title">About the Author</h3>
       <div className="author-intro-header">
         <div className="author-intro-image-container">
-          {author.imageUrl ? (
+          {author.imagePath ? (
             <img
-              src={author.imageUrl}
+              src={getImageUrl(author.imagePath, 'authors')}
               alt={author.name}
-              className="author-intro-image"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src =
-                  'https://via.placeholder.com/160?text=No+Image';
-              }}
+              className="author-details-image"
             />
           ) : (
-            <div
-              className="author-intro-image author-intro-image--placeholder"
-              role="img"
-              aria-label="No image available"
-            />
+            <div className="author-details-image-placeholder">
+              {t('author:details.image.noImage')}
+            </div>
           )}
           <div className="author-intro-info">
             <h4 className="author-name">{author.name}</h4>
@@ -61,7 +59,10 @@ const AuthorIntroduction: FC<{ author?: Author | null }> = ({ author }) => {
         <p className="author-bio-text">
           {previewBio}
           {bio.length > previewLength && <span className="see-more">...</span>}
-          <Link to={`${routes.author}/${author.id}`} className="see-more-link">
+          <Link
+            to={`${routes.author}/${author.id}/${slugify(author.name)}`}
+            className="see-more-link"
+          >
             See More
           </Link>
         </p>

@@ -1,5 +1,6 @@
 import './AuthorDetails.css';
 
+import { t } from 'i18next';
 import {
   MDBCard,
   MDBCardBody,
@@ -16,17 +17,18 @@ import { Link } from 'react-router-dom';
 
 import ApproveRejectButtons from '@/features/author/components/details/approve-reject-buttons/ApproveRejectButtons.js';
 import { useDetailsPage } from '@/features/author/hooks/useDetailsPage.js';
+import { getNationalityName } from '@/features/author/types/author.js';
 import BookListItem from '@/features/book/components/list-item/BookListItem.js';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
 import DeleteModal from '@/shared/components/delete-modal/DeleteModal.js';
 import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect.js';
 import { RenderStars } from '@/shared/components/render-stars/RenderStars.js';
 import { routes } from '@/shared/lib/constants/api.js';
-import { calculateAge, formatIsoDate } from '@/shared/lib/utils/utils.js';
+import { calculateAge, formatIsoDate, getImageUrl } from '@/shared/lib/utils/utils.js';
 
 const AuthorDetails: FC = () => {
   const {
-    parsedId,
+    id,
     token,
     isAdmin,
     userId,
@@ -60,17 +62,23 @@ const AuthorDetails: FC = () => {
                 <MDBCol md="12">
                   <MDBCardTitle className="author-title">{author.name}</MDBCardTitle>
                   <MDBCardText className="text-muted">
-                    {author.nationality?.name ?? 'Nationality unknown'}
+                    {getNationalityName(author.nationality)}
                     {author.penName ? ` \u00B7 Pen name: ${author.penName}` : ''}
                   </MDBCardText>
                 </MDBCol>
               </MDBRow>
               <MDBRow>
                 <MDBCol md="12" className="author-image-container">
-                  {author.imageUrl ? (
-                    <img src={author.imageUrl} alt={author.name} className="author-image" />
+                  {author.imagePath ? (
+                    <img
+                      src={getImageUrl(author.imagePath, 'authors')}
+                      alt={author.name}
+                      className="author-details-image"
+                    />
                   ) : (
-                    <div className="author-image-placeholder">No Image Available</div>
+                    <div className="author-details-image-placeholder">
+                      {t('author:details.image.noImage')}
+                    </div>
                   )}
                 </MDBCol>
               </MDBRow>
@@ -111,7 +119,7 @@ const AuthorDetails: FC = () => {
               {(isCreator || isAdmin) && (
                 <div className="d-flex gap-2 mt-4">
                   <Link
-                    to={`${routes.editAuthor}/${parsedId}`}
+                    to={`${routes.editAuthor}/${id}`}
                     className="btn btn-warning d-flex align-items-center gap-2"
                   >
                     <FaEdit /> Edit

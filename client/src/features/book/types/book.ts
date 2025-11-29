@@ -14,7 +14,7 @@ export interface Book {
 
 export interface CreateBook {
   title: string;
-  authorId?: number | null;
+  authorId?: string | null;
   imageUrl?: string | null;
   shortDescription: string;
   longDescription: string;

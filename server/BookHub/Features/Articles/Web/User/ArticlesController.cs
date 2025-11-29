@@ -8,7 +8,7 @@ using Service.Models;
 using static Common.Constants.ApiRoutes;
 using static Shared.Constants.RouteNames;
 
-public class ArticlesController(IArticlesService service) : ApiController
+public class ArticlesController(IArticleService service) : ApiController
 {
     [AllowAnonymous]
     // We should provide name here so we can construct the location header easier in the admin controller

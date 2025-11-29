@@ -1,9 +1,9 @@
 import type { FormikProps } from 'formik';
 import type { ChangeEvent, FC } from 'react';
 
-import type { AuthorFormValues } from '@/features/author/components/form/formik/useAuthorFormik.js';
-import { useSearchNationalities } from '@/features/nationality/hooks/useCrud.js';
-import type { Nationality } from '@/features/nationality/types/nationality.js';
+import type { AuthorFormValues } from '@/features/author/components/form/validation/authorSchema.js';
+import { useSearchNationalities } from '@/features/author/hooks/useNationality.js';
+import type { Nationality } from '@/features/author/types/author.js';
 
 const NationalitySearch: FC<{
   nationalities: Nationality[];

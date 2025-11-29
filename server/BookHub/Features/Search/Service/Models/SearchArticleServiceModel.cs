@@ -2,7 +2,7 @@
 {
     public class SearchArticleServiceModel
     {
-        public string Id { get; init; } = null!;
+        public Guid Id { get; init; }
 
         public string Title { get; init; } = null!;
 

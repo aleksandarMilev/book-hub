@@ -12,25 +12,25 @@
         Task<PaginatedModel<NotificationServiceModel>> All(int pageIndex, int pageSize);
 
         Task<int> CreateOnEntityCreation(
-           int resourceId,
+           Guid resourceId,
            string resourceType,
            string nameProp,
            string receiverId);
 
         Task<int> CreateOnEntityApprovalStatusChange(
-           int resourceId,
+           Guid resourceId,
            string resourceType,
            string nameProp,
            string receiverId,
            bool isApproved);
 
         Task<int> CreateOnChatInvitation(
-            int chatId,
+            Guid chatId,
             string chatName,
             string receiverId);
 
         Task<int> CreateOnChatInvitationStatusChanged(
-            int chatId,
+            Guid chatId,
             string chatName,
             string receiverId,
             bool hasAccepted);

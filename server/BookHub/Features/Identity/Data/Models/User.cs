@@ -30,7 +30,7 @@ public class User : IdentityUser, IDeletableEntity
 
     public ICollection<Vote> Votes { get; set; } = new HashSet<Vote>();
 
-    public ICollection<Book> Books { get; } = new HashSet<Book>();
+    public ICollection<BookDbModel> Books { get; } = new HashSet<BookDbModel>();
 
     public ICollection<AuthorDbModel> Authors { get; } = new HashSet<AuthorDbModel>();
 

@@ -33,13 +33,13 @@
 
         [HttpGet(ApiRoutes.ByAuthor + Id)]
         public async Task<ActionResult<PaginatedModel<BookServiceModel>>> ByAuthor(
-           int id,
+           Guid id,
            int page = DefaultPageIndex,
            int pageSize = DefaultPageSize) 
            => this.Ok(await this.service.ByAuthor(id, page, pageSize));
 
         [HttpGet(Id)]
-        public async Task<ActionResult<BookDetailsServiceModel>> Details(int id)
+        public async Task<ActionResult<BookDetailsServiceModel>> Details(Guid id)
             => this.Ok(await this.service.Details(id));
 
         [HttpPost]
@@ -52,7 +52,7 @@
         }
 
         [HttpPut(Id)]
-        public async Task<ActionResult> Edit(int id, CreateBookWebModel webModel)
+        public async Task<ActionResult> Edit(Guid id, CreateBookWebModel webModel)
         {
             var serviceModel = this.mapper.Map<CreateBookServiceModel>(webModel);
             var result = await this.service.Edit(id, serviceModel);
@@ -61,7 +61,7 @@
         }
 
         [HttpDelete(Id)]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(Guid id)
         {
             var result = await this.service.Delete(id);
 

@@ -13,8 +13,8 @@
            int pageIndex,
            int pageSize);
 
-        Task<Result> Add(int bookId, string status);
+        Task<Result> Add(Guid bookId, string status);
 
-        Task<Result> Delete(int bookId, string status);
+        Task<Result> Delete(Guid bookId, string status);
     }
 }

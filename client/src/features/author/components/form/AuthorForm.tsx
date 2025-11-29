@@ -14,19 +14,16 @@ import {
 import type { FC } from 'react';
 
 import image from '@/features/author/components/form/assets/create-author.jpg';
-import {
-  type AuthorFormValues,
-  useAuthorFormik,
-} from '@/features/author/components/form/formik/useAuthorFormik.js';
+import { useAuthorFormik } from '@/features/author/components/form/formik/useAuthorFormik.js';
 import GenderRadio from '@/features/author/components/form/gender-radio/GenderRadio.js';
 import NationalitySearch from '@/features/author/components/form/nationality-search/NationalitySearch.js';
+import type { AuthorFormValues } from '@/features/author/components/form/validation/authorSchema.js';
+import { useAll } from '@/features/author/hooks/useNationality.js';
 import type { AuthorDetails } from '@/features/author/types/author.js';
-import { useAll } from '@/features/nationality/hooks/useCrud.js';
 
-const AuthorForm: FC<{ authorData?: AuthorDetails | null; isEditMode?: boolean }> = ({
-  authorData = null,
-  isEditMode = false,
-}) => {
+type Props = { authorData?: AuthorDetails | null; isEditMode?: boolean };
+
+const AuthorForm: FC<Props> = ({ authorData = null, isEditMode = false }) => {
   const formik = useAuthorFormik({ authorData, isEditMode });
   const { nationalities, isFetching } = useAll();
 
@@ -73,20 +70,26 @@ const AuthorForm: FC<{ authorData?: AuthorDetails | null; isEditMode?: boolean }
                       />
                     </MDBCol>
                     <MDBCol md="12">
-                      {formik.touched.imageUrl && formik.errors.imageUrl && (
-                        <div className="text-danger mb-2">{formik.errors.imageUrl}</div>
-                      )}
-                      <MDBInput
-                        wrapperClass="mb-4"
-                        label="Image URL"
-                        size="lg"
-                        id="imageUrl"
-                        type="text"
-                        {...formik.getFieldProps('imageUrl')}
-                        className={
-                          formik.touched.imageUrl && formik.errors.imageUrl ? 'is-invalid' : ''
-                        }
+                      <label htmlFor="image" className="form-label">
+                        Image
+                      </label>
+                      <input
+                        id="image"
+                        name="image"
+                        type="file"
+                        accept=".jpg,.jpeg,.png,.webp,.avif"
+                        className={`form-control ${
+                          formik.touched.image && formik.errors.image ? 'is-invalid' : ''
+                        }`}
+                        onChange={(event) => {
+                          const file = event.currentTarget.files?.[0] ?? null;
+                          formik.setFieldValue('image', file);
+                          formik.setFieldTouched('image', true, false);
+                        }}
                       />
+                      {formik.touched.image && formik.errors.image && (
+                        <div className="text-danger mb-2">{formik.errors.image}</div>
+                      )}
                     </MDBCol>
                     <MDBCol md="12">
                       {formik.touched.bornAt && formik.errors.bornAt && (

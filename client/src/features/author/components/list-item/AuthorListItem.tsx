@@ -7,26 +7,19 @@ import { Link } from 'react-router-dom';
 import type { AuthorsSearchResult } from '@/features/search/types/search.js';
 import { RenderStars } from '@/shared/components/render-stars/RenderStars.js';
 import { routes } from '@/shared/lib/constants/api.js';
+import { getImageUrl, slugify } from '@/shared/lib/utils/utils.js';
 
 const AuthorListItem: FC<AuthorsSearchResult> = ({
   id,
   name,
-  imageUrl,
+  imagePath,
   averageRating,
   penName,
 }) => {
   return (
     <div className="row p-3 bg-light border rounded mb-3 shadow-sm author-list-item">
       <div className="col-md-3 col-4 mt-1 d-flex justify-content-center align-items-center">
-        {imageUrl ? (
-          <img
-            className="img-fluid img-responsive rounded-circle author-list-item-image"
-            src={imageUrl}
-            alt={name || penName || 'Author'}
-          />
-        ) : (
-          <div className="author-list-item-placeholder rounded-circle">No Image</div>
-        )}
+        <img src={getImageUrl(imagePath, 'authors')} alt={name} className="author-card-image" />
       </div>
       <div className="col-md-6 col-8 mt-1 author-list-item-content">
         <h5 className="mb-2 author-list-item-name">
@@ -46,7 +39,7 @@ const AuthorListItem: FC<AuthorsSearchResult> = ({
       <div className="col-md-3 d-flex align-items-center justify-content-center mt-1">
         <div className="d-flex flex-column align-items-center">
           <Link
-            to={`${routes.author}/${id}`}
+            to={`${routes.author}/${id}/${slugify(name)}`}
             className="btn btn-sm btn-primary author-list-item-btn"
           >
             View

@@ -8,7 +8,7 @@
     public interface IReviewService : ITransientService
     {
         Task<PaginatedModel<ReviewServiceModel>> AllForBook(
-            int bookId,
+            Guid bookId,
             int pageIndex,
             int pageSize);
 

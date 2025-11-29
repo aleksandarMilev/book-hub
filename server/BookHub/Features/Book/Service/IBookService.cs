@@ -9,9 +9,9 @@
     {
         Task<IEnumerable<BookServiceModel>> TopThree();
 
-        Task<BookDetailsServiceModel?> Details(int id);
+        Task<BookDetailsServiceModel?> Details(Guid id);
 
-        Task<BookDetailsServiceModel?> AdminDetails(int id);
+        Task<BookDetailsServiceModel?> AdminDetails(Guid id);
 
         Task<PaginatedModel<BookServiceModel>> ByGenre(
             int genreId, 
@@ -19,18 +19,18 @@
             int pageSize);
 
         Task<PaginatedModel<BookServiceModel>> ByAuthor(
-            int authorId, 
+            Guid authorId, 
             int page, 
             int pageSize);
 
-        Task<int> Create(CreateBookServiceModel model);
+        Task<Guid> Create(CreateBookServiceModel model);
 
-        Task<Result> Edit(int id, CreateBookServiceModel model);
+        Task<Result> Edit(Guid id, CreateBookServiceModel model);
 
-        Task<Result> Delete(int id);
+        Task<Result> Delete(Guid id);
 
-        Task<Result> Approve(int id);
+        Task<Result> Approve(Guid id);
 
-        Task<Result> Reject(int id);
+        Task<Result> Reject(Guid id);
     }
 }

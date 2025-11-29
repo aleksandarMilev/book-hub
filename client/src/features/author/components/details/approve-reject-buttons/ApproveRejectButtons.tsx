@@ -2,13 +2,21 @@ import { type FC, useState } from 'react';
 
 import { useAuthorApproval } from '@/features/author/hooks/useApproval.js';
 
-const ApproveRejectButtons: FC<{
-  authorId: number;
+type Props = {
+  authorId: string;
   authorName: string;
   initialIsApproved: boolean;
   token: string;
   onSuccess: (message: string, success?: boolean) => void;
-}> = ({ authorId, authorName, initialIsApproved, token, onSuccess }) => {
+};
+
+const ApproveRejectButtons: FC<Props> = ({
+  authorId,
+  authorName,
+  initialIsApproved,
+  token,
+  onSuccess,
+}) => {
   const [isApproved, setIsApproved] = useState(initialIsApproved);
   const { approveHandler, rejectHandler } = useAuthorApproval({
     authorId,

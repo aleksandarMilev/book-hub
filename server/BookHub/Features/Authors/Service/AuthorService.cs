@@ -1,257 +1,282 @@
 ﻿namespace BookHub.Features.Authors.Service
 {
     using Areas.Admin.Service;
-    using AutoMapper;
-    using AutoMapper.QueryableExtensions;
     using BookHub.Data;
-    using BookHub.Infrastructure.Services.CurrentUser;
-    using BookHub.Infrastructure.Services.Result;
     using Data.Models;
     using Features.UserProfile.Data.Models;
     using Infrastructure.Extensions;
+    using Infrastructure.Services.CurrentUser;
+    using Infrastructure.Services.ImageWriter;
+    using Infrastructure.Services.Result;
     using Microsoft.EntityFrameworkCore;
     using Models;
     using Notification.Service;
     using UserProfile.Service;
 
     using static Common.Constants.ErrorMessages;
+    using static Shared.AuthorMapping;
+    using static Shared.Constants.Paths;
 
     public class AuthorService(
         BookHubDbContext data,
         ICurrentUserService userService,
         IAdminService adminService,
         INotificationService notificationService,
+        IImageWriter imageWriter,
+        ILogger<AuthorService> logger,
         IProfileService profileService) : IAuthorService
     {
-        private const string DefaultAuthorImageUrl = "https://famouswritingroutines.com/wp-content/uploads/2022/06/daily-word-counts-of-famous-authors-1140x761.jpg";
-        private const string UnknownNationalityName = "Unknown";
-
-        public async Task<IEnumerable<AuthorNamesServiceModel>> Names()
+        public async Task<IEnumerable<AuthorNamesServiceModel>> Names(
+            CancellationToken token = default)
           => await data
               .Authors
-              .Select(a => new AuthorNamesServiceModel 
-              {
-                  Id = a.Id,
-                  Name = a.Name
-              })
-              .ToListAsync();
+              .Select(ToNamesServiceModelExpression)
+              .ToListAsync(token);
 
-        public async Task<IEnumerable<AuthorServiceModel>> TopThree()
+        public async Task<IEnumerable<AuthorServiceModel>> TopThree(
+            CancellationToken token = default)
             => await data
                 .Authors
-                .ProjectTo<AuthorServiceModel>(this.mapper.ConfigurationProvider)
+                .Select(ToServiceModelExpression)
                 .OrderByDescending(a => a.AverageRating)
                 .Take(3)
-                .ToListAsync();
+                .ToListAsync(token);
 
-        public async Task<AuthorDetailsServiceModel?> Details(Guid id)
+        public async Task<AuthorDetailsServiceModel?> Details(
+            Guid id,
+            CancellationToken token = default)
             => await data
                 .Authors
-                .ProjectTo<AuthorDetailsServiceModel>(this.mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(a => a.Id == id);
+                .Select(ToDetailsServiceModelExpression)
+                .FirstOrDefaultAsync(a => a.Id == id, token);
 
-        public async Task<AuthorDetailsServiceModel?> AdminDetails(Guid id)
+        public async Task<AuthorDetailsServiceModel?> AdminDetails(
+            Guid id,
+            CancellationToken token = default)
              => await data
                  .Authors
                  .IgnoreQueryFilters()
                  .ApplyIsDeletedFilter()
-                 .ProjectTo<AuthorDetailsServiceModel>(this.mapper.ConfigurationProvider)
-                 .FirstOrDefaultAsync(a => a.Id == id);
+                 .Select(ToDetailsServiceModelExpression)
+                 .FirstOrDefaultAsync(a => a.Id == id, token);
 
-        public async Task<int> Create(CreateAuthorServiceModel model)
+        public async Task<AuthorDetailsServiceModel> Create(
+            CreateAuthorServiceModel serviceModel,
+            CancellationToken token = default)
         {
-            model.ImageUrl ??= DefaultAuthorImageUrl;
-
-            var author = this.mapper.Map<AuthorDbModel>(model);
-            author.CreatorId = userService.GetId();
-            author.NationalityId = await this.MapNationalityToAuthor(model.NationalityId);
+            var dbModel = serviceModel.ToDbModel();
+            dbModel.CreatorId = userService.GetId();
 
             var isAdmin = userService.IsAdmin();
-
             if (isAdmin)
             {
-                author.IsApproved = true;
+                dbModel.IsApproved = true;
             }
 
-            this.data.Add(author);
-            await this.data.SaveChangesAsync();
+            await imageWriter.Write(
+                AuthorsImagePathPrefix,
+                dbModel,
+                serviceModel,
+                DefaultImagePath,
+                token);
+
+            data.Add(dbModel);
+            await data.SaveChangesAsync(token);
+
+            logger.LogInformation(
+                "New author with Id: {id} was created.",
+                dbModel.Id);
 
             if (!isAdmin)
             {
-                await this.notificationService.CreateOnEntityCreation(
-                    author.Id,
-                    nameof(AuthorDbModel), 
-                    author.Name,
-                    await this.adminService.GetId());
+                await notificationService.CreateOnEntityCreation(
+                    dbModel.Id,
+                    "Author",
+                    dbModel.Name,
+                    await adminService.GetId());
             }
 
-            return author.Id;
+            return dbModel.ToDetailsServiceModel();
         }
 
-        public async Task<Result> Edit(int id, CreateAuthorServiceModel model)
+        public async Task<Result> Edit(
+            Guid id,
+            CreateAuthorServiceModel serviceModel,
+            CancellationToken token = default)
         {
-            var author = await this.data
-                .Authors
-                .FindAsync(id);
-
-            if (author is null)
+            var dbModel = await this.GetDbModel(id, token);
+            if (dbModel is null)
             {
-                return string.Format(
-                    DbEntityNotFound,
-                    nameof(AuthorDbModel),
-                    id);
+                return this.LogAndReturnNotFoundMessage(id);
             }
 
-            if (author.CreatorId != this.userService.GetId())
+            var userId = userService.GetId()!;
+            if (dbModel.CreatorId != userId)
             {
-                return string.Format(
-                    UnauthorizedDbEntityAction,
-                    this.userService.GetUsername(),
-                    nameof(AuthorDbModel),
-                    id);
+                return LogAndReturnUnauthorizedMessage(id, userId);
             }
 
-            model.ImageUrl ??= DefaultAuthorImageUrl;
+            var oldImagePath = dbModel.ImagePath;
+            var isNewImageUploaded = serviceModel.Image is not null;
 
-            this.mapper.Map(model, author);
+            serviceModel.UpdateDbModel(dbModel);
 
-            author.NationalityId = await this.MapNationalityToAuthor(model.NationalityId);
+            await imageWriter.Write(
+                AuthorsImagePathPrefix,
+                dbModel,
+                serviceModel,
+                null,
+                token);
 
-            await this.data.SaveChangesAsync();
+            if (isNewImageUploaded)
+            {
+                imageWriter.Delete(
+                    nameof(AuthorDbModel),
+                    oldImagePath,
+                    DefaultImagePath);
+            }
+
+            await data.SaveChangesAsync(token);
+
+            logger.LogInformation(
+                "Author with Id: {id} was updated.",
+                dbModel.Id);
 
             return true;
         }
 
-        public async Task<Result> Delete(int id)
+        public async Task<Result> Delete(
+            Guid authorId,
+            CancellationToken token = default)
         {
-            var author = await this.data
-                 .Authors
-                 .FindAsync(id);
-
-            if (author is null)
+            var dbModel = await this.GetDbModel(authorId, token);
+            if (dbModel is null)
             {
-                return string.Format(
-                    DbEntityNotFound,
-                    nameof(AuthorDbModel),
-                    id);
+                return LogAndReturnNotFoundMessage(authorId);
             }
 
-            var isNotCreator = author.CreatorId != this.userService.GetId();
-            var isNotAdmin = !this.userService.IsAdmin();
+            var userId = userService.GetId()!;
+            var isNotCreator = dbModel.CreatorId != userId;
+            var isNotAdmin = !userService.IsAdmin();
 
             if (isNotCreator && isNotAdmin)
             {
-                return string.Format(
-                    UnauthorizedDbEntityAction,
-                    this.userService.GetUsername(),
-                    nameof(AuthorDbModel),
-                    id);
+                return LogAndReturnUnauthorizedMessage(authorId, userId);
             }
 
-            this.data.Remove(author);
-            await this.data.SaveChangesAsync();
+            data.Remove(dbModel);
+            await data.SaveChangesAsync(token);
+
+            logger.LogInformation(
+                "Author with Id: {id} was deleted.",
+                dbModel.Id);
 
             return true;
         }
 
-        public async Task<Result> Approve(int id)
+        public async Task<Result> Approve(
+            Guid id,
+            CancellationToken token = default)
         {
-            var author = await this.data
+            var dbModel = await data
                  .Authors
                  .IgnoreQueryFilters()
                  .ApplyIsDeletedFilter()
-                 .FirstOrDefaultAsync(a => a.Id == id);
+                 .FirstOrDefaultAsync(a => a.Id == id, token);
 
-            if (author is null)
+            if (dbModel is null)
             {
-                return string.Format(
-                    DbEntityNotFound,
-                    nameof(AuthorDbModel),
-                    id);
+                return LogAndReturnNotFoundMessage(id);
             }
 
-            if (!this.userService.IsAdmin())
+            if (!userService.IsAdmin())
             {
-                return string.Format(
-                    UnauthorizedDbEntityAction,
-                    this.userService.GetUsername(),
-                    nameof(AuthorDbModel),
-                    id);
+                return LogAndReturnUnauthorizedMessage(id, userService.GetId()!);
             }
 
-            author.IsApproved = true;
-            await this.data.SaveChangesAsync();
+            dbModel.IsApproved = true;
+            await data.SaveChangesAsync(token);
 
-            await this.notificationService.CreateOnEntityApprovalStatusChange(
+            await notificationService.CreateOnEntityApprovalStatusChange(
                 id,
-                nameof(AuthorDbModel),
-                author.Name,
-                author.CreatorId!,
+                "Author",
+                dbModel.Name,
+                dbModel.CreatorId!,
                 true);
 
-            await this.profileService.UpdateCount(
-                author.CreatorId!,
+            await profileService.UpdateCount(
+                dbModel.CreatorId!,
                 nameof(UserProfile.CreatedAuthorsCount),
                 x => ++x);
 
             return true;
         }
 
-        public async Task<Result> Reject(int id)
+        public async Task<Result> Reject(
+            Guid id,
+            CancellationToken token = default)
         {
-            var author = await this.data
-                 .Authors
-                 .IgnoreQueryFilters()
-                 .ApplyIsDeletedFilter()
-                 .FirstOrDefaultAsync(a => a.Id == id);
+            var dbModel = await data
+                .Authors
+                .IgnoreQueryFilters()
+                .ApplyIsDeletedFilter()
+                .FirstOrDefaultAsync(a => a.Id == id, token);
 
-            if (author is null)
+            if (dbModel is null)
             {
-                return string.Format(
-                    DbEntityNotFound,
-                    nameof(AuthorDbModel),
-                    id);
+                return LogAndReturnNotFoundMessage(id);
             }
 
-            if (!this.userService.IsAdmin())
+            if (!userService.IsAdmin())
             {
-                return string.Format(
-                    UnauthorizedDbEntityAction,
-                    this.userService.GetUsername(),
-                    nameof(AuthorDbModel),
-                    id);
+                return LogAndReturnUnauthorizedMessage(id, userService.GetId()!);
             }
 
-            this.data.Remove(author);
-            await this.data.SaveChangesAsync();
-
-            await this.notificationService.CreateOnEntityApprovalStatusChange(
+            await notificationService.CreateOnEntityApprovalStatusChange(
                 id,
-                nameof(AuthorDbModel),
-                author.Name,
-                author.CreatorId!,
+                "Author",
+                dbModel.Name,
+                dbModel.CreatorId!,
                 false);
 
             return true;
         }
 
-        private async Task<int> MapNationalityToAuthor(int? id)
+        private async Task<AuthorDbModel?> GetDbModel(
+            Guid id,
+            CancellationToken token = default)
+            => await data
+                .Authors
+                .FindAsync([id], token);
+
+        private string LogAndReturnNotFoundMessage(Guid id)
         {
-            var nationalityId = await this.data
-               .Nationalities
-               .Select(n => n.Id)
-               .FirstOrDefaultAsync(n => n == id);
+            logger.LogWarning(
+                DbEntityNotFoundTemplate,
+                nameof(AuthorDbModel),
+                id);
 
-            if (nationalityId == 0)
-            {
-                nationalityId = await this.data
-                   .Nationalities
-                   .Where(n => n.Name == UnknownNationalityName)
-                   .Select(n => n.Id)
-                   .FirstOrDefaultAsync();
-            }
+            return string.Format(
+                DbEntityNotFound,
+                nameof(AuthorDbModel),
+                id);
+        }
 
-            return nationalityId;
+        private string LogAndReturnUnauthorizedMessage(
+            Guid authorId,
+            string userId)
+        {
+            logger.LogWarning(
+                UnauthorizedMessageTemplate,
+                userId,
+                nameof(AuthorDbModel),
+                authorId);
+
+            return string.Format(
+                UnauthorizedMessage,
+                userId,
+                nameof(AuthorDbModel),
+                authorId);
         }
     }
 }

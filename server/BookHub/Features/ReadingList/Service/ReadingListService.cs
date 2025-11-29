@@ -53,7 +53,7 @@
                 pageSize);
         }
 
-        public async Task<Result> Add(int bookId, string status)
+        public async Task<Result> Add(Guid bookId, string status)
         {
             var userId = this.userService.GetId();
             var statusEnum = ParseStatusToEnum(status);
@@ -94,7 +94,7 @@
             return true;
         }
 
-        public async Task<Result> Delete(int bookId, string status)
+        public async Task<Result> Delete(Guid bookId, string status)
         {
             var userId = this.userService.GetId();
             var statusEnum = ParseStatusToEnum(status);

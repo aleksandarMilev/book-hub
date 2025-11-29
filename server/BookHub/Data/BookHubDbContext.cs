@@ -24,7 +24,7 @@ public class BookHubDbContext(
     DbContextOptions<BookHubDbContext> options, 
     ICurrentUserService userService) : IdentityDbContext<User>(options)
 {
-    public DbSet<Book> Books { get; init; }
+    public DbSet<BookDbModel> Books { get; init; }
 
     public DbSet<Genre> Genres { get; init; }
 

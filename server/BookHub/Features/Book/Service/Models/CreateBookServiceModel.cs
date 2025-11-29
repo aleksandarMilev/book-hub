@@ -4,7 +4,7 @@
     {
         public string Title { get; init; } = null!;
 
-        public int? AuthorId { get; init; }
+        public Guid AuthorId { get; init; }
 
         public string? ImageUrl { get; set; }
 

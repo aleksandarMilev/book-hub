@@ -4,7 +4,7 @@
 
     public class ReadingListWebModel
     {
-        public int BookId { get; init; }
+        public Guid BookId { get; init; }
 
         [Required]
         public string Status { get; init; } = null!;

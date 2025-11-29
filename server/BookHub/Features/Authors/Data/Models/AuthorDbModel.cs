@@ -3,6 +3,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using BookHub.Data.Models.Base;
+using Infrastructure.Services.ImageWriter.Models.Image;
 using Features.Book.Data.Models;
 using Features.Identity.Data.Models;
 using Shared;
@@ -11,7 +12,8 @@ using static Shared.Constants.Validation;
 
 public class AuthorDbModel:
     DeletableEntity<Guid>,
-    IApprovableEntity
+    IApprovableEntity,
+    IImageDdModel
 {
     [Required]
     [MaxLength(NameMaxLength)]
@@ -46,5 +48,5 @@ public class AuthorDbModel:
 
     public bool IsApproved { get; set; }
 
-    public ICollection<Book> Books { get; } = new HashSet<Book>();
+    public ICollection<BookDbModel> Books { get; set; } = new HashSet<BookDbModel>();
 }

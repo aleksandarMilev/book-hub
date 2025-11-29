@@ -71,7 +71,7 @@
         }
 
         public async Task<PaginatedModel<BookServiceModel>> ByAuthor(
-            int authorId, 
+            Guid authorId, 
             int page, 
             int pageSize)
         {
@@ -96,14 +96,14 @@
                 pageSize);
         }
 
-        public async Task<BookDetailsServiceModel?> Details(int id)
+        public async Task<BookDetailsServiceModel?> Details(Guid id)
             => await this.data
                 .Books
                 .AsQueryable()
                 .MapToDetailsModel(this.userService.GetId()!)
                 .FirstOrDefaultAsync(b => b.Id == id);
 
-        public async Task<BookDetailsServiceModel?> AdminDetails(int id)
+        public async Task<BookDetailsServiceModel?> AdminDetails(Guid id)
             => await this.data
                 .Books
                 .IgnoreQueryFilters()
@@ -111,11 +111,11 @@
                 .MapToDetailsModel(this.userService.GetId()!)
                 .FirstOrDefaultAsync(b => b.Id == id);
 
-        public async Task<int> Create(CreateBookServiceModel model)
+        public async Task<Guid> Create(CreateBookServiceModel model)
         {
             model.ImageUrl ??= DefaultImageUrl;
 
-            var book = this.mapper.Map<Book>(model);
+            var book = this.mapper.Map<BookDbModel>(model);
             book.CreatorId = this.userService.GetId();
             book.AuthorId = await this.MapAuthorToBook(model.AuthorId);
 
@@ -135,7 +135,7 @@
             {
                 await this.notificationService.CreateOnEntityCreation(
                     book.Id,
-                    nameof(Book),
+                    nameof(BookDbModel),
                     book.Title,
                     await this.adminService.GetId());
             }
@@ -143,7 +143,7 @@
             return book.Id;
         }
 
-        public async Task<Result> Edit(int id, CreateBookServiceModel model)
+        public async Task<Result> Edit(Guid id, CreateBookServiceModel model)
         {
             var book = await this.data
                  .Books
@@ -153,7 +153,7 @@
             {
                 return string.Format(
                     DbEntityNotFound,
-                    nameof(Book),
+                    nameof(BookDbModel),
                     id);
             }
 
@@ -164,7 +164,7 @@
                 return string.Format(
                     UnauthorizedDbEntityAction,
                     this.userService.GetUsername(),
-                    nameof(Book),
+                    nameof(BookDbModel),
                     id);
             }
 
@@ -179,7 +179,7 @@
             return true;
         }
 
-        public async Task<Result> Delete(int id)
+        public async Task<Result> Delete(Guid id)
         {
             var book = await this.data
                  .Books
@@ -189,7 +189,7 @@
             {
                 return string.Format(
                     DbEntityNotFound,
-                    nameof(Book),
+                    nameof(BookDbModel),
                     id);
             }
 
@@ -201,7 +201,7 @@
                 return string.Format(
                     UnauthorizedDbEntityAction,
                     this.userService.GetUsername(),
-                    nameof(Book),
+                    nameof(BookDbModel),
                     id);
             }
 
@@ -211,7 +211,7 @@
             return true;
         }
 
-        public async Task<Result> Approve(int id)
+        public async Task<Result> Approve(Guid id)
         {
             var book = await this.data
                  .Books
@@ -223,7 +223,7 @@
             {
                 return string.Format(
                     DbEntityNotFound,
-                    nameof(Book),
+                    nameof(BookDbModel),
                     id);
             }
 
@@ -232,7 +232,7 @@
 
             await this.notificationService.CreateOnEntityApprovalStatusChange(
                 id,
-                nameof(Book),
+                nameof(BookDbModel),
                 book.Title,
                 book.CreatorId!,
                 true);
@@ -245,7 +245,7 @@
             return true;
         }
 
-        public async Task<Result> Reject(int id)
+        public async Task<Result> Reject(Guid id)
         {
             var book = await this.data
                  .Books
@@ -257,7 +257,7 @@
             {
                 return string.Format(
                     DbEntityNotFound,
-                    nameof(Book),
+                    nameof(BookDbModel),
                     id);
             }
 
@@ -266,7 +266,7 @@
 
             await this.notificationService.CreateOnEntityApprovalStatusChange(
                 id,
-                nameof(Book),
+                nameof(BookDbModel),
                 book.Title,
                 book.CreatorId!,
                 false);
@@ -274,23 +274,23 @@
             return true;
         }
 
-        private async Task<int?> MapAuthorToBook(int? id) 
+        private async Task<Guid> MapAuthorToBook(Guid id) 
         {
             var authorId = await this.data
                 .Authors
                 .Select(a => a.Id)
                 .FirstOrDefaultAsync(a => a == id);
 
-            if (authorId == 0)
+            if (authorId == Guid.Empty)
             {
-                return null;
+                return Guid.Empty;
             }
 
             return authorId;
         }
 
         private async Task MapBookAndGenres(
-            int bookId, 
+            Guid bookId, 
             IEnumerable<int> genreIds)
         {
             await this.RemoveExistingBookGenres(bookId);
@@ -336,7 +336,7 @@
             await this.data.SaveChangesAsync();
         }
 
-        private async Task<bool> BookGenreExists(int bookId, int genreId)
+        private async Task<bool> BookGenreExists(Guid bookId, int genreId)
             => await this.data
                 .BooksGenres
                 .AsNoTracking()
@@ -344,7 +344,7 @@
                 bg.BookId == bookId &&
                 bg.GenreId == genreId);
 
-        private async Task RemoveExistingBookGenres(int bookId) 
+        private async Task RemoveExistingBookGenres(Guid bookId) 
         {
             var existingMaps = await this.data
                .BooksGenres

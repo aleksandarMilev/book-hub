@@ -22,7 +22,7 @@
         public User User { get; set; } = null!;
 
         [ForeignKey(nameof(ResourceType))]
-        public int ResourceId { get; init; }
+        public Guid ResourceId { get; init; }
 
         public string ResourceType { get; set; } = null!;
     }

@@ -1,56 +1,69 @@
-﻿namespace BookHub.Features.Authors.Web.User
+﻿namespace BookHub.Features.Authors.Web.User;
+
+using Infrastructure.Extensions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Models;
+using Service;
+using Service.Models;
+using Shared;
+
+using static ApiRoutes;
+using static Common.Constants.ApiRoutes;
+
+[Authorize]
+public class AuthorController(IAuthorService service) : ApiController
 {
-    using Infrastructure.Extensions;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
-    using Models;
-    using Service;
-    using Service.Models;
-    using Shared;
+    [AllowAnonymous]
+    [HttpGet(Author.Top)]
+    public async Task<ActionResult<IEnumerable<AuthorServiceModel>>> TopThree(
+        CancellationToken token = default)
+        => this.Ok(await service.TopThree(token));
 
-    using static ApiRoutes;
-    using static Common.Constants.ApiRoutes;
+    [HttpGet(Author.Names)]
+    public async Task<ActionResult<IEnumerable<AuthorNamesServiceModel>>> Names(
+        CancellationToken token = default)
+        => this.Ok(await service.Names(token));
 
-    [Authorize]
-    public class AuthorController(IAuthorService service) : ApiController
+    [HttpGet(Id, Name = nameof(this.Details))]
+    public async Task<ActionResult<AuthorDetailsServiceModel>> Details(
+        Guid id,
+        CancellationToken token = default)
+        => this.Ok(await service.Details(id, token));
+
+    [HttpPost]
+    public async Task<ActionResult<AuthorDetailsServiceModel>> Create(
+        CreateAuthorWebModel webModel,
+        CancellationToken token = default)
     {
-        [AllowAnonymous]
-        [HttpGet(Author.Top)]
-        public async Task<ActionResult<IEnumerable<AuthorServiceModel>>> TopThree()
-            => this.Ok(await service.TopThree());
+        var serviceModel = webModel.ToCreateServiceModel();
+        var createdAuthor = await service.Create(serviceModel, token);
 
-        [HttpGet(Author.Names)]
-        public async Task<ActionResult<IEnumerable<AuthorNamesServiceModel>>> Names()
-            => this.Ok(await service.Names());
+        return this.CreatedAtRoute(
+            routeName: nameof(this.Details),
+            routeValues: new { id = createdAuthor.Id },
+            value: createdAuthor);
+    }
 
-        [HttpGet(Id)]
-        public async Task<ActionResult<AuthorDetailsServiceModel>> Details(int id)
-            => this.Ok(await this.Details(id));
+    [HttpPut(Id)]
+    public async Task<ActionResult> Edit(
+        Guid id,
+        CreateAuthorWebModel webModel,
+        CancellationToken token = default)
+    {
+        var serviceModel = webModel.ToCreateServiceModel();
+        var result = await service.Edit(id, serviceModel, token);
 
-        [HttpPost]
-        public async Task<ActionResult<int>> Create(CreateAuthorWebModel webModel)
-        {
-            var serviceModel = webModel.ToCreateServiceModel();
-            var authorId = await service.Create(serviceModel);
+        return this.NoContentOrBadRequest(result);
+    }
 
-            return this.Created(nameof(this.Create), authorId);
-        }
+    [HttpDelete(Id)]
+    public async Task<ActionResult> Delete(
+        Guid id,
+        CancellationToken token = default)
+    {
+        var result = await service.Delete(id, token);
 
-        [HttpPut(Id)]
-        public async Task<ActionResult> Edit(int id, CreateAuthorWebModel webModel)
-        {
-            var serviceModel = webModel.ToCreateServiceModel();
-            var result = await service.Edit(id, serviceModel);
-
-            return this.NoContentOrBadRequest(result);
-        }
-
-        [HttpDelete(Id)]
-        public async Task<ActionResult> Delete(int id)
-        {
-            var result = await service.Delete(id);
-
-            return this.NoContentOrBadRequest(result);
-        }
+        return this.NoContentOrBadRequest(result);
     }
 }

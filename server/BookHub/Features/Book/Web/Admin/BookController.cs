@@ -15,11 +15,11 @@
         private readonly IBookService service = service;
 
         [HttpGet(Id)]
-        public async Task<ActionResult<BookDetailsServiceModel>> Details(int id)
+        public async Task<ActionResult<BookDetailsServiceModel>> Details(Guid id)
             => this.Ok(await this.service.AdminDetails(id));
 
         [HttpPatch(Id + ApiRoutes.Approve)]
-        public async Task<ActionResult> Approve(int id)
+        public async Task<ActionResult> Approve(Guid id)
         {
             var result = await this.service.Approve(id);
 
@@ -27,7 +27,7 @@
         }
 
         [HttpPatch(Id + ApiRoutes.Reject)]
-        public async Task<ActionResult> Reject(int id)
+        public async Task<ActionResult> Reject(Guid id)
         {
             var result = await this.service.Reject(id);
 
