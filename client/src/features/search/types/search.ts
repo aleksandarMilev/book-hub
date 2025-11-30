@@ -9,10 +9,10 @@ export type ArticlesSearchResult = {
 };
 
 export type AuthorsSearchResult = {
-  id: number;
+  id: string;
   name: string;
   penName?: string | null;
-  imageUrl: string;
+  imagePath: string;
   averageRating: number;
 };
 

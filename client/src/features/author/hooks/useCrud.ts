@@ -15,7 +15,6 @@ import { IsCanceledError, IsError } from '@/shared/lib/utils/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 import { useMessage } from '@/shared/stores/message/message.js';
 import { HttpError } from '@/shared/types/errors/httpError.js';
-import type { IntId } from '@/shared/types/intId.js';
 
 export const useTopThree = () => {
   const [authors, setAuthors] = useState<Author[]>([]);
@@ -125,7 +124,7 @@ export const useSearchNames = (authors: AuthorNames[]) => {
   };
 };
 
-export const useDetails = (id: IntId | null, disable = false) => {
+export const useDetails = (id?: string) => {
   const { token, isAdmin } = useAuth();
   const [author, setAuthor] = useState<AuthorDetails | null>(null);
   const [isFetching, setIsFetching] = useState(false);
@@ -138,7 +137,7 @@ export const useDetails = (id: IntId | null, disable = false) => {
       try {
         setIsFetching(true);
 
-        if (disable || !id) {
+        if (!id) {
           setError(
             HttpError.with()
               .message(errors.author.byId)
@@ -167,7 +166,7 @@ export const useDetails = (id: IntId | null, disable = false) => {
     void fetchData();
 
     return () => controller.abort();
-  }, [id, token, isAdmin, disable]);
+  }, [id, token, isAdmin]);
 
   return { author, isFetching, error };
 };
@@ -178,14 +177,8 @@ export const useCreate = () => {
 
   const createHandler = useCallback(
     async (authorData: CreateAuthor) => {
-      const authorToSend: CreateAuthor = {
-        ...authorData,
-        penName: authorData.penName || '',
-        imageUrl: authorData.imageUrl || '',
-      };
-
       try {
-        return await api.create(authorToSend, token);
+        return (await api.create(authorData, token)) ?? undefined;
       } catch (error) {
         const message = IsError(error) ? error.message : 'Failed to create author.';
         navigate(routes.badRequest, { state: { message } });
@@ -204,15 +197,9 @@ export const useEdit = () => {
   const navigate = useNavigate();
 
   const editHandler = useCallback(
-    async (id: number, authorData: CreateAuthor) => {
-      const authorToSend: CreateAuthor = {
-        ...authorData,
-        penName: authorData.penName || '',
-        imageUrl: authorData.imageUrl || '',
-      };
-
+    async (id: string, authorData: CreateAuthor) => {
       try {
-        await api.edit(id, authorToSend, token);
+        await api.edit(id, authorData, token);
       } catch (error) {
         const message = IsError(error) ? error.message : 'Failed to edit author.';
         navigate(routes.badRequest, { state: { message } });
@@ -224,7 +211,7 @@ export const useEdit = () => {
   return editHandler;
 };
 
-export const useRemove = (id: IntId | null, disable = false, name?: string) => {
+export const useRemove = (id?: string, name?: string) => {
   const { token } = useAuth();
   const navigate = useNavigate();
   const { showMessage } = useMessage();
@@ -233,7 +220,7 @@ export const useRemove = (id: IntId | null, disable = false, name?: string) => {
   const toggleModal = useCallback(() => setShowModal((prev) => !prev), []);
 
   const deleteHandler = useCallback(async () => {
-    if (disable || !id) {
+    if (!id) {
       return;
     }
 
@@ -245,7 +232,7 @@ export const useRemove = (id: IntId | null, disable = false, name?: string) => {
     const controller = new AbortController();
 
     try {
-      await api.remove(id, token);
+      await api.remove(id, token, controller.signal);
 
       showMessage(`${name || 'This author'} was successfully deleted!`, true);
       navigate(routes.home);
@@ -260,7 +247,7 @@ export const useRemove = (id: IntId | null, disable = false, name?: string) => {
       toggleModal();
       controller.abort();
     }
-  }, [showModal, id, token, name, navigate, showMessage, toggleModal, disable]);
+  }, [showModal, id, token, name, navigate, showMessage, toggleModal]);
 
   return { showModal, toggleModal, deleteHandler };
 };

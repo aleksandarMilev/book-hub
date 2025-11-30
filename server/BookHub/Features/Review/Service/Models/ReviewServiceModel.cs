@@ -20,6 +20,6 @@
 
         public string? ModifiedOn { get; init; }
 
-        public int BookId { get; init; }
+        public Guid BookId { get; init; }
     }
 }

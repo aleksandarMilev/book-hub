@@ -1,8 +1,9 @@
 ﻿namespace BookHub.Features.Authors.Service.Models;
 
+using Infrastructure.Services.ImageWriter.Models.Image;
 using Shared;
 
-public class CreateAuthorServiceModel
+public class CreateAuthorServiceModel : IImageServiceModel
 {
     public string Name { get; init; } = null!;
 

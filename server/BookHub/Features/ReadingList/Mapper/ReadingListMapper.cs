@@ -13,7 +13,7 @@
         {
             this.CreateMap<Genre, GenreNameServiceModel>();
 
-            this.CreateMap<Book, BookServiceModel>();
+            this.CreateMap<BookDbModel, BookServiceModel>();
 
             this.CreateMap<ReadingList, BookServiceModel>()
                 .IncludeMembers(rl => rl.Book);

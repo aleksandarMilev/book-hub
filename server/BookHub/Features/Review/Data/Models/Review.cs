@@ -22,9 +22,9 @@
         public User Creator { get; set; } = null!;
 
         [ForeignKey(nameof(Book))]
-        public int BookId { get; set; }
+        public Guid BookId { get; set; }
 
-        public Book Book { get; set; } = null!;
+        public BookDbModel Book { get; set; } = null!;
 
         public ICollection<Vote> Votes { get; set; } = new HashSet<Vote>();
     }

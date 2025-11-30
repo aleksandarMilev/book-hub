@@ -1,39 +1,52 @@
 .author-intro-card {
-  background-color: #f0f0f0;
-  padding: 1.5rem;
-  margin-top: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Inter', sans-serif;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  padding: 1.6rem 1.8rem;
+  margin-top: 1.8rem;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
 }
 
 .author-intro-title {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.8rem;
-  color: #333;
+  font-size: 1.4rem;
   font-weight: 700;
-  text-align: center;
-  margin-bottom: 1.5rem;
+  color: #3b2c4f;
+  margin-bottom: 1.2rem;
 }
 
 .author-intro-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1.5rem;
+  justify-content: flex-start;
+  margin-bottom: 1.2rem;
 }
 
 .author-intro-image-container {
   display: flex;
   align-items: center;
+  gap: 18px;
 }
 
-.author-intro-image {
-  max-width: 120px;
+.author-intro-card .author-details-image {
+  max-width: 90px;
+  height: 90px;
   object-fit: cover;
-  margin-right: 20px;
-  border: 3px solid #ddd;
   border-radius: 50%;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  border: 3px solid #ffffff;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.author-intro-card .author-details-image-placeholder {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: #f3f3f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9da3b0;
+  font-size: 0.85rem;
 }
 
 .author-intro-info {
@@ -41,51 +54,58 @@
   flex-direction: column;
 }
 
-.author-name {
-  font-weight: 600;
-  color: #333;
+.author-intro-card .author-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #182334;
+  margin-bottom: 4px;
 }
 
 .author-books-count {
   display: flex;
   align-items: center;
   color: #6c757d;
+  font-size: 0.95rem;
 }
 
 .author-book-icon {
-  margin-right: 5px;
+  margin-right: 6px;
 }
 
 .author-intro-bio {
   position: relative;
-  max-height: 200px;
-  overflow: hidden;
-  padding-bottom: 20px;
-  display: flex;
-  flex-direction: column;
 }
 
 .author-bio-text {
   line-height: 1.7;
-  position: relative;
-  z-index: 1;
-  max-width: calc(100% - 120px);
+  font-size: 0.98rem;
+  color: #2f343c;
   margin-bottom: 0;
 }
 
 .see-more {
-  color: #007bff;
-  font-weight: bold;
-  display: inline;
+  color: #6f42c1;
+  font-weight: 600;
 }
 
 .see-more-link {
-  font-weight: bold;
-  color: #007bff;
+  font-weight: 600;
+  color: #6ea8fe;
   text-decoration: none;
-  margin-left: 5px;
+  margin-left: 4px;
 }
 
 .see-more-link:hover {
   text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .author-intro-card {
+    padding: 1.3rem 1.4rem;
+  }
+
+  .author-intro-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

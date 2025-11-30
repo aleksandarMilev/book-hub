@@ -1,0 +1,120 @@
+{
+  "details": {
+    "breadcrumb": {
+      "home": "Home",
+      "list": "Authors"
+    },
+    "image": {
+      "noImage": "No image available for this author"
+    },
+    "penName": "Pen name: {{penName}}",
+    "birth": {
+      "label": "Born:",
+      "unknown": "Unknown",
+      "ageSuffix": " ({{age}} years old)"
+    },
+    "death": {
+      "label": "Died:",
+      "unknown": "Unknown",
+      "ageSuffix": " ({{age}} years old)"
+    },
+    "rating": {
+      "label": "Rating:"
+    },
+    "booksPublished": "{{count}} book published",
+    "booksPublished_plural": "{{count}} books published",
+    "booksPublishedNone": "No books by this author",
+    "topBooks": {
+      "title": "Top books",
+      "viewAll": "View all books by {{name}}",
+      "none": "No books available for this author."
+    },
+    "approval": {
+      "alreadyApproved": "This author has been approved.",
+      "approve": "Approve",
+      "reject": "Reject",
+      "approveSuccess": "{{name}} was successfully approved!",
+      "approveFailed": "Approval failed.",
+      "rejectSuccess": "{{name}} was successfully rejected!",
+      "rejectFailed": "Rejection failed."
+    },
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "editLabel": "Edit this author",
+      "deleteLabel": "Delete this author"
+    }
+  },
+  "list": {
+    "searchPlaceholder": "Search authors...",
+    "emptyAlt": "No authors found",
+    "emptyTitle": "We couldn't find any authors",
+    "emptyMessage": "Try adjusting your search terms or exploring our collection for more options.",
+    "unknownAuthor": "Unknown author",
+    "penNameLabel": "Pen name: {{penName}}",
+    "view": "View"
+  },
+  "form": {
+    "titleCreate": "Add a New Author to Support Our Community!",
+    "titleEdit": "Edit Author",
+    "labels": {
+      "name": "Name *",
+      "penName": "Pen name",
+      "image": "Image",
+      "bornAt": "Date of birth",
+      "diedAt": "Date of death (if applicable)",
+      "biography": "Biography"
+    },
+    "placeholders": {
+      "biography": "Write the author's biography here..."
+    },
+    "gender": {
+      "label": "Gender: *",
+      "male": "Male",
+      "female": "Female",
+      "other": "Other"
+    },
+    "nationality": {
+      "label": "Nationality:",
+      "helper": "(select \"unknown\" if you are not sure)",
+      "placeholder": "Search for a nationality...",
+      "loading": "Loading...",
+      "noMatches": "No matches found"
+    },
+    "requiredNote": "Fields marked with * are required",
+    "buttons": {
+      "reset": "Reset all",
+      "submitCreate": "Submit form",
+      "submitEdit": "Update author",
+      "submittingCreate": "Submitting...",
+      "submittingEdit": "Saving..."
+    },
+    "fallbackName": "this author",
+    "messages": {
+      "updateSuccess": "{{name}} was successfully edited!",
+      "createSuccessAdmin": "Author successfully created!",
+      "createSuccessUser": "Thank you for being part of our community! Our admin team will process your author soon.",
+      "operationFailed": "Something went wrong, please try again!"
+    }
+  },
+  "validation": {
+    "fields": {
+      "name": "Name",
+      "penName": "Pen name",
+      "biography": "Biography",
+      "bornAt": "Date of birth",
+      "diedAt": "Date of death",
+      "gender": "Gender",
+      "image": "Image"
+    },
+    "required": "{{field}} is required!",
+    "min": "{{field}} must be at least {{min}} characters long",
+    "max": "{{field}} must be less than {{max}} characters",
+    "datePast": "{{field}} must be in the past",
+    "deathBeforeBirth": "Date of death cannot be earlier than date of birth",
+    "image": {
+      "tooLarge": "The image is too large. Maximum allowed size is 2MB.",
+      "invalidType": "Invalid file type. Allowed types: {{types}}"
+    }
+  }
+}

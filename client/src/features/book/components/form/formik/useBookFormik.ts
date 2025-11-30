@@ -14,7 +14,7 @@ import { useMessage } from '@/shared/stores/message/message.js';
 
 export interface BookFormValues {
   title: string;
-  authorId: number | null;
+  authorId: string;
   imageUrl: string;
   publishedDate: string;
   shortDescription: string;
@@ -50,7 +50,7 @@ export const useBookFormik = ({
   const formik = useFormik<BookFormValues>({
     initialValues: {
       title: bookData?.title ?? '',
-      authorId: (bookData?.author?.id as number | null) ?? null,
+      authorId: 'authorId', //TODO fix author select
       imageUrl: bookData?.imageUrl ?? '',
       publishedDate: bookData?.publishedDate ?? '',
       shortDescription: bookData?.shortDescription ?? '',

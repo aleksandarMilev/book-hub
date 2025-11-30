@@ -12,6 +12,7 @@ import EmptyState from '@/shared/components/empty-state/EmptyState.js';
 import HomePageError from '@/shared/components/errors/home-page/HomePageError.js';
 import { RenderStars } from '@/shared/components/render-stars/RenderStars.js';
 import { routes } from '@/shared/lib/constants/api.js';
+import { getImageUrl } from '@/shared/lib/utils/utils.js';
 
 const TopAuthors: FC = () => {
   const { t } = useTranslation('home');
@@ -53,7 +54,11 @@ const TopAuthors: FC = () => {
               <tr key={a.id} className="author-row">
                 <td>
                   <div className="d-flex align-items-center">
-                    <img src={a.imageUrl ?? undefined} alt={a.name} className="author-image me-3" />
+                    <img
+                      src={getImageUrl(a.imagePath, 'authors')}
+                      alt={a.name}
+                      className="author-image me-3"
+                    />
                     <div>
                       <p className="author-name mb-1">{a.name}</p>
                     </div>

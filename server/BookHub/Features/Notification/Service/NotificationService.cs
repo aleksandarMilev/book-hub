@@ -56,7 +56,7 @@
         }
 
         public async Task<int> CreateOnEntityCreation(
-            int resourceId,
+            Guid resourceId,
             string resourceType,
             string nameProp,
             string receiverId)
@@ -79,7 +79,7 @@
         }
 
         public async Task<int> CreateOnEntityApprovalStatusChange(
-            int resourceId,
+            Guid resourceId,
             string resourceType,
             string nameProp,
             string receiverId,
@@ -107,7 +107,7 @@
         }
 
         public async Task<int> CreateOnChatInvitation(
-            int chatId,
+            Guid chatId,
             string chatName,
             string receiverId)
         {
@@ -129,7 +129,7 @@
         }
 
         public async Task<int> CreateOnChatInvitationStatusChanged(
-            int chatId,
+            Guid chatId,
             string chatName,
             string receiverId,
             bool hasAccepted)

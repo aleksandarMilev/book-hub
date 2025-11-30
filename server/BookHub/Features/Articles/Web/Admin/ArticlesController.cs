@@ -11,7 +11,7 @@ using Shared;
 using static Common.Constants.ApiRoutes;
 using static Shared.Constants.RouteNames;
 
-public class ArticlesController(IArticlesService service) : AdminApiController
+public class ArticlesController(IArticleService service) : AdminApiController
 {
     [HttpGet(Id)]
     public async Task<ActionResult<ArticleDetailsServiceModel>> DetailsForEdit(
@@ -27,7 +27,7 @@ public class ArticlesController(IArticlesService service) : AdminApiController
         var serviceModel = webModel.ToServiceModel();
         var createdArticle = await service.Create(serviceModel, token);
 
-        return CreatedAtRoute(
+        return this.CreatedAtRoute(
             routeName: DetailsRouteName,
             routeValues: new { id = createdArticle.Id },
             value: createdArticle);

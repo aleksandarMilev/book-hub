@@ -9,9 +9,9 @@ using Microsoft.EntityFrameworkCore;
 public class BookGenre
 {
     [ForeignKey(nameof(Book))]
-    public int BookId { get; set; }
+    public Guid BookId { get; set; }
 
-    public Book Book { get; set; } = null!;
+    public BookDbModel Book { get; set; } = null!;
 
     [ForeignKey(nameof(Genre))]
     public int GenreId { get; set; }

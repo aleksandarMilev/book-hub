@@ -4,6 +4,6 @@
     {
         Articles = 0,
         Authors = 1,
-        Nationalities = 2,
+        Books = 2
     }
 }

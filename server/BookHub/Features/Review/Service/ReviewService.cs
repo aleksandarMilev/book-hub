@@ -28,7 +28,7 @@
         private readonly IMapper mapper = mapper;
 
         public async Task<PaginatedModel<ReviewServiceModel>> AllForBook(
-            int bookId,
+            Guid bookId,
             int pageIndex,
             int pageSize)
         {
@@ -175,7 +175,7 @@
         }
 
 
-        private async Task ValidateBookId(int bookId)
+        private async Task ValidateBookId(Guid bookId)
         {
             var id = await this.data
                .Books
@@ -183,15 +183,16 @@
                .Select(b => b.Id)
                .FirstOrDefaultAsync();
 
-            if (id == 0)
+            if (id == Guid.Empty)
             {
-                throw new DbEntityNotFoundException<int>(nameof(Book), bookId);
+                throw new Exception();
+                //throw new DbEntityNotFoundException<int>(nameof(Book), bookId);
             }
         }
 
         private async Task<bool> UserAlreadyReviewedTheBook(
             string userId,
-            int bookId)
+            Guid bookId)
             => await this.data
                 .Reviews
                 .AnyAsync(r => 
@@ -199,7 +200,7 @@
                     r.BookId == bookId);
 
         private async Task CalculateBookRating(
-            int bookId,
+            Guid bookId,
             int newRating,
             int? oldRating = null,
             bool isDeleteMode = false)
@@ -207,7 +208,7 @@
             var book = await this.data
                .Books
                .FindAsync(bookId)
-               ?? throw new DbEntityNotFoundException<int>(nameof(Book), bookId);
+               ?? throw new DbEntityNotFoundException<Guid>(nameof(BookDbModel), bookId);
 
             double newAverageRating;
             var newRatingsCount = isDeleteMode 
@@ -236,7 +237,7 @@
         }
 
         private async Task CalculateAuthorRating(
-            int bookId,
+            Guid bookId,
             int newRating,
             int? oldRating = null,
             bool isDeleteMode = false)
@@ -250,7 +251,7 @@
             var author = await this.data
                .Authors
                .FindAsync(authorId)
-               ?? throw new DbEntityNotFoundException<int?>(nameof(AuthorDbModel), authorId);
+               ?? throw new DbEntityNotFoundException<Guid>(nameof(AuthorDbModel), authorId ?? Guid.Empty); //TODO
 
             double newAverageRating;
             var newRatingsCount = isDeleteMode

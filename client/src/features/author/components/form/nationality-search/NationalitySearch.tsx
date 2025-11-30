@@ -1,15 +1,19 @@
 import type { FormikProps } from 'formik';
 import type { ChangeEvent, FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import type { AuthorFormValues } from '@/features/author/components/form/formik/useAuthorFormik.js';
-import { useSearchNationalities } from '@/features/nationality/hooks/useCrud.js';
-import type { Nationality } from '@/features/nationality/types/nationality.js';
+import type { AuthorFormValues } from '@/features/author/components/form/validation/authorSchema.js';
+import { useSearchNationalities } from '@/features/author/hooks/useNationality.js';
+import type { Nationality } from '@/features/author/types/author.js';
 
-const NationalitySearch: FC<{
+type Props = {
   nationalities: Nationality[];
   loading: boolean;
   formik: FormikProps<AuthorFormValues>;
-}> = ({ nationalities, loading, formik }) => {
+};
+
+const NationalitySearch: FC<Props> = ({ nationalities, loading, formik }) => {
+  const { t } = useTranslation('authors');
   const {
     searchTerm,
     filteredNationalities,
@@ -26,25 +30,26 @@ const NationalitySearch: FC<{
   return (
     <div className="mb-4">
       <h6 className="fw-bold mb-2">
-        Nationality: <span className="fw-normal">{'(select "unknown" if you are not sure)'}</span>
+        {t('form.nationality.label')}{' '}
+        <span className="fw-normal">{t('form.nationality.helper')}</span>
       </h6>
       <input
         type="text"
         id="nationality"
         className="form-control"
-        placeholder="Search for a nationality..."
+        placeholder={t('form.nationality.placeholder')}
         value={searchTerm}
         onChange={handleInputChange}
         onFocus={showDropdownOnFocus}
       />
       {loading ? (
-        <div className="mt-2">Loading...</div>
+        <div className="mt-2">{t('form.nationality.loading')}</div>
       ) : (
         showDropdown &&
         searchTerm && (
           <ul className="list-group mt-2" style={{ maxHeight: '200px', overflowY: 'auto' }}>
             {filteredNationalities.length === 0 ? (
-              <li className="list-group-item">No matches found</li>
+              <li className="list-group-item">{t('form.nationality.noMatches')}</li>
             ) : (
               filteredNationalities.map((n) => (
                 <li

@@ -161,7 +161,8 @@
 
             _ = await this.notificationService
                 .CreateOnChatInvitationStatusChanged(
-                    chatId,
+                    //chatId,
+                    Guid.NewGuid(),
                     chatName,
                     chatCreatorId,
                     true);
@@ -202,7 +203,8 @@
 
             _ = await this.notificationService
                 .CreateOnChatInvitationStatusChanged(
-                    chatId,
+                    //chatId,
+                    Guid.NewGuid(),
                     chatName,
                     chatCreatorId,
                     false);
@@ -233,7 +235,8 @@
             _ = await this.CreateChatUserEntity(chatId, userToInviteId, false);
 
             await this.notificationService.CreateOnChatInvitation(
-                chatId,
+                //chatId,
+                Guid.NewGuid(),
                 chatName,
                 userToInviteId);
 

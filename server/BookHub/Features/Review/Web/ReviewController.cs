@@ -21,7 +21,7 @@
 
         [HttpGet(Id)]
         public async Task<ActionResult<PaginatedModel<ReviewServiceModel>>> AllForBook(
-            int id,
+            Guid id,
             int pageIndex = DefaultPageIndex,
             int pageSize = DefaultPageSize)
             => this.Ok(await this.service.AllForBook(id, pageIndex, pageSize));

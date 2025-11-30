@@ -11,22 +11,28 @@ import {
   MDBRow,
 } from 'mdb-react-ui-kit';
 import { type FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import ReactMarkdown from 'react-markdown';
 import { Link } from 'react-router-dom';
+import remarkGfm from 'remark-gfm';
 
 import ApproveRejectButtons from '@/features/author/components/details/approve-reject-buttons/ApproveRejectButtons.js';
 import { useDetailsPage } from '@/features/author/hooks/useDetailsPage.js';
+import { getNationalityName } from '@/features/author/types/author.js';
+import { formatBiography } from '@/features/author/utils/utils.js';
 import BookListItem from '@/features/book/components/list-item/BookListItem.js';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
 import DeleteModal from '@/shared/components/delete-modal/DeleteModal.js';
 import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect.js';
 import { RenderStars } from '@/shared/components/render-stars/RenderStars.js';
 import { routes } from '@/shared/lib/constants/api.js';
-import { calculateAge, formatIsoDate } from '@/shared/lib/utils/utils.js';
+import { calculateAge, formatIsoDate, getImageUrl } from '@/shared/lib/utils/utils.js';
 
 const AuthorDetails: FC = () => {
+  const { t } = useTranslation('authors');
   const {
-    parsedId,
+    id,
     token,
     isAdmin,
     userId,
@@ -50,78 +56,120 @@ const AuthorDetails: FC = () => {
 
   const isCreator = author.creatorId === userId;
 
+  const bornText = author.bornAt
+    ? formatIsoDate(author.bornAt, t('details.birth.unknown'))
+    : t('details.birth.unknown');
+
+  const diedText = author.diedAt
+    ? formatIsoDate(author.diedAt, t('details.death.unknown'))
+    : t('details.death.unknown');
+
+  const booksCount = author.booksCount ?? 0;
+  const booksText =
+    booksCount > 0
+      ? t('details.booksPublished', { count: booksCount })
+      : t('details.booksPublishedNone');
+
   return (
-    <MDBContainer className="my-5">
+    <MDBContainer className="author-details-page my-5">
       <MDBRow>
-        <MDBCol md="8" className="my-col">
-          <MDBCard>
-            <MDBCardBody>
-              <MDBRow>
-                <MDBCol md="12">
+        <MDBCol md="8" className="author-details-col">
+          <MDBCard className="author-details-card">
+            <MDBCardBody className="author-details-body">
+              <nav aria-label="breadcrumb" className="author-details-breadcrumb">
+                <ol className="breadcrumb mb-2">
+                  <li className="breadcrumb-item">
+                    <Link to={routes.home}>{t('details.breadcrumb.home')}</Link>
+                  </li>
+                  <li className="breadcrumb-item">
+                    <Link to={routes.author}>{t('details.breadcrumb.list')}</Link>
+                  </li>
+                  <li className="breadcrumb-item active" aria-current="page">
+                    {author.name}
+                  </li>
+                </ol>
+              </nav>
+              <MDBRow className="author-header-row align-items-center">
+                <MDBCol
+                  md="4"
+                  className="d-flex justify-content-center justify-content-md-start mb-3 mb-md-0"
+                >
+                  <div className="author-image-container">
+                    {author.imagePath ? (
+                      <img
+                        src={getImageUrl(author.imagePath, 'authors')}
+                        alt={author.name}
+                        className="author-details-image"
+                      />
+                    ) : (
+                      <div className="author-details-image-placeholder">
+                        {t('details.image.noImage')}
+                      </div>
+                    )}
+                  </div>
+                </MDBCol>
+                <MDBCol md="8">
                   <MDBCardTitle className="author-title">{author.name}</MDBCardTitle>
-                  <MDBCardText className="text-muted">
-                    {author.nationality?.name ?? 'Nationality unknown'}
-                    {author.penName ? ` \u00B7 Pen name: ${author.penName}` : ''}
+                  <MDBCardText className="author-subtitle">
+                    {getNationalityName(author.nationality)}
+                    {author.penName &&
+                      ` \u00B7 ${t('details.penName', { penName: author.penName })}`}
                   </MDBCardText>
-                </MDBCol>
-              </MDBRow>
-              <MDBRow>
-                <MDBCol md="12" className="author-image-container">
-                  {author.imageUrl ? (
-                    <img src={author.imageUrl} alt={author.name} className="author-image" />
-                  ) : (
-                    <div className="author-image-placeholder">No Image Available</div>
-                  )}
+                  <div className="author-header-meta">
+                    <div className="author-meta-pill">
+                      <MDBIcon fas icon="star" className="me-2" />
+                      <span className="me-1">{t('details.rating.label')}</span>
+                      <RenderStars rating={author.averageRating ?? 0} />
+                    </div>
+                    <div className="author-meta-pill">
+                      <MDBIcon fas icon="book" className="me-2" />
+                      {booksText}
+                    </div>
+                  </div>
                 </MDBCol>
               </MDBRow>
               <MDBRow>
                 <MDBCol md="12">
-                  <MDBCardText className="author-biography">{author.biography}</MDBCardText>
-                  <MDBCardText className="text-muted">
-                    <strong>Born:</strong>{' '}
-                    {author.bornAt ? formatIsoDate(author.bornAt, 'Unknown') : 'Unknown'}
+                  <div className="author-details-content">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {formatBiography(author.biography)}
+                    </ReactMarkdown>
+                  </div>
+                  <MDBCardText className="text-muted mt-3">
+                    <strong>{t('details.birth.label')}</strong> {bornText}
                     {author.bornAt && !author.diedAt
-                      ? ` (${calculateAge(author.bornAt)} years old)`
+                      ? t('details.birth.ageSuffix', {
+                          age: calculateAge(author.bornAt),
+                        })
                       : ''}
                   </MDBCardText>
                   {author.diedAt && (
                     <MDBCardText className="text-muted">
-                      <strong>Died:</strong> {formatIsoDate(author.diedAt, 'Unknown')}
+                      <strong>{t('details.death.label')}</strong> {diedText}
                       {author.bornAt &&
-                        ` (${calculateAge(author.bornAt, author.diedAt)} years old)`}
+                        t('details.death.ageSuffix', {
+                          age: calculateAge(author.bornAt, author.diedAt),
+                        })}
                     </MDBCardText>
                   )}
                 </MDBCol>
               </MDBRow>
-              <MDBRow className="mt-4">
-                <MDBCol md="6">
-                  <div className="author-meta d-flex align-items-center">
-                    <MDBIcon fas icon="star" className="me-2" />
-                    <span className="me-2">Rating:</span>
-                    <RenderStars rating={author.averageRating ?? 0} />
-                  </div>
-                </MDBCol>
-                <MDBCol md="6">
-                  <div className="author-meta">
-                    <MDBIcon fas icon="book" className="me-2" />
-                    {author.booksCount ?? 0} Books Published
-                  </div>
-                </MDBCol>
-              </MDBRow>
               {(isCreator || isAdmin) && (
-                <div className="d-flex gap-2 mt-4">
+                <div className="author-details-actions d-flex gap-2 mt-4">
                   <Link
-                    to={`${routes.editAuthor}/${parsedId}`}
+                    to={`${routes.editAuthor}/${id}`}
                     className="btn btn-warning d-flex align-items-center gap-2"
+                    aria-label={t('details.actions.editLabel')}
                   >
-                    <FaEdit /> Edit
+                    <FaEdit /> {t('details.actions.edit')}
                   </Link>
                   <button
                     type="button"
                     className="btn btn-danger d-flex align-items-center gap-2"
                     onClick={toggleModal}
+                    aria-label={t('details.actions.deleteLabel')}
                   >
-                    <FaTrash /> Delete
+                    <FaTrash /> {t('details.actions.delete')}
                   </button>
                 </div>
               )}
@@ -138,7 +186,9 @@ const AuthorDetails: FC = () => {
               )}
               <MDBRow className="mt-4">
                 <MDBCol md="12">
-                  <MDBCardTitle className="author-section-title">Top Books</MDBCardTitle>
+                  <MDBCardTitle className="author-section-title">
+                    {t('details.topBooks.title')}
+                  </MDBCardTitle>
                   {author.topBooks && author.topBooks.length > 0 ? (
                     <>
                       {author.topBooks.map((b) => (
@@ -154,12 +204,12 @@ const AuthorDetails: FC = () => {
                             })
                           }
                         >
-                          View all {author.name} books
+                          {t('details.topBooks.viewAll', { name: author.name })}
                         </button>
                       </div>
                     </>
                   ) : (
-                    <MDBCardText>No books available for this author.</MDBCardText>
+                    <MDBCardText>{t('details.topBooks.none')}</MDBCardText>
                   )}
                 </MDBCol>
               </MDBRow>

@@ -1,45 +1,180 @@
-.create-author-container {
-  background-color: #343a40;
+.author-form-container {
+  font-family: 'Inter', sans-serif;
+  padding-top: 30px;
 }
 
-.create-author-card {
-  margin-top: 20px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+.author-form-card {
+  border-radius: 18px;
+  border: none;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
 }
 
-.create-author-image {
-  border-top-left-radius: 15px;
-  border-bottom-left-radius: 15px;
+.author-form-card .card-body {
+  padding: 2.2rem 2.4rem;
 }
 
-.create-author-image {
+.author-form-image {
   width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.create-author-card .form-control {
-  border-radius: 5px;
-  border-color: #ced4da;
+.author-form-card .fw-bold,
+.author-form-title {
+  font-size: 1.9rem;
+  font-weight: 800 !important;
+  color: #3b2c4f;
+  margin-bottom: 25px !important;
 }
 
-.biography-textarea {
-  width: 100%;
+.author-form-card .form-control {
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, 0.85);
+  border: 2px solid transparent !important;
+  padding: 14px 16px !important;
+  font-size: 1rem;
+  transition: 0.25s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.author-form-card .form-control:focus {
+  border-color: #9a6bff !important;
+  box-shadow: 0 0 0 3px rgba(154, 107, 255, 0.25) !important;
+}
+
+.author-form-textarea,
+.author-form-card textarea#biography {
   resize: vertical;
   min-height: 200px;
-  padding: 10px;
-  border-color: #ced4da;
-  border-radius: 5px;
-  line-height: 1.5;
 }
 
-.create-author-card .form-control.is-invalid {
-  border-color: #dc3545;
+.author-form-card .text-danger {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #ff6b6b !important;
 }
 
-.text-danger {
-  font-size: 0.875rem;
-  font-weight: bold;
+.author-form-card .fw-bold.text-danger,
+.author-form-required-note {
+  font-size: 0.9rem;
+  margin-top: 10px;
 }
 
-.fw-bold {
-  font-weight: bold;
+.author-form-card .author-form-gender,
+.author-form-card .author-form-nationality {
+  background: #f7f5ff;
+  border-radius: 14px;
+  padding: 10px 14px;
+  margin-bottom: 18px;
+}
+
+.author-form-card .author-form-gender h6,
+.author-form-card .author-form-nationality h6 {
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6f42c1;
+}
+
+.author-form-nationality-input {
+  border-radius: 10px !important;
+}
+
+.author-form-nationality-dropdown {
+  max-height: 200px;
+  overflow-y: auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+  z-index: 5;
+}
+
+.author-form-nationality-item {
+  cursor: pointer;
+  padding: 10px 14px;
+  font-size: 0.95rem;
+}
+
+.author-form-nationality-item:hover {
+  background: #f3ecff;
+}
+
+.author-form-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.author-form-card .btn {
+  border-radius: 14px;
+  padding: 12px 22px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease,
+    opacity 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: none;
+}
+
+.author-form-card .btn-light {
+  background: #f4f4f6;
+  color: #555;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+.author-form-card .btn-light:hover:not(:disabled) {
+  background: #e7e7ec;
+  transform: translateY(-1px);
+}
+
+.author-form-card .btn-warning {
+  padding: 12px 24px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #6ea8fe, #9a6bff, #ff6ec7);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(154, 107, 255, 0.45);
+  border: none;
+}
+
+.author-form-card .btn-warning:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(154, 107, 255, 0.6);
+}
+
+.author-form-card .btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+@media (max-width: 768px) {
+  .author-form-card .card-body {
+    padding: 1.6rem 1.5rem;
+  }
+
+  .author-form-card .fw-bold,
+  .author-form-title {
+    font-size: 1.6rem;
+  }
+
+  .author-form-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .author-form-card .btn {
+    width: 100%;
+  }
 }

@@ -12,23 +12,30 @@ import {
   MDBRow,
 } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import image from '@/features/author/components/form/assets/create-author.jpg';
-import {
-  type AuthorFormValues,
-  useAuthorFormik,
-} from '@/features/author/components/form/formik/useAuthorFormik.js';
+import { useAuthorFormik } from '@/features/author/components/form/formik/useAuthorFormik.js';
 import GenderRadio from '@/features/author/components/form/gender-radio/GenderRadio.js';
 import NationalitySearch from '@/features/author/components/form/nationality-search/NationalitySearch.js';
+import type { AuthorFormValues } from '@/features/author/components/form/validation/authorSchema.js';
+import { useAll } from '@/features/author/hooks/useNationality.js';
 import type { AuthorDetails } from '@/features/author/types/author.js';
-import { useAll } from '@/features/nationality/hooks/useCrud.js';
 
-const AuthorForm: FC<{ authorData?: AuthorDetails | null; isEditMode?: boolean }> = ({
-  authorData = null,
-  isEditMode = false,
-}) => {
+type Props = { authorData?: AuthorDetails | null; isEditMode?: boolean };
+
+const AuthorForm: FC<Props> = ({ authorData = null, isEditMode = false }) => {
+  const { t } = useTranslation('authors');
   const formik = useAuthorFormik({ authorData, isEditMode });
   const { nationalities, isFetching } = useAll();
+
+  const submitLabel = formik.isSubmitting
+    ? isEditMode
+      ? t('form.buttons.submittingEdit')
+      : t('form.buttons.submittingCreate')
+    : isEditMode
+      ? t('form.buttons.submitEdit')
+      : t('form.buttons.submitCreate');
 
   return (
     <MDBContainer fluid className="author-form-container">
@@ -42,7 +49,7 @@ const AuthorForm: FC<{ authorData?: AuthorDetails | null; isEditMode?: boolean }
               <MDBCol md="6">
                 <MDBCardBody className="text-black d-flex flex-column justify-content-center">
                   <h3 className="mb-5 fw-bold">
-                    {isEditMode ? 'Edit Author' : 'Add a New Author to Support Our Community!'}
+                    {isEditMode ? t('form.titleEdit') : t('form.titleCreate')}
                   </h3>
                   <form onSubmit={formik.handleSubmit}>
                     <MDBCol md="12">
@@ -51,7 +58,7 @@ const AuthorForm: FC<{ authorData?: AuthorDetails | null; isEditMode?: boolean }
                       )}
                       <MDBInput
                         wrapperClass="mb-4"
-                        label="Name *"
+                        label={t('form.labels.name')}
                         size="lg"
                         id="name"
                         type="text"
@@ -62,7 +69,7 @@ const AuthorForm: FC<{ authorData?: AuthorDetails | null; isEditMode?: boolean }
                     <MDBCol md="12">
                       <MDBInput
                         wrapperClass="mb-4"
-                        label="Pen Name"
+                        label={t('form.labels.penName')}
                         size="lg"
                         id="penName"
                         type="text"
@@ -73,20 +80,26 @@ const AuthorForm: FC<{ authorData?: AuthorDetails | null; isEditMode?: boolean }
                       />
                     </MDBCol>
                     <MDBCol md="12">
-                      {formik.touched.imageUrl && formik.errors.imageUrl && (
-                        <div className="text-danger mb-2">{formik.errors.imageUrl}</div>
-                      )}
-                      <MDBInput
-                        wrapperClass="mb-4"
-                        label="Image URL"
-                        size="lg"
-                        id="imageUrl"
-                        type="text"
-                        {...formik.getFieldProps('imageUrl')}
-                        className={
-                          formik.touched.imageUrl && formik.errors.imageUrl ? 'is-invalid' : ''
-                        }
+                      <label htmlFor="image" className="form-label">
+                        {t('form.labels.image')}
+                      </label>
+                      <input
+                        id="image"
+                        name="image"
+                        type="file"
+                        accept=".jpg,.jpeg,.png,.webp,.avif"
+                        className={`form-control ${
+                          formik.touched.image && formik.errors.image ? 'is-invalid' : ''
+                        }`}
+                        onChange={(event) => {
+                          const file = event.currentTarget.files?.[0] ?? null;
+                          formik.setFieldValue('image', file);
+                          formik.setFieldTouched('image', true, false);
+                        }}
                       />
+                      {formik.touched.image && formik.errors.image && (
+                        <div className="text-danger mb-2">{formik.errors.image}</div>
+                      )}
                     </MDBCol>
                     <MDBCol md="12">
                       {formik.touched.bornAt && formik.errors.bornAt && (
@@ -94,7 +107,7 @@ const AuthorForm: FC<{ authorData?: AuthorDetails | null; isEditMode?: boolean }
                       )}
                       <MDBInput
                         wrapperClass="mb-4"
-                        label="Date of Birth"
+                        label={t('form.labels.bornAt')}
                         size="lg"
                         id="bornAt"
                         type="date"
@@ -110,7 +123,7 @@ const AuthorForm: FC<{ authorData?: AuthorDetails | null; isEditMode?: boolean }
                       )}
                       <MDBInput
                         wrapperClass="mb-4"
-                        label="Date of Death (if applicable)"
+                        label={t('form.labels.diedAt')}
                         size="lg"
                         id="diedAt"
                         type="date"
@@ -137,13 +150,13 @@ const AuthorForm: FC<{ authorData?: AuthorDetails | null; isEditMode?: boolean }
                         className={`form-control ${
                           formik.touched.biography && formik.errors.biography ? 'is-invalid' : ''
                         }`}
-                        placeholder="Write the author's biography here..."
+                        placeholder={t('form.placeholders.biography')}
                       />
                     </MDBCol>
-                    <p className="text-danger fw-bold mt-2">Fields marked with * are required</p>
+                    <p className="text-danger fw-bold mt-2">{t('form.requiredNote')}</p>
                     <div className="d-flex justify-content-end pt-3">
                       <MDBBtn color="light" size="lg" type="button" onClick={formik.handleReset}>
-                        Reset All
+                        {t('form.buttons.reset')}
                       </MDBBtn>
                       <MDBBtn
                         className="ms-2"
@@ -152,13 +165,7 @@ const AuthorForm: FC<{ authorData?: AuthorDetails | null; isEditMode?: boolean }
                         type="submit"
                         disabled={formik.isSubmitting}
                       >
-                        {formik.isSubmitting
-                          ? isEditMode
-                            ? 'Saving...'
-                            : 'Submitting...'
-                          : isEditMode
-                            ? 'Update Author'
-                            : 'Submit Form'}
+                        {submitLabel}
                       </MDBBtn>
                     </div>
                   </form>

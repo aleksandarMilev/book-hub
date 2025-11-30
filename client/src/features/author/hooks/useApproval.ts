@@ -11,7 +11,7 @@ export const useAuthorApproval = ({
   token,
   onSuccess,
 }: {
-  authorId: number;
+  authorId: string;
   authorName: string;
   token: string;
   onSuccess: (message: string, success?: boolean) => void;

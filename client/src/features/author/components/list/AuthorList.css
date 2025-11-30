@@ -1,0 +1,77 @@
+.author-list-page {
+  margin-top: 50px;
+  margin-bottom: 60px;
+  font-family: 'Inter', sans-serif;
+}
+
+.author-list-page .search-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0 1.5rem;
+}
+
+.author-list-page .search-bar {
+  width: 100%;
+  max-width: 480px;
+  background: #ffffff;
+  border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.12);
+  padding: 0.15rem 1.1rem;
+  display: flex;
+  align-items: center;
+}
+
+.author-list-page .search-bar input {
+  border: none;
+  outline: none;
+  width: 100%;
+  background: transparent;
+  font-size: 0.95rem;
+}
+
+/* Results container */
+.authors-container {
+  margin-top: 1rem;
+  min-height: 200px;
+}
+
+.authors-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.empty-state {
+  margin-top: 3rem;
+  text-align: center;
+  color: #6c757d;
+}
+
+.empty-state img {
+  max-width: 220px;
+  opacity: 0.8;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  transition:
+    transform 0.25s ease,
+    opacity 0.25s ease;
+}
+
+.empty-state img:hover {
+  transform: translateY(-4px);
+  opacity: 1;
+}
+
+.empty-state h4 {
+  margin-bottom: 0.4rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #3d2d52;
+}
+
+.empty-state p {
+  max-width: 420px;
+  margin: 0 auto;
+  font-size: 0.95rem;
+  color: #666;
+}

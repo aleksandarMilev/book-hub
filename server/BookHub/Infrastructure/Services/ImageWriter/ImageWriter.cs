@@ -12,8 +12,7 @@ public class ImageWriter(
     private static readonly string[] AllowedExtensions = [".jpg", ".jpeg", ".png", ".webp", ".avif"];
     private static readonly string[] AllowedContentTypes = ["image/jpeg", "image/png", "image/webp", "image/avif"];
 
-    public async Task Write<TId>(
-        TId id,
+    public async Task Write(
         string resourceName,
         IImageDdModel dbModel,
         IImageServiceModel serviceModel,
@@ -26,9 +25,8 @@ public class ImageWriter(
             if (!validationResult.Succeeded)
             {
                 logger.LogWarning(
-                    "Invalid image upload for {resourceName} with id: {Id}: {Error}",
+                    "Invalid image upload for {resourceName}. Error: {Error}.",
                     resourceName,
-                    id,
                     validationResult.ErrorMessage);
 
                 throw new InvalidOperationException(validationResult.ErrorMessage);
@@ -45,8 +43,7 @@ public class ImageWriter(
         }
     }
 
-    public void Delete<TId>(
-        TId id,
+    public void Delete(
         string resourceName,
         string? imagePath,
         string? defaultImagePath = null)
@@ -78,9 +75,8 @@ public class ImageWriter(
             {
                 File.Delete(physicalPath);
                 logger.LogInformation(
-                    "Deleted image file for {resourceName} with Id: {id} at path: {Path}",
+                    "Deleted image file for {resourceName} with at path: {Path}",
                     resourceName,
-                    id,
                     physicalPath);
             }
         }
@@ -88,9 +84,8 @@ public class ImageWriter(
         {
             logger.LogWarning(
                 exception,
-                "Failed to delete image file for {resourceName} with Id: {id} at path: {Path}",
+                "Failed to delete image file for {resourceName} at path: {Path}",
                 resourceName,
-                id,
                 imagePath);
         }
     }

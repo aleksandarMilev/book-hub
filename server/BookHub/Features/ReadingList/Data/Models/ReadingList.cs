@@ -18,9 +18,9 @@
         public User User { get; set; } = null!;
 
         [ForeignKey(nameof(Book))]
-        public int BookId { get; set; }
+        public Guid BookId { get; set; }
 
-        public Book Book { get; set; } = null!;
+        public BookDbModel Book { get; set; } = null!;
 
         public ReadingListStatus Status { get; set; }
 

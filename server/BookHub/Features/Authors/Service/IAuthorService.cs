@@ -1,28 +1,43 @@
-﻿namespace BookHub.Features.Authors.Service
+﻿namespace BookHub.Features.Authors.Service;
+
+using Infrastructure.Services.Result;
+using Infrastructure.Services.ServiceLifetimes;
+using Models;
+
+public interface IAuthorService : ITransientService
 {
-    using BookHub.Infrastructure.Services.Result;
-    using Infrastructure.Services;
-    using Infrastructure.Services.ServiceLifetimes;
-    using Models;
+    Task<IEnumerable<AuthorNamesServiceModel>> Names(
+        CancellationToken token = default);
 
-    public interface IAuthorService : ITransientService
-    {
-        Task<IEnumerable<AuthorNamesServiceModel>> Names();
+    Task<IEnumerable<AuthorServiceModel>> TopThree(
+        CancellationToken token = default);
 
-        Task<IEnumerable<AuthorServiceModel>> TopThree();
+    Task<AuthorDetailsServiceModel?> Details(
+        Guid id,
+        CancellationToken token = default);
 
-        Task<AuthorDetailsServiceModel?> Details(int id);
+    Task<AuthorDetailsServiceModel?> AdminDetails(
+        Guid id,
+        CancellationToken token = default);
 
-        Task<AuthorDetailsServiceModel?> AdminDetails(int id);
+    Task<AuthorDetailsServiceModel> Create(
+        CreateAuthorServiceModel serviceModel,
+        CancellationToken token = default);
 
-        Task<int> Create(CreateAuthorServiceModel model);
+    Task<Result> Edit(
+        Guid id,
+        CreateAuthorServiceModel serviceModel,
+        CancellationToken token = default);
 
-        Task<Result> Edit(int id, CreateAuthorServiceModel model);
+    Task<Result> Delete(
+        Guid authorId,
+        CancellationToken token = default);
 
-        Task<Result> Delete(int id);
+    Task<Result> Approve(
+        Guid id,
+        CancellationToken token = default);
+    Task<Result> Reject(
+        Guid id,
+        CancellationToken token = default);
 
-        Task<Result> Approve(int id);
-
-        Task<Result> Reject(int id);
-    }
 }
