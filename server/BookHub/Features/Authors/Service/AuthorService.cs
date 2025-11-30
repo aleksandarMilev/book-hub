@@ -30,14 +30,14 @@
             CancellationToken token = default)
           => await data
               .Authors
-              .Select(ToNamesServiceModelExpression)
+              .ToNamesServiceModels()
               .ToListAsync(token);
 
         public async Task<IEnumerable<AuthorServiceModel>> TopThree(
             CancellationToken token = default)
             => await data
                 .Authors
-                .Select(ToServiceModelExpression)
+                .ToServiceModels()
                 .OrderByDescending(a => a.AverageRating)
                 .Take(3)
                 .ToListAsync(token);
@@ -47,7 +47,7 @@
             CancellationToken token = default)
             => await data
                 .Authors
-                .Select(ToDetailsServiceModelExpression)
+                .ToDetailsServiceModels()
                 .FirstOrDefaultAsync(a => a.Id == id, token);
 
         public async Task<AuthorDetailsServiceModel?> AdminDetails(
@@ -57,7 +57,7 @@
                  .Authors
                  .IgnoreQueryFilters()
                  .ApplyIsDeletedFilter()
-                 .Select(ToDetailsServiceModelExpression)
+                 .ToDetailsServiceModels()
                  .FirstOrDefaultAsync(a => a.Id == id, token);
 
         public async Task<AuthorDetailsServiceModel> Create(
@@ -197,6 +197,10 @@
             dbModel.IsApproved = true;
             await data.SaveChangesAsync(token);
 
+            logger.LogInformation(
+                "Author with Id: {id} was approved.",
+                dbModel.Id);
+
             await notificationService.CreateOnEntityApprovalStatusChange(
                 id,
                 "Author",
@@ -231,6 +235,10 @@
             {
                 return LogAndReturnUnauthorizedMessage(id, userService.GetId()!);
             }
+
+            logger.LogInformation(
+                "Author with Id: {id} was rejected.",
+                dbModel.Id);
 
             await notificationService.CreateOnEntityApprovalStatusChange(
                 id,

@@ -1,0 +1,120 @@
+{
+  "details": {
+    "breadcrumb": {
+      "home": "Начало",
+      "list": "Автори"
+    },
+    "image": {
+      "noImage": "Няма налично изображение за този автор"
+    },
+    "penName": "Псевдоним: {{penName}}",
+    "birth": {
+      "label": "Роден:",
+      "unknown": "Неизвестно",
+      "ageSuffix": " ({{age}} години)"
+    },
+    "death": {
+      "label": "Починал:",
+      "unknown": "Неизвестно",
+      "ageSuffix": " (на {{age}} години)"
+    },
+    "rating": {
+      "label": "Оценка:"
+    },
+    "booksPublished": "Публикувана {{count}} книга",
+    "booksPublished_plural": "Публикувани {{count}} книги",
+    "booksPublishedNone": "Няма налични книги от този автор",
+    "topBooks": {
+      "title": "Топ книги",
+      "viewAll": "Виж всички книги на {{name}}",
+      "none": "Няма налични книги за този автор."
+    },
+    "approval": {
+      "alreadyApproved": "Този автор е одобрен.",
+      "approve": "Одобри",
+      "reject": "Отхвърли",
+      "approveSuccess": "{{name}} беше успешно одобрен!",
+      "approveFailed": "Одобрението е неуспешно.",
+      "rejectSuccess": "{{name}} беше успешно отхвърлен!",
+      "rejectFailed": "Отхвърлянето е неуспешно."
+    },
+    "actions": {
+      "edit": "Редактирай",
+      "delete": "Изтрий",
+      "editLabel": "Редактирай този автор",
+      "deleteLabel": "Изтрий този автор"
+    }
+  },
+  "list": {
+    "searchPlaceholder": "Търсене на автори...",
+    "emptyAlt": "Няма намерени автори",
+    "emptyTitle": "Не открихме автори",
+    "emptyMessage": "Опитайте да промените критериите за търсене или разгледайте колекцията ни.",
+    "unknownAuthor": "Неизвестен автор",
+    "penNameLabel": "Псевдоним: {{penName}}",
+    "view": "Виж"
+  },
+  "form": {
+    "titleCreate": "Добавете нов автор и подкрепете нашата общност!",
+    "titleEdit": "Редакция на автор",
+    "labels": {
+      "name": "Име *",
+      "penName": "Псевдоним",
+      "image": "Снимка",
+      "bornAt": "Дата на раждане",
+      "diedAt": "Дата на смърт (ако е приложимо)",
+      "biography": "Биография"
+    },
+    "placeholders": {
+      "biography": "Опишете биографията на автора тук..."
+    },
+    "gender": {
+      "label": "Пол: *",
+      "male": "Мъж",
+      "female": "Жена",
+      "other": "Друго"
+    },
+    "nationality": {
+      "label": "Националност:",
+      "helper": "(изберете „неизвестно“, ако не сте сигурни)",
+      "placeholder": "Търсене на националност...",
+      "loading": "Зареждане...",
+      "noMatches": "Няма съвпадения"
+    },
+    "requiredNote": "Полетата, отбелязани с *, са задължителни",
+    "buttons": {
+      "reset": "Изчисти",
+      "submitCreate": "Изпрати формуляра",
+      "submitEdit": "Запази промените",
+      "submittingCreate": "Изпращане...",
+      "submittingEdit": "Запазване..."
+    },
+    "fallbackName": "този автор",
+    "messages": {
+      "updateSuccess": "{{name}} беше успешно редактиран!",
+      "createSuccessAdmin": "Авторът беше създаден успешно!",
+      "createSuccessUser": "Благодарим, че сте част от нашата общност! Нашият екип ще прегледа автора скоро.",
+      "operationFailed": "Нещо се обърка, моля опитайте отново!"
+    }
+  },
+  "validation": {
+    "fields": {
+      "name": "Име",
+      "penName": "Псевдоним",
+      "biography": "Биография",
+      "bornAt": "Дата на раждане",
+      "diedAt": "Дата на смърт",
+      "gender": "Пол",
+      "image": "Снимка"
+    },
+    "required": "{{field}} е задължително поле!",
+    "min": "{{field}} трябва да съдържа поне {{min}} символа",
+    "max": "{{field}} трябва да съдържа по-малко от {{max}} символа",
+    "datePast": "{{field}} трябва да е в миналото",
+    "deathBeforeBirth": "Датата на смърт не може да е преди датата на раждане.",
+    "image": {
+      "tooLarge": "Изображението е твърде голямо. Максималният размер е 2MB.",
+      "invalidType": "Невалиден формат на файла. Позволени типове: {{types}}"
+    }
+  }
+}

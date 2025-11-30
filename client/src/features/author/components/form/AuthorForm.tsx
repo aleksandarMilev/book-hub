@@ -12,6 +12,7 @@ import {
   MDBRow,
 } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import image from '@/features/author/components/form/assets/create-author.jpg';
 import { useAuthorFormik } from '@/features/author/components/form/formik/useAuthorFormik.js';
@@ -24,8 +25,17 @@ import type { AuthorDetails } from '@/features/author/types/author.js';
 type Props = { authorData?: AuthorDetails | null; isEditMode?: boolean };
 
 const AuthorForm: FC<Props> = ({ authorData = null, isEditMode = false }) => {
+  const { t } = useTranslation('authors');
   const formik = useAuthorFormik({ authorData, isEditMode });
   const { nationalities, isFetching } = useAll();
+
+  const submitLabel = formik.isSubmitting
+    ? isEditMode
+      ? t('form.buttons.submittingEdit')
+      : t('form.buttons.submittingCreate')
+    : isEditMode
+      ? t('form.buttons.submitEdit')
+      : t('form.buttons.submitCreate');
 
   return (
     <MDBContainer fluid className="author-form-container">
@@ -39,7 +49,7 @@ const AuthorForm: FC<Props> = ({ authorData = null, isEditMode = false }) => {
               <MDBCol md="6">
                 <MDBCardBody className="text-black d-flex flex-column justify-content-center">
                   <h3 className="mb-5 fw-bold">
-                    {isEditMode ? 'Edit Author' : 'Add a New Author to Support Our Community!'}
+                    {isEditMode ? t('form.titleEdit') : t('form.titleCreate')}
                   </h3>
                   <form onSubmit={formik.handleSubmit}>
                     <MDBCol md="12">
@@ -48,7 +58,7 @@ const AuthorForm: FC<Props> = ({ authorData = null, isEditMode = false }) => {
                       )}
                       <MDBInput
                         wrapperClass="mb-4"
-                        label="Name *"
+                        label={t('form.labels.name')}
                         size="lg"
                         id="name"
                         type="text"
@@ -59,7 +69,7 @@ const AuthorForm: FC<Props> = ({ authorData = null, isEditMode = false }) => {
                     <MDBCol md="12">
                       <MDBInput
                         wrapperClass="mb-4"
-                        label="Pen Name"
+                        label={t('form.labels.penName')}
                         size="lg"
                         id="penName"
                         type="text"
@@ -71,7 +81,7 @@ const AuthorForm: FC<Props> = ({ authorData = null, isEditMode = false }) => {
                     </MDBCol>
                     <MDBCol md="12">
                       <label htmlFor="image" className="form-label">
-                        Image
+                        {t('form.labels.image')}
                       </label>
                       <input
                         id="image"
@@ -97,7 +107,7 @@ const AuthorForm: FC<Props> = ({ authorData = null, isEditMode = false }) => {
                       )}
                       <MDBInput
                         wrapperClass="mb-4"
-                        label="Date of Birth"
+                        label={t('form.labels.bornAt')}
                         size="lg"
                         id="bornAt"
                         type="date"
@@ -113,7 +123,7 @@ const AuthorForm: FC<Props> = ({ authorData = null, isEditMode = false }) => {
                       )}
                       <MDBInput
                         wrapperClass="mb-4"
-                        label="Date of Death (if applicable)"
+                        label={t('form.labels.diedAt')}
                         size="lg"
                         id="diedAt"
                         type="date"
@@ -140,13 +150,13 @@ const AuthorForm: FC<Props> = ({ authorData = null, isEditMode = false }) => {
                         className={`form-control ${
                           formik.touched.biography && formik.errors.biography ? 'is-invalid' : ''
                         }`}
-                        placeholder="Write the author's biography here..."
+                        placeholder={t('form.placeholders.biography')}
                       />
                     </MDBCol>
-                    <p className="text-danger fw-bold mt-2">Fields marked with * are required</p>
+                    <p className="text-danger fw-bold mt-2">{t('form.requiredNote')}</p>
                     <div className="d-flex justify-content-end pt-3">
                       <MDBBtn color="light" size="lg" type="button" onClick={formik.handleReset}>
-                        Reset All
+                        {t('form.buttons.reset')}
                       </MDBBtn>
                       <MDBBtn
                         className="ms-2"
@@ -155,13 +165,7 @@ const AuthorForm: FC<Props> = ({ authorData = null, isEditMode = false }) => {
                         type="submit"
                         disabled={formik.isSubmitting}
                       >
-                        {formik.isSubmitting
-                          ? isEditMode
-                            ? 'Saving...'
-                            : 'Submitting...'
-                          : isEditMode
-                            ? 'Update Author'
-                            : 'Submit Form'}
+                        {submitLabel}
                       </MDBBtn>
                     </div>
                   </form>

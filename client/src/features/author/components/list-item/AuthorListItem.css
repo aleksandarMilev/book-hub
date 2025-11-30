@@ -1,29 +1,29 @@
 .author-list-item {
-  transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
+  display: flex;
+  flex-direction: row;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 14px 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  transition:
+    transform 0.28s ease,
+    box-shadow 0.28s ease;
+  animation: authorFadeInUp 0.45s ease forwards;
+  opacity: 0;
 }
 
 .author-list-item:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
 }
 
-.author-list-item-image {
-  width: 100px;
-  height: 100px;
+.author-card-image {
+  width: 110px;
+  height: 110px;
   object-fit: cover;
   border-radius: 50%;
-}
-
-.author-list-item-placeholder {
-  width: 100px;
-  height: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f0f0f0;
-  color: #888;
-  font-size: 1.2rem;
-  border-radius: 50%;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
 }
 
 .author-list-item-content {
@@ -33,14 +33,14 @@
 }
 
 .author-list-item-name {
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: 1.2rem;
+  font-weight: 700;
   color: #1b2838;
 }
 
 .author-list-item-pen-name {
-  font-size: 1rem;
-  color: #555;
+  font-size: 0.95rem;
+  color: #6c757d;
 }
 
 .author-list-item-rating {
@@ -52,13 +52,40 @@
   text-decoration: none;
   font-size: 0.9rem;
   color: #fff;
-  padding: 5px 15px;
-  background-color: #007bff;
+  padding: 8px 18px;
+  background: linear-gradient(90deg, #6ea8fe, #9a6bff);
   border: none;
-  border-radius: 5px;
-  transition: background-color 0.2s ease;
+  border-radius: 999px;
+  transition:
+    background 0.2s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
 .author-list-item-btn:hover {
-  background-color: #0056b3;
+  background: linear-gradient(90deg, #5b93e6, #8251ff);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(154, 107, 255, 0.6);
+}
+
+@media (max-width: 768px) {
+  .author-list-item {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .author-card-image {
+    margin-bottom: 10px;
+  }
+}
+
+@keyframes authorFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

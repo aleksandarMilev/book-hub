@@ -1,8 +1,8 @@
-﻿namespace BookHub.Features.Book.Mapper
+﻿namespace BookHub.Common
 {
-    public static class MapperHelper
+    public static class Utils
     {
-        public static DateTime? ParseDateTime(string? dateTimeString)
+        public static DateTime? StringToDateTime(string? dateTimeString)
         {
             if (string.IsNullOrEmpty(dateTimeString))
             {
@@ -16,6 +16,8 @@
 
             return null;
         }
-    }
 
+        public static string? DateTimeToString(DateTime? dateTime)
+            => dateTime.HasValue ? dateTime.Value.ToString("O") : null;
+    }
 }

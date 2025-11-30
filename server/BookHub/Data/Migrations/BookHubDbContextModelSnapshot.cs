@@ -17,7 +17,7 @@ namespace BookHub.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.22")
+                .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -2172,13 +2172,13 @@ namespace BookHub.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("BookHub.Features.Book.Data.Models.Book", b =>
+            modelBuilder.Entity("BookHub.Features.Book.Data.Models.BookDbModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AuthorId")
+                    b.Property<Guid?>("AuthorId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("AverageRating")
@@ -2199,10 +2199,9 @@ namespace BookHub.Data.Migrations
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ImageUrl")
+                    b.Property<string>("ImagePath")
                         .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsApproved")
                         .HasColumnType("bit");
@@ -2778,98 +2777,6 @@ namespace BookHub.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "user1Id",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "8afe2fc6-1fd0-41a1-9d7c-76a6a7ae35ce",
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "user1@mail.com",
-                            EmailConfirmed = false,
-                            IsDeleted = false,
-                            LockoutEnabled = false,
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "9dd018c8-f6a4-4a8e-961e-a8c8cd04316f",
-                            TwoFactorEnabled = false,
-                            UserName = "user1name"
-                        },
-                        new
-                        {
-                            Id = "user2Id",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "92d5a807-448e-417f-8ab1-84e7b5faed56",
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "user2@mail.com",
-                            EmailConfirmed = false,
-                            IsDeleted = false,
-                            LockoutEnabled = false,
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "9fb74680-fdf0-40c5-a3c7-cafdbe0e05f8",
-                            TwoFactorEnabled = false,
-                            UserName = "user2name"
-                        },
-                        new
-                        {
-                            Id = "user3Id",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "f9c3c9e8-f3f4-4bfd-bfb3-e51039f4287b",
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "user3@mail.com",
-                            EmailConfirmed = false,
-                            IsDeleted = false,
-                            LockoutEnabled = false,
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "71fef20a-1f61-4a3b-b863-00a3d8622e18",
-                            TwoFactorEnabled = false,
-                            UserName = "user3name"
-                        },
-                        new
-                        {
-                            Id = "user4Id",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "34fd5b8a-2bfd-437f-832c-30b88b1a1d1e",
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "user4@mail.com",
-                            EmailConfirmed = false,
-                            IsDeleted = false,
-                            LockoutEnabled = false,
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "648d9fd0-1798-44c8-9fbe-b55b9037ed2e",
-                            TwoFactorEnabled = false,
-                            UserName = "user4name"
-                        },
-                        new
-                        {
-                            Id = "user5Id",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "7bb1cbb2-dde1-40c0-83fa-1a7de0bfb979",
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "user5@mail.com",
-                            EmailConfirmed = false,
-                            IsDeleted = false,
-                            LockoutEnabled = false,
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "170ae4fa-db4c-4773-9a16-ad81cf353038",
-                            TwoFactorEnabled = false,
-                            UserName = "user5name"
-                        },
-                        new
-                        {
-                            Id = "user6Id",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "a9f6bdbe-8ce9-420f-a751-5f55c416a2e2",
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "user6@mail.com",
-                            EmailConfirmed = false,
-                            IsDeleted = false,
-                            LockoutEnabled = false,
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "1fd1f0f6-900c-4dc2-8480-3de45f2fa43d",
-                            TwoFactorEnabled = false,
-                            UserName = "user6name"
-                        });
                 });
 
             modelBuilder.Entity("BookHub.Features.Notification.Data.Models.Notification", b =>
@@ -3050,304 +2957,6 @@ namespace BookHub.Data.Migrations
                     b.HasIndex("ReviewId");
 
                     b.ToTable("Votes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user2Id",
-                            IsUpvote = true,
-                            ReviewId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user3Id",
-                            IsUpvote = true,
-                            ReviewId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user4Id",
-                            IsUpvote = true,
-                            ReviewId = 1
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user5Id",
-                            IsUpvote = true,
-                            ReviewId = 1
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user6Id",
-                            IsUpvote = false,
-                            ReviewId = 1
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user2Id",
-                            IsUpvote = true,
-                            ReviewId = 2
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user3Id",
-                            IsUpvote = true,
-                            ReviewId = 2
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user2Id",
-                            IsUpvote = true,
-                            ReviewId = 15
-                        },
-                        new
-                        {
-                            Id = 9,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user3Id",
-                            IsUpvote = true,
-                            ReviewId = 15
-                        },
-                        new
-                        {
-                            Id = 10,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user4Id",
-                            IsUpvote = true,
-                            ReviewId = 15
-                        },
-                        new
-                        {
-                            Id = 11,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user3Id",
-                            IsUpvote = true,
-                            ReviewId = 15
-                        },
-                        new
-                        {
-                            Id = 12,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user3Id",
-                            IsUpvote = true,
-                            ReviewId = 20
-                        },
-                        new
-                        {
-                            Id = 13,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user3Id",
-                            IsUpvote = true,
-                            ReviewId = 20
-                        },
-                        new
-                        {
-                            Id = 14,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user3Id",
-                            IsUpvote = true,
-                            ReviewId = 20
-                        },
-                        new
-                        {
-                            Id = 15,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user2Id",
-                            IsUpvote = true,
-                            ReviewId = 26
-                        },
-                        new
-                        {
-                            Id = 16,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user3Id",
-                            IsUpvote = true,
-                            ReviewId = 26
-                        },
-                        new
-                        {
-                            Id = 17,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user4Id",
-                            IsUpvote = true,
-                            ReviewId = 26
-                        },
-                        new
-                        {
-                            Id = 18,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user1Id",
-                            IsUpvote = true,
-                            ReviewId = 32
-                        },
-                        new
-                        {
-                            Id = 19,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user2Id",
-                            IsUpvote = true,
-                            ReviewId = 32
-                        },
-                        new
-                        {
-                            Id = 20,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user3Id",
-                            IsUpvote = true,
-                            ReviewId = 32
-                        },
-                        new
-                        {
-                            Id = 21,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user4Id",
-                            IsUpvote = true,
-                            ReviewId = 32
-                        },
-                        new
-                        {
-                            Id = 22,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user5Id",
-                            IsUpvote = true,
-                            ReviewId = 32
-                        },
-                        new
-                        {
-                            Id = 23,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user6Id",
-                            IsUpvote = false,
-                            ReviewId = 32
-                        },
-                        new
-                        {
-                            Id = 24,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user1Id",
-                            IsUpvote = true,
-                            ReviewId = 37
-                        },
-                        new
-                        {
-                            Id = 25,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user2Id",
-                            IsUpvote = true,
-                            ReviewId = 37
-                        },
-                        new
-                        {
-                            Id = 26,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user3Id",
-                            IsUpvote = true,
-                            ReviewId = 37
-                        },
-                        new
-                        {
-                            Id = 27,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user1Id",
-                            IsUpvote = true,
-                            ReviewId = 41
-                        },
-                        new
-                        {
-                            Id = 28,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user2Id",
-                            IsUpvote = true,
-                            ReviewId = 41
-                        },
-                        new
-                        {
-                            Id = 29,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user3Id",
-                            IsUpvote = true,
-                            ReviewId = 41
-                        },
-                        new
-                        {
-                            Id = 30,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user1Id",
-                            IsUpvote = true,
-                            ReviewId = 43
-                        },
-                        new
-                        {
-                            Id = 31,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user2Id",
-                            IsUpvote = true,
-                            ReviewId = 43
-                        },
-                        new
-                        {
-                            Id = 32,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user3Id",
-                            IsUpvote = true,
-                            ReviewId = 43
-                        },
-                        new
-                        {
-                            Id = 33,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user2Id",
-                            IsUpvote = true,
-                            ReviewId = 49
-                        },
-                        new
-                        {
-                            Id = 34,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user2Id",
-                            IsUpvote = true,
-                            ReviewId = 53
-                        },
-                        new
-                        {
-                            Id = 35,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user2Id",
-                            IsUpvote = true,
-                            ReviewId = 56
-                        },
-                        new
-                        {
-                            Id = 36,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user2Id",
-                            IsUpvote = true,
-                            ReviewId = 60
-                        },
-                        new
-                        {
-                            Id = 37,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = "user2Id",
-                            IsUpvote = true,
-                            ReviewId = 63
-                        });
                 });
 
             modelBuilder.Entity("BookHub.Features.UserProfile.Data.Models.UserProfile", b =>
@@ -3422,65 +3031,6 @@ namespace BookHub.Data.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Profiles");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "user1Id",
-                            Biography = "John is a passionate reader and a book reviewer.",
-                            CreatedAuthorsCount = 0,
-                            CreatedBooksCount = 0,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CurrentlyReadingBooksCount = 1,
-                            DateOfBirth = new DateTime(1990, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "John",
-                            ImageUrl = "https://www.shareicon.net/data/512x512/2016/05/24/770117_people_512x512.png",
-                            IsPrivate = false,
-                            LastName = "Doe",
-                            PhoneNumber = "+1234567890",
-                            ReadBooksCount = 3,
-                            ReviewsCount = 15,
-                            SocialMediaUrl = "https://twitter.com/johndoe",
-                            ToReadBooksCount = 2
-                        },
-                        new
-                        {
-                            UserId = "user2Id",
-                            Biography = "Alice enjoys exploring fantasy and sci-fi genres.",
-                            CreatedAuthorsCount = 0,
-                            CreatedBooksCount = 0,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CurrentlyReadingBooksCount = 1,
-                            DateOfBirth = new DateTime(1985, 7, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "Alice",
-                            ImageUrl = "https://static.vecteezy.com/system/resources/previews/002/002/257/non_2x/beautiful-woman-avatar-character-icon-free-vector.jpg",
-                            IsPrivate = false,
-                            LastName = "Smith",
-                            PhoneNumber = "+1987654321",
-                            ReadBooksCount = 3,
-                            ReviewsCount = 15,
-                            SocialMediaUrl = "https://facebook.com/alicesmith",
-                            ToReadBooksCount = 1
-                        },
-                        new
-                        {
-                            UserId = "user3Id",
-                            Biography = "Bob is a new reader with a love for thrillers and mysteries.",
-                            CreatedAuthorsCount = 0,
-                            CreatedBooksCount = 0,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CurrentlyReadingBooksCount = 2,
-                            DateOfBirth = new DateTime(2000, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "Bob",
-                            ImageUrl = "https://cdn1.iconfinder.com/data/icons/user-pictures/101/malecostume-512.png",
-                            IsPrivate = false,
-                            LastName = "Johnson",
-                            PhoneNumber = "+1122334455",
-                            ReadBooksCount = 3,
-                            ReviewsCount = 14,
-                            SocialMediaUrl = "https://instagram.com/bobjohnson",
-                            ToReadBooksCount = 1
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -3618,7 +3168,7 @@ namespace BookHub.Data.Migrations
 
             modelBuilder.Entity("BookHub.Data.Models.Shared.BookGenre.BookGenre", b =>
                 {
-                    b.HasOne("BookHub.Features.Book.Data.Models.Book", "Book")
+                    b.HasOne("BookHub.Features.Book.Data.Models.BookDbModel", "Book")
                         .WithMany("BooksGenres")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3663,13 +3213,11 @@ namespace BookHub.Data.Migrations
                     b.Navigation("Creator");
                 });
 
-            modelBuilder.Entity("BookHub.Features.Book.Data.Models.Book", b =>
+            modelBuilder.Entity("BookHub.Features.Book.Data.Models.BookDbModel", b =>
                 {
                     b.HasOne("BookHub.Features.Authors.Data.Models.AuthorDbModel", "Author")
                         .WithMany("Books")
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AuthorId");
 
                     b.HasOne("BookHub.Features.Identity.Data.Models.User", "Creator")
                         .WithMany("Books")
@@ -3721,7 +3269,7 @@ namespace BookHub.Data.Migrations
 
             modelBuilder.Entity("BookHub.Features.ReadingList.Data.Models.ReadingList", b =>
                 {
-                    b.HasOne("BookHub.Features.Book.Data.Models.Book", "Book")
+                    b.HasOne("BookHub.Features.Book.Data.Models.BookDbModel", "Book")
                         .WithMany("ReadingLists")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3740,7 +3288,7 @@ namespace BookHub.Data.Migrations
 
             modelBuilder.Entity("BookHub.Features.Review.Data.Models.Review", b =>
                 {
-                    b.HasOne("BookHub.Features.Book.Data.Models.Book", "Book")
+                    b.HasOne("BookHub.Features.Book.Data.Models.BookDbModel", "Book")
                         .WithMany("Reviews")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3843,7 +3391,7 @@ namespace BookHub.Data.Migrations
                     b.Navigation("Books");
                 });
 
-            modelBuilder.Entity("BookHub.Features.Book.Data.Models.Book", b =>
+            modelBuilder.Entity("BookHub.Features.Book.Data.Models.BookDbModel", b =>
                 {
                     b.Navigation("BooksGenres");
 

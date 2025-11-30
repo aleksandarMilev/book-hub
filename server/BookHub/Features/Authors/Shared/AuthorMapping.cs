@@ -1,10 +1,12 @@
 ﻿namespace BookHub.Features.Authors.Shared;
 
-using System.Linq.Expressions;
-using Web.User.Models;
 using Data.Models;
-using Features.Book.Shared;
+using Features.Book.Service.Models;
+using Features.Genre.Service.Models;
 using Service.Models;
+using Web.User.Models;
+
+using static Common.Utils;
 
 public static class AuthorMapping
 {
@@ -22,25 +24,13 @@ public static class AuthorMapping
             Nationality = webModel.Nationality
         };
 
-    public static Expression<Func<AuthorDbModel, AuthorNamesServiceModel>> ToNamesServiceModelExpression =>
-        dbModel => new()
+    public static IQueryable<AuthorNamesServiceModel> ToNamesServiceModels(
+        this IQueryable<AuthorDbModel> authors)
+        => authors.Select(a => new AuthorNamesServiceModel 
         {
-            Id = dbModel.Id,
-            Name = dbModel.Name,
-        };
-
-    public static void UpdateDbModel(
-        this CreateAuthorServiceModel serviceModel,
-        AuthorDbModel dbModel)
-    {
-        dbModel.Name = serviceModel.Name;
-        dbModel.Biography = serviceModel.Biography;
-        dbModel.PenName = serviceModel.PenName;
-        dbModel.Nationality = serviceModel.Nationality;
-        dbModel.Gender = serviceModel.Gender;
-        dbModel.BornAt = StringToDateTime(serviceModel.BornAt);
-        dbModel.DiedAt = StringToDateTime(serviceModel.DiedAt);
-    }
+            Id = a.Id,
+            Name = a.Name,
+        });
 
     public static AuthorServiceModel ToServiceModel(
         this AuthorDbModel dbModel)
@@ -50,20 +40,21 @@ public static class AuthorMapping
             Name = dbModel.Name,
             ImagePath = dbModel.ImagePath,
             Biography = dbModel.Biography,
-            BooksCount = dbModel.Books.Count(),
+            BooksCount = dbModel.Books.Count,
             AverageRating = dbModel.AverageRating,
         };
 
-    public static Expression<Func<AuthorDbModel, AuthorServiceModel>> ToServiceModelExpression =>
-        dbModel => new()
+    public static IQueryable<AuthorServiceModel> ToServiceModels(
+        this IQueryable<AuthorDbModel> authors)
+        => authors.Select(a => new AuthorServiceModel
         {
-            Id = dbModel.Id,
-            Name = dbModel.Name,
-            ImagePath = dbModel.ImagePath,
-            Biography = dbModel.Biography,
-            BooksCount = dbModel.Books.Count(),
-            AverageRating = dbModel.AverageRating,
-        };
+            Id = a.Id,
+            Name = a.Name,
+            ImagePath = a.ImagePath,
+            Biography = a.Biography,
+            BooksCount = a.Books.Count,
+            AverageRating = a.AverageRating,
+        });
 
     public static AuthorDetailsServiceModel ToDetailsServiceModel(
         this AuthorDbModel dbModel)
@@ -73,7 +64,7 @@ public static class AuthorMapping
             Name = dbModel.Name,
             ImagePath = dbModel.ImagePath,
             Biography = dbModel.Biography,
-            BooksCount = dbModel.Books.Count(),
+            BooksCount = dbModel.Books.Count,
             PenName = dbModel.PenName,
             AverageRating = dbModel.AverageRating,
             Nationality = dbModel.Nationality,
@@ -85,30 +76,65 @@ public static class AuthorMapping
             TopBooks = dbModel
                 .Books
                 .Take(3)
-                .Select(BookMapping.ToServiceModelExpression)
+                .Select(b => new BookServiceModel
+                {
+                    Id = b.Id,
+                    Title = b.Title,
+                    AuthorName = b.Author == null ? null : b.Author.Name,
+                    ImagePath = b.ImagePath,
+                    ShortDescription = b.ShortDescription,
+                    AverageRating = b.AverageRating,
+                    Genres = b
+                    .BooksGenres
+                    .Select(bg => new GenreNameServiceModel
+                    {
+                        Id = bg.GenreId,
+                        Name = bg.Genre.Name
+                    })
+                    .ToHashSet()
+                })
+                .ToList(),
         };
 
-    public static Expression<Func<AuthorDbModel, AuthorDetailsServiceModel>> ToDetailsServiceModelExpression =>
-        dbModel => new()
+    public static IQueryable<AuthorDetailsServiceModel> ToDetailsServiceModels(
+        this IQueryable<AuthorDbModel> authors)
+        => authors.Select(a => new AuthorDetailsServiceModel
         {
-            Id = dbModel.Id,
-            Name = dbModel.Name,
-            ImagePath = dbModel.ImagePath,
-            Biography = dbModel.Biography,
-            BooksCount = dbModel.Books.Count(),
-            PenName = dbModel.PenName,
-            AverageRating = dbModel.AverageRating,
-            Nationality = dbModel.Nationality,
-            Gender = dbModel.Gender,
-            BornAt = dbModel.BornAt != null ? dbModel.BornAt.ToString() : null,
-            DiedAt = dbModel.DiedAt != null ? dbModel.DiedAt.ToString() : null,
-            CreatorId = dbModel.CreatorId,
-            IsApproved = dbModel.IsApproved,
-            TopBooks = dbModel
+            Id = a.Id,
+            Name = a.Name,
+            ImagePath = a.ImagePath,
+            Biography = a.Biography,
+            BooksCount = a.Books.Count,
+            PenName = a.PenName,
+            AverageRating = a.AverageRating,
+            Nationality = a.Nationality,
+            Gender = a.Gender,
+            BornAt = DateTimeToString(a.BornAt),
+            DiedAt = DateTimeToString(a.DiedAt),
+            CreatorId = a.CreatorId,
+            IsApproved = a.IsApproved,
+            TopBooks = a
                 .Books
                 .Take(3)
-                .Select(BookMapping.ToServiceModelExpression),
-        };
+                .Select(b => new BookServiceModel
+                {
+                    Id = b.Id,
+                    Title = b.Title,
+                    AuthorName = b.Author == null ? null : b.Author.Name,
+                    ImagePath = b.ImagePath,
+                    ShortDescription = b.ShortDescription,
+                    AverageRating = b.AverageRating,
+                    Genres = b
+                    .BooksGenres
+                    .Select(bg => new GenreNameServiceModel
+                    {
+                        Id = bg.GenreId,
+                        Name = bg.Genre.Name
+                    })
+                    .ToHashSet()
+                })
+                .ToList(),
+        });
 
     public static AuthorDbModel ToDbModel(
         this CreateAuthorServiceModel serviceModel)
@@ -123,21 +149,16 @@ public static class AuthorMapping
         DiedAt = StringToDateTime(serviceModel.DiedAt)
     };
 
-    private static DateTime? StringToDateTime(string? dateTimeString)
+    public static void UpdateDbModel(
+        this CreateAuthorServiceModel serviceModel,
+        AuthorDbModel dbModel)
     {
-        if (string.IsNullOrEmpty(dateTimeString))
-        {
-            return null;
-        }
-
-        if (DateTime.TryParse(dateTimeString, out DateTime result))
-        {
-            return result;
-        }
-
-        return null;
+        dbModel.Name = serviceModel.Name;
+        dbModel.Biography = serviceModel.Biography;
+        dbModel.PenName = serviceModel.PenName;
+        dbModel.Nationality = serviceModel.Nationality;
+        dbModel.Gender = serviceModel.Gender;
+        dbModel.BornAt = StringToDateTime(serviceModel.BornAt);
+        dbModel.DiedAt = StringToDateTime(serviceModel.DiedAt);
     }
-
-    private static string? DateTimeToString(DateTime? dateTime)
-        => dateTime.HasValue ? dateTime.Value.ToString("O") : null;
 }

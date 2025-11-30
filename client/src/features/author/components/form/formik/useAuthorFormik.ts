@@ -1,4 +1,5 @@
 import { useFormik } from 'formik';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -8,7 +9,7 @@ import {
 import { useCreate, useEdit } from '@/features/author/hooks/useCrud.js';
 import type { AuthorDetails, CreateAuthor } from '@/features/author/types/author.js';
 import { routes } from '@/shared/lib/constants/api.js';
-import { IsError } from '@/shared/lib/utils/utils.js';
+import { IsError, slugify } from '@/shared/lib/utils/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 import { useMessage } from '@/shared/stores/message/message.js';
 
@@ -21,6 +22,7 @@ export const useAuthorFormik = ({ authorData = null, isEditMode = false }: Props
   const { isAdmin } = useAuth();
   const navigate = useNavigate();
   const { showMessage } = useMessage();
+  const { t } = useTranslation('authors');
 
   const createHandler = useCreate();
   const editHandler = useEdit();
@@ -72,25 +74,30 @@ export const useAuthorFormik = ({ authorData = null, isEditMode = false }: Props
         if (authorData && isEditMode) {
           await editHandler(authorData.id, payload);
 
-          showMessage(`${authorData.name || 'This author'} was successfully edited!`, true);
-          navigate(`${routes.author}/${authorData.id}`, { replace: true });
+          const nameForMessage = authorData.name || t('form.fallbackName');
+          showMessage(t('form.messages.updateSuccess', { name: nameForMessage }), true);
+
+          navigate(`${routes.author}/${authorData.id}/${slugify(payload.name)}`, { replace: true });
         } else {
           const created = await createHandler(payload);
 
           if (created) {
-            showMessage(
-              isAdmin
-                ? 'Author successfully created!'
-                : 'Thank you for being part of our community! Our admin team will process your author soon.',
-              true,
-            );
+            const nameForMessage = payload.name || t('form.fallbackName');
+            const messageKey = isAdmin
+              ? 'form.messages.createSuccessAdmin'
+              : 'form.messages.createSuccessUser';
 
-            navigate(isAdmin ? `${routes.author}/${created.id}` : routes.home, { replace: true });
+            showMessage(t(messageKey, { name: nameForMessage }), true);
+
+            navigate(
+              isAdmin ? `${routes.author}/${created.id}/${slugify(payload.name)}` : routes.home,
+              { replace: true },
+            );
             resetForm();
           }
         }
       } catch (error) {
-        const message = IsError(error) ? error.message : 'Something went wrong, please try again!';
+        const message = IsError(error) ? error.message : t('form.messages.operationFailed');
         showMessage(message, false);
       }
     },

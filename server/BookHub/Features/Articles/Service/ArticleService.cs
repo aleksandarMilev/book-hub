@@ -40,7 +40,7 @@ public class ArticleService(
 
         return await data
             .Articles
-            .Select(Mapping.ToDetailsServiceModelExpression)
+            .ToServiceDetailsModels()
             .FirstOrDefaultAsync(a => a.Id == id, token);
     }
 

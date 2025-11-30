@@ -129,7 +129,7 @@ export const router = createBrowserRouter([
         element: withSuspense(<AuthenticatedRoute element={<AuthorList />} />),
       },
       {
-        path: `${routes.author}/:id`,
+        path: `${routes.author}/:id/:slug`,
         element: withSuspense(<AuthenticatedRoute element={<AuthorDetails />} />),
       },
       {

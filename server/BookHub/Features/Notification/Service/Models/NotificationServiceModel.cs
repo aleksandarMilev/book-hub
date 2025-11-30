@@ -10,7 +10,7 @@
 
         public DateTime CreatedOn { get; init; }
 
-        public int ResourceId { get; init; }
+        public Guid ResourceId { get; init; }
 
         public string ResourceType { get; init; } = null!;
     }

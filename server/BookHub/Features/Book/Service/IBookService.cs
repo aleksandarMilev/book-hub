@@ -1,36 +1,53 @@
 ﻿namespace BookHub.Features.Book.Service
 {
-    using Models;
-    using Infrastructure.Services;
+    using Infrastructure.Services.Result;
     using Infrastructure.Services.ServiceLifetimes;
-    using BookHub.Infrastructure.Services.Result;
+    using Models;
 
     public interface IBookService : ITransientService
     {
-        Task<IEnumerable<BookServiceModel>> TopThree();
+        Task<IEnumerable<BookServiceModel>> TopThree(
+            CancellationToken token = default);
 
-        Task<BookDetailsServiceModel?> Details(Guid id);
+        Task<BookDetailsServiceModel?> Details(
+            Guid id,
+            CancellationToken token = default);
 
-        Task<BookDetailsServiceModel?> AdminDetails(Guid id);
+        Task<BookDetailsServiceModel?> AdminDetails(
+            Guid id,
+            CancellationToken token = default);
 
         Task<PaginatedModel<BookServiceModel>> ByGenre(
             int genreId, 
             int page, 
-            int pageSize);
+            int pageSize,
+            CancellationToken token = default);
 
         Task<PaginatedModel<BookServiceModel>> ByAuthor(
             Guid authorId, 
             int page, 
-            int pageSize);
+            int pageSize,
+            CancellationToken token = default);
 
-        Task<Guid> Create(CreateBookServiceModel model);
+        Task<BookDetailsServiceModel> Create(
+            CreateBookServiceModel model,
+            CancellationToken token = default);
 
-        Task<Result> Edit(Guid id, CreateBookServiceModel model);
+        Task<Result> Edit(
+            Guid id,
+            CreateBookServiceModel model,
+            CancellationToken token = default);
 
-        Task<Result> Delete(Guid id);
+        Task<Result> Delete(
+            Guid id,
+            CancellationToken token = default);
 
-        Task<Result> Approve(Guid id);
+        Task<Result> Approve(
+            Guid id,
+            CancellationToken token = default);
 
-        Task<Result> Reject(Guid id);
+        Task<Result> Reject(
+            Guid id,
+            CancellationToken token = default);
     }
 }

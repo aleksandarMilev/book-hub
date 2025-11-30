@@ -1,6 +1,5 @@
 ﻿namespace BookHub.Features.Article.Shared;
 
-using System.Linq.Expressions;
 using Data.Models;
 using Service.Models;
 using Web.Models;
@@ -35,18 +34,19 @@ public static class Mapping
         dbModel.Content = serviceModel.Content;
     }
 
-    public static Expression<Func<ArticleDbModel, ArticleDetailsServiceModel>> ToDetailsServiceModelExpression =>
-        dbModel => new()
+    public static IQueryable<ArticleDetailsServiceModel> ToServiceDetailsModels(
+        this IQueryable<ArticleDbModel> articles)
+        => articles.Select(a => new ArticleDetailsServiceModel
         {
-            Id = dbModel.Id,
-            Views = dbModel.Views,
-            Title = dbModel.Title,
-            Introduction = dbModel.Introduction,
-            Content = dbModel.Content,
-            ImagePath = dbModel.ImagePath,
-            CreatedOn = dbModel.CreatedOn,
-            ModifiedOn = dbModel.ModifiedOn
-        };
+            Id = a.Id,
+            Views = a.Views,
+            Title = a.Title,
+            Introduction = a.Introduction,
+            Content = a.Content,
+            ImagePath = a.ImagePath,
+            CreatedOn = a.CreatedOn,
+            ModifiedOn = a.ModifiedOn
+        });
 
     public static ArticleDetailsServiceModel ToDetailsServiceModel(
         this ArticleDbModel dbModel)

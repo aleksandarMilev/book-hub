@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BookHub.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -349,8 +349,8 @@ namespace BookHub.Data.Migrations
                     AverageRating = table.Column<double>(type: "float", nullable: false),
                     RatingsCount = table.Column<int>(type: "int", nullable: false),
                     PublishedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ImageUrl = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
-                    AuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatorId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     IsApproved = table.Column<bool>(type: "bit", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -373,8 +373,7 @@ namespace BookHub.Data.Migrations
                         name: "FK_Books_Authors_AuthorId",
                         column: x => x.AuthorId,
                         principalTable: "Authors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -616,19 +615,6 @@ namespace BookHub.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "CreatedBy", "CreatedOn", "DeletedBy", "DeletedOn", "Email", "EmailConfirmed", "IsDeleted", "LockoutEnabled", "LockoutEnd", "ModifiedBy", "ModifiedOn", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[,]
-                {
-                    { "user1Id", 0, "8afe2fc6-1fd0-41a1-9d7c-76a6a7ae35ce", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "user1@mail.com", false, false, false, null, null, null, null, null, null, null, false, "9dd018c8-f6a4-4a8e-961e-a8c8cd04316f", false, "user1name" },
-                    { "user2Id", 0, "92d5a807-448e-417f-8ab1-84e7b5faed56", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "user2@mail.com", false, false, false, null, null, null, null, null, null, null, false, "9fb74680-fdf0-40c5-a3c7-cafdbe0e05f8", false, "user2name" },
-                    { "user3Id", 0, "f9c3c9e8-f3f4-4bfd-bfb3-e51039f4287b", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "user3@mail.com", false, false, false, null, null, null, null, null, null, null, false, "71fef20a-1f61-4a3b-b863-00a3d8622e18", false, "user3name" },
-                    { "user4Id", 0, "34fd5b8a-2bfd-437f-832c-30b88b1a1d1e", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "user4@mail.com", false, false, false, null, null, null, null, null, null, null, false, "648d9fd0-1798-44c8-9fbe-b55b9037ed2e", false, "user4name" },
-                    { "user5Id", 0, "7bb1cbb2-dde1-40c0-83fa-1a7de0bfb979", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "user5@mail.com", false, false, false, null, null, null, null, null, null, null, false, "170ae4fa-db4c-4773-9a16-ad81cf353038", false, "user5name" },
-                    { "user6Id", 0, "a9f6bdbe-8ce9-420f-a751-5f55c416a2e2", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "user6@mail.com", false, false, false, null, null, null, null, null, null, null, false, "1fd1f0f6-900c-4dc2-8480-3de45f2fa43d", false, "user6name" }
-                });
-
-            migrationBuilder.InsertData(
                 table: "Authors",
                 columns: new[] { "Id", "AverageRating", "Biography", "BornAt", "CreatedBy", "CreatedOn", "CreatorId", "DeletedBy", "DeletedOn", "DiedAt", "Gender", "ImagePath", "IsApproved", "IsDeleted", "ModifiedBy", "ModifiedOn", "Name", "Nationality", "PenName", "RatingsCount" },
                 values: new object[,]
@@ -760,60 +746,6 @@ namespace BookHub.Data.Migrations
                     { 31, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "Gothic fiction is characterized by its dark, eerie atmosphere, and often involves elements of horror, mystery, and the supernatural. These stories typically feature gloomy, decaying settings such as castles, mansions, or haunted landscapes, and often include tragic or macabre themes. Gothic fiction focuses on emotions like fear, dread, and despair, and explores the darker sides of human nature. Famous examples include works like Wuthering Heights and Frankenstein.", "https://bookstr.com/wp-content/uploads/2022/09/V8mj92.webp", false, null, null, "Gothic Fiction" },
                     { 32, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "Magical realism blends elements of magic or the supernatural with a realistic narrative, creating a world where extraordinary events occur within ordinary settings. This genre often explores themes of identity, culture, and human experience, and it is marked by the seamless integration of magical elements into everyday life. Prominent examples include books like One Hundred Years of Solitude and The House of the Spirits.", "https://www.world-defined.com/wp-content/uploads/2024/04/Magic-Realism-Books-978x652-1.webp", false, null, null, "Magical Realism" },
                     { 33, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "Dark fantasy combines elements of fantasy with a sense of horror, despair, and the supernatural. These stories often take place in dark, gritty worlds where magic, danger, and moral ambiguity challenge the characters. Dark fantasy blends the fantastical with the disturbing, creating a sense of dread and unease. Examples include books like The Dark Tower series and A Song of Ice and Fire.", "https://miro.medium.com/v2/resize:fit:1024/1*VU5O34UlH-1SXZkEnL0dyg.jpeg", false, null, null, "Dark Fantasy" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Profiles",
-                columns: new[] { "UserId", "Biography", "CreatedAuthorsCount", "CreatedBooksCount", "CreatedBy", "CreatedOn", "CurrentlyReadingBooksCount", "DateOfBirth", "FirstName", "ImageUrl", "IsPrivate", "LastName", "ModifiedBy", "ModifiedOn", "PhoneNumber", "ReadBooksCount", "ReviewsCount", "SocialMediaUrl", "ToReadBooksCount" },
-                values: new object[,]
-                {
-                    { "user1Id", "John is a passionate reader and a book reviewer.", 0, 0, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, new DateTime(1990, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "John", "https://www.shareicon.net/data/512x512/2016/05/24/770117_people_512x512.png", false, "Doe", null, null, "+1234567890", 3, 15, "https://twitter.com/johndoe", 2 },
-                    { "user2Id", "Alice enjoys exploring fantasy and sci-fi genres.", 0, 0, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, new DateTime(1985, 7, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), "Alice", "https://static.vecteezy.com/system/resources/previews/002/002/257/non_2x/beautiful-woman-avatar-character-icon-free-vector.jpg", false, "Smith", null, null, "+1987654321", 3, 15, "https://facebook.com/alicesmith", 1 },
-                    { "user3Id", "Bob is a new reader with a love for thrillers and mysteries.", 0, 0, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, new DateTime(2000, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Bob", "https://cdn1.iconfinder.com/data/icons/user-pictures/101/malecostume-512.png", false, "Johnson", null, null, "+1122334455", 3, 14, "https://instagram.com/bobjohnson", 1 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Votes",
-                columns: new[] { "Id", "CreatedBy", "CreatedOn", "CreatorId", "IsUpvote", "ModifiedBy", "ModifiedOn", "ReviewId" },
-                values: new object[,]
-                {
-                    { 1, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user2Id", true, null, null, 1 },
-                    { 2, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user3Id", true, null, null, 1 },
-                    { 3, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user4Id", true, null, null, 1 },
-                    { 4, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user5Id", true, null, null, 1 },
-                    { 5, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user6Id", false, null, null, 1 },
-                    { 6, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user2Id", true, null, null, 2 },
-                    { 7, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user3Id", true, null, null, 2 },
-                    { 8, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user2Id", true, null, null, 15 },
-                    { 9, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user3Id", true, null, null, 15 },
-                    { 10, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user4Id", true, null, null, 15 },
-                    { 11, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user3Id", true, null, null, 15 },
-                    { 12, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user3Id", true, null, null, 20 },
-                    { 13, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user3Id", true, null, null, 20 },
-                    { 14, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user3Id", true, null, null, 20 },
-                    { 15, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user2Id", true, null, null, 26 },
-                    { 16, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user3Id", true, null, null, 26 },
-                    { 17, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user4Id", true, null, null, 26 },
-                    { 18, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user1Id", true, null, null, 32 },
-                    { 19, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user2Id", true, null, null, 32 },
-                    { 20, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user3Id", true, null, null, 32 },
-                    { 21, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user4Id", true, null, null, 32 },
-                    { 22, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user5Id", true, null, null, 32 },
-                    { 23, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user6Id", false, null, null, 32 },
-                    { 24, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user1Id", true, null, null, 37 },
-                    { 25, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user2Id", true, null, null, 37 },
-                    { 26, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user3Id", true, null, null, 37 },
-                    { 27, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user1Id", true, null, null, 41 },
-                    { 28, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user2Id", true, null, null, 41 },
-                    { 29, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user3Id", true, null, null, 41 },
-                    { 30, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user1Id", true, null, null, 43 },
-                    { 31, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user2Id", true, null, null, 43 },
-                    { 32, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user3Id", true, null, null, 43 },
-                    { 33, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user2Id", true, null, null, 49 },
-                    { 34, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user2Id", true, null, null, 53 },
-                    { 35, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user2Id", true, null, null, 56 },
-                    { 36, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user2Id", true, null, null, 60 },
-                    { 37, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "user2Id", true, null, null, 63 }
                 });
 
             migrationBuilder.CreateIndex(

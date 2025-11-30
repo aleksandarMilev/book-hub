@@ -1,15 +1,14 @@
-﻿namespace BookHub.Features.Book.Web
+﻿namespace BookHub.Features.Book.Web;
+
+public static class ApiRoutes
 {
-    public static class ApiRoutes
-    {
-        public const string Top = "top/";
+    public const string Top = "top/";
 
-        public const string ByGenre = "genre/";
+    public const string ByGenre = "genre/";
 
-        public const string ByAuthor = "author/";
+    public const string ByAuthor = "author/";
 
-        public const string Approve = "approve/";
+    public const string Approve = "approve/";
 
-        public const string Reject = "reject/";
-    }
+    public const string Reject = "reject/";
 }

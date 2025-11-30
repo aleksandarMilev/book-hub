@@ -185,7 +185,7 @@
 
             if (id == Guid.Empty)
             {
-                throw null;
+                throw new Exception();
                 //throw new DbEntityNotFoundException<int>(nameof(Book), bookId);
             }
         }
@@ -251,7 +251,7 @@
             var author = await this.data
                .Authors
                .FindAsync(authorId)
-               ?? throw new DbEntityNotFoundException<Guid>(nameof(AuthorDbModel), authorId);
+               ?? throw new DbEntityNotFoundException<Guid>(nameof(AuthorDbModel), authorId ?? Guid.Empty); //TODO
 
             double newAverageRating;
             var newRatingsCount = isDeleteMode

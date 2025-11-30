@@ -1,71 +1,82 @@
-﻿namespace BookHub.Features.Book.Web.User
+﻿namespace BookHub.Features.Book.Web.User;
+
+using Features.Authors.Service.Models;
+using Features.Authors.Shared;
+using Features.Book.Shared;
+using Infrastructure.Extensions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Models;
+using Service;
+using Service.Models;
+
+using static Common.Constants.ApiRoutes;
+using static Common.Constants.DefaultValues;
+
+[Authorize]
+public class BookController(IBookService service) : ApiController
 {
-    using AutoMapper;
-    using Infrastructure.Extensions;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
-    using Models;
-    using Service;
-    using Service.Models;
+    [AllowAnonymous]
+    [HttpGet(ApiRoutes.Top)]
+    public async Task<ActionResult<IEnumerable<BookServiceModel>>> TopThree(
+        CancellationToken token = default)
+      => this.Ok(await service.TopThree(token));
 
-    using static Common.Constants.ApiRoutes;
-    using static Common.Constants.DefaultValues;
+    [HttpGet(ApiRoutes.ByGenre + Id)]
+    public async Task<ActionResult<PaginatedModel<BookServiceModel>>> ByGenre(
+        int id,
+        int page = DefaultPageIndex,
+        int pageSize = DefaultPageSize,
+        CancellationToken token = default) 
+        => this.Ok(await service.ByGenre(id, page, pageSize, token));
 
-    [Authorize]
-    public class BookController(
-        IBookService service,
-        IMapper mapper) : ApiController
+    [HttpGet(ApiRoutes.ByAuthor + Id)]
+    public async Task<ActionResult<PaginatedModel<BookServiceModel>>> ByAuthor(
+       Guid id,
+       int page = DefaultPageIndex,
+       int pageSize = DefaultPageSize,
+       CancellationToken token = default) 
+       => this.Ok(await service.ByAuthor(id, page, pageSize, token));
+
+    [HttpGet(Id)]
+    public async Task<ActionResult<BookDetailsServiceModel>> Details(
+        Guid id,
+        CancellationToken token = default)
+        => this.Ok(await service.Details(id, token));
+
+    [HttpPost]
+    public async Task<ActionResult<AuthorDetailsServiceModel>> Create(
+        CreateBookWebModel webModel,
+        CancellationToken token = default)
     {
-        private readonly IBookService service = service;
-        private readonly IMapper mapper = mapper;
+        var serviceModel = webModel.ToCreateServiceModel();
+        var createdBook = await service.Create(serviceModel, token);
 
-        [AllowAnonymous]
-        [HttpGet(ApiRoutes.Top)]
-        public async Task<ActionResult<IEnumerable<BookServiceModel>>> TopThree()
-          => this.Ok(await this.service.TopThree());
+        return this.CreatedAtRoute(
+            routeName: nameof(this.Details),
+            routeValues: new { id = createdBook.Id },
+            value: createdBook);
+    }
 
-        [HttpGet(ApiRoutes.ByGenre + Id)]
-        public async Task<ActionResult<PaginatedModel<BookServiceModel>>> ByGenre(
-            int id,
-            int page = DefaultPageIndex,
-            int pageSize = DefaultPageSize) 
-            => this.Ok(await this.service.ByGenre(id, page, pageSize));
+    [HttpPut(Id)]
+    public async Task<ActionResult> Edit(
+        Guid id,
+        CreateBookWebModel webModel,
+        CancellationToken token = default)
+    {
+        var serviceModel = webModel.ToCreateServiceModel();
+        var result = await service.Edit(id, serviceModel, token);
 
-        [HttpGet(ApiRoutes.ByAuthor + Id)]
-        public async Task<ActionResult<PaginatedModel<BookServiceModel>>> ByAuthor(
-           Guid id,
-           int page = DefaultPageIndex,
-           int pageSize = DefaultPageSize) 
-           => this.Ok(await this.service.ByAuthor(id, page, pageSize));
+        return this.NoContentOrBadRequest(result);
+    }
 
-        [HttpGet(Id)]
-        public async Task<ActionResult<BookDetailsServiceModel>> Details(Guid id)
-            => this.Ok(await this.service.Details(id));
+    [HttpDelete(Id)]
+    public async Task<ActionResult> Delete(
+        Guid id,
+        CancellationToken token = default)
+    {
+        var result = await service.Delete(id, token);
 
-        [HttpPost]
-        public async Task<ActionResult<int>> Create(CreateBookWebModel webModel)
-        {
-            var serviceModel = this.mapper.Map<CreateBookServiceModel>(webModel);
-            var bookId = await this.service.Create(serviceModel);
-
-            return this.Created(nameof(this.Create), bookId);
-        }
-
-        [HttpPut(Id)]
-        public async Task<ActionResult> Edit(Guid id, CreateBookWebModel webModel)
-        {
-            var serviceModel = this.mapper.Map<CreateBookServiceModel>(webModel);
-            var result = await this.service.Edit(id, serviceModel);
-
-            return this.NoContentOrBadRequest(result);
-        }
-
-        [HttpDelete(Id)]
-        public async Task<ActionResult> Delete(Guid id)
-        {
-            var result = await this.service.Delete(id);
-
-            return this.NoContentOrBadRequest(result);
-        }
+        return this.NoContentOrBadRequest(result);
     }
 }

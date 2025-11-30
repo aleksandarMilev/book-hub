@@ -12,22 +12,50 @@ const MAX_IMAGE_SIZE_BYTES = 2 * 1_024 * 1_024;
 const ALLOWED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.webp', '.avif'] as const;
 const ALLOWED_CONTENT_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/avif'] as const;
 
-const messages = {
-  required: (field: string) => `${field} is required!`,
-  min: (field: string, min: number) => `${field} must be at least ${min} characters long`,
-  max: (field: string, max: number) => `${field} must be less than ${max} characters`,
-  datePast: (field: string) => `${field} must be in the past`,
-  deathBeforeBirth: 'Date of death cannot be earlier than date of birth',
-};
+const FIELD_KEYS = {
+  name: 'authors:validation.fields.name',
+  penName: 'authors:validation.fields.penName',
+  biography: 'authors:validation.fields.biography',
+  bornAt: 'authors:validation.fields.bornAt',
+  diedAt: 'authors:validation.fields.diedAt',
+  gender: 'authors:validation.fields.gender',
+  image: 'authors:validation.fields.image',
+} as const;
+
+const getFieldLabel = (field: keyof typeof FIELD_KEYS) => i18n.t(FIELD_KEYS[field]);
 
 export const authorSchema = Yup.object({
   name: Yup.string()
-    .min(constraints.name.min, messages.min('Name', constraints.name.min))
-    .max(constraints.name.max, messages.max('Name', constraints.name.max))
-    .required(messages.required('Name')),
+    .min(constraints.name.min, () =>
+      i18n.t('authors:validation.min', {
+        field: getFieldLabel('name'),
+        min: constraints.name.min,
+      }),
+    )
+    .max(constraints.name.max, () =>
+      i18n.t('authors:validation.max', {
+        field: getFieldLabel('name'),
+        max: constraints.name.max,
+      }),
+    )
+    .required(() =>
+      i18n.t('authors:validation.required', {
+        field: getFieldLabel('name'),
+      }),
+    ),
   penName: Yup.string()
-    .min(constraints.penName.min, messages.min('Pen Name', constraints.penName.min))
-    .max(constraints.penName.max, messages.max('Pen Name', constraints.penName.max))
+    .min(constraints.penName.min, () =>
+      i18n.t('authors:validation.min', {
+        field: getFieldLabel('penName'),
+        min: constraints.penName.min,
+      }),
+    )
+    .max(constraints.penName.max, () =>
+      i18n.t('authors:validation.max', {
+        field: getFieldLabel('penName'),
+        max: constraints.penName.max,
+      }),
+    )
     .nullable(),
   image: Yup.mixed<File>()
     .nullable()
@@ -69,18 +97,44 @@ export const authorSchema = Yup.object({
     ),
   bornAt: Yup.date()
     .transform((value, originalValue) => (originalValue === '' ? null : value))
-    .max(new Date(), messages.datePast('Date of birth'))
+    .max(new Date(), () =>
+      i18n.t('authors:validation.datePast', {
+        field: getFieldLabel('bornAt'),
+      }),
+    )
     .nullable(),
   diedAt: Yup.date()
-    .max(new Date(), messages.datePast('Date of death'))
-    .min(Yup.ref('bornAt'), messages.deathBeforeBirth)
+    .max(new Date(), () =>
+      i18n.t('authors:validation.datePast', {
+        field: getFieldLabel('diedAt'),
+      }),
+    )
+    .min(Yup.ref('bornAt'), () => i18n.t('authors:validation.deathBeforeBirth'))
     .nullable(),
-  gender: Yup.string().required(messages.required('Gender')),
+  gender: Yup.string().required(() =>
+    i18n.t('authors:validation.required', {
+      field: getFieldLabel('gender'),
+    }),
+  ),
   nationality: Yup.number().nullable(),
   biography: Yup.string()
-    .min(constraints.biography.min, messages.min('Biography', constraints.biography.min))
-    .max(constraints.biography.max, messages.max('Biography', constraints.biography.max))
-    .required(messages.required('Biography')),
+    .min(constraints.biography.min, () =>
+      i18n.t('authors:validation.min', {
+        field: getFieldLabel('biography'),
+        min: constraints.biography.min,
+      }),
+    )
+    .max(constraints.biography.max, () =>
+      i18n.t('authors:validation.max', {
+        field: getFieldLabel('biography'),
+        max: constraints.biography.max,
+      }),
+    )
+    .required(() =>
+      i18n.t('authors:validation.required', {
+        field: getFieldLabel('biography'),
+      }),
+    ),
 });
 
 export type AuthorFormValues = Yup.InferType<typeof authorSchema>;
