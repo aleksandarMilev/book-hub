@@ -11,6 +11,6 @@ public class BookConfiguration : IEntityTypeConfiguration<BookDbModel>
     public void Configure(EntityTypeBuilder<BookDbModel> builder)
         => Seeder.SeedFromJson(
             builder,
-            FeatureNames.Books.ToString(),
+            FeatureNames.Book.ToString(),
             "books_seed.json");
 }
