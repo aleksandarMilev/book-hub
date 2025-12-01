@@ -23,6 +23,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Folder Include="Features\Book\Data\Seed\" />
 		<Folder Include="wwwroot\images\articles\" />
 	</ItemGroup>
 
