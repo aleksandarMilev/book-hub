@@ -4,6 +4,7 @@
     {
         Articles = 0,
         Authors = 1,
-        Book = 2
+        Books = 2,
+        Genres = 3
     }
 }

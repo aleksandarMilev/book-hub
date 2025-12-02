@@ -7,12 +7,19 @@ import type { Dispatch, FC, SetStateAction } from 'react';
 import { useReviewFormik } from '@/features/review/components/review-form/formik/useReviewFormik.js';
 import type { Review } from '@/features/review/types/review.js';
 
-const ReviewForm: FC<{
-  bookId: number;
+type Props = {
+  bookId?: string | undefined;
   refreshReviews: () => void | Promise<void>;
   setIsReviewCreatedOrEdited: Dispatch<SetStateAction<boolean>>;
   existingReview?: Review | null;
-}> = ({ bookId, refreshReviews, setIsReviewCreatedOrEdited, existingReview = null }) => {
+};
+
+const ReviewForm: FC<Props> = ({
+  bookId,
+  refreshReviews,
+  setIsReviewCreatedOrEdited,
+  existingReview = null,
+}) => {
   const { formik, rating, handleRating, isEditMode } = useReviewFormik({
     bookId,
     refreshReviews,

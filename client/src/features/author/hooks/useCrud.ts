@@ -178,7 +178,7 @@ export const useCreate = () => {
   const createHandler = useCallback(
     async (authorData: CreateAuthor) => {
       try {
-        return (await api.create(authorData, token)) ?? undefined;
+        return await api.create(authorData, token);
       } catch (error) {
         const message = IsError(error) ? error.message : 'Failed to create author.';
         navigate(routes.badRequest, { state: { message } });

@@ -1,3 +1,5 @@
+import './App.css';
+
 import { Outlet, ScrollRestoration } from 'react-router-dom';
 
 import Footer from '@/app/layout/footer/Footer.js';
@@ -15,7 +17,9 @@ export default function App() {
       <Header />
       <ErrorBoundary onReset={() => window.location.reload()}>
         <ScrollRestoration />
-        <Outlet />
+        <main className="app-shell">
+          <Outlet />
+        </main>
       </ErrorBoundary>
       <Footer />
     </>

@@ -10,7 +10,7 @@
 
         public int Views { get; set; }
 
-        public string? ImagePath { get; init; }
+        public string ImagePath { get; init; } = null!;
 
         public DateTime CreatedOn { get; init; }
     }

@@ -36,7 +36,7 @@ export async function get(
 }
 
 export async function add(
-  bookId: number,
+  bookId: string,
   status: ReadingStatusAPI,
   token: string,
   signal?: AbortSignal,
@@ -52,7 +52,7 @@ export async function add(
 }
 
 export async function remove(
-  bookId: number,
+  bookId: string,
   status: ReadingStatusAPI,
   token: string,
   signal?: AbortSignal,

@@ -1,13 +1,14 @@
 import type { Dispatch, FC, SetStateAction } from 'react';
 
 import ReviewForm from '@/features/review/components/review-form/ReviewForm.js';
-import type { IntId } from '@/shared/types/intId.js';
 
-const CreateReview: FC<{
-  bookId: IntId;
+type Props = {
+  bookId?: string | undefined;
   refreshReviews: () => void | Promise<void>;
   setIsReviewCreated: Dispatch<SetStateAction<boolean>>;
-}> = ({ bookId, refreshReviews, setIsReviewCreated }) => {
+};
+
+const CreateReview: FC<Props> = ({ bookId, refreshReviews, setIsReviewCreated }) => {
   return (
     <ReviewForm
       bookId={bookId}

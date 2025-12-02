@@ -19,6 +19,7 @@ import EmptyState from '@/shared/components/empty-state/EmptyState.js';
 import HomePageError from '@/shared/components/errors/home-page/HomePageError.js';
 import { RenderStars } from '@/shared/components/render-stars/RenderStars.js';
 import { routes } from '@/shared/lib/constants/api.js';
+import { getImageUrl } from '@/shared/lib/utils/utils.js';
 
 const TopBooks: FC = () => {
   const { t } = useTranslation('home');
@@ -49,7 +50,7 @@ const TopBooks: FC = () => {
         {books.map((b) => (
           <MDBCard key={b.id} className="top-book-card">
             <MDBCardImage
-              src={b.imageUrl ?? undefined}
+              src={getImageUrl(b.imagePath, 'books')}
               alt={t('topBooks.labels.bookCoverAlt', { title: b.title })}
               position="top"
               className="book-image"

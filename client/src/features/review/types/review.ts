@@ -8,13 +8,13 @@ export type Review = {
   createdBy: string;
   createdOn: string;
   modifiedOn?: string | null;
-  bookId: number;
+  bookId: string;
 };
 
 export type CreateReview = {
   content: string;
   rating: number;
-  bookId: number;
+  bookId?: string | undefined;
 };
 
 export type VoteRequest = {

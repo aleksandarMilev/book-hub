@@ -3,10 +3,10 @@ import type { GenreName } from '@/features/genre/types/genre.js';
 import type { Review } from '@/features/review/types/review.js';
 
 export interface Book {
-  id: number;
+  id: string;
   title: string;
   authorName?: string | null;
-  imageUrl: string;
+  imagePath: string;
   shortDescription: string;
   averageRating: number;
   genres: GenreName[];
@@ -15,11 +15,11 @@ export interface Book {
 export interface CreateBook {
   title: string;
   authorId?: string | null;
-  imageUrl?: string | null;
+  image?: File | null;
   shortDescription: string;
   longDescription: string;
-  publishedDate?: string | null;
-  genres: number[];
+  publishedDate?: string | null | undefined;
+  genres: string[];
 }
 
 export interface BookDetails extends Book {

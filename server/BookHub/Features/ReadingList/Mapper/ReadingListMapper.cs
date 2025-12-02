@@ -11,7 +11,7 @@
     {
         public ReadingListMapper()
         {
-            this.CreateMap<Genre, GenreNameServiceModel>();
+            this.CreateMap<GenreDbModel, GenreNameServiceModel>();
 
             this.CreateMap<BookDbModel, BookServiceModel>();
 

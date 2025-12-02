@@ -2,16 +2,21 @@ import './AuthorSearch.css';
 
 import type { FormikProps } from 'formik';
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useSearchNames } from '@/features/author/hooks/useCrud.js';
 import type { AuthorNames } from '@/features/author/types/author.js';
-import type { BookFormValues } from '@/features/book/components/form/formik/useBookFormik.js';
+import type { BookFormValues } from '@/features/book/components/form/validation/bookSchema.js';
 
-const AuthorSearch: FC<{
+type Props = {
   authors: AuthorNames[];
   loading: boolean;
   formik: FormikProps<BookFormValues>;
-}> = ({ authors, loading, formik }) => {
+};
+
+const AuthorSearch: FC<Props> = ({ authors, loading, formik }) => {
+  const { t } = useTranslation('books');
+
   const {
     searchTerm,
     filteredAuthors,
@@ -24,14 +29,14 @@ const AuthorSearch: FC<{
   return (
     <div className="mb-4">
       <h6 className="fw-bold mb-2">
-        Author Name:{' '}
-        <span className="fw-normal">(Select known authors, or leave blank if unknown)</span>
+        {t('form.authorSearch.label')}{' '}
+        <span className="fw-normal">({t('form.authorSearch.helper')})</span>
       </h6>
       <input
         type="text"
         id="authorName"
         className="form-control"
-        placeholder="Search for an author..."
+        placeholder={t('form.authorSearch.placeholder')}
         value={searchTerm}
         onChange={(e) => {
           const value = e.target.value;
@@ -43,16 +48,21 @@ const AuthorSearch: FC<{
         }}
         onFocus={showDropdownOnFocus}
         aria-autocomplete="list"
+        aria-label={t('form.authorSearch.ariaLabel')}
         autoComplete="off"
       />
       {loading ? (
-        <div className="mt-2">Loading...</div>
+        <div className="mt-2">{t('form.authorSearch.loading')}</div>
       ) : (
         showDropdown &&
         searchTerm && (
-          <ul className="list-group mt-2 dropdown-list" role="listbox" aria-label="Authors">
+          <ul
+            className="list-group mt-2 dropdown-list"
+            role="listbox"
+            aria-label={t('form.authorSearch.ariaLabel')}
+          >
             {filteredAuthors.length === 0 ? (
-              <li className="list-group-item">No matches found</li>
+              <li className="list-group-item">{t('form.authorSearch.noMatches')}</li>
             ) : (
               filteredAuthors.map((a) => (
                 <li

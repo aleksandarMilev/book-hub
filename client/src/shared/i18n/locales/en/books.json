@@ -1,0 +1,78 @@
+{
+  "validation": {
+    "fields": {
+      "title": "Title",
+      "shortDescription": "Short description",
+      "longDescription": "Long description",
+      "publishedDate": "Published date",
+      "image": "Cover image",
+      "genres": "Genres"
+    },
+    "required": "{{field}} is required!",
+    "min": "{{field}} must be at least {{min}} characters long",
+    "max": "{{field}} must be less than {{max}} characters",
+    "datePast": "{{field}} must be in the past",
+    "image": {
+      "tooLarge": "Image must be at most 2MB",
+      "invalidType": "Image must be one of: {{types}}"
+    },
+    "genres": {
+      "min": "At least one genre is required"
+    }
+  },
+  "form": {
+    "titleCreate": "Add a New Book to Our Collection!",
+    "titleEdit": "Edit Book",
+    "labels": {
+      "title": "Title *",
+      "image": "Cover image",
+      "publishedDate": "Published Date",
+      "shortDescription": "Short Description *",
+      "longDescription": "Full Description *"
+    },
+    "placeholders": {
+      "longDescription": "Write the book's full description here... *"
+    },
+    "buttons": {
+      "reset": "Reset All",
+      "submitCreate": "Submit Form",
+      "submittingCreate": "Submitting...",
+      "submitEdit": "Update Book",
+      "submittingEdit": "Saving..."
+    },
+    "requiredNote": "Fields marked with * are required",
+    "fallbackTitle": "this book",
+    "fallbackName": "this book",
+    "messages": {
+      "updateSuccess": "\"{{title}}\" was successfully updated.",
+      "createSuccessAdmin": "\"{{name}}\" was successfully created.",
+      "createSuccessUser": "Thank you for contributing to our community! Our team will review \"{{name}}\" soon.",
+      "operationFailed": "Something went wrong. Please try again."
+    }
+  },
+  "list": {
+    "searchPlaceholder": "Search books...",
+    "emptyTitle": "We couldn't find any books",
+    "emptyMessage": "Try adjusting your search terms or exploring our collection for more options.",
+    "emptyAlt": "Empty books illustration",
+    "unknownAuthor": "Unknown author",
+    "noGenres": "No genres",
+    "view": "View Details",
+    "byAuthor": "By {{author}}"
+  },
+  "details": {
+    "reviewsTitle": "Reviews",
+    "noReviews": "No reviews yet.",
+    "allReviews": "All Reviews",
+    "createReviewTitle": "Create Review",
+    "createProfile": "Create Profile",
+    "publishedLabel": "Published:",
+    "breadcrumb": {
+      "home": "Home",
+      "list": "Books"
+    },
+    "genresLabel": "Genres:",
+    "showMore": "Show More",
+    "showLess": "Show Less"
+  }
+}

@@ -5,7 +5,7 @@ import * as api from '@/features/book/api/api.js';
 import { routes } from '@/shared/lib/constants/api.js';
 
 export function useApproval(
-  id: number,
+  id: string,
   token: string,
   showMessage: (message: string, isSuccess: boolean) => void,
 ) {

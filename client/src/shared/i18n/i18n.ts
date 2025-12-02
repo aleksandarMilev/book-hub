@@ -27,6 +27,10 @@ const bgIdentity = await import('@/shared/i18n/locales/bg/identity.json', {
   assert: { type: 'json' },
 }).then((mod) => mod.default);
 
+const bgBooks = await import('@/shared/i18n/locales/bg/books.json', {
+  assert: { type: 'json' },
+}).then((mod) => mod.default);
+
 const enLayout = await import('@/shared/i18n/locales/en/layout.json', {
   assert: { type: 'json' },
 }).then((mod) => mod.default);
@@ -51,6 +55,10 @@ const enIdentity = await import('@/shared/i18n/locales/en/identity.json', {
   assert: { type: 'json' },
 }).then((mod) => mod.default);
 
+const enBooks = await import('@/shared/i18n/locales/en/books.json', {
+  assert: { type: 'json' },
+}).then((mod) => mod.default);
+
 const storedLanguage = typeof window !== 'undefined' ? localStorage.getItem('language') : null;
 
 const initialLanguage = storedLanguage || DEFAULT_LOCALE;
@@ -70,6 +78,7 @@ void i18n.use(initReactI18next).init({
       articles: enArticles,
       identity: enIdentity,
       authors: enAuthors,
+      books: enBooks,
     },
     'bg-BG': {
       layout: bgLayout,
@@ -78,6 +87,7 @@ void i18n.use(initReactI18next).init({
       articles: bgArticles,
       identity: bgIdentity,
       authors: bgAuthors,
+      books: bgBooks,
     },
   },
 });

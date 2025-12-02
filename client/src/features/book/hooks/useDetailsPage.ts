@@ -1,22 +1,22 @@
 import { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { useFullInfo, useRemove } from '@/features/book/hooks/useCrud.js';
-import { toIntId } from '@/shared/lib/utils/utils.js';
+import { routes } from '@/shared/lib/constants/api.js';
+import { slugify } from '@/shared/lib/utils/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 
 export const useDetailsPage = () => {
-  const { id } = useParams<{ id: string }>();
-  const parsedId = toIntId(id);
-  const disable = !parsedId;
+  const { id, slug } = useParams<{ id: string; slug: string }>();
 
   const firstReviewRef = useRef<HTMLDivElement | null>(null);
   const [showFullDescription, setShowFullDescription] = useState(false);
 
+  const navigate = useNavigate();
   const { userId, hasProfile, isAdmin } = useAuth();
 
-  const { book, isFetching, error, refreshBook } = useFullInfo(parsedId, disable);
-  const { showModal, toggleModal, deleteHandler } = useRemove(parsedId, disable, book?.title);
+  const { book, isFetching, error, refreshBook } = useFullInfo(id);
+  const { showModal, toggleModal, deleteHandler } = useRemove(id, book?.title);
 
   const [isReviewCreated, setIsReviewCreated] = useState(false);
   const [isReviewEdited, setIsReviewEdited] = useState(false);
@@ -30,6 +30,18 @@ export const useDetailsPage = () => {
     }
   }, [isReviewCreated, isReviewEdited, book?.reviews]);
 
+  useEffect(() => {
+    if (!book || !id) {
+      return;
+    }
+
+    const canonicalSlug = slugify(book.title);
+
+    if (!slug || slug !== canonicalSlug) {
+      navigate(`${routes.book}/${id}/${canonicalSlug}`, { replace: true });
+    }
+  }, [book, id, slug, navigate]);
+
   return {
     showFullDescription,
     userId,
@@ -40,7 +52,7 @@ export const useDetailsPage = () => {
     book,
     setShowFullDescription,
     toggleModal,
-    parsedId,
+    id,
     setIsReviewEdited,
     refreshBook,
     firstReviewRef,

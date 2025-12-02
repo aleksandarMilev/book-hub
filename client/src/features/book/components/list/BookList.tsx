@@ -1,7 +1,7 @@
 import './BookList.css';
 
 import { type ChangeEvent, type FC, useState } from 'react';
-import { FaSearch } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 import image from '@/assets/images/no-books-found.png';
@@ -13,6 +13,7 @@ import Pagination from '@/shared/components/pagination/Pagination.js';
 import { pagination } from '@/shared/lib/constants/defaultValues.js';
 
 const BookList: FC = () => {
+  const { t } = useTranslation('books');
   const location = useLocation();
 
   const genreId = location?.state?.genreId;
@@ -29,9 +30,27 @@ const BookList: FC = () => {
   const byAuthor = useByAuthor(authorId, page, pageSize, !genreId && !!authorId);
   const bySearch = useSearchBooks(searchTerm, page, pageSize);
 
-  const books = byGenre?.books ?? byAuthor?.books ?? bySearch?.items ?? [];
-  const totalItems = byGenre?.totalItems ?? byAuthor?.totalItems ?? bySearch?.totalItems ?? 0;
-  const isFetching = byGenre?.isFetching ?? byAuthor?.isFetching ?? bySearch?.isFetching ?? false;
+  const isGenreMode = !!genreId;
+  const isAuthorMode = !genreId && !!authorId;
+
+  const books = isGenreMode
+    ? (byGenre?.books ?? [])
+    : isAuthorMode
+      ? (byAuthor?.books ?? [])
+      : (bySearch?.items ?? []);
+
+  const totalItems = isGenreMode
+    ? (byGenre?.totalItems ?? 0)
+    : isAuthorMode
+      ? (byAuthor?.totalItems ?? 0)
+      : (bySearch?.totalItems ?? 0);
+
+  const isFetching = isGenreMode
+    ? (byGenre?.isFetching ?? false)
+    : isAuthorMode
+      ? (byAuthor?.isFetching ?? false)
+      : (bySearch?.isFetching ?? false);
+
   const totalPages = Math.ceil(totalItems / pageSize) || 1;
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -47,76 +66,61 @@ const BookList: FC = () => {
     setPage(newPage);
   };
 
+  const showEmpty = !isFetching && books.length === 0;
+
   return (
-    <div className="container mt-5 mb-5">
+    <div className="book-list-page container">
       {genreId ? (
-        <h1 className="text text-center mb-4">{genreName} Books</h1>
+        <h1 className="text-center mb-4">{genreName} Books</h1>
       ) : authorId ? (
-        <h1 className="text text-center mb-4">All Books by {authorName}</h1>
+        <h1 className="text-center mb-4">All Books by {authorName}</h1>
       ) : (
-        <div className="row mb-4">
-          <div className="col-md-10 mx-auto d-flex">
-            <div className="search-bar-container d-flex w-100">
-              <input
-                type="text"
-                className="form-control search-input"
-                placeholder="Search books..."
-                value={searchTerm}
-                onChange={handleSearchChange}
-                disabled={isFetching}
-                aria-label="Search books"
-              />
-              <button
-                className="btn btn-light search-btn"
-                disabled={isFetching}
-                aria-label="Search"
-              >
-                <FaSearch size={20} />
-              </button>
-            </div>
+        <div className="book-search-wrapper">
+          <div className="book-search-bar">
+            <input
+              type="text"
+              className="book-search-input"
+              placeholder={t('list.searchPlaceholder')}
+              value={searchTerm}
+              onChange={handleSearchChange}
+              aria-label={t('list.searchPlaceholder')}
+            />
           </div>
         </div>
       )}
-      <div className="d-flex justify-content-center row">
-        <div className="col-md-10">
-          {isFetching ? (
-            <DefaultSpinner />
-          ) : books.length > 0 ? (
-            <>
+      <div className="books-container">
+        {isFetching && <DefaultSpinner />}
+        {!isFetching && !showEmpty && (
+          <>
+            <div className="books-list">
               {books.map((b) => (
                 <BookListItem
                   key={b.id}
                   id={b.id}
                   title={b.title}
-                  authorName={b.authorName ?? 'Unknown Author'}
-                  imageUrl={b.imageUrl ?? ''}
+                  authorName={b.authorName ?? null}
+                  imagePath={b.imagePath ?? ''}
                   shortDescription={b.shortDescription ?? ''}
                   averageRating={b.averageRating ?? 0}
                   genres={b.genres ?? []}
                 />
               ))}
-              <Pagination
-                page={page}
-                totalPages={totalPages}
-                disabled={isFetching}
-                onPageChange={handlePageChange}
-              />
-            </>
-          ) : (
-            <div className="d-flex flex-column align-items-center justify-content-center mt-5">
-              <img
-                src={image}
-                alt="No books found"
-                className="mb-4"
-                style={{ maxWidth: '200px', opacity: 0.7 }}
-              />
-              <h5 className="text-muted">{"We couldn't find any books"}</h5>
-              <p className="text-muted text-center" style={{ maxWidth: '400px' }}>
-                Try adjusting your search terms or exploring our collection for more options.
-              </p>
             </div>
-          )}
-        </div>
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              disabled={isFetching}
+              onPageChange={handlePageChange}
+            />
+          </>
+        )}
+        {showEmpty && (
+          <div className="books-empty-state">
+            <img src={image} alt={t('list.emptyAlt')} className="books-empty-image" />
+            <h4 className="books-empty-title">{t('list.emptyTitle')}</h4>
+            <p className="books-empty-message">{t('list.emptyMessage')}</p>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -7,17 +7,19 @@ import type { CreateReview, Review } from '@/features/review/types/review.js';
 
 import { reviewSchema } from '../validation/reviewSchema.js';
 
+type Props = {
+  bookId?: string | undefined;
+  refreshReviews: () => void | Promise<void>;
+  setIsReviewCreatedOrEdited: React.Dispatch<React.SetStateAction<boolean>>;
+  existingReview?: Review | null;
+};
+
 export const useReviewFormik = ({
   bookId,
   refreshReviews,
   setIsReviewCreatedOrEdited,
   existingReview = null,
-}: {
-  bookId: number;
-  refreshReviews: () => void | Promise<void>;
-  setIsReviewCreatedOrEdited: React.Dispatch<React.SetStateAction<boolean>>;
-  existingReview?: Review | null;
-}) => {
+}: Props) => {
   const isEditMode = !!existingReview;
   const [rating, setRating] = useState<number>(existingReview?.rating || 0);
 

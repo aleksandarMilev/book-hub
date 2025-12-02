@@ -1,34 +1,42 @@
 import './BookListItem.css';
 
 import { type FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FaBook, FaTag, FaUser } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 import type { GenreName } from '@/features/genre/types/genre.js';
 import { RenderStars } from '@/shared/components/render-stars/RenderStars.js';
 import { routes } from '@/shared/lib/constants/api.js';
+import { getImageUrl, slugify } from '@/shared/lib/utils/utils.js';
 
-const BookListItem: FC<{
-  id: number;
-  imageUrl: string;
+type Props = {
+  id: string;
+  imagePath: string;
   title: string;
   authorName?: string | null;
   shortDescription: string;
   averageRating: number;
   genres: GenreName[];
-}> = ({ id, imageUrl, title, authorName, shortDescription, averageRating = 0, genres }) => {
+};
+
+const BookListItem: FC<Props> = ({
+  id,
+  imagePath,
+  title,
+  authorName,
+  shortDescription,
+  averageRating = 0,
+  genres,
+}) => {
+  const { t } = useTranslation('books');
+
+  const displayAuthorName = authorName || t('list.unknownAuthor');
+
   return (
     <div className="row p-3 bg-light border rounded mb-3 shadow-sm book-list-item">
       <div className="col-md-3 col-4 mt-1 d-flex justify-content-center align-items-center">
-        {imageUrl ? (
-          <img
-            className="img-fluid img-responsive rounded book-list-item-image"
-            src={imageUrl}
-            alt={title}
-          />
-        ) : (
-          <div className="text-muted text-center">No Image</div>
-        )}
+        <img src={getImageUrl(imagePath, 'books')} alt={title} className="book-list-item-image" />
       </div>
       <div className="col-md-6 col-8 mt-1 book-list-item-content">
         <h5 className="mb-2 book-list-item-title">
@@ -37,7 +45,7 @@ const BookListItem: FC<{
         </h5>
         <h6 className="text-muted mb-2 book-list-item-author">
           <FaUser className="me-2" />
-          By {authorName || 'Unknown Author'}
+          {t('list.byAuthor', { author: displayAuthorName })}
         </h6>
         <div className="d-flex flex-row mb-2 book-list-item-rating">
           <RenderStars rating={averageRating} />
@@ -51,7 +59,7 @@ const BookListItem: FC<{
               </Link>
             ))
           ) : (
-            <span className="text-muted">No genres</span>
+            <span className="text-muted">{t('list.noGenres')}</span>
           )}
         </div>
         {shortDescription && (
@@ -60,8 +68,11 @@ const BookListItem: FC<{
       </div>
       <div className="col-md-3 d-flex align-items-center justify-content-center mt-1">
         <div className="d-flex flex-column align-items-center">
-          <Link to={`${routes.book}/${id}`} className="btn btn-sm btn-primary book-list-item-btn">
-            View Details
+          <Link
+            to={`${routes.book}/${id}/${slugify(title)}`}
+            className="btn btn-sm btn-primary book-list-item-btn"
+          >
+            {t('list.view')}
           </Link>
         </div>
       </div>
