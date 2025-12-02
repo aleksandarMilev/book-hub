@@ -34,6 +34,7 @@ const ArticleList: FC = () => {
             placeholder={t('list.searchPlaceholder')}
             value={searchTerm}
             onChange={handleSearchChange}
+            aria-label={t('list.searchPlaceholder')}
           />
         </div>
       </div>

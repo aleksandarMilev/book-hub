@@ -14,7 +14,7 @@
     {
         public SearchMapper()
         {
-            this.CreateMap<Genre, GenreNameServiceModel>();
+            this.CreateMap<GenreDbModel, GenreNameServiceModel>();
 
             this.CreateMap<BookDbModel, SearchBookServiceModel>()
                  .ForMember(dest => dest.Genres, opt => opt.MapFrom(src => src.BooksGenres.Select(bg => bg.Genre)))

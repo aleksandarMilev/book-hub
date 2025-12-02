@@ -11,7 +11,6 @@ import { IsCanceledError, IsError } from '@/shared/lib/utils/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 import { useMessage } from '@/shared/stores/message/message.js';
 import { HttpError } from '@/shared/types/errors/httpError.js';
-import type { IntId } from '@/shared/types/intId.js';
 
 export function useTopThree() {
   const [books, setBooks] = useState<Book[]>([]);
@@ -91,7 +90,7 @@ export function useByGenre(
 }
 
 export function useByAuthor(
-  authorId: string | number,
+  authorId: string,
   page: number = pagination.defaultPageIndex,
   pageSize: number = pagination.defaultPageSize,
   enabled: boolean,
@@ -142,7 +141,7 @@ export function useByAuthor(
   return { books, totalItems, isFetching };
 }
 
-export function useFullInfo(id: IntId | null, disable = false) {
+export function useFullInfo(id?: string) {
   const { token, isAdmin } = useAuth();
 
   const [book, setBook] = useState<BookDetails | null>(null);
@@ -150,7 +149,7 @@ export function useFullInfo(id: IntId | null, disable = false) {
   const [error, setError] = useState<HttpError | null>(null);
 
   const fetchData = useCallback(async () => {
-    if (disable || !id) {
+    if (!id) {
       setError(
         HttpError.with()
           .message(errors.book.byId)
@@ -180,7 +179,7 @@ export function useFullInfo(id: IntId | null, disable = false) {
       setIsFetching(false);
       controller.abort();
     }
-  }, [id, token, isAdmin, disable]);
+  }, [id, token, isAdmin]);
 
   useEffect(() => {
     void fetchData();
@@ -189,23 +188,16 @@ export function useFullInfo(id: IntId | null, disable = false) {
   return { book, isFetching, error, refreshBook: fetchData };
 }
 
-export function useCreate() {
+export const useCreate = () => {
   const { token } = useAuth();
   const navigate = useNavigate();
 
   const createHandler = useCallback(
     async (bookData: CreateBook) => {
-      const bookToSend: CreateBook = {
-        ...bookData,
-        imageUrl: bookData.imageUrl || null,
-        authorId: bookData.authorId || null,
-        publishedDate: bookData.publishedDate || null,
-      };
-
       try {
-        return await api.create(bookToSend, token);
+        return await api.create(bookData, token);
       } catch (error) {
-        const message = IsError(error) ? error.message : errors.book.create;
+        const message = IsError(error) ? error.message : 'Failed to create book.';
         navigate(routes.badRequest, { state: { message } });
 
         return undefined;
@@ -215,37 +207,28 @@ export function useCreate() {
   );
 
   return createHandler;
-}
+};
 
-export function useEdit() {
+export const useEdit = () => {
   const { token } = useAuth();
   const navigate = useNavigate();
 
   const editHandler = useCallback(
-    async (id: number, bookData: CreateBook) => {
-      const bookToSend: CreateBook = {
-        ...bookData,
-        imageUrl: bookData.imageUrl || null,
-        authorId: bookData.authorId || null,
-        publishedDate: bookData.publishedDate || null,
-      };
-
+    async (id: string, bookData: CreateBook) => {
       try {
-        return await api.edit(id, bookToSend, token);
+        await api.edit(id, bookData, token);
       } catch (error) {
-        const message = IsError(error) ? error.message : errors.book.edit;
+        const message = IsError(error) ? error.message : 'Failed to edit book.';
         navigate(routes.badRequest, { state: { message } });
-
-        return undefined;
       }
     },
     [token, navigate],
   );
 
   return editHandler;
-}
+};
 
-export const useRemove = (id: IntId | null, disable = false, title?: string) => {
+export const useRemove = (id?: string, title?: string) => {
   const { token } = useAuth();
   const navigate = useNavigate();
   const { showMessage } = useMessage();
@@ -254,7 +237,7 @@ export const useRemove = (id: IntId | null, disable = false, title?: string) => 
   const toggleModal = useCallback(() => setShowModal((prev) => !prev), []);
 
   const deleteHandler = useCallback(async () => {
-    if (disable || !id) {
+    if (!id) {
       return;
     }
 
@@ -281,7 +264,7 @@ export const useRemove = (id: IntId | null, disable = false, title?: string) => 
       toggleModal();
       controller.abort();
     }
-  }, [showModal, id, token, title, navigate, showMessage, toggleModal, disable]);
+  }, [showModal, id, token, title, navigate, showMessage, toggleModal]);
 
   return { showModal, toggleModal, deleteHandler };
 };

@@ -98,7 +98,7 @@ export const router = createBrowserRouter([
         element: withSuspense(<AuthenticatedRoute element={<BookList />} />),
       },
       {
-        path: `${routes.book}/:id`,
+        path: `${routes.book}/:id/:slug`,
         element: withSuspense(<AuthenticatedRoute element={<BookDetails />} />),
       },
       {

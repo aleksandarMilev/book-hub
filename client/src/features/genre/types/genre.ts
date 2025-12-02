@@ -1,7 +1,7 @@
 import type { Book } from '@/features/book/types/book.js';
 
 export interface GenreName {
-  id: number;
+  id: string;
   name: string;
 }
 

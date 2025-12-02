@@ -1,34 +1,29 @@
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { useNames } from '@/features/author/hooks/useCrud.js';
-import { bookSchema } from '@/features/book/components/form/validation/bookSchema.js';
+import {
+  type BookFormValues,
+  bookSchema,
+} from '@/features/book/components/form/validation/bookSchema.js';
 import { useCreate, useEdit } from '@/features/book/hooks/useCrud.js';
 import type { BookDetails } from '@/features/book/types/book.js';
 import { useAll } from '@/features/genre/hooks/useCrud.js';
 import type { GenreName } from '@/features/genre/types/genre.js';
 import { routes } from '@/shared/lib/constants/api.js';
+import { slugify } from '@/shared/lib/utils/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 import { useMessage } from '@/shared/stores/message/message.js';
 
-export interface BookFormValues {
-  title: string;
-  authorId: string;
-  imageUrl: string;
-  publishedDate: string;
-  shortDescription: string;
-  longDescription: string;
-  genres: number[];
-}
-
-export const useBookFormik = ({
-  bookData = null,
-  isEditMode = false,
-}: {
+type Props = {
   bookData?: BookDetails | null;
   isEditMode?: boolean;
-}) => {
+};
+
+export const useBookFormik = ({ bookData = null, isEditMode = false }: Props) => {
+  const { t } = useTranslation('books');
   const { isAdmin } = useAuth();
   const navigate = useNavigate();
   const { showMessage } = useMessage();
@@ -50,9 +45,9 @@ export const useBookFormik = ({
   const formik = useFormik<BookFormValues>({
     initialValues: {
       title: bookData?.title ?? '',
-      authorId: 'authorId', //TODO fix author select
-      imageUrl: bookData?.imageUrl ?? '',
-      publishedDate: bookData?.publishedDate ?? '',
+      authorId: bookData?.author?.id ?? null,
+      image: null,
+      publishedDate: null,
       shortDescription: bookData?.shortDescription ?? '',
       longDescription: bookData?.longDescription ?? '',
       genres:
@@ -62,28 +57,61 @@ export const useBookFormik = ({
     enableReinitialize: true,
     validationSchema: bookSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
+      const normalizeDate = (value: unknown): string | null | undefined => {
+        if (!value) {
+          return null;
+        }
+
+        if (value instanceof Date && !isNaN(value.getTime())) {
+          return value.toISOString().split('T')[0];
+        }
+
+        if (typeof value === 'string' && value.trim() !== '') {
+          return value;
+        }
+
+        return null;
+      };
+
+      const payload = {
+        title: values.title,
+        authorId: values.authorId || null,
+        image: values.image ?? null,
+        shortDescription: values.shortDescription,
+        longDescription: values.longDescription,
+        publishedDate: normalizeDate(values.publishedDate),
+        genres: values.genres,
+      };
+
       try {
         if (isEditMode && bookData?.id) {
-          const ok = await editHandler(bookData.id, values);
-          if (ok) {
-            showMessage(`${bookData.title} was successfully edited!`, true);
-            navigate(`${routes.book}/${bookData.id}`);
-          }
+          await editHandler(bookData.id, payload);
+
+          const titleForMessage = bookData.title || t('form.fallbackTitle');
+
+          showMessage(t('form.messages.updateSuccess', { title: titleForMessage }), true);
+          navigate(`${routes.book}/${bookData.id}`);
         } else {
-          const bookId = await createHandler(values);
-          if (bookId) {
-            showMessage(
-              isAdmin
-                ? 'Book successfully created!'
-                : 'Thank you for being part of our community! Our admin team will process your book soon.',
-              true,
+          const created = await createHandler(payload);
+
+          if (created) {
+            const nameForMessage = payload.title || t('form.fallbackName');
+            const messageKey = isAdmin
+              ? 'form.messages.createSuccessAdmin'
+              : 'form.messages.createSuccessUser';
+
+            showMessage(t(messageKey, { name: nameForMessage }), true);
+
+            navigate(
+              isAdmin ? `${routes.author}/${created.id}/${slugify(payload.title)}` : routes.home,
+              { replace: true },
             );
-            navigate(isAdmin ? `${routes.book}/${bookId}` : routes.home);
             resetForm();
           }
         }
       } catch {
-        showMessage('Something went wrong. Please, try again.', false);
+        const fallback = t('form.messages.operationFailed');
+        showMessage(fallback, false);
       } finally {
         setSubmitting(false);
       }

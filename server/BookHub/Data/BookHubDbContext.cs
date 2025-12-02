@@ -26,7 +26,7 @@ public class BookHubDbContext(
 {
     public DbSet<BookDbModel> Books { get; init; }
 
-    public DbSet<Genre> Genres { get; init; }
+    public DbSet<GenreDbModel> Genres { get; init; }
 
     public DbSet<BookGenre> BooksGenres { get; init; }
 

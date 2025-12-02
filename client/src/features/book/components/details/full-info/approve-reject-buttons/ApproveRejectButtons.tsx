@@ -1,13 +1,17 @@
+import './ApproveRejectButtons.css';
+
 import { type FC, useState } from 'react';
 
 import { useApproval } from '@/features/book/hooks/useApproval.js';
 
-export const ApproveRejectButtons: FC<{
-  id: number;
+type Props = {
+  id: string;
   initialIsApproved: boolean;
   token: string;
   showMessage: (message: string, success?: boolean) => void;
-}> = ({ id, initialIsApproved, token, showMessage }) => {
+};
+
+export const ApproveRejectButtons: FC<Props> = ({ id, initialIsApproved, token, showMessage }) => {
   const [isApproved, setIsApproved] = useState(initialIsApproved);
   const { approveHandler, rejectHandler } = useApproval(id, token, showMessage);
 
@@ -18,16 +22,18 @@ export const ApproveRejectButtons: FC<{
     }
   };
 
-  return !isApproved ? (
-    <div className="d-flex gap-2">
-      <button className="btn btn-success d-flex align-items-center gap-2" onClick={handleApprove}>
+  if (isApproved) {
+    return <p className="book-approve-status text-success">This book has been approved.</p>;
+  }
+
+  return (
+    <div className="book-approve-buttons">
+      <button className="btn btn-success book-approve-button" type="button" onClick={handleApprove}>
         Approve
       </button>
-      <button className="btn btn-danger d-flex align-items-center gap-2" onClick={rejectHandler}>
+      <button className="btn btn-danger book-reject-button" type="button" onClick={rejectHandler}>
         Reject
       </button>
     </div>
-  ) : (
-    <p className="text-success">This book has been approved.</p>
   );
 };

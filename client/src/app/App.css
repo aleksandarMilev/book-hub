@@ -1,0 +1,70 @@
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at top left, rgba(154, 107, 255, 0.16), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(110, 168, 254, 0.16), transparent 55%), #f7f8ff;
+  font-family:
+    'Inter',
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+}
+
+.app-shell {
+  position: relative;
+  min-height: 100vh;
+  z-index: 0;
+}
+
+.app-shell::before,
+.app-shell::after {
+  content: '';
+  position: fixed;
+  border-radius: 999px;
+  filter: blur(40px);
+  opacity: 0.45;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.app-shell::before {
+  width: 320px;
+  height: 320px;
+  top: 8%;
+  left: 6%;
+  background: radial-gradient(circle, rgba(154, 107, 255, 0.5), transparent 60%);
+  animation: appBlob1 24s ease-in-out infinite alternate;
+}
+
+.app-shell::after {
+  width: 360px;
+  height: 360px;
+  bottom: 4%;
+  right: 8%;
+  background: radial-gradient(circle, rgba(110, 168, 254, 0.45), transparent 60%);
+  animation: appBlob2 28s ease-in-out infinite alternate;
+}
+
+@keyframes appBlob1 {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(25px, 30px, 0) scale(1.08);
+  }
+}
+
+@keyframes appBlob2 {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(-25px, -20px, 0) scale(1.06);
+  }
+}

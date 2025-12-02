@@ -17,10 +17,10 @@ export type AuthorsSearchResult = {
 };
 
 export type BooksSearchResult = {
-  id: number;
+  id: string;
   title: string;
   authorName?: string | null;
-  imageUrl: string;
+  imagePath: string;
   shortDescription: string;
   averageRating: number;
   genres: GenreName[];

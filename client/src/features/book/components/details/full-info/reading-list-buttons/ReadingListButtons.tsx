@@ -1,14 +1,23 @@
+import './ReadingListButtons.css';
+
 import { type FC, useState } from 'react';
 
 import { useListActions } from '@/features/reading-list/hooks/useCrud.js';
 import type { ReadingStatusUI } from '@/features/reading-list/types/readingList.js';
 
-export const ReadingListButtons: FC<{
-  bookId: number;
+type Props = {
+  bookId: string;
   initialReadingStatus: ReadingStatusUI;
   token: string;
   showMessage: (message: string, success?: boolean) => void;
-}> = ({ bookId, initialReadingStatus, token, showMessage }) => {
+};
+
+export const ReadingListButtons: FC<Props> = ({
+  bookId,
+  initialReadingStatus,
+  token,
+  showMessage,
+}) => {
   const [readingStatus, setReadingStatus] = useState<ReadingStatusUI>(initialReadingStatus);
   const { addToList, removeFromList } = useListActions(bookId, token, showMessage);
 
@@ -28,14 +37,26 @@ export const ReadingListButtons: FC<{
 
   if (!readingStatus) {
     return (
-      <div className="d-flex gap-2">
-        <button className="btn btn-outline-success" onClick={() => onAdd('read')}>
+      <div className="book-reading-list-buttons">
+        <button
+          className="btn btn-outline-success book-reading-list-button"
+          type="button"
+          onClick={() => onAdd('read')}
+        >
           Mark as Read
         </button>
-        <button className="btn btn-outline-primary" onClick={() => onAdd('to read')}>
+        <button
+          className="btn btn-outline-primary book-reading-list-button"
+          type="button"
+          onClick={() => onAdd('to read')}
+        >
           Add to Want to Read
         </button>
-        <button className="btn btn-outline-warning" onClick={() => onAdd('currently reading')}>
+        <button
+          className="btn btn-outline-warning book-reading-list-button"
+          type="button"
+          onClick={() => onAdd('currently reading')}
+        >
           Add to Currently Reading
         </button>
       </div>
@@ -43,23 +64,27 @@ export const ReadingListButtons: FC<{
   }
 
   return (
-    <div className="reading-status">
+    <div className="book-reading-status">
       {readingStatus === 'read' && (
-        <p>
+        <p className="book-reading-status-text">
           You marked this book as <strong>Read</strong>.
         </p>
       )}
       {readingStatus === 'to read' && (
-        <p>
+        <p className="book-reading-status-text">
           You added this book to <strong>Want to Read</strong>.
         </p>
       )}
       {readingStatus === 'currently reading' && (
-        <p>
+        <p className="book-reading-status-text">
           You are currently <strong>Reading</strong> this book.
         </p>
       )}
-      <button className="btn btn-outline-danger" onClick={onRemove}>
+      <button
+        className="btn btn-outline-danger book-reading-remove-button"
+        type="button"
+        onClick={onRemove}
+      >
         Remove from List
       </button>
     </div>

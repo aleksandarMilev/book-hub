@@ -1,5 +1,6 @@
 import {
   getAuthConfig,
+  getAuthConfigForFile,
   getPublicConfig,
   http,
   httpAdmin,
@@ -42,7 +43,7 @@ export const byGenre = async (
 
 export const byAuthor = async (
   token: string,
-  authorId: string | number,
+  authorId: string,
   page = pagination.defaultPageIndex,
   pageSize = pagination.defaultPageSize,
   signal?: AbortSignal,
@@ -58,7 +59,7 @@ export const byAuthor = async (
 };
 
 export const details = async (
-  id: number,
+  id: string,
   token: string,
   isAdmin: boolean,
   signal?: AbortSignal,
@@ -77,18 +78,30 @@ export const details = async (
 export const create = async (book: CreateBook, token: string, signal?: AbortSignal) => {
   try {
     const url = `${routes.book}`;
-    const response = await httpAdmin.post<{ id: number }>(url, book, getAuthConfig(token, signal));
+    const formData = new FormData();
 
-    return response.data.id;
+    writeFormData(formData, book);
+
+    const { data } = await http.post<BookDetails>(
+      url,
+      formData,
+      getAuthConfigForFile(token, signal),
+    );
+
+    return data;
   } catch (error) {
     processError(error, errors.book.create);
   }
 };
 
-export const edit = async (id: number, book: CreateBook, token: string, signal?: AbortSignal) => {
+export const edit = async (id: string, book: CreateBook, token: string, signal?: AbortSignal) => {
   try {
     const url = `${routes.book}/${id}`;
-    await httpAdmin.put(url, book, getAuthConfig(token, signal));
+    const formData = new FormData();
+
+    writeFormData(formData, book);
+
+    await http.put(url, formData, getAuthConfigForFile(token, signal));
 
     return true;
   } catch (error) {
@@ -96,7 +109,7 @@ export const edit = async (id: number, book: CreateBook, token: string, signal?:
   }
 };
 
-export const remove = async (id: number, token: string, signal?: AbortSignal) => {
+export const remove = async (id: string, token: string, signal?: AbortSignal) => {
   try {
     const url = `${routes.book}/${id}`;
     await httpAdmin.delete(url, getAuthConfig(token, signal));
@@ -107,7 +120,7 @@ export const remove = async (id: number, token: string, signal?: AbortSignal) =>
   }
 };
 
-export const approve = async (id: number, token: string, signal?: AbortSignal) => {
+export const approve = async (id: string, token: string, signal?: AbortSignal) => {
   try {
     const url = `${routes.book}/${id}/approve`;
     await httpAdmin.patch<void>(url, null, getAuthConfig(token, signal));
@@ -118,7 +131,7 @@ export const approve = async (id: number, token: string, signal?: AbortSignal) =
   }
 };
 
-export const reject = async (id: number, token: string, signal?: AbortSignal) => {
+export const reject = async (id: string, token: string, signal?: AbortSignal) => {
   try {
     const url = `${routes.book}/${id}/reject`;
     await httpAdmin.patch<void>(url, null, getAuthConfig(token, signal));
@@ -126,5 +139,27 @@ export const reject = async (id: number, token: string, signal?: AbortSignal) =>
     return true;
   } catch (error) {
     processError(error, baseErrors.general);
+  }
+};
+
+const writeFormData = (formData: FormData, book: CreateBook) => {
+  formData.append('title', book.title);
+  formData.append('shortDescription', book.shortDescription);
+  formData.append('longDescription', book.longDescription);
+
+  if (book.authorId) {
+    formData.append('authorId', String(book.authorId));
+  }
+
+  if (book.publishedDate) {
+    formData.append('publishedDate', book.publishedDate);
+  }
+
+  if (book.image) {
+    formData.append('image', book.image);
+  }
+
+  if (book.genres && book.genres.length > 0) {
+    book.genres.forEach((g) => formData.append('genres', String(g)));
   }
 };

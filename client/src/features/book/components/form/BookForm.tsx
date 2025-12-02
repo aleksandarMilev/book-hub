@@ -11,6 +11,7 @@ import {
   MDBRow,
 } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import image from '@/features/book/components/form/assets/create-book.jpg';
 import AuthorSearch from '@/features/book/components/form/author-search/AuthorSearch.js';
@@ -18,10 +19,13 @@ import { useBookFormik } from '@/features/book/components/form/formik/useBookFor
 import GenreSearch from '@/features/book/components/form/genre-search/GenreSearch.js';
 import type { BookDetails } from '@/features/book/types/book.js';
 
-const BookForm: FC<{
+type Props = {
   bookData?: BookDetails | null;
   isEditMode?: boolean;
-}> = ({ bookData = null, isEditMode = false }) => {
+};
+
+const BookForm: FC<Props> = ({ bookData = null, isEditMode = false }) => {
+  const { t } = useTranslation('books');
   const {
     formik,
     authors,
@@ -32,19 +36,27 @@ const BookForm: FC<{
     setSelectedGenres,
   } = useBookFormik({ bookData, isEditMode });
 
+  const submitLabel = formik.isSubmitting
+    ? isEditMode
+      ? t('form.buttons.submittingEdit')
+      : t('form.buttons.submittingCreate')
+    : isEditMode
+      ? t('form.buttons.submitEdit')
+      : t('form.buttons.submitCreate');
+
   return (
     <MDBContainer fluid className="book-form-container">
       <MDBRow className="d-flex justify-content-center align-items-center h-100">
         <MDBCol>
           <MDBCard className="my-4 book-form-card">
             <MDBRow className="g-0">
-              <MDBCol md="6" className="book-form-image-col">
+              <MDBCol md="6" className="book-form-image-col d-none d-md-block">
                 <MDBCardImage src={image} alt="Book" className="book-form-image" fluid />
               </MDBCol>
               <MDBCol md="6">
-                <MDBCardBody className="text-black d-flex flex-column justify-content-center">
-                  <h3 className="mb-5 fw-bold">
-                    {isEditMode ? 'Edit Book' : 'Add a New Book to Our Collection!'}
+                <MDBCardBody className="book-form-body text-black d-flex flex-column justify-content-center">
+                  <h3 className="mb-5 fw-bold book-form-title">
+                    {isEditMode ? t('form.titleEdit') : t('form.titleCreate')}
                   </h3>
                   <form onSubmit={formik.handleSubmit}>
                     <MDBRow>
@@ -54,7 +66,7 @@ const BookForm: FC<{
                         )}
                         <MDBInput
                           wrapperClass="mb-4"
-                          label="Title *"
+                          label={t('form.labels.title')}
                           size="lg"
                           id="title"
                           type="text"
@@ -76,7 +88,9 @@ const BookForm: FC<{
                           <div className="text-danger mb-2">
                             {typeof formik.errors.genres === 'string'
                               ? formik.errors.genres
-                              : 'Please select at least one genre'}
+                              : t('validation.genres.min', {
+                                  field: t('validation.fields.genres'),
+                                })}
                           </div>
                         )}
                         <GenreSearch
@@ -90,20 +104,26 @@ const BookForm: FC<{
                     </MDBRow>
                     <MDBRow>
                       <MDBCol md="12">
-                        {formik.touched.imageUrl && formik.errors.imageUrl && (
-                          <div className="text-danger mb-2">{formik.errors.imageUrl}</div>
-                        )}
-                        <MDBInput
-                          wrapperClass="mb-4"
-                          label="Image URL"
-                          size="lg"
-                          id="imageUrl"
-                          type="text"
-                          {...formik.getFieldProps('imageUrl')}
-                          className={
-                            formik.touched.imageUrl && formik.errors.imageUrl ? 'is-invalid' : ''
-                          }
+                        <label htmlFor="image" className="form-label book-form-image-label">
+                          {t('form.labels.image')}
+                        </label>
+                        <input
+                          id="image"
+                          name="image"
+                          type="file"
+                          accept=".jpg,.jpeg,.png,.webp,.avif"
+                          className={`form-control book-form-file-input ${
+                            formik.touched.image && formik.errors.image ? 'is-invalid' : ''
+                          }`}
+                          onChange={(event) => {
+                            const file = event.currentTarget.files?.[0] ?? null;
+                            formik.setFieldValue('image', file);
+                            formik.setFieldTouched('image', true, false);
+                          }}
                         />
+                        {formik.touched.image && formik.errors.image && (
+                          <div className="text-danger mb-2">{formik.errors.image as string}</div>
+                        )}
                       </MDBCol>
                     </MDBRow>
                     <MDBRow>
@@ -115,7 +135,7 @@ const BookForm: FC<{
                         )}
                         <MDBInput
                           wrapperClass="mb-4"
-                          label="Published Date"
+                          label={t('form.labels.publishedDate')}
                           size="lg"
                           id="publishedDate"
                           type="date"
@@ -135,7 +155,7 @@ const BookForm: FC<{
                         )}
                         <MDBInput
                           wrapperClass="mb-4"
-                          label="Short Description *"
+                          label={t('form.labels.shortDescription')}
                           size="lg"
                           id="shortDescription"
                           type="text"
@@ -155,21 +175,23 @@ const BookForm: FC<{
                         )}
                         <textarea
                           id="longDescription"
-                          rows={10}
+                          rows={8}
                           {...formik.getFieldProps('longDescription')}
-                          className={`form-control ${
+                          className={`form-control book-form-textarea ${
                             formik.touched.longDescription && formik.errors.longDescription
                               ? 'is-invalid'
                               : ''
                           }`}
-                          placeholder="Write the book's full description here... *"
+                          placeholder={t('form.placeholders.longDescription')}
                         />
                       </MDBCol>
                     </MDBRow>
-                    <p className="text-danger fw-bold mt-2">Fields marked with * are required</p>
-                    <div className="d-flex justify-content-end pt-3">
+                    <p className="text-danger fw-bold mt-2 book-form-required-note">
+                      {t('form.requiredNote')}
+                    </p>
+                    <div className="d-flex justify-content-end pt-3 book-form-actions">
                       <MDBBtn color="light" size="lg" type="button" onClick={formik.handleReset}>
-                        Reset All
+                        {t('form.buttons.reset')}
                       </MDBBtn>
                       <MDBBtn
                         className="ms-2"
@@ -178,13 +200,7 @@ const BookForm: FC<{
                         type="submit"
                         disabled={formik.isSubmitting}
                       >
-                        {isEditMode
-                          ? formik.isSubmitting
-                            ? 'Saving...'
-                            : 'Update Book'
-                          : formik.isSubmitting
-                            ? 'Submitting...'
-                            : 'Submit Form'}
+                        {submitLabel}
                       </MDBBtn>
                     </div>
                   </form>

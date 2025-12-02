@@ -1,0 +1,39 @@
+.book-approve-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.book-approve-button,
+.book-reject-button {
+  border-radius: 14px;
+  font-weight: 600;
+  padding: 8px 18px;
+  font-size: 0.9rem;
+}
+
+.book-approve-button {
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  border: none;
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.35);
+}
+
+.book-approve-button:hover {
+  background: linear-gradient(90deg, #16a34a, #15803d);
+  box-shadow: 0 6px 16px rgba(22, 163, 74, 0.45);
+}
+
+.book-reject-button {
+  border: none;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
+}
+
+.book-reject-button:hover {
+  box-shadow: 0 6px 16px rgba(220, 38, 38, 0.45);
+}
+
+.book-approve-status {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-top: 0.2rem;
+}

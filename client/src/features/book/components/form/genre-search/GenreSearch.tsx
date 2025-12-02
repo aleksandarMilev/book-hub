@@ -3,18 +3,22 @@ import './GenreSearch.css';
 import type { FormikProps } from 'formik';
 import type React from 'react';
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import type { BookFormValues } from '@/features/book/components/form/formik/useBookFormik.js';
+import type { BookFormValues } from '@/features/book/components/form/validation/bookSchema.js';
 import { useSearch } from '@/features/genre/hooks/useCrud.js';
 import type { GenreName } from '@/features/genre/types/genre.js';
 
-const GenreSearch: FC<{
+type Props = {
   genres: GenreName[];
   loading: boolean;
   formik: FormikProps<BookFormValues>;
   selectedGenres: GenreName[];
   setSelectedGenres: React.Dispatch<React.SetStateAction<GenreName[]>>;
-}> = ({ genres, loading, formik, selectedGenres, setSelectedGenres }) => {
+};
+
+const GenreSearch: FC<Props> = ({ genres, loading, formik, selectedGenres, setSelectedGenres }) => {
+  const { t } = useTranslation('books');
   const { searchTerm, filteredGenres, updateSearchTerm } = useSearch(genres, selectedGenres);
 
   const selectGenre = (genre: GenreName) => {
@@ -47,29 +51,32 @@ const GenreSearch: FC<{
   return (
     <div className="mb-4">
       <h6 className="fw-bold mb-2">
-        Genres:{' '}
-        <span className="fw-normal">
-          * (Select known genres, or &ldquo;Other&rdquo; if unknown)
-        </span>
+        {t('validation.fields.genres')}:&nbsp;
+        <span className="fw-normal">{t('form.genreSearch.helper')}</span>
       </h6>
       <input
         type="text"
         id="genreSearch"
         className="form-control"
-        placeholder="Search for genres..."
+        placeholder={t('form.genreSearch.placeholder')}
         value={searchTerm}
         onChange={(e) => updateSearchTerm(e.target.value)}
         aria-autocomplete="list"
+        aria-label={t('form.genreSearch.ariaLabel')}
         autoComplete="off"
       />
       {loading ? (
-        <div className="mt-2">Loading...</div>
+        <div className="mt-2">{t('form.genreSearch.loading')}</div>
       ) : (
         <div>
           {searchTerm && (
-            <ul className="list-group mt-2 genre-list" role="listbox" aria-label="Genres">
+            <ul
+              className="list-group mt-2 genre-list"
+              role="listbox"
+              aria-label={t('form.genreSearch.ariaLabel')}
+            >
               {filteredGenres.length === 0 ? (
-                <li className="list-group-item">No matches found</li>
+                <li className="list-group-item">{t('form.genreSearch.noMatches')}</li>
               ) : (
                 filteredGenres.map((g) => (
                   <li
@@ -95,7 +102,7 @@ const GenreSearch: FC<{
                       type="button"
                       className="badge-close"
                       onClick={() => removeGenre(g)}
-                      aria-label={`Remove ${g.name}`}
+                      aria-label={t('form.genreSearch.removeGenreAria', { name: g.name })}
                     >
                       &times;
                     </button>

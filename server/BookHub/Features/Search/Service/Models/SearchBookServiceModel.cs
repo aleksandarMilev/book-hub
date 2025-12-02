@@ -10,7 +10,7 @@
 
         public string? AuthorName { get; init; }
 
-        public string ImageUrl { get; init; } = null!;
+        public string ImagePath { get; init; } = null!;
 
         public string ShortDescription { get; init; } = null!;
 

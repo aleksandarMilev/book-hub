@@ -27,8 +27,8 @@ namespace BookHub.Data.Migrations
                     b.Property<Guid>("BookId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("GenreId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("GenreId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("BookId", "GenreId");
 
@@ -2970,6 +2970,756 @@ namespace BookHub.Data.Migrations
                     b.HasData(
                         new
                         {
+                            Id = new Guid("c91e9a2b-5d54-4a9a-93d4-0f3f7d87c412"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/if-it-bleeds.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "If It Bleeds is a 2020 collection of four novellas by Stephen King: 'Mr. Harrigan’s Phone', 'The Life of Chuck', 'If It Bleeds', and 'Rat'. The stories move between quiet, personal hauntings and larger supernatural disturbances—from a boy who discovers his deceased employer’s phone still seems to connect to the living world, to a collapsing reality told in reverse, to an investigative reporter (Holly Gibney) tracking an inhuman predator feeding on tragedy, and a blocked writer who strikes a dangerous bargain to finish his book. The collection explores themes of mortality, memory, media sensationalism, creative desperation, and the persistence of both kindness and evil in everyday life.",
+                            PublishedDate = new DateTime(2020, 4, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Four novellas that explore grief, evil, and the lingering echoes of supernatural events.",
+                            Title = "If It Bleeds"
+                        },
+                        new
+                        {
+                            Id = new Guid("e2d7f3b1-4a8c-4c7f-9b20-6b3c1a9de472"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/fairy-tale.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Fairy Tale is a 2022 novel by Stephen King that follows Charlie Reade, a seventeen-year-old boy who befriends a reclusive old man named Howard Bowditch and his dog, Radar. After Bowditch’s death, Charlie discovers that the old man was guarding a secret: a locked shed containing a portal to another world called Empis. Drawn into this fantastical realm of ruined cities, cursed royalty, strange magic, and looming darkness, Charlie must confront both external monsters and his own fears as he’s thrust into the role of unlikely hero. Blending classic fantasy with King’s trademark sense of dread, Fairy Tale explores themes of courage, destiny, sacrifice, and the power of stories to shape our lives.",
+                            PublishedDate = new DateTime(2022, 9, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A teenage boy inherits a portal to another world where a dark kingdom desperately needs a hero.",
+                            Title = "Fairy Tale"
+                        },
+                        new
+                        {
+                            Id = new Guid("9ac4c3e1-2f6b-4f0d-9ba9-6c3a8f2b7d45"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/holly.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Holly is a 2023 novel by Stephen King that places private investigator Holly Gibney at the center of a chilling standalone case. When a distraught woman asks Holly to find her missing daughter, the trail leads to an apparently harmless elderly couple—both retired academics—who live in a quiet Midwestern neighborhood. Beneath their courteous, cultured exterior lies a gruesome secret tied to a series of disappearances stretching back years. As Holly pursues the truth, she must navigate her own grief, anxiety, and lingering trauma while confronting a very human form of evil. The novel blends crime fiction and psychological horror, deepening Holly’s character as she steps fully into the role of lead detective in King’s expanding universe.",
+                            PublishedDate = new DateTime(2023, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Holly Gibney hunts a pair of respectable monsters hiding in plain sight.",
+                            Title = "Holly"
+                        },
+                        new
+                        {
+                            Id = new Guid("a6e9d3b2-4c7f-4f5a-9b1e-2d8c4f7a9e32"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/you-like-it-darker.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "You Like It Darker is a short-story collection by Stephen King that gathers a range of tales blending horror, suspense, and dark fantasy. The stories delve into the unsettling corners of human nature and the supernatural, featuring characters who confront haunted pasts, uncanny events, and moral crossroads. With King’s trademark mix of sharp characterization, creeping dread, and unexpected emotion, the collection showcases his ability to turn everyday situations into nightmarish or profound encounters. From quiet psychological terror to more overtly supernatural threats, You Like It Darker offers a varied but thematically linked set of narratives about what happens when darkness—inner or outer—demands to be faced.",
+                            PublishedDate = new DateTime(2024, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A collection of chilling and reflective tales that explore fate, obsession, and the shadows lurking at the edges of ordinary life.",
+                            Title = "You Like It Darker"
+                        },
+                        new
+                        {
+                            Id = new Guid("7e4a2c51-0dd7-4b9b-9a2c-494b62c2140f"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/never-flinch.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Never Flinch is a 2025 crime-thriller novel by Stephen King featuring private investigator Holly Gibney. The story unfolds along two converging tracks: in the Midwestern city of Buckeye, a killer sends a letter to the police announcing a plan to kill thirteen innocents and one guilty person as atonement for a wrongful conviction, while elsewhere a high-profile feminist writer faces escalating threats from a violent extremist. As Holly works alongside local detectives to decipher the killer’s motives and methods, she also takes a job as bodyguard to the embattled activist, forcing her to juggle overlapping dangers, old trauma, and public scrutiny. The novel explores themes of vengeance, abuse, extremism, and moral responsibility, while continuing Holly’s evolution from anxious outsider to determined, if imperfect, hero.",
+                            PublishedDate = new DateTime(2025, 5, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Holly Gibney hunts a killer promising a \"lottery\" of deaths while protecting a targeted feminist activist.",
+                            Title = "Never Flinch"
+                        },
+                        new
+                        {
+                            Id = new Guid("2bd3e1bb-4d57-4c0a-9a56-58c6714bb7a9"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-long-walk.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Long Walk is a dystopian novel by Stephen King, originally published under the pseudonym Richard Bachman in 1979. Set in an alternate, militarized America, it follows one hundred teenage boys who volunteer for an annual endurance contest known as the Long Walk. The rules are simple but merciless: maintain a minimum walking speed, never stop, and if you receive three warnings, you are shot on the spot. As the miles stretch on and exhaustion, pain, and psychological strain mount, friendships form and fracture while the boys confront fear, mortality, and the true cost of victory. Blending psychological horror with social commentary on violence, authoritarianism, and spectacle, The Long Walk is often cited as one of King’s most haunting and emotionally powerful early works.",
+                            PublishedDate = new DateTime(1979, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "One hundred boys, one brutal contest, and only one allowed to survive the road.",
+                            Title = "The Long Walk"
+                        },
+                        new
+                        {
+                            Id = new Guid("6f9e1c2b-8d44-4b87-94f6-6a32b5fb9184"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-dead-zone.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Dead Zone is a 1979 psychological horror and thriller novel by American writer Stephen King. It follows Johnny Smith, a schoolteacher who falls into a years-long coma after a car accident. When he awakens, he discovers he has developed powerful psychic abilities that allow him to glimpse people’s pasts and futures through touch. Struggling to rebuild his life, Johnny becomes increasingly tormented when he foresees catastrophe linked to ambitious politician Greg Stillson. Forced to confront the ethical implications of his visions, Johnny faces an agonizing decision about how far he is willing to go to prevent disaster. Blending supernatural elements with political tension and moral dilemma, The Dead Zone is one of King’s most character-driven and haunting works, and was later adapted into a film and a television series.",
+                            PublishedDate = new DateTime(1979, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A man awakens from a coma with the power to see the future—and a terrible choice to make.",
+                            Title = "The Dead Zone"
+                        },
+                        new
+                        {
+                            Id = new Guid("9f9c3b5e-8c4d-4e2f-9b54-4ea3a0c8e3f1"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/cujo.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Cujo is a 1981 horror novel by American writer Stephen King. The story follows a once-friendly Saint Bernard who becomes rabid and transforms into a relentless killer, trapping a mother and her young son in their stalled car during a scorching heatwave. As the town of Castle Rock deals with its own domestic troubles and hidden fears, the novel explores themes of helplessness, random tragedy, and the horrors that can emerge from everyday life. Cujo is often noted for its intense, claustrophobic atmosphere and its focus on psychological as well as physical terror.",
+                            PublishedDate = new DateTime(1981, 9, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A family is terrorized by a rabid dog trapped with them in a broken-down car.",
+                            Title = "Cujo"
+                        },
+                        new
+                        {
+                            Id = new Guid("a3a6f5a4-2b0c-4e2c-9a77-3a5f4b2c8e91"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/roadwork.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Roadwork is a 1981 novel by Stephen King, originally published under the pseudonym Richard Bachman. The story follows Barton George Dawes, an ordinary man whose life unravels when a highway expansion project threatens to demolish both his home and his workplace. As he refuses to accept the changes forced upon him, Bart’s quiet resistance escalates into a dangerous and ultimately violent stand against progress. The novel explores themes of grief, denial, the fear of change, and the psychological toll of losing one’s place in the world.",
+                            PublishedDate = new DateTime(1981, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "How far would one man go to keep the world from paving over his past?",
+                            Title = "Roadwork"
+                        },
+                        new
+                        {
+                            Id = new Guid("8c9e6b1c-8b4e-4f6d-8e5f-7f3d8f6a9b21"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-running-man.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Running Man is a dystopian thriller novel by Stephen King, originally published in 1982 under the pseudonym Richard Bachman. Set in a grim future where the world is plagued by poverty, violence, and oppressive media, the story follows Ben Richards, a desperate man who volunteers for a deadly reality show to earn money for his sick daughter. Hunted across the country by professional killers and watched by millions on television, Richards must use his wits and determination to stay alive. The novel explores themes of media manipulation, economic inequality, and the dehumanizing effects of entertainment. It was later loosely adapted into a 1987 film starring Arnold Schwarzenegger.",
+                            PublishedDate = new DateTime(1982, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "In a brutal future game show, the ultimate prize is survival.",
+                            Title = "The Running Man"
+                        },
+                        new
+                        {
+                            Id = new Guid("a3c3acf9-4d34-4b19-9a8f-1ae0d1b2f3cd"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/different-seasons.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Different Seasons is a 1982 collection of four novellas by Stephen King, each tied to a different season of the year. The stories include \"Rita Hayworth and Shawshank Redemption\" (spring), \"Apt Pupil\" (summer), \"The Body\" (fall), and \"The Breathing Method\" (winter). Though not strictly horror, the collection explores themes of hope, corruption, lost innocence, obsession, and the quiet terrors of ordinary life. Several of the novellas have been adapted into acclaimed films, most notably The Shawshank Redemption (1994) and Stand by Me (1986), helping cement the book's reputation as one of King's most celebrated works outside his traditional horror fare.",
+                            PublishedDate = new DateTime(1982, 8, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Four seasons, four journeys into the darker corners of human nature.",
+                            Title = "Different Seasons"
+                        },
+                        new
+                        {
+                            Id = new Guid("c7a4d6f3-4a1d-4c5a-9f55-9f3f4b7c2b19"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-talisman.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Talisman is a 1984 dark fantasy novel by Stephen King and Peter Straub. It follows twelve-year-old Jack Sawyer, who embarks on an epic journey across the United States and its parallel world, \"the Territories,\" to find a mystical talisman that can save his gravely ill mother. As Jack flips between realities, he encounters monsters, guardians, and twisted reflections of people he knows in his own world. Blending horror, fantasy, and adventure, the novel explores themes of courage, sacrifice, and the blurred boundaries between worlds. Widely regarded as a landmark collaboration between two masters of horror and fantasy, The Talisman has earned a lasting place in modern genre fiction.",
+                            PublishedDate = new DateTime(1984, 11, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A perilous cross-country quest through parallel worlds in search of a mystical talisman that can save a dying mother.",
+                            Title = "The Talisman"
+                        },
+                        new
+                        {
+                            Id = new Guid("d7c1b7fa-7a5c-4a1a-8f6a-8c7d5b0d9a32"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/thinner.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Thinner is a 1984 horror novel by Stephen King, published under the pseudonym Richard Bachman. The story follows Billy Halleck, an obese attorney who accidentally kills a Romani woman in a hit-and-run accident. After escaping legal consequences through his connections, Billy is cursed by the dead woman's father with a single word: 'Thinner.' As Billy rapidly and uncontrollably loses weight, he becomes desperate to find a way to break the curse. The novel explores themes of guilt, justice, prejudice, and the high price of avoiding responsibility for one's actions.",
+                            PublishedDate = new DateTime(1984, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A cursed man wastes away after a hit-and-run incident.",
+                            Title = "Thinner"
+                        },
+                        new
+                        {
+                            Id = new Guid("7e4cb2de-5bc9-4e9c-8a0a-9a4d3d2f91b7"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/skeleton-crew.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Skeleton Crew is a 1985 collection of short fiction by Stephen King, featuring a range of horror, suspense, and dark fantasy tales. The book includes some of King’s most memorable short works, such as \"The Mist,\" in which a small town is shrouded in a mysterious fog filled with deadly creatures, and \"The Monkey,\" a cursed toy that brings death wherever it appears. Across the collection, King explores fear, human frailty, the supernatural, and the unknown, delivering stories that are at turns disturbing, poignant, and deeply unsettling. Skeleton Crew further cemented King’s reputation as a master of the horror genre.",
+                            PublishedDate = new DateTime(1985, 6, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A chilling collection of short stories that showcase Stephen King's mastery of horror.",
+                            Title = "Skeleton Crew"
+                        },
+                        new
+                        {
+                            Id = new Guid("b6a4f4d0-1b7a-4c3b-9d4b-5c6a2b8e9f11"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-eyes-of-the-dragon.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Eyes of the Dragon is a fantasy novel by Stephen King that departs from his usual horror style and embraces a classic fairy-tale structure. Set in the kingdom of Delain, the story follows Prince Peter, who is falsely accused of murdering his father, King Roland, through the scheming of the dark magician Flagg. Imprisoned in a high tower, Peter must rely on his courage, intelligence, and a daring escape plan to reclaim his rightful throne. Blending political intrigue, coming-of-age themes, and elements of dark magic, the novel explores loyalty, justice, and the struggle between good and evil within both individuals and kingdoms.",
+                            PublishedDate = new DateTime(1984, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A young prince must fight betrayal and dark magic to save his kingdom.",
+                            Title = "The Eyes of the Dragon"
+                        },
+                        new
+                        {
+                            Id = new Guid("9b5d8c6c-6c2c-4a0a-9a6c-2df46a52f78f"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/four-past-midnight.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Four Past Midnight is a 1990 collection of four novellas by Stephen King that delve into supernatural and psychological horror. The stories—\"The Langoliers,\" \"Secret Window, Secret Garden,\" \"The Library Policeman,\" and \"The Sun Dog\"—explore themes of guilt, paranoia, alternate realities, and the lingering shadows of past mistakes. From a terrifying journey on an empty airplane to a writer stalked by his own creation, each novella presents an unsettling, slow-building dread characteristic of King's storytelling. Several tales have been adapted for film and television, further cementing the collection as a memorable entry in King's body of work.",
+                            PublishedDate = new DateTime(1990, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Four spine-tingling novellas that bend time, reality, and sanity.",
+                            Title = "Four Past Midnight"
+                        },
+                        new
+                        {
+                            Id = new Guid("9c2b0b17-8e9d-4e54-9b7a-2a5e6f4c3d10"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/needful-things.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Needful Things is a 1991 horror novel by Stephen King set in the town of Castle Rock, Maine. A mysterious new shop called \"Needful Things\" opens, run by the enigmatic Leland Gaunt, who seems to have the perfect item for each resident—something they desire more than anything. The cost, however, is not just money but \"small favors\" that pit neighbor against neighbor and gradually plunge the town into chaos. As tensions escalate into violence, Sheriff Alan Pangborn struggles to uncover Gaunt’s true nature and stop the destruction. The novel serves as both a chilling supernatural thriller and a dark satire of greed, temptation, and the corruptibility of ordinary people.",
+                            PublishedDate = new DateTime(1991, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A sinister shop opens in a small town, selling dreams at a terrible price.",
+                            Title = "Needful Things"
+                        },
+                        new
+                        {
+                            Id = new Guid("c3c8c737-8c9d-4c4c-9c7f-1b2a3f4d5e6f"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-tommyknockers.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Tommyknockers is a 1987 science fiction–horror novel by Stephen King. Set in the town of Haven, Maine, the story begins when writer Bobbi Anderson stumbles upon a buried alien spacecraft in the woods behind her home. As she uncovers more of the ship, a strange energy begins to affect the townspeople, enhancing their ingenuity while slowly eroding their humanity and sanity. Jim Gardener, an alcoholic poet and Bobbi's friend, becomes one of the few who can resist the ship’s influence due to a metal plate in his head. The novel explores themes of addiction, power, paranoia, and the corrupting influence of technology, blending cosmic horror with small-town drama.",
+                            PublishedDate = new DateTime(1987, 11, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A buried alien ship slowly transforms a small town with terrifying consequences.",
+                            Title = "The Tommyknockers"
+                        },
+                        new
+                        {
+                            Id = new Guid("d9f3b8c6-8a4c-4c9d-9c42-5f73baf0e7d2"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/nightmares-and-dreamscapes.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Nightmares & Dreamscapes is a 1993 short-story collection by Stephen King, featuring a wide range of horror, dark fantasy, suspense, and even a bit of humor. The anthology gathers together twenty short stories, one teleplay, one poem, and one nonfiction essay. Among the notable pieces are \"Dolan's Cadillac,\" a tale of long-plotted revenge; \"The End of the Whole Mess,\" a chilling story about a well-intentioned experiment gone wrong; and \"The Night Flier,\" which follows a tabloid journalist investigating a mysterious killer who travels by private plane. Across the collection, King experiments with different voices and formats while exploring themes of guilt, obsession, violence, and the uncanny lurking beneath ordinary life.",
+                            PublishedDate = new DateTime(1993, 9, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A diverse collection of horror, fantasy, and suspense stories from Stephen King.",
+                            Title = "Nightmares & Dreamscapes"
+                        },
+                        new
+                        {
+                            Id = new Guid("c2f4c3f9-0ab1-4b61-86c7-1a0e75f3f9d2"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/insomnia.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Insomnia is a 1994 novel by Stephen King set in the town of Derry, Maine. The story follows Ralph Roberts, an elderly widower who develops chronic insomnia after the death of his wife. As his sleep deprivation worsens, Ralph begins to see strange auras around people and encounters mysterious, otherworldly beings that seem to influence life and death. Drawn into a larger cosmic struggle, he discovers that his newfound abilities may be the key to preventing a catastrophic act of violence. Blending supernatural horror, dark fantasy, and psychological tension, Insomnia explores themes of aging, grief, fate, and the unseen forces that shape human existence.",
+                            PublishedDate = new DateTime(1994, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A man who can no longer sleep begins to see terrifying visions of a hidden world beneath reality.",
+                            Title = "Insomnia"
+                        },
+                        new
+                        {
+                            Id = new Guid("c2f4b6a1-8d3f-4a71-9f88-3d3f4a21b7e9"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/dolores-claiborne.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Dolores Claiborne is a 1992 psychological thriller novel by Stephen King, presented almost entirely as a single, unbroken monologue. Set on the isolated Little Tall Island in Maine, the story follows Dolores as she gives a stark, unflinching confession to the police about the death of her wealthy employer, Vera Donovan, and the long-ago disappearance of her abusive husband, Joe. As Dolores recounts her life of hardship, abuse, and sacrifice, the novel explores themes of domestic violence, maternal love, class, and the moral gray areas of justice and survival. With its intense character study and tightly focused narrative, Dolores Claiborne stands out as one of King’s most grounded and emotionally powerful works.",
+                            PublishedDate = new DateTime(1992, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A housekeeper’s confession on a remote Maine island unearths decades of buried secrets and rage.",
+                            Title = "Dolores Claiborne"
+                        },
+                        new
+                        {
+                            Id = new Guid("c3b7f9e1-981d-4c23-8e0f-5f1f9cbb0b77"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-green-mile.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Green Mile is a 1996 serial novel by Stephen King, originally published in six monthly installments. Set during the 1930s in the death row block of Cold Mountain Penitentiary—nicknamed \"The Green Mile\" for the color of its linoleum floor—the story is narrated by head guard Paul Edgecombe. His world is upended by the arrival of John Coffey, a gentle giant convicted of a horrific crime but possessing an extraordinary, seemingly supernatural gift. As strange miracles and chilling events unfold, Paul begins to question Coffey’s guilt and the morality of the executions he oversees. Blending supernatural elements with deep emotional and moral themes, The Green Mile is a powerful exploration of compassion, injustice, and the burden of carrying out the law.",
+                            PublishedDate = new DateTime(1996, 3, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "On death row, a condemned man with mysterious powers challenges everything the guards believe about justice, mercy, and miracles.",
+                            Title = "The Green Mile"
+                        },
+                        new
+                        {
+                            Id = new Guid("a8b2f6bb-0f3b-4c2c-b4b9-3f2d9a6f12cd"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-regulators.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Regulators is a 1996 horror novel by Stephen King, published under the pseudonym Richard Bachman. Set in the seemingly ordinary suburban neighborhood of Poplar Street in Wentworth, Ohio, the story begins when the street is suddenly besieged by supernatural forces shaped like characters and imagery from a violent children's TV Western. As reality itself bends and morphs, the residents are trapped in a deadly game orchestrated by an ancient, malevolent entity known as Tak, which has possessed an autistic boy named Seth Garin. The novel explores themes of invasion, loss of control, the corruption of innocence, and the fragile line between fantasy and reality, serving as a dark mirror to King’s companion novel, Desperation.",
+                            PublishedDate = new DateTime(1996, 9, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A quiet suburban street is twisted into a brutal, reality-warping battleground.",
+                            Title = "The Regulators"
+                        },
+                        new
+                        {
+                            Id = new Guid("c8b4c9e3-4c1c-4c46-8a0f-3e9e6c7c2a11"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/desperation.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Desperation is a 1996 horror novel by Stephen King. Set in the desolate Nevada desert, the story begins when several travelers are pulled over on a lonely highway by an unsettling small-town sheriff in the nearly abandoned mining town of Desperation. As the captives soon discover, the town has been overtaken by an ancient, malevolent force tied to an old mine and something buried deep beneath it. Blending supernatural horror with themes of faith, sacrifice, and the nature of evil, Desperation follows its characters as they struggle against both external monsters and their own inner demons in a desperate fight to survive.",
+                            PublishedDate = new DateTime(1996, 9, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A small desert town hides an ancient evil that turns a routine arrest into a nightmare of survival.",
+                            Title = "Desperation"
+                        },
+                        new
+                        {
+                            Id = new Guid("e6f4e1b3-9a2c-4f67-91b4-7fd5d1cf3229"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/hearts-in-atlantis.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Hearts in Atlantis is a 1999 collection of interconnected novellas and short stories by Stephen King. The book is structured in five parts—\"Low Men in Yellow Coats,\" \"Hearts in Atlantis,\" \"Blind Willie,\" \"Why We're in Vietnam,\" and \"Heavenly Shades of Night Are Falling\"—that follow a cast of recurring characters from childhood into late adulthood. Set largely during and after the 1960s, the collection explores themes of friendship, memory, moral responsibility, and the lasting impact of the Vietnam War on a generation. While several stories contain subtle connections to King’s broader Dark Tower mythos, the focus remains on deeply human dramas shaped by time, trauma, and the choices made along the way.",
+                            PublishedDate = new DateTime(1999, 9, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Linked tales of childhood, loss, and the long shadow of the Vietnam era.",
+                            Title = "Hearts in Atlantis"
+                        },
+                        new
+                        {
+                            Id = new Guid("e7b2c8a9-3f4d-4b77-9b65-2c8d4c5a7f13"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/bag-of-bones.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Bag of Bones is a 1998 supernatural thriller novel by Stephen King. It tells the story of Mike Noonan, a bestselling author suffering from writer’s block and grief after the sudden death of his wife, Jo. Seeking solace, he retreats to their summer home, Sara Laughs, located on the shores of Dark Score Lake. There, he becomes entangled in a chilling mystery involving the ghost of a murdered woman, a custody battle, and a curse that has haunted the town for decades. As supernatural forces close in, Mike must uncover the truth behind Jo’s hidden secrets and the lake’s tragic history. Blending ghost story, romance, and psychological suspense, Bag of Bones explores themes of love, loss, creativity, and redemption.",
+                            PublishedDate = new DateTime(1998, 9, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A grieving novelist returns to his lake house and uncovers dark secrets haunting its shores.",
+                            Title = "Bag of Bones"
+                        },
+                        new
+                        {
+                            Id = new Guid("f4b937c0-6c71-4e6b-9a2b-9f660a9b8b24"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/everythings-eventual.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Everything's Eventual is a 2002 short-story collection by Stephen King, containing 14 stories that span horror, suspense, dark fantasy, and psychological drama. The collection includes notable tales such as '1408', about a relentlessly haunted hotel room; 'Riding the Bullet', in which a young man hitchhikes and encounters a terrifying passenger; and 'Everything's Eventual', following a young man with a strange gift and deadly purpose. Other stories explore themes of mortality, guilt, chance, and the unpredictable forces that shape human lives. Together, these stories showcase King's range and his talent for uncovering dread and wonder in both the ordinary and the supernatural.",
+                            PublishedDate = new DateTime(2002, 3, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A collection of 14 tales exploring horror, fate, and the unseen corners of reality.",
+                            Title = "Everything's Eventual"
+                        },
+                        new
+                        {
+                            Id = new Guid("f4c3c92a-7c1b-45d3-9c2c-9b1e58d5a7e0"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-colorado-kid.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Colorado Kid is a 2005 mystery novel by Stephen King, published by the Hard Case Crime imprint. Set on a small island off the coast of Maine, the story follows two veteran newspapermen and their young intern as they discuss an unsolved case known locally as the \"Colorado Kid\"—a man who was found dead under baffling circumstances with no clear cause, motive, or identity. Rather than providing a neat resolution, the novel focuses on the nature of mysteries themselves, the limits of investigation, and the idea that some questions in life remain unanswered. It’s a moody, character-driven tale that blends elements of crime fiction with King’s trademark sense of atmosphere.",
+                            PublishedDate = new DateTime(2005, 10, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A mysterious corpse on a Maine island raises more questions than answers in this unconventional crime story.",
+                            Title = "The Colorado Kid"
+                        },
+                        new
+                        {
+                            Id = new Guid("8b3a2c8c-9af1-4e5e-9d7b-6d2d9a4c1f21"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/liseys-story.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Lisey's Story is a 2006 novel by Stephen King that blends psychological horror, dark fantasy, and an intimate portrait of marriage. After the death of her famous novelist husband, Scott Landon, Lisey is forced to confront both her grief and the hidden corners of Scott's past when a dangerous admirer threatens her. As she works through Scott's cryptic clues, Lisey revisits the private language, memories, and otherworldly place—Boo’ya Moon—that defined their relationship. The novel explores themes of trauma, love, creativity, and the ways in which shared stories can both wound and heal. Often cited by King as one of his personal favorites, Lisey's Story is a deeply emotional and haunting examination of what remains after great loss.",
+                            PublishedDate = new DateTime(2006, 10, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A widow unravels her late husband's secret world and confronts the monsters that live there—and in herself.",
+                            Title = "Lisey's Story"
+                        },
+                        new
+                        {
+                            Id = new Guid("b12c3f9e-4a6d-4b21-91f2-0d7a7e4f3c89"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/cell.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Cell is a 2006 horror novel by Stephen King. The story begins when a mysterious signal, known as 'the Pulse', is broadcast across cell phone networks worldwide. Anyone using a mobile phone at that moment is transformed into a savage, zombie-like creature driven by primal violence. The novel follows Clayton Riddell, a graphic artist in Boston, as he struggles to survive the immediate chaos and sets out on a perilous journey to find his young son. As the 'phone-crazies' begin to evolve and form a terrifying collective consciousness, Clay and his small band of survivors must confront the question of whether humanity can endure in a world forever changed by technology turned deadly.",
+                            PublishedDate = new DateTime(2006, 1, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A mysterious signal turns cell phone users into violent, mindless killers.",
+                            Title = "Cell"
+                        },
+                        new
+                        {
+                            Id = new Guid("0f3f8979-3d5c-4b96-9a2a-2f5f3bd6c412"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/duma-key.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Duma Key is a 2008 novel by Stephen King that follows Edgar Freemantle, a successful contractor who relocates to a remote island off the coast of Florida after a devastating construction accident leaves him physically and emotionally shattered. On Duma Key, Edgar discovers an unexpected talent for painting, but his art soon takes on an eerie, supernatural power that begins to affect reality itself. As he befriends other island residents and uncovers the island’s tragic history, Edgar realizes that his gift is tied to an ancient, malevolent presence. The novel explores themes of trauma, recovery, creativity, and the dangerous forces that can lurk beneath both memory and imagination.",
+                            PublishedDate = new DateTime(2008, 1, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "On a haunted Florida island, a wounded man’s newfound artistic gift begins to unleash something dark and deadly.",
+                            Title = "Duma Key"
+                        },
+                        new
+                        {
+                            Id = new Guid("5f8a1bde-3f72-4f2a-b9e0-5cd17a90c612"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/just-after-sunset.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Just After Sunset is a 2008 short-story collection by Stephen King, featuring thirteen tales that range from quiet psychological unease to full-on supernatural horror. The stories, including \"Willa,\" \"The Gingerbread Girl,\" \"Harvey's Dream,\" \"N.\", and \"A Very Tight Place,\" showcase King’s fascination with the fragile line between normalcy and nightmare. Many of the pieces explore themes of mortality, grief, obsession, and the hidden darkness in seemingly mundane settings, from suburban homes to lonely highways. The collection highlights King's versatility as a storyteller, delivering both intimate character studies and chilling, otherworldly encounters in tightly crafted short form.",
+                            PublishedDate = new DateTime(2008, 11, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Thirteen tales that explore the uncanny moments lurking at the edges of ordinary life.",
+                            Title = "Just After Sunset"
+                        },
+                        new
+                        {
+                            Id = new Guid("5b3f1c6e-7d4a-4f0f-9f5a-2a7a1d9e3c42"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/under-the-dome.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Under the Dome is a 2009 novel by Stephen King that chronicles the sudden isolation of the small town of Chester's Mill, Maine, when an invisible, impenetrable barrier descends from the sky and seals it off from the rest of the world. As resources dwindle and tempers flare, the town’s residents are forced to confront not only the mystery of the dome itself, but also the darkest aspects of human nature. Power-hungry politician Big Jim Rennie seizes the opportunity to tighten his control, while a small group of resisters, including former Army officer Dale \"Barbie\" Barbara and newspaper editor Julia Shumway, struggle to expose his corruption and find a way to bring the dome down. Combining science fiction, horror, and social commentary, Under the Dome is a sprawling, suspenseful exploration of community, power, and moral choice under extreme pressure.",
+                            PublishedDate = new DateTime(2009, 11, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A small town is suddenly sealed off from the world by an invisible dome, igniting chaos, corruption, and a desperate fight for survival.",
+                            Title = "Under the Dome"
+                        },
+                        new
+                        {
+                            Id = new Guid("3ce93e2b-8e5c-4a8b-bf17-3c5f4b3b76aa"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/full-dark-no-stars.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Full Dark, No Stars is a 2010 collection of four novellas by Stephen King, each delving into the darkest corners of human nature. The stories—'1922', 'Big Driver', 'Fair Extension', and 'A Good Marriage'—follow seemingly ordinary people who find themselves in situations of murder, betrayal, supernatural bargains, and horrific secrets. Set against both rural and suburban American backdrops, the collection explores themes of guilt, retribution, hidden evil, and the terrible choices people make when cornered. Uncompromising and often brutal, Full Dark, No Stars showcases King's talent for psychological horror grounded in real human fears and moral dilemmas.",
+                            PublishedDate = new DateTime(2010, 11, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Four novellas of ordinary people pushed to terrifying extremes of violence, guilt, and revenge.",
+                            Title = "Full Dark, No Stars"
+                        },
+                        new
+                        {
+                            Id = new Guid("6b2f1c3a-8e44-4fd0-9c6a-1c7b9320f3e9"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/11-22-63.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "11/22/63 is a 2011 novel by Stephen King that follows Jake Epping, a high school teacher who discovers a portal to the late 1950s in the back of a diner. Persuaded by the diner’s owner, Jake takes on a mission: go back in time, build a new life in the past, and ultimately prevent the assassination of President John F. Kennedy on November 22, 1963. As Jake becomes deeply involved with the people and world of the past, he realizes that history is stubborn and resists being changed—and that every alteration has unpredictable, often devastating consequences. Blending historical fiction, romance, suspense, and elements of the supernatural, the novel explores themes of fate, moral responsibility, and the personal cost of trying to rewrite history.",
+                            PublishedDate = new DateTime(2011, 11, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A time traveler attempts to stop the assassination of President John F. Kennedy, but changing the past comes at a terrible price.",
+                            Title = "11/22/63"
+                        },
+                        new
+                        {
+                            Id = new Guid("f13d2a8e-0b6d-4f0e-9c2e-7a1d5cbb9382"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/doctor-sleep.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Doctor Sleep is a 2013 novel by Stephen King and the sequel to his 1977 classic, The Shining. The story follows a now-adult Dan (Danny) Torrance, still scarred by the trauma of the Overlook Hotel and struggling with alcoholism and anger, much like his father before him. After hitting bottom, Dan finds a measure of peace working at a hospice, where his lingering psychic abilities—his 'shining'—help ease patients into death, earning him the nickname 'Doctor Sleep.' His fragile stability shatters when he forms a powerful psychic connection with a young girl named Abra Stone, whose shine is even stronger than his own. Together, they become the targets of the True Knot, a roaming group of quasi-immortal predators who feed on the psychic 'steam' of tortured children. Blending horror, character study, and redemption arc, the novel explores trauma, addiction, legacy, and the possibility of reclaiming one’s life from the ghosts of the past.",
+                            PublishedDate = new DateTime(2013, 9, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "An adult Dan Torrance battles his demons—and a psychic cult that preys on gifted children.",
+                            Title = "Doctor Sleep"
+                        },
+                        new
+                        {
+                            Id = new Guid("d1f8b9c4-4c3b-4070-9c32-42b9f2f6e8ad"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/finders-keepers.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Finders Keepers is a 2015 crime thriller novel by Stephen King and the second book in the Bill Hodges Trilogy. The story begins in 1978, when reclusive author John Rothstein is murdered by obsessed fan Morris Bellamy, who steals a cache of money and unpublished notebooks before hiding them away. Decades later, teenager Pete Saubers discovers the buried trunk and secretly uses the money to help his struggling family, becoming captivated by Rothstein’s lost work. When Morris is released from prison and learns his treasure is gone, his violent quest to reclaim it intersects with Pete’s efforts to protect his discovery. Drawn into the case, retired detective Bill Hodges, along with Holly Gibney and Jerome Robinson, must stop Bellamy before the past destroys more lives. Blending literary obsession, suspense, and moral ambiguity, Finders Keepers explores the dangerous power stories can hold over readers and the line between fandom and fanaticism.",
+                            PublishedDate = new DateTime(2015, 6, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A murdered author’s hidden notebooks resurface decades later, pulling a young fan and retired detective Bill Hodges into a deadly obsession.",
+                            Title = "Finders Keepers"
+                        },
+                        new
+                        {
+                            Id = new Guid("e6b8d4a1-2f3c-4f8a-9c23-7b4a1f9c23de"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-bazaar-of-bad-dreams.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Bazaar of Bad Dreams is a 2015 short-story collection by Stephen King, featuring a mix of previously published and new works that showcase his range in horror, dark fantasy, and psychological suspense. The collection contains stories such as 'Mile 81', about a predatory car at an abandoned rest stop; 'Ur', which explores a sinister, alternate-reality e-reader; and 'Bad Little Kid', a tale of a seemingly ageless child who brings tragedy wherever he appears. Each story is preceded by an introduction from King, offering personal insights into his inspiration, writing process, and themes. Together, these pieces examine mortality, regret, obsession, and the eerie forces lurking beneath ordinary life.",
+                            PublishedDate = new DateTime(2015, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A collection of unsettling tales, each introduced with King’s own reflections on their origins.",
+                            Title = "The Bazaar of Bad Dreams"
+                        },
+                        new
+                        {
+                            Id = new Guid("3e9c7a24-5a31-4a1e-9f5a-4d2b8f6c91e3"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/end-of-watch.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "End of Watch is a 2016 novel by Stephen King and the concluding volume of the Bill Hodges Trilogy. The story reunites retired detective Bill Hodges with his old partner Holly Gibney as they confront Brady Hartsfield, the notorious \"Mercedes Killer\" from Mr. Mercedes. Though Hartsfield lies in a hospital in a seemingly vegetative state, a series of strange suicides suggests he has developed terrifying new psychic abilities that allow him to influence vulnerable minds from afar. As Hodges races against time while battling his own failing health, he and his allies must find a way to stop Brady’s growing supernatural reach. Blending crime thriller, supernatural horror, and emotional drama, End of Watch brings the trilogy to a tense and haunting conclusion.",
+                            PublishedDate = new DateTime(2016, 6, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A deadly mind control power pulls retired detective Bill Hodges back into his final and most personal case.",
+                            Title = "End of Watch"
+                        },
+                        new
+                        {
+                            Id = new Guid("bb7c9f4e-4b0c-4c0b-8d1d-2f4a3b9f6e21"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-outsider.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Outsider is a 2018 novel by Stephen King that blends crime fiction with supernatural horror and introduces a key thread in the Holly Gibney series. The story begins with the arrest of beloved small-town teacher and coach Terry Maitland, accused of the gruesome murder of a young boy. The evidence against him—DNA, fingerprints, eyewitnesses—is overwhelming, yet Maitland has an ironclad alibi proving he was miles away when the crime occurred. As detective Ralph Anderson, defense lawyers, and later private investigator Holly Gibney dig deeper, they uncover a malevolent entity capable of mimicking others and feeding on grief. The novel explores themes of justice, doubt, mob mentality, and the unsettling idea that evil can look exactly like someone you trust. It also further develops Holly Gibney as a central figure in King’s interconnected universe.",
+                            PublishedDate = new DateTime(2018, 5, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A brutal crime, impossible evidence, and a darkness that wears a familiar face.",
+                            Title = "The Outsider"
+                        },
+                        new
+                        {
+                            Id = new Guid("b4f2c8e1-3a6d-4a9d-9f12-8e3a7d6c4b21"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/elevation.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Elevation is a 2018 novella by Stephen King set in the familiar town of Castle Rock, Maine. The story follows Scott Carey, a middle-aged man who is baffled to discover that he is steadily losing weight on the scale while his body shows no outward sign of change. As his inexplicable condition progresses, Scott becomes increasingly determined to use whatever time he has left to make life better for the people around him, including his feuding neighbors who face prejudice from the town. More reflective and uplifting than King’s typical horror fare, Elevation explores themes of empathy, community, and the quiet heroism of everyday kindness in the face of mortality.",
+                            PublishedDate = new DateTime(2018, 10, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A man in a small Maine town begins to mysteriously lose weight without changing in appearance, finding unexpected grace as his condition worsens.",
+                            Title = "Elevation"
+                        },
+                        new
+                        {
+                            Id = new Guid("fa8c9d2b-6e2b-4a8c-9a37-5cba2f0457dd"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-institute.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Institute is a 2019 horror-thriller novel by Stephen King. The story follows Luke Ellis, a highly gifted twelve-year-old who is kidnapped from his home and taken to a sinister facility known as the Institute. There, children with telepathic and telekinetic abilities are subjected to brutal tests and experiments by staff who insist their suffering serves a greater good. As friendships form and hope fades, Luke begins to plan a daring escape—one that may be the only chance to expose the truth behind the Institute’s operations. The novel explores themes of exploitation, institutional evil, resilience, and the moral cost of sacrificing the few for the many.",
+                            PublishedDate = new DateTime(2019, 9, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Children with special abilities are imprisoned in a secret facility where escape seems impossible.",
+                            Title = "The Institute"
+                        },
+                        new
+                        {
+                            Id = new Guid("d3a9c4b0-7f52-4c0f-9c41-9b5f2a7de3a1"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/later.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Later is a 2021 crime-horror novella by Stephen King, published by Hard Case Crime. Told from the perspective of Jamie Conklin, a boy who can see and speak to the dead, the story follows his coming of age as he is drawn into increasingly dangerous situations by adults who want to exploit his ability. What begins as a strange, unsettling gift becomes a curse when Jamie is coerced into using his power to confront a vengeful spirit that doesn’t follow the usual rules of the dead. Mixing supernatural chills with noir-inflected crime elements, the novella explores themes of innocence, exploitation, addiction, and the blurred line between truth and the stories we tell ourselves to survive.",
+                            PublishedDate = new DateTime(2021, 3, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A boy who can see the dead learns that some secrets refuse to stay buried.",
+                            Title = "Later"
+                        },
+                        new
+                        {
+                            Id = new Guid("f2c9b8d7-3e41-4f5d-92b3-4a7c1c6a9e21"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/billy-summers.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Billy Summers is a 2021 crime novel by Stephen King that follows the story of Billy, a highly skilled sniper and contract killer who only accepts assignments on targets he believes are truly bad. Ready to retire, Billy agrees to one final job: assassinate a man about to go on trial, then disappear. Posing as an aspiring writer in a small town while he waits for the hit, Billy begins to reflect on his violent past and the traumas of his time as a soldier in Iraq. When the job goes sideways and he realizes he has been double-crossed, Billy sets out to track down those who betrayed him. Blending slow-burn suspense, character study, and bursts of brutal action, Billy Summers is a tense, emotionally layered exploration of guilt, redemption, and the possibility of starting over.",
+                            PublishedDate = new DateTime(2021, 8, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A hitman with a strict moral code takes one last job, only to find himself trapped in a deadly conspiracy.",
+                            Title = "Billy Summers"
+                        },
+                        new
+                        {
+                            Id = new Guid("7a3f9a9c-5e9c-4b42-8d0a-1b4a2b0c9f31"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/blaze.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Blaze is a crime novel by Stephen King, published under his pseudonym Richard Bachman in 2007, though it was originally written decades earlier. The story centers on Clayton \"Blaze\" Blaisdell Jr., a physically imposing yet mentally impaired drifter whose life has been shaped by abuse, exploitation, and tragedy. Persuaded by the lingering voice of his deceased partner-in-crime, George, Blaze attempts one last big score: kidnapping the infant son of a wealthy family for ransom. As the botched scheme unfolds, Blaze’s rough exterior clashes with an unexpected affection for the child, forcing him to confront his past, his choices, and the possibility of redemption. Mixing noir sensibilities with King’s trademark emotional depth, Blaze is a bleak, poignant portrait of a criminal shaped by circumstance and loss.",
+                            PublishedDate = new DateTime(2007, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A small-time con with a damaged mind kidnaps a baby for ransom, only to find himself torn between crime and a strange, growing tenderness.",
+                            Title = "Blaze"
+                        },
+                        new
+                        {
+                            Id = new Guid("e8b0d4e9-1c4a-4b9a-9f6c-3f1a2b7c9d45"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/dreamcatcher.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Dreamcatcher is a 2001 horror novel by Stephen King that blends psychological terror, alien invasion, and the enduring power of friendship. The story follows four lifelong friends—Beaver, Henry, Jonesy, and Pete—who share a telepathic bond after rescuing a bullied boy named Duddits in their youth. Years later, during their annual hunting trip in the remote Maine woods, they encounter a bizarre storm, a stranded hunter infected with an otherworldly parasite, and a terrifying alien presence. As events spiral out of control, the friends must confront both an external alien threat and the inner scars of their shared past. Dark, brutal, and emotionally charged, Dreamcatcher explores themes of memory, trauma, loyalty, and sacrifice against the backdrop of cosmic horror.",
+                            PublishedDate = new DateTime(2001, 3, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Four friends bound by a childhood act of bravery face an alien horror in the snowy woods of Maine.",
+                            Title = "Dreamcatcher"
+                        },
+                        new
+                        {
+                            Id = new Guid("8e6d3a1b-6a3b-4f40-8d1d-8a4a3d9e9a52"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-stand.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Stand is a 1978 post-apocalyptic dark fantasy novel by American writer Stephen King. The story begins with a weaponized influenza strain, nicknamed Captain Trips, that escapes from a military facility and wipes out most of the world's population. The scattered survivors are drawn toward two opposing leaders: the benevolent Mother Abagail in Boulder, Colorado, and the malevolent Randall Flagg in Las Vegas, Nevada. As society collapses, the remaining men and women must choose sides in a climactic struggle between good and evil. Blending horror, fantasy, and social commentary, The Stand is widely regarded as one of King's most ambitious and influential works, later expanded in an uncut edition and adapted into multiple miniseries.",
+                            PublishedDate = new DateTime(1978, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A deadly plague, a shattered world, and the final battle between good and evil.",
+                            Title = "The Stand"
+                        },
+                        new
+                        {
+                            Id = new Guid("b3d2c4a1-7e8f-4e9c-9f31-2f0f6f1d7a45"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/salems-lot.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "’Salem’s Lot is a 1975 horror novel by American writer Stephen King. The story follows Ben Mears, a novelist who returns to the small town of Jerusalem’s Lot, Maine, only to discover that a mysterious antique dealer has taken up residence in the old Marsten House on the hill. As townspeople begin to disappear or show disturbing changes, Ben and a small group of allies uncover a vampiric presence consuming the town from within. The novel blends classic vampire mythology with small-town Americana, exploring themes of corruption, faith, community, and the insidious nature of evil. ’Salem’s Lot has been adapted into television miniseries and remains one of King’s most celebrated early works.",
+                            PublishedDate = new DateTime(1975, 10, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "An old town, an ancient evil, and a writer who returns home to face the darkness.",
+                            Title = "’Salem’s Lot"
+                        },
+                        new
+                        {
+                            Id = new Guid("5f0e3af3-0d8f-4f3a-9f0e-0b7a8b9c4c21"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/rage.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Rage is a psychological horror novel by Stephen King, originally published under the pseudonym Richard Bachman in 1977. The story centers on Charlie Decker, a disturbed high school student who takes his algebra class hostage after a violent outburst. As the standoff unfolds, Charlie’s classmates begin revealing dark secrets and buried resentments, blurring the lines between victim and accomplice. The novel delves into themes of alienation, adolescent anger, and the hidden tensions within the American school system. Due to concerns about its subject matter and its association with real-life school violence, Rage was later allowed to go out of print at King’s request and is no longer published.",
+                            PublishedDate = new DateTime(1977, 9, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A troubled teenager, a classroom under siege, and a descent into violent confession.",
+                            Title = "Rage"
+                        },
+                        new
+                        {
+                            Id = new Guid("c7a3c8c9-4b5e-4c2c-9c8b-2e4a1f7d9023"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/night-shift.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Night Shift is a 1978 short story collection by American writer Stephen King, gathering some of his most unsettling early works. The collection includes twenty stories, many of which first appeared in magazines, showcasing a wide range of horror scenarios: from monstrous creatures lurking in the dark and eerie small towns to sinister everyday objects and psychological terrors. Among its most notable stories are “Jerusalem’s Lot,” a gothic prequel to ’Salem’s Lot, “Children of the Corn,” about a murderous cult of rural children, and “The Lawnmower Man,” a bizarre tale of suburban horror. Several stories from Night Shift have been adapted for film and television, helping to establish King’s reputation as a master of short-form horror.",
+                            PublishedDate = new DateTime(1978, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A chilling collection of Stephen King’s early short horror fiction.",
+                            Title = "Night Shift"
+                        },
+                        new
+                        {
                             Id = new Guid("471ff115-dfca-4852-b4c6-2aa0384c859e"),
                             AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
                             AverageRating = 0.0,
@@ -2982,6 +3732,36 @@ namespace BookHub.Data.Migrations
                             RatingsCount = 0,
                             ShortDescription = "Sometimes dead is better.",
                             Title = "Pet Sematary"
+                        },
+                        new
+                        {
+                            Id = new Guid("9a1c3f4e-0a9c-4f13-9d96-8685b5c2e0fa"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/christine.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Christine is a 1983 horror novel by American writer Stephen King. The story follows teenage misfit Arnie Cunningham, who becomes obsessed with a battered 1958 Plymouth Fury he names Christine. As Arnie restores the car, his personality begins to change, and those who come between him and Christine meet violent, mysterious fates. The novel blends supernatural horror with themes of obsession, adolescence, loyalty, and the corrupting influence of power. Christine was adapted into a feature film directed by John Carpenter, released the same year as the novel, and has since become a staple of both automotive and horror pop culture.",
+                            PublishedDate = new DateTime(1983, 4, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Hell hath no fury like a 1958 Plymouth Fury.",
+                            Title = "Christine"
+                        },
+                        new
+                        {
+                            Id = new Guid("0c2f0d67-1f72-4a8d-8d69-1c7183762c84"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/carrie.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Carrie is a 1974 horror novel by American writer Stephen King, his first published novel. It tells the story of Carrie White, a shy, abused high school girl who discovers she possesses telekinetic powers. Tormented by her fanatically religious mother and relentlessly bullied by her peers, Carrie's rage builds to a catastrophic climax on the night of the senior prom. The novel explores themes of isolation, cruelty, coming of age, and the destructive potential of suppressed anger. Carrie was adapted into a critically acclaimed 1976 film directed by Brian De Palma, as well as several later film and stage adaptations, and remains one of King’s most iconic works.",
+                            PublishedDate = new DateTime(1974, 4, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A bullied girl, a terrible power, and a night no one will forget.",
+                            Title = "Carrie"
                         },
                         new
                         {
@@ -3295,13 +4075,11 @@ namespace BookHub.Data.Migrations
                     b.ToTable("ChatMessages");
                 });
 
-            modelBuilder.Entity("BookHub.Features.Genre.Data.Models.Genre", b =>
+            modelBuilder.Entity("BookHub.Features.Genre.Data.Models.GenreDbModel", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -3320,10 +4098,9 @@ namespace BookHub.Data.Migrations
                         .HasMaxLength(3000)
                         .HasColumnType("nvarchar(3000)");
 
-                    b.Property<string>("ImageUrl")
+                    b.Property<string>("ImagePath")
                         .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -3346,298 +4123,298 @@ namespace BookHub.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Horror fiction is designed to scare, unsettle, or horrify readers. It explores themes of fear and the unknown, often incorporating supernatural elements like ghosts, monsters, or curses. The genre can also delve into the darker aspects of human psychology, portraying paranoia, obsession, and moral corruption. Subgenres include Gothic horror, psychological horror, and splatterpunk, each offering unique ways to evoke dread. Settings often amplify the tension, ranging from haunted houses to desolate landscapes, while the stories frequently address societal fears and existential questions.",
-                            ImageUrl = "https://org-dcmp-staticassets.s3.us-east-1.amazonaws.com/posterimages/13453_1.jpg",
+                            ImagePath = "/images/genres/horror.jpg",
                             IsDeleted = false,
                             Name = "Horror"
                         },
                         new
                         {
-                            Id = 2,
+                            Id = new Guid("507c176c-59a3-4869-9811-08fadf985925"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Science fiction explores futuristic, scientific, and technological themes, challenging readers to consider the possibilities and consequences of innovation. These stories often involve space exploration, artificial intelligence, time travel, or parallel universes. Beyond the speculative elements, science fiction frequently tackles ethical dilemmas, societal transformations, and the human condition. Subgenres include cyberpunk, space opera, and hard science fiction, each offering distinct visions of the future. The genre invites readers to imagine the impact of progress and to ponder humanity’s place in the cosmos.",
-                            ImageUrl = "https://www.editoreric.com/greatlit/litgraphics/book-spiral-galaxy.jpg",
+                            ImagePath = "/images/genres/science-fiction.jpg",
                             IsDeleted = false,
                             Name = "Science Fiction"
                         },
                         new
                         {
-                            Id = 3,
+                            Id = new Guid("60f323b5-c68a-4d58-84e1-972358603833"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Fantasy stories transport readers to magical realms filled with mythical creatures, enchanted objects, and epic quests. These tales often feature battles between good and evil, drawing upon folklore, mythology, and the human imagination. Characters may wield powerful magic or undertake journeys of self-discovery in richly crafted worlds. Subgenres like high fantasy, urban fantasy, and dark fantasy provide diverse settings and tones, appealing to a wide range of readers. Themes of heroism, destiny, and transformation are central to the genre, offering both escape and inspiration.",
-                            ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5EcrB6fhai5L3-7Ted6fZgxUjCti0W4avrA&s",
+                            ImagePath = "/images/genres/fantasy.jpg",
                             IsDeleted = false,
                             Name = "Fantasy"
                         },
                         new
                         {
-                            Id = 4,
+                            Id = new Guid("c600e456-dbc6-4772-8e96-79beab47750b"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Mystery fiction is a puzzle-driven genre that engages readers with suspense and intrigue. The narrative typically revolves around solving a crime, uncovering hidden truths, or exposing a web of deceit. Protagonists range from amateur sleuths to seasoned detectives, each navigating clues, red herrings, and unexpected twists. Subgenres such as noir, cozy mysteries, and legal thrillers cater to varied tastes. Mystery stories often delve into human motives and societal dynamics, providing a satisfying journey toward uncovering the truth.",
-                            ImageUrl = "https://celadonbooks.com/wp-content/uploads/2020/03/what-is-a-mystery.jpg",
+                            ImagePath = "/images/genres/mystery.jpg",
                             IsDeleted = false,
                             Name = "Mystery"
                         },
                         new
                         {
-                            Id = 5,
+                            Id = new Guid("c746bd12-22b1-4ef1-a9b0-602467befa90"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Romance novels celebrate the complexities of love and relationships, weaving stories of passion, connection, and emotional growth. They can be set in diverse contexts, from historical periods to fantastical worlds, and often feature characters overcoming personal or external obstacles to find happiness. Subgenres like contemporary romance, historical romance, and paranormal romance offer unique flavors and settings. The genre emphasizes emotional resonance, with narratives that inspire hope and affirm the power of love.",
-                            ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/3/36/Hammond-SS10.jpg",
+                            ImagePath = "/images/genres/romance.jpg",
                             IsDeleted = false,
                             Name = "Romance"
                         },
                         new
                         {
-                            Id = 6,
+                            Id = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Thrillers are characterized by their fast-paced, high-stakes plots designed to keep readers on edge. They often involve life-and-death scenarios, sinister conspiracies, or relentless antagonists. The genre thrives on tension and unexpected twists, with protagonists racing against time to prevent disaster. Subgenres like psychological thrillers, spy thrillers, and action thrillers cater to diverse interests. The stories explore themes of survival, justice, and moral ambiguity, delivering an adrenaline-fueled reading experience.",
-                            ImageUrl = "https://celadonbooks.com/wp-content/uploads/2019/10/what-is-a-thriller-1024x768.jpg",
+                            ImagePath = "/images/genres/thriller.jpg",
                             IsDeleted = false,
                             Name = "Thriller"
                         },
                         new
                         {
-                            Id = 7,
+                            Id = new Guid("d285cd97-1d2f-4d2b-bc94-68cf54198b1c"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Adventure stories are dynamic tales of action, exploration, and survival. Protagonists often face daunting challenges, traversing uncharted territories or overcoming perilous odds. The genre celebrates courage, resilience, and the human spirit, taking readers on exhilarating journeys. From treasure hunts to epic battles, adventure fiction encompasses diverse settings and narratives. It appeals to those who crave excitement and the thrill of discovery.",
-                            ImageUrl = "https://thumbs.dreamstime.com/b/open-book-ship-sailing-waves-concept-reading-adventure-literature-generative-ai-270347849.jpg",
+                            ImagePath = "/images/genres/adventure.jpg",
                             IsDeleted = false,
                             Name = "Adventure"
                         },
                         new
                         {
-                            Id = 8,
+                            Id = new Guid("be00dfad-121c-4b4b-a868-af8a8097668a"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Historical fiction immerses readers in the past, blending factual events with fictional narratives to create vivid portrayals of bygone eras. These stories illuminate the lives, struggles, and triumphs of people from different times, providing insight into cultural, social, and political contexts. Subgenres include historical romance, historical mysteries, and alternate histories, each offering unique perspectives. The genre enriches our understanding of history while engaging us with compelling characters and plots.",
-                            ImageUrl = "https://celadonbooks.com/wp-content/uploads/2020/03/Historical-Fiction-scaled.jpg",
+                            ImagePath = "/images/genres/historical-fiction.jpg",
                             IsDeleted = false,
                             Name = "Historical fiction"
                         },
                         new
                         {
-                            Id = 9,
+                            Id = new Guid("6d7a1b5d-b6df-4f7e-b00a-5250d904a6a8"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Biographies chronicle the lives of real individuals, offering intimate portraits of their experiences, achievements, and legacies. These works range from comprehensive life stories to focused accounts of specific events or periods. Biographies can inspire, inform, and provide deep insight into historical or contemporary figures. Autobiographies and memoirs, subgenres of biography, allow subjects to share their own narratives, adding personal depth to the genre.",
-                            ImageUrl = "https://i0.wp.com/uspeakgreek.com/wp-content/uploads/2024/01/biography.webp?fit=780%2C780&ssl=1",
+                            ImagePath = "/images/genres/biography.jpg",
                             IsDeleted = false,
                             Name = "Biography"
                         },
                         new
                         {
-                            Id = 10,
+                            Id = new Guid("e2ca2afc-d980-491b-83e1-b20a7bf1daf6"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Self-help books are guides to personal growth, offering practical advice for improving one’s life. Topics range from mental health and relationships to productivity and spiritual fulfillment. The genre emphasizes empowerment, providing readers with strategies and tools for achieving goals and overcoming challenges. Subgenres include motivational literature, mindfulness guides, and career development books, catering to diverse needs and aspirations.",
-                            ImageUrl = "https://www.wellnessroadpsychology.com/wp-content/uploads/2024/05/Self-Help.jpg",
+                            ImagePath = "/images/genres/self-help.jpg",
                             IsDeleted = false,
                             Name = "Self-help"
                         },
                         new
                         {
-                            Id = 11,
+                            Id = new Guid("ff1226a6-0864-40be-82a8-63b9afedc4d7"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Non-fiction encompasses works rooted in factual information, offering insights into real-world topics. It spans memoirs, investigative journalism, essays, and academic studies, covering subjects like history, science, culture, and politics. The genre educates and engages readers, often challenging perceptions and broadening understanding. Non-fiction can be narrative-driven or expository, appealing to those seeking knowledge or a deeper connection to reality.",
-                            ImageUrl = "https://pickbestbook.com/wp-content/uploads/2023/06/Nonfiction-Literature-1.png",
+                            ImagePath = "/images/genres/non-fiction.jpg",
                             IsDeleted = false,
                             Name = "Non-fiction"
                         },
                         new
                         {
-                            Id = 12,
+                            Id = new Guid("6229a9ab-87a0-4ed2-ae89-dc8824ee09e3"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Poetry is a literary form that condenses emotions, thoughts, and imagery into carefully chosen words, often structured with rhythm and meter. It explores universal themes such as love, nature, grief, and introspection, offering readers profound and evocative experiences. From traditional sonnets and haikus to free verse and spoken word, poetry captivates through its ability to articulate the inexpressible, creating deep emotional resonance and intellectual reflection.",
-                            ImageUrl = "https://assets.ltkcontent.com/images/9037/examples-of-poetry-genres_7abbbb2796.jpg",
+                            ImagePath = "/images/genres/poetry.jpg",
                             IsDeleted = false,
                             Name = "Poetry"
                         },
                         new
                         {
-                            Id = 13,
+                            Id = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Drama fiction delves into emotional and relational conflicts, portraying the complexities of human interactions and emotions. It emphasizes character development and nuanced storytelling, often exploring themes of love, betrayal, identity, and societal struggles. Drama offers readers a lens into the intricacies of the human experience, whether through tragic, romantic, or morally ambiguous narratives. Its focus on realism and emotional depth creates stories that resonate deeply with audiences.",
-                            ImageUrl = "https://basudewacademichub.in/wp-content/uploads/2024/02/drama-literature-solution.png",
+                            ImagePath = "/images/genres/drama.jpg",
                             IsDeleted = false,
                             Name = "Drama"
                         },
                         new
                         {
-                            Id = 14,
+                            Id = new Guid("7b8834b3-516e-4e2e-89aa-468c48d1d5fd"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Children's literature is crafted to captivate and inspire young readers with imaginative worlds, moral lessons, and relatable characters. These stories often emphasize themes of curiosity, friendship, and bravery, delivering messages of kindness, resilience, and growth. From whimsical picture books to adventurous chapter books, children's fiction nurtures creativity and fosters a lifelong love of reading, helping young minds explore both real and fantastical realms.",
-                            ImageUrl = "https://media.vanityfair.com/photos/598888671dc63c45b7b1db6e/master/w_2560%2Cc_limit/MAG-0817-Wild-Things-a.jpg",
+                            ImagePath = "/images/genres/children.jpg",
                             IsDeleted = false,
                             Name = "Children's"
                         },
                         new
                         {
-                            Id = 15,
+                            Id = new Guid("131e73ab-1118-4792-a778-5a4ae1482981"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Young Adult (YA) fiction speaks to the unique experiences and challenges of adolescence, addressing themes such as identity, first love, friendship, and coming of age. These stories often feature relatable protagonists navigating personal growth, societal expectations, and emotional upheaval. Subgenres such as fantasy, dystopian, and contemporary YA provide diverse backdrops for these journeys, resonating with readers through authentic and engaging storytelling that reflects their own struggles and triumphs.",
-                            ImageUrl = "https://m.media-amazon.com/images/I/81xRLF1KCAL._AC_UF1000,1000_QL80_.jpg",
+                            ImagePath = "/images/genres/young-adult.jpg",
                             IsDeleted = false,
                             Name = "Young Adult"
                         },
                         new
                         {
-                            Id = 16,
+                            Id = new Guid("2a0702ed-fdf6-40c0-ad68-6303dec26aad"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Comedy fiction aims to entertain and delight readers through humor, satire, and absurdity. It uses wit and clever storytelling to highlight human follies, societal quirks, or surreal situations. From lighthearted escapades to biting social commentary, comedy encompasses a range of tones and styles. The genre often brings laughter and joy, offering an escape from the mundane while sometimes delivering thought-provoking messages in the guise of humor.",
-                            ImageUrl = "https://mandyevebarnett.com/wp-content/uploads/2017/12/humor.jpg?w=640",
+                            ImagePath = "/images/genres/comedy.jpg",
                             IsDeleted = false,
                             Name = "Comedy"
                         },
                         new
                         {
-                            Id = 17,
+                            Id = new Guid("71dbe769-6b34-4de0-ba7e-80649f753680"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Graphic novels seamlessly blend visual art and narrative storytelling, using a combination of text and illustrations to convey complex plots and emotions. This versatile format spans a wide array of genres, including superhero tales, memoirs, historical epics, and science fiction. Graphic novels offer an immersive reading experience, appealing to diverse audiences through their ability to convey vivid imagery and intricate storylines that are as impactful as traditional prose.",
-                            ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSb0THovTlPB_nRl3RY6TsbWD4R2qEC-TQSAg&s",
+                            ImagePath = "/images/genres/graphic-novel.jpg",
                             IsDeleted = false,
                             Name = "Graphic Novel"
                         },
                         new
                         {
-                            Id = 18,
+                            Id = new Guid("52e607d4-c347-440a-8d55-cf2e01d88a6c"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "The 'Other' genre serves as a home for unconventional, experimental, or cross-genre works that defy traditional categorization. This category embraces innovation and diversity, welcoming stories that push the boundaries of storytelling, structure, and style. From hybrid narratives to avant-garde experiments, 'Other' offers a platform for unique voices and creative expressions that don’t fit neatly into predefined genres.",
-                            ImageUrl = "https://www.98thpercentile.com/hubfs/388x203%20(4).png",
+                            ImagePath = "/images/genres/other.jpg",
                             IsDeleted = false,
                             Name = "Other"
                         },
                         new
                         {
-                            Id = 19,
+                            Id = new Guid("b9ead654-f282-45b7-b509-7d97142789df"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Dystopian fiction paints a grim portrait of societies marred by oppression, inequality, or disaster, often set in a future shaped by catastrophic events or authoritarian regimes. These cautionary tales explore themes like survival, rebellion, and the loss of humanity, serving as critiques of political, social, and environmental trends. Subgenres such as post-apocalyptic and cyber-dystopia examine the fragility of civilization and the consequences of unchecked power or technological overreach.",
-                            ImageUrl = "https://www.ideology-theory-practice.org/uploads/1/3/5/5/135563566/050_orig.jpg",
+                            ImagePath = "/images/genres/dystopian.jpg",
                             IsDeleted = false,
                             Name = "Dystopian"
                         },
                         new
                         {
-                            Id = 20,
+                            Id = new Guid("af4fc919-4c2f-4319-8c70-2a970a661a67"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Spirituality books delve into the deeper questions of existence, faith, and the human soul, offering insights and practices to nurture inner peace and personal growth. They often explore themes of mindfulness, self-awareness, and connection to a higher power or universal energy. From philosophical reflections to practical guides, these works resonate with readers seekinginspiration, understanding, and spiritual fulfillment across diverse traditions and belief systems.",
-                            ImageUrl = "https://m.media-amazon.com/images/I/61jxcM3UskL._AC_UF1000,1000_QL80_.jpg",
+                            Description = "Spirituality books delve into the deeper questions of existence, faith, and the human soul, offering insights and practices to nurture inner peace and personal growth. They often explore themes of mindfulness, self-awareness, and connection to a higher power or universal energy. From philosophical reflections to practical guides, these works resonate with readers seeking inspiration, understanding, and spiritual fulfillment across diverse traditions and belief systems.",
+                            ImagePath = "/images/genres/spirituality.jpg",
                             IsDeleted = false,
                             Name = "Spirituality"
                         },
                         new
                         {
-                            Id = 21,
+                            Id = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Crime fiction is centered around the investigation of a crime, often focusing on the detection of criminals or the pursuit of justice. It may include detectives, police officers, or amateur sleuths solving crimes like murder, theft, or corruption. The genre can involve suspense, action, and exploration of moral dilemmas surrounding law and order. Subgenres include hardboiledcrime, cozy mysteries, and police procedurals, all providing different approaches to solving crimes and investigating human behavior.",
-                            ImageUrl = "https://img.tpt.cloud/nextavenue/uploads/2019/04/Crime-Fiction-Savvy-Sleuths-Over-50_53473532.inside.1200x775.jpg",
+                            Description = "Crime fiction is centered around the investigation of a crime, often focusing on the detection of criminals or the pursuit of justice. It may include detectives, police officers, or amateur sleuths solving crimes like murder, theft, or corruption. The genre can involve suspense, action, and exploration of moral dilemmas surrounding law and order. Subgenres include hardboiled crime, cozy mysteries, and police procedurals, all providing different approaches to solving crimes and investigating human behavior.",
+                            ImagePath = "/images/genres/crime.jpg",
                             IsDeleted = false,
                             Name = "Crime"
                         },
                         new
                         {
-                            Id = 22,
+                            Id = new Guid("a4fa89a3-9b8e-4003-8071-4797e78a4575"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Urban fiction explores life in modern, often gritty urban settings, focusing on the struggles, relationships, and experiences of people in cities. This genre frequently addresses themes like poverty, crime, social injustice, and community dynamics. It can incorporate elements of drama, romance, and even horror, often portraying the challenges of urban life with raw, unflinching realism. Urban fiction is popular in contemporary literature and often includes characters from marginalized communities.",
-                            ImageUrl = "https://frugalbookstore.net/cdn/shop/collections/Urban-Fiction.png?v=1724599745&width=480",
+                            ImagePath = "/images/genres/urban-fiction.jpg",
                             IsDeleted = false,
                             Name = "Urban Fiction"
                         },
                         new
                         {
-                            Id = 23,
+                            Id = new Guid("075799ce-3794-4e77-a999-f0b228dec1f8"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Fairy tale fiction involves magical or fantastical stories often set in a world where magic and mythical creatures exist. These stories typically follow a clear moral arc, with characters who experience trials or transformation before achieving a happy ending. Fairy tales often feature archetypal characters like witches, princes, and princesses, and they explore themes of good vs. evil, justice, and personal growth. Many fairy tales have been passed down through generations, and the genre continues to inspire modern adaptations and retellings.",
-                            ImageUrl = "https://news.syr.edu/wp-content/uploads/2023/09/enchanting_fairy_tale_woodland_onto_a_castle_an.original-scaled.jpg",
+                            ImagePath = "/images/genres/fairy-tale.jpg",
                             IsDeleted = false,
                             Name = "Fairy Tale"
                         },
                         new
                         {
-                            Id = 24,
+                            Id = new Guid("43e2ee00-0037-4676-ad71-18481ef29fff"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Epic fiction is characterized by large-scale, grand narratives often centered around heroic characters or monumental events. Epics typically focus on the struggles and triumphs of protagonists who undergo significant personal or societal change. These stories often span extensive periods of time and encompass entire civilizations, exploring themes like war, leadership, and cultural identity. Classic examples include *The Iliad* and *The Odyssey*, with modern epics continuing to explore the human experience in vast, sweeping terms.",
-                            ImageUrl = "https://i0.wp.com/joncronshaw.com/wp-content/uploads/2024/01/DALL%C2%B7E-2024-01-17-09.05.10-A-magical-and-enchanting-landscape-for-a-fantasy-blog-post-featuring-an-ancient-castle-perched-on-a-high-cliff-a-vast-mystical-forest-with-towering.png?fit=1200%2C686&ssl=1",
+                            Description = "Epic fiction is characterized by large-scale, grand narratives often centered around heroic characters or monumental events. Epics typically focus on the struggles and triumphs of protagonists who undergo significant personal or societal change. These stories often span extensive periods of time and encompass entire civilizations, exploring themes like war, leadership, and cultural identity. Classic examples include The Iliad and The Odyssey, with modern epics continuing to explore the human experience in vast, sweeping terms.",
+                            ImagePath = "/images/genres/epic.jpg",
                             IsDeleted = false,
                             Name = "Epic"
                         },
                         new
                         {
-                            Id = 25,
+                            Id = new Guid("8c733d38-27c4-43da-a832-4f6db21a855d"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Political fiction uses stories to explore, criticize, or comment on political systems, ideologies, and power dynamics. These narratives often examine how political structures affect individuals and societies, focusing on themes of corruption, revolution, and social change. Political fiction can include dystopian novels, satires, and thrillers, offering commentary on both contemporary and historical politics. Through these stories, authors challenge readers to think critically about the systems that govern their lives.",
-                            ImageUrl = "https://markelayat.com/wp-content/uploads/elementor/thumbs/Political-Fiction-ft-image-qwo9yzatn5xk8t34vvqfivz2ed7zuj5lccn9ylm7bc.png",
+                            ImagePath = "/images/genres/political-fiction.jpg",
                             IsDeleted = false,
                             Name = "Political Fiction"
                         },
                         new
                         {
-                            Id = 26,
+                            Id = new Guid("80a6ef21-3e23-4d20-b897-19b788f7239b"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Philosophical fiction delves into profound questions about existence, ethics, free will, and the nature of reality. These novels often explore abstract ideas and are driven by deep intellectual themes rather than plot or action. Philosophical fiction may follow characters who engage in critical thinking, self-reflection, or existential crises. These works often question the meaning of life, morality, and consciousness, and they can be a blend of both fiction and philosophy, prompting readers to consider their own beliefs and perspectives.",
-                            ImageUrl = "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1546103428i/5297._UX160_.jpg",
+                            ImagePath = "/images/genres/philosophical-fiction.jpg",
                             IsDeleted = false,
                             Name = "Philosophical Fiction"
                         },
                         new
                         {
-                            Id = 27,
+                            Id = new Guid("fdc897ad-9ebf-476c-aa11-d9944c5ac473"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "True crime fiction is based on real-life criminal events, recounting the details of notorious crimes, investigations, and trials. It often focuses on infamous cases, delving into the psychology of criminals, the detectives or journalists who solve the cases, and the social impact of the crime. True crime often incorporates extensive research and interviews, giving readers an inside look at the complexities of real-life crime and law enforcement. These works can be chilling and thought-provoking, blending elements of mystery, drama,and historical non-fiction.",
-                            ImageUrl = "https://is1-ssl.mzstatic.com/image/thumb/Podcasts221/v4/00/07/67/000767b5-bad1-5d78-db34-373363ec6b3e/mza_8962416523973028402.jpg/1200x1200bf.webp",
+                            Description = "True crime fiction is based on real-life criminal events, recounting the details of notorious crimes, investigations, and trials. It often focuses on infamous cases, delving into the psychology of criminals, the detectives or journalists who solve the cases, and the social impact of the crime. True crime often incorporates extensive research and interviews, giving readers an inside look at the complexities of real-life crime and law enforcement. These works can be chilling and thought-provoking, blending elements of mystery, drama, and historical non-fiction.",
+                            ImagePath = "/images/genres/true-crime.jpg",
                             IsDeleted = false,
                             Name = "True Crime"
                         },
                         new
                         {
-                            Id = 28,
+                            Id = new Guid("407137e2-7924-4c18-83af-c8833e359d69"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Satire is a genre that uses humor, irony, and exaggeration to criticize or mock individuals, institutions, or societal norms. It often employs wit and sarcasm to highlight the flaws and absurdities of the subject being criticized, sometimes with the intent of provoking thought or promoting change. Satirical works can cover a wide range of topics, including politics, culture, and human nature, and can be both lighthearted or dark in tone. Famous examples include works like Gulliver's Travels and Catch-22.",
-                            ImageUrl = "https://photos.demandstudios.com/getty/article/64/32/529801877.jpg",
+                            ImagePath = "/images/genres/satire.jpg",
                             IsDeleted = false,
                             Name = "Satire"
                         },
                         new
                         {
-                            Id = 29,
+                            Id = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Psychological fiction delves into the inner workings of the mind, exploring complex emotional states, mental illness, and the psychological effects of personal trauma, relationships, and societal pressures. These works often focus on character development and the emotional or mental struggles of the protagonists, rather than external events. Psychological fiction can blur the lines between reality and illusion, questioning perceptions and exploring the deeper layers of human consciousness. It often presents challenging and sometimes disturbing narratives about identity and self-perception. Notable examples include The Bell Jar and The Catcher in the Rye.",
-                            ImageUrl = "https://literaturelegends.com/wp-content/uploads/2023/08/psychological.jpg",
+                            ImagePath = "/images/genres/psychological-fiction.jpg",
                             IsDeleted = false,
                             Name = "Psychological Fiction"
                         },
                         new
                         {
-                            Id = 30,
+                            Id = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Supernatural fiction explores phenomena beyond the natural world, often incorporating ghosts, spirits, vampires, or otherworldly beings. These works blend elements of horror, fantasy, and the unexplained, and often delve into themes of life after death, paranormal activity, and other mystifying occurrences. The supernatural genre captivates readers with its portrayal of eerie events and the unknown, often blurring the line between reality and the mystical. Examples include works like The Haunting of Hill House and The Turn of the Screw.",
-                            ImageUrl = "https://fully-booked.ca/wp-content/uploads/2024/02/evolution-of-paranormal-fiction-1024x576.jpg",
+                            ImagePath = "/images/genres/supernatural.jpg",
                             IsDeleted = false,
                             Name = "Supernatural"
                         },
                         new
                         {
-                            Id = 31,
+                            Id = new Guid("007d3fc0-bb15-4a58-98fb-17dfc930e969"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Gothic fiction is characterized by its dark, eerie atmosphere, and often involves elements of horror, mystery, and the supernatural. These stories typically feature gloomy, decaying settings such as castles, mansions, or haunted landscapes, and often include tragic or macabre themes. Gothic fiction focuses on emotions like fear, dread, and despair, and explores the darker sides of human nature. Famous examples include works like Wuthering Heights and Frankenstein.",
-                            ImageUrl = "https://bookstr.com/wp-content/uploads/2022/09/V8mj92.webp",
+                            ImagePath = "/images/genres/gothic-fiction.jpg",
                             IsDeleted = false,
                             Name = "Gothic Fiction"
                         },
                         new
                         {
-                            Id = 32,
+                            Id = new Guid("1e073d12-c069-481e-a474-b50a051ca461"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Magical realism blends elements of magic or the supernatural with a realistic narrative, creating a world where extraordinary events occur within ordinary settings. This genre often explores themes of identity, culture, and human experience, and it is marked by the seamless integration of magical elements into everyday life. Prominent examples include books like One Hundred Years of Solitude and The House of the Spirits.",
-                            ImageUrl = "https://www.world-defined.com/wp-content/uploads/2024/04/Magic-Realism-Books-978x652-1.webp",
+                            ImagePath = "/images/genres/magical-realism.jpg",
                             IsDeleted = false,
                             Name = "Magical Realism"
                         },
                         new
                         {
-                            Id = 33,
+                            Id = new Guid("2d2891fb-4ad0-4221-9274-f3b63cb5c4fd"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Dark fantasy combines elements of fantasy with a sense of horror, despair, and the supernatural. These stories often take place in dark, gritty worlds where magic, danger, and moral ambiguity challenge the characters. Dark fantasy blends the fantastical with the disturbing, creating a sense of dread and unease. Examples include books like The Dark Tower series and A Song of Ice and Fire.",
-                            ImageUrl = "https://miro.medium.com/v2/resize:fit:1024/1*VU5O34UlH-1SXZkEnL0dyg.jpeg",
+                            ImagePath = "/images/genres/dark-fantasy.jpg",
                             IsDeleted = false,
                             Name = "Dark Fantasy"
                         });
@@ -4124,7 +4901,7 @@ namespace BookHub.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BookHub.Features.Genre.Data.Models.Genre", "Genre")
+                    b.HasOne("BookHub.Features.Genre.Data.Models.GenreDbModel", "Genre")
                         .WithMany("BooksGenres")
                         .HasForeignKey("GenreId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -4357,7 +5134,7 @@ namespace BookHub.Data.Migrations
                     b.Navigation("Messages");
                 });
 
-            modelBuilder.Entity("BookHub.Features.Genre.Data.Models.Genre", b =>
+            modelBuilder.Entity("BookHub.Features.Genre.Data.Models.GenreDbModel", b =>
                 {
                     b.Navigation("BooksGenres");
                 });

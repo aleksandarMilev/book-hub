@@ -82,7 +82,7 @@ export function useList(
 }
 
 export function useListActions(
-  bookId: number,
+  bookId: string,
   token: string,
   showMessage: (message: string, success?: boolean) => void,
 ) {

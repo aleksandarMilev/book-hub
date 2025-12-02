@@ -1,0 +1,64 @@
+.book-reading-list-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.book-reading-list-button {
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.book-reading-list-button.btn-outline-success,
+.book-reading-list-button.btn-outline-primary,
+.book-reading-list-button.btn-outline-warning {
+  background-color: #ffffff;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+}
+
+.book-reading-list-button:hover {
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.12);
+}
+
+.book-reading-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: #f9fafb;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+}
+
+.book-reading-status-text {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #374151;
+}
+
+.book-reading-remove-button {
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 6px 14px;
+}
+
+@media (max-width: 576px) {
+  .book-reading-list-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .book-reading-list-button {
+    width: 100%;
+    text-align: center;
+  }
+
+  .book-reading-status {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

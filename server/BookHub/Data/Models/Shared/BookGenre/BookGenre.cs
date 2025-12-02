@@ -14,7 +14,7 @@ public class BookGenre
     public BookDbModel Book { get; set; } = null!;
 
     [ForeignKey(nameof(Genre))]
-    public int GenreId { get; set; }
+    public Guid GenreId { get; set; }
 
-    public Genre Genre { get; set; } = null!;
+    public GenreDbModel Genre { get; set; } = null!;
 }
