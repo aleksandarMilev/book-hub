@@ -21,7 +21,7 @@ export const routes = {
   topThreeBooks: '/books/top',
   createBook: '/books/new',
   editBook: '/books/edit',
-  genres: '/genre',
+  genres: '/genres',
   author: '/author',
   topThreeAuthors: '/author/top',
   createAuthor: '/author/new',

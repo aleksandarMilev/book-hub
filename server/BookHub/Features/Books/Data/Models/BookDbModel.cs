@@ -3,7 +3,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using BookHub.Data.Models.Base;
-using BookHub.Data.Models.Shared.BookGenre;
+using BookHub.Data.Models.Shared.BookGenre.Models;
 using Features.Authors.Data.Models;
 using Features.Identity.Data.Models;
 using Features.ReadingList.Data.Models;
@@ -50,7 +50,7 @@ public class BookDbModel:
 
     public bool IsApproved { get; set; }
 
-    public ICollection<BookGenre> BooksGenres { get; set; } = new HashSet<BookGenre>();
+    public ICollection<BookGenreDbModel> BooksGenres { get; set; } = new HashSet<BookGenreDbModel>();
 
     public ICollection<Review> Reviews { get; set; } = new HashSet<Review>();
 

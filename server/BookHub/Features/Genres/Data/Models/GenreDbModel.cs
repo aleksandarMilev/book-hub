@@ -2,7 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
     using BookHub.Data.Models.Base;
-    using BookHub.Data.Models.Shared.BookGenre;
+    using BookHub.Data.Models.Shared.BookGenre.Models;
 
     using static Shared.Constants.Validation;
 
@@ -19,6 +19,6 @@
         [MaxLength(DescriptionMaxLength)]
         public string Description { get; set; } = null!;
 
-        public ICollection<BookGenre> BooksGenres { get; } = new HashSet<BookGenre>();
+        public ICollection<BookGenreDbModel> BooksGenres { get; set; } = new HashSet<BookGenreDbModel>();
     }
 }

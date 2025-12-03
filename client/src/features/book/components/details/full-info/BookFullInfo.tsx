@@ -10,7 +10,7 @@ import type { BookDetails } from '@/features/book/types/book.js';
 import { toUiStatus } from '@/features/reading-list/types/readingList.js';
 import { RenderStars } from '@/shared/components/render-stars/RenderStars.js';
 import { routes } from '@/shared/lib/constants/api.js';
-import { formatIsoDate, getImageUrl } from '@/shared/lib/utils/utils.js';
+import { formatIsoDate, getImageUrl, slugify } from '@/shared/lib/utils/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 import { useMessage } from '@/shared/stores/message/message.js';
 
@@ -84,7 +84,7 @@ const BookFullInfo: FC<Props> = ({
             <div className="genres mb-3 book-info-genres">
               <span className="fw-semibold text-muted me-1">{t('details.genresLabel')}</span>
               {book.genres.map((g) => (
-                <Link to={`${routes.genres}/${g.id}`} key={g.id}>
+                <Link to={`${routes.genres}/${g.id}/${slugify(g.name)}`} key={g.id}>
                   <span className="badge bg-secondary me-1">{g.name}</span>
                 </Link>
               ))}

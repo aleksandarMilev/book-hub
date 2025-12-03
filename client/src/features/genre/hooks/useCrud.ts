@@ -6,10 +6,9 @@ import * as api from '@/features/genre/api/api.js';
 import type { GenreDetails, GenreName } from '@/features/genre/types/genre.js';
 import { routes } from '@/shared/lib/constants/api.js';
 import { errors } from '@/shared/lib/constants/errorMessages.js';
-import { IsCanceledError } from '@/shared/lib/utils/utils.js';
+import { IsCanceledError, IsError } from '@/shared/lib/utils/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 import { HttpError } from '@/shared/types/errors/httpError.js';
-import type { IntId } from '@/shared/types/intId.js';
 
 export const useAll = () => {
   const { token } = useAuth();
@@ -33,7 +32,7 @@ export const useAll = () => {
           return;
         }
 
-        const message = error instanceof Error ? error.message : 'Failed to load genres.';
+        const message = IsError(error) ? error.message : 'Failed to load genres.';
         navigate(routes.badRequest, { state: { message } });
       } finally {
         setIsFetching(false);
@@ -52,7 +51,7 @@ export const useAll = () => {
   return { genres, isFetching, refetch: fetchData };
 };
 
-export const useDetails = (id: IntId | null, disable = false) => {
+export const useDetails = (id?: string) => {
   const { token } = useAuth();
 
   const [genre, setGenre] = useState<GenreDetails | null>(null);
@@ -60,7 +59,7 @@ export const useDetails = (id: IntId | null, disable = false) => {
   const [error, setError] = useState<HttpError | null>(null);
 
   useEffect(() => {
-    if (disable || !id) {
+    if (!id) {
       setError(
         HttpError.with()
           .message(errors.genre.byId)
@@ -92,7 +91,7 @@ export const useDetails = (id: IntId | null, disable = false) => {
     })();
 
     return () => controller.abort();
-  }, [id, token, disable]);
+  }, [id, token]);
 
   return { genre, isFetching, error };
 };
