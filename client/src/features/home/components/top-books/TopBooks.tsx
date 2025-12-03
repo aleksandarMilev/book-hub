@@ -19,7 +19,7 @@ import EmptyState from '@/shared/components/empty-state/EmptyState.js';
 import HomePageError from '@/shared/components/errors/home-page/HomePageError.js';
 import { RenderStars } from '@/shared/components/render-stars/RenderStars.js';
 import { routes } from '@/shared/lib/constants/api.js';
-import { getImageUrl } from '@/shared/lib/utils/utils.js';
+import { getImageUrl, slugify } from '@/shared/lib/utils/utils.js';
 
 const TopBooks: FC = () => {
   const { t } = useTranslation('home');
@@ -72,7 +72,11 @@ const TopBooks: FC = () => {
                 <div className="genre-list">
                   {b.genres && b.genres.length > 0 ? (
                     b.genres.map((g) => (
-                      <Link key={g.id} to={`${routes.genres}/${g.id}`} className="genre-link">
+                      <Link
+                        key={g.id}
+                        to={`${routes.genres}/${g.id}/${slugify(g.name)}`}
+                        className="genre-link"
+                      >
                         <span className="genre-item">{g.name}</span>
                       </Link>
                     ))

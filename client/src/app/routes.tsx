@@ -120,7 +120,7 @@ export const router = createBrowserRouter([
       },
 
       {
-        path: `${routes.genres}/:id`,
+        path: `${routes.genres}/:id/:slug`,
         element: withSuspense(<AuthenticatedRoute element={<GenreDetails />} />),
       },
 

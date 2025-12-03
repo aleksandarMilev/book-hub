@@ -12,18 +12,9 @@ public static class Seeder
 
     public static void SeedFromJson<TDbModel>(
         EntityTypeBuilder<TDbModel> builder,
-        string featureFolder,
-        string fileName)
+        string path)
         where TDbModel : class
     {
-        var path = Path.Combine(
-            AppContext.BaseDirectory,
-            "Features",
-            featureFolder,
-            "Data",
-            "Seed",
-            fileName);
-
         if (!File.Exists(path))
         {
             return;

@@ -2,13 +2,13 @@
 
 using Areas.Admin.Service;
 using BookHub.Data;
-using BookHub.Data.Models.Shared.BookGenre;
-using BookHub.Infrastructure.Services.ImageWriter;
+using BookHub.Data.Models.Shared.BookGenre.Models;
 using Data.Models;
 using Features.Authors.Data.Models;
 using Features.UserProfile.Data.Models;
 using Infrastructure.Extensions;
 using Infrastructure.Services.CurrentUser;
+using Infrastructure.Services.ImageWriter;
 using Infrastructure.Services.Result;
 using Microsoft.EntityFrameworkCore;
 using Models;
@@ -354,7 +354,7 @@ public class BookService(
                     continue;
                 }
 
-                var bookGenre = new BookGenre
+                var bookGenre = new BookGenreDbModel
                 {
                     BookId = bookId,
                     GenreId = genreId
@@ -378,7 +378,7 @@ public class BookService(
 
             if (bookGenreExists)
             {
-                var bookGenre = new BookGenre
+                var bookGenre = new BookGenreDbModel
                 {
                     BookId = bookId,
                     GenreId = otherGenreId

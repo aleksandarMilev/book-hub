@@ -1,0 +1,22 @@
+{
+  "details": {
+    "breadcrumb": {
+      "home": "Home",
+      "list": "Genres"
+    },
+    "image": {
+      "noImage": "No image available for this genre"
+    },
+    "topBooks": {
+      "title": "Top books",
+      "viewAll": "View all {{name}} books",
+      "none": "No books available for this genre."
+    }
+  },
+  "list": {
+    "searchPlaceholder": "Search genres...",
+    "emptyAlt": "No genres found",
+    "emptyTitle": "We couldn't find any genres",
+    "emptyMessage": "Try adjusting your search terms or exploring our collection for more options."
+  }
+}

@@ -5,6 +5,7 @@
         Articles = 0,
         Authors = 1,
         Books = 2,
-        Genres = 3
+        Genres = 3,
+        BookGenre = 4
     }
 }

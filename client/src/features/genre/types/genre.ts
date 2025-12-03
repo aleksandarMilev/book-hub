@@ -7,6 +7,6 @@ export interface GenreName {
 
 export interface GenreDetails extends GenreName {
   description: string;
-  imageUrl: string;
+  imagePath: string;
   topBooks: Book[];
 }

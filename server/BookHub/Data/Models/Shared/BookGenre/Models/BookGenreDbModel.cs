@@ -1,4 +1,4 @@
-﻿namespace BookHub.Data.Models.Shared.BookGenre;
+﻿namespace BookHub.Data.Models.Shared.BookGenre.Models;
 
 using System.ComponentModel.DataAnnotations.Schema;
 using Features.Book.Data.Models;
@@ -6,7 +6,7 @@ using Features.Genre.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
 [PrimaryKey(nameof(BookId), nameof(GenreId))]
-public class BookGenre
+public class BookGenreDbModel
 {
     [ForeignKey(nameof(Book))]
     public Guid BookId { get; set; }

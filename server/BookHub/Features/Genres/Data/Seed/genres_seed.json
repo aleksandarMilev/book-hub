@@ -63,13 +63,13 @@
     "Id": "ff1226a6-0864-40be-82a8-63b9afedc4d7",
     "Name": "Non-fiction",
     "Description": "Non-fiction encompasses works rooted in factual information, offering insights into real-world topics. It spans memoirs, investigative journalism, essays, and academic studies, covering subjects like history, science, culture, and politics. The genre educates and engages readers, often challenging perceptions and broadening understanding. Non-fiction can be narrative-driven or expository, appealing to those seeking knowledge or a deeper connection to reality.",
-    "ImagePath": "/images/genres/non-fiction.jpg"
+    "ImagePath": "/images/genres/non-fiction.png"
   },
   {
     "Id": "6229a9ab-87a0-4ed2-ae89-dc8824ee09e3",
     "Name": "Poetry",
     "Description": "Poetry is a literary form that condenses emotions, thoughts, and imagery into carefully chosen words, often structured with rhythm and meter. It explores universal themes such as love, nature, grief, and introspection, offering readers profound and evocative experiences. From traditional sonnets and haikus to free verse and spoken word, poetry captivates through its ability to articulate the inexpressible, creating deep emotional resonance and intellectual reflection.",
-    "ImagePath": "/images/genres/poetry.jpg"
+    "ImagePath": "/images/genres/poetry.png"
   },
   {
     "Id": "08aa42b0-00f4-4a0e-8296-e39cc4bd1606",
@@ -81,13 +81,13 @@
     "Id": "7b8834b3-516e-4e2e-89aa-468c48d1d5fd",
     "Name": "Children's",
     "Description": "Children's literature is crafted to captivate and inspire young readers with imaginative worlds, moral lessons, and relatable characters. These stories often emphasize themes of curiosity, friendship, and bravery, delivering messages of kindness, resilience, and growth. From whimsical picture books to adventurous chapter books, children's fiction nurtures creativity and fosters a lifelong love of reading, helping young minds explore both real and fantastical realms.",
-    "ImagePath": "/images/genres/children.jpg"
+    "ImagePath": "/images/genres/children.png"
   },
   {
     "Id": "131e73ab-1118-4792-a778-5a4ae1482981",
     "Name": "Young Adult",
     "Description": "Young Adult (YA) fiction speaks to the unique experiences and challenges of adolescence, addressing themes such as identity, first love, friendship, and coming of age. These stories often feature relatable protagonists navigating personal growth, societal expectations, and emotional upheaval. Subgenres such as fantasy, dystopian, and contemporary YA provide diverse backdrops for these journeys, resonating with readers through authentic and engaging storytelling that reflects their own struggles and triumphs.",
-    "ImagePath": "/images/genres/young-adult.jpg"
+    "ImagePath": "/images/genres/young-adult.png"
   },
   {
     "Id": "2a0702ed-fdf6-40c0-ad68-6303dec26aad",
@@ -105,7 +105,7 @@
     "Id": "52e607d4-c347-440a-8d55-cf2e01d88a6c",
     "Name": "Other",
     "Description": "The 'Other' genre serves as a home for unconventional, experimental, or cross-genre works that defy traditional categorization. This category embraces innovation and diversity, welcoming stories that push the boundaries of storytelling, structure, and style. From hybrid narratives to avant-garde experiments, 'Other' offers a platform for unique voices and creative expressions that don’t fit neatly into predefined genres.",
-    "ImagePath": "/images/genres/other.jpg"
+    "ImagePath": "/images/genres/other.png"
   },
   {
     "Id": "b9ead654-f282-45b7-b509-7d97142789df",
@@ -153,7 +153,7 @@
     "Id": "80a6ef21-3e23-4d20-b897-19b788f7239b",
     "Name": "Philosophical Fiction",
     "Description": "Philosophical fiction delves into profound questions about existence, ethics, free will, and the nature of reality. These novels often explore abstract ideas and are driven by deep intellectual themes rather than plot or action. Philosophical fiction may follow characters who engage in critical thinking, self-reflection, or existential crises. These works often question the meaning of life, morality, and consciousness, and they can be a blend of both fiction and philosophy, prompting readers to consider their own beliefs and perspectives.",
-    "ImagePath": "/images/genres/philosophical-fiction.jpg"
+    "ImagePath": "/images/genres/philosophical-fiction.png"
   },
   {
     "Id": "fdc897ad-9ebf-476c-aa11-d9944c5ac473",
@@ -171,7 +171,7 @@
     "Id": "42b8464f-c942-4d61-b96c-0db6336d22ec",
     "Name": "Psychological Fiction",
     "Description": "Psychological fiction delves into the inner workings of the mind, exploring complex emotional states, mental illness, and the psychological effects of personal trauma, relationships, and societal pressures. These works often focus on character development and the emotional or mental struggles of the protagonists, rather than external events. Psychological fiction can blur the lines between reality and illusion, questioning perceptions and exploring the deeper layers of human consciousness. It often presents challenging and sometimes disturbing narratives about identity and self-perception. Notable examples include The Bell Jar and The Catcher in the Rye.",
-    "ImagePath": "/images/genres/psychological-fiction.jpg"
+    "ImagePath": "/images/genres/psychological-fiction.png"
   },
   {
     "Id": "97ecd058-6850-4c54-aff5-4df68ed4470f",

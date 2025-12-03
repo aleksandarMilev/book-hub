@@ -22,7 +22,7 @@ namespace BookHub.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("BookHub.Data.Models.Shared.BookGenre.BookGenre", b =>
+            modelBuilder.Entity("BookHub.Data.Models.Shared.BookGenre.Models.BookGenreDbModel", b =>
                 {
                     b.Property<Guid>("BookId")
                         .HasColumnType("uniqueidentifier");
@@ -35,6 +35,3463 @@ namespace BookHub.Data.Migrations
                     b.HasIndex("GenreId");
 
                     b.ToTable("BooksGenres");
+
+                    b.HasData(
+                        new
+                        {
+                            BookId = new Guid("c91e9a2b-5d54-4a9a-93d4-0f3f7d87c412"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c91e9a2b-5d54-4a9a-93d4-0f3f7d87c412"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c91e9a2b-5d54-4a9a-93d4-0f3f7d87c412"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c91e9a2b-5d54-4a9a-93d4-0f3f7d87c412"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e2d7f3b1-4a8c-4c7f-9b20-6b3c1a9de472"),
+                            GenreId = new Guid("60f323b5-c68a-4d58-84e1-972358603833")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e2d7f3b1-4a8c-4c7f-9b20-6b3c1a9de472"),
+                            GenreId = new Guid("2d2891fb-4ad0-4221-9274-f3b63cb5c4fd")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e2d7f3b1-4a8c-4c7f-9b20-6b3c1a9de472"),
+                            GenreId = new Guid("075799ce-3794-4e77-a999-f0b228dec1f8")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e2d7f3b1-4a8c-4c7f-9b20-6b3c1a9de472"),
+                            GenreId = new Guid("d285cd97-1d2f-4d2b-bc94-68cf54198b1c")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e2d7f3b1-4a8c-4c7f-9b20-6b3c1a9de472"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9ac4c3e1-2f6b-4f0d-9ba9-6c3a8f2b7d45"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9ac4c3e1-2f6b-4f0d-9ba9-6c3a8f2b7d45"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9ac4c3e1-2f6b-4f0d-9ba9-6c3a8f2b7d45"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9ac4c3e1-2f6b-4f0d-9ba9-6c3a8f2b7d45"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9ac4c3e1-2f6b-4f0d-9ba9-6c3a8f2b7d45"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a6e9d3b2-4c7f-4f5a-9b1e-2d8c4f7a9e32"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a6e9d3b2-4c7f-4f5a-9b1e-2d8c4f7a9e32"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a6e9d3b2-4c7f-4f5a-9b1e-2d8c4f7a9e32"),
+                            GenreId = new Guid("2d2891fb-4ad0-4221-9274-f3b63cb5c4fd")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a6e9d3b2-4c7f-4f5a-9b1e-2d8c4f7a9e32"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a6e9d3b2-4c7f-4f5a-9b1e-2d8c4f7a9e32"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7e4a2c51-0dd7-4b9b-9a2c-494b62c2140f"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7e4a2c51-0dd7-4b9b-9a2c-494b62c2140f"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7e4a2c51-0dd7-4b9b-9a2c-494b62c2140f"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7e4a2c51-0dd7-4b9b-9a2c-494b62c2140f"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7e4a2c51-0dd7-4b9b-9a2c-494b62c2140f"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("2bd3e1bb-4d57-4c0a-9a56-58c6714bb7a9"),
+                            GenreId = new Guid("b9ead654-f282-45b7-b509-7d97142789df")
+                        },
+                        new
+                        {
+                            BookId = new Guid("2bd3e1bb-4d57-4c0a-9a56-58c6714bb7a9"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("2bd3e1bb-4d57-4c0a-9a56-58c6714bb7a9"),
+                            GenreId = new Guid("80a6ef21-3e23-4d20-b897-19b788f7239b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("2bd3e1bb-4d57-4c0a-9a56-58c6714bb7a9"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("2bd3e1bb-4d57-4c0a-9a56-58c6714bb7a9"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("6f9e1c2b-8d44-4b87-94f6-6a32b5fb9184"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("6f9e1c2b-8d44-4b87-94f6-6a32b5fb9184"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("6f9e1c2b-8d44-4b87-94f6-6a32b5fb9184"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("6f9e1c2b-8d44-4b87-94f6-6a32b5fb9184"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("6f9e1c2b-8d44-4b87-94f6-6a32b5fb9184"),
+                            GenreId = new Guid("8c733d38-27c4-43da-a832-4f6db21a855d")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9f9c3b5e-8c4d-4e2f-9b54-4ea3a0c8e3f1"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9f9c3b5e-8c4d-4e2f-9b54-4ea3a0c8e3f1"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9f9c3b5e-8c4d-4e2f-9b54-4ea3a0c8e3f1"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a3a6f5a4-2b0c-4e2c-9a77-3a5f4b2c8e91"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a3a6f5a4-2b0c-4e2c-9a77-3a5f4b2c8e91"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a3a6f5a4-2b0c-4e2c-9a77-3a5f4b2c8e91"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a3a6f5a4-2b0c-4e2c-9a77-3a5f4b2c8e91"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8c9e6b1c-8b4e-4f6d-8e5f-7f3d8f6a9b21"),
+                            GenreId = new Guid("507c176c-59a3-4869-9811-08fadf985925")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8c9e6b1c-8b4e-4f6d-8e5f-7f3d8f6a9b21"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8c9e6b1c-8b4e-4f6d-8e5f-7f3d8f6a9b21"),
+                            GenreId = new Guid("b9ead654-f282-45b7-b509-7d97142789df")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8c9e6b1c-8b4e-4f6d-8e5f-7f3d8f6a9b21"),
+                            GenreId = new Guid("8c733d38-27c4-43da-a832-4f6db21a855d")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a3c3acf9-4d34-4b19-9a8f-1ae0d1b2f3cd"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a3c3acf9-4d34-4b19-9a8f-1ae0d1b2f3cd"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a3c3acf9-4d34-4b19-9a8f-1ae0d1b2f3cd"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a3c3acf9-4d34-4b19-9a8f-1ae0d1b2f3cd"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a3c3acf9-4d34-4b19-9a8f-1ae0d1b2f3cd"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a3c3acf9-4d34-4b19-9a8f-1ae0d1b2f3cd"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c7a4d6f3-4a1d-4c5a-9f55-9f3f4b7c2b19"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c7a4d6f3-4a1d-4c5a-9f55-9f3f4b7c2b19"),
+                            GenreId = new Guid("60f323b5-c68a-4d58-84e1-972358603833")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c7a4d6f3-4a1d-4c5a-9f55-9f3f4b7c2b19"),
+                            GenreId = new Guid("d285cd97-1d2f-4d2b-bc94-68cf54198b1c")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c7a4d6f3-4a1d-4c5a-9f55-9f3f4b7c2b19"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c7a4d6f3-4a1d-4c5a-9f55-9f3f4b7c2b19"),
+                            GenreId = new Guid("2d2891fb-4ad0-4221-9274-f3b63cb5c4fd")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d7c1b7fa-7a5c-4a1a-8f6a-8c7d5b0d9a32"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d7c1b7fa-7a5c-4a1a-8f6a-8c7d5b0d9a32"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d7c1b7fa-7a5c-4a1a-8f6a-8c7d5b0d9a32"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d7c1b7fa-7a5c-4a1a-8f6a-8c7d5b0d9a32"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7e4cb2de-5bc9-4e9c-8a0a-9a4d3d2f91b7"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7e4cb2de-5bc9-4e9c-8a0a-9a4d3d2f91b7"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7e4cb2de-5bc9-4e9c-8a0a-9a4d3d2f91b7"),
+                            GenreId = new Guid("2d2891fb-4ad0-4221-9274-f3b63cb5c4fd")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7e4cb2de-5bc9-4e9c-8a0a-9a4d3d2f91b7"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b6a4f4d0-1b7a-4c3b-9d4b-5c6a2b8e9f11"),
+                            GenreId = new Guid("60f323b5-c68a-4d58-84e1-972358603833")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b6a4f4d0-1b7a-4c3b-9d4b-5c6a2b8e9f11"),
+                            GenreId = new Guid("075799ce-3794-4e77-a999-f0b228dec1f8")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b6a4f4d0-1b7a-4c3b-9d4b-5c6a2b8e9f11"),
+                            GenreId = new Guid("2d2891fb-4ad0-4221-9274-f3b63cb5c4fd")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b6a4f4d0-1b7a-4c3b-9d4b-5c6a2b8e9f11"),
+                            GenreId = new Guid("43e2ee00-0037-4676-ad71-18481ef29fff")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9b5d8c6c-6c2c-4a0a-9a6c-2df46a52f78f"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9b5d8c6c-6c2c-4a0a-9a6c-2df46a52f78f"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9b5d8c6c-6c2c-4a0a-9a6c-2df46a52f78f"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9b5d8c6c-6c2c-4a0a-9a6c-2df46a52f78f"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9c2b0b17-8e9d-4e54-9b7a-2a5e6f4c3d10"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9c2b0b17-8e9d-4e54-9b7a-2a5e6f4c3d10"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9c2b0b17-8e9d-4e54-9b7a-2a5e6f4c3d10"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9c2b0b17-8e9d-4e54-9b7a-2a5e6f4c3d10"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9c2b0b17-8e9d-4e54-9b7a-2a5e6f4c3d10"),
+                            GenreId = new Guid("fdc897ad-9ebf-476c-aa11-d9944c5ac473")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c3c8c737-8c9d-4c4c-9c7f-1b2a3f4d5e6f"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c3c8c737-8c9d-4c4c-9c7f-1b2a3f4d5e6f"),
+                            GenreId = new Guid("507c176c-59a3-4869-9811-08fadf985925")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c3c8c737-8c9d-4c4c-9c7f-1b2a3f4d5e6f"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c3c8c737-8c9d-4c4c-9c7f-1b2a3f4d5e6f"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d9f3b8c6-8a4c-4c9d-9c42-5f73baf0e7d2"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d9f3b8c6-8a4c-4c9d-9c42-5f73baf0e7d2"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d9f3b8c6-8a4c-4c9d-9c42-5f73baf0e7d2"),
+                            GenreId = new Guid("2d2891fb-4ad0-4221-9274-f3b63cb5c4fd")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d9f3b8c6-8a4c-4c9d-9c42-5f73baf0e7d2"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c2f4c3f9-0ab1-4b61-86c7-1a0e75f3f9d2"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c2f4c3f9-0ab1-4b61-86c7-1a0e75f3f9d2"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c2f4c3f9-0ab1-4b61-86c7-1a0e75f3f9d2"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c2f4c3f9-0ab1-4b61-86c7-1a0e75f3f9d2"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c2f4c3f9-0ab1-4b61-86c7-1a0e75f3f9d2"),
+                            GenreId = new Guid("2d2891fb-4ad0-4221-9274-f3b63cb5c4fd")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c2f4b6a1-8d3f-4a71-9f88-3d3f4a21b7e9"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c2f4b6a1-8d3f-4a71-9f88-3d3f4a21b7e9"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c2f4b6a1-8d3f-4a71-9f88-3d3f4a21b7e9"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c2f4b6a1-8d3f-4a71-9f88-3d3f4a21b7e9"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c3b7f9e1-981d-4c23-8e0f-5f1f9cbb0b77"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c3b7f9e1-981d-4c23-8e0f-5f1f9cbb0b77"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c3b7f9e1-981d-4c23-8e0f-5f1f9cbb0b77"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c3b7f9e1-981d-4c23-8e0f-5f1f9cbb0b77"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c3b7f9e1-981d-4c23-8e0f-5f1f9cbb0b77"),
+                            GenreId = new Guid("be00dfad-121c-4b4b-a868-af8a8097668a")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c3b7f9e1-981d-4c23-8e0f-5f1f9cbb0b77"),
+                            GenreId = new Guid("af4fc919-4c2f-4319-8c70-2a970a661a67")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a8b2f6bb-0f3b-4c2c-b4b9-3f2d9a6f12cd"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a8b2f6bb-0f3b-4c2c-b4b9-3f2d9a6f12cd"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a8b2f6bb-0f3b-4c2c-b4b9-3f2d9a6f12cd"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a8b2f6bb-0f3b-4c2c-b4b9-3f2d9a6f12cd"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c8b4c9e3-4c1c-4c46-8a0f-3e9e6c7c2a11"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c8b4c9e3-4c1c-4c46-8a0f-3e9e6c7c2a11"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c8b4c9e3-4c1c-4c46-8a0f-3e9e6c7c2a11"),
+                            GenreId = new Guid("2d2891fb-4ad0-4221-9274-f3b63cb5c4fd")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c8b4c9e3-4c1c-4c46-8a0f-3e9e6c7c2a11"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e6f4e1b3-9a2c-4f67-91b4-7fd5d1cf3229"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e6f4e1b3-9a2c-4f67-91b4-7fd5d1cf3229"),
+                            GenreId = new Guid("be00dfad-121c-4b4b-a868-af8a8097668a")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e6f4e1b3-9a2c-4f67-91b4-7fd5d1cf3229"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e6f4e1b3-9a2c-4f67-91b4-7fd5d1cf3229"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e7b2c8a9-3f4d-4b77-9b65-2c8d4c5a7f13"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e7b2c8a9-3f4d-4b77-9b65-2c8d4c5a7f13"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e7b2c8a9-3f4d-4b77-9b65-2c8d4c5a7f13"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e7b2c8a9-3f4d-4b77-9b65-2c8d4c5a7f13"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e7b2c8a9-3f4d-4b77-9b65-2c8d4c5a7f13"),
+                            GenreId = new Guid("c746bd12-22b1-4ef1-a9b0-602467befa90")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e7b2c8a9-3f4d-4b77-9b65-2c8d4c5a7f13"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f4b937c0-6c71-4e6b-9a2b-9f660a9b8b24"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f4b937c0-6c71-4e6b-9a2b-9f660a9b8b24"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f4b937c0-6c71-4e6b-9a2b-9f660a9b8b24"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f4b937c0-6c71-4e6b-9a2b-9f660a9b8b24"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f4b937c0-6c71-4e6b-9a2b-9f660a9b8b24"),
+                            GenreId = new Guid("2d2891fb-4ad0-4221-9274-f3b63cb5c4fd")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f4c3c92a-7c1b-45d3-9c2c-9b1e58d5a7e0"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f4c3c92a-7c1b-45d3-9c2c-9b1e58d5a7e0"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f4c3c92a-7c1b-45d3-9c2c-9b1e58d5a7e0"),
+                            GenreId = new Guid("80a6ef21-3e23-4d20-b897-19b788f7239b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8b3a2c8c-9af1-4e5e-9d7b-6d2d9a4c1f21"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8b3a2c8c-9af1-4e5e-9d7b-6d2d9a4c1f21"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8b3a2c8c-9af1-4e5e-9d7b-6d2d9a4c1f21"),
+                            GenreId = new Guid("2d2891fb-4ad0-4221-9274-f3b63cb5c4fd")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8b3a2c8c-9af1-4e5e-9d7b-6d2d9a4c1f21"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b12c3f9e-4a6d-4b21-91f2-0d7a7e4f3c89"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b12c3f9e-4a6d-4b21-91f2-0d7a7e4f3c89"),
+                            GenreId = new Guid("507c176c-59a3-4869-9811-08fadf985925")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b12c3f9e-4a6d-4b21-91f2-0d7a7e4f3c89"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b12c3f9e-4a6d-4b21-91f2-0d7a7e4f3c89"),
+                            GenreId = new Guid("b9ead654-f282-45b7-b509-7d97142789df")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0f3f8979-3d5c-4b96-9a2a-2f5f3bd6c412"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0f3f8979-3d5c-4b96-9a2a-2f5f3bd6c412"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0f3f8979-3d5c-4b96-9a2a-2f5f3bd6c412"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0f3f8979-3d5c-4b96-9a2a-2f5f3bd6c412"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0f3f8979-3d5c-4b96-9a2a-2f5f3bd6c412"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5f8a1bde-3f72-4f2a-b9e0-5cd17a90c612"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5f8a1bde-3f72-4f2a-b9e0-5cd17a90c612"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5f8a1bde-3f72-4f2a-b9e0-5cd17a90c612"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5f8a1bde-3f72-4f2a-b9e0-5cd17a90c612"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5f8a1bde-3f72-4f2a-b9e0-5cd17a90c612"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5b3f1c6e-7d4a-4f0f-9f5a-2a7a1d9e3c42"),
+                            GenreId = new Guid("507c176c-59a3-4869-9811-08fadf985925")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5b3f1c6e-7d4a-4f0f-9f5a-2a7a1d9e3c42"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5b3f1c6e-7d4a-4f0f-9f5a-2a7a1d9e3c42"),
+                            GenreId = new Guid("b9ead654-f282-45b7-b509-7d97142789df")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5b3f1c6e-7d4a-4f0f-9f5a-2a7a1d9e3c42"),
+                            GenreId = new Guid("8c733d38-27c4-43da-a832-4f6db21a855d")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5b3f1c6e-7d4a-4f0f-9f5a-2a7a1d9e3c42"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3ce93e2b-8e5c-4a8b-bf17-3c5f4b3b76aa"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3ce93e2b-8e5c-4a8b-bf17-3c5f4b3b76aa"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3ce93e2b-8e5c-4a8b-bf17-3c5f4b3b76aa"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3ce93e2b-8e5c-4a8b-bf17-3c5f4b3b76aa"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("6b2f1c3a-8e44-4fd0-9c6a-1c7b9320f3e9"),
+                            GenreId = new Guid("507c176c-59a3-4869-9811-08fadf985925")
+                        },
+                        new
+                        {
+                            BookId = new Guid("6b2f1c3a-8e44-4fd0-9c6a-1c7b9320f3e9"),
+                            GenreId = new Guid("be00dfad-121c-4b4b-a868-af8a8097668a")
+                        },
+                        new
+                        {
+                            BookId = new Guid("6b2f1c3a-8e44-4fd0-9c6a-1c7b9320f3e9"),
+                            GenreId = new Guid("c746bd12-22b1-4ef1-a9b0-602467befa90")
+                        },
+                        new
+                        {
+                            BookId = new Guid("6b2f1c3a-8e44-4fd0-9c6a-1c7b9320f3e9"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("6b2f1c3a-8e44-4fd0-9c6a-1c7b9320f3e9"),
+                            GenreId = new Guid("8c733d38-27c4-43da-a832-4f6db21a855d")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f13d2a8e-0b6d-4f0e-9c2e-7a1d5cbb9382"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f13d2a8e-0b6d-4f0e-9c2e-7a1d5cbb9382"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f13d2a8e-0b6d-4f0e-9c2e-7a1d5cbb9382"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f13d2a8e-0b6d-4f0e-9c2e-7a1d5cbb9382"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f13d2a8e-0b6d-4f0e-9c2e-7a1d5cbb9382"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f13d2a8e-0b6d-4f0e-9c2e-7a1d5cbb9382"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d1f8b9c4-4c3b-4070-9c32-42b9f2f6e8ad"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d1f8b9c4-4c3b-4070-9c32-42b9f2f6e8ad"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d1f8b9c4-4c3b-4070-9c32-42b9f2f6e8ad"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d1f8b9c4-4c3b-4070-9c32-42b9f2f6e8ad"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d1f8b9c4-4c3b-4070-9c32-42b9f2f6e8ad"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e6b8d4a1-2f3c-4f8a-9c23-7b4a1f9c23de"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e6b8d4a1-2f3c-4f8a-9c23-7b4a1f9c23de"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e6b8d4a1-2f3c-4f8a-9c23-7b4a1f9c23de"),
+                            GenreId = new Guid("2d2891fb-4ad0-4221-9274-f3b63cb5c4fd")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e6b8d4a1-2f3c-4f8a-9c23-7b4a1f9c23de"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e6b8d4a1-2f3c-4f8a-9c23-7b4a1f9c23de"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3e9c7a24-5a31-4a1e-9f5a-4d2b8f6c91e3"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3e9c7a24-5a31-4a1e-9f5a-4d2b8f6c91e3"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3e9c7a24-5a31-4a1e-9f5a-4d2b8f6c91e3"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3e9c7a24-5a31-4a1e-9f5a-4d2b8f6c91e3"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("bb7c9f4e-4b0c-4c0b-8d1d-2f4a3b9f6e21"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("bb7c9f4e-4b0c-4c0b-8d1d-2f4a3b9f6e21"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("bb7c9f4e-4b0c-4c0b-8d1d-2f4a3b9f6e21"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("bb7c9f4e-4b0c-4c0b-8d1d-2f4a3b9f6e21"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("bb7c9f4e-4b0c-4c0b-8d1d-2f4a3b9f6e21"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b4f2c8e1-3a6d-4a9d-9f12-8e3a7d6c4b21"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b4f2c8e1-3a6d-4a9d-9f12-8e3a7d6c4b21"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b4f2c8e1-3a6d-4a9d-9f12-8e3a7d6c4b21"),
+                            GenreId = new Guid("80a6ef21-3e23-4d20-b897-19b788f7239b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b4f2c8e1-3a6d-4a9d-9f12-8e3a7d6c4b21"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("fa8c9d2b-6e2b-4a8c-9a37-5cba2f0457dd"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("fa8c9d2b-6e2b-4a8c-9a37-5cba2f0457dd"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("fa8c9d2b-6e2b-4a8c-9a37-5cba2f0457dd"),
+                            GenreId = new Guid("507c176c-59a3-4869-9811-08fadf985925")
+                        },
+                        new
+                        {
+                            BookId = new Guid("fa8c9d2b-6e2b-4a8c-9a37-5cba2f0457dd"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("fa8c9d2b-6e2b-4a8c-9a37-5cba2f0457dd"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d3a9c4b0-7f52-4c0f-9c41-9b5f2a7de3a1"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d3a9c4b0-7f52-4c0f-9c41-9b5f2a7de3a1"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d3a9c4b0-7f52-4c0f-9c41-9b5f2a7de3a1"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d3a9c4b0-7f52-4c0f-9c41-9b5f2a7de3a1"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d3a9c4b0-7f52-4c0f-9c41-9b5f2a7de3a1"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f2c9b8d7-3e41-4f5d-92b3-4a7c1c6a9e21"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f2c9b8d7-3e41-4f5d-92b3-4a7c1c6a9e21"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f2c9b8d7-3e41-4f5d-92b3-4a7c1c6a9e21"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f2c9b8d7-3e41-4f5d-92b3-4a7c1c6a9e21"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7a3f9a9c-5e9c-4b42-8d0a-1b4a2b0c9f31"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7a3f9a9c-5e9c-4b42-8d0a-1b4a2b0c9f31"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7a3f9a9c-5e9c-4b42-8d0a-1b4a2b0c9f31"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7a3f9a9c-5e9c-4b42-8d0a-1b4a2b0c9f31"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e8b0d4e9-1c4a-4b9a-9f6c-3f1a2b7c9d45"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e8b0d4e9-1c4a-4b9a-9f6c-3f1a2b7c9d45"),
+                            GenreId = new Guid("507c176c-59a3-4869-9811-08fadf985925")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e8b0d4e9-1c4a-4b9a-9f6c-3f1a2b7c9d45"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e8b0d4e9-1c4a-4b9a-9f6c-3f1a2b7c9d45"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e8b0d4e9-1c4a-4b9a-9f6c-3f1a2b7c9d45"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8e6d3a1b-6a3b-4f40-8d1d-8a4a3d9e9a52"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8e6d3a1b-6a3b-4f40-8d1d-8a4a3d9e9a52"),
+                            GenreId = new Guid("60f323b5-c68a-4d58-84e1-972358603833")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8e6d3a1b-6a3b-4f40-8d1d-8a4a3d9e9a52"),
+                            GenreId = new Guid("b9ead654-f282-45b7-b509-7d97142789df")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8e6d3a1b-6a3b-4f40-8d1d-8a4a3d9e9a52"),
+                            GenreId = new Guid("43e2ee00-0037-4676-ad71-18481ef29fff")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8e6d3a1b-6a3b-4f40-8d1d-8a4a3d9e9a52"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8e6d3a1b-6a3b-4f40-8d1d-8a4a3d9e9a52"),
+                            GenreId = new Guid("2d2891fb-4ad0-4221-9274-f3b63cb5c4fd")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b3d2c4a1-7e8f-4e9c-9f31-2f0f6f1d7a45"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b3d2c4a1-7e8f-4e9c-9f31-2f0f6f1d7a45"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b3d2c4a1-7e8f-4e9c-9f31-2f0f6f1d7a45"),
+                            GenreId = new Guid("007d3fc0-bb15-4a58-98fb-17dfc930e969")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b3d2c4a1-7e8f-4e9c-9f31-2f0f6f1d7a45"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5f0e3af3-0d8f-4f3a-9f0e-0b7a8b9c4c21"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5f0e3af3-0d8f-4f3a-9f0e-0b7a8b9c4c21"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5f0e3af3-0d8f-4f3a-9f0e-0b7a8b9c4c21"),
+                            GenreId = new Guid("131e73ab-1118-4792-a778-5a4ae1482981")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5f0e3af3-0d8f-4f3a-9f0e-0b7a8b9c4c21"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c7a3c8c9-4b5e-4c2c-9c8b-2e4a1f7d9023"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c7a3c8c9-4b5e-4c2c-9c8b-2e4a1f7d9023"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c7a3c8c9-4b5e-4c2c-9c8b-2e4a1f7d9023"),
+                            GenreId = new Guid("007d3fc0-bb15-4a58-98fb-17dfc930e969")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c7a3c8c9-4b5e-4c2c-9c8b-2e4a1f7d9023"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("471ff115-dfca-4852-b4c6-2aa0384c859e"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("471ff115-dfca-4852-b4c6-2aa0384c859e"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("471ff115-dfca-4852-b4c6-2aa0384c859e"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("471ff115-dfca-4852-b4c6-2aa0384c859e"),
+                            GenreId = new Guid("007d3fc0-bb15-4a58-98fb-17dfc930e969")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9a1c3f4e-0a9c-4f13-9d96-8685b5c2e0fa"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9a1c3f4e-0a9c-4f13-9d96-8685b5c2e0fa"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9a1c3f4e-0a9c-4f13-9d96-8685b5c2e0fa"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9a1c3f4e-0a9c-4f13-9d96-8685b5c2e0fa"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0c2f0d67-1f72-4a8d-8d69-1c7183762c84"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0c2f0d67-1f72-4a8d-8d69-1c7183762c84"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0c2f0d67-1f72-4a8d-8d69-1c7183762c84"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0c2f0d67-1f72-4a8d-8d69-1c7183762c84"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0c2f0d67-1f72-4a8d-8d69-1c7183762c84"),
+                            GenreId = new Guid("131e73ab-1118-4792-a778-5a4ae1482981")
+                        },
+                        new
+                        {
+                            BookId = new Guid("18432708-6e21-4f29-bfb9-db3d25a7e29f"),
+                            GenreId = new Guid("60f323b5-c68a-4d58-84e1-972358603833")
+                        },
+                        new
+                        {
+                            BookId = new Guid("18432708-6e21-4f29-bfb9-db3d25a7e29f"),
+                            GenreId = new Guid("d285cd97-1d2f-4d2b-bc94-68cf54198b1c")
+                        },
+                        new
+                        {
+                            BookId = new Guid("18432708-6e21-4f29-bfb9-db3d25a7e29f"),
+                            GenreId = new Guid("131e73ab-1118-4792-a778-5a4ae1482981")
+                        },
+                        new
+                        {
+                            BookId = new Guid("18432708-6e21-4f29-bfb9-db3d25a7e29f"),
+                            GenreId = new Guid("43e2ee00-0037-4676-ad71-18481ef29fff")
+                        },
+                        new
+                        {
+                            BookId = new Guid("85e89832-d193-486d-bcbf-d51057dd7cbe"),
+                            GenreId = new Guid("60f323b5-c68a-4d58-84e1-972358603833")
+                        },
+                        new
+                        {
+                            BookId = new Guid("85e89832-d193-486d-bcbf-d51057dd7cbe"),
+                            GenreId = new Guid("d285cd97-1d2f-4d2b-bc94-68cf54198b1c")
+                        },
+                        new
+                        {
+                            BookId = new Guid("85e89832-d193-486d-bcbf-d51057dd7cbe"),
+                            GenreId = new Guid("43e2ee00-0037-4676-ad71-18481ef29fff")
+                        },
+                        new
+                        {
+                            BookId = new Guid("85e89832-d193-486d-bcbf-d51057dd7cbe"),
+                            GenreId = new Guid("075799ce-3794-4e77-a999-f0b228dec1f8")
+                        },
+                        new
+                        {
+                            BookId = new Guid("38709103-bad9-47ab-aead-f77209f67e95"),
+                            GenreId = new Guid("b9ead654-f282-45b7-b509-7d97142789df")
+                        },
+                        new
+                        {
+                            BookId = new Guid("38709103-bad9-47ab-aead-f77209f67e95"),
+                            GenreId = new Guid("8c733d38-27c4-43da-a832-4f6db21a855d")
+                        },
+                        new
+                        {
+                            BookId = new Guid("38709103-bad9-47ab-aead-f77209f67e95"),
+                            GenreId = new Guid("80a6ef21-3e23-4d20-b897-19b788f7239b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("38709103-bad9-47ab-aead-f77209f67e95"),
+                            GenreId = new Guid("407137e2-7924-4c18-83af-c8833e359d69")
+                        },
+                        new
+                        {
+                            BookId = new Guid("38709103-bad9-47ab-aead-f77209f67e95"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7b9d0cf4-1bf4-4811-95de-40a8ad844ddd"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7b9d0cf4-1bf4-4811-95de-40a8ad844ddd"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7b9d0cf4-1bf4-4811-95de-40a8ad844ddd"),
+                            GenreId = new Guid("407137e2-7924-4c18-83af-c8833e359d69")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7b9d0cf4-1bf4-4811-95de-40a8ad844ddd"),
+                            GenreId = new Guid("8c733d38-27c4-43da-a832-4f6db21a855d")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7b9d0cf4-1bf4-4811-95de-40a8ad844ddd"),
+                            GenreId = new Guid("80a6ef21-3e23-4d20-b897-19b788f7239b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("2481949f-50e9-4487-9193-c649d91ebf9d"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("2481949f-50e9-4487-9193-c649d91ebf9d"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("2481949f-50e9-4487-9193-c649d91ebf9d"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("2481949f-50e9-4487-9193-c649d91ebf9d"),
+                            GenreId = new Guid("007d3fc0-bb15-4a58-98fb-17dfc930e969")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3c91d985-f552-44a2-94b3-0be0c4e79020"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3c91d985-f552-44a2-94b3-0be0c4e79020"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3c91d985-f552-44a2-94b3-0be0c4e79020"),
+                            GenreId = new Guid("007d3fc0-bb15-4a58-98fb-17dfc930e969")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3c91d985-f552-44a2-94b3-0be0c4e79020"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c47cc642-0ece-44dd-b698-e755ddffd6bc"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c47cc642-0ece-44dd-b698-e755ddffd6bc"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c47cc642-0ece-44dd-b698-e755ddffd6bc"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c47cc642-0ece-44dd-b698-e755ddffd6bc"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c47cc642-0ece-44dd-b698-e755ddffd6bc"),
+                            GenreId = new Guid("2d2891fb-4ad0-4221-9274-f3b63cb5c4fd")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c5a7ac1f-9ae8-4eb6-a22a-2d5522dfffe7"),
+                            GenreId = new Guid("8c733d38-27c4-43da-a832-4f6db21a855d")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c5a7ac1f-9ae8-4eb6-a22a-2d5522dfffe7"),
+                            GenreId = new Guid("407137e2-7924-4c18-83af-c8833e359d69")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c5a7ac1f-9ae8-4eb6-a22a-2d5522dfffe7"),
+                            GenreId = new Guid("b9ead654-f282-45b7-b509-7d97142789df")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c5a7ac1f-9ae8-4eb6-a22a-2d5522dfffe7"),
+                            GenreId = new Guid("80a6ef21-3e23-4d20-b897-19b788f7239b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3a941d9d-7580-4f83-8843-00d8be1ea6ed"),
+                            GenreId = new Guid("b9ead654-f282-45b7-b509-7d97142789df")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3a941d9d-7580-4f83-8843-00d8be1ea6ed"),
+                            GenreId = new Guid("80a6ef21-3e23-4d20-b897-19b788f7239b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3a941d9d-7580-4f83-8843-00d8be1ea6ed"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3a941d9d-7580-4f83-8843-00d8be1ea6ed"),
+                            GenreId = new Guid("407137e2-7924-4c18-83af-c8833e359d69")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3a941d9d-7580-4f83-8843-00d8be1ea6ed"),
+                            GenreId = new Guid("8c733d38-27c4-43da-a832-4f6db21a855d")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3a941d9d-7580-4f83-8843-00d8be1ea6ed"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c97946eb-86ff-458c-8cd1-b79c763614a9"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c97946eb-86ff-458c-8cd1-b79c763614a9"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e9efab6a-3add-4052-bee7-42bea0df66c8"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e9efab6a-3add-4052-bee7-42bea0df66c8"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("35a3af59-2008-4d98-81a7-4cd6eb55bb01"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("35a3af59-2008-4d98-81a7-4cd6eb55bb01"),
+                            GenreId = new Guid("be00dfad-121c-4b4b-a868-af8a8097668a")
+                        },
+                        new
+                        {
+                            BookId = new Guid("35a3af59-2008-4d98-81a7-4cd6eb55bb01"),
+                            GenreId = new Guid("80a6ef21-3e23-4d20-b897-19b788f7239b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("35a3af59-2008-4d98-81a7-4cd6eb55bb01"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("30f86a3a-430a-4484-b496-dad6d0b6b145"),
+                            GenreId = new Guid("507c176c-59a3-4869-9811-08fadf985925")
+                        },
+                        new
+                        {
+                            BookId = new Guid("30f86a3a-430a-4484-b496-dad6d0b6b145"),
+                            GenreId = new Guid("60f323b5-c68a-4d58-84e1-972358603833")
+                        },
+                        new
+                        {
+                            BookId = new Guid("30f86a3a-430a-4484-b496-dad6d0b6b145"),
+                            GenreId = new Guid("d285cd97-1d2f-4d2b-bc94-68cf54198b1c")
+                        },
+                        new
+                        {
+                            BookId = new Guid("30f86a3a-430a-4484-b496-dad6d0b6b145"),
+                            GenreId = new Guid("43e2ee00-0037-4676-ad71-18481ef29fff")
+                        },
+                        new
+                        {
+                            BookId = new Guid("30f86a3a-430a-4484-b496-dad6d0b6b145"),
+                            GenreId = new Guid("8c733d38-27c4-43da-a832-4f6db21a855d")
+                        },
+                        new
+                        {
+                            BookId = new Guid("30f86a3a-430a-4484-b496-dad6d0b6b145"),
+                            GenreId = new Guid("80a6ef21-3e23-4d20-b897-19b788f7239b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d7f18fda-ed34-45bb-b860-851fc7651313"),
+                            GenreId = new Guid("507c176c-59a3-4869-9811-08fadf985925")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d7f18fda-ed34-45bb-b860-851fc7651313"),
+                            GenreId = new Guid("d285cd97-1d2f-4d2b-bc94-68cf54198b1c")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d7f18fda-ed34-45bb-b860-851fc7651313"),
+                            GenreId = new Guid("2a0702ed-fdf6-40c0-ad68-6303dec26aad")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d7f18fda-ed34-45bb-b860-851fc7651313"),
+                            GenreId = new Guid("407137e2-7924-4c18-83af-c8833e359d69")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d7f18fda-ed34-45bb-b860-851fc7651313"),
+                            GenreId = new Guid("80a6ef21-3e23-4d20-b897-19b788f7239b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("4e3a7d2b-9e8c-4a1f-9c32-7b5f2a9d3c11"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("4e3a7d2b-9e8c-4a1f-9c32-7b5f2a9d3c11"),
+                            GenreId = new Guid("507c176c-59a3-4869-9811-08fadf985925")
+                        },
+                        new
+                        {
+                            BookId = new Guid("4e3a7d2b-9e8c-4a1f-9c32-7b5f2a9d3c11"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("4e3a7d2b-9e8c-4a1f-9c32-7b5f2a9d3c11"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("6a2a9c1e-8f36-4f3d-8c9d-8f2f0af1b7e3"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("6a2a9c1e-8f36-4f3d-8c9d-8f2f0af1b7e3"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("6a2a9c1e-8f36-4f3d-8c9d-8f2f0af1b7e3"),
+                            GenreId = new Guid("2d2891fb-4ad0-4221-9274-f3b63cb5c4fd")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8c3a1f0c-1a2b-4e6d-9b7f-2c4d6e8f9a10"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8c3a1f0c-1a2b-4e6d-9b7f-2c4d6e8f9a10"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8c3a1f0c-1a2b-4e6d-9b7f-2c4d6e8f9a10"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8c3a1f0c-1a2b-4e6d-9b7f-2c4d6e8f9a10"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8c3a1f0c-1a2b-4e6d-9b7f-2c4d6e8f9a10"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0a5c08f6-2c3b-4b8f-9b46-5a6a8e3c7c91"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0a5c08f6-2c3b-4b8f-9b46-5a6a8e3c7c91"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0a5c08f6-2c3b-4b8f-9b46-5a6a8e3c7c91"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b0a0bf71-1a65-4c4e-9b76-4b4db4ff9f53"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b0a0bf71-1a65-4c4e-9b76-4b4db4ff9f53"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b0a0bf71-1a65-4c4e-9b76-4b4db4ff9f53"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b0a0bf71-1a65-4c4e-9b76-4b4db4ff9f53"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("4e9b9c5d-8af1-4c22-9d6f-3a4b2f8e9c01"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("4e9b9c5d-8af1-4c22-9d6f-3a4b2f8e9c01"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("4e9b9c5d-8af1-4c22-9d6f-3a4b2f8e9c01"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("4e9b9c5d-8af1-4c22-9d6f-3a4b2f8e9c01"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("4e9b9c5d-8af1-4c22-9d6f-3a4b2f8e9c01"),
+                            GenreId = new Guid("2d2891fb-4ad0-4221-9274-f3b63cb5c4fd")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5a3d7c51-0b5a-4baf-8f3d-5b2b1c6b9f10"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5a3d7c51-0b5a-4baf-8f3d-5b2b1c6b9f10"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5a3d7c51-0b5a-4baf-8f3d-5b2b1c6b9f10"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5a3d7c51-0b5a-4baf-8f3d-5b2b1c6b9f10"),
+                            GenreId = new Guid("d285cd97-1d2f-4d2b-bc94-68cf54198b1c")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c0a8f9b2-5a34-4c23-9f10-9e7b2f4d3a21"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c0a8f9b2-5a34-4c23-9f10-9e7b2f4d3a21"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c0a8f9b2-5a34-4c23-9f10-9e7b2f4d3a21"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c0a8f9b2-5a34-4c23-9f10-9e7b2f4d3a21"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("6f2c8b9b-2d9a-488e-8d2b-7a2d6f5b91c1"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("6f2c8b9b-2d9a-488e-8d2b-7a2d6f5b91c1"),
+                            GenreId = new Guid("60f323b5-c68a-4d58-84e1-972358603833")
+                        },
+                        new
+                        {
+                            BookId = new Guid("6f2c8b9b-2d9a-488e-8d2b-7a2d6f5b91c1"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("6f2c8b9b-2d9a-488e-8d2b-7a2d6f5b91c1"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("6f2c8b9b-2d9a-488e-8d2b-7a2d6f5b91c1"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("6f2c8b9b-2d9a-488e-8d2b-7a2d6f5b91c1"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("6f2c8b9b-2d9a-488e-8d2b-7a2d6f5b91c1"),
+                            GenreId = new Guid("43e2ee00-0037-4676-ad71-18481ef29fff")
+                        },
+                        new
+                        {
+                            BookId = new Guid("6f2c8b9b-2d9a-488e-8d2b-7a2d6f5b91c1"),
+                            GenreId = new Guid("2d2891fb-4ad0-4221-9274-f3b63cb5c4fd")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8fa5d4c9-5b2f-4c31-96df-4c0e2d5f9a11"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8fa5d4c9-5b2f-4c31-96df-4c0e2d5f9a11"),
+                            GenreId = new Guid("507c176c-59a3-4869-9811-08fadf985925")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8fa5d4c9-5b2f-4c31-96df-4c0e2d5f9a11"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8fa5d4c9-5b2f-4c31-96df-4c0e2d5f9a11"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8fa5d4c9-5b2f-4c31-96df-4c0e2d5f9a11"),
+                            GenreId = new Guid("2d2891fb-4ad0-4221-9274-f3b63cb5c4fd")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5d3f8b8c-8e2e-4b0f-9c8c-2f5a7c9d3e21"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5d3f8b8c-8e2e-4b0f-9c8c-2f5a7c9d3e21"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5d3f8b8c-8e2e-4b0f-9c8c-2f5a7c9d3e21"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5d3f8b8c-8e2e-4b0f-9c8c-2f5a7c9d3e21"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5d3f8b8c-8e2e-4b0f-9c8c-2f5a7c9d3e21"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b0c7c1c3-7b3e-4a8c-9a33-0a2e4d9f8b21"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b0c7c1c3-7b3e-4a8c-9a33-0a2e4d9f8b21"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b0c7c1c3-7b3e-4a8c-9a33-0a2e4d9f8b21"),
+                            GenreId = new Guid("2d2891fb-4ad0-4221-9274-f3b63cb5c4fd")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b0c7c1c3-7b3e-4a8c-9a33-0a2e4d9f8b21"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b0c7c1c3-7b3e-4a8c-9a33-0a2e4d9f8b21"),
+                            GenreId = new Guid("80a6ef21-3e23-4d20-b897-19b788f7239b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7cc6b4a0-1a1f-4f3a-9a53-9f6e2c8b1142"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7cc6b4a0-1a1f-4f3a-9a53-9f6e2c8b1142"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7cc6b4a0-1a1f-4f3a-9a53-9f6e2c8b1142"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7cc6b4a0-1a1f-4f3a-9a53-9f6e2c8b1142"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f7a8e3c2-9bf4-4b6a-8f45-6a2b1c4d9e31"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f7a8e3c2-9bf4-4b6a-8f45-6a2b1c4d9e31"),
+                            GenreId = new Guid("60f323b5-c68a-4d58-84e1-972358603833")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f7a8e3c2-9bf4-4b6a-8f45-6a2b1c4d9e31"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f7a8e3c2-9bf4-4b6a-8f45-6a2b1c4d9e31"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f7a8e3c2-9bf4-4b6a-8f45-6a2b1c4d9e31"),
+                            GenreId = new Guid("b9ead654-f282-45b7-b509-7d97142789df")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f7a8e3c2-9bf4-4b6a-8f45-6a2b1c4d9e31"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f7a8e3c2-9bf4-4b6a-8f45-6a2b1c4d9e31"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f7a8e3c2-9bf4-4b6a-8f45-6a2b1c4d9e31"),
+                            GenreId = new Guid("2d2891fb-4ad0-4221-9274-f3b63cb5c4fd")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f7a8e3c2-9bf4-4b6a-8f45-6a2b1c4d9e31"),
+                            GenreId = new Guid("80a6ef21-3e23-4d20-b897-19b788f7239b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f7d1f2f4-8c9a-4a3a-9d0e-3a4c7b9f1a23"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f7d1f2f4-8c9a-4a3a-9d0e-3a4c7b9f1a23"),
+                            GenreId = new Guid("507c176c-59a3-4869-9811-08fadf985925")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f7d1f2f4-8c9a-4a3a-9d0e-3a4c7b9f1a23"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f7d1f2f4-8c9a-4a3a-9d0e-3a4c7b9f1a23"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f7d1f2f4-8c9a-4a3a-9d0e-3a4c7b9f1a23"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f7d1f2f4-8c9a-4a3a-9d0e-3a4c7b9f1a23"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7a6f4c1e-9f24-4d8b-8e39-1b8c5a2f9d10"),
+                            GenreId = new Guid("60f323b5-c68a-4d58-84e1-972358603833")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7a6f4c1e-9f24-4d8b-8e39-1b8c5a2f9d10"),
+                            GenreId = new Guid("2d2891fb-4ad0-4221-9274-f3b63cb5c4fd")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7a6f4c1e-9f24-4d8b-8e39-1b8c5a2f9d10"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7a6f4c1e-9f24-4d8b-8e39-1b8c5a2f9d10"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7a6f4c1e-9f24-4d8b-8e39-1b8c5a2f9d10"),
+                            GenreId = new Guid("d285cd97-1d2f-4d2b-bc94-68cf54198b1c")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7a6f4c1e-9f24-4d8b-8e39-1b8c5a2f9d10"),
+                            GenreId = new Guid("43e2ee00-0037-4676-ad71-18481ef29fff")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7a6f4c1e-9f24-4d8b-8e39-1b8c5a2f9d10"),
+                            GenreId = new Guid("b9ead654-f282-45b7-b509-7d97142789df")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7a6f4c1e-9f24-4d8b-8e39-1b8c5a2f9d10"),
+                            GenreId = new Guid("507c176c-59a3-4869-9811-08fadf985925")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7a6f4c1e-9f24-4d8b-8e39-1b8c5a2f9d10"),
+                            GenreId = new Guid("80a6ef21-3e23-4d20-b897-19b788f7239b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9c2d7e54-3c0b-4d6e-9f83-7a1b2c3d4e5f"),
+                            GenreId = new Guid("60f323b5-c68a-4d58-84e1-972358603833")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9c2d7e54-3c0b-4d6e-9f83-7a1b2c3d4e5f"),
+                            GenreId = new Guid("2d2891fb-4ad0-4221-9274-f3b63cb5c4fd")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9c2d7e54-3c0b-4d6e-9f83-7a1b2c3d4e5f"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9c2d7e54-3c0b-4d6e-9f83-7a1b2c3d4e5f"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9c2d7e54-3c0b-4d6e-9f83-7a1b2c3d4e5f"),
+                            GenreId = new Guid("d285cd97-1d2f-4d2b-bc94-68cf54198b1c")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9c2d7e54-3c0b-4d6e-9f83-7a1b2c3d4e5f"),
+                            GenreId = new Guid("43e2ee00-0037-4676-ad71-18481ef29fff")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9c2d7e54-3c0b-4d6e-9f83-7a1b2c3d4e5f"),
+                            GenreId = new Guid("b9ead654-f282-45b7-b509-7d97142789df")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9c2d7e54-3c0b-4d6e-9f83-7a1b2c3d4e5f"),
+                            GenreId = new Guid("507c176c-59a3-4869-9811-08fadf985925")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9c2d7e54-3c0b-4d6e-9f83-7a1b2c3d4e5f"),
+                            GenreId = new Guid("80a6ef21-3e23-4d20-b897-19b788f7239b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5f3a9b28-6e41-4c7d-9230-2a7b8c9d0e1f"),
+                            GenreId = new Guid("60f323b5-c68a-4d58-84e1-972358603833")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5f3a9b28-6e41-4c7d-9230-2a7b8c9d0e1f"),
+                            GenreId = new Guid("2d2891fb-4ad0-4221-9274-f3b63cb5c4fd")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5f3a9b28-6e41-4c7d-9230-2a7b8c9d0e1f"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5f3a9b28-6e41-4c7d-9230-2a7b8c9d0e1f"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5f3a9b28-6e41-4c7d-9230-2a7b8c9d0e1f"),
+                            GenreId = new Guid("d285cd97-1d2f-4d2b-bc94-68cf54198b1c")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5f3a9b28-6e41-4c7d-9230-2a7b8c9d0e1f"),
+                            GenreId = new Guid("43e2ee00-0037-4676-ad71-18481ef29fff")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5f3a9b28-6e41-4c7d-9230-2a7b8c9d0e1f"),
+                            GenreId = new Guid("b9ead654-f282-45b7-b509-7d97142789df")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5f3a9b28-6e41-4c7d-9230-2a7b8c9d0e1f"),
+                            GenreId = new Guid("507c176c-59a3-4869-9811-08fadf985925")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5f3a9b28-6e41-4c7d-9230-2a7b8c9d0e1f"),
+                            GenreId = new Guid("80a6ef21-3e23-4d20-b897-19b788f7239b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0a9d3c47-2b68-4e5f-8c91-3d4e5f6a7b8c"),
+                            GenreId = new Guid("60f323b5-c68a-4d58-84e1-972358603833")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0a9d3c47-2b68-4e5f-8c91-3d4e5f6a7b8c"),
+                            GenreId = new Guid("2d2891fb-4ad0-4221-9274-f3b63cb5c4fd")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0a9d3c47-2b68-4e5f-8c91-3d4e5f6a7b8c"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0a9d3c47-2b68-4e5f-8c91-3d4e5f6a7b8c"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0a9d3c47-2b68-4e5f-8c91-3d4e5f6a7b8c"),
+                            GenreId = new Guid("d285cd97-1d2f-4d2b-bc94-68cf54198b1c")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0a9d3c47-2b68-4e5f-8c91-3d4e5f6a7b8c"),
+                            GenreId = new Guid("43e2ee00-0037-4676-ad71-18481ef29fff")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0a9d3c47-2b68-4e5f-8c91-3d4e5f6a7b8c"),
+                            GenreId = new Guid("b9ead654-f282-45b7-b509-7d97142789df")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0a9d3c47-2b68-4e5f-8c91-3d4e5f6a7b8c"),
+                            GenreId = new Guid("507c176c-59a3-4869-9811-08fadf985925")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0a9d3c47-2b68-4e5f-8c91-3d4e5f6a7b8c"),
+                            GenreId = new Guid("80a6ef21-3e23-4d20-b897-19b788f7239b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0a9d3c47-2b68-4e5f-8c91-3d4e5f6a7b8c"),
+                            GenreId = new Guid("c746bd12-22b1-4ef1-a9b0-602467befa90")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0a9d3c47-2b68-4e5f-8c91-3d4e5f6a7b8c"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d1e2f3a4-b5c6-4789-9d0e-1f2a3b4c5d6e"),
+                            GenreId = new Guid("60f323b5-c68a-4d58-84e1-972358603833")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d1e2f3a4-b5c6-4789-9d0e-1f2a3b4c5d6e"),
+                            GenreId = new Guid("2d2891fb-4ad0-4221-9274-f3b63cb5c4fd")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d1e2f3a4-b5c6-4789-9d0e-1f2a3b4c5d6e"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d1e2f3a4-b5c6-4789-9d0e-1f2a3b4c5d6e"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d1e2f3a4-b5c6-4789-9d0e-1f2a3b4c5d6e"),
+                            GenreId = new Guid("d285cd97-1d2f-4d2b-bc94-68cf54198b1c")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d1e2f3a4-b5c6-4789-9d0e-1f2a3b4c5d6e"),
+                            GenreId = new Guid("43e2ee00-0037-4676-ad71-18481ef29fff")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d1e2f3a4-b5c6-4789-9d0e-1f2a3b4c5d6e"),
+                            GenreId = new Guid("b9ead654-f282-45b7-b509-7d97142789df")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d1e2f3a4-b5c6-4789-9d0e-1f2a3b4c5d6e"),
+                            GenreId = new Guid("507c176c-59a3-4869-9811-08fadf985925")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d1e2f3a4-b5c6-4789-9d0e-1f2a3b4c5d6e"),
+                            GenreId = new Guid("80a6ef21-3e23-4d20-b897-19b788f7239b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3b4c5d6e-7f81-49a0-b2c3-d4e5f6a7b8c9"),
+                            GenreId = new Guid("60f323b5-c68a-4d58-84e1-972358603833")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3b4c5d6e-7f81-49a0-b2c3-d4e5f6a7b8c9"),
+                            GenreId = new Guid("2d2891fb-4ad0-4221-9274-f3b63cb5c4fd")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3b4c5d6e-7f81-49a0-b2c3-d4e5f6a7b8c9"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3b4c5d6e-7f81-49a0-b2c3-d4e5f6a7b8c9"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3b4c5d6e-7f81-49a0-b2c3-d4e5f6a7b8c9"),
+                            GenreId = new Guid("d285cd97-1d2f-4d2b-bc94-68cf54198b1c")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3b4c5d6e-7f81-49a0-b2c3-d4e5f6a7b8c9"),
+                            GenreId = new Guid("43e2ee00-0037-4676-ad71-18481ef29fff")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3b4c5d6e-7f81-49a0-b2c3-d4e5f6a7b8c9"),
+                            GenreId = new Guid("b9ead654-f282-45b7-b509-7d97142789df")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3b4c5d6e-7f81-49a0-b2c3-d4e5f6a7b8c9"),
+                            GenreId = new Guid("507c176c-59a3-4869-9811-08fadf985925")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3b4c5d6e-7f81-49a0-b2c3-d4e5f6a7b8c9"),
+                            GenreId = new Guid("80a6ef21-3e23-4d20-b897-19b788f7239b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e8f7d6c5-b4a3-42d1-9e0f-1a2b3c4d5e6f"),
+                            GenreId = new Guid("60f323b5-c68a-4d58-84e1-972358603833")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e8f7d6c5-b4a3-42d1-9e0f-1a2b3c4d5e6f"),
+                            GenreId = new Guid("2d2891fb-4ad0-4221-9274-f3b63cb5c4fd")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e8f7d6c5-b4a3-42d1-9e0f-1a2b3c4d5e6f"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e8f7d6c5-b4a3-42d1-9e0f-1a2b3c4d5e6f"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e8f7d6c5-b4a3-42d1-9e0f-1a2b3c4d5e6f"),
+                            GenreId = new Guid("d285cd97-1d2f-4d2b-bc94-68cf54198b1c")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e8f7d6c5-b4a3-42d1-9e0f-1a2b3c4d5e6f"),
+                            GenreId = new Guid("43e2ee00-0037-4676-ad71-18481ef29fff")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e8f7d6c5-b4a3-42d1-9e0f-1a2b3c4d5e6f"),
+                            GenreId = new Guid("b9ead654-f282-45b7-b509-7d97142789df")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e8f7d6c5-b4a3-42d1-9e0f-1a2b3c4d5e6f"),
+                            GenreId = new Guid("507c176c-59a3-4869-9811-08fadf985925")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e8f7d6c5-b4a3-42d1-9e0f-1a2b3c4d5e6f"),
+                            GenreId = new Guid("80a6ef21-3e23-4d20-b897-19b788f7239b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("12ab34cd-56ef-4789-90ab-cdef12345678"),
+                            GenreId = new Guid("60f323b5-c68a-4d58-84e1-972358603833")
+                        },
+                        new
+                        {
+                            BookId = new Guid("12ab34cd-56ef-4789-90ab-cdef12345678"),
+                            GenreId = new Guid("2d2891fb-4ad0-4221-9274-f3b63cb5c4fd")
+                        },
+                        new
+                        {
+                            BookId = new Guid("12ab34cd-56ef-4789-90ab-cdef12345678"),
+                            GenreId = new Guid("263de3f0-6d7d-4e61-924d-8057d2535554")
+                        },
+                        new
+                        {
+                            BookId = new Guid("12ab34cd-56ef-4789-90ab-cdef12345678"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("12ab34cd-56ef-4789-90ab-cdef12345678"),
+                            GenreId = new Guid("d285cd97-1d2f-4d2b-bc94-68cf54198b1c")
+                        },
+                        new
+                        {
+                            BookId = new Guid("12ab34cd-56ef-4789-90ab-cdef12345678"),
+                            GenreId = new Guid("43e2ee00-0037-4676-ad71-18481ef29fff")
+                        },
+                        new
+                        {
+                            BookId = new Guid("12ab34cd-56ef-4789-90ab-cdef12345678"),
+                            GenreId = new Guid("b9ead654-f282-45b7-b509-7d97142789df")
+                        },
+                        new
+                        {
+                            BookId = new Guid("12ab34cd-56ef-4789-90ab-cdef12345678"),
+                            GenreId = new Guid("507c176c-59a3-4869-9811-08fadf985925")
+                        },
+                        new
+                        {
+                            BookId = new Guid("12ab34cd-56ef-4789-90ab-cdef12345678"),
+                            GenreId = new Guid("80a6ef21-3e23-4d20-b897-19b788f7239b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("12ab34cd-56ef-4789-90ab-cdef12345678"),
+                            GenreId = new Guid("075799ce-3794-4e77-a999-f0b228dec1f8")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0f1e2d3c-4b5a-4678-98c1-2d3e4f5a6b7c"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0f1e2d3c-4b5a-4678-98c1-2d3e4f5a6b7c"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("1a2b3c4d-5e6f-4789-90a1-b2c3d4e5f6a7"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("1a2b3c4d-5e6f-4789-90a1-b2c3d4e5f6a7"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("2b3c4d5e-6f70-4819-a1b2-c3d4e5f6a7b8"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("2b3c4d5e-6f70-4819-a1b2-c3d4e5f6a7b8"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("2b3c4d5e-6f70-4819-a1b2-c3d4e5f6a7b8"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("2b3c4d5e-6f70-4819-a1b2-c3d4e5f6a7b8"),
+                            GenreId = new Guid("8c733d38-27c4-43da-a832-4f6db21a855d")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3c4d5e6f-7081-492a-b2c3-d4e5f6a7b8c9"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3c4d5e6f-7081-492a-b2c3-d4e5f6a7b8c9"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3c4d5e6f-7081-492a-b2c3-d4e5f6a7b8c9"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8a2a6f6b-92a4-4f31-bf0c-5b0b4e1f8c1e"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8a2a6f6b-92a4-4f31-bf0c-5b0b4e1f8c1e"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8a2a6f6b-92a4-4f31-bf0c-5b0b4e1f8c1e"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("6e4df4fd-37fb-4c26-9a72-8a5b94d3a902"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("6e4df4fd-37fb-4c26-9a72-8a5b94d3a902"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("6e4df4fd-37fb-4c26-9a72-8a5b94d3a902"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("ba3a8b02-9e73-4a7e-bf1f-0a9e437421d5"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("ba3a8b02-9e73-4a7e-bf1f-0a9e437421d5"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("ba3a8b02-9e73-4a7e-bf1f-0a9e437421d5"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("1f6b3f05-6483-4ab0-9b1f-940d470e54c3"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("1f6b3f05-6483-4ab0-9b1f-940d470e54c3"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("1f6b3f05-6483-4ab0-9b1f-940d470e54c3"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0f8c4c8b-1b4d-4baf-8b6d-3f0b2e9a1c11"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0f8c4c8b-1b4d-4baf-8b6d-3f0b2e9a1c11"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0f8c4c8b-1b4d-4baf-8b6d-3f0b2e9a1c11"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0f8c4c8b-1b4d-4baf-8b6d-3f0b2e9a1c11"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8a6b1e2d-9c77-4f06-bf0c-6a0c9a7d4e22"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8a6b1e2d-9c77-4f06-bf0c-6a0c9a7d4e22"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8a6b1e2d-9c77-4f06-bf0c-6a0c9a7d4e22"),
+                            GenreId = new Guid("d285cd97-1d2f-4d2b-bc94-68cf54198b1c")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3bd7b9d8-2f3c-4c9f-9a86-1f2e4d5c6b33"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3bd7b9d8-2f3c-4c9f-9a86-1f2e4d5c6b33"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3bd7b9d8-2f3c-4c9f-9a86-1f2e4d5c6b33"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7c1e8d2a-5f44-48b7-9d2f-8e9c0b1a7d44"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7c1e8d2a-5f44-48b7-9d2f-8e9c0b1a7d44"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7c1e8d2a-5f44-48b7-9d2f-8e9c0b1a7d44"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("2ea4c9b7-6d31-4f9e-8c2b-9a7d5e1c5f55"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("2ea4c9b7-6d31-4f9e-8c2b-9a7d5e1c5f55"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("2ea4c9b7-6d31-4f9e-8c2b-9a7d5e1c5f55"),
+                            GenreId = new Guid("d285cd97-1d2f-4d2b-bc94-68cf54198b1c")
+                        },
+                        new
+                        {
+                            BookId = new Guid("2ea4c9b7-6d31-4f9e-8c2b-9a7d5e1c5f55"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7e6f1c01-8d5f-4b9b-9e35-5c0270f3b21a"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7e6f1c01-8d5f-4b9b-9e35-5c0270f3b21a"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("7e6f1c01-8d5f-4b9b-9e35-5c0270f3b21a"),
+                            GenreId = new Guid("d285cd97-1d2f-4d2b-bc94-68cf54198b1c")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9a3be5c4-2f9d-4e07-8a93-137cfa8659af"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9a3be5c4-2f9d-4e07-8a93-137cfa8659af"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("51d8c962-7a2b-4f1e-9a3b-14db0e1c2f45"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("51d8c962-7a2b-4f1e-9a3b-14db0e1c2f45"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("51d8c962-7a2b-4f1e-9a3b-14db0e1c2f45"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("51d8c962-7a2b-4f1e-9a3b-14db0e1c2f45"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c8b0c6f9-4d71-4e82-b70b-6d4e5cf6a8e0"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c8b0c6f9-4d71-4e82-b70b-6d4e5cf6a8e0"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c8b0c6f9-4d71-4e82-b70b-6d4e5cf6a8e0"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f21a37e4-9cf3-4a39-90ba-2c3e5c7d8f91"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f21a37e4-9cf3-4a39-90ba-2c3e5c7d8f91"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("4bc4d7cb-3cca-4bcb-8b0d-59b9e7fc6b81"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("4bc4d7cb-3cca-4bcb-8b0d-59b9e7fc6b81"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("4bc4d7cb-3cca-4bcb-8b0d-59b9e7fc6b81"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("4bc4d7cb-3cca-4bcb-8b0d-59b9e7fc6b81"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a475bea9-3baf-4365-bf1a-0e6e8d533970"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a475bea9-3baf-4365-bf1a-0e6e8d533970"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a475bea9-3baf-4365-bf1a-0e6e8d533970"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a475bea9-3baf-4365-bf1a-0e6e8d533970"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b3fd1fa4-e560-4738-88c6-c4ade3f7af19"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b3fd1fa4-e560-4738-88c6-c4ade3f7af19"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b3fd1fa4-e560-4738-88c6-c4ade3f7af19"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b3fd1fa4-e560-4738-88c6-c4ade3f7af19"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0bb4e360-bb62-4c03-a2bf-597235b64790"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0bb4e360-bb62-4c03-a2bf-597235b64790"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("188af1e0-73fa-4afe-bc9b-1547db499ca2"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("188af1e0-73fa-4afe-bc9b-1547db499ca2"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("188af1e0-73fa-4afe-bc9b-1547db499ca2"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b0c8b4f6-5e1d-4d52-9d37-0aa6c1e50f21"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b0c8b4f6-5e1d-4d52-9d37-0aa6c1e50f21"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3e7a9f12-0f4c-4a6a-b74b-9c8b1fd9a233"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3e7a9f12-0f4c-4a6a-b74b-9c8b1fd9a233"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9b214c70-1f65-4af9-9180-6e1380e3b5f4"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9b214c70-1f65-4af9-9180-6e1380e3b5f4"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9b214c70-1f65-4af9-9180-6e1380e3b5f4"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d4e3a1b2-6c78-4c2c-9a5f-2b1c7c9de8f0"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d4e3a1b2-6c78-4c2c-9a5f-2b1c7c9de8f0"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d4e3a1b2-6c78-4c2c-9a5f-2b1c7c9de8f0"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f87a3c59-2bd4-4d9f-8b60-7a9e3f124c61"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f87a3c59-2bd4-4d9f-8b60-7a9e3f124c61"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f87a3c59-2bd4-4d9f-8b60-7a9e3f124c61"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e1b9a9d7-7e5f-4ad3-a2b6-9c5e9cd870ac"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e1b9a9d7-7e5f-4ad3-a2b6-9c5e9cd870ac"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e1b9a9d7-7e5f-4ad3-a2b6-9c5e9cd870ac"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f4a8c3d2-043c-4f43-8ac5-0c5f1e6d9b2a"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f4a8c3d2-043c-4f43-8ac5-0c5f1e6d9b2a"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f4a8c3d2-043c-4f43-8ac5-0c5f1e6d9b2a"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0a7f6b24-9f93-4a6f-8bfb-8a2a4b9dcd5c"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0a7f6b24-9f93-4a6f-8bfb-8a2a4b9dcd5c"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0a7f6b24-9f93-4a6f-8bfb-8a2a4b9dcd5c"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("2c5a1f4d-7d3a-4af4-bdec-0a9bd5b1c1f8"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("2c5a1f4d-7d3a-4af4-bdec-0a9bd5b1c1f8"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("2c5a1f4d-7d3a-4af4-bdec-0a9bd5b1c1f8"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9d0e3b6f-41c8-4b45-96bb-1e2caa7d9f33"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9d0e3b6f-41c8-4b45-96bb-1e2caa7d9f33"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9d0e3b6f-41c8-4b45-96bb-1e2caa7d9f33"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5a7c5a3c-9a8b-4b4e-9b26-8afc5ad3e901"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5a7c5a3c-9a8b-4b4e-9b26-8afc5ad3e901"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5a7c5a3c-9a8b-4b4e-9b26-8afc5ad3e901"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5a7c5a3c-9a8b-4b4e-9b26-8afc5ad3e901"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f3c6940e-6688-4a17-9cd7-1962d6f4b4f2"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f3c6940e-6688-4a17-9cd7-1962d6f4b4f2"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f3c6940e-6688-4a17-9cd7-1962d6f4b4f2"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f3c6940e-6688-4a17-9cd7-1962d6f4b4f2"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("79bb19da-6b9d-4a4f-a3cc-8f5baf0e2a8c"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("79bb19da-6b9d-4a4f-a3cc-8f5baf0e2a8c"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("79bb19da-6b9d-4a4f-a3cc-8f5baf0e2a8c"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("79bb19da-6b9d-4a4f-a3cc-8f5baf0e2a8c"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("1e4cbd1d-8a0f-4b88-9fd3-6ff315b74b87"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("1e4cbd1d-8a0f-4b88-9fd3-6ff315b74b87"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("1e4cbd1d-8a0f-4b88-9fd3-6ff315b74b87"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("1e4cbd1d-8a0f-4b88-9fd3-6ff315b74b87"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c1dd2cfe-4a85-4e4a-8c8f-4c9cb9fa8fd0"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c1dd2cfe-4a85-4e4a-8c8f-4c9cb9fa8fd0"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c1dd2cfe-4a85-4e4a-8c8f-4c9cb9fa8fd0"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c1dd2cfe-4a85-4e4a-8c8f-4c9cb9fa8fd0"),
+                            GenreId = new Guid("d285cd97-1d2f-4d2b-bc94-68cf54198b1c")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c51d1a59-8f1c-4d10-9b65-1a8a8a8a614f"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c51d1a59-8f1c-4d10-9b65-1a8a8a8a614f"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c51d1a59-8f1c-4d10-9b65-1a8a8a8a614f"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c51d1a59-8f1c-4d10-9b65-1a8a8a8a614f"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9f1b3b3e-9e70-4c46-846a-0b898cbf607a"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9f1b3b3e-9e70-4c46-846a-0b898cbf607a"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d3f9b62b-6a3b-4f5c-afb6-77e0da82c0cb"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d3f9b62b-6a3b-4f5c-afb6-77e0da82c0cb"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d3f9b62b-6a3b-4f5c-afb6-77e0da82c0cb"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("4b4d7f13-5a3d-4f91-9e6a-7bfe60a5c9b5"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("4b4d7f13-5a3d-4f91-9e6a-7bfe60a5c9b5"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("4b4d7f13-5a3d-4f91-9e6a-7bfe60a5c9b5"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("4b4d7f13-5a3d-4f91-9e6a-7bfe60a5c9b5"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a6c1e30a-8a4e-4c1f-b856-4ec2f8ea4e95"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a6c1e30a-8a4e-4c1f-b856-4ec2f8ea4e95"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a6c1e30a-8a4e-4c1f-b856-4ec2f8ea4e95"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a6c1e30a-8a4e-4c1f-b856-4ec2f8ea4e95"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8a63c7cf-1e0d-4d3b-8a3c-5d7b8e1c9f10"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8a63c7cf-1e0d-4d3b-8a3c-5d7b8e1c9f10"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8a63c7cf-1e0d-4d3b-8a3c-5d7b8e1c9f10"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8a63c7cf-1e0d-4d3b-8a3c-5d7b8e1c9f10"),
+                            GenreId = new Guid("d285cd97-1d2f-4d2b-bc94-68cf54198b1c")
+                        },
+                        new
+                        {
+                            BookId = new Guid("8a63c7cf-1e0d-4d3b-8a3c-5d7b8e1c9f10"),
+                            GenreId = new Guid("8c733d38-27c4-43da-a832-4f6db21a855d")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5b2b3fd5-3a9c-4d76-8c6f-0dc0c1c3e72f"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5b2b3fd5-3a9c-4d76-8c6f-0dc0c1c3e72f"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5b2b3fd5-3a9c-4d76-8c6f-0dc0c1c3e72f"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5b2b3fd5-3a9c-4d76-8c6f-0dc0c1c3e72f"),
+                            GenreId = new Guid("8c733d38-27c4-43da-a832-4f6db21a855d")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f2c1e0d4-1c6a-4c57-ab2b-9a2f4dc6c9b2"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f2c1e0d4-1c6a-4c57-ab2b-9a2f4dc6c9b2"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f2c1e0d4-1c6a-4c57-ab2b-9a2f4dc6c9b2"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f2c1e0d4-1c6a-4c57-ab2b-9a2f4dc6c9b2"),
+                            GenreId = new Guid("007d3fc0-bb15-4a58-98fb-17dfc930e969")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c7c3d1f2-9f18-4a81-9f2b-3ab71f5f1e0c"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c7c3d1f2-9f18-4a81-9f2b-3ab71f5f1e0c"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c7c3d1f2-9f18-4a81-9f2b-3ab71f5f1e0c"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c7c3d1f2-9f18-4a81-9f2b-3ab71f5f1e0c"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f3a7c2d1-9b84-4f5d-8a91-2c7e5b3d6a10"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f3a7c2d1-9b84-4f5d-8a91-2c7e5b3d6a10"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f3a7c2d1-9b84-4f5d-8a91-2c7e5b3d6a10"),
+                            GenreId = new Guid("d285cd97-1d2f-4d2b-bc94-68cf54198b1c")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f3a7c2d1-9b84-4f5d-8a91-2c7e5b3d6a10"),
+                            GenreId = new Guid("8c733d38-27c4-43da-a832-4f6db21a855d")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a7c4e2b9-3d51-4a29-9f16-8b2e0d6f4c33"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a7c4e2b9-3d51-4a29-9f16-8b2e0d6f4c33"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a7c4e2b9-3d51-4a29-9f16-8b2e0d6f4c33"),
+                            GenreId = new Guid("d285cd97-1d2f-4d2b-bc94-68cf54198b1c")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a7c4e2b9-3d51-4a29-9f16-8b2e0d6f4c33"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d5e1a3c9-8f74-4c2b-9d10-7b3f2e6a4c78"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d5e1a3c9-8f74-4c2b-9d10-7b3f2e6a4c78"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d5e1a3c9-8f74-4c2b-9d10-7b3f2e6a4c78"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d5e1a3c9-8f74-4c2b-9d10-7b3f2e6a4c78"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e4b9c7a1-2f86-4d3c-8a5b-9c1e7d2f6b40"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e4b9c7a1-2f86-4d3c-8a5b-9c1e7d2f6b40"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e4b9c7a1-2f86-4d3c-8a5b-9c1e7d2f6b40"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e4b9c7a1-2f86-4d3c-8a5b-9c1e7d2f6b40"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e4b9c7a1-2f86-4d3c-8a5b-9c1e7d2f6b40"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f51b3c3b-8e7c-4f5f-9c0a-41b7b0c1a2d3"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f51b3c3b-8e7c-4f5f-9c0a-41b7b0c1a2d3"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f51b3c3b-8e7c-4f5f-9c0a-41b7b0c1a2d3"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d6df1e47-7e89-4d39-8011-0e4ebf2cdf45"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d6df1e47-7e89-4d39-8011-0e4ebf2cdf45"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("d6df1e47-7e89-4d39-8011-0e4ebf2cdf45"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9a61a35e-8b1e-4c5d-b2d8-2ba4419d0a10"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9a61a35e-8b1e-4c5d-b2d8-2ba4419d0a10"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9a61a35e-8b1e-4c5d-b2d8-2ba4419d0a10"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9a61a35e-8b1e-4c5d-b2d8-2ba4419d0a10"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b7c2334b-03f1-4ba3-97e7-02979086cd1c"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b7c2334b-03f1-4ba3-97e7-02979086cd1c"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b7c2334b-03f1-4ba3-97e7-02979086cd1c"),
+                            GenreId = new Guid("d285cd97-1d2f-4d2b-bc94-68cf54198b1c")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b7c2334b-03f1-4ba3-97e7-02979086cd1c"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("4fd6cd8b-52f2-4c9d-9540-5f3f8b5d8e4f"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("4fd6cd8b-52f2-4c9d-9540-5f3f8b5d8e4f"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("4fd6cd8b-52f2-4c9d-9540-5f3f8b5d8e4f"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("4fd6cd8b-52f2-4c9d-9540-5f3f8b5d8e4f"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a7d0e351-640e-4c41-93a1-3c63d51f9d54"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a7d0e351-640e-4c41-93a1-3c63d51f9d54"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a7d0e351-640e-4c41-93a1-3c63d51f9d54"),
+                            GenreId = new Guid("be00dfad-121c-4b4b-a868-af8a8097668a")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a7d0e351-640e-4c41-93a1-3c63d51f9d54"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("dbe0ac46-6f9c-4b69-b3ed-64b9f9389bee"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("dbe0ac46-6f9c-4b69-b3ed-64b9f9389bee"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("dbe0ac46-6f9c-4b69-b3ed-64b9f9389bee"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("dbe0ac46-6f9c-4b69-b3ed-64b9f9389bee"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0f6c9f5e-9e3f-4e3c-9f98-3b9c2530f7c2"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0f6c9f5e-9e3f-4e3c-9f98-3b9c2530f7c2"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0f6c9f5e-9e3f-4e3c-9f98-3b9c2530f7c2"),
+                            GenreId = new Guid("d285cd97-1d2f-4d2b-bc94-68cf54198b1c")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0f6c9f5e-9e3f-4e3c-9f98-3b9c2530f7c2"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("0f6c9f5e-9e3f-4e3c-9f98-3b9c2530f7c2"),
+                            GenreId = new Guid("8c733d38-27c4-43da-a832-4f6db21a855d")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e7c2b1f4-1c9b-4f4c-8d42-8e55c1e21caf"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e7c2b1f4-1c9b-4f4c-8d42-8e55c1e21caf"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e7c2b1f4-1c9b-4f4c-8d42-8e55c1e21caf"),
+                            GenreId = new Guid("d285cd97-1d2f-4d2b-bc94-68cf54198b1c")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e7c2b1f4-1c9b-4f4c-8d42-8e55c1e21caf"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("e7c2b1f4-1c9b-4f4c-8d42-8e55c1e21caf"),
+                            GenreId = new Guid("8c733d38-27c4-43da-a832-4f6db21a855d")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a9e4db2c-3f52-4c1a-ae54-3a7f4be61f31"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a9e4db2c-3f52-4c1a-ae54-3a7f4be61f31"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a9e4db2c-3f52-4c1a-ae54-3a7f4be61f31"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a9e4db2c-3f52-4c1a-ae54-3a7f4be61f31"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b3c96456-0f49-4a21-929c-02c42a4e6a0b"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b3c96456-0f49-4a21-929c-02c42a4e6a0b"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b3c96456-0f49-4a21-929c-02c42a4e6a0b"),
+                            GenreId = new Guid("97ecd058-6850-4c54-aff5-4df68ed4470f")
+                        },
+                        new
+                        {
+                            BookId = new Guid("b3c96456-0f49-4a21-929c-02c42a4e6a0b"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5d8a2fde-4f51-4f8b-93fd-1bfb5c6aa9c7"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5d8a2fde-4f51-4f8b-93fd-1bfb5c6aa9c7"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5d8a2fde-4f51-4f8b-93fd-1bfb5c6aa9c7"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("5d8a2fde-4f51-4f8b-93fd-1bfb5c6aa9c7"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9e4f7b67-0a1d-4f4b-9d7b-3a8e1e0b21c4"),
+                            GenreId = new Guid("c600e456-dbc6-4772-8e96-79beab47750b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9e4f7b67-0a1d-4f4b-9d7b-3a8e1e0b21c4"),
+                            GenreId = new Guid("625dadd9-a35a-4fda-bd0f-7e13b752dc72")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9e4f7b67-0a1d-4f4b-9d7b-3a8e1e0b21c4"),
+                            GenreId = new Guid("c83c1455-442f-4f05-8f04-32c2882bc673")
+                        },
+                        new
+                        {
+                            BookId = new Guid("9e4f7b67-0a1d-4f4b-9d7b-3a8e1e0b21c4"),
+                            GenreId = new Guid("8c733d38-27c4-43da-a832-4f6db21a855d")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3d2b8f3c-4b0b-4c10-b2f6-1b4f4a9a5f31"),
+                            GenreId = new Guid("c746bd12-22b1-4ef1-a9b0-602467befa90")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3d2b8f3c-4b0b-4c10-b2f6-1b4f4a9a5f31"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3d2b8f3c-4b0b-4c10-b2f6-1b4f4a9a5f31"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("3d2b8f3c-4b0b-4c10-b2f6-1b4f4a9a5f31"),
+                            GenreId = new Guid("80a6ef21-3e23-4d20-b897-19b788f7239b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c1b47e0f-7e4a-4f4b-8b7a-5f6c3a2d9e11"),
+                            GenreId = new Guid("c746bd12-22b1-4ef1-a9b0-602467befa90")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c1b47e0f-7e4a-4f4b-8b7a-5f6c3a2d9e11"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c1b47e0f-7e4a-4f4b-8b7a-5f6c3a2d9e11"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("c1b47e0f-7e4a-4f4b-8b7a-5f6c3a2d9e11"),
+                            GenreId = new Guid("80a6ef21-3e23-4d20-b897-19b788f7239b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f6a9e0d2-2d5c-4a87-9c3a-9a0b8f42c7e3"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f6a9e0d2-2d5c-4a87-9c3a-9a0b8f42c7e3"),
+                            GenreId = new Guid("80a6ef21-3e23-4d20-b897-19b788f7239b")
+                        },
+                        new
+                        {
+                            BookId = new Guid("f6a9e0d2-2d5c-4a87-9c3a-9a0b8f42c7e3"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a2e5b9c8-6fd7-4f63-9c1b-1a7f9d6d3b55"),
+                            GenreId = new Guid("c746bd12-22b1-4ef1-a9b0-602467befa90")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a2e5b9c8-6fd7-4f63-9c1b-1a7f9d6d3b55"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a2e5b9c8-6fd7-4f63-9c1b-1a7f9d6d3b55"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("a2e5b9c8-6fd7-4f63-9c1b-1a7f9d6d3b55"),
+                            GenreId = new Guid("8c733d38-27c4-43da-a832-4f6db21a855d")
+                        },
+                        new
+                        {
+                            BookId = new Guid("4b8a0f55-6f0c-4c0f-8aa8-5b2c7d80d4cf"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("4b8a0f55-6f0c-4c0f-8aa8-5b2c7d80d4cf"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        },
+                        new
+                        {
+                            BookId = new Guid("df7c3e3e-3bcf-4b8e-9f2f-75ad0a92c3bb"),
+                            GenreId = new Guid("08aa42b0-00f4-4a0e-8296-e39cc4bd1606")
+                        },
+                        new
+                        {
+                            BookId = new Guid("df7c3e3e-3bcf-4b8e-9f2f-75ad0a92c3bb"),
+                            GenreId = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec")
+                        });
                 });
 
             modelBuilder.Entity("BookHub.Data.Models.Shared.ChatUser.ChatUser", b =>
@@ -3907,7 +7364,7 @@ namespace BookHub.Data.Migrations
                             ImagePath = "/images/books/murder-on-the-orient-express.jpg",
                             IsApproved = true,
                             IsDeleted = false,
-                            LongDescription = "Murder on the Orient Express, first published in 1934, is one of Agatha Christie�s most famous works, featuring her legendary Belgian detective Hercule Poirot. The story takes place aboard the luxurious train, the Orient Express, where a wealthy American passenger, Samuel Ratchett, is found murdered in his compartment. Poirot, who happens to be traveling on the train, is asked to investigate the crime. As he delves deeper into the case, Poirot uncovers a complex web of lies and hidden motives. The passengers, all seemingly innocent, each have something to hide, and the detective must use his sharp mind to piece together the truth. Christie�s masterful plot, full of twists and red herrings, keeps readers guessing until the very end. The novel explores themes of justice, revenge, and the moral ambiguity of crime, making it a timeless and captivating mystery that has been adapted into numerous films and television series.",
+                            LongDescription = "Murder on the Orient Express, first published in 1934, is one of Agatha Christie's most famous works, featuring her legendary Belgian detective Hercule Poirot. The story takes place aboard the luxurious train, the Orient Express, where a wealthy American passenger, Samuel Ratchett, is found murdered in his compartment. Poirot, who happens to be traveling on the train, is asked to investigate the crime. As he delves deeper into the case, Poirot uncovers a complex web of lies and hidden motives. The passengers, all seemingly innocent, each have something to hide, and the detective must use his sharp mind to piece together the truth. Christie�s masterful plot, full of twists and red herrings, keeps readers guessing until the very end. The novel explores themes of justice, revenge, and the moral ambiguity of crime, making it a timeless and captivating mystery that has been adapted into numerous films and television series.",
                             PublishedDate = new DateTime(1934, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A classic Hercule Poirot mystery aboard the luxurious Orient Express, filled with twists and a brilliant solution to a baffling crime.",
@@ -3972,6 +7429,1396 @@ namespace BookHub.Data.Migrations
                             RatingsCount = 0,
                             ShortDescription = "A comedic science fiction adventure that follows Arthur Dent's absurd journey through space after Earth is destroyed.",
                             Title = "The Hitchhiker's Guide to the Galaxy"
+                        },
+                        new
+                        {
+                            Id = new Guid("4e3a7d2b-9e8c-4a1f-9c32-7b5f2a9d3c11"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/firestarter.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Published in 1980, Firestarter is a tense, character-driven thriller by Stephen King that blends government conspiracy with the terrifying force of psychic power. The story follows Andy McGee and his daughter Charlie, who both gained supernatural abilities after Andy and his wife participated in a secret government experiment run by an organization known as The Shop. While Andy develops the power of mind control through a force he calls 'the push,' Charlie is born with an even more dangerous gift: pyrokinesis, the ability to create and control fire with her mind.\n\nAs Charlie grows, The Shop becomes obsessed with exploiting her abilities as a potential weapon, pursuing her and her father across the country. The novel explores themes of parental love, the abuse of power, and the fear of what happens when extraordinary abilities collide with ruthless institutions. Charlie's struggle to understand and control her power, along with Andy’s desperate attempts to protect her, form the emotional core of the story. Firestarter combines emotional depth, suspense, and explosive set pieces into a gripping narrative about freedom, control, and the cost of turning human beings into experiments.",
+                            PublishedDate = new DateTime(1980, 9, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A young girl with terrifying pyrokinesis becomes the target of a ruthless government agency determined to control her power.",
+                            Title = "Firestarter"
+                        },
+                        new
+                        {
+                            Id = new Guid("6a2a9c1e-8f36-4f3d-8c9d-8f2f0af1b7e3"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/cycle-of-the-werewolf.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Published in 1983, Cycle of the Werewolf is a horror novella by Stephen King that tells the story of a small town, Tarker's Mills, terrorized by a mysterious creature. Structured around the calendar year, each chapter corresponds to a different month and a new full moon, as unexplained deaths begin to plague the town. As fear and paranoia grow, a young boy named Marty Coslaw starts to suspect that the killer is not human, but a werewolf hiding in plain sight among the townsfolk. The novella blends atmospheric horror with a creeping sense of dread as the town’s secrets and the beast’s identity are slowly revealed. Originally conceived as a collaboration between King and artist Bernie Wrightson, the story is richly visual, combining visceral horror with a classic monster narrative that explores themes of isolation, suspicion, and courage in the face of unimaginable evil.",
+                            PublishedDate = new DateTime(1983, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A chilling tale of a small town stalked by a werewolf, with each full moon bringing new terror.",
+                            Title = "Cycle of the Werewolf"
+                        },
+                        new
+                        {
+                            Id = new Guid("b0a0bf71-1a65-4c4e-9b76-4b4db4ff9f53"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/misery.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Originally published in 1987, Misery is one of Stephen King's most harrowing psychological horror novels. The story follows Paul Sheldon, a bestselling author known for his Misery Chastain romance series, who is severely injured in a car accident during a snowstorm. He is rescued by Annie Wilkes, a former nurse and self-proclaimed 'number one fan.' Instead of taking him to a hospital, Annie brings Paul to her remote home, where she tends to his injuries but soon reveals a dangerous and violent obsession with his work. When Annie discovers that Paul has killed off her beloved character in his latest manuscript, she forces him to write a new novel bringing Misery back to life, subjecting him to escalating physical and psychological torture. Set almost entirely within the claustrophobic confines of Annie’s house, Misery explores themes of fandom, control, addiction, and the sometimes toxic relationship between creators and their audience. With its intense atmosphere, razor-sharp suspense, and unforgettable villain, Misery remains one of King’s most acclaimed and chilling works.",
+                            PublishedDate = new DateTime(1987, 6, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A bestselling author is held captive by his 'number one fan' in a tense, psychological nightmare of obsession and survival.",
+                            Title = "Misery"
+                        },
+                        new
+                        {
+                            Id = new Guid("8c3a1f0c-1a2b-4e6d-9b7f-2c4d6e8f9a10"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-dark-half.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Published in 1989, The Dark Half is one of Stephen King's most unsettling psychological horror novels, delving deep into questions of identity, creativity, and the darkness that can live within. The story follows Thad Beaumont, a novelist who writes serious literary fiction under his real name but secretly pens violent, bestselling crime novels under the pseudonym George Stark. When Thad decides to \"kill off\" his pseudonym as a publicity stunt, the symbolic burial awakens something far more sinister. George Stark appears to come to life as a separate, murderous entity, determined to continue his existence by any means necessary. As bodies begin to pile up, Thad is forced to confront the terrifying possibility that Stark is not just a name on a page, but a dark manifestation of his own psyche. Blending supernatural horror with psychological tension, The Dark Half examines the nature of the creative mind, the masks people wear, and the dangerous power of suppressed impulses. It is a gripping, atmospheric tale that showcases King’s talent for turning internal conflict into visceral terror.",
+                            PublishedDate = new DateTime(1989, 10, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A chilling exploration of dual identity, where a writer's pseudonym refuses to stay buried.",
+                            Title = "The Dark Half"
+                        },
+                        new
+                        {
+                            Id = new Guid("0a5c08f6-2c3b-4b8f-9b46-5a6a8e3c7c91"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/geralds-game.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Published in 1992, Gerald's Game is one of Stephen King's most unsettling psychological horror novels, set almost entirely within a single room. The story follows Jessie Burlingame, who travels with her husband Gerald to a remote lakeside cabin in western Maine for a romantic getaway. During a bondage game gone wrong, Gerald suddenly dies of a heart attack, leaving Jessie handcuffed to the bed with no immediate hope of escape. What begins as a physical fight for survival soon becomes a harrowing mental ordeal. Dehydrated, weak, and trapped, Jessie is forced to confront the voices in her head, the unresolved traumas of her childhood, and the deep-rooted fears she has tried to suppress for years. As day fades into night, the horror intensifies with the appearance of a mysterious figure in the dark, blurring the line between hallucination and reality. Gerald's Game is less about monsters and more about the terror of being utterly powerless and alone, exploring themes of abuse, memory, resilience, and the long shadows cast by buried secrets. With its claustrophobic setting and intense psychological focus, the novel showcases King's ability to create horror not only from the supernatural, but from the darkest corners of the human mind.",
+                            PublishedDate = new DateTime(1992, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A disturbing psychological horror story about a woman trapped, alone and handcuffed, forced to confront both a terrifying intruder and the buried traumas of her past.",
+                            Title = "Gerald's Game"
+                        },
+                        new
+                        {
+                            Id = new Guid("4e9b9c5d-8af1-4c22-9d6f-3a4b2f8e9c01"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/rose-madder.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Published in 1995, Rose Madder follows Rosie Daniels, a woman who finally escapes her violently abusive husband, Norman, after years of terror. Starting a new life in a distant city, she struggles to rebuild her sense of self and safety. In a pawnshop, Rosie discovers a disturbing yet captivating painting of a woman in a rose-colored gown, and brings it home. The painting begins to change and reveal impossible details, drawing Rosie into a strange, mythic realm that mirrors her own trauma and rage. As Norman hunts her down with increasing brutality, the supernatural power tied to the painting becomes both a threat and a potential means of salvation. Blending psychological horror, themes of domestic violence, and elements of dark fantasy, Rose Madder explores survival, vengeance, and the cost of reclaiming one’s life from a nightmare.",
+                            PublishedDate = new DateTime(1995, 7, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A dark, supernatural story about a woman who flees an abusive marriage and discovers a mysterious painting that leads to another world.",
+                            Title = "Rose Madder"
+                        },
+                        new
+                        {
+                            Id = new Guid("5a3d7c51-0b5a-4baf-8f3d-5b2b1c6b9f10"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-girl-who-loved-tom-gordon.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "First published in 1999, The Girl Who Loved Tom Gordon is a psychological horror novel by Stephen King that tells the story of nine-year-old Trisha McFarland. After becoming separated from her mother and brother during a family hike on the Appalachian Trail, Trisha soon realizes she is lost in the vast, unforgiving woods. Armed with only a small pack, limited food, and her portable radio, she clings to broadcasts of Boston Red Sox games and draws strength from her admiration for her favorite player, relief pitcher Tom Gordon. As days pass and exhaustion, hunger, and illness set in, Trisha’s grip on reality begins to blur. She imagines Tom Gordon walking beside her, offering calm guidance as she battles fear and despair. At the same time, she becomes convinced that something sinister is stalking her in the forest—an unseen presence she calls \"The God of the Lost.\" The novel is an intimate, harrowing examination of survival, faith, and the resilience of a child’s mind under extreme pressure. Combining wilderness survival with creeping supernatural dread, The Girl Who Loved Tom Gordon is a tense, emotionally charged exploration of courage and the thin line between hope and terror.",
+                            PublishedDate = new DateTime(1999, 4, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A lost young girl relies on her wits, courage, and the imagined presence of her baseball hero to survive in the wilderness.",
+                            Title = "The Girl Who Loved Tom Gordon"
+                        },
+                        new
+                        {
+                            Id = new Guid("6f2c8b9b-2d9a-488e-8d2b-7a2d6f5b91c1"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/black-house.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Published in 2001, Black House is a horror novel by Stephen King and Peter Straub and the sequel to their earlier collaboration, The Talisman. The story follows Jack Sawyer, now a retired Los Angeles homicide detective living in the quiet town of French Landing, Wisconsin. Jack has tried to leave his past behind, including his memories of crossing into the otherworldly realm known as the Territories. When a series of brutal child murders shakes French Landing, Jack is reluctantly drawn back into investigative work, soon realizing that the crimes are connected not only to his own buried past but also to a greater cosmic evil. As the mysterious killer known as \"The Fisherman\" continues to terrorize the town, Jack must once again face the dangerous boundaries between worlds. Black House weaves together a police procedural, supernatural horror, and epic fantasy, further expanding the mythos surrounding the Dark Tower and exploring themes of memory, sacrifice, and the battle against an ancient darkness.",
+                            PublishedDate = new DateTime(2001, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A dark and unsettling sequel to The Talisman, where retired detective Jack Sawyer confronts a child-killer tied to forces from another world.",
+                            Title = "Black House"
+                        },
+                        new
+                        {
+                            Id = new Guid("8fa5d4c9-5b2f-4c31-96df-4c0e2d5f9a11"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/from-a-buick-8.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Published in 2002, From a Buick 8 is a haunting, slow-burn horror novel that centers on a mysterious car impounded by the Pennsylvania State Police. The Buick, which has sat for years in Shed B, isn’t really a car at all—its controls don’t work, its engine is a façade, and it occasionally emits bizarre lights and produces grotesque creatures and unnatural phenomena. The story is told largely through the memories of the troopers of Barracks D, who have guarded the Buick for decades and struggled to understand its origin, its purpose, or the rules that govern it.\n\nWhen a young man named Ned Wilcox, whose father served at the barracks before dying in a tragic accident, begins spending time with the troopers, they decide it’s finally time to tell him the truth about the Buick. Through their stories, Ned learns how deeply the car has affected their lives, from inexplicable disappearances to terrifying manifestations that defy the laws of nature. The novel explores grief, duty, and the human urge to seek meaning in the unknowable.\n\nRather than offering clear answers, From a Buick 8 leans into cosmic horror and the unsettling idea that some mysteries are beyond human comprehension. King uses the barracks camaraderie, small-town rhythms, and the oral storytelling structure to create a grounded, emotionally resonant atmosphere. The result is a chilling reflection on loss, fate, and the frightening vastness of the universe that lies just beyond what we can see.",
+                            PublishedDate = new DateTime(2002, 9, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A strange car locked in a Pennsylvania shed becomes a gateway to something otherworldly and terrifying.",
+                            Title = "From a Buick 8"
+                        },
+                        new
+                        {
+                            Id = new Guid("c0a8f9b2-5a34-4c23-9f10-9e7b2f4d3a21"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/joyland.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Published in 2013, Joyland is a crime novel with supernatural undertones by Stephen King, set in a small North Carolina amusement park in the 1970s. The story follows Devin Jones, a college student who takes a summer job at Joyland after a painful breakup. As he learns the ropes of carny life and becomes close to his co-workers, Devin becomes fascinated by the park’s dark history, particularly the unsolved murder of a young woman whose ghost is rumored to haunt one of the rides. Over the course of the summer and beyond, Devin is drawn into a mystery that intertwines the murder, a sick young boy with possible second sight, and his own journey through grief, loneliness, and the search for purpose. Joyland combines elements of crime fiction, ghost story, and poignant coming-of-age drama, showcasing King’s talent for blending suspense with deep emotional resonance in a vividly realized setting.",
+                            PublishedDate = new DateTime(2013, 6, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A coming-of-age mystery set in a small-town amusement park, where a college student confronts love, loss, and a lingering ghost story.",
+                            Title = "Joyland"
+                        },
+                        new
+                        {
+                            Id = new Guid("5d3f8b8c-8e2e-4b0f-9c8c-2f5a7c9d3e21"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/mr-mercedes.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Published in 2014, Mr. Mercedes is the first book in Stephen King's Bill Hodges trilogy, a tense crime thriller that trades supernatural horror for psychological suspense. The story follows Bill Hodges, a retired detective in Midwestern America, who is haunted by an unsolved case involving a mass murder committed with a stolen Mercedes. As Hodges sinks into depression and isolation, he receives a taunting letter from the perpetrator, Brady Hartsfield, a deeply disturbed man who is planning an even deadlier attack. Spurred back into action, Hodges teams up with unlikely allies, including a clever teenager and a woman with fragile mental health, to track down the killer before he strikes again. Mr. Mercedes is a gripping exploration of obsession, loneliness, and the thin line between order and chaos, showcasing King's talent for character-driven suspense and chillingly plausible evil.",
+                            PublishedDate = new DateTime(2014, 6, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A retired detective is pulled out of his despair when a sadistic killer who once escaped him begins a deadly new game.",
+                            Title = "Mr. Mercedes"
+                        },
+                        new
+                        {
+                            Id = new Guid("b0c7c1c3-7b3e-4a8c-9a33-0a2e4d9f8b21"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/revival.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Published in 2014, Revival is a dark and unsettling novel by Stephen King that explores themes of faith, addiction, obsession, and the dangers of probing into forces beyond human understanding. The story follows Jamie Morton, who first meets Reverend Charles Jacobs as a young boy in a small New England town. Jacobs, a charismatic minister with a deep fascination for electricity, experiences a devastating personal tragedy that shatters his faith and transforms his life’s purpose.\n\nOver the decades, Jamie and Jacobs cross paths at different stages of their lives. Jamie, struggling with addiction and inner demons, is drawn back into Jacobs’s orbit when the former preacher has reinvented himself as a healer who uses strange electrical experiments to perform seemingly miraculous cures. As Jacobs’s obsession with unlocking the ultimate secrets of the universe intensifies, his experiments grow more dangerous and morally ambiguous.\n\nWhat begins as a story of lost faith and second chances slowly morphs into cosmic horror, as Jamie uncovers the true nature of Jacobs’s ambitions and the terrifying consequences of his final experiment. Blending emotional depth, creeping dread, and a shocking climax, Revival is a chilling meditation on the afterlife, human desperation, and the horrifying possibilities that may lie beyond the veil.",
+                            PublishedDate = new DateTime(2014, 11, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A haunting story of faith, obsession, and the terrible price of tampering with the unknown.",
+                            Title = "Revival"
+                        },
+                        new
+                        {
+                            Id = new Guid("7cc6b4a0-1a1f-4f3a-9a53-9f6e2c8b1142"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/gwendys-button-box.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Gwendy’s Button Box, co-written by Stephen King and Richard Chizmar and first published in 2017, is a dark, unsettling novella set in the familiar town of Castle Rock, Maine. The story follows Gwendy Peterson, a young girl who encounters a peculiar man in a black suit and hat on the town’s Suicide Stairs. He entrusts her with a small, ornate box covered in buttons and levers, each with the potential for incredible reward or catastrophic destruction. As Gwendy grows up, the box remains a constant presence in her life, offering her wealth and success but demanding heavy moral responsibility in return. The tale examines themes of temptation, guilt, power, and the burden of choice, all wrapped in King’s trademark blend of small-town atmosphere and creeping dread. Compact yet emotionally resonant, Gwendy’s Button Box serves as both a coming-of-age story and a chilling meditation on what we do when unimaginable power is placed in our hands.",
+                            PublishedDate = new DateTime(2017, 5, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A mysterious stranger gives young Gwendy Peterson a strange box with dangerous powers and impossible choices.",
+                            Title = "Gwendy’s Button Box"
+                        },
+                        new
+                        {
+                            Id = new Guid("f7a8e3c2-9bf4-4b6a-8f45-6a2b1c4d9e31"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/sleeping-beauties.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Sleeping Beauties, co-written by Stephen King and his son Owen King and published in 2017, is a blend of horror, fantasy, and social commentary set in the small town of Dooling, West Virginia. A strange phenomenon known as 'Aurora' begins to spread across the globe: when women fall asleep, they become shrouded in a cocoon-like gauze. If the gauze is disturbed or removed, the sleeping women turn feral and violently attack. As more and more women succumb to the mysterious sleep, the world rapidly destabilizes, leaving men to confront not only the collapsing social order but also their own fears, prejudices, and capacity for violence.\n\nAt the center of the story is a mysterious woman named Evie, who appears to be connected to the Aurora phenomenon and may hold the key to understanding whether this new reality is a curse, a test, or an opportunity. The novel alternates between perspectives in Dooling and the strange alternate realm where the sleeping women find themselves, examining how gender, power, and morality play out when the rules of the world are suddenly rewritten. With its large cast of characters and wide scope, Sleeping Beauties offers an unsettling, thought-provoking exploration of what happens when the balance between men and women is violently disrupted, and whether humanity can learn from such a reckoning.",
+                            PublishedDate = new DateTime(2017, 9, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "In a world where women fall into a mysterious sleep and men are left to face their darkest impulses, a small Appalachian town becomes the battleground for the future of humanity.",
+                            Title = "Sleeping Beauties"
+                        },
+                        new
+                        {
+                            Id = new Guid("f7d1f2f4-8c9a-4a3a-9d0e-3a4c7b9f1a23"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/gwendys-final-task.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Published in 2022, Gwendy’s Final Task is the third and concluding novel in the Gwendy trilogy, co-written by Stephen King and Richard Chizmar. The story follows Gwendy Peterson, now a U.S. senator, who is once again entrusted with the mysterious and dangerous button box that has shaped her life since childhood. This time, the stakes are even higher, as she is sent on a mission that reaches far beyond Castle Rock and into the depths of space, where the fate of the world may depend on her choices. As Gwendy struggles with her responsibilities, aging, and the moral cost of wielding such immense power, the novel explores themes of sacrifice, temptation, and the burden of doing what is right when the consequences are unimaginable. Blending horror, suspense, and emotional drama, Gwendy’s Final Task provides a powerful and haunting end to Gwendy’s journey, tying together elements from earlier books and the broader King universe while examining how one person’s decisions can alter the course of many lives.",
+                            PublishedDate = new DateTime(2022, 2, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "The conclusion to Gwendy’s story, where she must face the box one last time and confront the fate of the world.",
+                            Title = "Gwendy’s Final Task"
+                        },
+                        new
+                        {
+                            Id = new Guid("7a6f4c1e-9f24-4d8b-8e39-1b8c5a2f9d10"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-dark-tower-i-the-gunslinger.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Dark Tower I: The Gunslinger introduces Roland Deschain, the last of the gunslingers, as he pursues the enigmatic Man in Black across a desolate, decaying world that has \"moved on.\" Blending elements of fantasy, western, horror, and dark science fiction, the novel follows Roland’s relentless journey through barren deserts, haunted way stations, and forgotten towns. Along the way, he encounters allies and sacrifices, including the boy Jake, whose fate forces Roland to choose between his humanity and his obsessive quest for the Dark Tower. This opening volume sets the tone for the epic saga that follows, establishing Roland’s grim determination, the strange rules of his world, and the looming mystery of the Tower itself.",
+                            PublishedDate = new DateTime(1982, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Roland Deschain, the last gunslinger, pursues the mysterious Man in Black across a dying world that has \"moved on.\"",
+                            Title = "The Dark Tower I: The Gunslinger"
+                        },
+                        new
+                        {
+                            Id = new Guid("9c2d7e54-3c0b-4d6e-9f83-7a1b2c3d4e5f"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-dark-tower-ii-the-drawing-of-the-three.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "In The Dark Tower II: The Drawing of the Three, Roland finds himself stranded on a strange beach, beset by monstrous lobstrosities and on the edge of death. Guided by prophetic tarot-like cards, he passes through a series of mysterious doors that open onto New York City at different times. Through these doors, he \"draws\" three critical companions: Eddie Dean, a troubled heroin smuggler; Odetta Holmes/Detta Walker, a woman with a fragmented, violent psyche; and Jack Mort, a dangerous man whose fate is deeply entwined with Roland’s own past. As Roland struggles to bind this unlikely ka-tet together, the group must confront their inner demons and begin to understand the larger stakes of the journey to the Dark Tower.",
+                            PublishedDate = new DateTime(1987, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Roland crosses a dangerous shore and \"draws\" three pivotal companions from our world to aid his quest for the Dark Tower.",
+                            Title = "The Dark Tower II: The Drawing of the Three"
+                        },
+                        new
+                        {
+                            Id = new Guid("5f3a9b28-6e41-4c7d-9230-2a7b8c9d0e1f"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-dark-tower-iii-the-waste-lands.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Dark Tower III: The Waste Lands continues Roland’s quest with his growing ka-tet—Eddie, Susannah, and a restored Jake—now bound together by fate and memory. The group travels deeper into Mid-World’s blasted landscapes, entering the ruined city of Lud, where ancient technology and tribal warfare coexist in a chaotic, dying environment. Pursued by fanatics and haunted by the remnants of a once-great civilization, they eventually face Blaine the Mono, a deranged, sentient monorail who loves riddles and threatens to kill them if they cannot outwit him. This volume deepens the mythology of the Dark Tower universe, exploring themes of decay, destiny, and the fragile hope that holds the ka-tet together.",
+                            PublishedDate = new DateTime(1991, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Roland and his ka-tet journey into the decaying city of Lud, racing a mad monorail and confronting a world poisoned by time.",
+                            Title = "The Dark Tower III: The Waste Lands"
+                        },
+                        new
+                        {
+                            Id = new Guid("0a9d3c47-2b68-4e5f-8c91-3d4e5f6a7b8c"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-dark-tower-iv-wizard-and-glass.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Dark Tower IV: Wizard and Glass acts as both continuation and origin story, as Roland and his ka-tet survive Blaine the Mono and then pause along the Path of the Beam to hear Roland’s tale of his youth. The story shifts to the barony of Mejis, where young Roland and his fellow apprentice gunslingers, Cuthbert and Alain, uncover a dangerous conspiracy involving corrupt officials and the agents of the Crimson King. At the heart of this memory is Roland’s doomed love for Susan Delgado, a relationship that will end in betrayal, fire, and irreversible loss. This novel dives deeply into Roland’s past, revealing how love, obsession, and tragedy forged the relentless gunslinger who now leads the ka-tet toward the Dark Tower.",
+                            PublishedDate = new DateTime(1997, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Roland recounts his tragic first love and the events in Mejis that shaped him into the hardened gunslinger he has become.",
+                            Title = "The Dark Tower IV: Wizard and Glass"
+                        },
+                        new
+                        {
+                            Id = new Guid("d1e2f3a4-b5c6-4789-9d0e-1f2a3b4c5d6e"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-dark-tower-v-wolves-of-the-calla.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "In The Dark Tower V: Wolves of the Calla, Roland and his ka-tet arrive in the farming village of Calla Bryn Sturgis, where they learn of a recurring horror: armored \"wolves\" who periodically ride in from Thunderclap to abduct one child from each set of twins, returning them broken and diminished. The ka-tet agrees to help defend the Calla, uncovering strange ties between Mid-World, the Dark Tower, and storylines familiar from King’s other work, including Father Callahan from ’Salem’s Lot. Combining western-style standoffs, moral dilemmas, and deepening multiverse connections, this volume explores courage, sacrifice, and the growing realization that the fate of the Tower is bound to many worlds, including our own.",
+                            PublishedDate = new DateTime(2003, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Roland’s ka-tet defends a small farming community against mysterious \"wolves\" that steal their children away.",
+                            Title = "The Dark Tower V: Wolves of the Calla"
+                        },
+                        new
+                        {
+                            Id = new Guid("3b4c5d6e-7f81-49a0-b2c3-d4e5f6a7b8c9"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-dark-tower-vi-song-of-susannah.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Dark Tower VI: Song of Susannah follows the ka-tet as it fractures under the pressures of prophecy and possession. Susannah Dean, hosting the personality of Mia and carrying a mysterious child, is transported to New York City in 1999, where sinister forces converge around her. Meanwhile, Roland and Eddie find themselves in Maine in 1977, confronting both the Crimson King’s agents and a crucial figure: a version of Stephen King himself, whose writing is intertwined with the very existence of the Tower. With multiple timelines colliding and the stakes rising, this penultimate installment grapples with identity, free will, and the terrifying possibility that the story itself could be cut short.",
+                            PublishedDate = new DateTime(2004, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Susannah is possessed and carried into another world, while the ka-tet is split across time in a race to save both her and the Tower.",
+                            Title = "The Dark Tower VI: Song of Susannah"
+                        },
+                        new
+                        {
+                            Id = new Guid("e8f7d6c5-b4a3-42d1-9e0f-1a2b3c4d5e6f"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-dark-tower-vii-the-dark-tower.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Dark Tower VII: The Dark Tower concludes Roland’s epic journey. As the ka-tet moves closer to the Dark Tower, they confront deadly traps, the full might of the Crimson King’s forces, and heartbreaking sacrifices that test their bond and resolve. The path leads through ruined cities, haunted landscapes, and across realities, pulling together threads from the entire series and many of King’s other works. Roland must finally face the consequences of his choices, the nature of ka (fate), and the mystery at the heart of the Tower itself. The finale is both grand and deeply personal, offering an ending that is controversial, haunting, and thematically consistent with the series’ exploration of obsession, storytelling, and eternal return.",
+                            PublishedDate = new DateTime(2004, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Roland’s long quest reaches its endgame as the ka-tet races toward the Dark Tower, facing devastating losses and the ultimate revelation.",
+                            Title = "The Dark Tower VII: The Dark Tower"
+                        },
+                        new
+                        {
+                            Id = new Guid("12ab34cd-56ef-4789-90ab-cdef12345678"),
+                            AuthorId = new Guid("3755f1e8-2f8a-476a-9bdb-bd0ab3873904"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-dark-tower-the-wind-through-the-keyhole.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Dark Tower: The Wind Through the Keyhole is a mid-series novel set between the events of The Waste Lands and Wizard and Glass. Caught in a deadly starkblast storm, Roland and his ka-tet take shelter, and Roland passes the time by telling a story from his youth. That story contains yet another tale within it, creating a layered narrative about a young Roland hunting a dangerous skin-man and a boy named Tim Ross who ventures into an enchanted wilderness. The book enriches the mythology of Mid-World, highlighting Roland’s growth, the folklore of his world, and the enduring power of stories within stories that echo the larger Dark Tower saga.",
+                            PublishedDate = new DateTime(2012, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A mid-series tale in which Roland tells a nested story from his youth, revealing another haunting encounter from his early days as a gunslinger.",
+                            Title = "The Dark Tower: The Wind Through the Keyhole"
+                        },
+                        new
+                        {
+                            Id = new Guid("0f1e2d3c-4b5a-4678-98c1-2d3e4f5a6b7c"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-mysterious-affair-at-styles.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "First published in 1920, The Mysterious Affair at Styles introduces Hercule Poirot, Agatha Christie's iconic Belgian detective, along with his friend and narrator, Captain Hastings. Set in the country estate of Styles Court, the story centers on the sudden and suspicious poisoning of Emily Inglethorp, the wealthy matriarch of the household. Almost everyone under her roof has something to hide: financial motives, strained relationships, and hidden pasts. Poirot methodically examines alibis, timelines, and physical clues, overturning assumptions as he goes. With its intricate plotting, red herrings, and logical deduction, the novel not only launches Poirot as a major detective figure, but also helps define the classic country-house mystery that would become a hallmark of Golden Age detective fiction.",
+                            PublishedDate = new DateTime(1920, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Hercule Poirot’s first case, involving a wealthy woman’s poisoning in an English country house full of secrets.",
+                            Title = "The Mysterious Affair at Styles"
+                        },
+                        new
+                        {
+                            Id = new Guid("1a2b3c4d-5e6f-4789-90a1-b2c3d4e5f6a7"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-murder-on-the-links.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Published in 1923, The Murder on the Links sends Hercule Poirot and Captain Hastings to northern France after Poirot receives an urgent plea for help from the wealthy Paul Renauld. When they arrive, Renauld has already been found dead, buried in a shallow grave near a new golf course. The investigation reveals a tangle of identities, long-buried secrets, and romantic entanglements, while local police, led by the proud Inspector Giraud, clash with Poirot’s more subtle methods. Hastings becomes personally involved after meeting a mysterious young woman he nicknames 'Cinderella.' Combining a classic whodunit framework with emotional stakes and misdirection, the novel shows Poirot balancing logic and psychology as he uncovers the truth behind the carefully staged crime.",
+                            PublishedDate = new DateTime(1923, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Poirot travels to France to investigate the brutal murder of a wealthy man found near a half-built golf course.",
+                            Title = "The Murder on the Links"
+                        },
+                        new
+                        {
+                            Id = new Guid("2b3c4d5e-6f70-4819-a1b2-c3d4e5f6a7b8"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-big-four.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Published in 1927, The Big Four places Hercule Poirot in a more global, espionage-tinged adventure as he confronts a powerful criminal syndicate. Known as the Big Four, this secretive group consists of four elusive masterminds working behind the scenes to manipulate events around the world. Poirot, aided by Captain Hastings, is drawn into a series of seemingly disconnected incidents—murder, disappearances, and strange accidents—that all trace back to this organization. The novel unfolds in a sequence of linked episodes, with Poirot repeatedly crossing paths with the enigmatic Number Four. Blending detective work with spy-thriller elements, The Big Four showcases Poirot’s ingenuity on an international stage and expands the scope of Christie’s usual village and country-house settings.",
+                            PublishedDate = new DateTime(1927, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Poirot battles a shadowy international criminal organization known only as the Big Four.",
+                            Title = "The Big Four"
+                        },
+                        new
+                        {
+                            Id = new Guid("3c4d5e6f-7081-492a-b2c3-d4e5f6a7b8c9"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-mystery-of-the-blue-train.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Published in 1928, The Mystery of the Blue Train sees Hercule Poirot embroiled in a glamorous yet deadly case aboard the famed Blue Train traveling from Paris to the French Riviera. The victim is Ruth Kettering, a wealthy American heiress found murdered in her compartment, her priceless ruby—the 'Heart of Fire'—missing. Behind the glitter of high society lies a web of greed, failing marriages, and secret identities. Poirot must disentangle false alibis and conflicting testimonies from fellow passengers, including a young woman unexpectedly thrust into the drama, to uncover who killed Ruth and why. Combining the allure of continental travel with a classic locked-compartment feel, the novel delivers a sophisticated puzzle of motives, opportunity, and deception.",
+                            PublishedDate = new DateTime(1928, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Poirot investigates the murder of an American heiress on a luxury train bound for the French Riviera.",
+                            Title = "The Mystery of the Blue Train"
+                        },
+                        new
+                        {
+                            Id = new Guid("8a2a6f6b-92a4-4f31-bf0c-5b0b4e1f8c1e"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/peril-at-end-house.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Peril at End House, first published as a novel in 1932, finds Hercule Poirot and Captain Hastings attempting to enjoy a quiet holiday at a seaside resort in Cornwall. Their peace is shattered when they meet Nick Buckley, the seemingly carefree owner of the crumbling End House, who has survived several uncanny ‘accidents.’ Poirot quickly becomes convinced that someone is determined to kill her. As he investigates the house’s history and its inhabitants, he uncovers hidden relationships, financial motives, and a sinister plan that hinges on mistaken identity. With its atmospheric coastal setting and a twist that forces readers to rethink everything they have been told, Peril at End House is a classic early Poirot puzzle about deception, inheritance, and the masks people wear.",
+                            PublishedDate = new DateTime(1932, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Poirot holidays in Cornwall only to uncover a deadly plot against the young mistress of End House.",
+                            Title = "Peril at End House"
+                        },
+                        new
+                        {
+                            Id = new Guid("6e4df4fd-37fb-4c26-9a72-8a5b94d3a902"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/lord-edgware-dies.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Lord Edgware Dies (published in 1933 and also known in the US as Thirteen at Dinner) opens when the dazzling actress Jane Wilkinson asks Hercule Poirot to help her obtain a divorce from her aristocratic husband, Lord Edgware. Soon afterward, Edgware is found stabbed to death in his London home. Multiple witnesses swear that Jane was at a dinner party at the time of the murder, yet she had publicly declared she wished her husband ‘dead.’ As Poirot digs deeper, he finds a tangle of impersonations, stagecraft, and carefully constructed alibis worthy of the theatre world Jane inhabits. The novel explores themes of ambition, vanity, and the roles people play in public and in private, culminating in one of Poirot’s most theatrical dénouements.",
+                            PublishedDate = new DateTime(1933, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A glamorous actress’s wish for freedom from her husband becomes chilling reality when Lord Edgware is found murdered.",
+                            Title = "Lord Edgware Dies"
+                        },
+                        new
+                        {
+                            Id = new Guid("ba3a8b02-9e73-4a7e-bf1f-0a9e437421d5"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/three-act-tragedy.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Three Act Tragedy, first published in the mid-1930s (US title Murder in Three Acts and UK book edition in 1935), is structured like a theatrical performance. At a dinner party hosted by the charismatic actor Sir Charles Cartwright, a kindly clergyman suddenly dies after drinking a cocktail, apparently from natural causes. When a second, eerily similar death occurs later, suspicion grows that both were murders. Hercule Poirot, along with observer Mr Satterthwaite, begins to see the crimes as a drama carefully staged in three acts, complete with misdirection, rehearsed roles, and a shocking final reveal. The story explores obsession, performance, and the lengths to which people will go to protect their desires, all wrapped in a tightly plotted, character-driven mystery.",
+                            PublishedDate = new DateTime(1935, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A series of ‘accidental’ deaths unfold like a play in three acts, with Poirot watching from the wings.",
+                            Title = "Three Act Tragedy"
+                        },
+                        new
+                        {
+                            Id = new Guid("1f6b3f05-6483-4ab0-9b1f-940d470e54c3"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/death-in-the-clouds.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Death in the Clouds, first published in 1935 (US title Death in the Air), is a classic ‘impossible’ crime featuring Hercule Poirot aboard a flight from Paris to London. During the journey, a notorious French moneylender, Madame Giselle, is found dead in her seat, apparently killed by a poisoned dart while the other passengers sat only a few feet away. With a limited set of suspects and the crime committed in a confined space, Poirot must reconstruct every moment of the flight, examining motives ranging from blackmail to hidden identities. The novel combines Christie’s love of modern travel with a meticulously fair puzzle, as Poirot disentangles alibis and psychological clues to uncover a killer who used the anonymity of air travel as their greatest weapon.",
+                            PublishedDate = new DateTime(1935, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A woman is murdered mid-flight, leaving Poirot to solve a ‘closed circle’ mystery in the skies.",
+                            Title = "Death in the Clouds"
+                        },
+                        new
+                        {
+                            Id = new Guid("0f8c4c8b-1b4d-4baf-8b6d-3f0b2e9a1c11"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-abc-murders.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The A.B.C. Murders, first published in 1936, is one of Agatha Christie's most inventive Hercule Poirot novels. Poirot begins receiving taunting letters signed by someone calling themselves A.B.C., each warning of a murder to come. The killer appears to choose both victims and locations according to the alphabet, leaving an A.B.C. railway guide at every crime scene. As panic spreads and the body count rises, Poirot must look beyond the pattern everyone else accepts as fact and uncover the personal motive hidden beneath the apparent randomness. Blending a serial killer premise with a classic puzzle mystery, the novel explores themes of identity, obsession, and the dangers of making assumptions.",
+                            PublishedDate = new DateTime(1936, 1, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Hercule Poirot hunts a methodical killer who strikes in alphabetical order across England.",
+                            Title = "The A.B.C. Murders"
+                        },
+                        new
+                        {
+                            Id = new Guid("8a6b1e2d-9c77-4f06-bf0c-6a0c9a7d4e22"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/murder-in-mesopotamia.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Murder in Mesopotamia, published in 1936, transports Hercule Poirot to an archaeological excavation in Iraq. When the nervous and much-disliked wife of the expedition leader is found bludgeoned in her bedroom, suspicion falls on the small, isolated group of archaeologists, staff, and visitors living at the remote dig house. The story is narrated by Nurse Amy Leatheran, hired to care for the victim before her death, giving the mystery an intimate, observational tone. As Poirot reconstructs the crime amid desert heat, professional rivalries, and buried secrets, he must determine how a killer could strike in a closely watched compound and then seemingly vanish. The novel combines classic whodunit plotting with rich archaeological atmosphere and explores jealousy, professional ambition, and psychological fragility.",
+                            PublishedDate = new DateTime(1936, 7, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Poirot investigates a murder inside a tense archaeological dig in the Iraqi desert.",
+                            Title = "Murder in Mesopotamia"
+                        },
+                        new
+                        {
+                            Id = new Guid("3bd7b9d8-2f3c-4c9f-9a86-1f2e4d5c6b33"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/cards-on-the-table.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Cards on the Table, first published in 1936, presents one of Agatha Christie's boldest premises. The enigmatic collector Mr Shaitana invites four people he privately believes to have committed undetected murders to a dinner party, then seats them opposite four sleuths: Hercule Poirot, Colonel Race, Superintendent Battle, and mystery writer Ariadne Oliver. During an evening of bridge, Shaitana is killed in plain sight, with only his four suspected 'collectors' as possible murderers. There are no alibis in the usual sense; instead, the key lies in the bridge scores, personalities, and pasts of the players. The novel becomes an intricate character study as Poirot delves into earlier crimes to solve the present one, exploring themes of guilt, vanity, and the many faces people present to the world.",
+                            PublishedDate = new DateTime(1936, 11, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A flamboyant host is murdered during a bridge party where all four guests are known killers.",
+                            Title = "Cards on the Table"
+                        },
+                        new
+                        {
+                            Id = new Guid("7c1e8d2a-5f44-48b7-9d2f-8e9c0b1a7d44"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/dumb-witness.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Dumb Witness, published in 1937 and known in the United States as Poirot Loses a Client, follows Hercule Poirot and Captain Hastings as they investigate the belated cry for help of Miss Emily Arundell. The wealthy spinster suffers a fall on the stairs supposedly caused by her fox terrier's ball, then later writes to Poirot fearing someone is trying to kill her. By the time the letter reaches him, she is already dead and the death has been accepted as natural. Poirot and Hastings arrive in a house simmering with resentment, inheritance disputes, and clashing personalities, with only fragmentary clues and the behavior of the loyal dog to guide them. The novel mixes family drama with classic clue-based detection and examines greed, loyalty, and the subtle signs of malice that others overlook.",
+                            PublishedDate = new DateTime(1937, 7, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Poirot reopens the suspicious 'accidental' death of an elderly woman after a delayed plea for help arrives.",
+                            Title = "Dumb Witness"
+                        },
+                        new
+                        {
+                            Id = new Guid("2ea4c9b7-6d31-4f9e-8c2b-9a7d5e1c5f55"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/death-on-the-nile.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Death on the Nile, first published in 1937, is one of Agatha Christie's most celebrated Poirot novels. The story follows beautiful heiress Linnet Ridgeway, whose luxurious honeymoon cruise along the Nile is overshadowed by jealousies, old grudges, and the ominous presence of her husband's jilted former fiancée. When Linnet is found murdered in her cabin, Poirot, who is also aboard, must navigate a ship full of suspects, each with secrets and motives of their own. The confined riverboat setting heightens the tension as he reconstructs movements, tests alibis, and probes the emotional undercurrents driving the crime. Combining travel mystery, intricate plotting, and a poignant exploration of love, obsession, and betrayal, the novel remains a cornerstone of classic detective fiction.",
+                            PublishedDate = new DateTime(1937, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A honeymoon cruise on the Nile turns deadly when a wealthy heiress is shot and Poirot must unravel a tangle of passions and alibis.",
+                            Title = "Death on the Nile"
+                        },
+                        new
+                        {
+                            Id = new Guid("7e6f1c01-8d5f-4b9b-9e35-5c0270f3b21a"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/appointment-with-death.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "First published in 1938, Appointment with Death sees Hercule Poirot travelling in the Middle East when he encounters the sinister Boynton family, ruled by a cruel and sadistic stepmother. During an excursion to Petra, Mrs Boynton is discovered dead, apparently from natural causes. Poirot, however, is not convinced. With only twenty-four hours to investigate and every family member bearing a motive rooted in years of psychological abuse, he must probe a closed circle of suspects whose lives have been twisted by fear and domination. Drawing on Christie’s own experiences in the region, the novel blends archaeological atmosphere with a classic puzzle mystery, exploring themes of control, trauma and the price of freedom.",
+                            PublishedDate = new DateTime(1938, 5, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "On a tour of the Middle East, Hercule Poirot must untangle a family’s dark secrets when their tyrannical matriarch is found dead beneath the desert sun.",
+                            Title = "Appointment with Death"
+                        },
+                        new
+                        {
+                            Id = new Guid("9a3be5c4-2f9d-4e07-8a93-137cfa8659af"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/hercule-poirots-christmas.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Hercule Poirot’s Christmas, first published in 1938 (also known in the US as Murder for Christmas and later A Holiday for Murder), is a classic country-house mystery with an unusually violent crime at its centre. The tyrannical Simeon Lee summons his estranged family home for Christmas, promising surprises and stirring up old resentments. When he is found savagely murdered in a locked room on Christmas Eve, every member of the household appears to have both motive and opportunity. Called in to assist the local police, Poirot must navigate a tangle of family grudges, illegitimate relationships and long-buried secrets. Christie offsets the cosy holiday setting with one of her most chilling portrayals of domestic hatred and retribution.",
+                            PublishedDate = new DateTime(1938, 12, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A brutal murder shatters a wealthy patriarch’s festive family gathering, forcing Poirot to uncover cruelty and greed behind the holiday cheer.",
+                            Title = "Hercule Poirot's Christmas"
+                        },
+                        new
+                        {
+                            Id = new Guid("51d8c962-7a2b-4f1e-9a3b-14db0e1c2f45"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/sad-cypress.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Published in 1940, Sad Cypress is one of Agatha Christie’s more emotionally intense Hercule Poirot novels, blending courtroom drama with traditional detection. Elinor Carlisle, a reserved young woman, appears to have every reason to kill her rival, the gentle Mary Gerrard, who has captured the affection of Elinor’s fiancé and the favour of her wealthy aunt. When Mary dies after eating a poisoned meal, Elinor is charged with murder and her conviction seems almost certain. Doctor Peter Lord, convinced of her innocence, turns to Poirot for help. As he reconstructs the events leading to Mary’s death and the earlier death of Elinor’s aunt, Poirot uncovers a web of inheritance, resentment and misplaced devotion. The novel explores love, class, and the corrosive power of suspicion, all leading to a quietly devastating resolution.",
+                            RatingsCount = 0,
+                            ShortDescription = "A young woman stands accused of poisoning her rival in love, and Poirot must distinguish jealousy from justice in a case shadowed by tragedy.",
+                            Title = "Sad Cypress"
+                        },
+                        new
+                        {
+                            Id = new Guid("c8b0c6f9-4d71-4e82-b70b-6d4e5cf6a8e0"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/one-two-buckle-my-shoe.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "One, Two, Buckle My Shoe, first published in 1940 and known in the US as The Patriotic Murders and later An Overdose of Death, opens with Poirot paying a routine visit to his dentist, Henry Morley. When Morley is later discovered shot dead in his surgery in what appears to be suicide, Poirot is unconvinced. Other patients from that same morning – including a powerful banker and a mysterious woman – become central to a case that escalates from an apparently personal tragedy into a conspiracy touching on international politics and extremist ideology. Christie deftly uses the counting-rhyme structure to frame the novel’s chapters while examining themes of social responsibility, political fanaticism and the moral cost of ‘necessary’ violence.",
+                            RatingsCount = 0,
+                            ShortDescription = "After his dentist is found dead, Poirot suspects that a tidy ‘suicide’ masks a far more sinister plot involving politics, high finance and assassination.",
+                            Title = "One, Two, Buckle My Shoe"
+                        },
+                        new
+                        {
+                            Id = new Guid("f21a37e4-9cf3-4a39-90ba-2c3e5c7d8f91"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/evil-under-the-sun.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Evil Under the Sun, first published in 1941, finds Hercule Poirot attempting to rest at an exclusive seaside hotel on a small Devon island. Among the guests is Arlena Stuart Marshall, a beautiful former actress whose open flirtation with another man enrages her husband and scandalises the resort. When Arlena is discovered strangled on a secluded beach, the apparently idyllic holiday setting becomes the scene of a meticulously planned crime. With a limited cast of suspects and alibis anchored to tides, sunbathing and scenic walks, Poirot must disentangle jealousy, staged appearances and a previous, eerily similar murder to reveal a ruthlessly calculated scheme. The novel revisits motifs from Christie’s earlier short fiction while offering one of her most atmospheric ‘closed-circle’ puzzles.",
+                            RatingsCount = 0,
+                            ShortDescription = "On a sun-drenched holiday island, the murder of a glamorous but disliked actress challenges Poirot to see past appearances and romantic entanglements.",
+                            Title = "Evil Under the Sun"
+                        },
+                        new
+                        {
+                            Id = new Guid("4bc4d7cb-3cca-4bcb-8b0d-59b9e7fc6b81"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/five-little-pigs.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Five Little Pigs, first published in 1942 and known in the United States as Murder in Retrospect, is one of Agatha Christie's most intricate Hercule Poirot novels. Sixteen years after the painter Amyas Crale was poisoned, his daughter Carla approaches Poirot, convinced that her mother, convicted of the crime, was innocent. With all physical evidence long gone, Poirot must solve the case entirely through memory and testimony.\n\nHe tracks down the five people who were present on the day of the murder—each a 'little pig' in the nursery rhyme that frames the story—and asks them to write their own account of what happened. By comparing their written narratives with their current recollections, Poirot slowly reconstructs the truth hidden beneath old resentments, romantic entanglements, and self-deception. The novel is celebrated for its unusual structure, psychological depth, and the way it explores the unreliability of memory over time.",
+                            PublishedDate = new DateTime(1942, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Poirot re-investigates a 16-year-old murder by questioning five key witnesses, each with their own version of the past.",
+                            Title = "Five Little Pigs"
+                        },
+                        new
+                        {
+                            Id = new Guid("a475bea9-3baf-4365-bf1a-0e6e8d533970"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-hollow.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Hollow, first published in 1946 (also issued in the U.S. as Murder After Hours), brings Hercule Poirot into a tense country-house gathering at the Angkatell estate. What begins as a seemingly ordinary weekend party—filled with flirtations, marital strain, and simmering rivalries—erupts into tragedy when Dr. John Christow is found shot by the swimming pool, surrounded by guests whose reactions seem oddly theatrical.\n\nPoirot, arriving just moments after the discovery of the body, is immediately struck by the unnatural arrangement of the crime scene. As he delves into the lives of the Angkatell family and their guests, he uncovers a web of romantic entanglements, long-standing grievances, and emotional conflicts that complicate the search for the killer. The novel is often praised for its strong character work and for blending classic whodunit plotting with a more introspective look at love, obsession, and emotional damage.",
+                            PublishedDate = new DateTime(1946, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A country-house weekend turns deadly when a staged scene around a swimming pool turns out to be horrifyingly real.",
+                            Title = "The Hollow"
+                        },
+                        new
+                        {
+                            Id = new Guid("b3fd1fa4-e560-4738-88c6-c4ade3f7af19"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/taken-at-the-flood.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Taken at the Flood, first published in 1948 and originally released in the U.S. under the title There Is a Tide…, is set in the uncertain years following World War II. The Cloade family, long accustomed to relying on the generosity of wealthy patriarch Gordon Cloade, are thrown into turmoil when he marries a young widow, Rosaleen, and then dies in an air raid shortly afterward. With no new will, Rosaleen becomes heir to his entire fortune, leaving the rest of the family financially stranded.\n\nRumours soon surface that Rosaleen’s first husband may still be alive, threatening the legitimacy of her marriage and inheritance. When a mysterious stranger arrives in the village and is later found dead, Hercule Poirot is drawn into a case involving greed, shifting identities, and the lingering scars of war. The novel combines classic Christie misdirection with a strong sense of post-war social change and the desperate measures people will take to secure their future.",
+                            PublishedDate = new DateTime(1948, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "In a shattered post-war England, a sudden inheritance and a dubious widow draw Poirot into a deadly family conflict.",
+                            Title = "Taken at the Flood"
+                        },
+                        new
+                        {
+                            Id = new Guid("0bb4e360-bb62-4c03-a2bf-597235b64790"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/mrs-mcgintys-dead.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Mrs McGinty's Dead, first published in 1952 and later issued in some editions under the alternative title Blood Will Tell, sees Hercule Poirot summoned to the small village of Broadhinny. A charwoman, Mrs. McGinty, has been brutally killed, and her lodger, James Bentley, has already been tried and convicted. Superintendent Spence, however, is troubled by the case and asks Poirot to re-examine the evidence before Bentley is executed.\n\nPosing as a boarder and aided—sometimes chaotically—by crime novelist Ariadne Oliver, Poirot uncovers how Mrs. McGinty may have stumbled upon a dangerous secret involving one of the villagers and an old scandal. The investigation leads him through a gallery of suspicious locals, petty jealousies, and hidden histories. The novel is notable for its blend of village atmosphere, dark humour, and Christie's recurring theme of how ordinary lives can conceal shocking pasts.",
+                            PublishedDate = new DateTime(1952, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Poirot reopens a seemingly simple village murder when he begins to suspect that the condemned man is innocent.",
+                            Title = "Mrs McGinty's Dead"
+                        },
+                        new
+                        {
+                            Id = new Guid("188af1e0-73fa-4afe-bc9b-1547db499ca2"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/after-the-funeral.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "After the Funeral, first published in 1953 and originally released in the United States as Funerals Are Fatal, begins with the death of wealthy Richard Abernethie and the gathering of his relatives at Enderby Hall for the reading of his will. The meeting is shattered when his eccentric sister, Cora Lansquenet, blurts out that Richard was murdered. The uneasy family dismisses the remark—until Cora herself is violently killed the next day.\n\nConcerned by the coincidence, family solicitor Mr. Entwhistle turns to Hercule Poirot for help. As Poirot probes the Abernethie clan, he uncovers financial motives, buried resentments, and a clever manipulation of appearances designed to conceal the true nature of both deaths. Combining a classic inheritance plot with a brooding post-war setting, the novel explores the corrosive effects of greed and the ways families can deceive both others and themselves.",
+                            PublishedDate = new DateTime(1953, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A careless remark at a will reading sparks suspicion of murder—and leads to another death.",
+                            Title = "After the Funeral"
+                        },
+                        new
+                        {
+                            Id = new Guid("b0c8b4f6-5e1d-4d52-9d37-0aa6c1e50f21"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/hickory-dickory-dock.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "First published in 1955, Hickory Dickory Dock (also published as Hickory Dickory Death in the United States) centers on a London student hostel where a string of odd petty thefts and acts of vandalism disturb the residents. When one of the young women living there is found dead, Hercule Poirot is called in to untangle the web of lies, secrets, and international connections that lurk behind the seemingly harmless pranks. Blending classic clue-driven detection with a diverse cast of characters, the novel explores themes of identity, post-war tension, and the dangers of underestimating small, inexplicable crimes.",
+                            PublishedDate = new DateTime(1955, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Hercule Poirot investigates a series of peculiar thefts at a student hostel that soon escalate into murder.",
+                            Title = "Hickory Dickory Dock"
+                        },
+                        new
+                        {
+                            Id = new Guid("3e7a9f12-0f4c-4a6a-b74b-9c8b1fd9a233"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/dead-mans-folly.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Dead Man's Folly, first published in 1956, sees Hercule Poirot invited to Nasse House, a country estate where crime writer Ariadne Oliver has devised a \"Murder Hunt\" game for a summer fête. Oliver becomes uneasy, suspecting that someone is manipulating her make-believe plot for sinister purposes. When the young girl playing the victim in the game is actually found murdered, Poirot must sort through family tensions, hidden motives, and the strange layout of the estate's folly and grounds to reveal a meticulously planned crime. The novel combines country house atmosphere with meta-commentary on detective fiction through Ariadne Oliver’s presence.",
+                            PublishedDate = new DateTime(1956, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A staged murder game at a country house turns deadly, and Poirot must uncover a very real killer.",
+                            Title = "Dead Man's Folly"
+                        },
+                        new
+                        {
+                            Id = new Guid("9b214c70-1f65-4af9-9180-6e1380e3b5f4"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/cat-among-the-pigeons.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Cat Among the Pigeons, first published in 1959, begins with political upheaval and smuggled jewels in the fictional Middle Eastern kingdom of Ramat. The action soon shifts to Meadowbank, an exclusive English girls' school, where a series of strange events culminate in murder. As teachers and students are drawn into a mystery involving hidden treasure and espionage, Hercule Poirot is eventually called upon to uncover how the international plot has infiltrated the seemingly safe world of the school. The novel blends school-story atmosphere with spy-thriller elements and classic Christie misdirection.",
+                            PublishedDate = new DateTime(1959, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A murder at an elite girls' school uncovers secrets involving stolen jewels, espionage, and international intrigue.",
+                            Title = "Cat Among the Pigeons"
+                        },
+                        new
+                        {
+                            Id = new Guid("d4e3a1b2-6c78-4c2c-9a5f-2b1c7c9de8f0"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-clocks.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Clocks, first published in 1963, opens when a young typist, Sheila Webb, is sent to a house in the town of Crowdean, only to find a dead man on the living room floor surrounded by clocks all stopped at the same time. None of the neighbors will admit to knowing the victim, and the circumstances appear deliberately theatrical. Hercule Poirot, intrigued by the puzzle from a distance, uses his famed \"armchair detection\" to piece together the truth. Meanwhile, a young intelligence officer investigates the case on the ground, uncovering connections to espionage and hidden identities. The novel combines a classic whodunit with elements of spy fiction and Christie’s fondness for elaborate, misleading stage-setting.",
+                            PublishedDate = new DateTime(1963, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A typist stumbles upon a corpse in a house filled with stopped clocks, and Poirot must solve a murder full of staged clues.",
+                            Title = "The Clocks"
+                        },
+                        new
+                        {
+                            Id = new Guid("f87a3c59-2bd4-4d9f-8b60-7a9e3f124c61"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/third-girl.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Third Girl, first published in 1966, begins when a young woman named Norma Restarick visits Hercule Poirot and abruptly declares that she may have committed a murder—only to decide he is \"too old\" to help and leave without giving her name. Poirot, assisted by his friend Ariadne Oliver, tracks Norma to the London flat she shares with two other young women, where he discovers a tangle of psychological distress, family secrets, and possible gaslighting. As deaths and accidents accumulate around Norma, Poirot must determine whether she is a victim, a killer, or something in between. The novel brings Poirot into the swinging 1960s, contrasting generational attitudes while maintaining Christie’s focus on motive, manipulation, and carefully planted clues.",
+                            PublishedDate = new DateTime(1966, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A troubled young woman tells Poirot she might have committed a murder, then vanishes before revealing any details.",
+                            Title = "Third Girl"
+                        },
+                        new
+                        {
+                            Id = new Guid("e1b9a9d7-7e5f-4ad3-a2b6-9c5e9cd870ac"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/halloween-party.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Hallowe'en Party, first published in 1969, brings Hercule Poirot and mystery novelist Ariadne Oliver to the quiet English village of Woodleigh Common. During a children's Hallowe'en party at the home of Rowena Drake, a boastful young girl, Joyce Reynolds, declares that she once saw a murder. Hours later, she is discovered dead, drowned in a tub used for bobbing for apples. Called in by Mrs Oliver, who fears that her offhand remarks may have triggered the crime, Poirot must untangle village secrets, hidden relationships, and long-buried scandals to learn whether Joyce really did witness a killing in the past. The novel explores the unreliability of memory, the dangers of gossip, and violence lurking beneath a seemingly festive occasion. It has since been closely associated with, and reissued under titles tied to, modern adaptations such as 'A Haunting in Venice'.",
+                            PublishedDate = new DateTime(1969, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "At a Hallowe'en party, a girl claims she once witnessed a murder—then is found drowned in an apple-bobbing tub, drawing Poirot into a chilling investigation.",
+                            Title = "Hallowe'en Party"
+                        },
+                        new
+                        {
+                            Id = new Guid("f4a8c3d2-043c-4f43-8ac5-0c5f1e6d9b2a"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/elephants-can-remember.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Elephants Can Remember, first published in 1972, is a late Hercule Poirot novel that centers on memory and the long shadow of past crimes. When Ariadne Oliver is asked an awkward question about the parents of the young woman her goddaughter intends to marry, she learns of a decades-old tragedy: General and Margaret Ravenscroft, believed to have died in a murder–suicide on a cliff top. Disturbed by the unanswered questions, she enlists Poirot to investigate. Because most of the principals are now dead, they must rely on 'elephants'—people whose memories stretch back to the time of the event—to reconstruct what really happened. As they piece together contradictory recollections, Poirot exposes hidden identities, family secrets, and a carefully disguised crime. The novel reflects on the fallibility and resilience of human memory and the lingering consequences of unresolved guilt.",
+                            PublishedDate = new DateTime(1972, 11, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Poirot and Ariadne Oliver revisit an old double-death mystery, relying on the 'elephants' of memory to uncover whether it was suicide or murder.",
+                            Title = "Elephants Can Remember"
+                        },
+                        new
+                        {
+                            Id = new Guid("0a7f6b24-9f93-4a6f-8bfb-8a2a4b9dcd5c"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/curtain-poirots-last-case.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Curtain: Poirot's Last Case, written in the 1940s but published in 1975, serves as the elegiac farewell to Hercule Poirot. Arthur Hastings returns to Styles Court, the country house where he and Poirot first solved a murder decades earlier, now converted into a guesthouse. There he finds Poirot physically frail but mentally as sharp as ever, secretly investigating an unknown manipulator—identified only as 'X'—who has never killed directly, but has incited others to commit murder. As a series of suspicious deaths unfolds among the guests, Poirot confides his theory to Hastings but withholds his full plan. The novel interrogates themes of justice, moral responsibility, and the limits of the detective’s role, culminating in Poirot’s most controversial and sacrificial decision. It closes the Poirot saga in a dark, deeply reflective tone that has made it one of Christie's most discussed works.",
+                            PublishedDate = new DateTime(1975, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "An aged Poirot and Hastings return to Styles, where a subtle killer drives others to murder—forcing Poirot to make a final, devastating choice.",
+                            Title = "Curtain: Poirot's Last Case"
+                        },
+                        new
+                        {
+                            Id = new Guid("2c5a1f4d-7d3a-4af4-bdec-0a9bd5b1c1f8"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-murder-at-the-vicarage.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Murder at the Vicarage, first published in 1930, is the first full-length novel to feature Miss Jane Marple and the village of St Mary Mead. Narrated by the local vicar, Leonard Clement, the story begins with nearly everyone agreeing that life would be easier without the tyrannical churchwarden Colonel Protheroe. When Protheroe is discovered shot dead in the vicar’s study, multiple suspects immediately present themselves—and more than one person appears ready to confess. As gossip swirls and alibis tangle, Miss Marple quietly observes the small details of human behavior, drawing on her deep knowledge of village types to see through the lies. The novel establishes the classic cozy English-village setting and introduces Marple’s central method: reading human nature rather than relying solely on physical clues.",
+                            PublishedDate = new DateTime(1930, 10, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "When the much-disliked Colonel Protheroe is found shot in the vicar’s study, Miss Marple uses her keen eye for village life to uncover the killer.",
+                            Title = "The Murder at the Vicarage"
+                        },
+                        new
+                        {
+                            Id = new Guid("9d0e3b6f-41c8-4b45-96bb-1e2caa7d9f33"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-body-in-the-library.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Body in the Library, first published in 1942, is one of Miss Marple’s most iconic cases. Colonel and Mrs Bantry awake in their country house in St Mary Mead to shocking news: the body of a young, heavily made-up blonde girl has been found on the rug in their library. With the Bantrys’ reputation at stake, Mrs Bantry turns to Miss Marple for help. The investigation leads from the village to a nearby seaside resort and a smart hotel frequented by wealthy guests, where identities, alibis, and motives become increasingly tangled. Miss Marple draws parallels between the suspects and the personalities she knows from village life, unraveling a plot involving greed, impersonation, and calculated cruelty. The novel plays with the classic trope of the 'mysterious corpse' while contrasting the apparent gentility of the countryside with darker undercurrents.",
+                            PublishedDate = new DateTime(1942, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A stranger’s corpse appears in the Bantrys’ library, and Miss Marple must trace the dead girl’s connections from a quiet village to a seaside hotel.",
+                            Title = "The Body in the Library"
+                        },
+                        new
+                        {
+                            Id = new Guid("5a7c5a3c-9a8b-4b4e-9b26-8afc5ad3e901"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-moving-finger.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Moving Finger is a classic Miss Marple mystery set in the seemingly peaceful village of Lymstock. Siblings Jerry and Joanna Burton arrive there so Jerry can recover from a plane crash, only to find themselves at the center of a scandal when they receive an anonymous letter accusing them of an immoral relationship. Soon it becomes clear that they are not the only targets of a vicious poison-pen campaign. When a prominent local woman dies in what appears to be suicide after receiving such a letter, whispers of murder begin to circulate. As fear and suspicion spread through the community, Miss Marple is eventually called in to untangle the web of malice, secrets, and misdirection. First published in the US in 1942 and in the UK in 1943, the novel blends small-village atmosphere with psychological insight, exploring how gossip and hidden guilt can be weaponised in a close-knit community.",
+                            PublishedDate = new DateTime(1943, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Anonymous poison-pen letters spread through a quiet village, culminating in murder that only Miss Marple can truly understand.",
+                            Title = "The Moving Finger"
+                        },
+                        new
+                        {
+                            Id = new Guid("f3c6940e-6688-4a17-9cd7-1962d6f4b4f2"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/a-murder-is-announced.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "A Murder Is Announced opens with an extraordinary notice in the local Chipping Cleghorn newspaper: a murder will take place at Little Paddocks at 6:30 that evening. The villagers assume it must be a parlour game or an eccentric joke, but they gather anyway, curious and amused. At the appointed time, the lights go out, a gun is fired, and suddenly the game turns deadly real. The resulting investigation uncovers layers of deception, mistaken identity, and long-buried history, as those in the house and the wider village prove to be far from what they seem. Miss Marple, staying nearby, applies her shrewd understanding of human nature to decipher what the announcement truly meant and who stood to gain from the chaos. First published in June 1950, the novel is often regarded as one of Christie’s finest village mysteries, combining a clever central gimmick with poignant character work and social observation.",
+                            PublishedDate = new DateTime(1950, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A village newspaper advert coolly announces a murder before it happens, drawing Miss Marple into one of her most ingenious cases.",
+                            Title = "A Murder Is Announced"
+                        },
+                        new
+                        {
+                            Id = new Guid("79bb19da-6b9d-4a4f-a3cc-8f5baf0e2a8c"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/they-do-it-with-mirrors.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "They Do It with Mirrors, also published in the US as Murder with Mirrors, finds Miss Marple visiting an old friend, Carrie Louise, at Stonygates—an estate that doubles as a rehabilitation center for delinquent boys. The atmosphere is tense: financial worries, ideological clashes, and simmering resentments swirl among family members and staff. During a dramatic confrontation in Carrie Louise’s office, a gun is fired elsewhere in the house, and a man is found dead. The apparent sequence of events seems impossible, as though everyone’s attention has been deliberately misdirected. Miss Marple, attuned to human frailties rather than grand theatrics, realises that the crime depends on carefully staged illusions—“tricks” done not with stage props, but with assumptions, timing, and perception. First published in 1952 (UK edition 17 November 1952), the novel combines country-house tension with themes of loyalty, idealism, and the deceptive comfort of familiar roles.",
+                            PublishedDate = new DateTime(1952, 11, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "At a charitable mansion for troubled boys, a staged shooting hides a more sinister crime that Miss Marple must see through the ‘smoke and mirrors’.",
+                            Title = "They Do It with Mirrors"
+                        },
+                        new
+                        {
+                            Id = new Guid("1e4cbd1d-8a0f-4b88-9fd3-6ff315b74b87"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/a-pocket-full-of-rye.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "A Pocket Full of Rye begins when financier Rex Fortescue collapses and dies in his office, later found to have traces of taxine—a poison extracted from yew berries—in his system. The oddest detail: a handful of rye grains in his pocket. When further deaths occur at the Fortescue family home, each echoing lines from the nursery rhyme \"Sing a Song of Sixpence\", it becomes clear that the killer is staging a grotesque pattern. Miss Marple enters the case through the murdered parlourmaid, Gladys Martin, whom she once trained and feels honour-bound to avenge. As she observes the dysfunctional Fortescue household—riven by greed, resentment, and old grievances—she pieces together how the rhyme has been twisted into a blueprint for murder. First published on 9 November 1953, the novel showcases Christie’s fascination with nursery rhymes as sinister frameworks and highlights Miss Marple’s blend of compassion and ruthless clarity.",
+                            PublishedDate = new DateTime(1953, 11, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A wealthy businessman dies with rye in his pocket, and a trail of nursery-rhyme murders brings Miss Marple into a poisoned family circle.",
+                            Title = "A Pocket Full of Rye"
+                        },
+                        new
+                        {
+                            Id = new Guid("c1dd2cfe-4a85-4e4a-8c8f-4c9cb9fa8fd0"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/4-50-from-paddington.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "In 4.50 from Paddington (published in the US as What Mrs. McGillicuddy Saw!), Mrs Elspeth McGillicuddy is dozing on a train when another train overtakes hers. As the carriages run side by side, she sees, through a briefly unobscured window, a man strangling a woman. Shocked and disbelieved by the authorities when no body is discovered, she turns to her friend Miss Marple. Convinced that the murder was real, Miss Marple calculates where the body must have been thrown from the train and enlists the capable young housekeeper Lucy Eyelesbarrow to go undercover at the nearby country estate, Rutherford Hall. Among its inhabitants lies both the corpse’s resting place and a complex network of motives. First published on 4 November 1957, the novel blends railway mystery, country-house intrigue, and Christmas-season atmosphere as Miss Marple orchestrates an investigation from the sidelines, proving that age and frailty are no barrier to sharp deduction.",
+                            PublishedDate = new DateTime(1957, 11, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A woman witnesses a murder on a passing train, but with no body to be found, Miss Marple must uncover where—and why—the victim disappeared.",
+                            Title = "4.50 from Paddington"
+                        },
+                        new
+                        {
+                            Id = new Guid("c51d1a59-8f1c-4d10-9b65-1a8a8a8a614f"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-mirror-crackd-from-side-to-side.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "First published in 1962, The Mirror Crack'd from Side to Side finds Miss Marple confronting change in the once-quiet village of St Mary Mead, now transformed by modern housing and new residents. Among them is Marina Gregg, a famous film actress who has bought the local estate. During a fête at her home, a fan who has just spoken to Marina suddenly collapses and dies after drinking a poisoned cocktail, leading everyone to assume that the actress was the real target. As the police investigate, Miss Marple quietly pieces together eyewitness accounts, old gossip and a half-overheard quotation to reveal how a long-buried tragedy and a chance encounter years earlier created the motive for murder. The novel blends classic village mystery elements with a poignant exploration of guilt, trauma and the destructive side of celebrity. :contentReference[oaicite:0]{index=0}",
+                            PublishedDate = new DateTime(1962, 11, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "When a glamorous film star moves to St Mary Mead and a fan is murdered at her party, Miss Marple must uncover a tragic secret hidden behind a perfect face.",
+                            Title = "The Mirror Crack'd from Side to Side"
+                        },
+                        new
+                        {
+                            Id = new Guid("9f1b3b3e-9e70-4c46-846a-0b898cbf607a"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/a-caribbean-mystery.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "A Caribbean Mystery, first published in 1964, takes Miss Marple away from St Mary Mead to a luxurious Caribbean resort, sent there by her nephew to recover her strength. The seemingly idyllic setting is peopled by a mix of wealthy tourists and long-term residents, including Major Palgrave, an elderly bore who claims to have once known a man who got away with murder. Before he can show Miss Marple a vital photograph, he is found dead and the picture has vanished. When another suspicious death follows, Miss Marple realises that the story of the unpunished killer is directly connected to the hotel’s guests. Using her sharp understanding of human nature, she cuts through flirtations, gossip and false identities to expose a modern murderer hiding behind a carefully constructed persona. :contentReference[oaicite:1]{index=1}",
+                            PublishedDate = new DateTime(1964, 11, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "On holiday in the Caribbean, Miss Marple is drawn into a web of lies and hidden pasts after a retired major who hints at a murderer in their midst turns up dead.",
+                            Title = "A Caribbean Mystery"
+                        },
+                        new
+                        {
+                            Id = new Guid("d3f9b62b-6a3b-4f5c-afb6-77e0da82c0cb"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/at-bertrams-hotel.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "At Bertram’s Hotel, first published in 1965, follows Miss Marple to a perfectly preserved London hotel that seems untouched by time. Bertram’s offers the kind of pre-war comfort, manners and food that she remembers from her youth, yet there is something oddly stage-managed about its perfection. As she observes the comings and goings of clergy, aristocrats, wealthy Americans and a notorious adventuress, a series of incidents—including an attempted murder, an apparent disappearance and a string of daring robberies—suggest that the hotel is the hub of a sophisticated criminal operation. Miss Marple’s quiet observations of staff routines, guest behaviour and tiny anachronisms ultimately reveal how the façade of old-world respectability is being used to conceal a modern, highly organised scheme that leads to murder. :contentReference[oaicite:2]{index=2}",
+                            PublishedDate = new DateTime(1965, 11, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Miss Marple’s nostalgic stay at an old-fashioned London hotel turns sinister as genteel charm masks theft, deception, and a deadly crime.",
+                            Title = "At Bertram's Hotel"
+                        },
+                        new
+                        {
+                            Id = new Guid("4b4d7f13-5a3d-4f91-9e6a-7bfe60a5c9b5"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/nemesis.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Nemesis, first published in 1971, finds Miss Marple named in the will of Jason Rafiel, a wealthy businessman she met on a previous case. From beyond the grave, Rafiel charges her with investigating an unspecified injustice, giving only the cryptic keyword ‘Nemesis’ and arranging for her to join a peculiar coach tour of English gardens and historic houses. With no clear crime, victim or suspect, Miss Marple must work out what Rafiel wants her to uncover, gradually connecting the tour to the unsolved murder of a young woman and the ruin of a local family years earlier. As she probes old scandals and contrasting sisters, she comes to understand Rafiel’s final wish: that she bring retribution to the true culprit and justice to the dead. The novel is one of Christie’s most reflective late works, meditating on ageing, responsibility and the idea of fate as Miss Marple’s reputation as ‘Nemesis’ is fully realised. :contentReference[oaicite:3]{index=3}",
+                            PublishedDate = new DateTime(1971, 11, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "After the death of an old acquaintance, Miss Marple is tasked from beyond the grave with solving a mysterious crime she knows nothing about.",
+                            Title = "Nemesis"
+                        },
+                        new
+                        {
+                            Id = new Guid("a6c1e30a-8a4e-4c1f-b856-4ec2f8ea4e95"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/sleeping-murder.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Sleeping Murder: Miss Marple’s Last Case was written during the 1940s but held back and first published in 1976, the final Miss Marple novel to appear in print. The story follows Gwenda Reed, a young woman who moves to England to find a house for herself and her husband. She impulsively buys a seaside villa that she feels she somehow recognises, and soon experiences unsettling flashes of déjà vu and a vivid memory of seeing a woman at the foot of the stairs, strangled. With Miss Marple’s guidance, Gwenda and her husband trace her fragmented childhood recollections back to a real crime hidden behind a façade of respectability. As they reopen an old scandal involving jealousy, infidelity and manipulation, they discover that the murderer is still alive and desperate to keep the past buried. Blending psychological unease with a classic cold-case puzzle, the novel serves as a fitting final showcase for Miss Marple’s insight into family secrets and the persistence of evil. :contentReference[oaicite:4]{index=4}",
+                            RatingsCount = 0,
+                            ShortDescription = "Newly married Gwenda Reed begins to suspect she once witnessed a murder as a child, and Miss Marple helps her uncover a terrifying past that refuses to stay buried.",
+                            Title = "Sleeping Murder"
+                        },
+                        new
+                        {
+                            Id = new Guid("8a63c7cf-1e0d-4d3b-8a3c-5d7b8e1c9f10"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-secret-adversary.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Secret Adversary, first published in 1922, introduces Agatha Christie's spirited duo Tommy Beresford and Tuppence Cowley. Set in the aftermath of World War I, the story begins when the pair, short on money and long on audacity, decide to start a business as 'young adventurers for hire.' They soon find themselves drawn into a dangerous web of espionage and conspiracy when they are hired to find a missing woman, Jane Finn, who vanished with highly sensitive government papers aboard the doomed Lusitania.\n\nAs Tommy and Tuppence follow a trail of clues through London high society and the criminal underworld, they pursue the identity of the mysterious 'Mr. Brown,' a ruthless mastermind manipulating events from the shadows. The novel blends classic Christie plotting with a more lighthearted, action-driven tone, showcasing the duo's charm, nerve, and ingenuity as they race to prevent a political catastrophe.",
+                            PublishedDate = new DateTime(1922, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Tommy and Tuppence embark on their first adventure, hunting a shadowy master criminal tied to post-war political intrigue.",
+                            Title = "The Secret Adversary"
+                        },
+                        new
+                        {
+                            Id = new Guid("5b2b3fd5-3a9c-4d76-8c6f-0dc0c1c3e72f"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/n-or-m.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "N or M?, first published in 1941, is a World War II-era espionage mystery featuring the married detective team Tommy and Tuppence Beresford. Feeling sidelined by the war effort due to their age, the couple is secretly recruited by British intelligence to track down two dangerous enemy agents operating in England, known only by the code names 'N' and 'M.'\n\nTheir mission takes them undercover to the sleepy seaside resort of Leahampton, where they pose as ordinary guests at the boardinghouse Sans Souci. Beneath the cosy surface, however, lies a nest of suspicion, secrets, and potential traitors. Unsure whom to trust among the seemingly harmless residents, Tommy and Tuppence must use their wits and courage to identify the infiltrators before they can sabotage the war effort. Blending spy thriller tension with domestic setting and Christie-style misdirection, the novel explores themes of patriotism, trust, and the hidden dangers of ordinary life in wartime.",
+                            PublishedDate = new DateTime(1941, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "During World War II, Tommy and Tuppence are sent to a quiet seaside guesthouse to unmask a deadly enemy spy known only as N or M.",
+                            Title = "N or M?"
+                        },
+                        new
+                        {
+                            Id = new Guid("f2c1e0d4-1c6a-4c57-ab2b-9a2f4dc6c9b2"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/by-the-pricking-of-my-thumbs.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "By the Pricking of My Thumbs, first published in 1968, reunites an older Tommy and Tuppence Beresford in a darker, more unsettling mystery. While visiting Tommy's elderly Aunt Ada in a nursing home, Tuppence meets a confused resident, Mrs. Lancaster, who asks, 'Was it your poor child?' in a chilling, inexplicable way. After Aunt Ada dies and Mrs. Lancaster mysteriously disappears, Tuppence becomes obsessed with uncovering the meaning behind the woman's strange words.\n\nHer search leads the couple to a village and a house Tuppence recognizes from a painting, drawing them into a sinister story involving missing children, buried secrets, and an old crime that has never truly been laid to rest. The novel blends domestic detail with a creeping sense of menace, showing Christie in a more Gothic and psychological mode, while still retaining the warmth and banter of the Beresfords' long marriage.",
+                            PublishedDate = new DateTime(1968, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A disturbing remark in a nursing home and a vanished old woman lead Tommy and Tuppence into a decades-old child murder case.",
+                            Title = "By the Pricking of My Thumbs"
+                        },
+                        new
+                        {
+                            Id = new Guid("c7c3d1f2-9f18-4a81-9f2b-3ab71f5f1e0c"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/postern-of-fate.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Postern of Fate, first published in 1973, is the last novel featuring Tommy and Tuppence Beresford and the final full-length detective novel Agatha Christie wrote. Now retired, the couple move into a rambling old house in a quiet English village. While unpacking, Tuppence stumbles across an old children's book that contains a cryptic message: a child claims to have witnessed a murder many years earlier.\n\nIntrigued, Tommy and Tuppence begin to investigate the house's past and the village's long-buried secrets. Their inquiries link the message to a wartime crime and possible enemy activity, suggesting that a seemingly innocent event in the past may have had deadly consequences. As they dig deeper into half-forgotten scandals and local gossip, the Beresfords confront the way history lingers in places and people. The novel is a nostalgic farewell to the duo, blending mystery, memory, and the passage of time.",
+                            PublishedDate = new DateTime(1973, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "In their final case, Tommy and Tuppence uncover a buried wartime secret after finding a cryptic message in an old children's book.",
+                            Title = "Postern of Fate"
+                        },
+                        new
+                        {
+                            Id = new Guid("f3a7c2d1-9b84-4f5d-8a91-2c7e5b3d6a10"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-secret-of-chimneys.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "First published in 1925, The Secret of Chimneys is a lively mix of mystery, political intrigue, and light-hearted adventure. When a set of compromising political memoirs and a murder become entangled at the grand country estate of Chimneys, amateur adventurer Anthony Cade finds himself drawn into a web of international conspiracy. Secret identities, hidden pasts, and royal claims all intersect, as Scotland Yard and various shadowy figures converge on the house. Combining witty dialogue, eccentric characters, and a twisting plot, the novel showcases Christie’s playful side while still delivering a satisfying whodunit.",
+                            PublishedDate = new DateTime(1925, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A country house gathering turns deadly as political intrigue, stolen letters, and murder collide at Chimneys.",
+                            Title = "The Secret of Chimneys"
+                        },
+                        new
+                        {
+                            Id = new Guid("a7c4e2b9-3d51-4a29-9f16-8b2e0d6f4c33"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-seven-dials-mystery.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Published in 1929, The Seven Dials Mystery returns readers to the world of Chimneys and follows the energetic Lady Eileen \"Bundle\" Brent as she stumbles into a new and deadly puzzle. What begins as a harmless prank involving alarm clocks soon turns sinister when one of the house guests is found dead, a mysterious group called the Seven Dials is mentioned, and shadowy figures appear to be pulling strings behind the scenes. With conspiracies, secret meetings, and hidden motives, the novel blends light-hearted country house humor with a high-stakes mystery, featuring Bundle as an unusually bold and modern heroine for her time.",
+                            PublishedDate = new DateTime(1929, 1, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A practical joke gone wrong leads to murder and a secret society known as the Seven Dials.",
+                            Title = "The Seven Dials Mystery"
+                        },
+                        new
+                        {
+                            Id = new Guid("d5e1a3c9-8f74-4c2b-9d10-7b3f2e6a4c78"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/murder-is-easy.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Published in 1939, Murder Is Easy (also known as Easy to Kill in the US) is a standalone crime novel that begins when Luke Fitzwilliam meets an elderly woman on a train who insists that a series of recent deaths in her village are murders, not accidents. When Luke later learns she herself has been killed, he travels to the village to investigate. Beneath the surface of a seemingly peaceful community, he finds secrets, grudges, and a terrifyingly ruthless killer who hides behind a façade of normalcy. The novel is a blend of village mystery, psychological tension, and slow-burning romance, showcasing Christie’s talent for revealing the darkness that can lurk under a charming exterior.",
+                            PublishedDate = new DateTime(1939, 6, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A string of \"accidental\" deaths in a quiet village leads to the chilling hunt for a cunning serial killer.",
+                            Title = "Murder Is Easy"
+                        },
+                        new
+                        {
+                            Id = new Guid("e4b9c7a1-2f86-4d3c-8a5b-9c1e7d2f6b40"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/towards-zero.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Towards Zero, first published in 1944, is a carefully structured mystery that explores the idea that a murder begins long before the fatal act. When several people with complicated past ties gather at the seaside home of Lady Tressilian, tensions rise among ex-spouses, new partners, and old friends. What appears to be a domestic tangle escalates into murder, and Superintendent Battle is called in to investigate. Christie plays with time, motive, and perspective, gradually revealing how events long in the past lead inexorably toward the \"zero hour.\" The novel combines psychological insight with classic clue-based detection, making it one of her more thematically ambitious works.",
+                            PublishedDate = new DateTime(1944, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A gathering at a seaside house builds inexorably toward murder as past grievances and hidden motives converge.",
+                            Title = "Towards Zero"
+                        },
+                        new
+                        {
+                            Id = new Guid("f51b3c3b-8e7c-4f5f-9c0a-41b7b0c1a2d3"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-man-in-the-brown-suit.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Man in the Brown Suit, first published in the UK on 22 August 1924, is an early thriller by Agatha Christie that blends crime, espionage, and high adventure. The story follows Anne Beddingfeld, a spirited young woman eager for excitement after her father’s death. When she sees a man fall to his death in the London Underground and discovers a cryptic note nearby, she impulsively decides to investigate. Her search leads her onto a ship bound for South Africa, where she encounters a cast of suspicious fellow passengers, smuggling, diamond theft, and a shadowy mastermind known only as ‘The Colonel.’ The novel introduces the recurring character Colonel Race and showcases Christie’s flair for romantic adventure alongside mystery, with exotic settings, kidnappings, and disguises playing a central role in the plot.",
+                            PublishedDate = new DateTime(1924, 8, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "An adventurous young woman witnesses a mysterious death and follows a dangerous trail from London to South Africa.",
+                            Title = "The Man in the Brown Suit"
+                        },
+                        new
+                        {
+                            Id = new Guid("d6df1e47-7e89-4d39-8011-0e4ebf2cdf45"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/sparkling-cyanide.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Sparkling Cyanide, first published in 1945 (initially in the US under the title Remembered Death), is a Colonel Race novel built around memory, guilt, and the lingering effects of a past crime. Rosemary Barton, a beautiful and wealthy socialite, collapses and dies at a restaurant dinner, apparently from suicide after a bout of depression. A year later, her husband George, troubled by anonymous hints that Rosemary may have been murdered, recreates the fateful dinner at the same restaurant with the same guests, hoping to flush out the killer. Instead, another death occurs, plunging the group into suspicion and fear. Colonel Race and others must reexamine the earlier tragedy, the guests’ motives, and the subtle psychological pressures at play. The novel revisits and expands on Christie’s earlier short story ‘Yellow Iris,’ turning it into a full-length mystery about love, money, and calculated revenge.",
+                            RatingsCount = 0,
+                            ShortDescription = "A year after a woman’s death at a glittering dinner, her husband restages the party to prove it was murder—only for tragedy to strike again.",
+                            Title = "Sparkling Cyanide"
+                        },
+                        new
+                        {
+                            Id = new Guid("9a61a35e-8b1e-4c5d-b2d8-2ba4419d0a10"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-sittaford-mystery.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Sittaford Mystery is a standalone detective novel set on the bleak, snow-covered heights of Dartmoor. During an evening of table-turning in the remote settlement of Sittaford, the ‘spirits’ announce that local landowner Captain Trevelyan has been murdered. Shocked but sceptical, Major Burnaby treks through the storm to the nearby village—only to find that Trevelyan really is dead. With roads blocked and suspects scattered between Sittaford and the village, the investigation soon becomes a tangle of alibis, secrets, and red herrings. It falls to the sharp-witted Emily Trefusis, Trevelyan’s nephew’s fiancée, to pry into motives ranging from financial desperation to hidden identities. Blending a wintry, slightly eerie atmosphere with classic clue-based detection, the novel showcases Christie experimenting with a touch of the supernatural while still delivering a fair-play puzzle.",
+                            PublishedDate = new DateTime(1931, 9, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A snowbound Dartmoor village, a séance that predicts a death, and a determined young woman who refuses to accept the obvious solution.",
+                            Title = "The Sittaford Mystery"
+                        },
+                        new
+                        {
+                            Id = new Guid("b7c2334b-03f1-4ba3-97e7-02979086cd1c"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/why-didnt-they-ask-evans.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Why Didn’t They Ask Evans? is a light, adventurous mystery featuring two spirited amateurs rather than Christie’s regular detectives. When Bobby Jones, a vicar’s son and casual golfer, finds a man dying at the foot of a Welsh cliff, the stranger’s last words—“Why didn’t they ask Evans?”—stick in his mind. Shortly afterwards, a photograph of a glamorous woman connected to the dead man is mysteriously swapped out, convincing Bobby that something is very wrong. Teaming up with his quick-witted childhood friend Lady Frances ‘Frankie’ Derwent, he plunges into a trail of bogus identities, attempted murders, and country-house intrigues. The novel combines humour and romance with a twisty plot, as Bobby and Frankie bluff, disguise themselves, and narrowly dodge danger while trying to understand who Evans is—and why asking them would have changed everything.",
+                            PublishedDate = new DateTime(1934, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A dying man’s cryptic question sends two amateur sleuths racing through country houses and conspiracies to uncover a buried truth.",
+                            Title = "Why Didn’t They Ask Evans?"
+                        },
+                        new
+                        {
+                            Id = new Guid("4fd6cd8b-52f2-4c9d-9540-5f3f8b5d8e4f"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/and-then-there-were-none.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "And Then There Were None is one of Agatha Christie’s most iconic and unsettling novels. Ten people, each with a concealed crime in their past, are invited to a secluded island off the Devon coast by a mysterious host known only as U. N. Owen. On their first evening, a gramophone recording accuses each guest of murder, and soon afterwards, people begin to die in ways that echo a sinister nursery rhyme displayed in each bedroom. Cut off from the mainland, with no apparent way for a killer to be hiding on the island, the survivors turn on one another as paranoia and guilt mount. There is no detective to step in; instead, the narrative becomes a relentless countdown as the guests try and fail to save themselves. Blending classic whodunit structure with psychological suspense and a bleak sense of justice, the novel remains one of the best-selling mysteries of all time and a cornerstone of crime fiction.",
+                            PublishedDate = new DateTime(1939, 11, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Ten strangers lured to a remote island are accused of past crimes and killed one by one in Christie’s most famous and chilling puzzle.",
+                            Title = "And Then There Were None"
+                        },
+                        new
+                        {
+                            Id = new Guid("a7d0e351-640e-4c41-93a1-3c63d51f9d54"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/death-comes-as-the-end.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Death Comes as the End is Christie’s only full-length novel set in the distant past, a historical mystery unfolding in Egypt around 2000 BC. Young widow Renisenb returns to her father Imhotep’s household, hoping for stability, only to see the family thrown into turmoil when Imhotep brings home a beautiful and manipulative concubine, Nofret. Nofret quickly makes enemies of Imhotep’s sons and their wives, while the seemingly devoted servant Henet seethes with secret resentments. When Nofret is found dead at the foot of a cliff, supposedly by accident, and further deaths follow, it becomes clear that someone within the family has turned their simmering hatreds into murder. Without any modern forensics or investigators, the mystery hinges entirely on character, motive, and the patterns of fear and jealousy in a closed household. The novel blends the rhythms of domestic drama with a classic whodunit structure, using its ancient setting to explore timeless themes of power, inheritance, and emotional corruption.",
+                            PublishedDate = new DateTime(1944, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "In ancient Thebes, a new concubine disrupts a priest’s household, and a series of deaths turns family tensions into a deadly mystery.",
+                            Title = "Death Comes as the End"
+                        },
+                        new
+                        {
+                            Id = new Guid("dbe0ac46-6f9c-4b69-b3ed-64b9f9389bee"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/crooked-house.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Crooked House is a dark, psychologically rich family mystery that Christie counted among her own favourites. Aristide Leonides, a wealthy, self-made patriarch living in a rambling, literally and figuratively ‘crooked’ house on the outskirts of London, dies of what appears to be natural causes—until it is discovered that his eye medicine was laced with eserine. Suspicion falls heavily on his much younger second wife, but almost everyone in the sprawling Leonides clan has both opportunity and motive. The story is narrated by Charles Hayward, a diplomat and former intelligence officer in love with Aristide’s granddaughter Sophia, who insists she cannot marry him until the murderer is found. As Charles moves into the household, he confronts warped loyalties, buried resentments, and unsettling hints about the younger generation. The novel builds to one of Christie’s most shocking solutions, using the ‘crooked’ motif to explore how love, upbringing, and moral blindness can twist a person’s sense of right and wrong.",
+                            PublishedDate = new DateTime(1949, 5, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "In a wealthy but ‘crooked’ family, the poisoning of its patriarch forces a painful hunt for a killer who must be one of their own.",
+                            Title = "Crooked House"
+                        },
+                        new
+                        {
+                            Id = new Guid("0f6c9f5e-9e3f-4e3c-9f98-3b9c2530f7c2"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/they-came-to-baghdad.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "They Came to Baghdad, first published in 1951, is one of Agatha Christie’s few pure adventure and spy novels. The story follows Victoria Jones, a spontaneous and resourceful young woman who decides on a whim to travel to Baghdad after meeting a charming stranger in London. Once there, she finds herself entangled in a secret international conference, shadowy intelligence operations and a plot that could threaten world peace. As Victoria adopts false identities, hides in archaeological digs and navigates a city full of double-crossing agents, she must work out whom she can trust before it is too late. Drawing on Christie’s own travels in the Middle East, the novel blends light romance, espionage and political thriller elements against a vividly drawn Baghdad backdrop.",
+                            PublishedDate = new DateTime(1951, 3, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A young woman’s impulsive trip to Baghdad plunges her into an international conspiracy where political intrigue and danger lurk behind every charming stranger.",
+                            Title = "They Came to Baghdad"
+                        },
+                        new
+                        {
+                            Id = new Guid("e7c2b1f4-1c9b-4f4c-8d42-8e55c1e21caf"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/destination-unknown.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Destination Unknown, first published in 1954 (US title: So Many Steps to Death), is a Cold War–era spy novel that departs from Christie’s usual whodunits. After a disastrous marriage, Hilary Craven travels to Morocco intending to end her life. Instead, she is approached by British intelligence and offered a different kind of escape: to assume the identity of the estranged wife of a vanished nuclear scientist and follow the trail of several missing geniuses. Hilary’s mission leads her across borders to a secret research commune where idealism, coercion and terror coexist. As she uncovers the truth about the disappearances and the real aims of those in charge, Hilary must decide what she is willing to risk to stop a threat that could alter the balance of power in the world. The novel mixes personal rebirth with a tense, conspiracy-driven plot framed by mid-century fears about scientific progress and political extremism.",
+                            PublishedDate = new DateTime(1954, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "On the brink of suicide, a woman is recruited to impersonate a missing scientist’s wife and infiltrate a mysterious organisation that makes brilliant minds vanish.",
+                            Title = "Destination Unknown"
+                        },
+                        new
+                        {
+                            Id = new Guid("a9e4db2c-3f52-4c1a-ae54-3a7f4be61f31"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/ordeal-by-innocence.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Ordeal by Innocence, first published in 1958, is one of Christie’s darker, more character-driven crime novels. The wealthy philanthropist Rachel Argyle has been bludgeoned to death, and her adopted son Jacko is convicted of the murder and dies in prison protesting his innocence. Two years later, Dr Arthur Calgary arrives at the Argyle home with a devastating revelation: he can prove Jacko’s alibi. Instead of bringing relief, his news tears open old wounds and transforms every member of the household into a potential suspect. Is someone lying to protect themselves—or someone they love? As Calgary pushes on, he uncovers simmering resentments, rivalries and secrets within the family, and the question of who killed Rachel becomes inseparable from the question of who can bear to know the truth. The novel focuses less on clue-puzzle detection and more on the psychological impact of doubt, guilt and the destructive power of a wrongful conviction.",
+                            PublishedDate = new DateTime(1958, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Years after a man dies in prison for murdering his adoptive mother, a new witness comes forward—forcing a family to relive the past and face the possibility that the real killer is still among them.",
+                            Title = "Ordeal by Innocence"
+                        },
+                        new
+                        {
+                            Id = new Guid("b3c96456-0f49-4a21-929c-02c42a4e6a0b"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-pale-horse.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Pale Horse, first published in 1961, is a standalone crime novel that flirts with the supernatural while offering a rational, shocking explanation. The story begins when a priest, shortly after hearing a mysterious deathbed confession, is murdered in the street. Among his belongings is a list of names, several of whom soon die in apparently natural circumstances. Writer Mark Easterbrook traces the trail to a former inn called The Pale Horse, now home to three eccentric women whispered to be modern witches who can arrange deaths from a distance. As Mark and his friends investigate, they encounter séances, village gossip and an unsettling blend of folklore and pseudo-science. Beneath the talk of curses lies a very real, very modern murder mechanism, and Christie uses the case to explore how fear, suggestion and scientific ignorance can be weaponised. The novel is notable for its eerie atmosphere and its use of an unusual poisoning method at the heart of the solution.",
+                            PublishedDate = new DateTime(1961, 11, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A dying woman’s confession and a list of names lead to a country pub called The Pale Horse, where rumours of witchcraft may conceal a far more chilling method of murder.",
+                            Title = "The Pale Horse"
+                        },
+                        new
+                        {
+                            Id = new Guid("5d8a2fde-4f51-4f8b-93fd-1bfb5c6aa9c7"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/endless-night.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Endless Night, first published in 1967, is a psychological crime novel narrated in the first person by Michael Rogers, a drifter dissatisfied with his prospects. Michael becomes obsessed with Gipsy’s Acre, a piece of land said to be cursed, and with Ellie Guteman, a shy American heiress. Defying her disapproving family and ominous warnings from a local gypsy, the couple marry and commission a modernist dream home on the site. What begins as a romantic escape gradually turns sinister as tensions with Ellie’s entourage grow and a series of accidents and deaths shake their new life. Christie slowly peels back Michael’s version of events to reveal a far darker truth about his motives and the forces driving the tragedy. With its modern setting, intimate viewpoint and devastating twist, the novel stands out in Christie’s late work as a bleak, tightly wound study of obsession, class aspiration and the consequences of manipulating fate.",
+                            PublishedDate = new DateTime(1967, 10, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A restless young man marries a rich heiress and builds his dream house on cursed land—only to find that envy, deception and desire can be more deadly than any legend.",
+                            Title = "Endless Night"
+                        },
+                        new
+                        {
+                            Id = new Guid("9e4f7b67-0a1d-4f4b-9d7b-3a8e1e0b21c4"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/passenger-to-frankfurt.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Passenger to Frankfurt, first published in 1970, is one of Agatha Christie's late-career political and espionage thrillers. The story follows Sir Stafford Nye, a British diplomat returning home via Frankfurt Airport, where a frightened young woman approaches him begging to borrow his passport and identity, claiming her life is in danger. On an impulse, Nye agrees, setting in motion a chain of events that plunges him into a dangerous international intrigue.\n\nHe soon discovers that he has stumbled into a vast, loosely organized conspiracy seeking to destabilize governments and exploit youth unrest and neo-fascist currents across Europe. As Nye is drawn deeper into this world of secret meetings, coded messages, and elusive leaders, he must navigate both political manipulation and personal risk to uncover the truth. The novel mixes Christie’s familiar mystery elements with Cold War anxieties, youth radicalization, and the fear of history repeating itself.",
+                            PublishedDate = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A weary diplomat’s chance encounter at an airport draws him into a shadowy global conspiracy of political extremism and unrest.",
+                            Title = "Passenger to Frankfurt"
+                        },
+                        new
+                        {
+                            Id = new Guid("3d2b8f3c-4b0b-4c10-b2f6-1b4f4a9a5f31"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/giants-bread.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Giant's Bread, first published in 1930 under Agatha Christie's pseudonym Mary Westmacott, is a deeply emotional novel about music, love, and the cost of genius. It centres on Vernon Deyre, a sensitive boy who discovers an extraordinary gift for music. As he grows, Vernon grapples with family expectations, financial insecurity, and the tension between personal happiness and artistic destiny.\n\nAgainst a backdrop of social change and the looming threat of war, Vernon’s relationships—with his childhood friend Joe, his first love Nell, and the glamorous but demanding Jane—shape and complicate his choices. A catastrophic event in his adult life leads to a dramatic reinvention and a haunting question of identity. Blending romance, psychological insight, and the world of high art, the novel explores what it means to devote oneself completely to a creative calling, and the emotional wreckage such devotion can leave behind.",
+                            PublishedDate = new DateTime(1930, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A gifted composer’s rise, fall, and search for identity unfold in a sweeping tale of love, art, and sacrifice.",
+                            Title = "Giant's Bread"
+                        },
+                        new
+                        {
+                            Id = new Guid("c1b47e0f-7e4a-4f4b-8b7a-5f6c3a2d9e11"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/unfinished-portrait.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Unfinished Portrait, first published in 1934 under the name Mary Westmacott, is a largely character-driven, semi-autobiographical novel. It follows Celia, a woman in deep emotional crisis, who is contemplating suicide after the collapse of her marriage and the disintegration of her sense of self. On a holiday island, she meets Larraby, a famous painter, and over the course of one long night she tells him the story of her life.\n\nThrough Celia’s recollections—from her sheltered childhood and early romantic idealism to marriage, motherhood, betrayal, and heartbreak—the reader sees the gradual erosion and rebuilding of her identity. Larraby listens, probes, and interprets, effectively ‘painting’ her in words. The novel offers a penetrating exploration of emotional vulnerability, the expectations placed on women, and the quiet desperation that can lurk beneath outwardly ordinary lives.",
+                            PublishedDate = new DateTime(1934, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A woman on the brink of suicide recounts her life to a stranger, revealing a nuanced portrait of love, loss, and self-discovery.",
+                            Title = "Unfinished Portrait"
+                        },
+                        new
+                        {
+                            Id = new Guid("f6a9e0d2-2d5c-4a87-9c3a-9a0b8f42c7e3"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/absent-in-the-spring.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "Absent in the Spring, first published in 1944 as a Mary Westmacott novel, is an introspective, non-crime story about self-knowledge and denial. Joan Scudamore, a capable, confident middle-class woman, becomes stranded at a small rest house in the desert on her way back to England from visiting her daughter in Iraq. With nothing to do and no one familiar to distract her, Joan is left alone with her thoughts for the first time in years.\n\nIn this enforced isolation, she begins to re-examine her past—her marriage, her relationships with her children, and her own actions—with an increasingly unflinching eye. The image of herself as a devoted wife and mother gradually crumbles as she recognizes the subtle cruelty, selfishness, and lack of empathy that have shaped her family’s lives. The novel is a stark, psychologically acute portrait of a woman confronted with the truth about who she really is, and what it may already be too late to repair.",
+                            PublishedDate = new DateTime(1944, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "Stranded between journeys, a self-assured woman is forced into a painful, honest reckoning with the reality of her life and relationships.",
+                            Title = "Absent in the Spring"
+                        },
+                        new
+                        {
+                            Id = new Guid("a2e5b9c8-6fd7-4f63-9c1b-1a7f9d6d3b55"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-rose-and-the-yew-tree.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Rose and the Yew Tree, first published in 1948 under the Mary Westmacott pen name, is a sombre, character-focused novel set in the aftermath of World War II. The story is narrated by Hugh Norreys, a disabled man confined by illness and circumstance, who watches the world—and the people he cares about—from a distance. His quiet existence is disrupted by the rise of John Gabriel, a dynamic local politician, and the arrival of Isabella, a strangely aloof young woman with whom Gabriel becomes involved.\n\nAs Hugh observes their turbulent relationship, he becomes increasingly aware of the emotional and moral costs of ambition, charisma, and idealization. The novel weaves themes of sacrifice, disillusionment, and the clash between romantic ideals and harsh reality. It is less a conventional romance than a meditation on the ways people use one another, and how a single intense relationship can alter the trajectories of several lives.",
+                            PublishedDate = new DateTime(1948, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A reserved observer becomes entangled in the lives of a charismatic politician and the enigmatic woman who may destroy him.",
+                            Title = "The Rose and the Yew Tree"
+                        },
+                        new
+                        {
+                            Id = new Guid("4b8a0f55-6f0c-4c0f-8aa8-5b2c7d80d4cf"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/a-daughters-a-daughter.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "A Daughter's a Daughter, written earlier but first published as a novel in 1952 under the Mary Westmacott name, examines the fraught relationship between a mother and her daughter. Ann Prentice, a widow devoted to her grown daughter Sarah, unexpectedly falls in love and plans to remarry. What she imagines will be a new beginning is met instead with fierce resistance and jealousy from Sarah, who feels displaced and betrayed.\n\nThe story follows the escalating emotional warfare between mother and daughter as resentment, manipulation, and wounded pride lead them toward choices that may irreparably damage their relationship. Christie explores the darker side of familial love—the possessiveness, the unspoken expectations, and the difficulty of allowing loved ones to change. The novel is an unflinching study of generational conflict and the painful price of emotional immaturity on both sides.",
+                            PublishedDate = new DateTime(1952, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "The bond between a widowed mother and her only daughter shatters when love, jealousy, and the desire for independence collide.",
+                            Title = "A Daughter's a Daughter"
+                        },
+                        new
+                        {
+                            Id = new Guid("df7c3e3e-3bcf-4b8e-9f2f-75ad0a92c3bb"),
+                            AuthorId = new Guid("3c44f945-8398-4c44-b962-9e2ea929fda4"),
+                            AverageRating = 0.0,
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ImagePath = "/images/books/the-burden.jpg",
+                            IsApproved = true,
+                            IsDeleted = false,
+                            LongDescription = "The Burden, first published in 1956 as a Mary Westmacott novel, tells the story of an intense, complicated bond between two sisters. When Laura Franklin, a shy and overlooked child, believes that she has saved the life of her baby sister Shirley, she feels an overwhelming sense of responsibility and love that borders on obsession. As they grow up, Laura dedicates herself to Shirley’s happiness, often at the cost of her own opportunities and desires.\n\nShirley, beautiful and charismatic, comes to rely on this devotion without fully understanding its depth or its possessive edge. When Shirley’s choices in love and life clash with Laura’s fierce protective instincts, the relationship twists into jealousy, sacrifice, and emotional manipulation. The novel charts decades of entanglement, asking how love can become a burden—both to the one who gives it and the one who receives it—and whether it is ever possible to break free from roles adopted in childhood.",
+                            PublishedDate = new DateTime(1956, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RatingsCount = 0,
+                            ShortDescription = "A woman’s consuming devotion to her younger sister becomes a lifelong burden that distorts love into something dangerous.",
+                            Title = "The Burden"
                         });
                 });
 
@@ -4216,7 +9063,7 @@ namespace BookHub.Data.Migrations
                             Id = new Guid("ff1226a6-0864-40be-82a8-63b9afedc4d7"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Non-fiction encompasses works rooted in factual information, offering insights into real-world topics. It spans memoirs, investigative journalism, essays, and academic studies, covering subjects like history, science, culture, and politics. The genre educates and engages readers, often challenging perceptions and broadening understanding. Non-fiction can be narrative-driven or expository, appealing to those seeking knowledge or a deeper connection to reality.",
-                            ImagePath = "/images/genres/non-fiction.jpg",
+                            ImagePath = "/images/genres/non-fiction.png",
                             IsDeleted = false,
                             Name = "Non-fiction"
                         },
@@ -4225,7 +9072,7 @@ namespace BookHub.Data.Migrations
                             Id = new Guid("6229a9ab-87a0-4ed2-ae89-dc8824ee09e3"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Poetry is a literary form that condenses emotions, thoughts, and imagery into carefully chosen words, often structured with rhythm and meter. It explores universal themes such as love, nature, grief, and introspection, offering readers profound and evocative experiences. From traditional sonnets and haikus to free verse and spoken word, poetry captivates through its ability to articulate the inexpressible, creating deep emotional resonance and intellectual reflection.",
-                            ImagePath = "/images/genres/poetry.jpg",
+                            ImagePath = "/images/genres/poetry.png",
                             IsDeleted = false,
                             Name = "Poetry"
                         },
@@ -4243,7 +9090,7 @@ namespace BookHub.Data.Migrations
                             Id = new Guid("7b8834b3-516e-4e2e-89aa-468c48d1d5fd"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Children's literature is crafted to captivate and inspire young readers with imaginative worlds, moral lessons, and relatable characters. These stories often emphasize themes of curiosity, friendship, and bravery, delivering messages of kindness, resilience, and growth. From whimsical picture books to adventurous chapter books, children's fiction nurtures creativity and fosters a lifelong love of reading, helping young minds explore both real and fantastical realms.",
-                            ImagePath = "/images/genres/children.jpg",
+                            ImagePath = "/images/genres/children.png",
                             IsDeleted = false,
                             Name = "Children's"
                         },
@@ -4252,7 +9099,7 @@ namespace BookHub.Data.Migrations
                             Id = new Guid("131e73ab-1118-4792-a778-5a4ae1482981"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Young Adult (YA) fiction speaks to the unique experiences and challenges of adolescence, addressing themes such as identity, first love, friendship, and coming of age. These stories often feature relatable protagonists navigating personal growth, societal expectations, and emotional upheaval. Subgenres such as fantasy, dystopian, and contemporary YA provide diverse backdrops for these journeys, resonating with readers through authentic and engaging storytelling that reflects their own struggles and triumphs.",
-                            ImagePath = "/images/genres/young-adult.jpg",
+                            ImagePath = "/images/genres/young-adult.png",
                             IsDeleted = false,
                             Name = "Young Adult"
                         },
@@ -4279,7 +9126,7 @@ namespace BookHub.Data.Migrations
                             Id = new Guid("52e607d4-c347-440a-8d55-cf2e01d88a6c"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "The 'Other' genre serves as a home for unconventional, experimental, or cross-genre works that defy traditional categorization. This category embraces innovation and diversity, welcoming stories that push the boundaries of storytelling, structure, and style. From hybrid narratives to avant-garde experiments, 'Other' offers a platform for unique voices and creative expressions that don’t fit neatly into predefined genres.",
-                            ImagePath = "/images/genres/other.jpg",
+                            ImagePath = "/images/genres/other.png",
                             IsDeleted = false,
                             Name = "Other"
                         },
@@ -4351,7 +9198,7 @@ namespace BookHub.Data.Migrations
                             Id = new Guid("80a6ef21-3e23-4d20-b897-19b788f7239b"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Philosophical fiction delves into profound questions about existence, ethics, free will, and the nature of reality. These novels often explore abstract ideas and are driven by deep intellectual themes rather than plot or action. Philosophical fiction may follow characters who engage in critical thinking, self-reflection, or existential crises. These works often question the meaning of life, morality, and consciousness, and they can be a blend of both fiction and philosophy, prompting readers to consider their own beliefs and perspectives.",
-                            ImagePath = "/images/genres/philosophical-fiction.jpg",
+                            ImagePath = "/images/genres/philosophical-fiction.png",
                             IsDeleted = false,
                             Name = "Philosophical Fiction"
                         },
@@ -4378,7 +9225,7 @@ namespace BookHub.Data.Migrations
                             Id = new Guid("42b8464f-c942-4d61-b96c-0db6336d22ec"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Psychological fiction delves into the inner workings of the mind, exploring complex emotional states, mental illness, and the psychological effects of personal trauma, relationships, and societal pressures. These works often focus on character development and the emotional or mental struggles of the protagonists, rather than external events. Psychological fiction can blur the lines between reality and illusion, questioning perceptions and exploring the deeper layers of human consciousness. It often presents challenging and sometimes disturbing narratives about identity and self-perception. Notable examples include The Bell Jar and The Catcher in the Rye.",
-                            ImagePath = "/images/genres/psychological-fiction.jpg",
+                            ImagePath = "/images/genres/psychological-fiction.png",
                             IsDeleted = false,
                             Name = "Psychological Fiction"
                         },
@@ -4893,7 +9740,7 @@ namespace BookHub.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("BookHub.Data.Models.Shared.BookGenre.BookGenre", b =>
+            modelBuilder.Entity("BookHub.Data.Models.Shared.BookGenre.Models.BookGenreDbModel", b =>
                 {
                     b.HasOne("BookHub.Features.Book.Data.Models.BookDbModel", "Book")
                         .WithMany("BooksGenres")

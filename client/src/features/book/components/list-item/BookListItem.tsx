@@ -54,7 +54,7 @@ const BookListItem: FC<Props> = ({
           <FaTag className="me-2" />
           {genres.length > 0 ? (
             genres.map((g) => (
-              <Link key={g.id} to={`${routes.genres}/${g.id}`}>
+              <Link key={g.id} to={`${routes.genres}/${g.id}/${slugify(g.name)}`}>
                 <span className="badge bg-secondary me-1">{g.name}</span>
               </Link>
             ))

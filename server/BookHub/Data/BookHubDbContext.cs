@@ -16,9 +16,8 @@ using Infrastructure.Services.CurrentUser;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Models.Base;
-using Models.Shared.BookGenre;
+using Models.Shared.BookGenre.Models;
 using Models.Shared.ChatUser;
-
 
 public class BookHubDbContext(
     DbContextOptions<BookHubDbContext> options, 
@@ -28,7 +27,7 @@ public class BookHubDbContext(
 
     public DbSet<GenreDbModel> Genres { get; init; }
 
-    public DbSet<BookGenre> BooksGenres { get; init; }
+    public DbSet<BookGenreDbModel> BooksGenres { get; init; }
 
     public DbSet<ReadingList> ReadingLists { get; init; }
 
