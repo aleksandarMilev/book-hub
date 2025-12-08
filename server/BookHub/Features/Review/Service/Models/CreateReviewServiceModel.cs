@@ -1,11 +1,10 @@
-﻿namespace BookHub.Features.Review.Service.Models
+﻿namespace BookHub.Features.Review.Service.Models;
+
+public class CreateReviewServiceModel
 {
-    public class CreateReviewServiceModel
-    {
-        public string Content { get; set; } = null!;
+    public string Content { get; set; } = null!;
 
-        public int Rating { get; init; }
+    public int Rating { get; init; }
 
-        public Guid BookId { get; init; }
-    }
+    public Guid BookId { get; init; }
 }

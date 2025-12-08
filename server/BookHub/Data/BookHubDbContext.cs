@@ -33,9 +33,9 @@ public class BookHubDbContext(
 
     public DbSet<AuthorDbModel> Authors { get; init; }
 
-    public DbSet<Review> Reviews { get; init; }
+    public DbSet<ReviewDbModel> Reviews { get; init; }
 
-    public DbSet<Vote> Votes { get; init; }
+    public DbSet<VoteDbModel> Votes { get; init; }
 
     public DbSet<UserProfile> Profiles { get; init; }
 

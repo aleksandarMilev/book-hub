@@ -28,13 +28,13 @@ public class User : IdentityUser, IDeletableEntity
 
     public UserProfile? Profile { get; set; }
 
-    public ICollection<Vote> Votes { get; set; } = new HashSet<Vote>();
+    public ICollection<VoteDbModel> Votes { get; set; } = new HashSet<VoteDbModel>();
 
     public ICollection<BookDbModel> Books { get; } = new HashSet<BookDbModel>();
 
     public ICollection<AuthorDbModel> Authors { get; } = new HashSet<AuthorDbModel>();
 
-    public ICollection<Review> Reviews { get; } = new HashSet<Review>();
+    public ICollection<ReviewDbModel> Reviews { get; } = new HashSet<ReviewDbModel>();
 
     public ICollection<ReadingList> ReadingLists { get; } = new HashSet<ReadingList>();
 

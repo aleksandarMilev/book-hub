@@ -1,24 +1,24 @@
-﻿namespace BookHub.Features.Review.Web
+﻿namespace BookHub.Features.Review.Web;
+
+using BookHub.Common;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Models;
+using Service;
+
+[Authorize]
+public class VoteController(IVoteService service) : ApiController
 {
-    using BookHub.Common;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
-    using Models;
-    using Service;
-
-    [Authorize]
-    public class VoteController(IVoteService service) : ApiController
+    [HttpPost]
+    public async Task<ActionResult<Guid>> Create(
+        VoteRequestModel model,
+        CancellationToken token = default) 
     {
-        private readonly IVoteService service = service;
+        await service.Create(
+            model.ReviewId,
+            model.IsUpvote,
+            token);
 
-        [HttpPost]
-        public async Task<ActionResult<int>> Create(VoteRequestModel model) 
-        {
-            var voteId = await this.service.Create(model.ReviewId, model.IsUpvote);
-
-            return voteId == null
-                ? this.BadRequest()
-                : this.Created(nameof(this.Create), model.ReviewId);
-        }
+        return this.Ok(model.ReviewId);
     }
 }

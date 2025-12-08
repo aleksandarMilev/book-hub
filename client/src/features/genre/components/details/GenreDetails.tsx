@@ -1,7 +1,6 @@
 import './GenreDetails.css';
 
 import {
-  MDBBtn,
   MDBCard,
   MDBCardBody,
   MDBCardText,
@@ -90,9 +89,13 @@ const GenreDetails: FC = () => {
                         <BookListItem key={b.id} {...b} />
                       ))}
                       <div className="d-flex justify-content-center mt-3">
-                        <MDBBtn className="genre-view-all-btn" onClick={handleAllBooksClick}>
+                        <button
+                          type="button"
+                          className="genre-view-all-btn"
+                          onClick={handleAllBooksClick}
+                        >
                           {t('details.topBooks.viewAll', { name: genre.name })}
-                        </MDBBtn>
+                        </button>
                       </div>
                     </>
                   ) : (

@@ -6,9 +6,9 @@
     using Features.Book.Data.Models;
     using Features.Identity.Data.Models;
 
-    using static Shared.ValidationConstants;
+    using static Shared.Constants.Validation;
 
-    public class Review : DeletableEntity<int>
+    public class ReviewDbModel : DeletableEntity<Guid>
     {
         [MaxLength(ContentMaxLength)]
         public string Content { get; set; } = null!;
@@ -26,6 +26,6 @@
 
         public BookDbModel Book { get; set; } = null!;
 
-        public ICollection<Vote> Votes { get; set; } = new HashSet<Vote>();
+        public ICollection<VoteDbModel> Votes { get; set; } = new HashSet<VoteDbModel>();
     }
 }

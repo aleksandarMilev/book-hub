@@ -1,9 +1,8 @@
-﻿namespace BookHub.Features.Review.Web.Models
-{
-    public class VoteRequestModel
-    {
-        public int ReviewId { get; init; }
+﻿namespace BookHub.Features.Review.Web.Models;
 
-        public bool IsUpvote { get; init; }
-    }
+public class VoteRequestModel
+{
+    public Guid ReviewId { get; init; }
+
+    public bool IsUpvote { get; init; }
 }
