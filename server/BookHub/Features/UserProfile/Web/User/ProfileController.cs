@@ -1,6 +1,7 @@
 ﻿namespace BookHub.Features.UserProfile.Web.User
 {
     using AutoMapper;
+    using BookHub.Common;
     using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;

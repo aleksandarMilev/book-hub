@@ -52,7 +52,7 @@ public class BookDbModel:
 
     public ICollection<BookGenreDbModel> BooksGenres { get; set; } = new HashSet<BookGenreDbModel>();
 
-    public ICollection<Review> Reviews { get; set; } = new HashSet<Review>();
+    public ICollection<ReviewDbModel> Reviews { get; set; } = new HashSet<ReviewDbModel>();
 
     public ICollection<ReadingList> ReadingLists { get; set; } = new HashSet<ReadingList>();
 }

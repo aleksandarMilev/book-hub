@@ -1,11 +1,14 @@
 ﻿namespace BookHub.Features.Review.Shared
 {
-    public static class ValidationConstants
+    public static class Constants
     {
-        public const int ContentMinLength = 5;
-        public const int ContentMaxLength = 5_000;
+        public static class Validation
+        {
+            public const int ContentMinLength = 5;
+            public const int ContentMaxLength = 5_000;
 
-        public const double RatingMinValue = 1.0;
-        public const double RatingMaxValue = 5.0;
+            public const int RatingMinValue = 1;
+            public const int RatingMaxValue = 5;
+        }
     }
 }

@@ -1,23 +1,22 @@
-﻿namespace BookHub.Features.Statistics.Service.Models
+﻿namespace BookHub.Features.Statistics.Service.Models;
+
+public class StatisticsServiceModel(
+    int users,
+    int books,
+    int authors,
+    int reviews,
+    int genres,
+    int articles)
 {
-    public class StatisticsServiceModel(
-        int users,
-        int books,
-        int authors,
-        int reviews,
-        int genres,
-        int articles)
-    {
-        public int Users { get; init; } = users;
+    public int Users { get; init; } = users;
 
-        public int Books { get; init; } = books;
+    public int Books { get; init; } = books;
 
-        public int Authors { get; init; } = authors;
+    public int Authors { get; init; } = authors;
 
-        public int Reviews { get; init; } = reviews;
+    public int Reviews { get; init; } = reviews;
 
-        public int Genres { get; init; } = genres;
+    public int Genres { get; init; } = genres;
 
-        public int Articles { get; init; } = articles;
-    }
+    public int Articles { get; init; } = articles;
 }

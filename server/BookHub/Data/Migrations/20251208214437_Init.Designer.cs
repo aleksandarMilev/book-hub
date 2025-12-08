@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookHub.Data.Migrations
 {
     [DbContext(typeof(BookHubDbContext))]
-    [Migration("20251203223310_Init")]
+    [Migration("20251208214437_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -9444,13 +9444,11 @@ namespace BookHub.Data.Migrations
                     b.ToTable("ReadingLists");
                 });
 
-            modelBuilder.Entity("BookHub.Features.Review.Data.Models.Review", b =>
+            modelBuilder.Entity("BookHub.Features.Review.Data.Models.ReviewDbModel", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("BookId")
                         .HasColumnType("uniqueidentifier");
@@ -9497,7 +9495,7 @@ namespace BookHub.Data.Migrations
                     b.ToTable("Reviews");
                 });
 
-            modelBuilder.Entity("BookHub.Features.Review.Data.Models.Vote", b =>
+            modelBuilder.Entity("BookHub.Features.Review.Data.Models.VoteDbModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -9524,14 +9522,15 @@ namespace BookHub.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ReviewId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ReviewId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CreatorId");
 
-                    b.HasIndex("ReviewId");
+                    b.HasIndex("ReviewId", "CreatorId")
+                        .IsUnique();
 
                     b.ToTable("Votes");
                 });
@@ -9863,7 +9862,7 @@ namespace BookHub.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("BookHub.Features.Review.Data.Models.Review", b =>
+            modelBuilder.Entity("BookHub.Features.Review.Data.Models.ReviewDbModel", b =>
                 {
                     b.HasOne("BookHub.Features.Book.Data.Models.BookDbModel", "Book")
                         .WithMany("Reviews")
@@ -9882,7 +9881,7 @@ namespace BookHub.Data.Migrations
                     b.Navigation("Creator");
                 });
 
-            modelBuilder.Entity("BookHub.Features.Review.Data.Models.Vote", b =>
+            modelBuilder.Entity("BookHub.Features.Review.Data.Models.VoteDbModel", b =>
                 {
                     b.HasOne("BookHub.Features.Identity.Data.Models.User", "Creator")
                         .WithMany("Votes")
@@ -9890,10 +9889,10 @@ namespace BookHub.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BookHub.Features.Review.Data.Models.Review", "Review")
+                    b.HasOne("BookHub.Features.Review.Data.Models.ReviewDbModel", "Review")
                         .WithMany("Votes")
                         .HasForeignKey("ReviewId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Creator");
@@ -10010,7 +10009,7 @@ namespace BookHub.Data.Migrations
                     b.Navigation("Votes");
                 });
 
-            modelBuilder.Entity("BookHub.Features.Review.Data.Models.Review", b =>
+            modelBuilder.Entity("BookHub.Features.Review.Data.Models.ReviewDbModel", b =>
                 {
                     b.Navigation("Votes");
                 });

@@ -1,57 +1,69 @@
-﻿namespace BookHub.Features.Review.Service
+﻿namespace BookHub.Features.Review.Service;
+
+using BookHub.Data;
+using Data.Models;
+using Infrastructure.Services.CurrentUser;
+using Microsoft.EntityFrameworkCore;
+
+public class VoteService(
+    BookHubDbContext data,
+    ICurrentUserService userService) : IVoteService
 {
-    using BookHub.Data;
-    using BookHub.Infrastructure.Services.CurrentUser;
-    using Data.Models;
-    using Infrastructure.Services;
-    using Microsoft.EntityFrameworkCore;
-
-    public class VoteService(
-        BookHubDbContext data,
-        ICurrentUserService userService) : IVoteService
+    public async Task<int?> Create(
+        Guid reviewId,
+        bool isUpvote,
+        CancellationToken token = default)
     {
-        private readonly BookHubDbContext data = data;
-        private readonly ICurrentUserService userService = userService;
+        var reviewExists = await data
+            .Reviews
+            .AnyAsync(
+                r => r.Id == reviewId,
+                token);
 
-        public async Task<int?> Create(int reviewId, bool isUpvote)
+        if (!reviewExists)
         {
-            var userId = this.userService.GetId();
+            return null;
+        }
 
-            var voteExists = await this.data
-                .Votes
-                .AnyAsync(v => 
+        var userId = userService.GetId()!;
+        var voteExists = await data
+            .Votes
+            .AnyAsync(
+                v => 
                     v.ReviewId == reviewId &&
                     v.IsUpvote == isUpvote &&
-                    v.CreatorId == userId);
+                    v.CreatorId == userId,
+                token);
 
-            if (voteExists)
-            {
-                return null;
-            }
+        if (voteExists)
+        {
+            return null;
+        }
 
-            var oppositeVote = await this.data
-                .Votes
-                .FirstOrDefaultAsync(v =>
+        var oppositeVote = await data
+            .Votes
+            .FirstOrDefaultAsync(
+                v =>
                     v.ReviewId == reviewId &&
                     v.IsUpvote == !isUpvote &&
-                    v.CreatorId == userId);
+                    v.CreatorId == userId,
+                token);
 
-            if (oppositeVote != null)
-            {
-                this.data.Remove(oppositeVote);
-            }
-
-            var vote = new Vote()
-            { 
-                ReviewId = reviewId,
-                IsUpvote = isUpvote,
-                CreatorId = userId!
-            };
-
-            this.data.Add(vote);
-            await this.data.SaveChangesAsync();
-
-            return vote.Id;
+        if (oppositeVote != null)
+        {
+            data.Remove(oppositeVote);
         }
+
+        var vote = new VoteDbModel
+        { 
+            ReviewId = reviewId,
+            IsUpvote = isUpvote,
+            CreatorId = userId
+        };
+
+        data.Add(vote);
+        await data.SaveChangesAsync(token);
+
+        return vote.Id;
     }
 }

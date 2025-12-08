@@ -1,20 +1,19 @@
-﻿namespace BookHub.Features.Review.Web.Models
+﻿namespace BookHub.Features.Review.Web.Models;
+
+using System.ComponentModel.DataAnnotations;
+
+using static Shared.Constants.Validation;
+
+public class CreateReviewWebModel
 {
-    using System.ComponentModel.DataAnnotations;
+    [Required]
+    [StringLength(
+        ContentMaxLength,
+        MinimumLength = ContentMinLength)]
+    public string Content { get; init; } = null!;
 
-    using static Shared.ValidationConstants;
+    [Range(RatingMinValue, RatingMaxValue)]
+    public int Rating { get; init; }
 
-    public class CreateReviewWebModel
-    {
-        [Required]
-        [StringLength(
-            ContentMaxLength,
-            MinimumLength = ContentMinLength)]
-        public string Content { get; init; } = null!;
-
-        [Range(RatingMinValue, RatingMaxValue)]
-        public int Rating { get; init; }
-
-        public int BookId { get; init; }
-    }
+    public Guid BookId { get; init; }
 }

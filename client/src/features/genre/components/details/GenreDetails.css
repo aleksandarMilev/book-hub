@@ -40,7 +40,6 @@
   text-decoration: underline;
 }
 
-/* Titleь + description */
 .genre-title {
   font-size: clamp(1.8rem, 2.4vw + 1rem, 2.6rem);
   font-weight: 800;
@@ -114,11 +113,33 @@
   padding: 0.6rem 1.6rem;
   background: linear-gradient(90deg, #6ea8fe, #9a6bff, #ff6ec7);
   border: none;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.98rem;
+  box-shadow: 0 4px 12px rgba(110, 168, 254, 0.25);
+  transition:
+    filter 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
 }
 
 .genre-view-all-btn:hover {
   filter: brightness(1.05);
   box-shadow: 0 6px 16px rgba(110, 168, 254, 0.35);
+  transform: translateY(-1px);
+}
+
+.genre-view-all-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 8px rgba(110, 168, 254, 0.3);
+}
+
+.genre-view-all-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(110, 168, 254, 0.65);
 }
 
 @media (max-width: 768px) {

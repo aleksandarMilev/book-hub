@@ -1,5 +1,6 @@
 ﻿namespace BookHub.Features.Authors.Web.User;
 
+using BookHub.Common;
 using Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

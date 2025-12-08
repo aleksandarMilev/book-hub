@@ -1,5 +1,11 @@
 import type { GenreName } from '@/features/genre/types/genre.js';
 
+export type GenresSearchResult = {
+  id: string;
+  name: string;
+  imagePath: string;
+};
+
 export type ArticlesSearchResult = {
   id: string;
   title: string;

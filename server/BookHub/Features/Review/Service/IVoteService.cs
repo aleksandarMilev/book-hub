@@ -1,9 +1,11 @@
-﻿namespace BookHub.Features.Review.Service
-{
-    using Infrastructure.Services.ServiceLifetimes;
+﻿namespace BookHub.Features.Review.Service;
 
-    public interface IVoteService : ITransientService
-    {
-        Task<int?> Create(int reviewId, bool isUpvote);
-    }
+using Infrastructure.Services.ServiceLifetimes;
+
+public interface IVoteService : ITransientService
+{
+    Task<int?> Create(
+        Guid reviewId,
+        bool isUpvote,
+        CancellationToken token = default);
 }

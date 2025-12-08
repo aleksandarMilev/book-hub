@@ -7,6 +7,7 @@ import type {
   AuthorsSearchResult,
   BooksSearchResult,
   ChatsSearchResult,
+  GenresSearchResult,
   ProfilesSearchResult,
 } from '@/features/search/types/search.js';
 import { routes } from '@/shared/lib/constants/api.js';
@@ -72,6 +73,14 @@ export function useSearchBooks(
   pageSize: number = pagination.defaultPageSize,
 ) {
   return useSearch<BooksSearchResult>(api.searchBooks, searchTerm, page, pageSize);
+}
+
+export function useSearchGenres(
+  searchTerm: string,
+  page: number = pagination.defaultPageIndex,
+  pageSize: number = pagination.defaultPageSize,
+) {
+  return useSearch<GenresSearchResult>(api.searchGenres, searchTerm, page, pageSize);
 }
 
 export function useSearchChats(

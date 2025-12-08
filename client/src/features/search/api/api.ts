@@ -5,6 +5,7 @@ import type {
   AuthorsSearchResult,
   BooksSearchResult,
   ChatsSearchResult,
+  GenresSearchResult,
   ProfilesSearchResult,
 } from '@/features/search/types/search.js';
 import { getAuthConfig, getPublicConfig, processError } from '@/shared/api/http.js';
@@ -37,6 +38,16 @@ async function search<T>(
   } catch (error) {
     processError(error, errors.search.all);
   }
+}
+
+export async function searchGenres(
+  searchTerm: string,
+  page: number = pagination.defaultPageIndex,
+  pageSize: number = pagination.defaultPageSize,
+  token?: string,
+  signal?: AbortSignal,
+) {
+  return search<GenresSearchResult>(routes.searchGenres, searchTerm, page, pageSize, token, signal);
 }
 
 export async function searchBooks(

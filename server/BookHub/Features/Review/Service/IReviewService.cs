@@ -1,21 +1,32 @@
-﻿namespace BookHub.Features.Review.Service
+﻿namespace BookHub.Features.Review.Service;
+
+using BookHub.Common;
+using Infrastructure.Services.Result;
+using Infrastructure.Services.ServiceLifetimes;
+using Models;
+
+public interface IReviewService : ITransientService
 {
-    using BookHub.Infrastructure.Services.Result;
-    using Infrastructure.Services;
-    using Infrastructure.Services.ServiceLifetimes;
-    using Models;
+    Task<PaginatedModel<ReviewServiceModel>> AllForBook(
+        Guid bookId,
+        int pageIndex,
+        int pageSize,
+        CancellationToken token = default);
 
-    public interface IReviewService : ITransientService
-    {
-        Task<PaginatedModel<ReviewServiceModel>> AllForBook(
-            Guid bookId,
-            int pageIndex,
-            int pageSize);
+    Task<ReviewServiceModel?> Details(
+        Guid id,
+        CancellationToken token = default);
 
-        Task<int> Create(CreateReviewServiceModel model);
+    Task<ResultWith<ReviewServiceModel>> Create(
+        CreateReviewServiceModel model,
+        CancellationToken token = default);
 
-        Task<Result> Edit(int id, CreateReviewServiceModel model);
+    Task<Result> Edit(
+        Guid id,
+        CreateReviewServiceModel model,
+        CancellationToken token = default);
 
-        Task<Result> Delete(int id);
-    }
+    Task<Result> Delete(
+        Guid id,
+        CancellationToken token = default);
 }

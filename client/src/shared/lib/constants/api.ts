@@ -29,6 +29,7 @@ export const routes = {
   authorNationalities: '/nationality/names',
   authorNames: '/author/names',
   searchBooks: '/search/books',
+  searchGenres: '/search/genres',
   searchArticles: '/search/articles',
   searchAuthors: '/search/authors',
   searchProfiles: '/search/profiles',

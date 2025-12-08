@@ -8,7 +8,7 @@ import Loading from '@/app/layout/loading/Loading.js';
 import AdminRoute from '@/app/routes/guards/admin/AdminRoute.js';
 import AuthenticatedRoute from '@/app/routes/guards/authenticated/AuthenticatedRoute.js';
 import ChatRoute from '@/app/routes/guards/chat/ChatRoute.js';
-import ProfileRoute from '@/app/routes/guards/profle/ProfileRoute.js';
+import ProfileRoute from '@/app/routes/guards/profile/ProfileRoute.js';
 import { routes } from '@/shared/lib/constants/api.js';
 
 const Fallback = () => <Loading />;
@@ -34,6 +34,7 @@ const EditBook = lazy(() => import('@/features/book/components/edit/EditBook.jsx
 const ReadingList = lazy(() => import('@/features/reading-list/components/list/ReadingList.jsx'));
 const ReviewList = lazy(() => import('@/features/review/components/review-list/ReviewList.jsx'));
 
+const GenreList = lazy(() => import('@/features/genre/components/list/GenreList.js'));
 const GenreDetails = lazy(() => import('@/features/genre/components/details/GenreDetails.jsx'));
 
 const AuthorList = lazy(() => import('@/features/author/components/list/AuthorList.js'));
@@ -122,6 +123,10 @@ export const router = createBrowserRouter([
       {
         path: `${routes.genres}/:id/:slug`,
         element: withSuspense(<AuthenticatedRoute element={<GenreDetails />} />),
+      },
+      {
+        path: routes.genres,
+        element: withSuspense(<AuthenticatedRoute element={<GenreList />} />),
       },
 
       {
