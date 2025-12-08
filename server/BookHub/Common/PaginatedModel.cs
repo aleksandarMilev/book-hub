@@ -1,4 +1,4 @@
-﻿namespace BookHub.Features;
+﻿namespace BookHub.Common;
 
 public class PaginatedModel<T>(
     IEnumerable<T> items,

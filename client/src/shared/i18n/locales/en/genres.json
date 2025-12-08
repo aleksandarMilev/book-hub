@@ -17,6 +17,7 @@
     "searchPlaceholder": "Search genres...",
     "emptyAlt": "No genres found",
     "emptyTitle": "We couldn't find any genres",
-    "emptyMessage": "Try adjusting your search terms or exploring our collection for more options."
+    "emptyMessage": "Try adjusting your search terms or exploring our collection for more options.",
+    "view": "View"
   }
 }

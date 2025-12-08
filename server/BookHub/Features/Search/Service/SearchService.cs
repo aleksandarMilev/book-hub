@@ -1,16 +1,15 @@
 ﻿namespace BookHub.Features.Search.Service;
 
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using BookHub.Common;
 using Data;
 using Infrastructure.Services.CurrentUser;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Shared;
 
 public class SearchService(
     BookHubDbContext data,
-    ICurrentUserService userService,
-    IMapper mapper) : ISearchService
+    ICurrentUserService userService) : ISearchService
 {
     public async Task<PaginatedModel<SearchGenreServiceModel>> Genres(
         string? searchTerm,
@@ -19,8 +18,8 @@ public class SearchService(
         CancellationToken token = default)
     {
         var genres = data
-            .Books
-            .ProjectTo<SearchGenreServiceModel>(mapper.ConfigurationProvider);
+            .Genres
+            .ToSearchSeviceModels();
 
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
@@ -51,7 +50,7 @@ public class SearchService(
     {
         var books = data
             .Books
-            .ProjectTo<SearchBookServiceModel>(mapper.ConfigurationProvider);
+            .ToSearchSeviceModels();
 
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
@@ -85,7 +84,7 @@ public class SearchService(
     {
         var articles = data
             .Articles
-            .ProjectTo<SearchArticleServiceModel>(mapper.ConfigurationProvider);
+            .ToSearchSeviceModels();
 
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
@@ -120,7 +119,7 @@ public class SearchService(
     {
         var authors = data
             .Authors
-            .ProjectTo<SearchAuthorServiceModel>(mapper.ConfigurationProvider);
+            .ToSearchSeviceModels();
 
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
@@ -153,7 +152,7 @@ public class SearchService(
     {
         var profiles = data
              .Profiles
-             .ProjectTo<SearchProfileServiceModel>(mapper.ConfigurationProvider);
+             .ToSearchSeviceModels();
 
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
@@ -195,7 +194,7 @@ public class SearchService(
              ));
         }
 
-         var chatModels = chats.ProjectTo<SearchChatServiceModel>(mapper.ConfigurationProvider);
+        var chatModels = chats.ToSearchSeviceModels();
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
             chatModels = chatModels.Where(c => c.Name.ToLower().Contains(searchTerm.ToLower()));

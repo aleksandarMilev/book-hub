@@ -1,5 +1,6 @@
 ﻿namespace BookHub.Features.Search.Service;
 
+using BookHub.Common;
 using Infrastructure.Services.ServiceLifetimes;
 using Models;
 

@@ -1,4 +1,3 @@
-// src/app/layout/header/Header.tsx
 import './Header.css';
 
 import { type FC, useState } from 'react';
@@ -52,6 +51,9 @@ const Header: FC = () => {
               </Nav.Link>
               <Nav.Link as={Link} to={routes.book} onClick={closeMenu}>
                 {t('header.nav.books')}
+              </Nav.Link>
+              <Nav.Link as={Link} to={routes.genres} onClick={closeMenu}>
+                {t('header.nav.genres')}
               </Nav.Link>
               <Nav.Link as={Link} to={routes.author} onClick={closeMenu}>
                 {t('header.nav.authors')}

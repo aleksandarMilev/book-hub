@@ -6,7 +6,5 @@ public class SearchGenreServiceModel
 
     public string Name { get; init; } = null!;
 
-    public string Description { get; init; } = null!;
-
     public string ImagePath { get; init; } = null!;
 }
