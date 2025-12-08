@@ -2,6 +2,7 @@
 {
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
+    using BookHub.Common;
     using BookHub.Data;
     using Common.Exceptions;
     using Data.Models;

@@ -1,51 +1,62 @@
-﻿namespace BookHub.Features.Search.Web
+﻿namespace BookHub.Features.Search.Web;
+
+using BookHub.Common;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Service;
+using Service.Models;
+
+using static Common.Constants.DefaultValues;
+
+[Authorize]
+public class SearchController(ISearchService service) : ApiController
 {
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
-    using Service;
-    using Service.Models;
+    [HttpGet(ApiRoutes.Books)]
+    public async Task<ActionResult<PaginatedModel<SearchBookServiceModel>>> Books(
+        string? searchTerm,
+        int page = DefaultPageIndex,
+        int pageSize = DefaultPageSize,
+        CancellationToken token = default)
+        => this.Ok(await service.Books(searchTerm, page, pageSize));
 
-    using static Common.Constants.DefaultValues;
+    [HttpGet(ApiRoutes.Genres)]
+    public async Task<ActionResult<PaginatedModel<SearchBookServiceModel>>> Genres(
+        string? searchTerm,
+        int page = DefaultPageIndex,
+        int pageSize = DefaultPageSize,
+        CancellationToken token = default)
+        => this.Ok(await service.Genres(searchTerm, page, pageSize, token));
 
-    [Authorize]
-    public class SearchController(ISearchService service) : ApiController
-    {
-        private readonly ISearchService service = service;
+    [AllowAnonymous]
+    [HttpGet(ApiRoutes.Articles)]
+    public async Task<ActionResult<PaginatedModel<SearchArticleServiceModel>>> Articles(
+        string? searchTerm,
+        int page = DefaultPageIndex,
+        int pageSize = DefaultPageSize,
+        CancellationToken token = default)
+        => this.Ok(await service.Articles(searchTerm, page, pageSize, token));
 
-        [HttpGet(ApiRoutes.Books)]
-        public async Task<ActionResult<PaginatedModel<SearchBookServiceModel>>> Books(
-            string? searchTerm,
-            int page = DefaultPageIndex,
-            int pageSize = DefaultPageSize)
-            => this.Ok(await this.service.Books(searchTerm, page, pageSize));
+    [HttpGet(ApiRoutes.Authors)]
+    public async Task<ActionResult<PaginatedModel<SearchAuthorServiceModel>>> Authors(
+       string? searchTerm,
+       int page = DefaultPageIndex,
+       int pageSize = DefaultPageSize,
+        CancellationToken token = default)
+       => this.Ok(await service.Authors(searchTerm, page, pageSize, token));
 
-        [AllowAnonymous]
-        [HttpGet(ApiRoutes.Articles)]
-        public async Task<ActionResult<PaginatedModel<SearchArticleServiceModel>>> Articles(
-            string? searchTerm,
-            int page = DefaultPageIndex,
-            int pageSize = DefaultPageSize)
-            => this.Ok(await this.service.Articles(searchTerm, page, pageSize));
+    [HttpGet(ApiRoutes.Profiles)]
+    public async Task<ActionResult<PaginatedModel<SearchProfileServiceModel>>> Profiles(
+       string? searchTerm,
+       int page = DefaultPageIndex,
+       int pageSize = DefaultPageSize,
+        CancellationToken token = default)
+       => this.Ok(await service.Profiles(searchTerm, page, pageSize, token));
 
-        [HttpGet(ApiRoutes.Authors)]
-        public async Task<ActionResult<PaginatedModel<SearchAuthorServiceModel>>> Authors(
-           string? searchTerm,
-           int page = DefaultPageIndex,
-           int pageSize = DefaultPageSize)
-           => this.Ok(await this.service.Authors(searchTerm, page, pageSize));
-
-        [HttpGet(ApiRoutes.Profiles)]
-        public async Task<ActionResult<PaginatedModel<SearchProfileServiceModel>>> Profiles(
-           string? searchTerm,
-           int page = DefaultPageIndex,
-           int pageSize = DefaultPageSize)
-           => this.Ok(await this.service.Profiles(searchTerm, page, pageSize));
-
-        [HttpGet(ApiRoutes.Chats)]
-        public async Task<ActionResult<PaginatedModel<SearchChatServiceModel>>> Chats(
-            string? searchTerm,
-            int page = DefaultPageIndex,
-            int pageSize = DefaultPageSize)
-            => this.Ok(await this.service.Chats(searchTerm, page, pageSize));
-    }
+    [HttpGet(ApiRoutes.Chats)]
+    public async Task<ActionResult<PaginatedModel<SearchChatServiceModel>>> Chats(
+        string? searchTerm,
+        int page = DefaultPageIndex,
+        int pageSize = DefaultPageSize,
+        CancellationToken token = default)
+        => this.Ok(await service.Chats(searchTerm, page, pageSize, token));
 }

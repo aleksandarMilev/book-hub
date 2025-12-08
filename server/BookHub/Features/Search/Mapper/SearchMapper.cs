@@ -1,33 +1,34 @@
-﻿namespace BookHub.Features.Search.Mapper
+﻿namespace BookHub.Features.Search.Mapper;
+
+using Article.Data.Models;
+using Authors.Data.Models;
+using AutoMapper;
+using Book.Data.Models;
+using Chat.Data.Models;
+using Genre.Data.Models;
+using Genre.Service.Models;
+using Service.Models;
+using UserProfile.Data.Models;
+
+public class SearchMapper : Profile
 {
-    using Article.Data.Models;
-    using Authors.Data.Models;
-    using AutoMapper;
-    using Book.Data.Models;
-    using Chat.Data.Models;
-    using Genre.Data.Models;
-    using Genre.Service.Models;
-    using Service.Models;
-    using UserProfile.Data.Models;
-
-    public class SearchMapper : Profile
+    public SearchMapper()
     {
-        public SearchMapper()
-        {
-            this.CreateMap<GenreDbModel, GenreNameServiceModel>();
+        this.CreateMap<GenreDbModel, GenreNameServiceModel>();
 
-            this.CreateMap<BookDbModel, SearchBookServiceModel>()
-                 .ForMember(dest => dest.Genres, opt => opt.MapFrom(src => src.BooksGenres.Select(bg => bg.Genre)))
-                 .ForMember(dest => dest.AuthorName, opt => opt.MapFrom(src => src.Author == null ? null : src.Author.Name));
+        this.CreateMap<GenreDbModel, SearchGenreServiceModel>();
 
-            this.CreateMap<ArticleDbModel, SearchArticleServiceModel>();
+        this.CreateMap<BookDbModel, SearchBookServiceModel>()
+             .ForMember(dest => dest.Genres, opt => opt.MapFrom(src => src.BooksGenres.Select(bg => bg.Genre)))
+             .ForMember(dest => dest.AuthorName, opt => opt.MapFrom(src => src.Author == null ? null : src.Author.Name));
 
-            this.CreateMap<AuthorDbModel, SearchAuthorServiceModel>();
+        this.CreateMap<ArticleDbModel, SearchArticleServiceModel>();
 
-            this.CreateMap<UserProfile, SearchProfileServiceModel>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.UserId));
+        this.CreateMap<AuthorDbModel, SearchAuthorServiceModel>();
 
-            this.CreateMap<Chat, SearchChatServiceModel>();
-        }
+        this.CreateMap<UserProfile, SearchProfileServiceModel>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.UserId));
+
+        this.CreateMap<Chat, SearchChatServiceModel>();
     }
 }

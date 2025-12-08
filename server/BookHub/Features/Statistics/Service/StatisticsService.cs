@@ -1,46 +1,43 @@
-﻿namespace BookHub.Features.Statistics.Service
+﻿namespace BookHub.Features.Statistics.Service;
+
+using Data;
+using Microsoft.EntityFrameworkCore;
+using Models;
+
+public class StatisticsService(BookHubDbContext data) : IStatisticsService
 {
-    using Data;
-    using Microsoft.EntityFrameworkCore;
-    using Models;
-
-    public class StatisticsService(BookHubDbContext data) : IStatisticsService
+    public async Task<StatisticsServiceModel> All(CancellationToken token = default)
     {
-        private readonly BookHubDbContext data = data;
+        var users = await data
+            .Users
+            .CountAsync(token);
 
-        public async Task<StatisticsServiceModel> All()
-        {
-            var users = await this.data
-                .Users
-                .CountAsync();
+        var books = await data
+            .Books
+            .CountAsync(token);
 
-            var books = await this.data
-                .Books
-                .CountAsync();
+        var authors = await data
+            .Authors
+            .CountAsync(token);
 
-            var authors = await this.data
-                .Authors
-                .CountAsync();
+        var reviews = await data
+            .Reviews
+            .CountAsync(token);
 
-            var reviews = await this.data
-                .Reviews
-                .CountAsync();
+        var genres = await data
+            .Genres
+            .CountAsync(token);
 
-            var genres = await this.data
-                .Genres
-                .CountAsync();
+        var articles = await data
+            .Articles
+            .CountAsync(token);
 
-            var articles = await this.data
-                .Articles
-                .CountAsync();
-
-            return new StatisticsServiceModel(
-                users,
-                books,
-                authors,
-                reviews,
-                genres,
-                articles);
-        }
+        return new StatisticsServiceModel(
+            users,
+            books,
+            authors,
+            reviews,
+            genres,
+            articles);
     }
 }

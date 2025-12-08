@@ -1,6 +1,7 @@
 ﻿namespace BookHub.Features.Chat.Web
 {
     using AutoMapper;
+    using BookHub.Common;
     using BookHub.Infrastructure.Services.CurrentUser;
     using BookHub.Infrastructure.Services.Result;
     using Infrastructure.Extensions;

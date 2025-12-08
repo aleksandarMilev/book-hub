@@ -1,10 +1,9 @@
-﻿namespace BookHub.Features.Statistics.Service
-{
-    using Infrastructure.Services.ServiceLifetimes;
-    using Models;
+﻿namespace BookHub.Features.Statistics.Service;
 
-    public interface IStatisticsService : ITransientService
-    {
-        Task<StatisticsServiceModel> All();
-    }
+using Infrastructure.Services.ServiceLifetimes;
+using Models;
+
+public interface IStatisticsService : ITransientService
+{
+    Task<StatisticsServiceModel> All(CancellationToken token = default);
 }

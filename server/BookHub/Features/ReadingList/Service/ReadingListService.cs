@@ -3,6 +3,7 @@
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using Book.Service.Models;
+    using BookHub.Common;
     using BookHub.Data;
     using BookHub.Infrastructure.Services.CurrentUser;
     using BookHub.Infrastructure.Services.Result;

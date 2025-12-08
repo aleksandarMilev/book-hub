@@ -1,5 +1,6 @@
 ﻿namespace BookHub.Features.Review.Service
 {
+    using BookHub.Common;
     using BookHub.Infrastructure.Services.Result;
     using Infrastructure.Services;
     using Infrastructure.Services.ServiceLifetimes;

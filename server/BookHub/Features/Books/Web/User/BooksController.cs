@@ -1,5 +1,6 @@
 ﻿namespace BookHub.Features.Book.Web.User;
 
+using BookHub.Common;
 using Features.Authors.Service.Models;
 using Features.Authors.Shared;
 using Features.Book.Shared;

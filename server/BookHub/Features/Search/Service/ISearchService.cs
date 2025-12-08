@@ -1,33 +1,43 @@
-﻿namespace BookHub.Features.Search.Service
+﻿namespace BookHub.Features.Search.Service;
+
+using Infrastructure.Services.ServiceLifetimes;
+using Models;
+
+public interface ISearchService : ITransientService
 {
-    using Infrastructure.Services.ServiceLifetimes;
-    using Models;
+    Task<PaginatedModel<SearchGenreServiceModel>> Genres(
+        string? searchTerm,
+        int page,
+        int pageSize,
+        CancellationToken token = default);
 
-    public interface ISearchService : ITransientService
-    {
-        Task<PaginatedModel<SearchBookServiceModel>> Books(
-            string? searchTerm,
-            int page,
-            int pageSize);
+    Task<PaginatedModel<SearchBookServiceModel>> Books(
+        string? searchTerm,
+        int page,
+        int pageSize,
+        CancellationToken token = default);
 
-        Task<PaginatedModel<SearchArticleServiceModel>> Articles(
-            string? searchTerm,
-            int page,
-            int pageSize);
+    Task<PaginatedModel<SearchArticleServiceModel>> Articles(
+        string? searchTerm,
+        int page,
+        int pageSize,
+        CancellationToken token = default);
 
-        Task<PaginatedModel<SearchAuthorServiceModel>> Authors(
-            string? searchTerm,
-            int page,
-            int pageSize);
+    Task<PaginatedModel<SearchAuthorServiceModel>> Authors(
+        string? searchTerm,
+        int page,
+        int pageSize,
+        CancellationToken token = default);
 
-        Task<PaginatedModel<SearchProfileServiceModel>> Profiles(
-            string? searchTerm,
-            int page,
-            int pageSize);
+    Task<PaginatedModel<SearchProfileServiceModel>> Profiles(
+        string? searchTerm,
+        int page,
+        int pageSize,
+        CancellationToken token = default);
 
-        Task<PaginatedModel<SearchChatServiceModel>> Chats(
-            string? searchTerm,
-            int page,
-            int pageSize);
-    }
+    Task<PaginatedModel<SearchChatServiceModel>> Chats(
+        string? searchTerm,
+        int page,
+        int pageSize,
+        CancellationToken token = default);
 }

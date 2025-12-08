@@ -1,6 +1,7 @@
 ﻿namespace BookHub.Features.ReadingList.Web
 {
     using Book.Service.Models;
+    using BookHub.Common;
     using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;

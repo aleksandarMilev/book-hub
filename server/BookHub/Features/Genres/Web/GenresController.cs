@@ -1,5 +1,6 @@
 ﻿namespace BookHub.Features.Genre.Web;
 
+using BookHub.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service;
