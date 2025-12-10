@@ -7,7 +7,7 @@ export const useUpvote = () => {
   const { token } = useAuth();
 
   const upvoteHandler = useCallback(
-    async (id: number, setUpvoteCount?: Dispatch<SetStateAction<number>>) => {
+    async (id: string, setUpvoteCount?: Dispatch<SetStateAction<number>>) => {
       if (!token) return false;
 
       try {
@@ -31,7 +31,7 @@ export const useDownvote = () => {
   const { token } = useAuth();
 
   const downvoteHandler = useCallback(
-    async (id: number, setDownvoteCount?: Dispatch<SetStateAction<number>>) => {
+    async (id: string, setDownvoteCount?: Dispatch<SetStateAction<number>>) => {
       if (!token) {
         return false;
       }
@@ -64,7 +64,7 @@ export const useVoteHandlers = ({
   setDownvoteClicked,
   onVote,
 }: {
-  id: number;
+  id: string;
   hasProfile: boolean;
   upvoteCount: number;
   downvoteCount: number;

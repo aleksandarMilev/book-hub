@@ -70,7 +70,7 @@ public static class SearchMapping
             Id = p.UserId,
             FirstName = p.FirstName,
             LastName = p.LastName,
-            ImageUrl = p.ImageUrl,
+            ImagePath = p.ImagePath,
             IsPrivate = p.IsPrivate,
         });
 

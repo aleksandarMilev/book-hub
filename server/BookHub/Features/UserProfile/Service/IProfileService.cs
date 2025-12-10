@@ -1,31 +1,43 @@
-﻿namespace BookHub.Features.UserProfile.Service
+﻿namespace BookHub.Features.UserProfile.Service;
+
+using Infrastructure.Services.Result;
+using Infrastructure.Services.ServiceLifetimes;
+using Models;
+
+public interface IProfileService : ITransientService
 {
-    using BookHub.Infrastructure.Services.Result;
-    using Infrastructure.Services;
-    using Infrastructure.Services.ServiceLifetimes;
-    using Models;
+    Task<IEnumerable<ProfileServiceModel>> TopThree(
+       CancellationToken token = default);
 
-    public interface IProfileService : ITransientService
-    {
-        Task<IEnumerable<ProfileServiceModel>> TopThree();
+    Task<ProfileServiceModel?> Mine(
+        CancellationToken token = default);
 
-        Task<ProfileServiceModel?> Mine();
+    Task<IProfileServiceModel?> OtherUser(
+        string id,
+        CancellationToken token = default);
 
-        Task<IProfileServiceModel?> OtherUser(string id);
+    Task<bool> HasProfile(
+        CancellationToken token = default);
 
-        Task<bool> HasProfile();
+    Task<bool> HasMoreThanFiveCurrentlyReading(
+        string userId,
+        CancellationToken token = default);
 
-        Task<bool> HasMoreThanFiveCurrentlyReading(string userId);
+    Task<ProfileServiceModel> Create(
+        CreateProfileServiceModel model,
+        CancellationToken token = default);
 
-        Task<string> Create(CreateProfileServiceModel model);
+    Task<Result> Edit(
+        CreateProfileServiceModel model,
+        CancellationToken token = default);
 
-        Task<Result> Edit(CreateProfileServiceModel model);
+    Task<Result> Delete(
+        string? userId = null,
+        CancellationToken token = default);
 
-        Task<Result> Delete(string userId = null!);
-
-        Task UpdateCount(
-            string userId,
-            string propName,
-            Func<int, int> updateFunc);
-    }
+    Task<Result> UpdateCount(
+        string userId,
+        string propName,
+        Func<int, int> updateFunc,
+        CancellationToken token = default);
 }

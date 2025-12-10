@@ -23,7 +23,7 @@
             this.CreateMap<ChatMessage, ChatMessageServiceModel>()
                 .ForMember(
                     dest => dest.SenderImageUrl,
-                    opt => opt.MapFrom(src => src.Sender.Profile!.ImageUrl))
+                    opt => opt.MapFrom(src => src.Sender.Profile!.ImagePath))
                 .ForMember(
                     dest => dest.SenderName,
                     opt => opt.MapFrom(src => src.Sender.Profile!.FirstName + " " + src.Sender.Profile.LastName));

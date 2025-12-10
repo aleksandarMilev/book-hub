@@ -1,65 +1,72 @@
-﻿namespace BookHub.Features.UserProfile.Web.User
+﻿namespace BookHub.Features.UserProfile.Web.User;
+
+using BookHub.Common;
+using Infrastructure.Extensions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Models;
+using Service;
+using Service.Models;
+using Shared;
+
+using static Common.Constants.ApiRoutes;
+
+[Authorize]
+public class ProfileController(IProfileService service) : ApiController
 {
-    using AutoMapper;
-    using BookHub.Common;
-    using Infrastructure.Extensions;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
-    using Models;
-    using Service;
-    using Service.Models;
+    [AllowAnonymous]
+    [HttpGet(ApiRoutes.Top)]
+    public async Task<ActionResult<IEnumerable<ProfileServiceModel>>> TopThree(
+        CancellationToken token = default)
+        => this.Ok(await service.TopThree(token));
 
-    using static Common.Constants.ApiRoutes;
+    [HttpGet(ApiRoutes.Mine, Name = nameof(this.Mine))]
+    public async Task<ActionResult<ProfileServiceModel>> Mine(
+        CancellationToken token = default)
+        => this.Ok(await service.Mine(token));
 
-    [Authorize]
-    public class ProfileController(
-        IProfileService service,
-        IMapper mapper) : ApiController
+    [HttpGet(Id)]
+    public async Task<ActionResult<IProfileServiceModel>> OtherUser(
+        string id,
+        CancellationToken token = default)
+        => this.Ok(await service.OtherUser(id, token));
+
+    [HttpGet(ApiRoutes.Exists)]
+    public async Task<ActionResult<bool>> Exists(
+        CancellationToken token = default)
+        => this.Ok(await service.HasProfile(token));
+
+    [HttpPost]
+    public async Task<ActionResult<ProfileServiceModel>> Create(
+        CreateProfileWebModel webModel,
+        CancellationToken token = default)
     {
-        private readonly IProfileService service = service;
-        private readonly IMapper mapper = mapper;
+        var serviceModel = webModel.ToCreateServiceModel();
+        var result = await service.Create(serviceModel, token);
 
-        [AllowAnonymous]
-        [HttpGet(ApiRoutes.Top)]
-        public async Task<ActionResult<IEnumerable<ProfileServiceModel>>> TopThree()
-            => this.Ok(await this.service.TopThree());
+        return this.CreatedAtRoute(
+            routeName: nameof(this.Mine),
+            routeValues: new { id = result.Id },
+            value: result);
+    }
 
-        [HttpGet(ApiRoutes.Mine)]
-        public async Task<ActionResult<ProfileServiceModel>> Mine()
-            => this.Ok(await this.service.Mine());
+    [HttpPut]
+    public async Task<ActionResult> Edit(
+        CreateProfileWebModel webModel,
+        CancellationToken token = default)
+    {
+        var serviceModel = webModel.ToCreateServiceModel();
+        var result = await service.Edit(serviceModel, token);
 
-        [HttpGet(Id)]
-        public async Task<ActionResult<IProfileServiceModel>> OtherUser(string id)
-            => this.Ok(await this.service.OtherUser(id));
+        return this.NoContentOrBadRequest(result);
+    }
 
-        [HttpGet(ApiRoutes.Exists)]
-        public async Task<ActionResult<bool>> Exists()
-            => this.Ok(await this.service.HasProfile());
+    [HttpDelete]
+    public async Task<ActionResult> Delete(
+        CancellationToken token = default)
+    {
+        var result = await service.Delete(token: token);
 
-        [HttpPost]
-        public async Task<ActionResult<string>> Create(CreateProfileWebModel webModel)
-        {
-            var serviceModel = this.mapper.Map<CreateProfileServiceModel>(webModel);
-            var id = await this.service.Create(serviceModel);
-
-            return this.Created(nameof(this.Create), id);
-        }
-
-        [HttpPut]
-        public async Task<ActionResult> Edit(CreateProfileWebModel webModel)
-        {
-            var serviceModel = this.mapper.Map<CreateProfileServiceModel>(webModel);
-            var result = await this.service.Edit(serviceModel);
-
-            return this.NoContentOrBadRequest(result);
-        }
-
-        [HttpDelete]
-        public async Task<ActionResult> Delete()
-        {
-            var result = await this.service.Delete();
-
-            return this.NoContentOrBadRequest(result);
-        }
+        return this.NoContentOrBadRequest(result);
     }
 }

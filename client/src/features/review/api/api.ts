@@ -5,7 +5,7 @@ import { errors } from '@/shared/lib/constants/errorMessages.js';
 import type { PaginatedResult } from '@/shared/types/paginatedResult.js';
 
 export async function all(
-  bookId: number,
+  bookId: string,
   pageIndex: number,
   pageSize: number,
   token: string,
@@ -13,9 +13,9 @@ export async function all(
 ) {
   try {
     const url = `${routes.review}/${bookId}?pageIndex=${pageIndex}&pageSize=${pageSize}`;
-    const response = await http.get<PaginatedResult<Review>>(url, getAuthConfig(token, signal));
+    const { data } = await http.get<PaginatedResult<Review>>(url, getAuthConfig(token, signal));
 
-    return response.data;
+    return data;
   } catch (error) {
     processError(error, errors.review.all);
   }
@@ -24,15 +24,15 @@ export async function all(
 export async function create(review: CreateReview, token: string, signal?: AbortSignal) {
   try {
     const url = `${routes.review}`;
-    const response = await http.post(url, review, getAuthConfig(token, signal));
+    const { data } = await http.post(url, review, getAuthConfig(token, signal));
 
-    return response.data;
+    return data;
   } catch (error) {
     processError(error, errors.review.create);
   }
 }
 
-export async function edit(id: number, review: CreateReview, token: string, signal?: AbortSignal) {
+export async function edit(id: string, review: CreateReview, token: string, signal?: AbortSignal) {
   try {
     const url = `${routes.review}/${id}`;
     await http.put(url, review, getAuthConfig(token, signal));
@@ -43,7 +43,7 @@ export async function edit(id: number, review: CreateReview, token: string, sign
   }
 }
 
-export async function remove(id: number, token: string, signal?: AbortSignal) {
+export async function remove(id: string, token: string, signal?: AbortSignal) {
   try {
     const url = `${routes.review}/${id}`;
     await http.delete(url, getAuthConfig(token, signal));
@@ -54,7 +54,7 @@ export async function remove(id: number, token: string, signal?: AbortSignal) {
   }
 }
 
-export async function upvote(id: number, token: string, signal?: AbortSignal) {
+export async function upvote(id: string, token: string, signal?: AbortSignal) {
   try {
     const url = `${routes.vote}`;
     const vote = { reviewId: id, isUpvote: true };
@@ -66,7 +66,7 @@ export async function upvote(id: number, token: string, signal?: AbortSignal) {
   }
 }
 
-export async function downvote(id: number, token: string, signal?: AbortSignal) {
+export async function downvote(id: string, token: string, signal?: AbortSignal) {
   try {
     const url = `${routes.vote}`;
     const vote: VoteRequest = { reviewId: id, isUpvote: false };

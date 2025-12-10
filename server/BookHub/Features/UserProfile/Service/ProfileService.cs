@@ -1,164 +1,276 @@
-﻿namespace BookHub.Features.UserProfile.Service
+﻿namespace BookHub.Features.UserProfile.Service;
+
+using System.Diagnostics;
+using BookHub.Data;
+using Data.Models;
+using Infrastructure.Services.CurrentUser;
+using Infrastructure.Services.ImageWriter;
+using Infrastructure.Services.Result;
+using Microsoft.EntityFrameworkCore;
+using Models;
+using Shared;
+
+using static Common.Constants.ErrorMessages;
+using static Shared.Constants.Validation;
+using static Shared.Constants.Paths;
+public class ProfileService(
+    BookHubDbContext data,
+    ICurrentUserService userService,
+    IImageWriter imageWriter,
+    ILogger<ProfileService> logger) : IProfileService
 {
-    using AutoMapper;
-    using AutoMapper.QueryableExtensions;
-    using BookHub.Data;
-    using Common.Exceptions;
-    using Data.Models;
-    using Infrastructure.Services.CurrentUser;
-    using Infrastructure.Services.Result;
-    using Microsoft.EntityFrameworkCore;
-    using Models;
+    public async Task<IEnumerable<ProfileServiceModel>> TopThree(
+        CancellationToken token = default)
+        => await data
+            .Profiles
+            .OrderByDescending(p =>
+                p.CreatedBooksCount +
+                p.CreatedAuthorsCount +
+                p.ReviewsCount)
+            .Take(3)
+            .ToServiceModels()
+            .ToListAsync(token);
 
-    using static Common.Constants.ErrorMessages;
-    using static Shared.ValidationConstants;
+    public async Task<ProfileServiceModel?> Mine(
+        CancellationToken token = default)
+        => await data
+            .Profiles
+            .ToServiceModels()
+            .FirstOrDefaultAsync(
+                p => p.Id == userService.GetId(),
+                token);
 
-    public class ProfileService(
-        BookHubDbContext data,
-        ICurrentUserService userService,
-        IMapper mapper) : IProfileService
+    public async Task<IProfileServiceModel?> OtherUser(
+        string id,
+        CancellationToken token = default)
     {
-        private readonly BookHubDbContext data = data;
-        private readonly ICurrentUserService userService = userService;
-        private readonly IMapper mapper = mapper;
+        var dbModel = await data
+            .Profiles
+            .ToServiceModels()
+            .FirstOrDefaultAsync(
+                p => p.Id == id,
+                token);
 
-        public async Task<IEnumerable<ProfileServiceModel>> TopThree()
-            => await this.data
-                .Profiles
-                .OrderByDescending(p =>
-                    p.CreatedBooksCount +
-                    p.CreatedAuthorsCount +
-                    p.ReviewsCount)
-                .Take(3)
-                .ProjectTo<ProfileServiceModel>(this.mapper.ConfigurationProvider)
-                .ToListAsync();
-
-        public async Task<ProfileServiceModel?> Mine()
-            => await this.data
-                .Profiles
-                .ProjectTo<ProfileServiceModel>(this.mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(p => p.Id == this.userService.GetId());
-
-        public async Task<IProfileServiceModel?> OtherUser(string id)
+        if (dbModel is null)
         {
-            var model = await this.data
-                .Profiles
-                .ProjectTo<ProfileServiceModel>(this.mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(p => p.Id == id);
-
-            if (model is null)
-            {
-                return null;
-            }
-
-            if (model.IsPrivate)
-            {
-                return this.mapper.Map<PrivateProfileServiceModel>(model);
-            }
-
-            return model;
+            return null;
         }
 
-        public async Task<bool> HasProfile()
-             => await this.data
-                .Profiles
-                .AnyAsync(p => p.UserId == this.userService.GetId());
-
-        public async Task<bool> HasMoreThanFiveCurrentlyReading(string userId)
-            => await this.data
-                .Profiles
-                .Where(p => p.UserId == userId)
-                .Select(p => p.CurrentlyReadingBooksCount)
-                .FirstOrDefaultAsync() == CurrentlyReadingBooksMaxCount;
-         
-        public async Task<string> Create(CreateProfileServiceModel model)
+        if (dbModel.IsPrivate)
         {
-            var profile = this.mapper.Map<UserProfile>(model);
-            profile.UserId = this.userService.GetId()!;
-
-            this.data.Add(profile);
-            await this.data.SaveChangesAsync();
-
-            return profile.UserId;
+            return dbModel.ToPrivateServiceModel();
         }
 
-        public async Task<Result> Edit(CreateProfileServiceModel model)
+        return dbModel;
+    }
+
+    public async Task<bool> HasProfile(
+        CancellationToken token = default)
+         => await data
+            .Profiles
+            .AsNoTracking()
+            .AnyAsync(
+                p => p.UserId == userService.GetId(),
+                token);
+
+    public async Task<bool> HasMoreThanFiveCurrentlyReading(
+        string userId,
+        CancellationToken token = default)
+        => await data
+            .Profiles
+            .Where(p => p.UserId == userId)
+            .Select(p => p.CurrentlyReadingBooksCount)
+            .FirstOrDefaultAsync(token) == CurrentlyReadingBooksMaxCount;
+     
+    public async Task<ProfileServiceModel> Create(
+        CreateProfileServiceModel serviceModel,
+        CancellationToken token = default)
+    {
+        var userId = userService.GetId()!;
+        var dbModel = serviceModel.ToDbModel();
+        dbModel.UserId = userId;
+
+        await imageWriter.Write(
+           ProfilesImagePathPrefix,
+           dbModel,
+           serviceModel,
+           DefaultImagePath,
+           token);
+
+        data.Add(dbModel);
+        await data.SaveChangesAsync(token);
+
+        logger.LogInformation(
+            "Profile for user with id {UserId} was created.",
+            userId);
+
+        return dbModel.ToServiceModel();
+    }
+
+    public async Task<Result> Edit(
+        CreateProfileServiceModel serviceModel,
+        CancellationToken token = default)
+    {
+        var userId = userService.GetId()!;
+        var dbModel = await this.GetDbModel(userId, token);
+
+        if (dbModel is null)
         {
-            var userId = this.userService.GetId();
-
-            var profile = await this.data
-                 .Profiles
-                 .FindAsync(userId);
-
-            if (profile is null)
-            {
-                return string.Format(
-                    DbEntityNotFound,
-                    nameof(UserProfile),
-                    userId);
-            }
-
-            this.mapper.Map(model, profile);
-
-            await this.data.SaveChangesAsync();
-
-            return true;
+            return this.LogAndReturnNotFoundMessage(userId);
         }
 
-        public async Task<Result> Delete(string userToDeleteId = null!)
+        var isNotCurrentUserProfile = dbModel.UserId != userId;
+        if (isNotCurrentUserProfile)
         {
-            var currentUserId = this.userService.GetId()!;
-            userToDeleteId ??= currentUserId;
-
-            var profile = await this.data
-                .Profiles
-                .FindAsync(userToDeleteId);
-
-            if (profile is null)
-            {
-                return string.Format(
-                    DbEntityNotFound,
-                    nameof(UserProfile),
-                    userToDeleteId);
-            }
-
-            var isNotCurrentUserProfile = profile.UserId != currentUserId;
-            var userIsNotAdmin = !this.userService.IsAdmin();
-
-            if (isNotCurrentUserProfile && userIsNotAdmin)
-            { 
-                return string.Format(
-                    UnauthorizedDbEntityAction,
-                    this.userService.GetUsername(),
-                    nameof(UserProfile),
-                    userToDeleteId);
-            }
-
-            this.data.Remove(profile);
-            await this.data.SaveChangesAsync();
-
-            return true;
+            return this.LogAndReturnUnauthorizedMessage(
+                userId,
+                dbModel.UserId);
         }
 
-        public async Task UpdateCount(
-            string userId,
-            string propName,
-            Func<int, int> updateFunc)
+        var oldImagePath = dbModel.ImagePath;
+        var isNewImageUploaded = serviceModel.Image is not null;
+
+        serviceModel.UpdateDbModel(dbModel);
+
+        await imageWriter.Write(
+            ProfilesImagePathPrefix,
+            dbModel,
+            serviceModel,
+            null,
+            token);
+
+        if (isNewImageUploaded)
         {
-            var profile = await this.data
-               .Profiles
-               .FindAsync(userId)
-               ?? throw new DbEntityNotFoundException<string>(nameof(UserProfile), userId);
-
-            var property = typeof(UserProfile)
-                .GetProperty(propName)
-                ?? throw new ArgumentException(propName);
-
-            var currentValue = (int)property.GetValue(profile)!;
-            var updatedValue = updateFunc(currentValue);
-            property.SetValue(profile, updatedValue);
-
-            await this.data.SaveChangesAsync();
+            imageWriter.Delete(
+                nameof(UserProfile),
+                oldImagePath,
+                DefaultImagePath);
         }
+
+        await data.SaveChangesAsync(token);
+
+        logger.LogInformation(
+            "Profile for user with id {UserId} was updated.",
+            userId);
+
+        return true;
+    }
+
+    public async Task<Result> Delete(
+        string? userToDeleteId = null,
+        CancellationToken token = default)
+    {
+        var currentUserId = userService.GetId()!;
+        userToDeleteId ??= currentUserId;
+
+        var dbModel = await this.GetDbModel(userToDeleteId, token);
+        if (dbModel is null)
+        {
+            return this.LogAndReturnNotFoundMessage(userToDeleteId);
+        }
+
+        var isNotCurrentUserProfile = dbModel.UserId != currentUserId;
+        var userIsNotAdmin = !userService.IsAdmin();
+
+        if (isNotCurrentUserProfile && userIsNotAdmin)
+        {
+            return this.LogAndReturnUnauthorizedMessage(
+                currentUserId,
+                dbModel.UserId);
+        }
+
+        data.Remove(dbModel);
+        await data.SaveChangesAsync(token);
+
+        logger.LogInformation(
+            "Profile with id: {UserId} was deleted.",
+            userToDeleteId);
+
+        return true;
+    }
+
+    public async Task<Result> UpdateCount(
+        string userId,
+        string propName,
+        Func<int, int> updateFunc,
+        CancellationToken token = default)
+    {
+        var profile = await this.GetDbModel(userId, token);
+        if (profile is null)
+        {
+            return this.LogAndReturnNotFoundMessage(userId);
+        }
+
+        var property = typeof(UserProfile).GetProperty(propName);
+        if (property is null)
+        {
+            var methodInfo = new StackTrace().GetFrame(1)?.GetMethod();
+            var className = methodInfo?.ReflectedType?.Name;
+
+            logger.LogWarning(
+                "{Class}.{Method}() attempted to update property \"${Property}\" on UserProfile with Id: {UserId} but such property does not exist.",
+                className,
+                methodInfo,
+                propName,
+                userId);
+
+            return string.Format(
+                "{0}.{1}() attempted to update property \"${2}\" on UserProfile with Id: {3} but such property does not exist.",
+                className,
+                methodInfo,
+                propName,
+                userId);
+        }
+
+        var currentValue = (int)property.GetValue(profile)!;
+        var updatedValue = updateFunc(currentValue);
+
+        property.SetValue(profile, updatedValue);
+
+        await data.SaveChangesAsync(token);
+
+        logger.LogInformation(
+            "\"${Property}\" on UserProfile with Id: {UserId} was updated successfully.",
+                propName,
+                userId);
+
+        return true;
+    }
+
+    private async Task<UserProfile?> GetDbModel(
+        string id,
+        CancellationToken token = default)
+        => await data
+            .Profiles
+            .FindAsync([id], token);
+
+    private string LogAndReturnNotFoundMessage(string id)
+    {
+        logger.LogWarning(
+            DbEntityNotFoundTemplate,
+            nameof(UserProfile),
+            id);
+
+        return string.Format(
+            DbEntityNotFound,
+            nameof(UserProfile),
+            id);
+    }
+
+    private string LogAndReturnUnauthorizedMessage(
+        string currentUserId,
+        string userToDeleteId)
+    {
+        logger.LogWarning(
+            UnauthorizedMessageTemplate,
+            currentUserId,
+            nameof(UserProfile),
+            userToDeleteId);
+
+        return string.Format(
+            UnauthorizedMessage,
+            currentUserId,
+            nameof(UserProfile),
+            userToDeleteId);
     }
 }

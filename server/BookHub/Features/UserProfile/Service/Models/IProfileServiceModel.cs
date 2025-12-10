@@ -1,15 +1,14 @@
-﻿namespace BookHub.Features.UserProfile.Service.Models
+﻿namespace BookHub.Features.UserProfile.Service.Models;
+
+public interface IProfileServiceModel
 {
-    public interface IProfileServiceModel
-    {
-        string Id { get; }
+    string Id { get; }
 
-        string FirstName { get; }
+    string FirstName { get; }
 
-        string LastName { get; }
+    string LastName { get; }
 
-        string ImageUrl { get; } 
+    string ImagePath { get; } 
 
-        bool IsPrivate { get;  }
-    }
+    bool IsPrivate { get;  }
 }

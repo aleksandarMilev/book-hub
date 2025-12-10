@@ -4,11 +4,11 @@ import { MDBBtn, MDBIcon, MDBTextArea } from 'mdb-react-ui-kit';
 import type React from 'react';
 import type { Dispatch, FC, SetStateAction } from 'react';
 
-import { useReviewFormik } from '@/features/review/components/review-form/formik/useReviewFormik.js';
+import { useReviewFormik } from '@/features/review/components/form/formik/useReviewFormik.js';
 import type { Review } from '@/features/review/types/review.js';
 
 type Props = {
-  bookId?: string | undefined;
+  bookId: string;
   refreshReviews: () => void | Promise<void>;
   setIsReviewCreatedOrEdited: Dispatch<SetStateAction<boolean>>;
   existingReview?: Review | null;

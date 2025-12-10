@@ -1,5 +1,4 @@
 /* eslint-disable react-refresh/only-export-components */
-
 import React, { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
@@ -32,7 +31,7 @@ const CreateBook = lazy(() => import('@/features/book/components/create/CreateBo
 const EditBook = lazy(() => import('@/features/book/components/edit/EditBook.jsx'));
 
 const ReadingList = lazy(() => import('@/features/reading-list/components/list/ReadingList.jsx'));
-const ReviewList = lazy(() => import('@/features/review/components/review-list/ReviewList.jsx'));
+const ReviewList = lazy(() => import('@/features/review/components/list/ReviewList.js'));
 
 const GenreList = lazy(() => import('@/features/genre/components/list/GenreList.js'));
 const GenreDetails = lazy(() => import('@/features/genre/components/details/GenreDetails.jsx'));
