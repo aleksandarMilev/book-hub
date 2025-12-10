@@ -2,7 +2,7 @@ import './ReviewList.css';
 
 import { type FC } from 'react';
 
-import ReviewListItem from '@/features/review/components/review-list-item/ReviewListItem.js';
+import ReviewListItem from '@/features/review/components/list-item/ReviewListItem.js';
 import { useAll } from '@/features/review/hooks/useCrud.js';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
 import Pagination from '@/shared/components/pagination/Pagination.js';

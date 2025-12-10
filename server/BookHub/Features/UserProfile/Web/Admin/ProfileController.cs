@@ -1,22 +1,21 @@
-﻿namespace BookHub.Features.UserProfile.Web.Admin
+﻿namespace BookHub.Features.UserProfile.Web.Admin;
+
+using Areas.Admin.Web;
+using Infrastructure.Extensions;
+using Microsoft.AspNetCore.Mvc;
+using Service;
+
+using static Common.Constants.ApiRoutes;
+
+public class ProfileController(IProfileService service) : AdminApiController
 {
-    using Areas.Admin.Web;
-    using Infrastructure.Extensions;
-    using Microsoft.AspNetCore.Mvc;
-    using Service;
-
-    using static Common.Constants.ApiRoutes;
-
-    public class ProfileController(IProfileService service) : AdminApiController
+    [HttpDelete(Id)]
+    public async Task<ActionResult> Delete(
+        string id,
+        CancellationToken token = default)
     {
-        private readonly IProfileService service = service;
+        var result = await service.Delete(id, token);
 
-        [HttpDelete(Id)]
-        public async Task<ActionResult> Delete(string id)
-        {
-            var result = await this.service.Delete(id);
-
-            return this.NoContentOrBadRequest(result);
-        }
+        return this.NoContentOrBadRequest(result);
     }
 }

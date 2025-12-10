@@ -8,9 +8,9 @@ import { Link } from 'react-router-dom';
 import AuthorIntroduction from '@/features/author/components/introduction/AuthorIntroduction.js';
 import BookFullInfo from '@/features/book/components/details/full-info/BookFullInfo.js';
 import { useDetailsPage } from '@/features/book/hooks/useDetailsPage.js';
-import CreateReview from '@/features/review/components/create-review/CreateReview.js';
-import EditReview from '@/features/review/components/edit-review/EditReview.js';
-import ReviewListItem from '@/features/review/components/review-list-item/ReviewListItem.js';
+import CreateReview from '@/features/review/components/create/CreateReview.js';
+import EditReview from '@/features/review/components/edit/EditReview.js';
+import ReviewListItem from '@/features/review/components/list-item/ReviewListItem.js';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
 import DeleteModal from '@/shared/components/delete-modal/DeleteModal.js';
 import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect.js';
@@ -70,14 +70,14 @@ const BookDetails: FC = () => {
                 <>
                   {!existingReview && (
                     <CreateReview
-                      bookId={id}
+                      bookId={id!}
                       refreshReviews={refreshBook}
                       setIsReviewCreated={setIsReviewCreated}
                     />
                   )}
                   {existingReview && (
                     <EditReview
-                      bookId={id}
+                      bookId={id!}
                       existingReview={existingReview}
                       setIsReviewEdited={setIsReviewEdited}
                       refreshReviews={refreshBook}

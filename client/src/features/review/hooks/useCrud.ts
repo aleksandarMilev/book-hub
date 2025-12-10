@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import * as api from '@/features/review/api/api.js';
@@ -6,7 +6,7 @@ import type { CreateReview, Review } from '@/features/review/types/review.js';
 import { routes } from '@/shared/lib/constants/api.js';
 import { pagination } from '@/shared/lib/constants/defaultValues.js';
 import { errors } from '@/shared/lib/constants/errorMessages.js';
-import { IsCanceledError, IsError, toIntId } from '@/shared/lib/utils/utils.js';
+import { IsCanceledError, IsError } from '@/shared/lib/utils/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 import { useMessage } from '@/shared/stores/message/message.js';
 
@@ -15,7 +15,6 @@ export const useAll = () => {
   const navigate = useNavigate();
 
   const { bookId } = useParams<{ bookId: string }>();
-  const parsedBookId = useMemo(() => toIntId(bookId), [bookId]);
 
   const location = useLocation();
   const bookTitle = location.state as string | undefined;
@@ -30,14 +29,14 @@ export const useAll = () => {
 
   const fetchData = useCallback(
     async (pageNumber: number, signal?: AbortSignal) => {
-      if (!token || !parsedBookId) {
+      if (!token || !bookId) {
         return;
       }
 
       try {
         setIsFetching(true);
 
-        const data = await api.all(parsedBookId, pageNumber, pageSize, token, signal);
+        const data = await api.all(bookId, pageNumber, pageSize, token, signal);
 
         setReviews(data?.items ?? []);
         setTotalItems(data?.totalItems ?? 0);
@@ -52,11 +51,11 @@ export const useAll = () => {
         setIsFetching(false);
       }
     },
-    [token, parsedBookId, pageSize, navigate],
+    [token, bookId, pageSize, navigate],
   );
 
   useEffect(() => {
-    if (!parsedBookId) {
+    if (!bookId) {
       navigate(routes.badRequest, { state: { message: 'Invalid book id.' } });
       return;
     }
@@ -64,7 +63,7 @@ export const useAll = () => {
     const controller = new AbortController();
     void fetchData(page, controller.signal);
     return () => controller.abort();
-  }, [parsedBookId, page, fetchData, navigate]);
+  }, [bookId, page, fetchData, navigate]);
 
   const handleNextPage = useCallback(() => {
     if (page < totalPages) {
@@ -102,7 +101,7 @@ export const useCreate = () => {
 
       try {
         const created = await api.create(reviewData, token);
-        return (created as { id?: number } | undefined)?.id;
+        return (created as { id?: string } | undefined)?.id;
       } catch (error) {
         const message = IsError(error) ? error.message : 'Failed to create review.';
         navigate(routes.badRequest, { state: { message } });
@@ -121,7 +120,7 @@ export const useEdit = () => {
   const navigate = useNavigate();
 
   const editHandler = useCallback(
-    async (reviewId: number, reviewData: CreateReview) => {
+    async (reviewId: string, reviewData: CreateReview) => {
       if (!token) {
         return;
       }
@@ -141,7 +140,7 @@ export const useEdit = () => {
   return editHandler;
 };
 
-export const useRemove = (id: number, refresh?: () => void | Promise<void>) => {
+export const useRemove = (id: string, refresh?: () => void | Promise<void>) => {
   const { token } = useAuth();
   const navigate = useNavigate();
   const { showMessage } = useMessage();
@@ -167,7 +166,7 @@ export const useRemove = (id: number, refresh?: () => void | Promise<void>) => {
       if (refresh) {
         await Promise.resolve(refresh());
       }
-    } catch (error: unknown) {
+    } catch (error) {
       if (IsCanceledError(error)) {
         return;
       }

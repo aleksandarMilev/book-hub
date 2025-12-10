@@ -8,7 +8,7 @@ import type { CreateReview, Review } from '@/features/review/types/review.js';
 import { reviewSchema } from '../validation/reviewSchema.js';
 
 type Props = {
-  bookId?: string | undefined;
+  bookId: string;
   refreshReviews: () => void | Promise<void>;
   setIsReviewCreatedOrEdited: React.Dispatch<React.SetStateAction<boolean>>;
   existingReview?: Review | null;

@@ -8,7 +8,7 @@ public class SearchProfileServiceModel
 
     public string LastName { get; init; } = null!;
 
-    public string ImageUrl { get; init; } = null!;
+    public string ImagePath { get; init; } = null!;
 
     public bool IsPrivate { get; init; }
 }

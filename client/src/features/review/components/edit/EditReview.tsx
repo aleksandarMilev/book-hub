@@ -1,10 +1,10 @@
 import type { Dispatch, FC, SetStateAction } from 'react';
 
-import ReviewForm from '@/features/review/components/review-form/ReviewForm.js';
+import ReviewForm from '@/features/review/components/form/ReviewForm.js';
 import type { Review } from '@/features/review/types/review.js';
 
 type Props = {
-  bookId?: string | undefined;
+  bookId: string;
   refreshReviews: () => void | Promise<void>;
   existingReview: Review;
   setIsReviewEdited: Dispatch<SetStateAction<boolean>>;

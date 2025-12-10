@@ -1,5 +1,5 @@
 export type Review = {
-  id: number;
+  id: string;
   content: string;
   rating: number;
   upvotes: number;
@@ -14,10 +14,10 @@ export type Review = {
 export type CreateReview = {
   content: string;
   rating: number;
-  bookId?: string | undefined;
+  bookId?: string;
 };
 
 export type VoteRequest = {
-  reviewId: number;
+  reviewId: string;
   isUpvote: boolean;
 };

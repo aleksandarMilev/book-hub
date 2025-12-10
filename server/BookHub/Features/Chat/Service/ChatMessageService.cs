@@ -36,7 +36,7 @@
                 .Select(p => new
                 {
                     Name = p.FirstName + " " + p.LastName,
-                    Image = p.ImageUrl
+                    Image = p.ImagePath
                 })
                 .FirstOrDefaultAsync();
 
@@ -89,7 +89,7 @@
                .Select(p => new
                {
                    Name = p.FirstName + " " + p.LastName,
-                   Image = p.ImageUrl
+                   Image = p.ImagePath
                })
                .FirstOrDefaultAsync();
 

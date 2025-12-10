@@ -10,10 +10,12 @@ import DeleteModal from '@/shared/components/delete-modal/DeleteModal.js';
 import { RenderStars } from '@/shared/components/render-stars/RenderStars.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 
-const ReviewListItem: FC<{
+type Props = {
   review: Review;
   onVote: () => void | Promise<void>;
-}> = ({ review, onVote }) => {
+};
+
+const ReviewListItem: FC<Props> = ({ review, onVote }) => {
   const { userId, hasProfile } = useAuth();
   const { id, content, rating, creatorId, createdBy, upvotes, downvotes } = review;
 
