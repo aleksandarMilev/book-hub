@@ -276,10 +276,6 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddAutoMapper(
-        this IServiceCollection services)
-        => services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
     private static IServiceCollection AddJwtSettings(
         this IServiceCollection services,
         IConfiguration configuration)

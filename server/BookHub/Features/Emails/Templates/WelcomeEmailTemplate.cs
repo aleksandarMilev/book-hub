@@ -2,7 +2,7 @@
 
 public static class WelcomeEmailTemplate
 {
-    public static string Build(string userName)
+    public static string Build(string username)
     {
         return $@"
 <!DOCTYPE html>
@@ -26,7 +26,7 @@ public static class WelcomeEmailTemplate
                     </tr>
                     <tr>
                         <td style=""padding:24px 32px;color:#111827;font-size:14px;line-height:1.6;"">
-                            <p style=""margin-top:0;"">Hi {System.Net.WebUtility.HtmlEncode(userName)},</p>
+                            <p style=""margin-top:0;"">Hi {System.Net.WebUtility.HtmlEncode(username)},</p>
 
                             <p>
                                 Thanks for signing up for <strong>BookHub</strong>! You can now explore books,

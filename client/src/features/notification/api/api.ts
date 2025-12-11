@@ -16,26 +16,26 @@ export const lastThree = async (token: string, signal?: AbortSignal) => {
   }
 };
 
-export async function all(
+export const all = async (
   token: string,
   pageIndex: number,
   pageSize: number,
   signal?: AbortSignal,
-) {
+) => {
   try {
     const url = `${routes.notification}?pageIndex=${pageIndex}&pageSize=${pageSize}`;
-    const response = await http.get<PaginatedResult<NotificationType>>(
+    const { data } = await http.get<PaginatedResult<NotificationType>>(
       url,
       getAuthConfig(token, signal),
     );
 
-    return response.data;
+    return data;
   } catch (error) {
     processError(error, errors.notification.all);
   }
-}
+};
 
-export async function markAsRead(id: number, token: string, signal?: AbortSignal) {
+export const markAsRead = async (id: string, token: string, signal?: AbortSignal) => {
   try {
     const url = `${routes.notification}/${id}/read`;
     await http.patch<void>(url, null, getAuthConfig(token, signal));
@@ -44,9 +44,9 @@ export async function markAsRead(id: number, token: string, signal?: AbortSignal
   } catch (error) {
     processError(error, errors.notification.markAsRead);
   }
-}
+};
 
-export async function remove(id: number, token: string, signal?: AbortSignal) {
+export const remove = async (id: string, token: string, signal?: AbortSignal) => {
   try {
     const url = `${routes.notification}/${id}`;
     await http.delete<void>(url, getAuthConfig(token, signal));
@@ -59,4 +59,4 @@ export async function remove(id: number, token: string, signal?: AbortSignal) {
 
     return false;
   }
-}
+};

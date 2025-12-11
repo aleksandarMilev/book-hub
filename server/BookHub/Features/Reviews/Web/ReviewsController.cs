@@ -14,7 +14,7 @@ using static Common.Constants.ApiRoutes;
 using static Common.Constants.DefaultValues;
 
 [Authorize]
-public class ReviewController(IReviewService service) : ApiController
+public class ReviewsController(IReviewService service) : ApiController
 {
     [HttpGet(ByBook + Id)]
     public async Task<ActionResult<PaginatedModel<ReviewServiceModel>>> AllForBook(

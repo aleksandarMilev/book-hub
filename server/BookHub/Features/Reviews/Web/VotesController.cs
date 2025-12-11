@@ -7,7 +7,7 @@ using Models;
 using Service;
 
 [Authorize]
-public class VoteController(IVoteService service) : ApiController
+public class VotesController(IVoteService service) : ApiController
 {
     [HttpPost]
     public async Task<ActionResult<Guid>> Create(

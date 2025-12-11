@@ -276,8 +276,7 @@ namespace BookHub.Data.Migrations
                 name: "Notifications",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Message = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     IsRead = table.Column<bool>(type: "bit", nullable: false),
                     ReceiverId = table.Column<string>(type: "nvarchar(max)", nullable: false),

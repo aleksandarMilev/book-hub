@@ -1,6 +1,7 @@
 import './ReadingList.css';
 
 import { type FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 import noBooksImage from '@/assets/images/no-books-found.png';
@@ -10,6 +11,8 @@ import { useReadingListPage } from '@/features/reading-list/hooks/useReadingList
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
 
 const ReadingList: FC = () => {
+  const { t } = useTranslation('readingList');
+
   const {
     missing,
     isFetching,
@@ -25,7 +28,7 @@ const ReadingList: FC = () => {
   const totalPages = getTotalPages(totalItems, pageSize);
 
   if (missing) {
-    return <p>Invalid reading list request.</p>;
+    return <p>{t('errors.invalidRequest')}</p>;
   }
 
   if (isFetching) {
@@ -34,7 +37,7 @@ const ReadingList: FC = () => {
 
   return (
     <div className="reading-list-container">
-      <h1 className="read-status-title">{getTitle(statusUI, firstName)}</h1>
+      <h1 className="read-status-title">{getTitle(t, statusUI, firstName)}</h1>
       <div className="d-flex justify-content-center row">
         <div className="col-md-10">
           {readingList.length > 0 ? (
@@ -48,7 +51,7 @@ const ReadingList: FC = () => {
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page === 1}
                 >
-                  <FaArrowLeft /> Previous
+                  <FaArrowLeft /> {t('pagination.previous')}
                 </button>
                 <div className="pagination-info mx-3">
                   <span className="current-page">{page}</span> /{' '}
@@ -59,7 +62,7 @@ const ReadingList: FC = () => {
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                   disabled={page === totalPages}
                 >
-                  Next <FaArrowRight />
+                  {t('pagination.next')} <FaArrowRight />
                 </button>
               </div>
             </>
@@ -67,11 +70,11 @@ const ReadingList: FC = () => {
             <div className="d-flex flex-column align-items-center justify-content-center mt-5">
               <img
                 src={noBooksImage}
-                alt="No books found"
+                alt={t('empty.alt')}
                 className="mb-4"
                 style={{ maxWidth: '200px', opacity: 0.7 }}
               />
-              <h5 className="text-muted">{firstName} has no books in this list.</h5>
+              <h5 className="text-muted">{t('empty.message', { firstName })}</h5>
             </div>
           )}
         </div>

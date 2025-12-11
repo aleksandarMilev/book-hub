@@ -8,7 +8,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AutoMapper" Version="13.0.1" />
 		<PackageReference Include="MailKit" Version="4.14.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.0" />
@@ -24,8 +23,7 @@
 
 	<ItemGroup>
 		<Folder Include="Data\Models\Shared\BookGenre\Seed\" />
-		<Folder Include="wwwroot\images\articles\" />
-		<Folder Include="wwwroot\images\profiles\" />
+		<Folder Include="wwwroot\images\" />
 	</ItemGroup>
 
 </Project>

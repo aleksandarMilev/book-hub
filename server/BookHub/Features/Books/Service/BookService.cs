@@ -151,7 +151,8 @@ public class BookService(
                 dbModel.Id,
                 nameof(BookDbModel),
                 dbModel.Title,
-                await adminService.GetId());
+                await adminService.GetId(),
+                token);
         }
 
         return dbModel.ToDetailsServiceModel(userId);

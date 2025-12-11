@@ -93,7 +93,8 @@ public class AuthorService(
                 dbModel.Id,
                 "Author",
                 dbModel.Name,
-                await adminService.GetId());
+                await adminService.GetId(),
+                token);
         }
 
         return dbModel.ToDetailsServiceModel();

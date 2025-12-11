@@ -1,11 +1,17 @@
+import type { TFunction } from 'i18next';
+
 import type { ReadingStatusUI } from '@/features/reading-list/types/readingList.js';
 
 export const getTotalPages = (totalItems: number, pageSize: number) =>
   Math.max(1, Math.ceil(totalItems / pageSize));
 
-export const getTitle = (statusUI: ReadingStatusUI, firstName: string) =>
-  statusUI === 'read'
-    ? `${firstName} · Read`
-    : statusUI === 'to read'
-      ? `${firstName} · To Read`
-      : `${firstName} · Currently Reading`;
+export const getTitle = (t: TFunction, statusUI: ReadingStatusUI, firstName: string) => {
+  const statusText =
+    statusUI === 'read'
+      ? t('status.read')
+      : statusUI === 'to read'
+        ? t('status.toRead')
+        : t('status.currentlyReading');
+
+  return `${firstName} · ${statusText}`;
+};

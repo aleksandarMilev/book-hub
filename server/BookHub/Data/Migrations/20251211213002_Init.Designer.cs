@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookHub.Data.Migrations
 {
     [DbContext(typeof(BookHubDbContext))]
-    [Migration("20251211135415_Init")]
+    [Migration("20251211213002_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -9358,11 +9358,9 @@ namespace BookHub.Data.Migrations
 
             modelBuilder.Entity("BookHub.Features.Notification.Data.Models.Notification", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");

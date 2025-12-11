@@ -1,0 +1,18 @@
+{
+  "status": {
+    "read": "Прочетени",
+    "toRead": "За четене",
+    "currentlyReading": "Чета в момента"
+  },
+  "pagination": {
+    "previous": "Назад",
+    "next": "Напред"
+  },
+  "empty": {
+    "alt": "Няма намерени книги",
+    "message": "{{firstName}} няма книги в този списък."
+  },
+  "errors": {
+    "invalidRequest": "Невалидна заявка за списъка за четене."
+  }
+}

@@ -1,6 +1,5 @@
 ﻿namespace BookHub.Features.ReadingList.Web;
 
-using AutoMapper;
 using Book.Service.Models;
 using BookHub.Common;
 using Data.Models;
