@@ -1,12 +1,22 @@
-﻿namespace BookHub.Features.ReadingList.Web.Models
+﻿namespace BookHub.Features.ReadingList.Web.Models;
+
+using System.ComponentModel.DataAnnotations;
+using Data.Models;
+
+public class ReadingListWebModel : IValidatableObject
 {
-    using System.ComponentModel.DataAnnotations;
+    public Guid BookId { get; init; }
 
-    public class ReadingListWebModel
+    public ReadingListStatus Status { get; init; }
+
+    public IEnumerable<ValidationResult> Validate(
+        ValidationContext validationContext)
     {
-        public Guid BookId { get; init; }
-
-        [Required]
-        public string Status { get; init; } = null!;
+        if (!Enum.IsDefined(typeof(ReadingListStatus), this.Status))
+        {
+            yield return new ValidationResult(
+                "Invalid Stattus value.",
+                [nameof(this.Status)]);
+        }
     }
 }

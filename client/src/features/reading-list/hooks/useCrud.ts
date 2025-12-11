@@ -26,7 +26,6 @@ export function useList(
         setReadingList([]);
         setTotalItems(0);
         setError(null);
-
         return;
       }
 
@@ -38,7 +37,14 @@ export function useList(
         setReadingList([]);
         setTotalItems(0);
         setError(null);
+        return;
+      }
 
+      const apiStatus = toApiStatus(statusUI);
+      if (apiStatus == null) {
+        setReadingList([]);
+        setTotalItems(0);
+        setError('Invalid reading status.');
         return;
       }
 
@@ -46,7 +52,6 @@ export function useList(
         setIsFetching(true);
         setError(null);
 
-        const apiStatus = toApiStatus(statusUI);
         const result = await api.get(
           ownerId ?? userId!,
           token,
@@ -88,10 +93,15 @@ export function useListActions(
 ) {
   const addToList = useCallback(
     async (statusUI: ReadingStatusUI) => {
-      try {
-        await api.add(bookId, toApiStatus(statusUI), token);
-        showMessage('Book added to your reading list!', true);
+      const apiStatus = toApiStatus(statusUI);
+      if (apiStatus == null) {
+        showMessage('Invalid reading status.', false);
+        return false;
+      }
 
+      try {
+        await api.add(bookId, apiStatus, token);
+        showMessage('Book added to your reading list!', true);
         return true;
       } catch {
         showMessage('Failed to update reading list.', false);
@@ -103,10 +113,15 @@ export function useListActions(
 
   const removeFromList = useCallback(
     async (statusUI: ReadingStatusUI) => {
-      try {
-        await api.remove(bookId, toApiStatus(statusUI), token);
-        showMessage('Book removed from your reading list!', true);
+      const apiStatus = toApiStatus(statusUI);
+      if (apiStatus == null) {
+        showMessage('Invalid reading status.', false);
+        return false;
+      }
 
+      try {
+        await api.remove(bookId, apiStatus, token);
+        showMessage('Book removed from your reading list!', true);
         return true;
       } catch {
         showMessage('Failed to remove book from list.', false);

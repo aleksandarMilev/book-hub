@@ -1,42 +1,67 @@
-﻿namespace BookHub.Features.ReadingList.Web
+﻿namespace BookHub.Features.ReadingList.Web;
+
+using AutoMapper;
+using Book.Service.Models;
+using BookHub.Common;
+using Data.Models;
+using Infrastructure.Extensions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Models;
+using Service;
+using Shared;
+
+using static Common.Constants.DefaultValues;
+
+[Authorize]
+public class ReadingListController(IReadingListService service) : ApiController
 {
-    using Book.Service.Models;
-    using BookHub.Common;
-    using Infrastructure.Extensions;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
-    using Models;
-    using Service;
-
-    using static Common.Constants.DefaultValues;
-
-    [Authorize]
-    public class ReadingListController(IReadingListService service) : ApiController
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<BookServiceModel>>> All(
+        string userId,
+        ReadingListStatus status,
+        int pageIndex = DefaultPageIndex,
+        int pageSize = DefaultPageSize,
+        CancellationToken token = default)
     {
-        private readonly IReadingListService service = service;
+        var result = await service.All(
+            userId,
+            status,
+            pageIndex,
+            pageSize,
+            token);
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<BookServiceModel>>> All(
-            string userId,
-            string status,
-            int pageIndex = DefaultPageIndex,
-            int pageSize = DefaultPageSize)
-            => this.Ok(await this.service.All(userId, status, pageIndex, pageSize));
-
-        [HttpPost]
-        public async Task<ActionResult> Add(ReadingListWebModel webModel) 
+        if (result.Succeeded)
         {
-            var result = await this.service.Add(webModel.BookId, webModel.Status);
-
-            return this.NoContentOrBadRequest(result);
+            return this.Ok(result.Data);
         }
 
-        [HttpDelete]
-        public async Task<ActionResult> Delete(ReadingListWebModel webModel)
-        {
-            var result = await this.service.Delete(webModel.BookId, webModel.Status);
+        return this.BadRequest(result.ErrorMessage);
+    }
 
-            return this.NoContentOrBadRequest(result);
-        }
+    [HttpPost]
+    public async Task<ActionResult> Add(
+        ReadingListWebModel webModel,
+        CancellationToken token = default) 
+    {
+        var serviceModel = webModel.ToServiceModel();
+        var result = await service.Add(
+            serviceModel,
+            token);
+
+        return this.NoContentOrBadRequest(result);
+    }
+
+    [HttpDelete]
+    public async Task<ActionResult> Delete(
+        ReadingListWebModel webModel,
+        CancellationToken token = default)
+    {
+        var serviceModel = webModel.ToServiceModel();
+        var result = await service.Delete(
+            serviceModel,
+            token);
+
+        return this.NoContentOrBadRequest(result);
     }
 }

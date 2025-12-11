@@ -36,18 +36,18 @@ public class CreateAuthorWebModel : IValidatableObject
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        if (!Enum.IsDefined(typeof(Nationality), Nationality))
+        if (!Enum.IsDefined(typeof(Nationality), this.Nationality))
         {
             yield return new ValidationResult(
                 "Invalid nationality value.",
-                [nameof(Nationality)]);
+                [nameof(this.Nationality)]);
         }
 
-        if (!Enum.IsDefined(typeof(Gender), Gender))
+        if (!Enum.IsDefined(typeof(Gender), this.Gender))
         {
             yield return new ValidationResult(
                 "Invalid gender value.",
-                [nameof(Gender)]);
+                [nameof(this.Gender)]);
         }
     }
 }

@@ -14,7 +14,7 @@ export async function get(
   signal?: AbortSignal,
 ) {
   try {
-    const params: Record<string, string | number | null> = { userId, status };
+    const params: Record<string, string | number> = { userId, status };
     if (pageIndex != null) {
       params.pageIndex = pageIndex;
     }

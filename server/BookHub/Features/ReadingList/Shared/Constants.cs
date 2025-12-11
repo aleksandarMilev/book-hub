@@ -1,6 +1,8 @@
-﻿namespace BookHub.Features.ReadingList.Service
+﻿namespace BookHub.Features.ReadingList.Shared;
+
+public static class Constants
 {
-    public static class ErrorMessage
+    public static class ErrorMessages
     {
         public const string BookAlreadyInTheList = "This book is already added in the user list!";
 
