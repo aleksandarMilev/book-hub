@@ -1,27 +1,28 @@
 export type ReadingStatusUI = 'read' | 'to read' | 'currently reading' | null;
 
-export type ReadingStatusAPI = 'Read' | 'ToRead' | 'CurrentlyReading' | null;
+// server enum: Read = 0, ToRead = 1, CurrentlyReading = 2
+export type ReadingStatusAPI = 0 | 1 | 2;
 
-export const toApiStatus = (status: string | null | undefined): ReadingStatusAPI => {
+export const toApiStatus = (status: ReadingStatusUI): ReadingStatusAPI | null => {
   switch (status) {
     case 'read':
-      return 'Read';
+      return 0;
     case 'to read':
-      return 'ToRead';
+      return 1;
     case 'currently reading':
-      return 'CurrentlyReading';
+      return 2;
     default:
       return null;
   }
 };
 
-export const toUiStatus = (status: string | null | undefined): ReadingStatusUI => {
+export const toUiStatus = (status: number | null | undefined): ReadingStatusUI => {
   switch (status) {
-    case 'Read':
+    case 0:
       return 'read';
-    case 'ToRead':
+    case 1:
       return 'to read';
-    case 'CurrentlyReading':
+    case 2:
       return 'currently reading';
     default:
       return null;

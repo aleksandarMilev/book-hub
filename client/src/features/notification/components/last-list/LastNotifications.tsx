@@ -1,6 +1,7 @@
 import './LastNotifications.css';
 
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Badge, Dropdown } from 'react-bootstrap';
 import { FaBell } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
@@ -11,36 +12,61 @@ import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.j
 import { routes } from '@/shared/lib/constants/api.js';
 
 const LastNotifications: FC = () => {
+  const { t } = useTranslation('notifications');
+
   const { notifications, isFetching, refetch } = useLastThree();
-  const unreadNotifications = notifications.filter((n) => !n.isRead);
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   if (isFetching) {
     return <DefaultSpinner />;
   }
 
   return (
-    <Dropdown align="end">
-      <Dropdown.Toggle variant="light" id="notifications-dropdown">
-        <FaBell size={24} />
-        {unreadNotifications.length > 0 && (
-          <Badge pill bg="danger" className="notification-badge">
-            {unreadNotifications.length}
+    <Dropdown align="end" className="bh-notifications-dd">
+      <Dropdown.Toggle
+        variant="light"
+        id="notifications-dropdown"
+        className="bh-notifications-dd__toggle"
+      >
+        <FaBell size={22} />
+        {unreadCount > 0 && (
+          <Badge pill bg="danger" className="bh-notifications-dd__badge">
+            {unreadCount}
           </Badge>
         )}
       </Dropdown.Toggle>
-      <Dropdown.Menu>
-        {notifications.length > 0 ? (
-          notifications.map((n) => (
-            <LastNotificationsListItem key={n.id} notification={n} refetchNotifications={refetch} />
-          ))
-        ) : (
-          <Dropdown.Item>No new notifications</Dropdown.Item>
-        )}
-        <Link to={routes.notification}>
-          <Dropdown.Item as={Link} to={routes.notification}>
-            All
+
+      <Dropdown.Menu className="bh-notifications-dd__menu">
+        <div className="bh-notifications-dd__header">
+          <div className="bh-notifications-dd__title">{t('dropdown.title')}</div>
+          <div className="bh-notifications-dd__subtitle">
+            {unreadCount > 0
+              ? t('dropdown.unreadCount', { count: unreadCount })
+              : t('dropdown.allCaughtUp')}
+          </div>
+        </div>
+
+        <div className="bh-notifications-dd__items">
+          {notifications.length > 0 ? (
+            notifications.map((n) => (
+              <LastNotificationsListItem
+                key={n.id}
+                notification={n}
+                refetchNotifications={refetch}
+              />
+            ))
+          ) : (
+            <Dropdown.Item className="bh-notifications-dd__empty">
+              {t('dropdown.empty')}
+            </Dropdown.Item>
+          )}
+        </div>
+
+        <div className="bh-notifications-dd__footer">
+          <Dropdown.Item as={Link} to={routes.notification} className="bh-notifications-dd__all">
+            {t('dropdown.viewAll')}
           </Dropdown.Item>
-        </Link>
+        </div>
       </Dropdown.Menu>
     </Dropdown>
   );

@@ -15,7 +15,6 @@ builder.Services
         builder.Environment)
     .AddApiControllers()
     .AddServices()
-    .AddAutoMapper()
     .AddSwagger()
     .AddHealthcheck();
 
@@ -58,7 +57,7 @@ var url = Environment.GetEnvironmentVariable("DOTNET_URLS")
     ?? Environment.GetEnvironmentVariable("ASPNETCORE_URLS");
 
 logger.LogInformation(
-    "Server is listening on: {Url}. Enviroment: {env}",
+    "Server is listening on: {Url}. Environment: {env}",
     url,
     app.Environment.ToString());
 

@@ -1,0 +1,18 @@
+{
+  "status": {
+    "read": "Read",
+    "toRead": "To Read",
+    "currentlyReading": "Currently Reading"
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "empty": {
+    "alt": "No books found",
+    "message": "{{firstName}} has no books in this list."
+  },
+  "errors": {
+    "invalidRequest": "Invalid reading list request."
+  }
+}

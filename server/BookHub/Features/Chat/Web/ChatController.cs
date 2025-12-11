@@ -1,6 +1,5 @@
 ﻿namespace BookHub.Features.Chat.Web
 {
-    using AutoMapper;
     using BookHub.Common;
     using Infrastructure.Extensions;
     using Infrastructure.Services.Result;
@@ -15,11 +14,9 @@
 
     [Authorize]
     public class ChatController(
-        IChatService service,
-        IMapper mapper) : ApiController
+        IChatService service) : ApiController
     {
         private readonly IChatService service = service;
-        private readonly IMapper mapper = mapper;
 
         [HttpGet(Id)]
         public async Task<ActionResult<ChatDetailsServiceModel>> Details(int id)
@@ -40,7 +37,8 @@
         [HttpPost]
         public async Task<ActionResult<int>> Create(CreateChatWebModel webModel)
         {
-            var serviceModel = this.mapper.Map<CreateChatServiceModel>(webModel);
+            //var serviceModel = this.mapper.Map<CreateChatServiceModel>(webModel);
+            var serviceModel = new CreateChatServiceModel(); //TODO: implement mapping
             var id = await this.service.Create(serviceModel);
 
             return this.Created(nameof(this.Create), id);
@@ -49,7 +47,8 @@
         [HttpPut(Id)]
         public async Task<ActionResult<Result>> Edit(int id, CreateChatWebModel webModel)
         {
-            var serviceModel = this.mapper.Map<CreateChatServiceModel>(webModel);
+            //var serviceModel = this.mapper.Map<CreateChatServiceModel>(webModel);
+            var serviceModel = new CreateChatServiceModel(); //TODO: implement mapping
             var result = await this.service.Edit(id, serviceModel);
 
             return this.NoContentOrBadRequest(result);

@@ -1,8 +1,71 @@
+.reading-list-container {
+  font-family: 'Inter', sans-serif;
+  padding: 2.2rem 0 3rem;
+}
+
 .read-status-title {
-  margin: 1em;
-  font-size: 2rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
+  margin: 0 auto 1.6rem;
+  width: min(100%, 980px);
+  padding: 0.9rem 1.2rem;
   text-align: center;
-  transition: color 0.3s ease;
+
+  font-size: clamp(1.6rem, 2.2vw + 1rem, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #182334;
+
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border-radius: 18px;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.reading-list-container .col-md-10 {
+  max-width: 980px;
+}
+
+.reading-list-container img[alt='No books found'] {
+  transition:
+    transform 0.25s ease,
+    opacity 0.25s ease;
+}
+
+.reading-list-container img[alt='No books found']:hover {
+  transform: translateY(-4px);
+  opacity: 0.9;
+}
+
+.reading-list-container h5.text-muted {
+  margin-top: 0.2rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #6c757d !important;
+}
+
+.reading-list-container .col-md-10 {
+  animation: readingListFadeInUp 0.35s ease both;
+}
+
+@media (max-width: 768px) {
+  .reading-list-container {
+    padding: 1.6rem 0 2.4rem;
+  }
+
+  .read-status-title {
+    border-radius: 16px;
+    padding: 0.85rem 1rem;
+    margin-bottom: 1.2rem;
+  }
+}
+
+@keyframes readingListFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

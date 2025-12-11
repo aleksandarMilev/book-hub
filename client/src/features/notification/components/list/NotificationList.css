@@ -1,27 +1,100 @@
-.notification-list .list-group-item {
-  border-left: 5px solid transparent;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+.bh-notifications-page {
+  font-family: 'Inter', sans-serif;
+  padding: 2.2rem 0 3rem;
 }
 
-.notification-list .list-group-item.unread {
-  background-color: #f9f9f9;
-  border-color: #007bff;
+.bh-notifications-header {
+  width: min(100%, 980px);
+  margin: 0 auto 1.4rem;
+  padding: 1.1rem 1.2rem;
+
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.12);
 }
 
-.notification-list .list-group-item.read {
-  background-color: #ffffff;
+.bh-notifications-header__titleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bh-notifications-header__icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(154, 107, 255, 0.12);
+  color: #6f42c1;
+}
+
+.bh-notifications-header__title {
+  margin: 0;
+  font-size: clamp(1.5rem, 2.2vw + 1rem, 2.1rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: #182334;
+}
+
+.bh-notifications-header__subtitle {
+  margin: 6px 0 0;
+  color: #6c757d;
+  font-size: 0.95rem;
+}
+
+.bh-notifications-list {
+  width: min(100%, 980px);
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bh-notifications-pagination {
+  width: min(100%, 980px);
+  margin: 18px auto 0;
+}
+
+.bh-notifications-empty {
+  width: min(100%, 980px);
+  margin: 0 auto;
+  padding-top: 1.6rem;
+}
+
+.bh-notifications-empty__card {
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.12);
+  padding: 1.4rem 1.2rem;
+  text-align: center;
+}
+
+.bh-notifications-empty__title {
+  font-weight: 900;
+  color: #182334;
+  letter-spacing: -0.02em;
+}
+
+.bh-notifications-empty__text {
+  margin-top: 4px;
   color: #6c757d;
 }
 
-.notification-list .list-group-item h5 {
-  font-size: 1.1rem;
-}
+@media (max-width: 768px) {
+  .bh-notifications-page {
+    padding: 1.6rem 0 2.4rem;
+  }
 
-.notification-list .list-group-item:hover {
-  background-color: #e9f4ff;
-}
-
-.notification-list .btn {
-  font-size: 0.9rem;
-  padding: 5px 10px;
+  .bh-notifications-header {
+    border-radius: 16px;
+  }
 }

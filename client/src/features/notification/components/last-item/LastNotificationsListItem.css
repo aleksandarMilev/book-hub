@@ -1,68 +1,90 @@
-.notification-item {
-  padding: 15px;
-  border-bottom: 1px solid #e0e0e0;
-  display: flex;
-  flex-direction: column;
-  background-color: #fff;
-  transition: background-color 0.3s ease;
-  cursor: pointer;
+.bh-notifications-dd-item {
+  padding: 12px 12px;
+  border-radius: 14px;
+  margin: 6px 8px;
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease;
 }
 
-.notification-item:hover {
-  background-color: #f8f9fa;
+.bh-notifications-dd-item:hover {
+  transform: translateY(-1px);
+  background: rgba(154, 107, 255, 0.08);
 }
 
-.notification-header {
+.bh-notifications-dd-item__row {
   display: flex;
-  flex-direction: row;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.bh-notifications-dd-item__icon {
+  display: inline-flex;
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
   align-items: center;
+  justify-content: center;
+  background: rgba(154, 107, 255, 0.12);
+  color: #6f42c1;
+  flex: 0 0 auto;
+}
+
+.bh-notifications-dd-item__body {
+  min-width: 0;
+  flex: 1;
+}
+
+.bh-notifications-dd-item__top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
   gap: 10px;
 }
 
-.notification-icon-wrapper {
-  display: flex;
-  align-items: center;
+.bh-notifications-dd-item__type {
+  color: #182334;
+  font-weight: 800;
+  letter-spacing: -0.01em;
 }
 
-.notification-icon {
-  font-size: 1.5em;
-  color: #007bff;
-}
-
-.resource-type {
-  font-weight: bold;
-  color: #007bff;
-  font-size: 1.1em;
-}
-
-.notification-message {
-  font-size: 0.9em;
-  color: #333;
-  margin-top: 5px;
-}
-
-.notification-footer {
-  margin-top: 5px;
+.bh-notifications-dd-item__date {
   color: #6c757d;
-  font-size: 0.85em;
-  display: flex;
-  justify-content: space-between;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.bh-notifications-dd-item__message {
+  margin-top: 4px;
+  color: #2f343c;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.bh-notifications-dd-item__meta {
+  margin-top: 8px;
+}
+
+.bh-notifications-dd-item__pill {
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  display: inline-flex;
   align-items: center;
+  gap: 6px;
 }
 
-.notification-timestamp {
-  font-style: italic;
+.bh-notifications-dd-item__pill--unread {
+  background: rgba(154, 107, 255, 0.12);
+  border-color: rgba(154, 107, 255, 0.18);
+  color: #2f2a43;
 }
 
-.notification-status {
-  font-size: 0.85em;
-  font-weight: bold;
-}
-
-.notification-item-read .notification-status {
-  color: #28a745;
-}
-
-.notification-item-unread .notification-status {
-  color: #dc3545;
+.bh-notifications-dd-item__pill--read {
+  background: rgba(108, 117, 125, 0.1);
+  border-color: rgba(108, 117, 125, 0.14);
+  color: #6c757d;
 }

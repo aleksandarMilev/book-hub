@@ -1,0 +1,37 @@
+{
+  "page": {
+    "title": "Notifications",
+    "subtitle": "Your latest updates and alerts."
+  },
+  "dropdown": {
+    "title": "Notifications",
+    "unreadCount": "{{count}} unread",
+    "allCaughtUp": "All caught up",
+    "empty": "No new notifications",
+    "viewAll": "View all"
+  },
+  "actions": {
+    "view": "View",
+    "delete": "Delete"
+  },
+  "status": {
+    "read": "Read",
+    "unread": "Unread"
+  },
+  "empty": {
+    "title": "No notifications",
+    "text": "You're all caught up."
+  },
+  "messages": {
+    "deleteSuccess": "Notification successfully deleted!"
+  },
+  "errors": {
+    "loadAll": "Failed to load notifications.",
+    "delete": "Failed to delete notification."
+  },
+  "resourceType": {
+    "Book": "Book",
+    "Author": "Author",
+    "Chat": "Chat"
+  }
+}
