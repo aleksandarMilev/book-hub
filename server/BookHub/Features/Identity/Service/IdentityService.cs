@@ -5,11 +5,14 @@ using System.Security.Claims;
 using System.Text;
 using Data.Models;
 using Email;
+using Features.UserProfile.Service;
 using Infrastructure.Services.Result;
 using Infrastructure.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Models;
+using Shared;
 
 using static Common.Constants.Names;
 using static Shared.Constants;
@@ -17,55 +20,81 @@ using static Shared.Constants;
 public class IdentityService(
     UserManager<User> userManager,
     IEmailSender emailSender,
+    IProfileService profileService,
     ILogger<IdentityService> logger,
     IOptions<JwtSettings> settings) : IIdentityService
 {
     private readonly JwtSettings settings = settings.Value;
 
     public async Task<ResultWith<string>> Register(
-        string email,
-        string username,
-        string password)
+        RegisterServiceModel serviceModel,
+        CancellationToken token = default)
     {
         var user = new User
         {
-            Email = email,
-            UserName = username
+            Email = serviceModel.Email,
+            UserName = serviceModel.Username
         };
 
-        var result = await userManager.CreateAsync(user, password);
-        if (result.Succeeded)
+        var identityResult = await userManager.CreateAsync(
+            user,
+            serviceModel.Password);
+
+        if (identityResult.Succeeded)
         {
-            var token = this.GenerateJwtToken(
-                this.settings.Secret,
-                user.Id,
-                username,
-                email);
+            try
+            {
+                var jwt = this.GenerateJwtToken(
+                    this.settings.Secret,
+                    user.Id,
+                    serviceModel.Username,
+                    serviceModel.Email);
 
-            logger.LogInformation(
-                "User with email: {Email} and Username: {Username} successfully registered.",
-                email,
-                username);
+                logger.LogInformation(
+                    "User with email: {Email} and Username: {Username} successfully registered.",
+                    serviceModel.Email,
+                    serviceModel.Username);
 
-            await emailSender.SendWelcome(email, username);
+                await profileService.Create(
+                    serviceModel.ToCreateProfileServiceModel(),
+                    user.Id,
+                    token);
 
-            return ResultWith<string>.Success(token);
+                await emailSender.SendWelcome(
+                    serviceModel.Email,
+                    serviceModel.Username);
+
+                return ResultWith<string>.Success(jwt);
+            }
+            catch (Exception exception)
+            {
+                logger.LogError(exception,
+                    "Failed to complete registration for {Email}",
+                    serviceModel.Email);
+
+                await userManager.DeleteAsync(user);
+
+                return ResultWith<string>.Failure(InvalidRegisterAttempt);
+            }
         }
 
-        var errorMessage = string.Join("; ", result.Errors.Select(e => e.Description));
+        var errorMessage = string.Join("; ", identityResult.Errors.Select(e => e.Description));
 
         return ResultWith<string>.Failure(errorMessage ?? InvalidRegisterAttempt);
     }
 
     public async Task<ResultWith<string>> Login(
-        string credentials,
-        string password,
-        bool rememberMe)
+        LoginServiceModel serviceModel,
+        CancellationToken token = default)
     {
-        var user = await userManager.FindByNameAsync(credentials);
+        var user = await userManager.FindByNameAsync(
+            serviceModel.Credentials);
+
         if (user is null)
         {
-            user = await userManager.FindByEmailAsync(credentials);
+            user = await userManager.FindByEmailAsync(
+                serviceModel.Credentials);
+
             if (user is null)
             {
                 return ResultWith<string>.Failure(InvalidLoginAttempt);
@@ -77,21 +106,24 @@ public class IdentityService(
             return ResultWith<string>.Failure(AccountIsLocked);
         }
 
-        var passwordIsValid = await userManager.CheckPasswordAsync(user, password);
+        var passwordIsValid = await userManager.CheckPasswordAsync(
+            user,
+            serviceModel.Password);
+
         if (passwordIsValid)
         {
             await userManager.ResetAccessFailedCountAsync(user);
 
             var isAdmin = await userManager.IsInRoleAsync(user, AdminRoleName);
-            var token = this.GenerateJwtToken(
+            var jwt = this.GenerateJwtToken(
                 this.settings.Secret,
                 user.Id,
                 user.UserName!,
                 user.Email!,
-                rememberMe,
+                serviceModel.RememberMe,
                 isAdmin);
 
-            return ResultWith<string>.Success(token);
+            return ResultWith<string>.Success(jwt);
         }
 
         await userManager.AccessFailedAsync(user);

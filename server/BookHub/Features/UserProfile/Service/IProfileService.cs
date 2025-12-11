@@ -16,15 +16,13 @@ public interface IProfileService : ITransientService
         string id,
         CancellationToken token = default);
 
-    Task<bool> HasProfile(
-        CancellationToken token = default);
-
     Task<bool> HasMoreThanFiveCurrentlyReading(
         string userId,
         CancellationToken token = default);
 
     Task<ProfileServiceModel> Create(
         CreateProfileServiceModel model,
+        string userId,
         CancellationToken token = default);
 
     Task<Result> Edit(

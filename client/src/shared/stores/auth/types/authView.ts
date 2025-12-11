@@ -7,8 +7,6 @@ export type AuthView = {
   token: string;
   isAdmin: boolean;
   isAuthenticated: boolean;
-  hasProfile: boolean;
   changeAuthenticationState: (user: User | null) => void;
-  changeHasProfileState: (hasProfile: boolean) => void;
   logout: () => void;
 };

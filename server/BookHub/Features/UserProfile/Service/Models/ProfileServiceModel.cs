@@ -4,8 +4,6 @@ public class ProfileServiceModel:
     PrivateProfileServiceModel,
     IProfileServiceModel
 {
-    public string PhoneNumber { get; init; } = null!;
-
     public DateTime? DateOfBirth { get; init; }
 
     public string? SocialMediaUrl { get; init; }

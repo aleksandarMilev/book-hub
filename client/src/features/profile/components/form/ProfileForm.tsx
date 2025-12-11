@@ -11,15 +11,16 @@ import {
 } from 'mdb-react-ui-kit';
 import type React from 'react';
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useProfileFormik } from '@/features/profile/components/form/formik/useProfileFormik.js';
 import type { Profile } from '@/features/profile/types/profile.js';
 
-const ProfileForm: FC<{ profile?: Profile | null; isEditMode?: boolean }> = ({
-  profile = null,
-  isEditMode = false,
-}) => {
-  const formik = useProfileFormik({ profile, isEditMode });
+type Props = { profile?: Profile | null };
+
+const ProfileForm: FC<Props> = ({ profile = null }) => {
+  const formik = useProfileFormik({ profile });
+  const { t } = useTranslation('profiles');
 
   return (
     <div className="profile-form-container">
@@ -28,10 +29,8 @@ const ProfileForm: FC<{ profile?: Profile | null; isEditMode?: boolean }> = ({
           <MDBCol className="form-col">
             <MDBCard className="my-4 profile-details-card">
               <MDBCardBody className="text-black">
-                <h3 className="mb-5 fw-bold">
-                  {isEditMode ? 'Edit Your Profile' : 'Create Your Profile'}
-                </h3>
-                <form onSubmit={formik.handleSubmit}>
+                <h3 className="mb-5 fw-bold">{t('form.title')}</h3>
+                <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
                   <MDBRow>
                     <MDBCol md="12">
                       {formik.touched.firstName && formik.errors.firstName && (
@@ -39,7 +38,7 @@ const ProfileForm: FC<{ profile?: Profile | null; isEditMode?: boolean }> = ({
                       )}
                       <MDBInput
                         wrapperClass="mb-4"
-                        label="First Name *"
+                        label={t('form.labels.firstName')}
                         size="lg"
                         id="firstName"
                         type="text"
@@ -57,7 +56,7 @@ const ProfileForm: FC<{ profile?: Profile | null; isEditMode?: boolean }> = ({
                       )}
                       <MDBInput
                         wrapperClass="mb-4"
-                        label="Last Name *"
+                        label={t('form.labels.lastName')}
                         size="lg"
                         id="lastName"
                         type="text"
@@ -70,43 +69,26 @@ const ProfileForm: FC<{ profile?: Profile | null; isEditMode?: boolean }> = ({
                   </MDBRow>
                   <MDBRow>
                     <MDBCol md="12">
-                      {formik.touched.imageUrl && formik.errors.imageUrl && (
-                        <div className="text-danger mb-2">{formik.errors.imageUrl}</div>
+                      {formik.touched.image && formik.errors.image && (
+                        <div className="text-danger mb-2">{formik.errors.image as string}</div>
                       )}
-                      <MDBInput
-                        wrapperClass="mb-4"
-                        label="Image URL *"
-                        size="lg"
-                        id="imageUrl"
-                        type="text"
-                        value={formik.values.imageUrl ?? ''}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                          formik.setFieldValue('imageUrl', e.target?.value ?? '')
-                        }
+                      <label htmlFor="image" className="form-label">
+                        {t('form.labels.image')}
+                      </label>
+                      <input
+                        id="image"
+                        name="image"
+                        type="file"
+                        accept=".jpg,.jpeg,.png,.webp,.avif"
+                        className={`form-control ${
+                          formik.touched.image && formik.errors.image ? 'is-invalid' : ''
+                        }`}
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                          const file = event.currentTarget.files?.[0] ?? null;
+                          formik.setFieldValue('image', file);
+                          formik.setFieldTouched('image', true, false);
+                        }}
                         onBlur={formik.handleBlur}
-                        className={
-                          formik.touched.imageUrl && formik.errors.imageUrl ? 'is-invalid' : ''
-                        }
-                      />
-                    </MDBCol>
-                  </MDBRow>
-                  <MDBRow>
-                    <MDBCol md="12">
-                      {formik.touched.phoneNumber && formik.errors.phoneNumber && (
-                        <div className="text-danger mb-2">{formik.errors.phoneNumber}</div>
-                      )}
-                      <MDBInput
-                        wrapperClass="mb-4"
-                        label="Phone Number *"
-                        size="lg"
-                        id="phoneNumber"
-                        type="text"
-                        {...formik.getFieldProps('phoneNumber')}
-                        className={
-                          formik.touched.phoneNumber && formik.errors.phoneNumber
-                            ? 'is-invalid'
-                            : ''
-                        }
                       />
                     </MDBCol>
                   </MDBRow>
@@ -117,7 +99,7 @@ const ProfileForm: FC<{ profile?: Profile | null; isEditMode?: boolean }> = ({
                       )}
                       <MDBInput
                         wrapperClass="mb-4"
-                        label="Date of Birth *"
+                        label={t('form.labels.dateOfBirth')}
                         size="lg"
                         id="dateOfBirth"
                         type="date"
@@ -137,7 +119,7 @@ const ProfileForm: FC<{ profile?: Profile | null; isEditMode?: boolean }> = ({
                       )}
                       <MDBInput
                         wrapperClass="mb-4"
-                        label="Social Media URL"
+                        label={t('form.labels.socialMediaUrl')}
                         size="lg"
                         id="socialMediaUrl"
                         type="text"
@@ -165,8 +147,10 @@ const ProfileForm: FC<{ profile?: Profile | null; isEditMode?: boolean }> = ({
                         value={formik.values.biography ?? ''}
                         onChange={(e) => formik.setFieldValue('biography', e.target.value || null)}
                         onBlur={formik.handleBlur}
-                        className={`form-control ${formik.touched.biography && formik.errors.biography ? 'is-invalid' : ''}`}
-                        placeholder="Write a short biography... (Optional)"
+                        className={`form-control ${
+                          formik.touched.biography && formik.errors.biography ? 'is-invalid' : ''
+                        }`}
+                        placeholder={t('form.placeholders.biography')}
                       />
                     </MDBCol>
                   </MDBRow>
@@ -180,22 +164,18 @@ const ProfileForm: FC<{ profile?: Profile | null; isEditMode?: boolean }> = ({
                       onBlur={formik.handleBlur}
                     />
                     <label htmlFor="isPrivate" className="form-check-label">
-                      Keep my profile private
+                      {t('form.labels.isPrivate')}
                     </label>
                   </div>
-                  <p className="text-danger fw-bold mt-2">Fields marked with * are required</p>
+                  <p className="text-danger fw-bold mt-2">{t('form.notes.required')}</p>
                   <div className="d-flex justify-content-end pt-3">
                     <MDBBtn color="light" size="lg" type="button" onClick={formik.handleReset}>
-                      Reset All
+                      {t('form.buttons.reset')}
                     </MDBBtn>
                     <MDBBtn className="ms-2" color="warning" size="lg" type="submit">
                       {formik.isSubmitting
-                        ? isEditMode
-                          ? 'Saving...'
-                          : 'Submitting...'
-                        : isEditMode
-                          ? 'Update Profile'
-                          : 'Create Profile'}
+                        ? t('form.buttons.submitting')
+                        : t('form.buttons.submit')}
                     </MDBBtn>
                   </div>
                 </form>

@@ -31,25 +31,6 @@ public class ProfileController(IProfileService service) : ApiController
         CancellationToken token = default)
         => this.Ok(await service.OtherUser(id, token));
 
-    [HttpGet(ApiRoutes.Exists)]
-    public async Task<ActionResult<bool>> Exists(
-        CancellationToken token = default)
-        => this.Ok(await service.HasProfile(token));
-
-    [HttpPost]
-    public async Task<ActionResult<ProfileServiceModel>> Create(
-        CreateProfileWebModel webModel,
-        CancellationToken token = default)
-    {
-        var serviceModel = webModel.ToCreateServiceModel();
-        var result = await service.Create(serviceModel, token);
-
-        return this.CreatedAtRoute(
-            routeName: nameof(this.Mine),
-            routeValues: new { id = result.Id },
-            value: result);
-    }
-
     [HttpPut]
     public async Task<ActionResult> Edit(
         CreateProfileWebModel webModel,

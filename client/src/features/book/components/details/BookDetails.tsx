@@ -22,7 +22,7 @@ const BookDetails: FC = () => {
   const {
     showFullDescription,
     userId,
-    hasProfile,
+    isAuthenticated,
     isAdmin,
     error,
     isFetching,
@@ -66,7 +66,7 @@ const BookDetails: FC = () => {
                 deleteHandler={toggleModal}
               />
               {book.author && <AuthorIntroduction author={book.author} />}
-              {!isAdmin && hasProfile ? (
+              {!isAdmin && isAuthenticated ? (
                 <>
                   {!existingReview && (
                     <CreateReview

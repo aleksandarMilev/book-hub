@@ -64,15 +64,6 @@ public class ProfileService(
         return dbModel;
     }
 
-    public async Task<bool> HasProfile(
-        CancellationToken token = default)
-         => await data
-            .Profiles
-            .AsNoTracking()
-            .AnyAsync(
-                p => p.UserId == userService.GetId(),
-                token);
-
     public async Task<bool> HasMoreThanFiveCurrentlyReading(
         string userId,
         CancellationToken token = default)
@@ -80,13 +71,13 @@ public class ProfileService(
             .Profiles
             .Where(p => p.UserId == userId)
             .Select(p => p.CurrentlyReadingBooksCount)
-            .FirstOrDefaultAsync(token) == CurrentlyReadingBooksMaxCount;
-     
+            .FirstOrDefaultAsync(token) >= CurrentlyReadingBooksMaxCount;
+
     public async Task<ProfileServiceModel> Create(
         CreateProfileServiceModel serviceModel,
+        string userId,
         CancellationToken token = default)
     {
-        var userId = userService.GetId()!;
         var dbModel = serviceModel.ToDbModel();
         dbModel.UserId = userId;
 
@@ -208,16 +199,16 @@ public class ProfileService(
             var className = methodInfo?.ReflectedType?.Name;
 
             logger.LogWarning(
-                "{Class}.{Method}() attempted to update property \"${Property}\" on UserProfile with Id: {UserId} but such property does not exist.",
+                "{Class}.{Method}() attempted to update property \"{Property}\" on UserProfile with Id: {UserId} but such property does not exist.",
                 className,
-                methodInfo,
+                methodInfo?.Name,
                 propName,
                 userId);
 
             return string.Format(
-                "{0}.{1}() attempted to update property \"${2}\" on UserProfile with Id: {3} but such property does not exist.",
+                "{0}.{1}() attempted to update property \"{2}\" on UserProfile with Id: {3} but such property does not exist.",
                 className,
-                methodInfo,
+                methodInfo?.Name,
                 propName,
                 userId);
         }
@@ -230,9 +221,9 @@ public class ProfileService(
         await data.SaveChangesAsync(token);
 
         logger.LogInformation(
-            "\"${Property}\" on UserProfile with Id: {UserId} was updated successfully.",
-                propName,
-                userId);
+            "\"{Property}\" on UserProfile with Id: {UserId} was updated successfully.",
+            propName,
+            userId);
 
         return true;
     }

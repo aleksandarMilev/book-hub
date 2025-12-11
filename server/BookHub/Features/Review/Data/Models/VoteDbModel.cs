@@ -12,7 +12,7 @@
         [ForeignKey(nameof(Review))]
         public Guid ReviewId { get; set; }
 
-        [DeleteBehavior(DeleteBehavior.Cascade)]
+        [DeleteBehavior(DeleteBehavior.Restrict)]
         public ReviewDbModel Review { get; set; } = null!;
 
         [ForeignKey(nameof(Creator))]

@@ -8,6 +8,7 @@ import { useTopProfilesPage } from '@/features/home/hooks/useTopProfilesPage.js'
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
 import EmptyState from '@/shared/components/empty-state/EmptyState.js';
 import HomePageError from '@/shared/components/errors/home-page/HomePageError.js';
+import { getImageUrl } from '@/shared/lib/utils/utils.js';
 
 const TopUsers: FC = () => {
   const { t } = useTranslation('home');
@@ -44,7 +45,11 @@ const TopUsers: FC = () => {
             tabIndex={0}
             onKeyDown={(e) => e.key === 'Enter' && onProfileClickHandler(p.id)}
           >
-            <img src={p.imageUrl} alt={`${p.firstName} ${p.lastName}`} className="user-image" />
+            <img
+              src={getImageUrl(p.imagePath, 'profiles')}
+              alt={`${p.firstName} ${p.lastName}`}
+              className="user-image"
+            />
             <div className="user-info">
               <h4>{`${p.firstName} ${p.lastName}`}</h4>
               <p>

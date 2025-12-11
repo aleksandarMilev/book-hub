@@ -45,7 +45,11 @@ const Message: FC<{
           </>
         )}
       </div>
-      <img src={sender?.imageUrl || image} alt="avatar" style={{ width: '45px', height: '100%' }} />
+      <img
+        src={sender?.imagePath || image}
+        alt="avatar"
+        style={{ width: '45px', height: '100%' }}
+      />
       <div className="ms-2 profile-item" onClick={() => sender && onProfileClick(sender.id)}>
         <strong>
           {sender?.firstName} {sender?.lastName}

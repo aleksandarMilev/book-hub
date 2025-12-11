@@ -9,27 +9,25 @@ import {
   faEdit,
   faGlobe,
   faLock,
-  faPhone,
-  faPlus,
   faTrashAlt,
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import BookListItem from '@/features/book/components/list-item/BookListItem.js';
 import { useInviteToChat } from '@/features/chat/hooks/useCrud.js';
-import defaultProfilePicture from '@/features/profile/components/details/assets/default-profile-picture.png';
 import { useDetails } from '@/features/profile/hooks/useCrud.js';
 import type { PrivateProfile, Profile } from '@/features/profile/types/profile.js';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
 import DeleteModal from '@/shared/components/delete-modal/DeleteModal.js';
 import { routes } from '@/shared/lib/constants/api.js';
-import { IsError } from '@/shared/lib/utils/utils.js';
+import { getImageUrl, IsError } from '@/shared/lib/utils/utils.js';
 import { useMessage } from '@/shared/stores/message/message.js';
 
 const isFullProfile = (profile: Profile | PrivateProfile | null | undefined): profile is Profile =>
-  !!profile && 'phoneNumber' in profile;
+  !!profile && 'createdBooksCount' in profile;
 
 const ProfileDetails = () => {
   const {
@@ -53,6 +51,7 @@ const ProfileDetails = () => {
 
   const { showMessage } = useMessage();
   const inviteToChat = useInviteToChat(refetchChats);
+  const { t } = useTranslation('profiles');
 
   if (profileLoading) {
     return <DefaultSpinner />;
@@ -70,18 +69,22 @@ const ProfileDetails = () => {
                 {profile && isAdmin && (
                   <button type="button" className="btn btn-outline-danger" onClick={toggleModal}>
                     <FontAwesomeIcon icon={faTrashAlt} className="me-2" />
-                    Delete
+                    {t('details.buttons.delete')}
                   </button>
                 )}
                 <div className="d-flex flex-column align-items-center text-center">
                   <img
-                    src={profile?.imageUrl || defaultProfilePicture}
+                    src={getImageUrl(profile?.imagePath ?? '', 'profiles')}
                     alt="Profile"
                     className="rounded-circle p-1 bg-primary"
                     width="110"
                   />
                   <div className="mt-3">
-                    <h4>{profile ? `${profile.firstName} ${profile.lastName}` : 'Your Name'}</h4>
+                    <h4>
+                      {profile
+                        ? `${profile.firstName} ${profile.lastName}`
+                        : t('details.labels.nameFallback')}
+                    </h4>
                   </div>
                 </div>
                 {canSeePrivate ? (
@@ -90,26 +93,19 @@ const ProfileDetails = () => {
                     <ul className="list-group list-group-flush">
                       <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                         <h6 className="mb-0">
-                          <FontAwesomeIcon icon={faPhone} className="me-2 text-primary" />
-                          Phone Number
-                        </h6>
-                        <span className="text-secondary">
-                          {full ? full.phoneNumber || 'Your phone number' : 'Your phone number'}
-                        </span>
-                      </li>
-                      <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                        <h6 className="mb-0">
                           <FontAwesomeIcon icon={faBirthdayCake} className="me-2 text-danger" />
-                          Date of Birth
+                          {t('details.labels.dateOfBirth')}
                         </h6>
                         <span className="text-secondary">
-                          {full ? full.dateOfBirth || 'Your date of birth' : 'Your date of birth'}
+                          {full
+                            ? full.dateOfBirth || t('details.labels.dateOfBirthFallback')
+                            : t('details.labels.dateOfBirthFallback')}
                         </span>
                       </li>
                       <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                         <h6 className="mb-0">
                           <FontAwesomeIcon icon={faGlobe} className="me-2 text-info" />
-                          Website
+                          {t('details.labels.website')}
                         </h6>
                         <span className="text-secondary">
                           {full && full.socialMediaUrl ? (
@@ -117,17 +113,19 @@ const ProfileDetails = () => {
                               {full.socialMediaUrl}
                             </a>
                           ) : (
-                            'Your website URL'
+                            t('details.labels.websiteFallback')
                           )}
                         </span>
                       </li>
                       <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                         <h6 className="mb-0">
                           <FontAwesomeIcon icon={faLock} className="me-2 text-warning" />
-                          Account Privacy
+                          {t('details.labels.accountPrivacy')}
                         </h6>
                         <span className="text-secondary">
-                          {profile?.isPrivate ? 'Private' : 'Public'}
+                          {profile?.isPrivate
+                            ? t('details.labels.privacyPrivate')
+                            : t('details.labels.privacyPublic')}
                         </span>
                       </li>
                     </ul>
@@ -135,13 +133,13 @@ const ProfileDetails = () => {
                     <div className="list-group-item d-flex flex-column align-items-start">
                       <h6 className="mb-0">
                         <FontAwesomeIcon icon={faUser} className="me-2 text-success" />
-                        Biography
+                        {t('details.labels.biography')}
                       </h6>
                       <span className="text-secondary mt-2">
                         {full && full.biography ? (
                           <p className="bio-text">{full.biography}</p>
                         ) : (
-                          'Your biography'
+                          t('details.labels.biographyFallback')
                         )}
                       </span>
                     </div>
@@ -149,13 +147,13 @@ const ProfileDetails = () => {
                     <div className="statistics-section">
                       <h6 className="mb-0">
                         <FontAwesomeIcon icon={faChartBar} className="me-2 text-info" />
-                        Statistics:
+                        {t('details.stats.title')}
                       </h6>
                       <div className="statistics-items mt-3">
                         <div className="stat-item">
                           <span className="stat-label">
                             <FontAwesomeIcon icon={faBook} className="me-2 text-info" />
-                            Books Created:
+                            {t('details.stats.booksCreated')}
                           </span>
                           <span className="stat-value">
                             {full ? (full.createdBooksCount ?? 0) : 0}
@@ -164,7 +162,7 @@ const ProfileDetails = () => {
                         <div className="stat-item">
                           <span className="stat-label">
                             <FontAwesomeIcon icon={faUser} className="me-2 text-success" />
-                            Authors Created:
+                            {t('details.stats.authorsCreated')}
                           </span>
                           <span className="stat-value">
                             {full ? (full.createdAuthorsCount ?? 0) : 0}
@@ -173,14 +171,14 @@ const ProfileDetails = () => {
                         <div className="stat-item">
                           <span className="stat-label">
                             <FontAwesomeIcon icon={faComment} className="me-2 text-warning" />
-                            Reviews Written:
+                            {t('details.stats.reviewsWritten')}
                           </span>
                           <span className="stat-value">{full ? (full.reviewsCount ?? 0) : 0}</span>
                         </div>
                         <div className="stat-item">
                           <span className="stat-label">
                             <FontAwesomeIcon icon={faBookReader} className="me-2 text-warning" />
-                            Currently Reading:
+                            {t('details.stats.currentlyReading')}
                           </span>
                           <span className="stat-value">
                             {full ? (full.currentlyReadingBooksCount ?? 0) : 0}
@@ -189,7 +187,7 @@ const ProfileDetails = () => {
                         <div className="stat-item">
                           <span className="stat-label">
                             <FontAwesomeIcon icon={faBookReader} className="me-2 text-warning" />
-                            Want to Read:
+                            {t('details.stats.wantToRead')}
                           </span>
                           <span className="stat-value">
                             {full ? (full.toReadBooksCount ?? 0) : 0}
@@ -198,7 +196,7 @@ const ProfileDetails = () => {
                         <div className="stat-item">
                           <span className="stat-label">
                             <FontAwesomeIcon icon={faBookReader} className="me-2 text-warning" />
-                            Read:
+                            {t('details.stats.read')}
                           </span>
                           <span className="stat-value">
                             {full ? (full.readBooksCount ?? 0) : 0}
@@ -210,7 +208,7 @@ const ProfileDetails = () => {
                     <div className="d-flex justify-content-around mt-3">
                       {profile && userId !== profile.id && !profile.isPrivate && (
                         <section className="chat-section">
-                          <h3 className="chat-section-heading">Add this user to a chat:</h3>
+                          <h3 className="chat-section-heading">{t('details.chat.title')}</h3>
                           <div className="chat-buttons-container">
                             {chatError ? (
                               <p className="chat-buttons-error">{chatError}</p>
@@ -235,7 +233,7 @@ const ProfileDetails = () => {
                         <>
                           <Link to={routes.editProfile} className="btn btn-outline-primary">
                             <FontAwesomeIcon icon={faEdit} className="me-2" />
-                            Edit
+                            {t('details.buttons.edit')}
                           </Link>
                           <button
                             type="button"
@@ -243,15 +241,9 @@ const ProfileDetails = () => {
                             onClick={toggleModal}
                           >
                             <FontAwesomeIcon icon={faTrashAlt} className="me-2" />
-                            Delete
+                            {t('details.buttons.delete')}
                           </button>
                         </>
-                      )}
-                      {!profile && (
-                        <Link to={routes.createProfile} className="btn btn-outline-success">
-                          <FontAwesomeIcon icon={faPlus} className="me-2" />
-                          Create
-                        </Link>
                       )}
                     </div>
                     {profile && (
@@ -261,26 +253,30 @@ const ProfileDetails = () => {
                         ) : (
                           <div className="currently-reading-container">
                             <h1>
-                              {profile.id !== userId ? `${profile.firstName} is ` : "You're "}
-                              currently reading:
+                              {profile.id !== userId
+                                ? t('details.currentlyReading.otherTitle', {
+                                    firstName: profile.firstName,
+                                  })
+                                : t('details.currentlyReading.ownTitle')}
                             </h1>
                             {readingList?.length > 0
                               ? readingList.map((b) => <BookListItem key={b.id} {...b} />)
-                              : 'No currently reading books'}
+                              : t('details.currentlyReading.empty')}
                           </div>
                         )}
                         <div onClick={onNavigateToRead} className="book-stats favorite-stats">
-                          To Read ({full ? (full.toReadBooksCount ?? 0) : 0})
+                          {t('details.shortcuts.toRead')} ({full ? (full.toReadBooksCount ?? 0) : 0}
+                          )
                         </div>
                         <div onClick={onNavigateRead} className="book-stats read-stats">
-                          Read ({full ? (full.readBooksCount ?? 0) : 0})
+                          {t('details.shortcuts.read')} ({full ? (full.readBooksCount ?? 0) : 0})
                         </div>
                       </>
                     )}
                   </>
                 ) : (
                   <div className="private-profile-message">
-                    <p>This user profile is private. Only the owner can view its full details.</p>
+                    <p>{t('details.privacyNotice')}</p>
                   </div>
                 )}
               </div>
@@ -294,9 +290,9 @@ const ProfileDetails = () => {
         deleteHandler={async () => {
           try {
             await deleteHandler();
-            showMessage('The profile was successfully deleted!', true);
+            showMessage(t('messages.deleteSuccess'), true);
           } catch (error) {
-            const message = IsError(error) ? error.message : 'Failed to delete profile.';
+            const message = IsError(error) ? error.message : t('messages.deleteFailed');
             showMessage(message, false);
           }
         }}

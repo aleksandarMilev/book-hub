@@ -26,7 +26,7 @@ public class AuthorController(IAuthorService service) : ApiController
         CancellationToken token = default)
         => this.Ok(await service.Names(token));
 
-    [HttpGet(Id, Name = nameof(this.Details))]
+    [HttpGet(Id)]
     public async Task<ActionResult<AuthorDetailsServiceModel>> Details(
         Guid id,
         CancellationToken token = default)
@@ -40,8 +40,8 @@ public class AuthorController(IAuthorService service) : ApiController
         var serviceModel = webModel.ToCreateServiceModel();
         var createdAuthor = await service.Create(serviceModel, token);
 
-        return this.CreatedAtRoute(
-            routeName: nameof(this.Details),
+        return this.CreatedAtAction(
+            actionName: nameof(this.Details),
             routeValues: new { id = createdAuthor.Id },
             value: createdAuthor);
     }

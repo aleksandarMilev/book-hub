@@ -25,6 +25,7 @@
 	<ItemGroup>
 		<Folder Include="Data\Models\Shared\BookGenre\Seed\" />
 		<Folder Include="wwwroot\images\articles\" />
+		<Folder Include="wwwroot\images\profiles\" />
 	</ItemGroup>
 
 </Project>

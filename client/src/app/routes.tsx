@@ -7,7 +7,6 @@ import Loading from '@/app/layout/loading/Loading.js';
 import AdminRoute from '@/app/routes/guards/admin/AdminRoute.js';
 import AuthenticatedRoute from '@/app/routes/guards/authenticated/AuthenticatedRoute.js';
 import ChatRoute from '@/app/routes/guards/chat/ChatRoute.js';
-import ProfileRoute from '@/app/routes/guards/profile/ProfileRoute.js';
 import { routes } from '@/shared/lib/constants/api.js';
 
 const Fallback = () => <Loading />;
@@ -22,7 +21,6 @@ const ProfileList = lazy(() => import('@/features/profile/components/list/Profil
 const ProfileDetails = lazy(
   () => import('@/features/profile/components/details/ProfileDetails.jsx'),
 );
-const CreateProfile = lazy(() => import('@/features/profile/components/create/CreateProfile.jsx'));
 const EditProfile = lazy(() => import('@/features/profile/components/edit/EditProfile.jsx'));
 
 const BookList = lazy(() => import('@/features/book/components/list/BookList.jsx'));
@@ -85,12 +83,8 @@ export const router = createBrowserRouter([
         element: withSuspense(<AuthenticatedRoute element={<ProfileDetails />} />),
       },
       {
-        path: routes.createProfile,
-        element: withSuspense(<AuthenticatedRoute element={<CreateProfile />} />),
-      },
-      {
         path: routes.editProfile,
-        element: withSuspense(<ProfileRoute element={<EditProfile />} />),
+        element: withSuspense(<AuthenticatedRoute element={<EditProfile />} />),
       },
 
       {
@@ -103,11 +97,11 @@ export const router = createBrowserRouter([
       },
       {
         path: routes.createBook,
-        element: withSuspense(<ProfileRoute element={<CreateBook />} />),
+        element: withSuspense(<AuthenticatedRoute element={<CreateBook />} />),
       },
       {
         path: `${routes.editBook}/:id`,
-        element: withSuspense(<ProfileRoute element={<EditBook />} />),
+        element: withSuspense(<AuthenticatedRoute element={<EditBook />} />),
       },
 
       {
@@ -138,11 +132,11 @@ export const router = createBrowserRouter([
       },
       {
         path: routes.createAuthor,
-        element: withSuspense(<ProfileRoute element={<CreateAuthor />} />),
+        element: withSuspense(<AuthenticatedRoute element={<CreateAuthor />} />),
       },
       {
         path: `${routes.editAuthor}/:id`,
-        element: withSuspense(<ProfileRoute element={<EditAuthor />} />),
+        element: withSuspense(<AuthenticatedRoute element={<EditAuthor />} />),
       },
 
       {

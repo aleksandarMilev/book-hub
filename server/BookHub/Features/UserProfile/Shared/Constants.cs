@@ -10,9 +10,6 @@ public static class Constants
         public const int NameMinLength = 2;
         public const int NameMaxLength = 100;
 
-        public const int PhoneMinLength = 8;
-        public const int PhoneMaxLength = 15;
-
         public const int BiographyMinLength = 10;
         public const int BiographyMaxLength = 1_000;
 

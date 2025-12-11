@@ -16,7 +16,7 @@ const ParticipantListItem: FC<{
       onClick={() => onProfileClickHandler(participant.id)}
     >
       <MDBCardImage
-        src={participant.imageUrl || ''}
+        src={participant.imagePath || ''}
         alt={participant.firstName}
         style={{
           width: '40px',

@@ -1,56 +1,53 @@
 import { useFormik } from 'formik';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { profileSchema } from '@/features/profile/components/form/validation/profileSchema.js';
-import { useCreate, useEdit } from '@/features/profile/hooks/useCrud.js';
+import { useEdit } from '@/features/profile/hooks/useCrud.js';
 import type { CreateProfile, Profile } from '@/features/profile/types/profile.js';
 import { routes } from '@/shared/lib/constants/api.js';
 import { IsError } from '@/shared/lib/utils/utils.js';
 import { useMessage } from '@/shared/stores/message/message.js';
 
-export const useProfileFormik = ({
-  profile = null,
-  isEditMode = false,
-}: {
-  profile?: Profile | null;
-  isEditMode?: boolean;
-}) => {
+type Props = { profile?: Profile | null };
+
+const normalizeDate = (date?: string | null): string => {
+  if (!date) {
+    return '';
+  }
+
+  return date.split('T')[0]!;
+};
+
+export const useProfileFormik = ({ profile = null }: Props) => {
   const navigate = useNavigate();
   const { showMessage } = useMessage();
-
-  const createHandler = useCreate();
   const editHandler = useEdit();
+  const { t } = useTranslation('profiles');
 
   const formik = useFormik<CreateProfile>({
     initialValues: {
-      firstName: profile?.firstName || '',
-      lastName: profile?.lastName || '',
-      imageUrl: profile?.imageUrl || '',
-      phoneNumber: profile?.phoneNumber || '',
-      dateOfBirth: profile?.dateOfBirth || '',
+      firstName: profile?.firstName ?? '',
+      lastName: profile?.lastName ?? '',
+      dateOfBirth: normalizeDate(profile?.dateOfBirth ?? null),
       socialMediaUrl: profile?.socialMediaUrl ?? null,
       biography: profile?.biography ?? null,
       isPrivate: profile?.isPrivate ?? false,
+      image: null,
     },
     validationSchema: profileSchema,
     onSubmit: async (values, { resetForm, setSubmitting }) => {
       try {
-        if (isEditMode) {
-          await editHandler(values);
-          showMessage('You have successfully edited your profile!', true);
-        } else {
-          await createHandler(values);
-
-          showMessage('You have successfully created your profile!', true);
-          resetForm();
-        }
+        await editHandler(values);
+        showMessage(t('messages.editSuccess'), true);
 
         navigate(routes.profile, { replace: true });
       } catch (error) {
-        const message = IsError(error) ? error.message : 'Profile action failed.';
+        const message = IsError(error) ? error.message : t('messages.editFailed');
         showMessage(message, false);
       } finally {
         setSubmitting(false);
+        resetForm();
       }
     },
   });

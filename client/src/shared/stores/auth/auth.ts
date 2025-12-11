@@ -9,8 +9,6 @@ import type { AuthView } from './types/authView.js';
 const creator: StateCreator<AuthState> = (set) => ({
   user: null,
   setUser: (user) => set({ user }),
-  setHasProfile: (hasProfile) =>
-    set((state) => (state.user ? { user: { ...state.user, hasProfile } } : state)),
   logout: () => set({ user: null }),
 });
 
@@ -30,8 +28,6 @@ export const useAuth = (): AuthView =>
     token: state.user?.token ?? '',
     isAdmin: state.user?.isAdmin ?? false,
     isAuthenticated: Boolean(state.user?.username),
-    hasProfile: state.user?.hasProfile ?? false,
     changeAuthenticationState: state.setUser,
-    changeHasProfileState: state.setHasProfile,
     logout: state.logout,
   }));

@@ -24,7 +24,7 @@ public class ReviewController(IReviewService service) : ApiController
         CancellationToken token = default)
         => this.Ok(await service.AllForBook(id, pageIndex, pageSize, token));
 
-    [HttpGet(Id, Name = nameof(this.Details))]
+    [HttpGet(Id)]
     public async Task<ActionResult<ReviewServiceModel>> Details(
         Guid id,
         CancellationToken token = default)
@@ -43,8 +43,8 @@ public class ReviewController(IReviewService service) : ApiController
             return this.BadRequest(result.ErrorMessage);
         }
 
-        return this.CreatedAtRoute(
-            routeName: nameof(this.Details),
+        return this.CreatedAtAction(
+            actionName: nameof(this.Details),
             routeValues: new { id = result.Data.Id },
             value: result.Data);
     }

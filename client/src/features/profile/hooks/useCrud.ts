@@ -1,5 +1,5 @@
-import { format } from 'date-fns';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useChatsNotJoined } from '@/features/chat/hooks/useCrud.js';
@@ -10,23 +10,10 @@ import { routes } from '@/shared/lib/constants/api.js';
 import { IsCanceledError, IsError } from '@/shared/lib/utils/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 
-const isFullProfile = (profile: Profile | PrivateProfile | null): profile is Profile =>
-  !!profile && 'phoneNumber' in profile;
-
-const toCreateType = (profile: Profile): CreateProfile => ({
-  firstName: profile.firstName,
-  lastName: profile.lastName,
-  imageUrl: profile.imageUrl ?? '',
-  phoneNumber: profile.phoneNumber ?? '',
-  dateOfBirth: profile.dateOfBirth ? format(new Date(profile.dateOfBirth), 'yyyy-MM-dd') : '',
-  socialMediaUrl: profile.socialMediaUrl ?? null,
-  biography: profile.biography ?? null,
-  isPrivate: !!profile.isPrivate,
-});
-
 const useProfile = (otherId?: string) => {
   const { token } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation('profiles');
 
   const [profile, setProfile] = useState<Profile | PrivateProfile | null>(null);
   const [isFetching, setIsFetching] = useState(false);
@@ -41,44 +28,22 @@ const useProfile = (otherId?: string) => {
         setIsFetching(true);
 
         if (otherId) {
-          const data = await api.other(otherId, token, signal);
-          if (data) {
-            if (isFullProfile(data)) {
-              setProfile({
-                ...data,
-                dateOfBirth: data.dateOfBirth
-                  ? format(new Date(data.dateOfBirth), 'yyyy-MM-dd')
-                  : '',
-              });
-            } else {
-              setProfile(data);
-            }
-          } else {
-            setProfile(null);
-          }
+          setProfile(await api.other(otherId, token, signal));
         } else {
-          const mine = await api.mine(token, signal);
-          if (mine) {
-            setProfile({
-              ...mine,
-              dateOfBirth: mine.dateOfBirth ? format(new Date(mine.dateOfBirth), 'yyyy-MM-dd') : '',
-            });
-          } else {
-            setProfile(null);
-          }
+          setProfile(await api.mine(token, signal));
         }
       } catch (error) {
         if (IsCanceledError(error)) {
           return;
         }
 
-        const message = IsError(error) ? error.message : 'Failed to load profile.';
+        const message = IsError(error) ? error.message : t('messages.profileLoadFailed');
         navigate(routes.badRequest, { state: { message } });
       } finally {
         setIsFetching(false);
       }
     },
-    [token, otherId, navigate],
+    [token, otherId, navigate, t],
   );
 
   useEffect(() => {
@@ -87,12 +52,7 @@ const useProfile = (otherId?: string) => {
     return () => controller.abort();
   }, [fetchData]);
 
-  const profileInput = useMemo(
-    () => (isFullProfile(profile) ? toCreateType(profile) : null),
-    [profile],
-  );
-
-  return { profile, profileInput, isFetching, refetch: fetchData };
+  return { profile, isFetching, refetch: fetchData };
 };
 
 export const useDetails = () => {
@@ -187,25 +147,29 @@ export const useTopProfiles = () => {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { t } = useTranslation('profiles');
 
-  const fetchData = useCallback(async (signal?: AbortSignal) => {
-    try {
-      setIsFetching(true);
-      setError(null);
+  const fetchData = useCallback(
+    async (signal?: AbortSignal) => {
+      try {
+        setIsFetching(true);
+        setError(null);
 
-      const data = await api.topThree(signal);
-      setProfiles(data ?? []);
-    } catch (error) {
-      if (IsCanceledError(error)) {
-        return;
+        const data = await api.topThree(signal);
+        setProfiles(data ?? []);
+      } catch (error) {
+        if (IsCanceledError(error)) {
+          return;
+        }
+
+        const message = IsError(error) ? error.message : t('messages.profilesLoadFailed');
+        setError(message);
+      } finally {
+        setIsFetching(false);
       }
-
-      const message = IsError(error) ? error.message : 'Failed to load profiles.';
-      setError(message);
-    } finally {
-      setIsFetching(false);
-    }
-  }, []);
+    },
+    [t],
+  );
 
   useEffect(() => {
     const controller = new AbortController();
@@ -221,6 +185,7 @@ export const useOtherProfile = (id?: string | null) => useProfile(id ?? undefine
 export const useMineProfile = () => {
   const { token } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation('profiles');
 
   const [profile, setProfile] = useState<Profile | null>(null);
   const [isFetching, setIsFetching] = useState(false);
@@ -233,27 +198,19 @@ export const useMineProfile = () => {
 
       try {
         setIsFetching(true);
-        const data = await api.mine(token, signal);
-        if (data) {
-          setProfile({
-            ...data,
-            dateOfBirth: data.dateOfBirth ? format(new Date(data.dateOfBirth), 'yyyy-MM-dd') : '',
-          });
-        } else {
-          setProfile(null);
-        }
+        setProfile(await api.mine(token, signal));
       } catch (error) {
         if (IsCanceledError(error)) {
           return;
         }
 
-        const message = IsError(error) ? error.message : 'Failed to load your profile.';
+        const message = IsError(error) ? error.message : t('messages.ownProfileLoadFailed');
         navigate(routes.badRequest, { state: { message } });
       } finally {
         setIsFetching(false);
       }
     },
-    [token, navigate],
+    [token, navigate, t],
   );
 
   useEffect(() => {
@@ -262,45 +219,13 @@ export const useMineProfile = () => {
     return () => controller.abort();
   }, [fetchData]);
 
-  const profileInput = useMemo(() => (profile ? toCreateType(profile) : null), [profile]);
-  return { profile, profileInput, isFetching, refetch: fetchData };
-};
-
-export const useCreate = () => {
-  const navigate = useNavigate();
-  const { token, changeHasProfileState } = useAuth();
-
-  return useCallback(
-    async (values: CreateProfile): Promise<boolean | undefined> => {
-      if (!token) {
-        return undefined;
-      }
-
-      const toSend: CreateProfile = {
-        ...values,
-        socialMediaUrl: values.socialMediaUrl ?? null,
-        biography: values.biography ?? null,
-      };
-
-      try {
-        await api.create(toSend, token);
-        changeHasProfileState?.(true);
-
-        return true;
-      } catch (error) {
-        const message = IsError(error) ? error.message : 'Failed to create profile.';
-        navigate(routes.badRequest, { state: { message } });
-
-        return undefined;
-      }
-    },
-    [token, navigate, changeHasProfileState],
-  );
+  return { profile, isFetching, refetch: fetchData };
 };
 
 export const useEdit = () => {
   const { token } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation('profiles');
 
   return useCallback(
     async (values: CreateProfile): Promise<boolean | undefined> => {
@@ -309,27 +234,33 @@ export const useEdit = () => {
       }
 
       const toSend: CreateProfile = {
-        ...values,
-        socialMediaUrl: values.socialMediaUrl ?? null,
-        biography: values.biography ?? null,
+        firstName: values.firstName.trim(),
+        lastName: values.lastName.trim(),
+        dateOfBirth:
+          values.dateOfBirth && values.dateOfBirth.trim() !== '' ? values.dateOfBirth.trim() : null,
+        socialMediaUrl: values.socialMediaUrl?.trim() || null,
+        biography: values.biography?.trim() || null,
+        isPrivate: values.isPrivate,
+        image: values.image ?? null,
       };
 
       try {
         return await api.edit(toSend, token);
       } catch (error) {
-        const message = IsError(error) ? error.message : 'Failed to edit profile.';
+        const message = IsError(error) ? error.message : t('messages.editFailedSimple');
         navigate(routes.badRequest, { state: { message } });
 
         return undefined;
       }
     },
-    [token, navigate],
+    [token, navigate, t],
   );
 };
 
 export const useRemove = (id?: string) => {
   const navigate = useNavigate();
   const { token, isAdmin } = useAuth();
+  const { t } = useTranslation('profiles');
 
   const [showModal, setShowModal] = useState(false);
   const toggleModal = useCallback(() => setShowModal((prev) => !prev), []);
@@ -359,13 +290,13 @@ export const useRemove = (id?: string) => {
         return;
       }
 
-      const message = IsError(error) ? error.message : 'Failed to delete profile.';
+      const message = IsError(error) ? error.message : t('messages.deleteFailed');
       throw new Error(message);
     } finally {
       toggleModal();
       controller.abort();
     }
-  }, [token, id, isAdmin, navigate, showModal, toggleModal]);
+  }, [token, id, isAdmin, navigate, showModal, toggleModal, t]);
 
   return { showModal, toggleModal, deleteHandler };
 };

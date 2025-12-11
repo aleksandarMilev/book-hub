@@ -1,11 +1,21 @@
-﻿namespace BookHub.Features.UserProfile.Web.Models;
+﻿namespace BookHub.Features.Identity.Web.Models;
 
 using System.ComponentModel.DataAnnotations;
 
-using static Shared.Constants.Validation;
+using static Features.UserProfile.Shared.Constants.Validation;
 
-public class CreateProfileWebModel
+public class RegisterWebModel
 {
+    [Required]
+    public string Username { get; init; } = null!;
+
+    [Required]
+    [EmailAddress]
+    public string Email { get; init; } = null!;
+
+    [Required]
+    public string Password { get; init; } = null!;
+
     [Required]
     [StringLength(
         NameMaxLength,

@@ -36,7 +36,7 @@ const BookFullInfo: FC<Props> = ({
 }) => {
   const { t } = useTranslation('books');
   const { showMessage } = useMessage();
-  const { isAdmin, token, hasProfile } = useAuth();
+  const { isAdmin, token, isAuthenticated } = useAuth();
 
   const fallbackDateText = 'Publication date unknown';
   const formattedDate = book.publishedDate
@@ -111,7 +111,7 @@ const BookFullInfo: FC<Props> = ({
                   token={token}
                   showMessage={showMessage}
                 />
-              ) : hasProfile ? (
+              ) : isAuthenticated ? (
                 <ReadingListButtons
                   bookId={book.id}
                   initialReadingStatus={toUiStatus(book.readingStatus ?? null)}

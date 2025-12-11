@@ -2,7 +2,7 @@
 
 using Data.Models;
 using Service.Models;
-using Web.User.Models;
+using Web.Models;
 
 using static BookHub.Common.Utils;
 
@@ -17,7 +17,6 @@ public static class ProfileMapping
             LastName = p.LastName,
             ImagePath = p.ImagePath,
             IsPrivate = p.IsPrivate,
-            PhoneNumber = p.PhoneNumber,
             DateOfBirth = p.DateOfBirth,
             SocialMediaUrl = p.SocialMediaUrl,
             Biography = p.Biography,
@@ -38,7 +37,6 @@ public static class ProfileMapping
             LastName = dbModel.LastName,
             ImagePath = dbModel.ImagePath,
             IsPrivate = dbModel.IsPrivate,
-            PhoneNumber = dbModel.PhoneNumber,
             DateOfBirth = dbModel.DateOfBirth,
             SocialMediaUrl = dbModel.SocialMediaUrl,
             Biography = dbModel.Biography,
@@ -67,7 +65,6 @@ public static class ProfileMapping
         {
             FirstName = serviceModel.FirstName,
             LastName = serviceModel.LastName,
-            PhoneNumber = serviceModel.PhoneNumber,
             DateOfBirth = StringToDateTime(serviceModel.DateOfBirth),
             SocialMediaUrl = serviceModel.SocialMediaUrl,
             Biography = serviceModel.Biography,
@@ -80,7 +77,6 @@ public static class ProfileMapping
     {
         dbModel.FirstName = serviceModel.FirstName;
         dbModel.LastName = serviceModel.LastName;
-        dbModel.PhoneNumber = serviceModel.PhoneNumber;
         dbModel.DateOfBirth = StringToDateTime(serviceModel.DateOfBirth);
         dbModel.SocialMediaUrl = serviceModel.SocialMediaUrl;
         dbModel.Biography = serviceModel.Biography;
@@ -93,7 +89,6 @@ public static class ProfileMapping
         {
             FirstName = webModel.FirstName,
             LastName = webModel.LastName,
-            PhoneNumber = webModel.PhoneNumber,
             DateOfBirth = webModel.DateOfBirth,
             SocialMediaUrl = webModel.SocialMediaUrl,
             Biography = webModel.Biography,
