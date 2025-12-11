@@ -16,7 +16,7 @@ type Props = {
 };
 
 const ReviewListItem: FC<Props> = ({ review, onVote }) => {
-  const { userId, hasProfile } = useAuth();
+  const { userId, isAuthenticated } = useAuth();
   const { id, content, rating, creatorId, createdBy, upvotes, downvotes } = review;
 
   const [upvoteClicked, setUpvoteClicked] = useState(false);
@@ -27,7 +27,7 @@ const ReviewListItem: FC<Props> = ({ review, onVote }) => {
   const { showModal, toggleModal, deleteHandler } = useRemove(id, onVote);
   const { handleUpvote, handleDownvote } = useVoteHandlers({
     id,
-    hasProfile,
+    isAuthenticated,
     upvoteCount,
     downvoteCount,
     setUpvoteCount,
@@ -50,7 +50,7 @@ const ReviewListItem: FC<Props> = ({ review, onVote }) => {
       </div>
       <p className="review-content">{content}</p>
       <div className="review-footer d-flex justify-content-between align-items-center">
-        {hasProfile && (
+        {isAuthenticated && (
           <div className="review-votes d-flex align-items-center">
             <MDBIcon
               style={{ color: upvoteClicked ? 'blue' : 'black', cursor: 'pointer' }}

@@ -13,7 +13,7 @@ export const useDetailsPage = () => {
   const [showFullDescription, setShowFullDescription] = useState(false);
 
   const navigate = useNavigate();
-  const { userId, hasProfile, isAdmin } = useAuth();
+  const { userId, isAuthenticated, isAdmin } = useAuth();
 
   const { book, isFetching, error, refreshBook } = useFullInfo(id);
   const { showModal, toggleModal, deleteHandler } = useRemove(id, book?.title);
@@ -45,7 +45,7 @@ export const useDetailsPage = () => {
   return {
     showFullDescription,
     userId,
-    hasProfile,
+    isAuthenticated,
     isAdmin,
     error,
     isFetching,

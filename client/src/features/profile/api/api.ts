@@ -1,19 +1,8 @@
 import type { CreateProfile, PrivateProfile, Profile } from '@/features/profile/types/profile.js';
 import { getAuthConfig, http, httpAdmin, processError } from '@/shared/api/http.js';
 import { routes } from '@/shared/lib/constants/api.js';
-import { baseErrors, errors } from '@/shared/lib/constants/errorMessages.js';
+import { errors } from '@/shared/lib/constants/errorMessages.js';
 import { isNotFoundError } from '@/shared/lib/utils/utils.js';
-
-export const hasProfile = async (token: string, signal?: AbortSignal) => {
-  try {
-    const url = `${routes.hasProfile}`;
-    const { data } = await http.get<boolean>(url, getAuthConfig(token, signal));
-
-    return data;
-  } catch (error) {
-    processError(error, baseErrors.general);
-  }
-};
 
 export const topThree = async (signal?: AbortSignal) => {
   try {
@@ -53,21 +42,40 @@ export const other = async (id: string, token: string, signal?: AbortSignal) => 
   }
 };
 
-export const create = async (profile: CreateProfile, token: string, signal?: AbortSignal) => {
-  try {
-    const url = `${routes.profile}`;
-    await http.post(url, profile, getAuthConfig(token, signal));
-
-    return true;
-  } catch (error) {
-    processError(error, errors.profile.create);
-  }
-};
-
 export const edit = async (profile: CreateProfile, token: string, signal?: AbortSignal) => {
   try {
     const url = `${routes.profile}`;
-    await http.put(url, profile, getAuthConfig(token, signal));
+    const formData = new FormData();
+
+    formData.append('FirstName', profile.firstName);
+    formData.append('LastName', profile.lastName);
+
+    if (profile.dateOfBirth) {
+      formData.append('DateOfBirth', profile.dateOfBirth);
+    }
+
+    if (profile.socialMediaUrl) {
+      formData.append('SocialMediaUrl', profile.socialMediaUrl);
+    }
+
+    if (profile.biography) {
+      formData.append('Biography', profile.biography);
+    }
+
+    formData.append('IsPrivate', String(profile.isPrivate));
+
+    if (profile.image) {
+      formData.append('Image', profile.image);
+    }
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      ...(signal ? { signal } : {}),
+    };
+
+    await http.put(url, formData, config);
 
     return true;
   } catch (error) {

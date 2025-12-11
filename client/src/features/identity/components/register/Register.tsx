@@ -19,8 +19,10 @@ const Register: FC = () => {
   const formik = useRegisterFormik();
   const { t } = useTranslation('identity');
 
+  const isSubmitting = formik.isSubmitting;
+
   return (
-    <MDBContainer fluid className="register-page">
+    <MDBContainer fluid className="identity-auth register-page">
       <MDBCard className="text-black register-card m-5">
         <MDBCardBody className="register-body">
           <MDBRow className="align-items-center">
@@ -30,7 +32,50 @@ const Register: FC = () => {
               className="order-2 order-lg-1 d-flex flex-column align-items-center"
             >
               <h2 className="register-title">{t('register.title')}</h2>
-              <form onSubmit={formik.handleSubmit} className="w-100" noValidate>
+              <form
+                onSubmit={formik.handleSubmit}
+                className="w-100"
+                noValidate
+                encType="multipart/form-data"
+              >
+                <div className="auth-field">
+                  <label htmlFor="firstName" className="auth-label">
+                    {t('register.labels.firstName')}
+                  </label>
+                  {formik.touched.firstName && formik.errors.firstName && (
+                    <div className="auth-error">{formik.errors.firstName}</div>
+                  )}
+                  <div className="register-field-row">
+                    <MDBIcon fas icon="user" className="register-icon" />
+                    <input
+                      id="firstName"
+                      type="text"
+                      className={`auth-input ${
+                        formik.touched.firstName && formik.errors.firstName ? 'is-invalid' : ''
+                      }`}
+                      {...formik.getFieldProps('firstName')}
+                    />
+                  </div>
+                </div>
+                <div className="auth-field">
+                  <label htmlFor="lastName" className="auth-label">
+                    {t('register.labels.lastName')}
+                  </label>
+                  {formik.touched.lastName && formik.errors.lastName && (
+                    <div className="auth-error">{formik.errors.lastName}</div>
+                  )}
+                  <div className="register-field-row">
+                    <MDBIcon fas icon="user-tag" className="register-icon" />
+                    <input
+                      id="lastName"
+                      type="text"
+                      className={`auth-input ${
+                        formik.touched.lastName && formik.errors.lastName ? 'is-invalid' : ''
+                      }`}
+                      {...formik.getFieldProps('lastName')}
+                    />
+                  </div>
+                </div>
                 <div className="auth-field">
                   <label htmlFor="username" className="auth-label">
                     {t('register.labels.username')}
@@ -39,7 +84,7 @@ const Register: FC = () => {
                     <div className="auth-error">{formik.errors.username}</div>
                   )}
                   <div className="register-field-row">
-                    <MDBIcon fas icon="user" className="register-icon" />
+                    <MDBIcon fas icon="user-circle" className="register-icon" />
                     <input
                       id="username"
                       type="text"
@@ -109,15 +154,112 @@ const Register: FC = () => {
                     />
                   </div>
                 </div>
+                <div className="auth-field">
+                  <label htmlFor="dateOfBirth" className="auth-label">
+                    {t('register.labels.dateOfBirth')}
+                  </label>
+                  {formik.touched.dateOfBirth && formik.errors.dateOfBirth && (
+                    <div className="auth-error">{formik.errors.dateOfBirth}</div>
+                  )}
+                  <div className="register-field-row">
+                    <MDBIcon fas icon="calendar-alt" className="register-icon" />
+                    <input
+                      id="dateOfBirth"
+                      type="date"
+                      className={`auth-input ${
+                        formik.touched.dateOfBirth && formik.errors.dateOfBirth ? 'is-invalid' : ''
+                      }`}
+                      {...formik.getFieldProps('dateOfBirth')}
+                    />
+                  </div>
+                </div>
+                <div className="auth-field">
+                  <label htmlFor="socialMediaUrl" className="auth-label">
+                    {t('register.labels.socialMediaUrl')}
+                  </label>
+                  {formik.touched.socialMediaUrl && formik.errors.socialMediaUrl && (
+                    <div className="auth-error">{formik.errors.socialMediaUrl}</div>
+                  )}
+                  <div className="register-field-row">
+                    <MDBIcon fas icon="link" className="register-icon" />
+                    <input
+                      id="socialMediaUrl"
+                      type="url"
+                      className={`auth-input ${
+                        formik.touched.socialMediaUrl && formik.errors.socialMediaUrl
+                          ? 'is-invalid'
+                          : ''
+                      }`}
+                      {...formik.getFieldProps('socialMediaUrl')}
+                    />
+                  </div>
+                </div>
+                <div className="auth-field">
+                  <label htmlFor="image" className="auth-label">
+                    {t('register.labels.image')}
+                  </label>
+                  {formik.touched.image && formik.errors.image && (
+                    <div className="auth-error">{formik.errors.image as string}</div>
+                  )}
+                  <div className="register-field-row register-field-row-file">
+                    <MDBIcon fas icon="image" className="register-icon" />
+                    <input
+                      id="image"
+                      name="image"
+                      type="file"
+                      accept=".jpg,.jpeg,.png,.webp,.avif"
+                      className={`form-control ${
+                        formik.touched.image && formik.errors.image ? 'is-invalid' : ''
+                      }`}
+                      onChange={(event) => {
+                        const file = event.currentTarget.files?.[0] ?? null;
+                        formik.setFieldValue('image', file);
+                        formik.setFieldTouched('image', true, false);
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="auth-field">
+                  <label htmlFor="biography" className="auth-label">
+                    {t('register.labels.biography')}
+                  </label>
+                  {formik.touched.biography && formik.errors.biography && (
+                    <div className="auth-error">{formik.errors.biography}</div>
+                  )}
+                  <textarea
+                    id="biography"
+                    rows={4}
+                    className={`form-control ${
+                      formik.touched.biography && formik.errors.biography ? 'is-invalid' : ''
+                    }`}
+                    {...formik.getFieldProps('biography')}
+                    placeholder={t('register.placeholders.biography')}
+                  />
+                </div>
+
+                {/* Privacy toggle */}
+                <div className="auth-field">
+                  <div className="form-check">
+                    <input
+                      id="isPrivate"
+                      type="checkbox"
+                      className="form-check-input"
+                      checked={formik.values.isPrivate}
+                      onChange={(e) => formik.setFieldValue('isPrivate', e.target.checked)}
+                    />
+                    <label htmlFor="isPrivate" className="form-check-label auth-label ms-2">
+                      {t('register.labels.isPrivate')}
+                    </label>
+                  </div>
+                </div>
+
                 <button
                   className="auth-submit-btn"
                   type="submit"
-                  disabled={formik.isSubmitting}
-                  aria-busy={formik.isSubmitting}
+                  disabled={isSubmitting}
+                  aria-busy={isSubmitting}
                 >
-                  {formik.isSubmitting
-                    ? t('register.buttons.submitting')
-                    : t('register.buttons.submit')}
+                  {isSubmitting ? t('register.buttons.submitting') : t('register.buttons.submit')}
                 </button>
               </form>
             </MDBCol>

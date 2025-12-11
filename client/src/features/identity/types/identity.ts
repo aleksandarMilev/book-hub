@@ -6,6 +6,13 @@ export interface RegisterRequest {
   username: string;
   email: string;
   password: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  socialMediaUrl?: string | null;
+  biography?: string | null;
+  isPrivate: boolean;
+  image?: File | null;
 }
 
 export interface LoginRequest {

@@ -1,0 +1,83 @@
+.profile-list-page {
+  margin-top: 3rem;
+  margin-bottom: 3.5rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.profile-list-page .search-bar-container {
+  display: flex;
+  justify-content: center;
+  margin: 0 0 1.5rem;
+}
+
+.profile-list-page .search-bar-container .search-input {
+  border-radius: 999px 0 0 999px;
+  border: 1px solid #e5e7eb;
+  padding: 0.55rem 1rem;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.12);
+  transition:
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    background 0.22s ease,
+    transform 0.18s ease;
+}
+
+.profile-list-page .search-bar-container .search-input:focus {
+  outline: none;
+  border-color: #6ea8fe;
+  background: #ffffff;
+  box-shadow:
+    0 0 0 2px rgba(110, 168, 254, 0.45),
+    0 8px 22px rgba(15, 23, 42, 0.18);
+  transform: translateY(-1px);
+}
+
+.profile-list-page .search-bar-container .search-input:disabled {
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
+.profile-list-page .search-bar-container .search-btn {
+  border-radius: 0 999px 999px 0;
+  border: 1px solid #e5e7eb;
+  border-left: none;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.12);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 1rem;
+}
+
+.profile-list-page .search-bar-container .search-btn:hover:not(:disabled) {
+  background-color: #f3f4ff;
+}
+
+.profile-list-page .empty-state-image {
+  max-width: 220px;
+  opacity: 0.8;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  transition:
+    transform 0.25s ease,
+    opacity 0.25s ease;
+}
+
+.profile-list-page .empty-state-image:hover {
+  transform: translateY(-4px);
+  opacity: 1;
+}
+
+.profile-list-page .empty-state-title {
+  margin-bottom: 0.4rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #3d2d52;
+}
+
+.profile-list-page .empty-state-text {
+  max-width: 420px;
+  margin: 0 auto;
+  font-size: 0.95rem;
+  color: #666;
+}

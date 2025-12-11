@@ -1,54 +1,87 @@
-.profile-form-container {
+.profile-list-item {
+  display: flex;
+  flex-direction: row;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 14px 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.profile-list-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.22);
+}
+
+.profile-list-item-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+}
+
+.profile-list-item-placeholder {
+  width: 100px;
+  height: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  padding: 0 15px;
+  background-color: #f3f4f6;
+  color: #9ca3af;
+  font-size: 0.9rem;
+  border-radius: 50%;
+  font-weight: 600;
 }
 
-.form-row {
+.profile-list-item-content {
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: center;
-  width: 100%;
 }
 
-.form-col {
-  width: 100%;
-  max-width: 600px;
+.profile-list-item-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1b2838;
 }
 
-.profile-details-card {
-  width: 100%;
-  border-radius: 8px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  padding: 30px;
+.profile-list-item-privacy {
+  font-size: 0.95rem;
+  color: #6b7280;
 }
 
-.text-center {
-  text-align: center;
+.profile-list-item-btn {
+  text-decoration: none;
+  font-size: 0.9rem;
+  color: #fff;
+  padding: 8px 18px;
+  background: linear-gradient(90deg, #6ea8fe, #9a6bff);
+  border: none;
+  border-radius: 999px;
+  transition:
+    background 0.2s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
-.mb-4 {
-  margin-bottom: 1.5rem;
+.profile-list-item-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(154, 107, 255, 0.6);
 }
 
-.d-flex {
-  display: flex;
-}
+@media (max-width: 768px) {
+  .profile-list-item {
+    flex-direction: column;
+    text-align: center;
+  }
 
-.justify-content-end {
-  justify-content: flex-end;
-}
-
-.pt-3 {
-  padding-top: 1rem;
-}
-
-.is-invalid {
-  border-color: #e74a3b;
-}
-
-.ms-2 {
-  margin-left: 0.5rem;
+  .profile-list-item-image,
+  .profile-list-item-placeholder {
+    margin-bottom: 10px;
+  }
 }

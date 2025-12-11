@@ -1,9 +1,16 @@
-.register-page {
+.identity-auth.register-page {
   padding: 3rem 1rem;
   font-family: 'Inter', sans-serif;
+  background: radial-gradient(
+    circle at top left,
+    #f5f7ff 0,
+    #f3f3ff 28%,
+    #fdfbff 62%,
+    #ffffff 100%
+  );
 }
 
-.register-card {
+.identity-auth .register-card {
   border-radius: 24px;
   border: none;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.16);
@@ -11,11 +18,11 @@
   backdrop-filter: blur(14px);
 }
 
-.register-body {
+.identity-auth .register-body {
   padding: 2.4rem 2.6rem;
 }
 
-.register-title {
+.identity-auth .register-title {
   font-size: 2rem;
   font-weight: 800;
   text-align: center;
@@ -23,12 +30,12 @@
   color: #3b2c4f;
 }
 
-.auth-field {
+.identity-auth .auth-field {
   margin-bottom: 1.2rem;
   text-align: left;
 }
 
-.auth-label {
+.identity-auth .auth-label {
   display: block;
   font-size: 0.95rem;
   font-weight: 600;
@@ -36,7 +43,9 @@
   margin-bottom: 0.35rem;
 }
 
-.auth-input {
+.identity-auth .auth-input,
+.identity-auth .register-field-row .form-control,
+.identity-auth .auth-field textarea.form-control {
   width: 100%;
   border-radius: 12px;
   border: 2px solid transparent;
@@ -47,40 +56,94 @@
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease,
-    transform 0.15s ease;
+    transform 0.15s ease,
+    background-color 0.15s ease;
 }
 
-.auth-input:focus {
+.identity-auth .auth-input::placeholder,
+.identity-auth .auth-field textarea.form-control::placeholder {
+  color: #9ca3af;
+}
+
+.identity-auth .auth-field textarea.form-control {
+  min-height: 140px;
+  resize: vertical;
+}
+
+.identity-auth .auth-input:focus,
+.identity-auth .register-field-row .form-control:focus,
+.identity-auth .auth-field textarea.form-control:focus {
   outline: none;
   border-color: #9a6bff;
   box-shadow: 0 0 0 3px rgba(154, 107, 255, 0.25);
   transform: translateY(-1px);
+  background-color: #ffffff;
 }
 
-.auth-input.is-invalid {
+.identity-auth .auth-input.is-invalid,
+.identity-auth .register-field-row .form-control.is-invalid,
+.identity-auth .auth-field textarea.form-control.is-invalid {
   border-color: #e55353;
   box-shadow: 0 0 0 3px rgba(229, 83, 83, 0.2);
 }
 
-.auth-error {
+.identity-auth .auth-error {
   color: #e55353;
   font-size: 0.85rem;
   font-weight: 600;
   margin-bottom: 0.3rem;
 }
 
-.register-field-row {
+.identity-auth .register-field-row {
   display: flex;
   align-items: center;
   gap: 0.75rem;
 }
 
-.register-icon {
+.identity-auth .register-field-row-file {
+  align-items: stretch;
+}
+
+.identity-auth .register-icon {
   font-size: 1.1rem;
   color: #9a6bff;
 }
 
-.auth-submit-btn {
+.identity-auth .register-field-row-file .form-control {
+  padding-top: 0.55rem;
+  padding-bottom: 0.55rem;
+}
+
+.identity-auth .auth-field .form-check-input {
+  border-radius: 6px;
+  border: 1.5px solid #d1d5db;
+  cursor: pointer;
+  box-shadow: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.identity-auth .auth-field .form-check-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(154, 107, 255, 0.25);
+  border-color: #9a6bff;
+}
+
+.identity-auth .auth-field .form-check-input:checked {
+  background-color: #9a6bff;
+  border-color: #9a6bff;
+}
+
+.identity-auth .auth-field .form-check-label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #444;
+  cursor: pointer;
+}
+
+.identity-auth .auth-submit-btn {
   margin-top: 0.6rem;
   border-radius: 999px;
   padding: 0.85rem 1.8rem;
@@ -94,38 +157,41 @@
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease,
-    opacity 0.2s ease;
+    opacity 0.2s ease,
+    filter 0.15s ease;
 }
 
-.auth-submit-btn:hover:not(:disabled) {
+.identity-auth .auth-submit-btn:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 14px 30px rgba(154, 107, 255, 0.55);
+  filter: brightness(1.03);
 }
 
-.auth-submit-btn:active:not(:disabled) {
+.identity-auth .auth-submit-btn:active:not(:disabled) {
   transform: translateY(0);
   box-shadow: 0 8px 18px rgba(154, 107, 255, 0.4);
 }
 
-.auth-submit-btn:disabled {
+.identity-auth .auth-submit-btn:disabled {
   opacity: 0.7;
   cursor: default;
   box-shadow: none;
 }
 
-.register-image {
+.identity-auth .register-image {
   width: 100%;
   height: auto;
   border-radius: 18px;
   object-fit: cover;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.18);
 }
 
 @media (max-width: 992px) {
-  .register-body {
+  .identity-auth .register-body {
     padding: 2rem 1.6rem;
   }
 
-  .register-title {
+  .identity-auth .register-title {
     margin-top: 1rem;
     margin-bottom: 1.6rem;
     font-size: 1.7rem;
@@ -133,7 +199,11 @@
 }
 
 @media (max-width: 768px) {
-  .register-card {
+  .identity-auth .register-card {
     margin: 1.5rem;
+  }
+
+  .identity-auth.register-page {
+    padding-top: 2rem;
   }
 }

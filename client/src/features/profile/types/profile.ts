@@ -2,13 +2,12 @@ export type PrivateProfile = {
   id: string;
   firstName: string;
   lastName: string;
-  imageUrl: string;
+  imagePath: string;
   isPrivate: boolean;
 };
 
 export type Profile = PrivateProfile & {
-  phoneNumber: string;
-  dateOfBirth: string;
+  dateOfBirth?: string | null;
   socialMediaUrl?: string | null;
   biography?: string | null;
   createdBooksCount: number;
@@ -22,10 +21,9 @@ export type Profile = PrivateProfile & {
 export type CreateProfile = {
   firstName: string;
   lastName: string;
-  imageUrl: string;
-  phoneNumber: string;
-  dateOfBirth: string;
+  dateOfBirth?: string | null;
   socialMediaUrl?: string | null;
   biography?: string | null;
   isPrivate: boolean;
+  image?: File | null;
 };

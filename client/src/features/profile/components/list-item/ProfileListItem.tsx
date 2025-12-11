@@ -1,21 +1,31 @@
 import './ProfileListItem.css';
 
 import { type FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FaLock, FaUnlock, FaUser } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 import { routes } from '@/shared/lib/constants/api.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 
-const ProfileListItem: FC<{
+type Props = {
   id: string;
   imageUrl: string;
   firstName: string;
   lastName: string;
   isPrivate: boolean;
-}> = ({ id: profileId, imageUrl, firstName, lastName, isPrivate }) => {
+};
+
+const ProfileListItem: FC<Props> = ({
+  id: profileId,
+  imageUrl,
+  firstName,
+  lastName,
+  isPrivate,
+}) => {
   const { userId } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation('profiles');
 
   const onClickHandler = () => {
     navigate(routes.profile, {
@@ -37,7 +47,9 @@ const ProfileListItem: FC<{
             }}
           />
         ) : (
-          <div className="profile-list-item-placeholder rounded-circle">No Image</div>
+          <div className="profile-list-item-placeholder rounded-circle">
+            {t('listItem.noImage')}
+          </div>
         )}
       </div>
       <div className="col-md-6 col-8 mt-1 profile-list-item-content">
@@ -49,12 +61,12 @@ const ProfileListItem: FC<{
           {isPrivate ? (
             <>
               <FaLock className="me-2" />
-              Private Profile
+              {t('listItem.privateProfile')}
             </>
           ) : (
             <>
               <FaUnlock className="me-2" />
-              Public Profile
+              {t('listItem.publicProfile')}
             </>
           )}
         </h6>
@@ -62,7 +74,7 @@ const ProfileListItem: FC<{
       <div className="col-md-3 d-flex align-items-center justify-content-center mt-1">
         <div className="d-flex flex-column align-items-center">
           <button onClick={onClickHandler} className="btn btn-sm btn-primary profile-list-item-btn">
-            View Profile
+            {t('listItem.viewProfile')}
           </button>
         </div>
       </div>

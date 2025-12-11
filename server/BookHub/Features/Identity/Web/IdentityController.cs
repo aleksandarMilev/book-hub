@@ -1,20 +1,22 @@
 ﻿namespace BookHub.Features.Identity.Web;
 
 using BookHub.Common;
+using Identity.Shared;
 using Infrastructure.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Service;
+using Service.Models;
 
 public class IdentityController(IIdentityService service) : ApiController
 {
     [HttpPost(ApiRoutes.Register)]
-    public async Task<ActionResult<LoginResponseModel>> Register(RegisterRequestModel model)
+    public async Task<ActionResult<LoginResponseModel>> Register(
+        RegisterWebModel webModel,
+        CancellationToken token = default)
     {
-        var result = await service.Register(
-            model.Email,
-            model.Username,
-            model.Password);
+        var serviceModel = webModel.ToRegisterServiceModel();
+        var result = await service.Register(serviceModel, token);
 
         return this.OkOrBadRequest(
             result,
@@ -22,12 +24,12 @@ public class IdentityController(IIdentityService service) : ApiController
     }
 
     [HttpPost(ApiRoutes.Login)]
-    public async Task<ActionResult<LoginResponseModel>> Login(LoginRequestModel model)
+    public async Task<ActionResult<LoginResponseModel>> Login(
+        LoginWebModel webModel,
+        CancellationToken token = default)
     {
-        var result = await service.Login(
-             model.Credentials,
-             model.Password,
-             model.RememberMe);
+        var serviceModel = webModel.ToLoginServiceModel();
+        var result = await service.Login(serviceModel, token);
 
         return this.OkOrBadRequest(
             result,

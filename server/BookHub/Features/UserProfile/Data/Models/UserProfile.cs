@@ -18,6 +18,7 @@ public class UserProfile:
     public string UserId { get; set; } = null!;
 
     public User User { get; set; } = null!;
+
     [Required]
     [MaxLength(NameMaxLength)]
     public string FirstName { get; set; } = null!;
@@ -26,11 +27,8 @@ public class UserProfile:
     [MaxLength(NameMaxLength)]
     public string LastName { get; set; } = null!;
 
-    public string ImagePath { get; set; } = null!;
-
     [Required]
-    [MaxLength(PhoneMaxLength)]
-    public string PhoneNumber { get; set; } = null!;
+    public string ImagePath { get; set; } = null!;
 
     public DateTime? DateOfBirth { get; set; }
 

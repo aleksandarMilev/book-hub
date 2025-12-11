@@ -55,7 +55,7 @@ export const useDownvote = () => {
 
 export const useVoteHandlers = ({
   id,
-  hasProfile,
+  isAuthenticated,
   upvoteCount,
   downvoteCount,
   setUpvoteCount,
@@ -65,7 +65,7 @@ export const useVoteHandlers = ({
   onVote,
 }: {
   id: string;
-  hasProfile: boolean;
+  isAuthenticated: boolean;
   upvoteCount: number;
   downvoteCount: number;
   setUpvoteCount: Dispatch<SetStateAction<number>>;
@@ -80,7 +80,7 @@ export const useVoteHandlers = ({
   const downvote = useDownvote();
 
   const handleUpvote = useCallback(async () => {
-    if (!token || !hasProfile) {
+    if (!token || !isAuthenticated) {
       return;
     }
 
@@ -96,7 +96,7 @@ export const useVoteHandlers = ({
     }
   }, [
     token,
-    hasProfile,
+    isAuthenticated,
     id,
     upvote,
     downvoteCount,
@@ -108,7 +108,7 @@ export const useVoteHandlers = ({
   ]);
 
   const handleDownvote = useCallback(async () => {
-    if (!token || !hasProfile) {
+    if (!token || !isAuthenticated) {
       return;
     }
 
@@ -125,7 +125,7 @@ export const useVoteHandlers = ({
     }
   }, [
     token,
-    hasProfile,
+    isAuthenticated,
     id,
     downvote,
     upvoteCount,

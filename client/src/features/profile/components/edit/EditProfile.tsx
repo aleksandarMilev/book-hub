@@ -11,7 +11,7 @@ const EditProfile: FC = () => {
     return <DefaultSpinner />;
   }
 
-  return <ProfileForm profile={profile} isEditMode />;
+  return <ProfileForm profile={profile} />;
 };
 
 export default EditProfile;

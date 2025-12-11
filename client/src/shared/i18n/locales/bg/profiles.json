@@ -1,0 +1,88 @@
+{
+  "details": {
+    "buttons": {
+      "edit": "Редакция",
+      "delete": "Изтриване",
+      "create": "Създай"
+    },
+    "labels": {
+      "nameFallback": "Твоето име",
+      "dateOfBirth": "Дата на раждане",
+      "dateOfBirthFallback": "Твоята дата на раждане",
+      "website": "Уебсайт",
+      "websiteFallback": "Адрес на твоя уебсайт",
+      "accountPrivacy": "Поверителност на профила",
+      "privacyPrivate": "Частен",
+      "privacyPublic": "Публичен",
+      "biography": "Биография",
+      "biographyFallback": "Твоята биография"
+    },
+    "stats": {
+      "title": "Статистика:",
+      "booksCreated": "Създадени книги:",
+      "authorsCreated": "Създадени автори:",
+      "reviewsWritten": "Написани ревюта:",
+      "currentlyReading": "В момента чете:",
+      "wantToRead": "Иска да прочете:",
+      "read": "Прочетени:"
+    },
+    "chat": {
+      "title": "Добави този потребител към чат:"
+    },
+    "currentlyReading": {
+      "ownTitle": "В момента четеш:",
+      "otherTitle": "{{firstName}} в момента чете:",
+      "empty": "Няма книги в 'в момента чета'"
+    },
+    "shortcuts": {
+      "toRead": "За четене",
+      "read": "Прочетени"
+    },
+    "privacyNotice": "Този потребителски профил е частен. Само собственикът може да вижда всички детайли."
+  },
+  "form": {
+    "title": "Редакция на профила",
+    "labels": {
+      "firstName": "Име *",
+      "lastName": "Фамилия *",
+      "image": "Профилна снимка",
+      "dateOfBirth": "Дата на раждане *",
+      "socialMediaUrl": "Линк към сайт/социална мрежа",
+      "biography": "Биография",
+      "isPrivate": "Профилът ми да е частен"
+    },
+    "placeholders": {
+      "biography": "Напиши кратка биография... (по избор)"
+    },
+    "notes": {
+      "required": "Полетата отбелязани с * са задължителни"
+    },
+    "buttons": {
+      "reset": "Изчисти",
+      "submit": "Запази промените",
+      "submitting": "Запазване..."
+    }
+  },
+  "list": {
+    "searchPlaceholder": "Търси потребители...",
+    "searchAria": "Търси потребители",
+    "emptyTitle": "Не открихме потребители",
+    "emptyText": "Опитай да промениш критериите за търсене или разгледай други секции."
+  },
+  "listItem": {
+    "noImage": "Няма снимка",
+    "privateProfile": "Частен профил",
+    "publicProfile": "Публичен профил",
+    "viewProfile": "Виж профила"
+  },
+  "messages": {
+    "editSuccess": "Успешно редактира профила си!",
+    "editFailed": "Възникна грешка при редакцията на профила.",
+    "profileLoadFailed": "Грешка при зареждане на профил.",
+    "ownProfileLoadFailed": "Грешка при зареждане на твоя профил.",
+    "profilesLoadFailed": "Грешка при зареждане на профили.",
+    "deleteSuccess": "Профилът беше изтрит успешно!",
+    "deleteFailed": "Неуспешно изтриване на профил.",
+    "editFailedSimple": "Неуспешно редактиране на профил."
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "details": {
+    "buttons": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "create": "Create"
+    },
+    "labels": {
+      "nameFallback": "Your Name",
+      "dateOfBirth": "Date of Birth",
+      "dateOfBirthFallback": "Your date of birth",
+      "website": "Website",
+      "websiteFallback": "Your website URL",
+      "accountPrivacy": "Account Privacy",
+      "privacyPrivate": "Private",
+      "privacyPublic": "Public",
+      "biography": "Biography",
+      "biographyFallback": "Your biography"
+    },
+    "stats": {
+      "title": "Statistics:",
+      "booksCreated": "Books Created:",
+      "authorsCreated": "Authors Created:",
+      "reviewsWritten": "Reviews Written:",
+      "currentlyReading": "Currently Reading:",
+      "wantToRead": "Want to Read:",
+      "read": "Read:"
+    },
+    "chat": {
+      "title": "Add this user to a chat:"
+    },
+    "currentlyReading": {
+      "ownTitle": "You're currently reading:",
+      "otherTitle": "{{firstName}} is currently reading:",
+      "empty": "No currently reading books"
+    },
+    "shortcuts": {
+      "toRead": "To Read",
+      "read": "Read"
+    },
+    "privacyNotice": "This user profile is private. Only the owner can view its full details."
+  },
+  "form": {
+    "title": "Edit Your Profile",
+    "labels": {
+      "firstName": "First Name *",
+      "lastName": "Last Name *",
+      "image": "Profile Image",
+      "dateOfBirth": "Date of Birth *",
+      "socialMediaUrl": "Social Media URL",
+      "biography": "Biography",
+      "isPrivate": "Keep my profile private"
+    },
+    "placeholders": {
+      "biography": "Write a short biography... (Optional)"
+    },
+    "notes": {
+      "required": "Fields marked with * are required"
+    },
+    "buttons": {
+      "reset": "Reset All",
+      "submit": "Save Changes",
+      "submitting": "Saving..."
+    }
+  },
+  "list": {
+    "searchPlaceholder": "Search users...",
+    "searchAria": "Search users",
+    "emptyTitle": "We couldn't find any users",
+    "emptyText": "Try adjusting your search terms or exploring our collection for more options."
+  },
+  "listItem": {
+    "noImage": "No Image",
+    "privateProfile": "Private Profile",
+    "publicProfile": "Public Profile",
+    "viewProfile": "View Profile"
+  },
+  "messages": {
+    "editSuccess": "You have successfully edited your profile!",
+    "editFailed": "Profile action failed.",
+    "profileLoadFailed": "Failed to load profile.",
+    "ownProfileLoadFailed": "Failed to load your profile.",
+    "profilesLoadFailed": "Failed to load profiles.",
+    "deleteSuccess": "The profile was successfully deleted!",
+    "deleteFailed": "Failed to delete profile.",
+    "editFailedSimple": "Failed to edit profile."
+  }
+}

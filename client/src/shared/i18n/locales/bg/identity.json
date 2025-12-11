@@ -21,10 +21,20 @@
   "register": {
     "title": "Регистрация",
     "labels": {
+      "firstName": "Име",
+      "lastName": "Фамилия",
       "username": "Потребителско име",
       "email": "Имейл",
       "password": "Парола",
-      "confirmPassword": "Повтори паролата"
+      "confirmPassword": "Повтори паролата",
+      "dateOfBirth": "Дата на раждане",
+      "socialMediaUrl": "Линк към сайт/социална мрежа",
+      "image": "Профилна снимка",
+      "biography": "Биография",
+      "isPrivate": "Профилът ми да е частен"
+    },
+    "placeholders": {
+      "biography": "Напиши кратка биография... (по избор)"
     },
     "buttons": {
       "submit": "Регистрация",
@@ -35,8 +45,24 @@
       "emailRequired": "Имейлът е задължителен",
       "emailInvalid": "Невалиден формат на имейла",
       "passwordRequired": "Паролата е задължителна",
-      "confirmPasswordRequired": "Моля потвърди паролата",
-      "passwordsMustMatch": "Паролите трябва да съвпадат"
+      "confirmPasswordRequired": "Моля, потвърди паролата",
+      "passwordsMustMatch": "Паролите трябва да съвпадат",
+
+      "firstNameMin": "Името трябва да е поне {{min}} символа",
+      "firstNameMax": "Името не може да е по-дълго от {{max}} символа",
+      "firstNameRequired": "Името е задължително",
+
+      "lastNameMin": "Фамилията трябва да е поне {{min}} символа",
+      "lastNameMax": "Фамилията не може да е по-дълга от {{max}} символа",
+      "lastNameRequired": "Фамилията е задължителна",
+
+      "dateOfBirthRequired": "Датата на раждане е задължителна",
+
+      "socialMediaUrlLength": "Адресът трябва да е между {{min}} и {{max}} символа",
+      "biographyLength": "Биографията трябва да е между {{min}} и {{max}} символа",
+
+      "imageTooLarge": "Изображението е твърде голямо (максимум 2MB)",
+      "imageInvalidType": "Невалиден формат на изображение. Позволени: {{types}}"
     }
   },
   "messages": {

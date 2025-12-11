@@ -3,8 +3,11 @@ import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import * as identityApi from '@/features/identity/api/api.js';
-import type { DecodedToken, LoginResponse } from '@/features/identity/types/identity.js';
-import * as profileApi from '@/features/profile/api/api.js';
+import type {
+  DecodedToken,
+  LoginResponse,
+  RegisterFormValues,
+} from '@/features/identity/types/identity.js';
 import { IsCanceledError } from '@/shared/lib/utils/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 import type { User } from '@/shared/stores/auth/types/user.js';
@@ -27,7 +30,6 @@ export const useLogin = () => {
           email: decoded.email,
           token: result.token,
           isAdmin: Boolean(decoded.role),
-          hasProfile: await profileApi.hasProfile(result.token),
         };
 
         changeAuthenticationState(user);
@@ -53,18 +55,20 @@ export const useRegister = () => {
   const { t } = useTranslation('identity');
 
   const onRegister = useCallback(
-    async (username: string, email: string, password: string) => {
+    async (requestModel: RegisterFormValues) => {
       try {
-        const result: LoginResponse = await identityApi.register(username, email, password);
-        const decoded = jwtDecode<DecodedToken>(result.token);
+        const result: LoginResponse = await identityApi.register(requestModel);
+        if (!result) {
+          return;
+        }
 
+        const decoded = jwtDecode<DecodedToken>(result.token);
         const user: User = {
           userId: decoded.nameid,
           username: decoded.unique_name,
           email: decoded.email,
           token: result.token,
           isAdmin: Boolean(decoded.role),
-          hasProfile: false,
         };
 
         changeAuthenticationState(user);

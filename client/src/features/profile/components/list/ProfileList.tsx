@@ -1,8 +1,11 @@
+import './ProfileList.css';
+
 import { type ChangeEvent, type FC, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FaSearch } from 'react-icons/fa';
 
-import noUsersImage from '@/features/profile/components/list/assets/no-users-found.avif';
 import ProfileListItem from '@/features/profile/components/list-item/ProfileListItem.js';
+import noUsersImage from '@/features/profile/components/list/assets/no-users-found.avif';
 import { useSearchProfiles } from '@/features/search/hooks/useCrud.js';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
 import Pagination from '@/shared/components/pagination/Pagination.js';
@@ -12,6 +15,7 @@ import { pagination } from '@/shared/lib/constants/defaultValues.js';
 const ProfileList: FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm);
+  const { t } = useTranslation('profiles');
 
   const [page, setPage] = useState(pagination.defaultPageIndex);
   const pageSize = pagination.defaultPageSize;
@@ -35,14 +39,14 @@ const ProfileList: FC = () => {
   };
 
   return (
-    <div className="container mt-5 mb-5">
+    <div className="profile-list-page container">
       <div className="row mb-4">
         <div className="col-md-10 mx-auto d-flex">
           <div className="search-bar-container d-flex w-100">
             <input
               type="text"
               className="form-control search-input"
-              placeholder="Search users..."
+              placeholder={t('list.searchPlaceholder')}
               value={searchTerm}
               onChange={handleSearchChange}
               disabled={isFetching}
@@ -50,7 +54,7 @@ const ProfileList: FC = () => {
             <button
               className="btn btn-light search-btn"
               disabled={isFetching}
-              aria-label="Search users"
+              aria-label={t('list.searchAria')}
             >
               <FaSearch size={20} />
             </button>
@@ -85,14 +89,11 @@ const ProfileList: FC = () => {
               <img
                 src={noUsersImage}
                 alt="No users found"
-                className="mb-4 clickable"
-                style={{ maxWidth: '200px', opacity: 0.7, cursor: 'pointer' }}
+                className="empty-state-image"
                 onClick={() => setSearchTerm('')}
               />
-              <h5 className="text-muted">{"We couldn't find any users"}</h5>
-              <p className="text-muted text-center" style={{ maxWidth: '400px' }}>
-                Try adjusting your search terms or exploring our collection for more options.
-              </p>
+              <h5 className="empty-state-title text-center">{t('list.emptyTitle')}</h5>
+              <p className="empty-state-text text-center">{t('list.emptyText')}</p>
             </div>
           )}
         </div>

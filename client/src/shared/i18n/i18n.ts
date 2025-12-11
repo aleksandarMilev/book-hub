@@ -35,6 +35,10 @@ const bgGenres = await import('@/shared/i18n/locales/bg/genres.json', {
   assert: { type: 'json' },
 }).then((mod) => mod.default);
 
+const bgProfiles = await import('@/shared/i18n/locales/bg/profiles.json', {
+  assert: { type: 'json' },
+}).then((mod) => mod.default);
+
 const enLayout = await import('@/shared/i18n/locales/en/layout.json', {
   assert: { type: 'json' },
 }).then((mod) => mod.default);
@@ -67,6 +71,10 @@ const enGenres = await import('@/shared/i18n/locales/en/genres.json', {
   assert: { type: 'json' },
 }).then((mod) => mod.default);
 
+const enProfiles = await import('@/shared/i18n/locales/en/profiles.json', {
+  assert: { type: 'json' },
+}).then((mod) => mod.default);
+
 const storedLanguage = typeof window !== 'undefined' ? localStorage.getItem('language') : null;
 
 const initialLanguage = storedLanguage || DEFAULT_LOCALE;
@@ -88,6 +96,7 @@ void i18n.use(initReactI18next).init({
       authors: enAuthors,
       books: enBooks,
       genres: enGenres,
+      profiles: enProfiles,
     },
     'bg-BG': {
       layout: bgLayout,
@@ -98,6 +107,7 @@ void i18n.use(initReactI18next).init({
       authors: bgAuthors,
       books: bgBooks,
       genres: bgGenres,
+      profiles: bgProfiles,
     },
   },
 });

@@ -1,4 +1,4 @@
-﻿namespace BookHub.Features.Identity.Web.Models;
+﻿namespace BookHub.Features.Identity.Service.Models;
 
 public class LoginResponseModel(string token)
 {

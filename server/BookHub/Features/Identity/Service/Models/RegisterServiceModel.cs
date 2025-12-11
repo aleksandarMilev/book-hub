@@ -1,9 +1,13 @@
-﻿namespace BookHub.Features.UserProfile.Service.Models;
+﻿namespace BookHub.Features.Identity.Service.Models;
 
-using Infrastructure.Services.ImageWriter.Models.Image;
-
-public class CreateProfileServiceModel : IImageServiceModel
+public class RegisterServiceModel
 {
+    public string Username { get; init; } = null!;
+
+    public string Email { get; init; } = null!;
+
+    public string Password { get; init; } = null!;
+
     public string FirstName { get; init; } = null!;
 
     public string LastName { get; init; } = null!;

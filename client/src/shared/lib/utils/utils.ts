@@ -2,7 +2,6 @@ import { HttpStatusCode, isAxiosError } from 'axios';
 import { format } from 'date-fns';
 
 import { baseUrl } from '@/shared/lib/constants/api.js';
-import type { IntId } from '@/shared/types/intId.js';
 
 export const slugify = (value: string): string =>
   value
@@ -25,24 +24,6 @@ export const getImageUrl = (imagePath: string, resource: string) => {
 };
 
 export const sleep = (ms = 2_000) => new Promise<void>((resolve) => setTimeout(resolve, ms));
-
-export function toIntId(value: unknown): IntId | null {
-  let num: number;
-
-  if (typeof value === 'number') {
-    num = value;
-  } else if (typeof value === 'string') {
-    num = Number(value);
-  } else {
-    num = NaN;
-  }
-
-  if (Number.isInteger(num) && num > 0) {
-    return num as IntId;
-  } else {
-    return null;
-  }
-}
 
 export const formatIsoDate = (iso?: string | null, fallback = 'Unknown date') =>
   iso ? format(new Date(iso), 'dd MMM yyyy') : fallback;

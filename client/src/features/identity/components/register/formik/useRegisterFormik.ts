@@ -13,6 +13,13 @@ const registerInitialValues: RegisterFormValues = {
   email: '',
   password: '',
   confirmPassword: '',
+  firstName: '',
+  lastName: '',
+  dateOfBirth: '',
+  socialMediaUrl: '',
+  biography: '',
+  isPrivate: false,
+  image: null,
 };
 
 export const useRegisterFormik = () => {
@@ -25,7 +32,7 @@ export const useRegisterFormik = () => {
     validationSchema: createRegisterSchema(t),
     onSubmit: async (values, { setErrors }) => {
       try {
-        await registerHandler(values.username, values.email, values.password);
+        await registerHandler(values);
         navigate(routes.home);
       } catch (error) {
         const message = IsError(error) ? error.message : t('messages.unknownError');

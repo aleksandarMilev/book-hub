@@ -14,7 +14,7 @@ const Login: FC = () => {
   const { t } = useTranslation('identity');
 
   return (
-    <MDBContainer fluid className="login-page">
+    <MDBContainer fluid className="identity-auth login-page">
       <MDBRow className="login-row">
         <MDBCol md="6" className="login-image-wrapper">
           <img src={image} className="login-image" alt="Login" />

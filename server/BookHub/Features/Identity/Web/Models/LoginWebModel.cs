@@ -2,7 +2,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
-public class LoginRequestModel
+public class LoginWebModel
 {
     [Required]
     public string Credentials { get; init; } = null!;
