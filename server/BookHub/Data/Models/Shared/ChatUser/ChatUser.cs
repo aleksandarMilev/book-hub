@@ -19,7 +19,7 @@ public class ChatUser
     [ForeignKey(nameof(Chat))]
     public int ChatId { get; set; }
 
-    public Chat Chat { get; set; } = null!;
+    public ChatDbModel Chat { get; set; } = null!;
 
     public bool HasAccepted { get; set; }
 }

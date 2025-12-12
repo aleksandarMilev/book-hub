@@ -75,7 +75,7 @@ public static class SearchMapping
         });
 
     public static IQueryable<SearchChatServiceModel> ToSearchSeviceModels(
-        this IQueryable<Chat> profiles)
+        this IQueryable<ChatDbModel> profiles)
         => profiles.Select(p => new SearchChatServiceModel
         {
             Id = p.Id,

@@ -1,18 +1,21 @@
-﻿namespace BookHub.Features.Chat.Service
+﻿namespace BookHub.Features.Chat.Service;
+
+using Infrastructure.Services.Result;
+using Infrastructure.Services.ServiceLifetimes;
+using Service.Models;
+
+public interface IChatMessageService : ITransientService
 {
-    using BookHub.Infrastructure.Services.Result;
-    using Infrastructure.Services;
-    using Infrastructure.Services.ServiceLifetimes;
-    using Service.Models;
+    Task<ResultWith<ChatMessageServiceModel>> Create(
+        CreateChatMessageServiceModel model,
+        CancellationToken token = default);
 
-    public interface IChatMessageService : ITransientService
-    {
-        Task<ChatMessageServiceModel> Create(CreateChatMessageServiceModel model);
+    Task<ResultWith<ChatMessageServiceModel>> Edit(
+        int id,
+        CreateChatMessageServiceModel model,
+        CancellationToken token = default);
 
-        Task<ResultWith<ChatMessageServiceModel>> Edit(
-            int id,
-            CreateChatMessageServiceModel model);
-
-        Task<Result> Delete(int id);
-    }
+    Task<Result> Delete(
+        int id,
+        CancellationToken token = default);
 }

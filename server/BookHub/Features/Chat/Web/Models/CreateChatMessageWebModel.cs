@@ -2,7 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    using static Shared.ValidationConstants;
+    using static Shared.Constants.Validation;
 
     public class CreateChatMessageWebModel
     {
@@ -12,6 +12,6 @@
             MinimumLength = MessageMinLength)]
         public string Message { get; init; } = null!;
 
-        public int ChatId { get; init; }
+        public Guid ChatId { get; init; }
     }
 }

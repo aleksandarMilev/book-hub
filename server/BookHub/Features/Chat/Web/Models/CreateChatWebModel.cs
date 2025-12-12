@@ -1,20 +1,16 @@
-﻿namespace BookHub.Features.Chat.Web.Models
+﻿namespace BookHub.Features.Chat.Web.Models;
+
+using System.ComponentModel.DataAnnotations;
+
+using static Shared.Constants.Validation;
+
+public class CreateChatWebModel
 {
-    using System.ComponentModel.DataAnnotations;
+    [Required]
+    [StringLength(
+        NameMaxLength,
+        MinimumLength = NameMinLength)]
+    public string Name { get; init; } = null!;
 
-    using static Shared.ValidationConstants;
-
-    public class CreateChatWebModel
-    {
-        [Required]
-        [StringLength(
-            NameMaxLength,
-            MinimumLength = NameMinLength)]
-        public string Name { get; set; } = null!;
-
-        [StringLength(
-            UrlMaxLength,
-            MinimumLength = UrlMinLength)]
-        public string? ImageUrl { get; set; }
-    }
+    public IFormFile? Image { get; init; }
 }

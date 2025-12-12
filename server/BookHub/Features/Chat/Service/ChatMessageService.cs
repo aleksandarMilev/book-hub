@@ -1,136 +1,181 @@
 ﻿namespace BookHub.Features.Chat.Service;
 
 using BookHub.Data;
+using Data.Models;
+using Factories.ChatMessage;
 using Infrastructure.Services.CurrentUser;
 using Infrastructure.Services.Result;
-using Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Service.Models;
+using Shared;
+using UserProfile.Data.Models;
 
 using static Common.Constants.ErrorMessages;
 
 public class ChatMessageService(
     BookHubDbContext data,
-    ICurrentUserService userService) : IChatMessageService
+    ICurrentUserService userService,
+    IChatMessageFactory factory,
+    ILogger<ChatMessageService> logger) : IChatMessageService
 {
-    private readonly BookHubDbContext data = data;
-    private readonly ICurrentUserService userService = userService;
-
-    public async Task<ChatMessageServiceModel> Create(CreateChatMessageServiceModel model)
+    public async Task<ResultWith<ChatMessageServiceModel>> Create(
+        CreateChatMessageServiceModel serviceModel,
+        CancellationToken token = default)
     {
-        var userId = this.userService.GetId()!;
+        var userId = userService.GetId()!;
+        var dbModel = serviceModel.ToChatMessageDbModel();
+        dbModel.SenderId = userId;
 
-        //var message = this.mapper.Map<ChatMessage>(model);
-        var message = new ChatMessage(); //TODO: implement mapping. this is just to compile the project
-        message.SenderId = userId;
+        data.Add(dbModel);
+        await data.SaveChangesAsync(token);
 
-        this.data.Add(message);
-        await this.data.SaveChangesAsync();
-
-        var profile = await this.data
-            .Profiles
-            .Where(p => p.UserId == userId)
-            .Select(p => new
-            {
-                Name = p.FirstName + " " + p.LastName,
-                Image = p.ImagePath
-            })
-            .FirstOrDefaultAsync();
-
-        var serviceModel = new ChatMessageServiceModel()
-        {
-            Id = message.Id,
-            Message = message.Message,
-            SenderId = message.SenderId,
-            SenderName = profile!.Name,
-            SenderImageUrl = profile!.Image,
-            CreatedOn = message.CreatedOn
-        };
-
-        return serviceModel;
+        return await this.GetProfileAndBuildResult(
+            userId,
+            dbModel,
+            token);
     }
 
     public async Task<ResultWith<ChatMessageServiceModel>> Edit(
-        int id, 
-        CreateChatMessageServiceModel model)
+        int chatMessageId, 
+        CreateChatMessageServiceModel serviceModel,
+        CancellationToken token = default)
     {
-        var userId = this.userService.GetId();
+        var userId = userService.GetId()!;
+        var dbModel = await this.GetDbModel(chatMessageId, token);
 
-        var message = await this.data
-            .ChatMessages
-            .FindAsync(id);
-
-        if (message is null)
+        if (dbModel is null)
         {
-            return string.Format(
-                DbEntityNotFound,
-                nameof(ChatMessage),
-                id);
+            return this.LogAndReturnChatMessageNotFoundMessage(chatMessageId);
         }
 
-        if (message.SenderId != userId)
+        if (dbModel.SenderId != userId)
         {
-            return string.Format(
-                UnauthorizedDbEntityAction,
-                this.userService.GetUsername(),
-                nameof(ChatMessage),
-                id);
+            return this.LogAndReturnUnauthorizedMessage(chatMessageId, userId);
         }
 
-        //this.mapper.Map(model, message); //TODO: implement
-        await this.data.SaveChangesAsync();
+        serviceModel.UpdateChatMessageDbModel(dbModel);
+        await data.SaveChangesAsync(token);
 
-        var profile = await this.data
-           .Profiles
-           .Where(p => p.UserId == userId)
-           .Select(p => new
-           {
-               Name = p.FirstName + " " + p.LastName,
-               Image = p.ImagePath
-           })
-           .FirstOrDefaultAsync();
-
-        var serviceModel = new ChatMessageServiceModel()
-        {
-            Id = message.Id,
-            Message = message.Message,
-            SenderId = message.SenderId,
-            SenderName = profile!.Name,
-            SenderImageUrl = profile!.Image,
-            CreatedOn = message.CreatedOn,
-            ModifiedOn = message.ModifiedOn!.Value
-        };
-
-        return ResultWith<ChatMessageServiceModel>
-            .Success(serviceModel);
+        return await this.GetProfileAndBuildResult(
+            userId,
+            dbModel,
+            token);
     }
 
-    public async Task<Result> Delete(int id)
+    public async Task<Result> Delete(
+        int chatMessageId,
+        CancellationToken token = default)
     {
-        var message = await this.data
-            .ChatMessages
-            .FindAsync(id);
+        var userId = userService.GetId()!;
+        var dbModel = await this.GetDbModel(chatMessageId, token);
 
-        if (message is null)
+        if (dbModel is null)
         {
-            return string.Format(
-                DbEntityNotFound,
-                nameof(ChatMessage),
-                id);
+            return this.LogAndReturnChatMessageNotFoundMessage(chatMessageId);
         }
 
-        if (message.SenderId != this.userService.GetId())
+        if (dbModel.SenderId != userId)
         {
-            return string.Format(
-                UnauthorizedDbEntityAction,
-                this.userService.GetUsername(),
-                nameof(ChatMessage),
-                id);
+            return this.LogAndReturnUnauthorizedMessage(chatMessageId, userId);
         }
 
-        this.data.Remove(message);
-        await this.data.SaveChangesAsync();
+        data.Remove(dbModel);
+        await data.SaveChangesAsync(token);
 
         return true;
+    }
+
+    private async Task<ChatMessageDbModel?> GetDbModel(
+        int id,
+        CancellationToken token = default)
+        => await data
+            .ChatMessages
+            .FindAsync([id], token);
+
+    private string LogAndReturnProfileNotFoundMessage(string id)
+    {
+        logger.LogWarning(
+            DbEntityNotFoundTemplate,
+            nameof(UserProfile),
+            id);
+
+        return string.Format(
+            DbEntityNotFound,
+            nameof(UserProfile),
+            id);
+    }
+
+    private string LogAndReturnChatMessageNotFoundMessage(int id)
+    {
+        logger.LogWarning(
+            DbEntityNotFoundTemplate,
+            nameof(ChatMessageDbModel),
+            id);
+
+        return string.Format(
+            DbEntityNotFound,
+            nameof(ChatMessageDbModel),
+            id);
+    }
+
+    private string LogAndReturnUnauthorizedMessage(
+        int chatMessageId,
+        string userId)
+    {
+        logger.LogWarning(
+            UnauthorizedMessageTemplate,
+            userId,
+            nameof(ChatMessageDbModel),
+            chatMessageId);
+
+        return string.Format(
+            UnauthorizedMessage,
+            userId,
+            nameof(ChatMessageDbModel),
+            chatMessageId);
+    }
+
+    private async Task<ChatMessageProfileServiceModel?> GetChatMessageProfileServiceModel(
+        string userId,
+        CancellationToken token = default)
+        => await data
+            .Profiles
+            .Where(p => p.UserId == userId)
+            .ToChatMessageProfileServiceModel()
+            .FirstOrDefaultAsync(token);
+
+    private ChatMessageServiceModel BuildChatMessageServiceModelResult(
+        ChatMessageDbModel chatMessage,
+        ChatMessageProfileServiceModel profile)
+        => factory
+            .WithId(chatMessage.Id)
+            .WithMessage(chatMessage.Message)
+            .WithSenderId(chatMessage.SenderId)
+            .WithSenderName(profile.Name)
+            .WithSenderImagePath(profile.ImagePath)
+            .CreatedOn(chatMessage.CreatedOn)
+            .Build();
+
+    private async Task<ResultWith<ChatMessageServiceModel>> GetProfileAndBuildResult(
+        string userId,
+        ChatMessageDbModel dbModel,
+        CancellationToken token = default)
+    {
+        var profile = await this.GetChatMessageProfileServiceModel(
+            userId,
+            token);
+
+        if (profile is null)
+        {
+            // It should not be possible (in theory) for user without profile to get there.
+            // Check to follow good practices and make C# happy without using the null coalescing operator.
+            return this.LogAndReturnProfileNotFoundMessage(userId);
+        }
+
+        var result = this.BuildChatMessageServiceModelResult(
+            dbModel,
+            profile);
+
+        return ResultWith<ChatMessageServiceModel>.Success(result);
     }
 }

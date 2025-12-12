@@ -1,12 +1,8 @@
 ﻿namespace BookHub.Features.Chat.Service.Models;
 
-public class ChatServiceModel
+public class ChatMessageProfileServiceModel
 {
-    public Guid Id { get; init; }
-
     public string Name { get; init; } = null!;
 
     public string ImagePath { get; init; } = null!;
-
-    public string CreatorId { get; init; } = null!;
 }

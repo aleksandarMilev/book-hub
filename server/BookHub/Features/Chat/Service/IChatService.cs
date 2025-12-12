@@ -1,42 +1,59 @@
-﻿namespace BookHub.Features.Chat.Service
+﻿namespace BookHub.Features.Chat.Service;
+
+using Infrastructure.Services.Result;
+using Infrastructure.Services.ServiceLifetimes;
+using Models;
+using UserProfile.Service.Models;
+using Web.Models;
+
+public interface IChatService : ITransientService
 {
-    using BookHub.Infrastructure.Services.Result;
-    using Infrastructure.Services;
-    using Infrastructure.Services.ServiceLifetimes;
-    using Service.Models;
-    using UserProfile.Service.Models;
+    Task<ChatDetailsServiceModel> Details(
+        Guid id,
+        CancellationToken token = default);
 
-    public interface IChatService : ITransientService
-    {
-        Task<IEnumerable<ChatServiceModel>> NotJoined(string userToJoinId);
+    IEnumerable<ChatServiceModel> NotJoined(
+        string userId,
+        CancellationToken token = default);
 
-        Task<ChatDetailsServiceModel?> Details(int id);
+    Task<bool> CanAccessChat(
+        Guid chatId,
+        string userId,
+        CancellationToken token = default);
 
-        Task<bool> CanAccessChat(int chatId, string userId);
+    Task<bool> IsInvited(
+        Guid id,
+        string userId,
+        CancellationToken token = default);
 
-        Task<bool> IsInvited(int chatId, string userId);
+    Task<int> Create(
+        CreateChatWebModel webModel,
+        CancellationToken token = default);
 
-        Task<int> Create(CreateChatServiceModel model);
+    Task<Result> Edit(
+        Guid id,
+        CreateChatWebModel webModel,
+        CancellationToken token = default);
 
-        Task<Result> Edit(int id, CreateChatServiceModel model);
+    Task<Result> Delete(
+        Guid id,
+        CancellationToken token = default);
 
-        Task<Result> Delete(int id);
+    Task<ResultWith<PrivateProfileServiceModel>> Accept(
+        ProcessChatInvitationWebModel webModel,
+        CancellationToken token = default);
 
-        Task<Result> InviteUserToChat(
-            int chatId,
-            string chatName,
-            string userId);
+    Task<Result> Reject(
+        ProcessChatInvitationWebModel webModel,
+        CancellationToken token = default);
 
-        Task<Result> RemoveUserFromChat(int chatId, string userToRemoveId);
+    Task<int> InviteUser(
+       Guid id,
+       AddUserToChatWebModel webModel,
+       CancellationToken token = default);
 
-        Task<ResultWith<PrivateProfileServiceModel>> Accept(
-            int chatId,
-            string chatName,
-            string chatCreatorId);
-
-        Task<Result> Reject(
-            int chatId,
-            string chatName,
-            string chatCreatorId);
-    }
+    Task<Result> RemoveUser(
+        Guid chatId,
+        string userId,
+        CancellationToken token = default);
 }

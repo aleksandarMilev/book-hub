@@ -43,9 +43,9 @@ public class BookHubDbContext(
 
     public DbSet<Notification> Notifications { get; init; }
 
-    public DbSet<ChatMessage> ChatMessages { get; init; }
+    public DbSet<ChatMessageDbModel> ChatMessages { get; init; }
 
-    public DbSet<Chat> Chats { get; init; }
+    public DbSet<ChatDbModel> Chats { get; init; }
 
     public DbSet<ChatUser> ChatsUsers { get; init; }
 
