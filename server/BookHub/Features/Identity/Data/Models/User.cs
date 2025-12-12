@@ -40,7 +40,7 @@ public class User : IdentityUser, IDeletableEntity
 
     public ICollection<ChatUser> ChatsUsers { get; set; } = new HashSet<ChatUser>();
 
-    public ICollection<Chat> ChatsCreated { get; set; } = new HashSet<Chat>();
+    public ICollection<ChatDbModel> ChatsCreated { get; set; } = new HashSet<ChatDbModel>();
 
-    public ICollection<ChatMessage> SentChatMessages { get; } = new HashSet<ChatMessage>();
+    public ICollection<ChatMessageDbModel> SentChatMessages { get; } = new HashSet<ChatMessageDbModel>();
 }

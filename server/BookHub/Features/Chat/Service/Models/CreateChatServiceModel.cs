@@ -1,9 +1,10 @@
-﻿namespace BookHub.Features.Chat.Service.Models
-{
-    public class CreateChatServiceModel
-    {
-        public string Name { get; init; } = null!;
+﻿namespace BookHub.Features.Chat.Service.Models;
 
-        public string ImageUrl { get; set; } = null!;
-    }
+using Infrastructure.Services.ImageWriter.Models.Image;
+
+public class CreateChatServiceModel : IImageServiceModel
+{
+    public string Name { get; init; } = null!;
+
+    public IFormFile? Image { get; init; }
 }

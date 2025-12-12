@@ -61,7 +61,7 @@ public class ChatService(
         model.ImageUrl ??= DefaultImageUrl;
 
         //var chat = this.mapper.Map<Chat>(model);
-        var chat = new Chat(); //TODO: implement mapping
+        var chat = new ChatDbModel(); //TODO: implement mapping
         chat.CreatorId = creatorId;
 
         this.data.Add(chat);
@@ -85,7 +85,7 @@ public class ChatService(
         {
             return string.Format(
                 DbEntityNotFound,
-                nameof(Chat),
+                nameof(ChatDbModel),
                 id);
         }
 
@@ -94,7 +94,7 @@ public class ChatService(
             return string.Format(
                 UnauthorizedDbEntityAction,
                 this.userService.GetUsername(),
-                nameof(Chat), 
+                nameof(ChatDbModel), 
                 id);
         }
 
@@ -116,7 +116,7 @@ public class ChatService(
         {
             return string.Format(
                 DbEntityNotFound,
-                nameof(Chat),
+                nameof(ChatDbModel),
                 id);
         }
 
@@ -126,7 +126,7 @@ public class ChatService(
             return string.Format(
                 UnauthorizedDbEntityAction,
                 this.userService.GetUsername(),
-                nameof(Chat),
+                nameof(ChatDbModel),
                 id);
         }
 
@@ -228,7 +228,7 @@ public class ChatService(
             return string.Format(
                 UnauthorizedDbEntityAction,
                 this.userService.GetUsername(),
-                nameof(Chat),
+                nameof(ChatDbModel),
                 chatId);
         }
 
@@ -261,7 +261,7 @@ public class ChatService(
             return string.Format(
                 UnauthorizedDbEntityAction,
                 this.userService.GetUsername(),
-                nameof(Chat),
+                nameof(ChatDbModel),
                 chatId);
         }
 

@@ -1,55 +1,61 @@
-﻿namespace BookHub.Features.Chat.Web
+﻿namespace BookHub.Features.Chat.Web;
+
+using BookHub.Common;
+using BookHub.Features.Chat.Shared;
+using Infrastructure.Extensions;
+using Infrastructure.Services.Result;
+using Microsoft.AspNetCore.Mvc;
+using Models;
+using Service;
+using Service.Models;
+
+using static Common.Constants.ApiRoutes;
+
+public class ChatMessageController(IChatMessageService service) : ApiController
 {
-    using BookHub.Common;
-    using Infrastructure.Extensions;
-    using Infrastructure.Services.CurrentUser;
-    using Infrastructure.Services.Result;
-    using Microsoft.AspNetCore.Mvc;
-    using Models;
-    using Service;
-    using Service.Models;
-    using static Common.Constants.ApiRoutes;
-
-    public class ChatMessageController(
-        IChatMessageService service,
-        ICurrentUserService userService) : ApiController
+    [HttpPost]
+    public async Task<ActionResult<ChatMessageServiceModel>> Create(
+        CreateChatMessageWebModel webModel,
+        CancellationToken token = default)
     {
-        private readonly IChatMessageService service = service;
-        private readonly ICurrentUserService userService = userService;
+        var serviceModel = webModel.ToCreateChatMessageServiceModel();
+        var result = await service.Create(serviceModel, token);
 
-        [HttpPost]
-        public async Task<ActionResult<ChatMessageServiceModel>> Create(CreateChatMessageWebModel webModel)
+        if (result.Succeeded)
         {
-            //var serviceModel = this.mapper.Map<CreateChatMessageServiceModel>(webModel);
-            var serviceModel = new CreateChatMessageServiceModel(); // TODO: implement mapping
-            var createdServiceModel = await this.service.Create(serviceModel);
-
-            return this.Created(nameof(this.Create), createdServiceModel);
+            return this.Ok(result.Data);
         }
 
-        [HttpPut(Id)]
-        public async Task<ActionResult<ResultWith<ChatMessageServiceModel>>> Edit(
-            int id,
-            CreateChatMessageWebModel webModel)
+        return this.BadRequest(result.ErrorMessage);
+    }
+
+    [HttpPut(Id)]
+    public async Task<ActionResult<ResultWith<ChatMessageServiceModel>>> Edit(
+        int id,
+        CreateChatMessageWebModel webModel,
+        CancellationToken token = default)
+    {
+        var serviceModel = webModel.ToCreateChatMessageServiceModel();
+        var result = await service.Edit(
+            id,
+            serviceModel,
+            token);
+
+        if (result.Succeeded)
         {
-            //var serviceModel = this.mapper.Map<CreateChatMessageServiceModel>(webModel);
-            var serviceModel = new CreateChatMessageServiceModel(); // TODO: implement mapping
-            var result = await this.service.Edit(id, serviceModel);
-
-            if (result.Succeeded)
-            {
-                return this.Ok(result.Data);
-            }
-
-            return this.BadRequest(result.ErrorMessage);
+            return this.Ok(result.Data);
         }
 
-        [HttpDelete(Id)]
-        public async Task<ActionResult<Result>> Delete(int id)
-        {
-            var result = await this.service.Delete(id);
+        return this.BadRequest(result.ErrorMessage);
+    }
 
-            return this.NoContentOrBadRequest(result);
-        }
+    [HttpDelete(Id)]
+    public async Task<ActionResult<Result>> Delete(
+        int id,
+        CancellationToken token = default)
+    {
+        var result = await service.Delete(id, token);
+
+        return this.NoContentOrBadRequest(result);
     }
 }

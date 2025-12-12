@@ -117,7 +117,7 @@ public class NotificationService(
         var notification = new Notification
         {
             ResourceId = chatId,
-            ResourceType = nameof(Chat),
+            ResourceType = nameof(ChatDbModel),
             Message = message,
             ReceiverId = receiverId
         };
@@ -146,7 +146,7 @@ public class NotificationService(
         var notification = new Notification
         {
             ResourceId = chatId,
-            ResourceType = nameof(Chat),
+            ResourceType = nameof(ChatDbModel),
             Message = message,
             ReceiverId = receiverId
         };

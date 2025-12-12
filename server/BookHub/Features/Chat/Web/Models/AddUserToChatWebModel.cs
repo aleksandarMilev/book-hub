@@ -1,18 +1,17 @@
-﻿namespace BookHub.Features.Chat.Web.Models
+﻿namespace BookHub.Features.Chat.Web.Models;
+
+using System.ComponentModel.DataAnnotations;
+
+using static Shared.Constants.Validation;
+
+public class AddUserToChatWebModel
 {
-    using System.ComponentModel.DataAnnotations;
+    [Required]
+    public string UserId { get; init; } = null!;
 
-    using static Shared.ValidationConstants;
-
-    public class AddUserToChatWebModel
-    {
-        [Required]
-        public string UserId { get; set; } = null!;
-
-        [Required]
-        [StringLength(
-            NameMaxLength,
-            MinimumLength = NameMinLength)]
-        public string ChatName { get; set; } = null!;
-    }
+    [Required]
+    [StringLength(
+        NameMaxLength,
+        MinimumLength = NameMinLength)]
+    public string ChatName { get; init; } = null!;
 }
