@@ -6,6 +6,12 @@ using Service.Models;
 
 public interface IChatMessageService : ITransientService
 {
+    Task<ResultWith<IEnumerable<ChatMessageServiceModel>>> GetForChat(
+        Guid chatId,
+        int? before = null,
+        int take = 50,
+        CancellationToken token = default);
+
     Task<ResultWith<ChatMessageServiceModel>> Create(
         CreateChatMessageServiceModel model,
         CancellationToken token = default);

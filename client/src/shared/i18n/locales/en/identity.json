@@ -27,14 +27,14 @@
       "email": "Email",
       "password": "Password",
       "confirmPassword": "Repeat your password",
-      "dateOfBirth": "Date of birth",
-      "socialMediaUrl": "Website or social media URL",
-      "image": "Profile image",
-      "biography": "Biography",
-      "isPrivate": "Keep my profile private"
+      "dateOfBirth": "Date of birth (optional)",
+      "socialMediaUrl": "Website or social media URL (optional)",
+      "image": "Profile image (optional)",
+      "biography": "Biography (optional)",
+      "isPrivate": "Keep my profile private (optional)"
     },
     "placeholders": {
-      "biography": "Write a short biography... (optional)"
+      "biography": "Write a short biography..."
     },
     "buttons": {
       "submit": "Register",
@@ -47,22 +47,19 @@
       "passwordRequired": "Password is required",
       "confirmPasswordRequired": "Please confirm your password",
       "passwordsMustMatch": "Passwords must match",
-
       "firstNameMin": "First name must be at least {{min}} characters long",
       "firstNameMax": "First name must be at most {{max}} characters long",
       "firstNameRequired": "First name is required",
-
       "lastNameMin": "Last name must be at least {{min}} characters long",
       "lastNameMax": "Last name must be at most {{max}} characters long",
       "lastNameRequired": "Last name is required",
-
-      "dateOfBirthRequired": "Date of birth is required",
-
-      "socialMediaUrlLength": "URL length should be between {{min}} and {{max}} characters long",
+      "socialMediaUrlLength": "Website or social media URL length should be between {{min}} and {{max}} characters long",
       "biographyLength": "Biography length should be between {{min}} and {{max}} characters long",
-
       "imageTooLarge": "Image is too large (max 2MB)",
-      "imageInvalidType": "Invalid image type. Allowed: {{types}}"
+      "imageInvalidType": "Invalid image type. Allowed: {{types}}",
+      "dateOfBirthInvalid": "Invalid date of birth",
+      "dateOfBirthTooOld": "Date of birth cannot be more than {{years}} years ago",
+      "dateOfBirthInFuture": "Date of birth cannot be in the future"
     }
   },
   "messages": {

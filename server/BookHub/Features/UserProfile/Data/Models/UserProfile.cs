@@ -17,7 +17,7 @@ public class UserProfile:
     [ForeignKey(nameof(User))]
     public string UserId { get; set; } = null!;
 
-    public User User { get; set; } = null!;
+    public UserDbModel User { get; set; } = null!;
 
     [Required]
     [MaxLength(NameMaxLength)]

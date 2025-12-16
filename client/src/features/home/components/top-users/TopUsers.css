@@ -1,5 +1,5 @@
 .top-users-container {
-  margin: 50px auto;
+  margin: 54px auto;
   max-width: 1200px;
   padding: 0 20px;
   text-align: center;
@@ -8,9 +8,9 @@
 
 .top-users-title {
   font-size: 2.6rem;
-  font-weight: 800;
+  font-weight: 900;
   margin-bottom: 2rem;
-  background: linear-gradient(90deg, #6ea8fe, #9a6bff, #ff6ec7);
+  background: var(--grad-brand);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -27,23 +27,34 @@
   width: 100%;
   max-width: 360px;
   padding: 22px;
-  border-radius: 20px;
+  border-radius: 22px;
+
   background: rgba(255, 255, 255, 0.42);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.34);
+
   display: flex;
   align-items: center;
   cursor: pointer;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+
+  box-shadow: var(--shadow-sm);
+
   transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease,
-    background 0.25s ease;
+    transform 0.25s var(--ease-out),
+    box-shadow 0.25s var(--ease-out),
+    background 0.25s var(--ease-out);
 }
 
 .top-user-card:hover {
-  transform: translateY(-5px);
-  background: rgba(255, 255, 255, 0.55);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.16);
+  transform: translateY(-6px);
+  background: rgba(255, 255, 255, 0.54);
+  box-shadow: var(--shadow-lg);
+}
+
+.top-user-card:focus-visible {
+  box-shadow:
+    0 0 0 3px rgba(110, 168, 254, 0.32),
+    var(--shadow-md);
 }
 
 .user-image {
@@ -52,10 +63,19 @@
   border-radius: 50%;
   object-fit: cover;
 
-  border: 3px solid rgba(255, 255, 255, 0.65);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  border: 3px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
 
   margin-right: 18px;
+
+  transition:
+    transform 0.25s var(--ease-out),
+    box-shadow 0.25s var(--ease-out);
+}
+
+.top-user-card:hover .user-image {
+  transform: scale(1.03);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.16);
 }
 
 .user-info {
@@ -65,7 +85,7 @@
 
 .user-info h4 {
   font-size: 1.25rem;
-  font-weight: 700;
+  font-weight: 900;
   margin-bottom: 8px;
   background: linear-gradient(90deg, #7f5bff, #ff6ec7);
   -webkit-background-clip: text;
@@ -76,20 +96,44 @@
 .user-info p {
   margin: 4px 0;
   font-size: 0.95rem;
-  color: #404040;
+  color: rgba(30, 30, 40, 0.72);
 }
 
 @media (max-width: 768px) {
-  .top-user-card {
-    max-width: 100%;
+  .top-users-container {
+    margin: 34px auto;
+    padding: 0 14px;
   }
-
+  .top-users-title {
+    font-size: 2.1rem;
+    margin-bottom: 1.4rem;
+  }
+  .top-users-list {
+    gap: 16px;
+  }
+  .top-user-card {
+    max-width: min(92vw, 520px);
+  }
   .user-image {
     width: 70px;
     height: 70px;
   }
-
   .user-info h4 {
     font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .top-user-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 18px 14px;
+  }
+  .user-image {
+    margin-right: 0;
+    margin-bottom: 12px;
+  }
+  .user-info {
+    text-align: center;
   }
 }

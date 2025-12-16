@@ -35,8 +35,8 @@ export const useRegisterFormik = () => {
         await registerHandler(values);
         navigate(routes.home);
       } catch (error) {
-        const message = IsError(error) ? error.message : t('messages.unknownError');
-        setErrors({ username: message });
+        const errorMessage = IsError(error) ? error.message : t('messages.unknownError');
+        setErrors({ username: errorMessage });
       }
     },
   });

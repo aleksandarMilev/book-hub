@@ -43,10 +43,10 @@ public class BookDbModel:
 
     public AuthorDbModel? Author { get; set; }
 
-    [ForeignKey(nameof(User))]
+    [ForeignKey(nameof(UserDbModel))]
     public string? CreatorId { get; set; }
 
-    public User? Creator { get; set; }
+    public UserDbModel? Creator { get; set; }
 
     public bool IsApproved { get; set; }
 

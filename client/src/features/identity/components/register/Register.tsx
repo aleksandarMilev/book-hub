@@ -236,8 +236,6 @@ const Register: FC = () => {
                     placeholder={t('register.placeholders.biography')}
                   />
                 </div>
-
-                {/* Privacy toggle */}
                 <div className="auth-field">
                   <div className="form-check">
                     <input
@@ -252,7 +250,6 @@ const Register: FC = () => {
                     </label>
                   </div>
                 </div>
-
                 <button
                   className="auth-submit-btn"
                   type="submit"

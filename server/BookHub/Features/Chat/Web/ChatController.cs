@@ -14,8 +14,31 @@ using UserProfile.Service.Models;
 using static Common.Constants.ApiRoutes;
 
 [Authorize]
-public class ChatController(IChatService service) : ApiController
+public class ChatController(
+    IChatService service,
+    IChatMessageService messageService) : ApiController
 {
+    [HttpGet(Id + ApiRoutes.Messages)]
+    public async Task<ActionResult<IEnumerable<ChatMessageServiceModel>>> Messages(
+        Guid id,
+        int? before,
+        int take = 50,
+        CancellationToken token = default)
+    {
+        var result = await messageService.GetForChat(
+            id,
+            before,
+            take,
+            token);
+
+        if (result.Succeeded)
+        {
+            return this.Ok(result.Data);
+        }
+
+        return this.BadRequest(result.ErrorMessage);
+    }
+
     [HttpGet(Id)]
     public async Task<ActionResult<ChatDetailsServiceModel>> Details(
         Guid id,
@@ -30,10 +53,10 @@ public class ChatController(IChatService service) : ApiController
 
     [HttpGet(Id + ApiRoutes.Access)]
     public async Task<ActionResult<bool>> CanAccessChat(
-        Guid chatId,
+        Guid id,
         string userId,
         CancellationToken token = default)
-        => this.Ok(await service.CanAccessChat(chatId, userId, token));
+        => this.Ok(await service.CanAccessChat(id, userId, token));
 
     [HttpGet(Id + ApiRoutes.Invited)]
     public async Task<ActionResult<bool>> IsInvited(
@@ -43,14 +66,22 @@ public class ChatController(IChatService service) : ApiController
         => this.Ok(await service.IsInvited(id, userId, token));
 
     [HttpPost]
-    public async Task<ActionResult<int>> Create(
+    public async Task<ActionResult<ChatDetailsServiceModel>> Create(
         CreateChatWebModel webModel,
         CancellationToken token = default)
     {
         var serviceModel = webModel.ToCreateChatServiceModel();
-        var id = await service.Create(serviceModel, token);
+        var result = await service.Create(serviceModel, token);
 
-        return this.Created(nameof(this.Create), id);
+        if (result.Succeeded)
+        {
+            return this.CreatedAtAction(
+                actionName: nameof(this.Details),
+                routeValues: new { id = result.Data!.Id },
+                value: result.Data);
+        }
+
+        return this.BadRequest(result.ErrorMessage);
     }
 
     [HttpPut(Id)]
@@ -114,22 +145,17 @@ public class ChatController(IChatService service) : ApiController
             serviceModel,
             token);
 
-        if (result.Succeeded)
-        {
-            return this.Created(nameof(this.Created), id);
-        }
-
-        return this.BadRequest(new { errorMessage = result.ErrorMessage });
+        return this.NoContentOrBadRequest(result);
     }
 
     [HttpDelete(ApiRoutes.RemoveUser)]
     public async Task<ActionResult<Result>> RemoveUser(
-        Guid chatId,
+        Guid id,
         string userId,
         CancellationToken token = default)
     {
         var result = await service.RemoveUserFromChat(
-            chatId,
+            id,
             userId,
             token);
 

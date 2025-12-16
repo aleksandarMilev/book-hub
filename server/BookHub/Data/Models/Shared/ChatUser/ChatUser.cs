@@ -13,11 +13,11 @@ public class ChatUser
     [ForeignKey(nameof(User))]
     public string UserId { get; set; } = null!;
 
-    public User User { get; set; } = null!;
+    public UserDbModel User { get; set; } = null!;
 
     [Required]
     [ForeignKey(nameof(Chat))]
-    public int ChatId { get; set; }
+    public Guid ChatId { get; set; }
 
     public ChatDbModel Chat { get; set; } = null!;
 

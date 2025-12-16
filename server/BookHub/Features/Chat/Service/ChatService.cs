@@ -2,311 +2,480 @@
 
 using BookHub.Data;
 using BookHub.Data.Models.Shared.ChatUser;
-using Infrastructure.Services.CurrentUser;
-using Infrastructure.Services.Result;
 using Data.Models;
-using Microsoft.Data.SqlClient;
+using Infrastructure.Services.CurrentUser;
+using Infrastructure.Services.ImageWriter;
+using Infrastructure.Services.Result;
 using Microsoft.EntityFrameworkCore;
 using Notification.Service;
 using Service.Models;
+using Shared;
+using UserProfile.Data.Models;
 using UserProfile.Service.Models;
 
 using static Common.Constants.ErrorMessages;
+using static Shared.Constants.Paths;
 
 public class ChatService(
     BookHubDbContext data,
     ICurrentUserService userService,
-    INotificationService notificationService) : IChatService
+    INotificationService notificationService,
+    IImageWriter imageWriter,
+    ILogger<ChatService> logger) : IChatService
 {
-    private const string DefaultImageUrl = "https://pushfestival.ca/2015/wp-content/uploads/blogger/-rqsdeqC0mpU/UG5c0Xwk9hI/AAAAAAAAA7g/Q9psMuS468M/s1600/LiesbethBernaerts_HumanLibrary.jpg";
-
-    private readonly BookHubDbContext data = data;
-    private readonly ICurrentUserService userService = userService;
-    private readonly INotificationService notificationService = notificationService;
-
-    public async Task<ChatDetailsServiceModel?> Details(int id)
-        => await this.data
-            .Chats
-            //.ProjectTo<ChatDetailsServiceModel>(this.mapper.ConfigurationProvider)
-            .Select(c => new ChatDetailsServiceModel()) //TODO: implement mapping
-            .FirstOrDefaultAsync(c => c.Id == id);
-
-    public async Task<IEnumerable<ChatServiceModel>> NotJoined(string userToJoinId)
-        => await this.data
-            .Chats
-            .Where(c => 
-                c.CreatorId == this.userService.GetId() && 
-                !c.ChatsUsers.Any(cu => cu.UserId == userToJoinId))
-            //.ProjectTo<ChatServiceModel>(this.mapper.ConfigurationProvider)
-            .Select(c => new ChatServiceModel()) //TODO: implement mapping
-            .ToListAsync();
-
-    public async Task<bool> CanAccessChat(int chatId, string userId)
-        => await this.data
-            .ChatsUsers
-            .AnyAsync(cu => cu.UserId == userId && cu.ChatId == chatId);
-
-    public async Task<bool> IsInvited(int chatId, string userId)
-          => await this.data
-              .ChatsUsers
-              .AnyAsync(cu => 
-                  cu.UserId == userId && 
-                  cu.ChatId == chatId &&
-                  !cu.HasAccepted);
-
-    public async Task<int> Create(CreateChatServiceModel model)
+    public async Task<ChatDetailsServiceModel?> Details(
+        Guid chatId,
+        CancellationToken token = default)
     {
-        var creatorId = this.userService.GetId()!;
+        var userId = userService.GetId()!;
 
-        model.ImageUrl ??= DefaultImageUrl;
+        var canAccessChat = await this.CanAccessChat(chatId, userId, token);
+        if (!canAccessChat)
+        {
+            return null;
+        }
 
-        //var chat = this.mapper.Map<Chat>(model);
-        var chat = new ChatDbModel(); //TODO: implement mapping
-        chat.CreatorId = creatorId;
-
-        this.data.Add(chat);
-        await this.data.SaveChangesAsync();
-
-        _ = await this.CreateChatUserEntity(
-            chat.Id,
-            creatorId,
-            true);
-
-        return chat.Id;
-    }
-
-    public async Task<Result> Edit(int id, CreateChatServiceModel model)
-    {
-        var chat = await this.data
-           .Chats
-           .FindAsync(id);
+        var chat = await data
+            .Chats
+            .ToChatDetailsServiceModels()
+            .FirstOrDefaultAsync(c => c.Id == chatId, token);
 
         if (chat is null)
         {
-            return string.Format(
-                DbEntityNotFound,
-                nameof(ChatDbModel),
-                id);
+            return null;
         }
 
-        if (chat.CreatorId != this.userService.GetId())
+        var messages = await data
+            .ChatMessages
+            .Where(m => m.ChatId == chatId)
+            .ToServiceModels()
+            .OrderByDescending(m => m.Id)
+            .Take(20)
+            .ToListAsync(token);
+
+        messages.Reverse();
+        chat.Messages = messages;
+
+        return chat;
+    }
+
+    public async Task<IEnumerable<ChatServiceModel>> NotJoined(
+        string userToJoinId,
+        CancellationToken token = default)
+        => await data
+            .Chats
+            .Where(c => 
+                c.CreatorId == userService.GetId() && 
+                !c.ChatsUsers.Any(cu => cu.UserId == userToJoinId))
+            .ToChatServiceModels()
+            .ToListAsync(token);
+
+    public async Task<bool> CanAccessChat(
+        Guid chatId,
+        string userId,
+        CancellationToken token = default)
+        => await data
+            .Chats
+            .AnyAsync(
+                c =>
+                    c.Id == chatId &&
+                    c.ChatsUsers.Any(cu => cu.UserId == userId && cu.HasAccepted),
+                token);
+
+    public async Task<bool> IsInvited(
+            Guid chatId,
+            string userId,
+            CancellationToken token = default)
+            => await data
+                .Chats
+                .AnyAsync(
+                    c =>
+                        c.Id == chatId &&
+                        c.ChatsUsers.Any(cu => cu.UserId == userId && !cu.HasAccepted),
+                    token);
+
+    public async Task<ResultWith<ChatDetailsServiceModel>> Create(
+        CreateChatServiceModel serviceModel,
+        CancellationToken token = default)
+    {
+        var creatorId = userService.GetId()!;
+
+        var dbModel = serviceModel.ToDbModel();
+        dbModel.CreatorId = creatorId;
+
+        await imageWriter.Write(
+           ImagePathPrefix,
+           dbModel,
+           serviceModel,
+           DefaultImagePath,
+           token);
+
+        data.Add(dbModel);
+
+        var chatUserEntityCreationResult = await this.CreateChatUserEntity(
+            dbModel.Id,
+            creatorId,
+            true,
+            token);
+
+        if (!chatUserEntityCreationResult.Succeeded)
         {
-            return string.Format(
-                UnauthorizedDbEntityAction,
-                this.userService.GetUsername(),
-                nameof(ChatDbModel), 
-                id);
+            return chatUserEntityCreationResult.ErrorMessage!;
         }
 
-        model.ImageUrl ??= DefaultImageUrl;
-        //this.mapper.Map(model, chat); //TODO: implement mapping
+        await data.SaveChangesAsync(token);
 
-        await this.data.SaveChangesAsync();
+        logger.LogInformation(
+            "New chat with Id: {id} was created.",
+            dbModel.Id);
+
+        var serviceModelResult = dbModel.ToChatDetailsServiceModels();
+        return ResultWith<ChatDetailsServiceModel>.Success(serviceModelResult);
+    }
+
+    public async Task<Result> Edit(
+        Guid chatId,
+        CreateChatServiceModel serviceModel,
+        CancellationToken token = default)
+    {
+        var dbModel = await this.GetChatDbModel(chatId, token);
+        if (dbModel is null)
+        {
+            return this.LogAndReturnNotFoundMessage(
+                nameof(ChatDbModel),
+                chatId);
+        }
+
+        var userId = userService.GetId()!;
+        if (dbModel.CreatorId != userId)
+        {
+            return LogAndReturnUnauthorizedMessage(
+                userId,
+                nameof(ChatDbModel),
+                chatId);
+        }
+
+        var oldImagePath = dbModel.ImagePath;
+        var isNewImageUploaded = serviceModel.Image is not null;
+
+        serviceModel.UpdateDbModel(dbModel);
+
+        await imageWriter.Write(
+            ImagePathPrefix,
+            dbModel,
+            serviceModel,
+            null,
+            token);
+
+        if (isNewImageUploaded)
+        {
+            imageWriter.Delete(
+                nameof(ChatDbModel),
+                oldImagePath,
+                DefaultImagePath);
+        }
+
+        await data.SaveChangesAsync(token);
+
+        logger.LogInformation(
+            "Chat with Id: {id} was updated.",
+            dbModel.Id);
 
         return true;
     }
 
-    public async Task<Result> Delete(int id)
+    public async Task<Result> Delete(
+        Guid chatId,
+        CancellationToken token = default)
     {
-        var chat = await this.data
-            .Chats
-            .FindAsync(id);
-
-        if (chat is null)
+        var dbModel = await this.GetChatDbModel(chatId, token);
+        if (dbModel is null)
         {
-            return string.Format(
-                DbEntityNotFound,
+            return LogAndReturnNotFoundMessage(
                 nameof(ChatDbModel),
-                id);
+                chatId);
         }
 
-        if (chat.CreatorId != this.userService.GetId() &&
-            !this.userService.IsAdmin())
+        var userId = userService.GetId()!;
+        var isNotCreator = dbModel.CreatorId != userId;
+        var isNotAdmin = !userService.IsAdmin();
+
+        if (isNotCreator && isNotAdmin)
         {
-            return string.Format(
-                UnauthorizedDbEntityAction,
-                this.userService.GetUsername(),
+            return LogAndReturnUnauthorizedMessage(
+                userId,
                 nameof(ChatDbModel),
-                id);
+                chatId);
         }
 
-        this.data.Remove(chat);
-        await this.data.SaveChangesAsync();
+        data.Remove(dbModel);
+        await data.SaveChangesAsync(token);
+
+        logger.LogInformation(
+            "Chat with Id: {id} was deleted.",
+            dbModel.Id);
 
         return true;
     }
 
     public async Task<ResultWith<PrivateProfileServiceModel>> Accept(
-        int chatId,
-        string chatName,
-        string chatCreatorId)
+        ProcessChatInvitationServiceModel serviceModel,
+        CancellationToken token = default)
     {
-        var invitedUserId = this.userService.GetId()!;
-
-        var mapEntity = await this.data
-            .ChatsUsers
-            .FirstOrDefaultAsync(cu => cu.UserId == invitedUserId && cu.ChatId == chatId);
+        var chatId = serviceModel.ChatId;
+        var invitedUserId = userService.GetId()!;
+        var mapEntity = await this.GetChatUserDbModel(
+            invitedUserId,
+            chatId,
+            token);
 
         if (mapEntity is null)
         {
-            return string.Format(
-                DbEntityNotFound,
+            return this.LogAndReturnNotFoundMessage(
                 nameof(ChatUser),
                 $"{chatId}-{invitedUserId}");
         }
 
         mapEntity.HasAccepted = true;
-        await this.data.SaveChangesAsync();
+        await data.SaveChangesAsync(token);
 
-        _ = await this.notificationService
+        logger.LogInformation(
+            "User with Id: {userId} accepted to in chat with Id: {chatId}",
+            invitedUserId,
+            chatId);
+
+        await notificationService
             .CreateOnChatInvitationStatusChanged(
-                //chatId,
-                Guid.NewGuid(),
-                chatName,
-                chatCreatorId,
-                true);
+                chatId,
+                serviceModel.ChatName,
+                serviceModel.ChatCreatorId,
+                true,
+                token);
 
-        var profileModel = await this.data
+        var profile = await data
             .Profiles
             .Where(p => p.UserId == invitedUserId)
-            //.ProjectTo<PrivateProfileServiceModel>(this.mapper.ConfigurationProvider) 
-            .Select(p => new PrivateProfileServiceModel()) //TODO: implement mapping
-            .FirstOrDefaultAsync();
+            .ToPrivateProfileServiceModel()
+            .FirstOrDefaultAsync(token);
 
-        return ResultWith<PrivateProfileServiceModel>
-            .Success(profileModel!);
+        if (profile is null)
+        {
+            return this.LogAndReturnNotFoundMessage(
+                nameof(UserProfile),
+                invitedUserId);
+        }
+
+        return ResultWith<PrivateProfileServiceModel>.Success(profile);
     }
 
     public async Task<Result> Reject(
-        int chatId,
-        string chatName,
-        string chatCreatorId)
+        ProcessChatInvitationServiceModel serviceModel,
+        CancellationToken token = default)
     {
-        var invitedUserId = this.userService.GetId();
-
-        var mapEntity = await this.data
-           .ChatsUsers
-           .FirstOrDefaultAsync(cu => 
-                cu.UserId == invitedUserId && 
-                cu.ChatId == chatId);
+        var chatId = serviceModel.ChatId;
+        var invitedUserId = userService.GetId()!;
+        var mapEntity = await this.GetChatUserDbModel(
+            invitedUserId,
+            chatId,
+            token);
 
         if (mapEntity is null)
         {
-            return string.Format(
-                DbEntityNotFound,
+            return this.LogAndReturnNotFoundMessage(
                 nameof(ChatUser),
                 $"{chatId}-{invitedUserId}");
         }
 
-        this.data.Remove(mapEntity);
-        await this.data.SaveChangesAsync();
+        data.Remove(mapEntity);
+        await data.SaveChangesAsync(token);
 
-        _ = await this.notificationService
+        logger.LogInformation(
+            "User with Id: {userId} rejected to in chat with Id: {chatId}",
+            invitedUserId,
+            chatId);
+
+        await notificationService
             .CreateOnChatInvitationStatusChanged(
-                //chatId,
-                Guid.NewGuid(),
-                chatName,
-                chatCreatorId,
-                false);
+                chatId,
+                serviceModel.ChatName,
+                serviceModel.ChatCreatorId,
+                false,
+                token);
 
         return true;
     }
 
     public async Task<Result> InviteUserToChat(
-       int chatId,
-       string chatName,
-       string userToInviteId)
+       Guid chatId,
+       AddUserToChatServiceModel serviceModel,
+       CancellationToken token = default)
     {
-        var chatCreatorId = await this.data
+        var userToInviteId = serviceModel.UserId;
+        var currentUserId = userService.GetId()!;
+        var chatCreatorId = await data
            .Chats
            .Where(c => c.Id == chatId)
            .Select(c => c.CreatorId)
-           .FirstOrDefaultAsync();
+           .FirstOrDefaultAsync(token);
 
-        if (chatCreatorId != this.userService.GetId())
+        if (chatCreatorId != currentUserId)
         {
-            return string.Format(
-                UnauthorizedDbEntityAction,
-                this.userService.GetUsername(),
+            return this.LogAndReturnUnauthorizedMessage(
+                currentUserId,
                 nameof(ChatDbModel),
                 chatId);
         }
 
-        _ = await this.CreateChatUserEntity(chatId, userToInviteId, false);
+        var chatUserEntityCreationResult = await this.CreateChatUserEntity(
+            chatId,
+            userToInviteId,
+            false,
+            token);
 
-        await this.notificationService.CreateOnChatInvitation(
-            //chatId,
-            Guid.NewGuid(),
-            chatName,
-            userToInviteId);
+        if (!chatUserEntityCreationResult.Succeeded)
+        {
+            return chatUserEntityCreationResult.ErrorMessage!;
+        }
+
+        await data.SaveChangesAsync(token);
+
+        logger.LogInformation(
+            "User with Id: {userToInviteId} was invited to join in chat with Id: {chatId}",
+            userToInviteId,
+            chatId);
+
+        await notificationService.CreateOnChatInvitation(
+            chatId,
+            serviceModel.ChatName,
+            userToInviteId,
+            token);
 
         return true;
     }
 
-    public async Task<Result> RemoveUserFromChat(int chatId, string userToRemoveId)
+    public async Task<Result> RemoveUserFromChat(
+        Guid chatId,
+        string userToRemoveId,
+        CancellationToken token = default)
     {
-        var currentUserId = this.userService.GetId()!;
-
-        var chatCreatorId = await this.data
+        var currentUserId = userService.GetId()!;
+        var chatCreatorId = await data
             .Chats
             .Where(c => c.Id == chatId)
             .Select(c => c.CreatorId)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(token);
 
         var isNotCreator = chatCreatorId != currentUserId;
         var notToBeRemoved = userToRemoveId != currentUserId;
 
         if (isNotCreator && notToBeRemoved)
         {
-            return string.Format(
-                UnauthorizedDbEntityAction,
-                this.userService.GetUsername(),
+            return this.LogAndReturnUnauthorizedMessage(
+                currentUserId,
                 nameof(ChatDbModel),
                 chatId);
         }
 
-        var mapEntity = await this.data
-            .ChatsUsers
-            .FirstOrDefaultAsync(cu =>
-                cu.UserId == userToRemoveId && 
-                cu.ChatId == chatId);
+        var mapEntity = await this.GetChatUserDbModel(
+            userToRemoveId,
+            chatId,
+            token);
 
         if (mapEntity is null)
         {
-            return string.Format(
-                DbEntityNotFound,
-                nameof(ChatUser),
+            return this.LogAndReturnNotFoundMessage(
+                nameof(ChatDbModel),
                 $"{chatId}-{userToRemoveId}");
         }
 
-        this.data.Remove(mapEntity);
-        await this.data.SaveChangesAsync();
+        data.Remove(mapEntity);
+        await data.SaveChangesAsync(token);
+
+        logger.LogInformation(
+            "User with Id: {userToRemoveId} was removed from chat with Id: {chatId}",
+            userToRemoveId,
+            chatId);
 
         return true;
     }
 
-    private async Task<bool> CreateChatUserEntity(
-        int chatId,
+    private async Task<Result> CreateChatUserEntity(
+        Guid chatId,
         string userId,
-        bool hasAccepted)
+        bool hasAccepted,
+        CancellationToken cancellationToken = default)
     {
-        var mapEntity = new ChatUser()
+        var alreadyInvited = await data
+            .ChatsUsers
+            .AsNoTracking()
+            .AnyAsync(
+                cu => cu.ChatId == chatId && cu.UserId == userId,
+                cancellationToken);
+
+        if (alreadyInvited)
+        {
+            return $"User with Id: {userId} is already invited to or participant in Chat with Id: {chatId}";
+        }
+
+        var chatUser = new ChatUser
         {
             UserId = userId,
             ChatId = chatId,
             HasAccepted = hasAccepted
         };
 
-        try
-        {
-            this.data.Add(mapEntity);
-            await this.data.SaveChangesAsync();
+        data.Add(chatUser);
 
-            return true;
-        }
-        catch (SqlException)
-        {
-            return false;
-        }
+        return true;
+    }
+
+    private async Task<ChatDbModel?> GetChatDbModel(
+        Guid id,
+        CancellationToken token = default)
+        => await data
+            .Chats
+            .FindAsync([id], token);
+
+    private async Task<ChatUser?> GetChatUserDbModel(
+        string userId,
+        Guid chatId,
+        CancellationToken token = default)
+        => await data
+            .ChatsUsers
+            .FirstOrDefaultAsync(
+                cu => cu.UserId == userId && cu.ChatId == chatId,
+                token);
+
+    private string LogAndReturnNotFoundMessage<TId>(
+        string entityName,
+        TId id)
+    {
+        logger.LogWarning(
+            DbEntityNotFoundTemplate,
+            entityName,
+            id);
+
+        return string.Format(
+            DbEntityNotFound,
+            entityName,
+            id);
+    }
+
+    private string LogAndReturnUnauthorizedMessage<TId>(
+        string userId,
+        string resourceName,
+        TId resourceId)
+    {
+        logger.LogWarning(
+            UnauthorizedMessageTemplate,
+            userId,
+            resourceName,
+            resourceId);
+
+        return string.Format(
+            UnauthorizedMessage,
+            userId,
+            resourceName,
+            resourceId);
     }
 }

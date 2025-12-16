@@ -103,7 +103,7 @@ public static class ServiceCollectionExtensions
         IWebHostEnvironment env)
     {
         services
-            .AddIdentityCore<User>(opt =>
+            .AddIdentityCore<UserDbModel>(opt =>
             {
                 opt.User.RequireUniqueEmail = true;
                 opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(AccountLockoutTimeSpan);

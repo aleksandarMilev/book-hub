@@ -8,9 +8,9 @@ public interface IIdentityService : ITransientService
 {
     Task<ResultWith<string>> Register(
         RegisterServiceModel model,
-        CancellationToken token = default);
+        CancellationToken cancellationToken = default);
 
     Task<ResultWith<string>> Login(
         LoginServiceModel model,
-        CancellationToken token = default);
+        CancellationToken cancellationToken = default);
 }

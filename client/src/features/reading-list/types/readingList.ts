@@ -1,6 +1,5 @@
 export type ReadingStatusUI = 'read' | 'to read' | 'currently reading' | null;
 
-// server enum: Read = 0, ToRead = 1, CurrentlyReading = 2
 export type ReadingStatusAPI = 0 | 1 | 2;
 
 export const toApiStatus = (status: ReadingStatusUI): ReadingStatusAPI | null => {

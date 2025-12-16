@@ -1,21 +1,32 @@
 import { MDBIcon } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
 
-import image from '@/features/chat/components/details/message/assets/message.webp';
+import fallbackAvatar from '@/features/chat/components/details/message/assets/message.webp';
 import type { ChatMessage } from '@/features/chat/types/chat.js';
 import type { PrivateProfile } from '@/features/profile/types/profile.js';
 import { formatIsoDate } from '@/shared/lib/utils/utils.js';
 
-const Message: FC<{
+type Props = {
   message: ChatMessage;
   isSentByUser: boolean;
   sender?: PrivateProfile | undefined;
   onEdit: (message: ChatMessage) => void;
   onDelete: (id: number) => void;
   onProfileClick: (id: string) => void;
-}> = ({ message, isSentByUser, sender, onEdit, onDelete, onProfileClick }) => {
+};
+
+const Message: FC<Props> = ({
+  message,
+  isSentByUser,
+  sender,
+  onEdit,
+  onDelete,
+  onProfileClick,
+}) => {
   const created = formatIsoDate(message.createdOn);
   const modified = message.modifiedOn ? formatIsoDate(message.modifiedOn) : null;
+  const displayName = sender ? `${sender.firstName} ${sender.lastName}` : message.senderName;
+  const avatar = sender?.imagePath || message.senderImagePath || fallbackAvatar;
 
   return (
     <div className={`d-flex flex-row justify-content-${isSentByUser ? 'end' : 'start'} mb-4`}>
@@ -45,15 +56,13 @@ const Message: FC<{
           </>
         )}
       </div>
-      <img
-        src={sender?.imagePath || image}
-        alt="avatar"
-        style={{ width: '45px', height: '100%' }}
-      />
-      <div className="ms-2 profile-item" onClick={() => sender && onProfileClick(sender.id)}>
-        <strong>
-          {sender?.firstName} {sender?.lastName}
-        </strong>
+      <img src={avatar} alt="avatar" style={{ width: '45px', height: '100%' }} />
+      <div
+        className="ms-2 profile-item"
+        onClick={() => sender && onProfileClick(sender.id)}
+        title={displayName}
+      >
+        <strong>{displayName}</strong>
       </div>
     </div>
   );

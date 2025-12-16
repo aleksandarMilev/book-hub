@@ -18,6 +18,6 @@
         [ForeignKey(nameof(Creator))]
         public string CreatorId { get; set; } = null!;
 
-        public User Creator { get; set; } = null!;
+        public UserDbModel Creator { get; set; } = null!;
     }
 }

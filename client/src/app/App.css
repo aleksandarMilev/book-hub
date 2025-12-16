@@ -1,19 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Poppins:wght@500;600;700;800&display=swap');
+
+:root {
+  /* Brand */
+  --c-blue: #6ea8fe;
+  --c-purple: #9a6bff;
+  --c-pink: #ff6ec7;
+  --bg: #f7f8ff;
+  --text: #1e1e28;
+  --muted: rgba(30, 30, 40, 0.72);
+  --glass: rgba(255, 255, 255, 0.22);
+  --glass-2: rgba(255, 255, 255, 0.36);
+  --stroke: rgba(255, 255, 255, 0.28);
+  --stroke-2: rgba(30, 30, 40, 0.08);
+  --r-sm: 12px;
+  --r-md: 18px;
+  --r-lg: 22px;
+  --shadow-sm: 0 6px 18px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 10px 28px rgba(0, 0, 0, 0.14);
+  --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.18);
+  --grad-brand: linear-gradient(90deg, var(--c-blue), var(--c-purple), var(--c-pink));
+  --grad-brand-soft: linear-gradient(
+    120deg,
+    rgba(110, 168, 254, 0.18),
+    rgba(154, 107, 255, 0.15),
+    rgba(255, 110, 199, 0.18)
+  );
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
 html,
 body {
   min-height: 100%;
 }
 
+html {
+  color-scheme: light;
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   background:
-    radial-gradient(circle at top left, rgba(154, 107, 255, 0.16), transparent 55%),
-    radial-gradient(circle at bottom right, rgba(110, 168, 254, 0.16), transparent 55%), #f7f8ff;
+    radial-gradient(circle at 12% 8%, rgba(154, 107, 255, 0.18), transparent 54%),
+    radial-gradient(circle at 90% 92%, rgba(110, 168, 254, 0.18), transparent 55%),
+    radial-gradient(circle at 55% 40%, rgba(255, 110, 199, 0.1), transparent 60%), var(--bg);
+
   font-family:
     'Inter',
     system-ui,
     -apple-system,
     BlinkMacSystemFont,
     sans-serif;
+  color: var(--text);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: -40%;
+  pointer-events: none;
+  z-index: -2;
+
+  background: linear-gradient(
+    120deg,
+    rgba(110, 168, 254, 0.05),
+    rgba(154, 107, 255, 0.04),
+    rgba(255, 110, 199, 0.05)
+  );
+  filter: blur(22px);
+  transform: translate3d(0, 0, 0);
+  animation: pageSheen 22s var(--ease-out) infinite alternate;
+}
+
+@keyframes pageSheen {
+  0% {
+    transform: translate3d(-2%, -1%, 0) rotate(-2deg);
+  }
+  100% {
+    transform: translate3d(2%, 1%, 0) rotate(2deg);
+  }
 }
 
 .app-shell {
@@ -27,28 +94,30 @@ body {
   content: '';
   position: fixed;
   border-radius: 999px;
-  filter: blur(40px);
+  filter: blur(44px);
   opacity: 0.45;
   z-index: -1;
   pointer-events: none;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
 }
 
 .app-shell::before {
-  width: 320px;
-  height: 320px;
-  top: 8%;
-  left: 6%;
-  background: radial-gradient(circle, rgba(154, 107, 255, 0.5), transparent 60%);
-  animation: appBlob1 24s ease-in-out infinite alternate;
+  width: 340px;
+  height: 340px;
+  top: 7%;
+  left: 5%;
+  background: radial-gradient(circle, rgba(154, 107, 255, 0.55), transparent 62%);
+  animation: appBlob1 26s var(--ease-out) infinite alternate;
 }
 
 .app-shell::after {
-  width: 360px;
-  height: 360px;
-  bottom: 4%;
-  right: 8%;
-  background: radial-gradient(circle, rgba(110, 168, 254, 0.45), transparent 60%);
-  animation: appBlob2 28s ease-in-out infinite alternate;
+  width: 380px;
+  height: 380px;
+  bottom: 3%;
+  right: 7%;
+  background: radial-gradient(circle, rgba(110, 168, 254, 0.5), transparent 62%);
+  animation: appBlob2 30s var(--ease-out) infinite alternate;
 }
 
 @keyframes appBlob1 {
@@ -56,7 +125,7 @@ body {
     transform: translate3d(0, 0, 0) scale(1);
   }
   100% {
-    transform: translate3d(25px, 30px, 0) scale(1.08);
+    transform: translate3d(28px, 34px, 0) scale(1.1);
   }
 }
 
@@ -65,6 +134,55 @@ body {
     transform: translate3d(0, 0, 0) scale(1);
   }
   100% {
-    transform: translate3d(-25px, -20px, 0) scale(1.06);
+    transform: translate3d(-30px, -24px, 0) scale(1.08);
+  }
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(110, 168, 254, 0.35);
+}
+
+@media (max-width: 420px) {
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+  }
+  #root,
+  .app-shell {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: clip;
+  }
+  * {
+    max-width: 100%;
+  }
+  .app-shell::before {
+    width: 260px;
+    height: 260px;
+    left: -6%;
+  }
+  .app-shell::after {
+    width: 300px;
+    height: 300px;
+    right: -6%;
+  }
+}
+
+@media (max-width: 768px) {
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  #root,
+  .app-shell {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: clip;
   }
 }

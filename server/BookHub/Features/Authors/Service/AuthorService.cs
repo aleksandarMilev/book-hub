@@ -246,7 +246,8 @@ public class AuthorService(
             "Author",
             dbModel.Name,
             dbModel.CreatorId!,
-            false);
+            false,
+            token);
 
         return true;
     }

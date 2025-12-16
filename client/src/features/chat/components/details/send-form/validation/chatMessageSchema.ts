@@ -5,7 +5,7 @@ const lengths = {
   maxMessage: 5_000,
 };
 
-export const chatSchema = Yup.object({
+export const chatMessageSchema = Yup.object({
   message: Yup.string()
     .min(lengths.minMessage, 'Message must contain at least 1 character')
     .max(lengths.maxMessage, 'Message must be less than 5000 characters')

@@ -4,68 +4,119 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
   background-image: url('./assets/hero.jpg');
   background-size: cover;
   background-position: center;
   overflow: hidden;
-  animation: heroFadeIn 1s ease;
+
+  animation: heroFadeIn 0.9s var(--ease-out);
+}
+
+.hero-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: inherit;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.03);
+  filter: saturate(1.05);
+  opacity: 0.95;
+  z-index: 0;
+  animation: heroBgDrift 18s var(--ease-out) infinite alternate;
+}
+
+@keyframes heroBgDrift {
+  0% {
+    transform: scale(1.03) translate3d(-0.7%, -0.4%, 0);
+  }
+  100% {
+    transform: scale(1.06) translate3d(0.7%, 0.4%, 0);
+  }
 }
 
 @keyframes heroFadeIn {
   from {
     opacity: 0;
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
+    transform: translateY(0);
   }
 }
 
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    120deg,
-    rgba(110, 168, 254, 0.18),
-    rgba(154, 107, 255, 0.15),
-    rgba(255, 110, 199, 0.18)
-  );
+  background: var(--grad-brand-soft);
   backdrop-filter: blur(1.5px);
   z-index: 1;
 }
 
+.hero-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 45%, transparent 35%, rgba(0, 0, 0, 0.22) 100%);
+  opacity: 0.8;
+}
+
 .hero-glow {
   position: absolute;
-  width: 200px;
-  height: 200px;
+  width: 240px;
+  height: 240px;
   border-radius: 50%;
-  filter: blur(70px);
-  opacity: 0.25;
-  z-index: 1;
+  filter: blur(80px);
+  opacity: 0.26;
+  z-index: 2;
+  will-change: transform;
 }
 
 .hero-glow.one {
-  background: #ff6ec7;
-  top: 15%;
-  left: 15%;
+  background: var(--c-pink);
+  top: 14%;
+  left: 12%;
+  animation: glowFloat1 9s var(--ease-out) infinite alternate;
 }
 
 .hero-glow.two {
-  background: #6ea8fe;
+  background: var(--c-blue);
   bottom: 10%;
-  right: 15%;
+  right: 14%;
+  animation: glowFloat2 11s var(--ease-out) infinite alternate;
+}
+
+@keyframes glowFloat1 {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(18px, 12px, 0) scale(1.08);
+  }
+}
+
+@keyframes glowFloat2 {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(-18px, -14px, 0) scale(1.06);
+  }
 }
 
 .hero-content {
   position: relative;
   z-index: 5;
   text-align: center;
-  animation: fadeUp 0.9s ease forwards;
+  animation: fadeUp 0.7s var(--ease-out) forwards;
   opacity: 0;
 }
 
 @keyframes fadeUp {
   from {
-    transform: translateY(20px);
+    transform: translateY(18px);
     opacity: 0;
   }
   to {
@@ -75,25 +126,30 @@
 }
 
 .hero-box {
-  padding: 2rem 2.5rem;
-  max-width: 620px;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(8px);
-  border-radius: 18px;
-  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.18);
+  padding: 2rem 2.6rem;
+  max-width: 640px;
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   color: white;
 }
 
 .hero-title {
-  font-size: 2.4rem;
-  font-weight: 800;
+  font-size: 2.55rem;
+  font-weight: 900;
   margin-bottom: 0.75rem;
+  letter-spacing: 0.2px;
+  font-family: 'Poppins', sans-serif;
+  text-shadow: 0 18px 36px rgba(0, 0, 0, 0.25);
 }
 
 .hero-subtitle {
   font-size: 1.15rem;
   margin-bottom: 1.7rem;
-  opacity: 0.9;
+  opacity: 0.92;
+  text-shadow: 0 14px 28px rgba(0, 0, 0, 0.18);
 }
 
 .hero-buttons {
@@ -107,63 +163,103 @@
   align-items: center;
   justify-content: center;
   padding: 12px 26px;
-  border-radius: 40px;
+  border-radius: 999px;
   font-size: 1rem;
   line-height: 1.2;
   text-decoration: none;
   border: none;
   cursor: pointer;
-  box-shadow: none;
+
+  position: relative;
+  overflow: hidden;
+
   transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease,
-    color 0.2s ease;
+    transform 0.2s var(--ease-out),
+    box-shadow 0.2s var(--ease-out),
+    filter 0.2s var(--ease-out);
+}
+
+.hero-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+  transform: translateX(-120%);
+  transition: transform 0.6s var(--ease-out);
 }
 
 .hero-button-main {
-  background: linear-gradient(90deg, #6ea8fe, #9a6bff);
+  background: linear-gradient(90deg, var(--c-blue), var(--c-purple));
   color: #fff;
 }
 
 .hero-button-secondary {
-  background: rgba(255, 255, 255, 0.22);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.32);
   color: #fff;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(6px);
 }
 
 .hero-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.24);
+  filter: saturate(1.08);
 }
 
-.hero-button:active,
-.hero-button:focus {
+.hero-button:hover::before {
+  transform: translateX(120%);
+}
+
+.hero-button:active {
   transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  outline: none;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
 }
 
 .hero-button:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(110, 168, 254, 0.7);
+  box-shadow: 0 0 0 3px rgba(110, 168, 254, 0.65);
 }
 
 @media (max-width: 768px) {
   .hero-container {
-    height: 430px;
+    height: 440px;
+    padding: 0 14px;
   }
-
+  .hero-box {
+    width: min(92vw, 560px);
+    margin: 0 auto;
+    padding: 1.55rem 1.35rem;
+  }
   .hero-title {
-    font-size: 1.85rem;
+    font-size: 2.05rem;
   }
-
   .hero-subtitle {
     font-size: 1.05rem;
+    margin-bottom: 1.2rem;
   }
-
   .hero-buttons {
     flex-direction: column;
+    align-items: center;
+  }
+  .hero-button {
+    width: min(92vw, 360px);
+  }
+}
+
+@media (max-width: 420px) {
+  .hero-container {
+    height: 400px;
+  }
+  .hero-box {
+    padding: 1.25rem 1.05rem;
+  }
+  .hero-title {
+    font-size: 1.75rem;
+  }
+  .hero-subtitle {
+    font-size: 0.98rem;
+  }
+  .hero-button {
+    width: 92vw;
+    padding: 12px 18px;
   }
 }

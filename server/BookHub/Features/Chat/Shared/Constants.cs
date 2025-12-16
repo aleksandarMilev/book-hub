@@ -10,4 +10,11 @@ public static class Constants
         public const int NameMinLength = 1;
         public const int NameMaxLength = 200;
     }
+
+    public static class Paths
+    {
+        public const string DefaultImagePath = "/images/chats/default.jpg";
+
+        public const string ImagePathPrefix = "chats";
+    }
 }

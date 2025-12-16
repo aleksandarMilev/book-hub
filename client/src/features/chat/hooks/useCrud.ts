@@ -1,46 +1,151 @@
 import { useFormik } from 'formik';
 import type React from 'react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import * as api from '@/features/chat/api/api.js';
-import { chatSchema } from '@/features/chat/components/form/validation/chatSchema.js';
 import type {
   Chat,
   ChatDetails,
   ChatMessage,
+  ChatMessagesQuery,
   CreateChat,
   CreateChatMessage,
 } from '@/features/chat/types/chat.js';
 import type { PrivateProfile } from '@/features/profile/types/profile.js';
 import { routes } from '@/shared/lib/constants/api.js';
-import { formatIsoDate, IsCanceledError, IsError } from '@/shared/lib/utils/utils.js';
+import { IsCanceledError, IsError } from '@/shared/lib/utils/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 import { useMessage } from '@/shared/stores/message/message.js';
+
+import { chatMessageSchema } from '../components/details/send-form/validation/chatMessageSchema.js';
 
 export const useChatDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const chatId = useMemo(() => (id ? Number(id) : NaN), [id]);
+
+  const chatId = useMemo(() => id ?? '', [id]);
 
   const { userId, token } = useAuth();
   const { showMessage } = useMessage();
 
-  const { chat, isFetching } = useDetails(chatId);
+  const { chat, isFetching, refetch } = useDetails(chatId);
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [messageToEdit, setMessageToEdit] = useState<ChatMessage | null>(null);
-  const [messages, setMessages] = useState<ChatMessage[]>(chat?.messages || []);
+
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [participants, setParticipants] = useState<PrivateProfile[]>([]);
+
+  const isLoadingMoreRef = useRef(false);
+
+  const normalizeOrder = useCallback((chatMessages: ChatMessage[]) => {
+    return chatMessages.slice().sort((leftMessage, rightMessage) => {
+      const leftCreatedAtMs = new Date(leftMessage.createdOn).getTime();
+      const rightCreatedAtMs = new Date(rightMessage.createdOn).getTime();
+
+      if (leftCreatedAtMs !== rightCreatedAtMs) {
+        return leftCreatedAtMs - rightCreatedAtMs;
+      }
+
+      return leftMessage.id - rightMessage.id;
+    });
+  }, []);
+
+  const removeDuplicateMessagesById = useCallback((messagesList: ChatMessage[]) => {
+    const messageById = new Map<number, ChatMessage>();
+
+    for (const message of messagesList) {
+      messageById.set(message.id, message);
+    }
+
+    return Array.from(messageById.values());
+  }, []);
 
   useEffect(() => {
-    setMessages(chat?.messages || []);
-  }, [chat]);
+    if (!chat) {
+      setParticipants([]);
+      setMessages([]);
 
-  const [participants, setParticipants] = useState<PrivateProfile[]>(chat?.participants || []);
+      return;
+    }
 
-  useEffect(() => {
-    setParticipants(chat?.participants || []);
-  }, [chat]);
+    setParticipants(chat.participants || []);
+
+    const fromDetails = chat.messages || [];
+    if (fromDetails.length > 0) {
+      const withoutDuplicates = removeDuplicateMessagesById(fromDetails);
+      const normalized = normalizeOrder(withoutDuplicates);
+
+      setMessages(normalized);
+      return;
+    }
+
+    if (!chatId || !token) {
+      return;
+    }
+
+    const controller = new AbortController();
+
+    (async () => {
+      try {
+        const initial = await api.messages(chatId, token, { take: 20 }, controller.signal);
+        const withoutDuplicates = removeDuplicateMessagesById(initial ?? []);
+        const normalized = normalizeOrder(withoutDuplicates);
+
+        setMessages(normalized);
+      } catch (error) {
+        const errorMessage = IsError(error) ? error.message : 'Failed to load messages.';
+        showMessage(errorMessage, false);
+      }
+    })();
+
+    return () => controller.abort();
+  }, [chat, chatId, token, normalizeOrder, removeDuplicateMessagesById, showMessage]);
+
+  const loadMoreMessages = useCallback(
+    async (take = 50) => {
+      if (!chatId || !token) {
+        return;
+      }
+
+      if (isLoadingMoreRef.current) {
+        return;
+      }
+
+      isLoadingMoreRef.current = true;
+
+      try {
+        const oldestId = messages[0]?.id;
+
+        const query: ChatMessagesQuery = { take };
+        if (typeof oldestId === 'number') {
+          query.before = oldestId;
+        }
+
+        const older = await api.messages(chatId, token, query);
+        if (!older?.length) {
+          return;
+        }
+
+        const merged = [...older, ...messages];
+        const deduped = removeDuplicateMessagesById(merged);
+        const normalized = normalizeOrder(deduped);
+
+        setMessages(normalized);
+      } catch (error) {
+        if (IsCanceledError(error)) {
+          return;
+        }
+
+        const errorMessage = IsError(error) ? error.message : 'Failed to load older messages.';
+        showMessage(errorMessage, false);
+      } finally {
+        isLoadingMoreRef.current = false;
+      }
+    },
+    [chatId, token, messages, normalizeOrder, removeDuplicateMessagesById, showMessage],
+  );
 
   const deleteMessage = useCallback(
     async (messageId: number) => {
@@ -50,8 +155,8 @@ export const useChatDetails = () => {
         setMessages((prev) => prev.filter((m) => m.id !== messageId));
         showMessage('Your message was successfully deleted', true);
       } catch (error) {
-        const message = IsError(error) ? error?.message : 'Failed to delete message.';
-        showMessage(message, false);
+        const errorMessage = IsError(error) ? error?.message : 'Failed to delete message.';
+        showMessage(errorMessage, false);
       }
     },
     [token, showMessage],
@@ -65,8 +170,8 @@ export const useChatDetails = () => {
         setParticipants((prev) => prev.filter((p) => p.id !== profileId));
         showMessage(`You have successfully removed ${firstName}!`, true);
       } catch (error) {
-        const message = IsError(error) ? error?.message : 'Failed to remove user.';
-        showMessage(message, false);
+        const errorMessage = IsError(error) ? error?.message : 'Failed to remove user.';
+        showMessage(errorMessage, false);
       }
     },
     [chatId, token, showMessage],
@@ -90,7 +195,6 @@ export const useChatDetails = () => {
     (message: ChatMessage) => {
       setIsEditMode(true);
       setMessageToEdit(message);
-
       formik.setValues({ chatId, message: message.message });
     },
     [formik, chatId],
@@ -99,7 +203,6 @@ export const useChatDetails = () => {
   const handleCancelEdit = useCallback(() => {
     setIsEditMode(false);
     setMessageToEdit(null);
-
     formik.resetForm();
   }, [formik]);
 
@@ -114,6 +217,7 @@ export const useChatDetails = () => {
     chatId,
     chat,
     isFetching,
+    refetch,
     userId,
     isEditMode,
     messages,
@@ -125,10 +229,11 @@ export const useChatDetails = () => {
     removeUserClickHandler,
     refreshParticipantsList,
     onProfileClickHandler,
+    loadMoreMessages,
   };
 };
 
-export const useDeleteChat = (id: number, name?: string) => {
+export const useDeleteChat = (id: string, name?: string) => {
   const { token } = useAuth();
   const navigate = useNavigate();
   const { showMessage } = useMessage();
@@ -148,8 +253,8 @@ export const useDeleteChat = (id: number, name?: string) => {
       showMessage(`You have successfully deleted ${name || 'this chat'}!`, true);
       navigate(routes.home);
     } catch (error) {
-      const message = IsError(error) ? error?.message : 'Failed to delete chat.';
-      showMessage(message, false);
+      const errorMessage = IsError(error) ? error?.message : 'Failed to delete chat.';
+      showMessage(errorMessage, false);
     } finally {
       toggleModal();
     }
@@ -160,82 +265,83 @@ export const useDeleteChat = (id: number, name?: string) => {
 
 export function useChatsNotJoined(userId?: string) {
   const { token } = useAuth();
+
   const [chatNames, setChatNames] = useState<Chat[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isFetching, setIsFetching] = useState(false);
 
-  const fetchData = useCallback(async () => {
-    if (!userId || !token) {
-      return;
-    }
-
-    const controller = new AbortController();
-
-    try {
-      setIsFetching(true);
-
-      const data = await api.chatsNotJoined(userId, token, controller.signal);
-
-      setChatNames(data);
-      setError(null);
-    } catch (error) {
-      if (IsCanceledError(error)) {
+  const fetchData = useCallback(
+    async (signal?: AbortSignal) => {
+      if (!userId || !token) {
         return;
       }
 
-      const message = IsError(error) ? error.message : 'Failed to load chat names.';
-      setError(message);
-    } finally {
-      setIsFetching(false);
-    }
+      setIsFetching(true);
 
-    return () => controller.abort();
-  }, [userId, token]);
+      try {
+        const data = await api.chatsNotJoined(userId, token, signal);
+        setChatNames(data ?? null);
+        setError(null);
+      } catch (error) {
+        if (IsCanceledError(error)) {
+          return;
+        }
+        const errorMessage = IsError(error) ? error.message : 'Failed to load chat names.';
+        setError(errorMessage);
+      } finally {
+        setIsFetching(false);
+      }
+    },
+    [userId, token],
+  );
 
   useEffect(() => {
-    void fetchData();
+    const controller = new AbortController();
+    void fetchData(controller.signal);
+
+    return () => controller.abort();
   }, [fetchData]);
 
   return { chatNames, isFetching, error, refetch: fetchData };
 }
 
-export function useDetails(chatId: number) {
+export function useDetails(chatId: string) {
   const { token } = useAuth();
   const navigate = useNavigate();
 
   const [chat, setChat] = useState<ChatDetails | null>(null);
   const [isFetching, setIsFetching] = useState(false);
 
-  const numericId = typeof chatId === 'string' ? Number(chatId) : chatId;
-
-  const fetchData = useCallback(async () => {
-    if (!numericId || !token) {
-      return;
-    }
-
-    const controller = new AbortController();
-
-    try {
-      setIsFetching(true);
-
-      const data = await api.details(numericId, token, controller.signal);
-      setChat(data);
-    } catch (error) {
-      if (IsCanceledError(error)) {
+  const fetchData = useCallback(
+    async (signal?: AbortSignal) => {
+      if (!chatId || !token) {
         return;
       }
 
-      const message = IsError(error) ? error.message : 'Failed to load chat details.';
-      navigate(routes.badRequest, { state: { message } });
-    } finally {
-      setIsFetching(false);
-    }
+      setIsFetching(true);
 
-    return () => controller.abort();
-  }, [numericId, token, navigate]);
+      try {
+        const data = await api.details(chatId, token, signal);
+        setChat(data ?? null);
+      } catch (error) {
+        if (IsCanceledError(error)) {
+          return;
+        }
+
+        const errorMessage = IsError(error) ? error.message : 'Failed to load chat details.';
+        navigate(routes.badRequest, { state: { message: errorMessage } });
+      } finally {
+        setIsFetching(false);
+      }
+    },
+    [chatId, token, navigate],
+  );
 
   useEffect(() => {
-    void fetchData();
+    const controller = new AbortController();
+    void fetchData(controller.signal);
+
+    return () => controller.abort();
   }, [fetchData]);
 
   return { chat, isFetching, refetch: fetchData };
@@ -251,13 +357,11 @@ export function useCreate() {
         return;
       }
 
-      const toSend: CreateChat = { ...chatData, imageUrl: chatData.imageUrl || null };
-
       try {
-        return await api.create(toSend, token);
+        return await api.create(chatData, token);
       } catch (error) {
-        const message = IsError(error) ? error.message : 'Failed to create chat.';
-        navigate(routes.badRequest, { state: { message } });
+        const errorMessage = IsError(error) ? error.message : 'Failed to create chat.';
+        navigate(routes.badRequest, { state: { message: errorMessage } });
 
         throw error;
       }
@@ -271,18 +375,16 @@ export function useEdit() {
   const navigate = useNavigate();
 
   return useCallback(
-    async (chatId: number, chatData: CreateChat) => {
+    async (chatId: string, chatData: CreateChat) => {
       if (!token) {
         return;
       }
 
-      const toSend: CreateChat = { ...chatData, imageUrl: chatData.imageUrl || null };
-
       try {
-        return await api.edit(chatId, toSend, token);
+        return await api.edit(chatId, chatData, token);
       } catch (error) {
-        const message = IsError(error) ? error.message : 'Failed to edit chat.';
-        navigate(routes.badRequest, { state: { message } });
+        const errorMessage = IsError(error) ? error.message : 'Failed to edit chat.';
+        navigate(routes.badRequest, { state: { message: errorMessage } });
 
         throw error;
       }
@@ -299,12 +401,13 @@ export function useCreateMessage() {
       if (!token) {
         throw new Error('Not authenticated');
       }
-      try {
-        return await api.createMessage(messageData, token);
-      } catch (error) {
-        const message = IsError(error) ? error.message : 'Failed to create message.';
-        throw new Error(message);
+
+      const data = await api.createMessage(messageData, token);
+      if (!data) {
+        throw new Error('Failed to create message.');
       }
+
+      return data;
     },
     [token],
   );
@@ -318,12 +421,13 @@ export function useEditMessage() {
       if (!token) {
         throw new Error('Not authenticated');
       }
-      try {
-        return await api.editMessage(messageId, messageData, token);
-      } catch (error) {
-        const message = IsError(error) ? error.message : 'Failed to edit message.';
-        throw new Error(message);
+
+      const data = await api.editMessage(messageId, messageData, token);
+      if (!data) {
+        throw new Error('Failed to edit message.');
       }
+
+      return data;
     },
     [token],
   );
@@ -334,7 +438,7 @@ export function useInviteToChat(refetch?: () => void) {
   const { showMessage } = useMessage();
 
   return useCallback(
-    async (chatId: number, userId: string, firstName: string, chatName: string) => {
+    async (chatId: string, userId: string, firstName: string, chatName: string) => {
       if (!token) {
         return;
       }
@@ -343,8 +447,8 @@ export function useInviteToChat(refetch?: () => void) {
         await api.inviteUserToChat(chatId, chatName, userId, token);
         showMessage(`You successfully added ${firstName} to ${chatName}!`, true);
       } catch (error) {
-        const message = IsError(error) ? error?.message : 'Failed to invite user.';
-        showMessage(message, false);
+        const errorMessage = IsError(error) ? error?.message : 'Failed to invite user.';
+        showMessage(errorMessage, false);
       } finally {
         refetch?.();
       }
@@ -359,6 +463,8 @@ export function useChatButtons(
   refreshParticipantsList?: (participant: PrivateProfile) => void,
 ) {
   const { id } = useParams<{ id: string }>();
+  const chatId = id ?? '';
+
   const navigate = useNavigate();
   const { userId, token } = useAuth();
   const { showMessage } = useMessage();
@@ -366,71 +472,73 @@ export function useChatButtons(
   const [isInvited, setIsInvited] = useState(false);
 
   useEffect(() => {
-    if (!id || !userId || !token) {
+    if (!chatId || !userId || !token) {
       return;
     }
 
     api
-      .userIsInvited(Number(id), userId, token)
-      .then(setIsInvited)
+      .userIsInvited(chatId, userId, token)
+      .then((v) => setIsInvited(Boolean(v)))
       .catch(() => setIsInvited(false));
-  }, [id, userId, token]);
+  }, [chatId, userId, token]);
 
   const onAcceptClick = useCallback(async () => {
-    if (!id || !chatCreatorId || !token) {
+    if (!chatId || !chatCreatorId || !token) {
       return;
     }
 
     try {
-      const newParticipant = await api.accept(Number(id), chatName, chatCreatorId, token);
+      const newParticipant = await api.accept(chatId, chatName, chatCreatorId, token);
 
-      showMessage(`You are now a member in ${chatName}!`, true);
-      setIsInvited(false);
-      refreshParticipantsList?.(newParticipant);
+      if (newParticipant) {
+        showMessage(`You are now a member in ${chatName}!`, true);
+        setIsInvited(false);
+        refreshParticipantsList?.(newParticipant);
+      }
     } catch (error) {
-      const message = IsError(error) ? error.message : 'Failed to accept invitation.';
-      showMessage(message, false);
+      const errorMessage = IsError(error) ? error.message : 'Failed to accept invitation.';
+      showMessage(errorMessage, false);
     }
-  }, [id, chatCreatorId, token, chatName, showMessage, refreshParticipantsList]);
+  }, [chatId, chatCreatorId, token, chatName, showMessage, refreshParticipantsList]);
 
   const onRejectClick = useCallback(async () => {
-    if (!id || !chatCreatorId || !token) {
+    if (!chatId || !chatCreatorId || !token) {
       return;
     }
 
     try {
-      await api.reject(Number(id), chatName, chatCreatorId, token);
+      await api.reject(chatId, chatName, chatCreatorId, token);
 
       showMessage('You have successfully rejected this chat invitation!', true);
       setIsInvited(false);
       navigate(routes.home);
     } catch (error) {
-      const message = IsError(error) ? error.message : 'Failed to accept invitation.';
-      showMessage(message, false);
+      const errorMessage = IsError(error) ? error.message : 'Failed to reject invitation.';
+      showMessage(errorMessage, false);
     }
-  }, [id, chatCreatorId, token, chatName, showMessage, navigate]);
+  }, [chatId, chatCreatorId, token, chatName, showMessage, navigate]);
 
   const onLeaveClick = useCallback(
     async (profileId: string) => {
-      if (!id || !token) {
+      if (!chatId || !token) {
         return;
       }
 
       try {
-        await api.removeUser(Number(id), profileId, token);
+        await api.removeUser(chatId, profileId, token);
 
         showMessage('You have successfully left the chat!', true);
         navigate(routes.home);
       } catch (error) {
-        const message = IsError(error) ? error?.message : 'Failed to leave chat.';
-        showMessage(message, false);
+        const errorMessage = IsError(error) ? error?.message : 'Failed to leave chat.';
+        showMessage(errorMessage, false);
       }
     },
-    [id, token, showMessage, navigate],
+    [chatId, token, showMessage, navigate],
   );
 
   return {
-    id,
+    id: chatId,
     userId,
     isInvited,
     onAcceptClick,
@@ -441,7 +549,7 @@ export function useChatButtons(
 
 export const removeMessage = (id: number, token: string) => api.removeMessage(id, token);
 
-export const removeUserFromChat = (chatId: number, userId: string, token: string) =>
+export const removeUserFromChat = (chatId: string, userId: string, token: string) =>
   api.removeUser(chatId, userId, token);
 
 export const useSendFormFormik = ({
@@ -452,47 +560,68 @@ export const useSendFormFormik = ({
   setMessageToEdit,
   setMessages,
 }: {
-  chatId: number;
+  chatId: string;
   isEditMode: boolean;
   messageToEdit: ChatMessage | null;
   setIsEditMode: (value: boolean) => void;
-  setMessageToEdit: (v: ChatMessage | null) => void;
+  setMessageToEdit: (value: ChatMessage | null) => void;
   setMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
   token: string;
 }) => {
   const { showMessage } = useMessage();
 
   const createMessage = useCreateMessage();
-  const editMessage = useEditMessage();
+  const updateMessage = useEditMessage();
 
-  const formik = useFormik<{ chatId: number; message: string }>({
+  const sortMessagesChronologically = (messagesList: ChatMessage[]) => {
+    return messagesList.slice().sort((leftMessage, rightMessage) => {
+      const leftCreatedAtMs = new Date(leftMessage.createdOn).getTime();
+      const rightCreatedAtMs = new Date(rightMessage.createdOn).getTime();
+
+      if (leftCreatedAtMs !== rightCreatedAtMs) {
+        return leftCreatedAtMs - rightCreatedAtMs;
+      }
+
+      return leftMessage.id - rightMessage.id;
+    });
+  };
+
+  const uniqueMessagesById = (messagesList: ChatMessage[]) => {
+    const messageById = new Map<number, ChatMessage>();
+
+    for (const message of messagesList) {
+      messageById.set(message.id, message);
+    }
+
+    return Array.from(messageById.values());
+  };
+
+  const mergeMessageThenNormalize = (currentMessages: ChatMessage[], nextMessage: ChatMessage) => {
+    const messagesWithoutOldVersion = currentMessages.filter(
+      (message) => message.id !== nextMessage.id,
+    );
+
+    const mergedMessages = [...messagesWithoutOldVersion, nextMessage];
+    return sortMessagesChronologically(uniqueMessagesById(mergedMessages));
+  };
+
+  const formik = useFormik<{ chatId: string; message: string }>({
+    enableReinitialize: true,
     initialValues: { chatId, message: '' },
-    validationSchema: chatSchema,
-    onSubmit: async (values, { resetForm }) => {
-      const payload = { chatId, message: values.message };
+    validationSchema: chatMessageSchema,
+    onSubmit: async (formValues, { resetForm }) => {
+      const messagePayload: CreateChatMessage = {
+        chatId: formValues.chatId,
+        message: formValues.message,
+      };
+
       try {
-        let response: ChatMessage;
-        if (isEditMode && messageToEdit) {
-          response = await editMessage(messageToEdit.id, payload);
-          setMessages((prev) =>
-            prev.map((m) =>
-              m.id === response.id
-                ? {
-                    ...m,
-                    message: response.message,
-                    createdOn: formatIsoDate(response.createdOn),
-                    modifiedOn: response.modifiedOn ? formatIsoDate(response.modifiedOn) : null,
-                  }
-                : m,
-            ),
-          );
-        } else {
-          response = await createMessage(payload);
-          response.createdOn = formatIsoDate(response.createdOn);
+        const savedMessage =
+          isEditMode && messageToEdit
+            ? await updateMessage(messageToEdit.id, messagePayload)
+            : await createMessage(messagePayload);
 
-          setMessages((prev) => [...prev, response]);
-        }
-
+        setMessages((currentMessages) => mergeMessageThenNormalize(currentMessages, savedMessage));
         resetForm();
       } catch {
         showMessage('Something went wrong while processing your message, please try again', false);

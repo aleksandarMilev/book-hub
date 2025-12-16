@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 
 using static Common.Constants.Names;
 
-public class AdminService(UserManager<User> userManager) : IAdminService
+public class AdminService(UserManager<UserDbModel> userManager) : IAdminService
 {
     public async Task<string> GetId()
     {

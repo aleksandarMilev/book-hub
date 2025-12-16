@@ -15,7 +15,7 @@ public class ReadingList : IEntity
     [ForeignKey(nameof(User))]
     public string UserId { get; set; } = null!;
 
-    public User User { get; set; } = null!;
+    public UserDbModel User { get; set; } = null!;
 
     [ForeignKey(nameof(Book))]
     public Guid BookId { get; set; }

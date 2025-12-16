@@ -1,5 +1,6 @@
 import type { Author } from '@/features/author/types/author.js';
 import type { GenreName } from '@/features/genre/types/genre.js';
+import type { ReadingStatusAPI } from '@/features/reading-list/types/readingList.js';
 import type { Review } from '@/features/review/types/review.js';
 
 export interface Book {
@@ -29,7 +30,7 @@ export interface BookDetails extends Book {
   creatorId?: string | null;
   moreThanFiveReviews: boolean;
   isApproved: boolean;
-  readingStatus?: string | null;
+  readingStatus?: ReadingStatusAPI | null;
   author?: Author | null;
   reviews: Review[];
 }
