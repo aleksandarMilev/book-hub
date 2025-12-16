@@ -33,9 +33,9 @@ export type BooksSearchResult = {
 };
 
 export type ChatsSearchResult = {
-  id: number;
+  id: string;
   name: string;
-  imageUrl: string;
+  imagePath: string;
   creatorId: string;
 };
 

@@ -7,13 +7,12 @@ import type { Chat, CreateChat } from '@/features/chat/types/chat.js';
 import { routes } from '@/shared/lib/constants/api.js';
 import { useMessage } from '@/shared/stores/message/message.js';
 
-export function useChatFormik({
-  chatData = null,
-  isEditMode = false,
-}: {
+type Props = {
   chatData?: Chat | null;
   isEditMode?: boolean;
-}) {
+};
+
+export function useChatFormik({ chatData = null, isEditMode = false }: Props) {
   const navigate = useNavigate();
   const { showMessage } = useMessage();
 
@@ -23,7 +22,7 @@ export function useChatFormik({
   const formik = useFormik<CreateChat>({
     initialValues: {
       name: chatData?.name || '',
-      imageUrl: chatData?.imageUrl || null,
+      image: null,
     },
     validationSchema: chatSchema,
     onSubmit: async (values) => {
@@ -35,14 +34,14 @@ export function useChatFormik({
             navigate(`${routes.chat}/${chatData!.id}`);
           }
         } else {
-          const chatId = await createHandler(values);
-          if (chatId) {
+          const created = await createHandler(values);
+          if (created?.id) {
             showMessage(`You have successfully created ${values.name}`, true);
-            navigate(`${routes.chat}/${chatId}`);
+            navigate(`${routes.chat}/${created.id}`);
           }
         }
       } catch {
-        showMessage('Something went wrong while creating your chat, please try again!', false);
+        showMessage('Something went wrong while saving your chat, please try again!', false);
       }
     },
   });

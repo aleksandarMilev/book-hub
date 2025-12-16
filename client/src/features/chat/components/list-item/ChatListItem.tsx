@@ -9,17 +9,19 @@ import DeleteModal from '@/shared/components/delete-modal/DeleteModal.js';
 import { routes } from '@/shared/lib/constants/api.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 
-const ChatListItem: FC<{
-  id: number;
+type Props = {
+  id: string;
   name: string;
-  imageUrl: string | null;
+  imagePath: string | null;
   creatorId: string;
-}> = ({ id, name, imageUrl, creatorId }) => {
+};
+
+const ChatListItem: FC<Props> = ({ id, name, imagePath, creatorId }) => {
   const navigate = useNavigate();
   const { userId, isAdmin } = useAuth();
 
   const onEditClick = () => {
-    navigate(routes.editChat, { state: { chat: { id, name, imageUrl } } });
+    navigate(routes.editChat, { state: { chat: { id, name, imagePath, creatorId } } });
   };
 
   const { showModal, toggleModal, deleteHandler } = useDeleteChat(id, name);
@@ -28,7 +30,7 @@ const ChatListItem: FC<{
     <>
       <div className="row chat-list-item p-2 bg-light border rounded mb-3 shadow-sm">
         <div className="col-3 d-flex justify-content-center align-items-center">
-          <img className="img-fluid chat-list-item-image" src={imageUrl || ''} alt={name} />
+          <img className="img-fluid chat-list-item-image" src={imagePath || ''} alt={name} />
         </div>
         <div className="col-7 d-flex flex-column justify-content-between chat-list-item-content">
           <h5 className="mb-1 chat-list-item-name">{name}</h5>
@@ -55,6 +57,7 @@ const ChatListItem: FC<{
           </Link>
         </div>
       </div>
+
       <DeleteModal showModal={showModal} toggleModal={toggleModal} deleteHandler={deleteHandler} />
     </>
   );

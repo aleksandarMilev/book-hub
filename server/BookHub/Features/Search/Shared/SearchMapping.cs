@@ -3,7 +3,7 @@
 using Article.Data.Models;
 using Authors.Data.Models;
 using Book.Data.Models;
-using Features.Chat.Data.Models;
+using Chat.Data.Models;
 using Genre.Data.Models;
 using Genre.Service.Models;
 using Service.Models;
@@ -80,7 +80,7 @@ public static class SearchMapping
         {
             Id = p.Id,
             Name = p.Name,
-            ImageUrl = p.ImageUrl,
+            ImagePath = p.ImagePath,
             CreatorId = p.CreatorId,
         });
 }

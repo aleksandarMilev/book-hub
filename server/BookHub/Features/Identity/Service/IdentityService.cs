@@ -15,10 +15,11 @@ using Models;
 using Shared;
 
 using static Common.Constants.Names;
-using static Shared.Constants;
+using static Shared.Constants.ErrorMessages;
+using static Shared.Constants.TokenExpiration;
 
 public class IdentityService(
-    UserManager<User> userManager,
+    UserManager<UserDbModel> userManager,
     IEmailSender emailSender,
     IProfileService profileService,
     ILogger<IdentityService> logger,
@@ -28,9 +29,9 @@ public class IdentityService(
 
     public async Task<ResultWith<string>> Register(
         RegisterServiceModel serviceModel,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
-        var user = new User
+        var user = new UserDbModel
         {
             Email = serviceModel.Email,
             UserName = serviceModel.Username
@@ -58,7 +59,7 @@ public class IdentityService(
                 await profileService.Create(
                     serviceModel.ToCreateProfileServiceModel(),
                     user.Id,
-                    token);
+                    cancellationToken);
 
                 await emailSender.SendWelcome(
                     serviceModel.Email,
@@ -85,16 +86,14 @@ public class IdentityService(
 
     public async Task<ResultWith<string>> Login(
         LoginServiceModel serviceModel,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var user = await userManager.FindByNameAsync(
             serviceModel.Credentials);
 
         if (user is null)
         {
-            user = await userManager.FindByEmailAsync(
-                serviceModel.Credentials);
-
+            user = await userManager.FindByEmailAsync(serviceModel.Credentials);
             if (user is null)
             {
                 return ResultWith<string>.Failure(InvalidLoginAttempt);
@@ -165,10 +164,8 @@ public class IdentityService(
             Expires = rememberMe
                 ? DateTime.UtcNow.AddDays(ExtendedTokenExpirationTime)
                 : DateTime.UtcNow.AddDays(DefaultTokenExpirationTime),
-
             Issuer = this.settings.Issuer,
             Audience = this.settings.Audience,
-
             SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(key),
                 SecurityAlgorithms.HmacSha256Signature)

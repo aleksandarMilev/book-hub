@@ -10,16 +10,13 @@ import {
   MDBRow,
 } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import image from '@/features/identity/components/register/assets/register.webp';
-import { useRegisterFormik } from '@/features/identity/components/register/formik/useRegisterFormik.js';
+
+import { useRegisterPage } from '../../hooks/useRegisterPage.js';
 
 const Register: FC = () => {
-  const formik = useRegisterFormik();
-  const { t } = useTranslation('identity');
-
-  const isSubmitting = formik.isSubmitting;
+  const { t, isSubmitting, formik, submitErrorRef } = useRegisterPage();
 
   return (
     <MDBContainer fluid className="identity-auth register-page">
@@ -38,6 +35,17 @@ const Register: FC = () => {
                 noValidate
                 encType="multipart/form-data"
               >
+                {!!formik.status?.submitError && (
+                  <div
+                    ref={submitErrorRef}
+                    className="auth-form-error"
+                    role="alert"
+                    aria-live="polite"
+                    tabIndex={-1}
+                  >
+                    {formik.status.submitError}
+                  </div>
+                )}
                 <div className="auth-field">
                   <label htmlFor="firstName" className="auth-label">
                     {t('register.labels.firstName')}
@@ -236,8 +244,6 @@ const Register: FC = () => {
                     placeholder={t('register.placeholders.biography')}
                   />
                 </div>
-
-                {/* Privacy toggle */}
                 <div className="auth-field">
                   <div className="form-check">
                     <input
@@ -252,7 +258,6 @@ const Register: FC = () => {
                     </label>
                   </div>
                 </div>
-
                 <button
                   className="auth-submit-btn"
                   type="submit"

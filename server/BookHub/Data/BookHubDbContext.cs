@@ -21,7 +21,7 @@ using Models.Shared.ChatUser;
 
 public class BookHubDbContext(
     DbContextOptions<BookHubDbContext> options, 
-    ICurrentUserService userService) : IdentityDbContext<User>(options)
+    ICurrentUserService userService) : IdentityDbContext<UserDbModel>(options)
 {
     public DbSet<BookDbModel> Books { get; init; }
 

@@ -1,15 +1,23 @@
 import { MDBCardImage, MDBIcon } from 'mdb-react-ui-kit';
-import type { FC } from 'react';
+import React, { type FC } from 'react';
 
 import type { PrivateProfile } from '@/features/profile/types/profile.js';
 
-const ParticipantListItem: FC<{
+type Props = {
   participant: PrivateProfile;
   index: number;
   onProfileClickHandler: (id: string) => void;
   onDeleteHandler: (id: string, firstName: string) => void;
   currentUserIsChatCreator: boolean;
-}> = ({ participant, index, onProfileClickHandler, onDeleteHandler, currentUserIsChatCreator }) => {
+};
+
+const ParticipantListItem: FC<Props> = ({
+  participant,
+  index,
+  onProfileClickHandler,
+  onDeleteHandler,
+  currentUserIsChatCreator,
+}) => {
   return (
     <li
       className="d-flex align-items-center mb-3 profile-item"
@@ -42,7 +50,7 @@ const ParticipantListItem: FC<{
                 fas
                 icon="times"
                 className="ms-2 cursor-pointer"
-                onClick={(e: Event) => {
+                onClick={(e: React.MouseEvent) => {
                   e.stopPropagation();
                   onDeleteHandler(participant.id, participant.firstName);
                 }}

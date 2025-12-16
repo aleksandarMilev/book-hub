@@ -19,7 +19,7 @@ public class Notification : DeletableEntity<Guid>
     [ForeignKey(nameof(User))]
     public string ReceiverId { get; set; } = null!;
 
-    public User User { get; set; } = null!;
+    public UserDbModel User { get; set; } = null!;
 
     [ForeignKey(nameof(ResourceType))]
     public Guid ResourceId { get; init; }

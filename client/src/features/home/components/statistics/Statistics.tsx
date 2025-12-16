@@ -1,7 +1,6 @@
 import './Statistics.css';
 
 import { type FC } from 'react';
-import { useTranslation } from 'react-i18next';
 import { FaBook, FaCommentDots, FaNewspaper, FaTags, FaUsers, FaUserTie } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
@@ -11,8 +10,7 @@ import HomePageError from '@/shared/components/errors/home-page/HomePageError.js
 import { routes } from '@/shared/lib/constants/api.js';
 
 const Statistics: FC = () => {
-  const { t } = useTranslation('home');
-  const { isAuthenticated, isFetching, error, counts } = useStatisticsPage();
+  const { t, isAuthenticated, isFetching, error, counts } = useStatisticsPage();
 
   if (error) {
     return <HomePageError message={error} />;

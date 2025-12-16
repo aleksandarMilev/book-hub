@@ -4,16 +4,15 @@ using Infrastructure.Services.Result;
 using Infrastructure.Services.ServiceLifetimes;
 using Models;
 using UserProfile.Service.Models;
-using Web.Models;
 
 public interface IChatService : ITransientService
 {
-    Task<ChatDetailsServiceModel> Details(
+    Task<ChatDetailsServiceModel?> Details(
         Guid id,
         CancellationToken token = default);
 
-    IEnumerable<ChatServiceModel> NotJoined(
-        string userId,
+    Task<IEnumerable<ChatServiceModel>> NotJoined(
+        string userToJoinId,
         CancellationToken token = default);
 
     Task<bool> CanAccessChat(
@@ -22,38 +21,38 @@ public interface IChatService : ITransientService
         CancellationToken token = default);
 
     Task<bool> IsInvited(
-        Guid id,
+        Guid chatId,
         string userId,
         CancellationToken token = default);
 
-    Task<int> Create(
-        CreateChatWebModel webModel,
+    Task<ResultWith<ChatDetailsServiceModel>> Create(
+        CreateChatServiceModel serviceModel,
         CancellationToken token = default);
 
     Task<Result> Edit(
-        Guid id,
-        CreateChatWebModel webModel,
+        Guid chatId,
+        CreateChatServiceModel serviceModel,
         CancellationToken token = default);
 
     Task<Result> Delete(
-        Guid id,
+        Guid chatId,
         CancellationToken token = default);
 
     Task<ResultWith<PrivateProfileServiceModel>> Accept(
-        ProcessChatInvitationWebModel webModel,
+        ProcessChatInvitationServiceModel model,
         CancellationToken token = default);
 
     Task<Result> Reject(
-        ProcessChatInvitationWebModel webModel,
+        ProcessChatInvitationServiceModel model,
         CancellationToken token = default);
 
-    Task<int> InviteUser(
-       Guid id,
-       AddUserToChatWebModel webModel,
+    Task<Result> InviteUserToChat(
+       Guid chatId,
+       AddUserToChatServiceModel model,
        CancellationToken token = default);
 
-    Task<Result> RemoveUser(
+    Task<Result> RemoveUserFromChat(
         Guid chatId,
-        string userId,
+        string userToRemoveId,
         CancellationToken token = default);
 }

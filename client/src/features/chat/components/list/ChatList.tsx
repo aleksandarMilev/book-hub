@@ -1,4 +1,4 @@
-import { type ChangeEvent, type FC, useState } from 'react';
+import { type ChangeEvent, type FC, useEffect, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 
 import image from '@/features/chat/components/form/assets/chat.avif';
@@ -16,9 +16,13 @@ const ChatList: FC = () => {
   const [page, setPage] = useState(pagination.defaultPageIndex);
   const pageSize = pagination.defaultPageSize;
 
+  useEffect(() => {
+    setPage(pagination.defaultPageIndex);
+  }, [debouncedSearch]);
+
   const { items: chats, totalItems, isFetching } = useSearchChats(debouncedSearch, page, pageSize);
 
-  const totalPages = Math.ceil(totalItems / pageSize) || 1;
+  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -31,6 +35,11 @@ const ChatList: FC = () => {
     }
 
     setPage(newPage);
+  };
+
+  const clearSearch = () => {
+    setSearchTerm('');
+    setPage(pagination.defaultPageIndex);
   };
 
   return (
@@ -47,16 +56,21 @@ const ChatList: FC = () => {
               disabled={isFetching}
             />
             <button
+              type="button"
               className="btn btn-light search-btn"
               disabled={isFetching}
               aria-label="Search chats"
+              onClick={() => {
+                if (searchTerm.trim().length > 0) {
+                  clearSearch();
+                }
+              }}
             >
               <FaSearch size={20} />
             </button>
           </div>
         </div>
       </div>
-
       <div className="d-flex justify-content-center row">
         <div className="col-md-10">
           {isFetching ? (
@@ -80,9 +94,9 @@ const ChatList: FC = () => {
                 alt="No chats found"
                 className="mb-4 clickable"
                 style={{ maxWidth: '200px', opacity: 0.7, cursor: 'pointer' }}
-                onClick={() => setSearchTerm('')}
+                onClick={clearSearch}
               />
-              <h5 className="text-muted">{"We couldn't find any chats"}</h5>
+              <h5 className="text-muted">We couldn&apos;t find any chats</h5>
               <p className="text-muted text-center" style={{ maxWidth: '400px' }}>
                 Try adjusting your search terms or exploring our collection for more options.
               </p>

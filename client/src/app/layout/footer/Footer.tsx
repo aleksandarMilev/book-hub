@@ -74,7 +74,7 @@ const Footer: FC = () => {
                 </Link>
               </p>
               <p>
-                <Link to={routes.chats} className="footer-link">
+                <Link to={routes.chat} className="footer-link">
                   {t('footer.links.chats')}
                 </Link>
               </p>
@@ -101,20 +101,6 @@ const Footer: FC = () => {
                   {t('footer.links.login')}
                 </Link>
               </p>
-            </MDBCol>
-            <MDBCol md="4" lg="4" className="footer-column mb-md-0 mb-4">
-              <h6 className="footer-title">{t('footer.columns.newsletter')}</h6>
-              <p className="footer-description">{t('footer.newsletter.description')}</p>
-              <form className="newsletter-form">
-                <input
-                  type="email"
-                  placeholder={t('footer.newsletter.placeholder')}
-                  className="newsletter-input"
-                />
-                <button type="submit" className="newsletter-button">
-                  {t('footer.newsletter.subscribe')}
-                </button>
-              </form>
             </MDBCol>
           </MDBRow>
         </MDBContainer>

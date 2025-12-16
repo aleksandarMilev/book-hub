@@ -1,8 +1,8 @@
 import './LastNotifications.css';
 
 import type { FC } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Badge, Dropdown } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import { FaBell } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 

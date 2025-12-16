@@ -1,5 +1,9 @@
 .identity-auth.register-page {
-  padding: 3rem 1rem;
+  padding: 2.25rem 1rem;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+
   font-family: 'Inter', sans-serif;
   background: radial-gradient(
     circle at top left,
@@ -16,10 +20,38 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.16);
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(14px);
+  overflow: hidden;
+  max-width: 1120px;
+  width: 100%;
+  margin: 1.75rem auto !important;
 }
 
 .identity-auth .register-body {
+  padding: 0;
+}
+
+.identity-auth .register-body .row {
+  margin: 0;
+  align-items: stretch !important;
+}
+
+.identity-auth .register-body .row > div:first-child {
   padding: 2.4rem 2.6rem;
+}
+
+.identity-auth .register-body .row > div:last-child {
+  padding: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+}
+
+.identity-auth .register-image {
+  width: 100%;
+  height: clamp(320px, 62vh, 760px);
+  object-fit: cover;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .identity-auth .register-title {
@@ -178,32 +210,81 @@
   box-shadow: none;
 }
 
-.identity-auth .register-image {
-  width: 100%;
-  height: auto;
-  border-radius: 18px;
-  object-fit: cover;
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.18);
+.identity-auth .auth-form-error {
+  margin: 0 0 1rem;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(229, 83, 83, 0.35);
+  background: rgba(229, 83, 83, 0.08);
+  color: #b42318;
+  font-weight: 700;
 }
 
-@media (max-width: 992px) {
-  .identity-auth .register-body {
-    padding: 2rem 1.6rem;
-  }
+.identity-auth.register-page {
+  min-height: calc(100svh - var(--app-header-height, 72px));
+  overflow-y: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+.identity-auth .register-card {
+  margin: 0 auto !important;
+}
+
+@media (max-width: 1024px) {
+  .identity-auth.register-page {
+    padding: 1.5rem 1rem;
+    align-items: center;
+  }
+  .identity-auth .register-card {
+    margin: 0 auto !important;
+  }
+  .identity-auth .register-body .row {
+    flex-direction: column;
+  }
+  .identity-auth .register-body .row > div:last-child {
+    order: -1 !important;
+  }
+  .identity-auth .register-body .row > div {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  .identity-auth .register-body .row > div:first-child {
+    padding: 1.8rem 1.4rem;
+  }
+  .identity-auth .register-image {
+    height: clamp(200px, 32vh, 320px);
+    width: 100%;
+    object-fit: cover;
+  }
   .identity-auth .register-title {
-    margin-top: 1rem;
-    margin-bottom: 1.6rem;
+    margin-top: 0.25rem;
+    margin-bottom: 1.2rem;
     font-size: 1.7rem;
   }
 }
 
-@media (max-width: 768px) {
-  .identity-auth .register-card {
-    margin: 1.5rem;
+@media (max-width: 480px) {
+  .identity-auth .register-body .row > div:first-child {
+    padding: 1.4rem 1rem;
+  }
+  .identity-auth .register-image {
+    height: 180px;
+  }
+  .identity-auth .register-field-row {
+    gap: 0.6rem;
+  }
+}
+
+@media (max-width: 1024px) and (max-height: 560px) {
+  .identity-auth.register-page {
+    align-items: flex-start;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
   }
 
-  .identity-auth.register-page {
-    padding-top: 2rem;
+  .identity-auth .register-card {
+    margin: 0 auto !important;
   }
 }

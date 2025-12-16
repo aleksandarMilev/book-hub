@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { useTopProfiles } from '@/features/profile/hooks/useCrud.js';
 import { routes } from '@/shared/lib/constants/api.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
+import { useTranslation } from 'react-i18next';
 
 export const useTopProfilesPage = () => {
+  const { t } = useTranslation('home');
   const { userId } = useAuth();
   const navigate = useNavigate();
   const { profiles, isFetching, error } = useTopProfiles();
@@ -15,5 +17,5 @@ export const useTopProfilesPage = () => {
     });
   };
 
-  return { profiles, isFetching, error, onProfileClickHandler };
+  return { t, profiles, isFetching, error, onProfileClickHandler };
 };

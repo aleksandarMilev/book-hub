@@ -19,7 +19,7 @@ public class ChatMessageDbModel : DeletableEntity<int>
     public string SenderId { get; set; } = null!;
 
     [DeleteBehavior(DeleteBehavior.Restrict)]
-    public User Sender { get; set; } = null!;
+    public UserDbModel Sender { get; set; } = null!;
 
     [Required]
     [ForeignKey(nameof(Chat))]

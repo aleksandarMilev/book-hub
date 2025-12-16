@@ -57,7 +57,7 @@ public static class AppBuilderExtensions
         using var serviceScope = app.ApplicationServices.CreateScope();
         var services = serviceScope.ServiceProvider;
 
-        var userManager = services.GetRequiredService<UserManager<User>>();
+        var userManager = services.GetRequiredService<UserManager<UserDbModel>>();
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
         if (await roleManager.RoleExistsAsync(AdminRoleName))
@@ -75,7 +75,7 @@ public static class AppBuilderExtensions
         const string AdminEmail = "admin@mail.com";
         const string AdminPassword = "admin1234";
 
-        var user = new User
+        var user = new UserDbModel
         {
             Email = AdminEmail,
             UserName = AdminRoleName

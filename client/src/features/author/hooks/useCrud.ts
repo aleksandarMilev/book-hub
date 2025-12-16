@@ -15,8 +15,10 @@ import { IsCanceledError, IsError } from '@/shared/lib/utils/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 import { useMessage } from '@/shared/stores/message/message.js';
 import { HttpError } from '@/shared/types/errors/httpError.js';
+import { useTranslation } from 'react-i18next';
 
 export const useTopThree = () => {
+  const { t } = useTranslation('home');
   const [authors, setAuthors] = useState<Author[]>([]);
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -48,7 +50,7 @@ export const useTopThree = () => {
     return () => controller.abort();
   }, []);
 
-  return { authors, isFetching, error };
+  return { t, authors, isFetching, error };
 };
 
 export const useNames = () => {

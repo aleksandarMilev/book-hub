@@ -4,8 +4,8 @@ import { type ChangeEvent, type FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaSearch } from 'react-icons/fa';
 
-import ProfileListItem from '@/features/profile/components/list-item/ProfileListItem.js';
 import noUsersImage from '@/features/profile/components/list/assets/no-users-found.avif';
+import ProfileListItem from '@/features/profile/components/list-item/ProfileListItem.js';
 import { useSearchProfiles } from '@/features/search/hooks/useCrud.js';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
 import Pagination from '@/shared/components/pagination/Pagination.js';

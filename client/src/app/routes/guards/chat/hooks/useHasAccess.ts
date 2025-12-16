@@ -17,7 +17,7 @@ export const useHasAccess = () => {
     }
 
     api
-      .hasAccess(Number(id), userId, token)
+      .hasAccess(id, userId, token)
       .then((access: boolean) => setHasAccess(access))
       .finally(() => setIsLoading(false));
   }, [id, userId, token]);

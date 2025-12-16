@@ -14,7 +14,7 @@ using Microsoft.OpenApi.Models;
 using Services.ServiceLifetimes;
 using Settings;
 
-using static Features.Identity.Shared.Constants;
+using static Features.Identity.Shared.Constants.Lockout;
 using static Common.Constants.Cors;
 
 public static class ServiceCollectionExtensions
@@ -103,7 +103,7 @@ public static class ServiceCollectionExtensions
         IWebHostEnvironment env)
     {
         services
-            .AddIdentityCore<User>(opt =>
+            .AddIdentityCore<UserDbModel>(opt =>
             {
                 opt.User.RequireUniqueEmail = true;
                 opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(AccountLockoutTimeSpan);

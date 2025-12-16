@@ -1,7 +1,7 @@
 ﻿namespace BookHub.Features.Identity.Shared;
 
-using Features.UserProfile.Service.Models;
 using Service.Models;
+using UserProfile.Service.Models;
 using Web.Models;
 
 public static class IdentityMapping

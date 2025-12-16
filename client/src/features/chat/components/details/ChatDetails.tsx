@@ -1,6 +1,7 @@
 import './ChatDetails.css';
 
 import {
+  MDBBtn,
   MDBCard,
   MDBCardBody,
   MDBCardHeader,
@@ -33,6 +34,7 @@ const ChatDetails: FC = () => {
     removeUserClickHandler,
     refreshParticipantsList,
     onProfileClickHandler,
+    loadMoreMessages,
   } = useChatDetails();
 
   if (isFetching || !chat) {
@@ -42,8 +44,8 @@ const ChatDetails: FC = () => {
   return (
     <>
       <ChatButtons
-        chatName={chat?.name}
-        chatCreatorId={chat?.creatorId}
+        chatName={chat.name}
+        chatCreatorId={chat.creatorId}
         refreshParticipantsList={refreshParticipantsList}
       />
       <MDBContainer className="py-5 vh-100">
@@ -54,16 +56,26 @@ const ChatDetails: FC = () => {
                 <MDBCard id="chat1" className="chat-card">
                   <MDBCardHeader className="chat-card-header">
                     <MDBCardImage
-                      src={chat?.imageUrl || ''}
+                      src={chat.imagePath || ''}
                       alt="Chat"
                       className="chat-card-header-img"
                     />
-                    <p className="mb-0 fw-bold">{chat?.name}</p>
+                    <p className="mb-0 fw-bold">{chat.name}</p>
                   </MDBCardHeader>
                   <MDBCardBody className="chat-card-body">
+                    <div className="d-flex justify-content-center mb-3">
+                      <MDBBtn
+                        size="sm"
+                        outline
+                        onClick={() => loadMoreMessages(50)}
+                        disabled={!messages || messages.length === 0}
+                      >
+                        Load older messages
+                      </MDBBtn>
+                    </div>
                     {messages?.map((m) => {
                       const isSentByUser = m.senderId === userId;
-                      const sender = chat.participants.find((p) => p.id === m.senderId);
+                      const sender = participants.find((p) => p.id === m.senderId);
 
                       return (
                         <Message
@@ -93,8 +105,9 @@ const ChatDetails: FC = () => {
                   <MDBCardBody className="participants-card-body">
                     <ul className="participants-list">
                       {participants
+                        .slice()
                         .sort((a, b) =>
-                          a.id === chat?.creatorId ? -1 : b.id === chat?.creatorId ? 1 : 0,
+                          a.id === chat.creatorId ? -1 : b.id === chat.creatorId ? 1 : 0,
                         )
                         .map((p, i) => (
                           <ParticipantListItem
@@ -103,7 +116,7 @@ const ChatDetails: FC = () => {
                             index={i}
                             onProfileClickHandler={onProfileClickHandler}
                             onDeleteHandler={removeUserClickHandler}
-                            currentUserIsChatCreator={userId === chat?.creatorId}
+                            currentUserIsChatCreator={userId === chat.creatorId}
                           />
                         ))}
                     </ul>

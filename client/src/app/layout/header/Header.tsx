@@ -61,7 +61,7 @@ const Header: FC = () => {
               <Nav.Link as={Link} to={routes.articles} onClick={closeMenu}>
                 {t('header.nav.articles')}
               </Nav.Link>
-              <Nav.Link as={Link} to={routes.chats} onClick={closeMenu}>
+              <Nav.Link as={Link} to={routes.chat} onClick={closeMenu}>
                 {t('header.nav.chats')}
               </Nav.Link>
               <Nav.Link as={Link} to={routes.profiles} onClick={closeMenu}>
@@ -84,7 +84,6 @@ const Header: FC = () => {
                 </Nav.Link>
               )}
             </Nav>
-
             <Nav className="ms-auto auth-section align-items-center">
               <div className="language-switcher me-3">
                 <button

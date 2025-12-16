@@ -8,7 +8,6 @@ using Features.Identity.Data.Models;
 using Infrastructure.Services.ImageWriter.Models.Image;
 using Microsoft.EntityFrameworkCore;
 
-
 using static Shared.Constants.Validation;
 
 public class ChatDbModel:
@@ -27,7 +26,7 @@ public class ChatDbModel:
     public string CreatorId { get; set; } = null!;
 
     [DeleteBehavior(DeleteBehavior.Restrict)]
-    public User Creator { get; set; } = null!;
+    public UserDbModel Creator { get; set; } = null!;
 
     public ICollection<ChatMessageDbModel> Messages { get; set; } = new HashSet<ChatMessageDbModel>();
 

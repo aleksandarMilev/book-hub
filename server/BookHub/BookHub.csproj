@@ -23,7 +23,7 @@
 
 	<ItemGroup>
 		<Folder Include="Data\Models\Shared\BookGenre\Seed\" />
-		<Folder Include="wwwroot\images\" />
+		<Folder Include="wwwroot\images\chats\" />
 	</ItemGroup>
 
 </Project>

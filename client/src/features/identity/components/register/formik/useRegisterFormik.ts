@@ -30,13 +30,18 @@ export const useRegisterFormik = () => {
   const formik = useFormik<RegisterFormValues>({
     initialValues: registerInitialValues,
     validationSchema: createRegisterSchema(t),
-    onSubmit: async (values, { setErrors }) => {
+    initialStatus: { submitError: '' as string },
+    onSubmit: async (values, { setStatus, setSubmitting }) => {
+      setStatus({ submitError: '' });
+
       try {
         await registerHandler(values);
         navigate(routes.home);
       } catch (error) {
-        const message = IsError(error) ? error.message : t('messages.unknownError');
-        setErrors({ username: message });
+        const errorMessage = IsError(error) ? error.message : t('messages.unknownError');
+
+        setStatus({ submitError: errorMessage });
+        setSubmitting(false);
       }
     },
   });

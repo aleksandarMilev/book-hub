@@ -15,4 +15,6 @@ public static class ApiRoutes
     public const string RejectInvite = "invite/reject/";
 
     public const string RemoveUser = "remove/user/";
+
+    public const string Messages = "messages/";
 }

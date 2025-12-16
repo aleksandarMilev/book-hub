@@ -1,9 +1,9 @@
 import type { PrivateProfile } from '@/features/profile/types/profile.js';
 
 export interface Chat {
-  id: number;
+  id: string;
   name: string;
-  imageUrl: string;
+  imagePath: string;
   creatorId: string;
 }
 
@@ -12,22 +12,27 @@ export interface ChatMessage {
   message: string;
   senderId: string;
   senderName: string;
-  senderImageUrl: string;
+  senderImagePath: string;
   createdOn: string;
   modifiedOn?: string | null;
 }
 
 export interface ChatDetails extends Chat {
   participants: PrivateProfile[];
-  messages: ChatMessage[];
+  messages?: ChatMessage[];
 }
 
 export interface CreateChatMessage {
   message: string;
-  chatId: number;
+  chatId: string;
 }
 
 export interface CreateChat {
   name: string;
-  imageUrl?: string | null;
+  image?: File | null;
+}
+
+export interface ChatMessagesQuery {
+  before?: number;
+  take?: number;
 }

@@ -11,28 +11,32 @@ using Service.Models;
 public class IdentityController(IIdentityService service) : ApiController
 {
     [HttpPost(ApiRoutes.Register)]
-    public async Task<ActionResult<LoginResponseModel>> Register(
+    public async Task<ActionResult<JwtTokenServiceModel>> Register(
         RegisterWebModel webModel,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var serviceModel = webModel.ToRegisterServiceModel();
-        var result = await service.Register(serviceModel, token);
+        var result = await service.Register(
+            serviceModel,
+            cancellationToken);
 
         return this.OkOrBadRequest(
             result,
-            token => new LoginResponseModel(token));
+            token => new JwtTokenServiceModel(token));
     }
 
     [HttpPost(ApiRoutes.Login)]
-    public async Task<ActionResult<LoginResponseModel>> Login(
+    public async Task<ActionResult<JwtTokenServiceModel>> Login(
         LoginWebModel webModel,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var serviceModel = webModel.ToLoginServiceModel();
-        var result = await service.Login(serviceModel, token);
+        var result = await service.Login(
+            serviceModel,
+            cancellationToken);
 
         return this.OkOrBadRequest(
             result,
-            token => new LoginResponseModel(token));
+            token => new JwtTokenServiceModel(token));
     }
 }

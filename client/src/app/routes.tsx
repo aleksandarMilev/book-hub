@@ -162,7 +162,7 @@ export const router = createBrowserRouter([
       },
 
       {
-        path: routes.chats,
+        path: routes.chat,
         element: withSuspense(<AuthenticatedRoute element={<ChatList />} />),
       },
       {
