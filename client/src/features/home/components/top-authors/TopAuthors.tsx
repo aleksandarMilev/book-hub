@@ -2,7 +2,6 @@ import './TopAuthors.css';
 
 import { MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
 import { type FC } from 'react';
-import { useTranslation } from 'react-i18next';
 import { FaBookReader } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
@@ -15,8 +14,7 @@ import { routes } from '@/shared/lib/constants/api.js';
 import { getImageUrl } from '@/shared/lib/utils/utils.js';
 
 const TopAuthors: FC = () => {
-  const { t } = useTranslation('home');
-  const { authors, isFetching, error } = useTopThree();
+  const { t, authors, isFetching, error } = useTopThree();
 
   if (error) {
     return <HomePageError message={error} />;

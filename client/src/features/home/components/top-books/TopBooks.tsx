@@ -9,7 +9,6 @@ import {
   MDBCardTitle,
 } from 'mdb-react-ui-kit';
 import { type FC } from 'react';
-import { useTranslation } from 'react-i18next';
 import { FaBook, FaBookReader } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
@@ -22,8 +21,7 @@ import { routes } from '@/shared/lib/constants/api.js';
 import { getImageUrl, slugify } from '@/shared/lib/utils/utils.js';
 
 const TopBooks: FC = () => {
-  const { t } = useTranslation('home');
-  const { books, isFetching, error } = useTopThree();
+  const { t, books, isFetching, error } = useTopThree();
 
   if (error) {
     return <HomePageError message={error} />;

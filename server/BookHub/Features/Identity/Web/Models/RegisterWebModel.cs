@@ -1,19 +1,30 @@
 ﻿namespace BookHub.Features.Identity.Web.Models;
 
 using System.ComponentModel.DataAnnotations;
+using Infrastructure.Validation;
 
 using static Features.UserProfile.Shared.Constants.Validation;
+using static Shared.Constants.Validation;
 
 public class RegisterWebModel
 {
     [Required]
+    [StringLength(
+        UsernameMaxLength,
+        MinimumLength = UsernameMinLength)]
     public string Username { get; init; } = null!;
 
     [Required]
     [EmailAddress]
+    [StringLength(
+        EmailMaxLength,
+        MinimumLength = EmailMinLength)]
     public string Email { get; init; } = null!;
 
     [Required]
+    [StringLength(
+        PasswordMaxLength,
+        MinimumLength = PasswordMinLength)]
     public string Password { get; init; } = null!;
 
     [Required]
@@ -30,6 +41,7 @@ public class RegisterWebModel
 
     public IFormFile? Image { get; init; }
 
+    [DateOfBirth(MaxAgeYears)]
     public string? DateOfBirth { get; init; }
 
     [StringLength(

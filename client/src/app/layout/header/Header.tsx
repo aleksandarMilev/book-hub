@@ -84,7 +84,6 @@ const Header: FC = () => {
                 </Nav.Link>
               )}
             </Nav>
-
             <Nav className="ms-auto auth-section align-items-center">
               <div className="language-switcher me-3">
                 <button

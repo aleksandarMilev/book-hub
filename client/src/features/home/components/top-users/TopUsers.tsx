@@ -1,7 +1,6 @@
 import './TopUsers.css';
 
 import { type FC } from 'react';
-import { useTranslation } from 'react-i18next';
 import { FaBookReader } from 'react-icons/fa';
 
 import { useTopProfilesPage } from '@/features/home/hooks/useTopProfilesPage.js';
@@ -11,8 +10,7 @@ import HomePageError from '@/shared/components/errors/home-page/HomePageError.js
 import { getImageUrl } from '@/shared/lib/utils/utils.js';
 
 const TopUsers: FC = () => {
-  const { t } = useTranslation('home');
-  const { profiles, isFetching, error, onProfileClickHandler } = useTopProfilesPage();
+  const { t, profiles, isFetching, error, onProfileClickHandler } = useTopProfilesPage();
 
   if (error) {
     return <HomePageError message={error} />;

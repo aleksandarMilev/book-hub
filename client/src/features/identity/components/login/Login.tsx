@@ -2,16 +2,14 @@ import './Login.css';
 
 import { MDBCheckbox, MDBCol, MDBContainer, MDBRow } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import image from '@/features/identity/components/login/assets/login.webp';
-import { useLoginFormik } from '@/features/identity/components/login/formik/useLoginFormik.js';
 import { routes } from '@/shared/lib/constants/api.js';
+import { useLoginPage } from '../../hooks/useLoginPage.js';
 
 const Login: FC = () => {
-  const formik = useLoginFormik();
-  const { t } = useTranslation('identity');
+  const { t, formik } = useLoginPage();
 
   return (
     <MDBContainer fluid className="identity-auth login-page">

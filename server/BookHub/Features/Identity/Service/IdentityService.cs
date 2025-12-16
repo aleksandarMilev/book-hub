@@ -15,7 +15,8 @@ using Models;
 using Shared;
 
 using static Common.Constants.Names;
-using static Shared.Constants;
+using static Shared.Constants.ErrorMessages;
+using static Shared.Constants.TokenExpiration;
 
 public class IdentityService(
     UserManager<UserDbModel> userManager,

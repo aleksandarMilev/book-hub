@@ -23,9 +23,6 @@ public static class Constants
         public const string UnauthorizedMessage = "User with Id: {0} can not modify {1} with Id: {2}!";
 
         public const string UnauthorizedMessageTemplate = $"User with Id: {{UserId}} can not modify {{ResourceName}} with Id: {{ResourceId}}!";
-
-        //TODO: remove
-        public const string UnauthorizedDbEntityAction = "{0} can not modify {1} with Id: {2}!";
     }
 
     public static class Names 
@@ -36,5 +33,10 @@ public static class Constants
     public static class Cors
     {
         public const string CorsPolicyName = "CorsPolicy";
+    }
+
+    public static class DateFormats
+    {
+        public const string ISO8601 = "yyyy-MM-dd";
     }
 }

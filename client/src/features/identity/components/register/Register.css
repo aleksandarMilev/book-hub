@@ -210,33 +210,81 @@
   box-shadow: none;
 }
 
-@media (max-width: 992px) {
+.identity-auth .auth-form-error {
+  margin: 0 0 1rem;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(229, 83, 83, 0.35);
+  background: rgba(229, 83, 83, 0.08);
+  color: #b42318;
+  font-weight: 700;
+}
+
+.identity-auth.register-page {
+  min-height: calc(100svh - var(--app-header-height, 72px));
+  overflow-y: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.identity-auth .register-card {
+  margin: 0 auto !important;
+}
+
+@media (max-width: 1024px) {
   .identity-auth.register-page {
     padding: 1.5rem 1rem;
-    align-items: flex-start;
+    align-items: center;
   }
-
   .identity-auth .register-card {
-    margin: 1rem auto !important;
+    margin: 0 auto !important;
   }
-
+  .identity-auth .register-body .row {
+    flex-direction: column;
+  }
+  .identity-auth .register-body .row > div:last-child {
+    order: -1 !important;
+  }
+  .identity-auth .register-body .row > div {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
   .identity-auth .register-body .row > div:first-child {
-    padding: 2rem 1.6rem;
+    padding: 1.8rem 1.4rem;
   }
-
-  .identity-auth .register-title {
-    margin-top: 0.5rem;
-    margin-bottom: 1.4rem;
-    font-size: 1.75rem;
-  }
-
   .identity-auth .register-image {
-    height: 220px;
+    height: clamp(200px, 32vh, 320px);
+    width: 100%;
+    object-fit: cover;
+  }
+  .identity-auth .register-title {
+    margin-top: 0.25rem;
+    margin-bottom: 1.2rem;
+    font-size: 1.7rem;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
+  .identity-auth .register-body .row > div:first-child {
+    padding: 1.4rem 1rem;
+  }
   .identity-auth .register-image {
-    height: 200px;
+    height: 180px;
+  }
+  .identity-auth .register-field-row {
+    gap: 0.6rem;
+  }
+}
+
+@media (max-width: 1024px) and (max-height: 560px) {
+  .identity-auth.register-page {
+    align-items: flex-start;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .identity-auth .register-card {
+    margin: 0 auto !important;
   }
 }
