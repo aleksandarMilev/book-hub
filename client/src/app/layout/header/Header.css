@@ -327,3 +327,61 @@
     padding: 0.8rem 0.9rem;
   }
 }
+
+@media (min-width: 992px) and (max-width: 1480px) {
+  .fancy-navbar .navbar-collapse {
+    flex-wrap: wrap;
+    row-gap: 0.45rem;
+  }
+  .main-links.navbar-nav {
+    flex-wrap: wrap;
+    column-gap: 0.2rem;
+    row-gap: 0.25rem;
+  }
+  .main-links .nav-link {
+    font-size: 0.98rem;
+    padding: 0.42rem 0.6rem;
+    margin-right: 0.1rem;
+    white-space: nowrap;
+  }
+  .auth-section.navbar-nav {
+    width: 100%;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.2rem;
+  }
+  .navbar-user {
+    max-width: 280px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-right: 0.35rem;
+  }
+  .btn-pill {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0.48rem 0.85rem !important;
+    font-size: 0.98rem;
+    line-height: 1.15;
+    white-space: nowrap;
+  }
+  .language-switcher {
+    margin-right: 0.35rem !important;
+    white-space: nowrap;
+  }
+}
+
+@media (min-width: 1200px) {
+  .auth-section .btn-pill {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    text-align: center !important;
+    line-height: 1 !important;
+    min-height: 40px;
+    padding: 0.55rem 1.05rem !important;
+  }
+}
