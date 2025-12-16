@@ -2,13 +2,21 @@
 
 using System.ComponentModel.DataAnnotations;
 
+using static Shared.Constants.Validation;
+
 public class LoginWebModel
 {
     [Required]
+    [StringLength(
+       CredentialsMaxLength,
+       MinimumLength = CredentialsMinLength)]
     public string Credentials { get; init; } = null!;
 
-    public bool RememberMe { get; init; } 
-
     [Required]
+    [StringLength(
+       PasswordMaxLength,
+       MinimumLength = PasswordMinLength)]
     public string Password { get; init; } = null!;
+
+    public bool RememberMe { get; init; }
 }

@@ -24,6 +24,9 @@ public static class Constants
         public const int EmailMinLength = 5;
         public const int EmailMaxLength = 254;
 
+        public const int CredentialsMinLength = UsernameMinLength;
+        public const int CredentialsMaxLength = EmailMaxLength;
+
         public const int MaxAgeYears = 110;
     }
 
