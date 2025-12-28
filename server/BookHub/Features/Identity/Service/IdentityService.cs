@@ -144,6 +144,8 @@ public class IdentityService(
         bool isAdmin = false)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
+        tokenHandler.OutboundClaimTypeMap.Clear();
+
         var key = Encoding.ASCII.GetBytes(appSettingsSecret);
 
         var claimList = new List<Claim>
