@@ -328,7 +328,7 @@
   }
 }
 
-@media (min-width: 992px) and (max-width: 1480px) {
+@media (min-width: 992px) and (max-width: 1660px) {
   .fancy-navbar .navbar-collapse {
     flex-wrap: wrap;
     row-gap: 0.45rem;

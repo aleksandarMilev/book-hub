@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookHub.Data.Migrations
 {
     [DbContext(typeof(BookHubDbContext))]
-    [Migration("20251211213002_Init")]
+    [Migration("20260102164300_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace BookHub.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "10.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -3502,8 +3502,8 @@ namespace BookHub.Data.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("ChatId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ChatId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("HasAccepted")
                         .HasColumnType("bit");
@@ -8825,13 +8825,11 @@ namespace BookHub.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("BookHub.Features.Chat.Data.Models.Chat", b =>
+            modelBuilder.Entity("BookHub.Features.Chat.Data.Models.ChatDbModel", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -8849,10 +8847,9 @@ namespace BookHub.Data.Migrations
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ImageUrl")
+                    b.Property<string>("ImagePath")
                         .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -8875,7 +8872,7 @@ namespace BookHub.Data.Migrations
                     b.ToTable("Chats");
                 });
 
-            modelBuilder.Entity("BookHub.Features.Chat.Data.Models.ChatMessage", b =>
+            modelBuilder.Entity("BookHub.Features.Chat.Data.Models.ChatMessageDbModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -8883,8 +8880,8 @@ namespace BookHub.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ChatId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ChatId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -8918,9 +8915,11 @@ namespace BookHub.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChatId");
-
                     b.HasIndex("SenderId");
+
+                    b.HasIndex("ChatId", "CreatedOn");
+
+                    b.HasIndex("ChatId", "Id");
 
                     b.ToTable("ChatMessages");
                 });
@@ -9270,7 +9269,7 @@ namespace BookHub.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("BookHub.Features.Identity.Data.Models.User", b =>
+            modelBuilder.Entity("BookHub.Features.Identity.Data.Models.UserDbModel", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -9393,7 +9392,7 @@ namespace BookHub.Data.Migrations
 
                     b.Property<string>("ReceiverId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<Guid>("ResourceId")
                         .HasColumnType("uniqueidentifier");
@@ -9402,12 +9401,9 @@ namespace BookHub.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ReceiverId");
 
                     b.ToTable("Notifications");
                 });
@@ -9755,13 +9751,13 @@ namespace BookHub.Data.Migrations
 
             modelBuilder.Entity("BookHub.Data.Models.Shared.ChatUser.ChatUser", b =>
                 {
-                    b.HasOne("BookHub.Features.Chat.Data.Models.Chat", "Chat")
+                    b.HasOne("BookHub.Features.Chat.Data.Models.ChatDbModel", "Chat")
                         .WithMany("ChatsUsers")
                         .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BookHub.Features.Identity.Data.Models.User", "User")
+                    b.HasOne("BookHub.Features.Identity.Data.Models.UserDbModel", "User")
                         .WithMany("ChatsUsers")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -9774,7 +9770,7 @@ namespace BookHub.Data.Migrations
 
             modelBuilder.Entity("BookHub.Features.Authors.Data.Models.AuthorDbModel", b =>
                 {
-                    b.HasOne("BookHub.Features.Identity.Data.Models.User", "Creator")
+                    b.HasOne("BookHub.Features.Identity.Data.Models.UserDbModel", "Creator")
                         .WithMany("Authors")
                         .HasForeignKey("CreatorId");
 
@@ -9787,7 +9783,7 @@ namespace BookHub.Data.Migrations
                         .WithMany("Books")
                         .HasForeignKey("AuthorId");
 
-                    b.HasOne("BookHub.Features.Identity.Data.Models.User", "Creator")
+                    b.HasOne("BookHub.Features.Identity.Data.Models.UserDbModel", "Creator")
                         .WithMany("Books")
                         .HasForeignKey("CreatorId");
 
@@ -9796,9 +9792,9 @@ namespace BookHub.Data.Migrations
                     b.Navigation("Creator");
                 });
 
-            modelBuilder.Entity("BookHub.Features.Chat.Data.Models.Chat", b =>
+            modelBuilder.Entity("BookHub.Features.Chat.Data.Models.ChatDbModel", b =>
                 {
-                    b.HasOne("BookHub.Features.Identity.Data.Models.User", "Creator")
+                    b.HasOne("BookHub.Features.Identity.Data.Models.UserDbModel", "Creator")
                         .WithMany("ChatsCreated")
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -9807,15 +9803,15 @@ namespace BookHub.Data.Migrations
                     b.Navigation("Creator");
                 });
 
-            modelBuilder.Entity("BookHub.Features.Chat.Data.Models.ChatMessage", b =>
+            modelBuilder.Entity("BookHub.Features.Chat.Data.Models.ChatMessageDbModel", b =>
                 {
-                    b.HasOne("BookHub.Features.Chat.Data.Models.Chat", "Chat")
+                    b.HasOne("BookHub.Features.Chat.Data.Models.ChatDbModel", "Chat")
                         .WithMany("Messages")
                         .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BookHub.Features.Identity.Data.Models.User", "Sender")
+                    b.HasOne("BookHub.Features.Identity.Data.Models.UserDbModel", "Sender")
                         .WithMany("SentChatMessages")
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -9828,9 +9824,11 @@ namespace BookHub.Data.Migrations
 
             modelBuilder.Entity("BookHub.Features.Notification.Data.Models.Notification", b =>
                 {
-                    b.HasOne("BookHub.Features.Identity.Data.Models.User", "User")
+                    b.HasOne("BookHub.Features.Identity.Data.Models.UserDbModel", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -9843,7 +9841,7 @@ namespace BookHub.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BookHub.Features.Identity.Data.Models.User", "User")
+                    b.HasOne("BookHub.Features.Identity.Data.Models.UserDbModel", "User")
                         .WithMany("ReadingLists")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -9862,7 +9860,7 @@ namespace BookHub.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BookHub.Features.Identity.Data.Models.User", "Creator")
+                    b.HasOne("BookHub.Features.Identity.Data.Models.UserDbModel", "Creator")
                         .WithMany("Reviews")
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -9875,7 +9873,7 @@ namespace BookHub.Data.Migrations
 
             modelBuilder.Entity("BookHub.Features.Review.Data.Models.VoteDbModel", b =>
                 {
-                    b.HasOne("BookHub.Features.Identity.Data.Models.User", "Creator")
+                    b.HasOne("BookHub.Features.Identity.Data.Models.UserDbModel", "Creator")
                         .WithMany("Votes")
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -9894,7 +9892,7 @@ namespace BookHub.Data.Migrations
 
             modelBuilder.Entity("BookHub.Features.UserProfile.Data.Models.UserProfile", b =>
                 {
-                    b.HasOne("BookHub.Features.Identity.Data.Models.User", "User")
+                    b.HasOne("BookHub.Features.Identity.Data.Models.UserDbModel", "User")
                         .WithOne("Profile")
                         .HasForeignKey("BookHub.Features.UserProfile.Data.Models.UserProfile", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -9914,7 +9912,7 @@ namespace BookHub.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("BookHub.Features.Identity.Data.Models.User", null)
+                    b.HasOne("BookHub.Features.Identity.Data.Models.UserDbModel", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -9923,7 +9921,7 @@ namespace BookHub.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("BookHub.Features.Identity.Data.Models.User", null)
+                    b.HasOne("BookHub.Features.Identity.Data.Models.UserDbModel", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -9938,7 +9936,7 @@ namespace BookHub.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BookHub.Features.Identity.Data.Models.User", null)
+                    b.HasOne("BookHub.Features.Identity.Data.Models.UserDbModel", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -9947,7 +9945,7 @@ namespace BookHub.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("BookHub.Features.Identity.Data.Models.User", null)
+                    b.HasOne("BookHub.Features.Identity.Data.Models.UserDbModel", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -9968,7 +9966,7 @@ namespace BookHub.Data.Migrations
                     b.Navigation("Reviews");
                 });
 
-            modelBuilder.Entity("BookHub.Features.Chat.Data.Models.Chat", b =>
+            modelBuilder.Entity("BookHub.Features.Chat.Data.Models.ChatDbModel", b =>
                 {
                     b.Navigation("ChatsUsers");
 
@@ -9980,7 +9978,7 @@ namespace BookHub.Data.Migrations
                     b.Navigation("BooksGenres");
                 });
 
-            modelBuilder.Entity("BookHub.Features.Identity.Data.Models.User", b =>
+            modelBuilder.Entity("BookHub.Features.Identity.Data.Models.UserDbModel", b =>
                 {
                     b.Navigation("Authors");
 

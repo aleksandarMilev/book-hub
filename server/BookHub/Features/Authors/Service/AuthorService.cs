@@ -209,10 +209,9 @@ public class AuthorService(
             dbModel.CreatorId!,
             true);
 
-        await profileService.UpdateCount(
+        await profileService.IncrementCreatedAuthorsCount(
             dbModel.CreatorId!,
-            nameof(UserProfile.CreatedAuthorsCount),
-            x => ++x);
+            token);
 
         return true;
     }

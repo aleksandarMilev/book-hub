@@ -26,4 +26,5 @@ export type CreateProfile = {
   biography?: string | null;
   isPrivate: boolean;
   image?: File | null;
+  removeImage: boolean;
 };

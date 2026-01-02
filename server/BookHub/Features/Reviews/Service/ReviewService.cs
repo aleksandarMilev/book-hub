@@ -99,10 +99,9 @@ public class ReviewService(
             serviceModel.Rating,
             token: token);
 
-        await profileService.UpdateCount(
+        await profileService.IncrementCreatedAuthorsCount(
             userId,
-            nameof(UserProfile.ReviewsCount),
-            x => ++x);
+            token);
 
         var result = dbModel.ToServiceModel();
         return ResultWith<ReviewServiceModel>.Success(result);

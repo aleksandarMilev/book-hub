@@ -10,7 +10,11 @@ using Service.Models;
 
 public class IdentityController(IIdentityService service) : ApiController
 {
-    [HttpPost(ApiRoutes.Register)]
+    private const string RegisterRoute = "register/";
+
+    private const string LoginRoute = "login/";
+
+    [HttpPost(RegisterRoute)]
     public async Task<ActionResult<JwtTokenServiceModel>> Register(
         RegisterWebModel webModel,
         CancellationToken cancellationToken = default)
@@ -25,7 +29,7 @@ public class IdentityController(IIdentityService service) : ApiController
             token => new JwtTokenServiceModel(token));
     }
 
-    [HttpPost(ApiRoutes.Login)]
+    [HttpPost(LoginRoute)]
     public async Task<ActionResult<JwtTokenServiceModel>> Login(
         LoginWebModel webModel,
         CancellationToken cancellationToken = default)

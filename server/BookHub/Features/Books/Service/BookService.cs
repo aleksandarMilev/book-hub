@@ -276,10 +276,9 @@ public class BookService(
             dbModel.CreatorId!,
             true);
 
-        await profileService.UpdateCount(
+        await profileService.IncrementCreatedBooksCount(
             dbModel.CreatorId!,
-            nameof(UserProfile.CreatedBooksCount),
-            x => ++x);
+            token);
 
         return true;
     }

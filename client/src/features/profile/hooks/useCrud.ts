@@ -242,6 +242,7 @@ export const useEdit = () => {
         biography: values.biography?.trim() || null,
         isPrivate: values.isPrivate,
         image: values.image ?? null,
+        removeImage: values.removeImage ?? false,
       };
 
       try {

@@ -1,4 +1,5 @@
-﻿namespace BookHub.Features.Identity.Service;
+﻿# pragma warning disable CA1873
+namespace BookHub.Features.Identity.Service;
 
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -144,6 +145,8 @@ public class IdentityService(
         bool isAdmin = false)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
+        tokenHandler.OutboundClaimTypeMap.Clear();
+
         var key = Encoding.ASCII.GetBytes(appSettingsSecret);
 
         var claimList = new List<Claim>

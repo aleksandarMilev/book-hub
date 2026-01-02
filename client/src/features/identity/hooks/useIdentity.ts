@@ -23,14 +23,7 @@ export const useLogin = () => {
       try {
         const result: LoginResponse = await identityApi.login(credentials, password, rememberMe);
         const decoded = jwtDecode<DecodedToken>(result.token);
-
-        const user: User = {
-          userId: decoded.nameid,
-          username: decoded.unique_name,
-          email: decoded.email,
-          token: result.token,
-          isAdmin: Boolean(decoded.role),
-        };
+        const user = userFromDecodedToken(decoded, result.token);
 
         changeAuthenticationState(user);
         showMessage(t('messages.welcome', { username: user.username }), true);
@@ -63,13 +56,7 @@ export const useRegister = () => {
         }
 
         const decoded = jwtDecode<DecodedToken>(result.token);
-        const user: User = {
-          userId: decoded.nameid,
-          username: decoded.unique_name,
-          email: decoded.email,
-          token: result.token,
-          isAdmin: Boolean(decoded.role),
-        };
+        const user = userFromDecodedToken(decoded, result.token);
 
         changeAuthenticationState(user);
         showMessage(t('messages.welcome', { username: user.username }), true);
@@ -86,3 +73,11 @@ export const useRegister = () => {
 
   return onRegister;
 };
+
+const userFromDecodedToken = (decoded: DecodedToken, token: string): User => ({
+  userId: decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'],
+  username: decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'],
+  email: decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'],
+  isAdmin: Boolean(decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']),
+  token,
+});

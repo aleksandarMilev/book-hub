@@ -19,9 +19,9 @@ export const topThree = async (signal?: AbortSignal) => {
 export const mine = async (token: string, signal?: AbortSignal) => {
   try {
     const url = `${routes.mineProfile}`;
-    const { data } = await http.get<Profile>(url, getAuthConfig(token, signal));
-
-    return data;
+    const r = await http.get<Profile>(url, getAuthConfig(token, signal));
+    console.log(r);
+    return r.data;
   } catch (error: unknown) {
     if (isNotFoundError(error)) {
       return null;
@@ -66,6 +66,10 @@ export const edit = async (profile: CreateProfile, token: string, signal?: Abort
 
     if (profile.image) {
       formData.append('Image', profile.image);
+    }
+
+    if (profile.removeImage) {
+      formData.append('RemoveImage', String(profile.removeImage));
     }
 
     const config = {
