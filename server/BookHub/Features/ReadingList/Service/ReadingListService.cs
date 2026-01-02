@@ -98,11 +98,28 @@ public class ReadingListService(
         data.Add(mapEntity);
         await data.SaveChangesAsync(token);
 
-        await profileService.UpdateCount(
-            userId!,
-            GetPropertyName(readingStatus),
-            x => ++x,
-            token);
+        switch (readingStatus)
+        {
+            case ReadingListStatus.Read:
+                await profileService.IncrementReadBooksCount(
+                    userId,
+                    token);
+
+                break;
+            case ReadingListStatus.ToRead:
+                await profileService.IncrementToReadBooksCount(
+                    userId,
+                    token);
+                break;
+            case ReadingListStatus.CurrentlyReading:
+                await profileService.IncrementCurrentlyReadingBooksCount(
+                    userId,
+                    token);
+
+                break;
+            default:
+                break;
+        }
 
         return true;
     }
@@ -133,11 +150,28 @@ public class ReadingListService(
         data.Remove(mapEntity);
         await data.SaveChangesAsync(token);
 
-        await profileService.UpdateCount(
-           userId!,
-           GetPropertyName(readingStatus),
-           x => --x,
-           token);
+        switch (readingStatus)
+        {
+            case ReadingListStatus.Read:
+                await profileService.DecrementReadBooksCount(
+                    userId,
+                    token);
+
+                break;
+            case ReadingListStatus.ToRead:
+                await profileService.DecrementToReadBooksCount(
+                    userId,
+                    token);
+                break;
+            case ReadingListStatus.CurrentlyReading:
+                await profileService.DecrementCurrentlyReadingBooksCount(
+                    userId,
+                    token);
+
+                break;
+            default:
+                break;
+        }
 
         return true;
     }
@@ -147,17 +181,6 @@ public class ReadingListService(
         CancellationToken token = default)
         => await data
             .Books
+            .AsNoTracking()
             .AnyAsync(b => b.Id == id, token);
-
-    private static string GetPropertyName(ReadingListStatus status)
-        => status switch
-    {
-        ReadingListStatus.Read => nameof(UserProfile.ReadBooksCount),
-        ReadingListStatus.ToRead => nameof(UserProfile.ToReadBooksCount),
-        ReadingListStatus.CurrentlyReading => nameof(UserProfile.CurrentlyReadingBooksCount),
-        _ => throw new ArgumentOutOfRangeException(
-            nameof(status),
-            status,
-            "Unknown ReadingListStatus value"),
-    };
 }

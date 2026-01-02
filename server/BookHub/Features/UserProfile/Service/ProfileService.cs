@@ -1,26 +1,30 @@
-﻿namespace BookHub.Features.UserProfile.Service;
+﻿# pragma warning disable CA1873
 
-using System.Diagnostics;
+namespace BookHub.Features.UserProfile.Service;
+
 using BookHub.Data;
+using BookHub.Features.Identity.Data.Models;
 using Data.Models;
 using Infrastructure.Services.CurrentUser;
 using Infrastructure.Services.ImageWriter;
 using Infrastructure.Services.Result;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Shared;
 
 using static Common.Constants.ErrorMessages;
-using static Shared.Constants.Validation;
 using static Shared.Constants.Paths;
+
 public class ProfileService(
     BookHubDbContext data,
+    UserManager<UserDbModel> userManager,
     ICurrentUserService userService,
     IImageWriter imageWriter,
     ILogger<ProfileService> logger) : IProfileService
 {
     public async Task<IEnumerable<ProfileServiceModel>> TopThree(
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
         => await data
             .Profiles
             .OrderByDescending(p =>
@@ -29,27 +33,27 @@ public class ProfileService(
                 p.ReviewsCount)
             .Take(3)
             .ToServiceModels()
-            .ToListAsync(token);
+            .ToListAsync(cancellationToken);
 
     public async Task<ProfileServiceModel?> Mine(
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
         => await data
             .Profiles
             .ToServiceModels()
             .FirstOrDefaultAsync(
                 p => p.Id == userService.GetId(),
-                token);
+                cancellationToken);
 
     public async Task<IProfileServiceModel?> OtherUser(
         string id,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var dbModel = await data
             .Profiles
             .ToServiceModels()
             .FirstOrDefaultAsync(
                 p => p.Id == id,
-                token);
+                cancellationToken);
 
         if (dbModel is null)
         {
@@ -67,7 +71,7 @@ public class ProfileService(
     public async Task<ProfileServiceModel> Create(
         CreateProfileServiceModel serviceModel,
         string userId,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var dbModel = serviceModel.ToDbModel();
         dbModel.UserId = userId;
@@ -77,10 +81,10 @@ public class ProfileService(
            dbModel,
            serviceModel,
            DefaultImagePath,
-           token);
+           cancellationToken);
 
         data.Add(dbModel);
-        await data.SaveChangesAsync(token);
+        await data.SaveChangesAsync(cancellationToken);
 
         logger.LogInformation(
             "Profile for user with id {UserId} was created.",
@@ -91,10 +95,12 @@ public class ProfileService(
 
     public async Task<Result> Edit(
     CreateProfileServiceModel serviceModel,
-    CancellationToken token = default)
+    CancellationToken cancellationToken = default)
     {
         var userId = userService.GetId()!;
-        var dbModel = await this.GetDbModel(userId, token);
+        var dbModel = await this.GetDbModel(
+            userId,
+            cancellationToken);
 
         if (dbModel is null)
         {
@@ -112,14 +118,11 @@ public class ProfileService(
 
         serviceModel.UpdateDbModel(dbModel);
 
+        string? pathToDeleteAfterSave = null;
         if (shouldRemoveImage)
         {
             dbModel.ImagePath = DefaultImagePath;
-
-            imageWriter.Delete(
-                nameof(UserProfile),
-                oldImagePath,
-                DefaultImagePath);
+            pathToDeleteAfterSave = oldImagePath;
         }
         else
         {
@@ -128,18 +131,33 @@ public class ProfileService(
                 dbModel,
                 serviceModel,
                 null,
-                token);
+                cancellationToken);
 
             if (isNewImageUploaded)
             {
-                imageWriter.Delete(
-                    nameof(UserProfile),
-                    oldImagePath,
-                    DefaultImagePath);
+                pathToDeleteAfterSave = oldImagePath;
             }
         }
 
-        await data.SaveChangesAsync(token);
+        await data.SaveChangesAsync(cancellationToken);
+        if (!string.IsNullOrWhiteSpace(pathToDeleteAfterSave))
+        {
+            try
+            {
+                imageWriter.Delete(
+                    ProfilesImagePathPrefix,
+                    pathToDeleteAfterSave,
+                    DefaultImagePath);
+            }
+            catch (Exception exception)
+            {
+                logger.LogWarning(
+                    exception,
+                    "Profile image delete failed for user {UserId}. Path: {Path}",
+                    userId,
+                    pathToDeleteAfterSave);
+            }
+        }
 
         logger.LogInformation(
             "Profile for user with id {UserId} was updated.",
@@ -150,12 +168,15 @@ public class ProfileService(
 
     public async Task<Result> Delete(
         string? userToDeleteId = null,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var currentUserId = userService.GetId()!;
         userToDeleteId ??= currentUserId;
 
-        var dbModel = await this.GetDbModel(userToDeleteId, token);
+        var dbModel = await this.GetDbModel(
+            userToDeleteId,
+            cancellationToken);
+
         if (dbModel is null)
         {
             return this.LogAndReturnNotFoundMessage(userToDeleteId);
@@ -166,75 +187,180 @@ public class ProfileService(
 
         if (isNotCurrentUserProfile && userIsNotAdmin)
         {
-            return this.LogAndReturnUnauthorizedMessage(
-                currentUserId,
-                dbModel.UserId);
+            return this.LogAndReturnUnauthorizedMessage(currentUserId, dbModel.UserId);
         }
 
-        data.Remove(dbModel);
-        await data.SaveChangesAsync(token);
+        var imagePathToDelete = dbModel.ImagePath;
 
-        logger.LogInformation(
-            "Profile with id: {UserId} was deleted.",
-            userToDeleteId);
+        await using var transaction = await data.Database.BeginTransactionAsync(cancellationToken);
 
-        return true;
+        try
+        {
+            data.Remove(dbModel);
+            await data.SaveChangesAsync(cancellationToken);
+
+            var user = await userManager.FindByIdAsync(dbModel.UserId);
+            if (user is not null)
+            {
+                var identityResult = await userManager.DeleteAsync(user);
+                if (!identityResult.Succeeded)
+                {
+                    await transaction.RollbackAsync(cancellationToken);
+                    return string.Join("; ", identityResult.Errors.Select(e => e.Description));
+                }
+            }
+
+            await transaction.CommitAsync(cancellationToken);
+
+            try
+            {
+                imageWriter.Delete(
+                    ProfilesImagePathPrefix,
+                    imagePathToDelete,
+                    DefaultImagePath);
+            }
+            catch (Exception exception)
+            {
+                logger.LogWarning(
+                    exception,
+                    "Profile image delete failed for user {UserId}. Path: {Path}",
+                    userToDeleteId,
+                    imagePathToDelete);
+            }
+
+            logger.LogInformation(
+                "Profile with id: {UserId} was deleted.",
+                userToDeleteId);
+
+            return true;
+        }
+        catch (Exception exception)
+        {
+            await transaction.RollbackAsync(cancellationToken);
+
+            logger.LogError(
+                exception,
+                "Error deleting profile/user for {UserId}",
+                userToDeleteId);
+
+            return "Delete failed.";
+        }
     }
 
-    public async Task<Result> UpdateCount(
+    public async Task IncrementCreatedBooksCount(
         string userId,
-        string propName,
-        Func<int, int> updateFunc,
-        CancellationToken token = default)
-    {
-        var profile = await this.GetDbModel(userId, token);
-        if (profile is null)
-        {
-            return this.LogAndReturnNotFoundMessage(userId);
-        }
+        CancellationToken cancellationToken = default)
+        => await data
+            .Profiles
+            .Where(p => p.UserId == userId)
+            .ExecuteUpdateAsync(
+                setters => setters.SetProperty(
+                    profile => profile.CreatedBooksCount,
+                    profile => profile.CreatedBooksCount + 1),
+                cancellationToken);
 
-        var property = typeof(UserProfile).GetProperty(propName);
-        if (property is null)
-        {
-            var methodInfo = new StackTrace().GetFrame(1)?.GetMethod();
-            var className = methodInfo?.ReflectedType?.Name;
+    public async Task IncrementCreatedAuthorsCount(
+        string userId,
+        CancellationToken cancellationToken = default)
+        => await data
+            .Profiles
+            .Where(p => p.UserId == userId)
+            .ExecuteUpdateAsync(
+                setters => setters.SetProperty(
+                    profile => profile.CreatedAuthorsCount,
+                    profile => profile.CreatedAuthorsCount + 1),
+                cancellationToken);
 
-            logger.LogWarning(
-                "{Class}.{Method}() attempted to update property \"{Property}\" on UserProfile with Id: {UserId} but such property does not exist.",
-                className,
-                methodInfo?.Name,
-                propName,
-                userId);
+    public async Task IncrementWrittenReviewsCount(
+        string userId,
+        CancellationToken cancellationToken = default)
+        => await data
+            .Profiles
+            .Where(p => p.UserId == userId)
+            .ExecuteUpdateAsync(
+                setters => setters.SetProperty(
+                    profile => profile.ReviewsCount,
+                    profile => profile.ReviewsCount + 1),
+                cancellationToken);
 
-            return string.Format(
-                "{0}.{1}() attempted to update property \"{2}\" on UserProfile with Id: {3} but such property does not exist.",
-                className,
-                methodInfo?.Name,
-                propName,
-                userId);
-        }
+    public async Task IncrementCurrentlyReadingBooksCount(
+        string userId,
+        CancellationToken cancellationToken = default)
+        => await data
+            .Profiles
+            .Where(p => p.UserId == userId)
+            .ExecuteUpdateAsync(
+                setters => setters.SetProperty(
+                    profile => profile.CurrentlyReadingBooksCount,
+                    profile => profile.CurrentlyReadingBooksCount + 1),
+                cancellationToken);
 
-        var currentValue = (int)property.GetValue(profile)!;
-        var updatedValue = updateFunc(currentValue);
+    public async Task IncrementToReadBooksCount(
+        string userId,
+        CancellationToken cancellationToken = default)
+        => await data
+            .Profiles
+            .Where(p => p.UserId == userId)
+            .ExecuteUpdateAsync(
+                setters => setters.SetProperty(
+                    profile => profile.ToReadBooksCount,
+                    profile => profile.ToReadBooksCount + 1),
+                cancellationToken);
 
-        property.SetValue(profile, updatedValue);
+    public async Task IncrementReadBooksCount(
+        string userId,
+        CancellationToken cancellationToken = default)
+        => await data
+            .Profiles
+            .Where(p => p.UserId == userId)
+            .ExecuteUpdateAsync(
+                setters => setters.SetProperty(
+                    profile => profile.ReadBooksCount,
+                    profile => profile.ReadBooksCount + 1),
+                cancellationToken);
 
-        await data.SaveChangesAsync(token);
+    public async Task DecrementCurrentlyReadingBooksCount(
+        string userId,
+        CancellationToken cancellationToken = default)
+        => await data
+            .Profiles
+            .Where(p => p.UserId == userId)
+            .ExecuteUpdateAsync(
+                setters => setters.SetProperty(
+                    profile => profile.CurrentlyReadingBooksCount,
+                    profile => profile.CurrentlyReadingBooksCount - 1),
+                cancellationToken);
 
-        logger.LogInformation(
-            "\"{Property}\" on UserProfile with Id: {UserId} was updated successfully.",
-            propName,
-            userId);
+    public async Task DecrementToReadBooksCount(
+        string userId,
+        CancellationToken cancellationToken = default)
+         => await data
+            .Profiles
+            .Where(p => p.UserId == userId)
+            .ExecuteUpdateAsync(
+                setters => setters.SetProperty(
+                    profile => profile.ToReadBooksCount,
+                    profile => profile.ToReadBooksCount - 1),
+                cancellationToken);
 
-        return true;
-    }
+    public async Task DecrementReadBooksCount(
+        string userId,
+        CancellationToken cancellationToken = default)
+         => await data
+            .Profiles
+            .Where(p => p.UserId == userId)
+            .ExecuteUpdateAsync(
+                setters => setters.SetProperty(
+                    profile => profile.ReadBooksCount,
+                    profile => profile.ReadBooksCount - 1),
+                cancellationToken);
 
     private async Task<UserProfile?> GetDbModel(
         string id,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
         => await data
             .Profiles
-            .FindAsync([id], token);
+            .FindAsync([id], cancellationToken);
 
     private string LogAndReturnNotFoundMessage(string id)
     {

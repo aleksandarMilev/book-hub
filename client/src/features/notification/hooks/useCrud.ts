@@ -55,7 +55,9 @@ export const useAll = (
 
   const fetchData = useCallback(
     async (signal?: AbortSignal) => {
-      if (!token) return;
+      if (!token) {
+        return;
+      }
 
       try {
         setIsFetching(true);
@@ -98,7 +100,9 @@ export const useRemove = (id: string, refetch: () => void | Promise<void>) => {
       return;
     }
 
-    if (!token) return;
+    if (!token) {
+      return;
+    }
 
     const controller = new AbortController();
 

@@ -29,9 +29,39 @@ public interface IProfileService : ITransientService
         string? userId = null,
         CancellationToken token = default);
 
-    Task<Result> UpdateCount(
+    Task IncrementCreatedBooksCount(
         string userId,
-        string propName,
-        Func<int, int> updateFunc,
-        CancellationToken token = default);
+        CancellationToken cancellationToken = default);
+
+    Task IncrementCreatedAuthorsCount(
+        string userId,
+        CancellationToken cancellationToken = default);
+
+    Task IncrementWrittenReviewsCount(
+        string userId,
+        CancellationToken cancellationToken = default);
+
+    Task IncrementCurrentlyReadingBooksCount(
+        string userId,
+        CancellationToken cancellationToken = default);
+
+    Task IncrementToReadBooksCount(
+        string userId,
+        CancellationToken cancellationToken = default);
+
+    Task IncrementReadBooksCount(
+        string userId,
+        CancellationToken cancellationToken = default);
+
+    Task DecrementCurrentlyReadingBooksCount(
+        string userId,
+        CancellationToken cancellationToken = default);
+
+    Task DecrementToReadBooksCount(
+        string userId,
+        CancellationToken cancellationToken = default);
+
+    Task DecrementReadBooksCount(
+        string userId,
+        CancellationToken cancellationToken = default);
 }

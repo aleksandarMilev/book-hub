@@ -1,7 +1,8 @@
+import { useTranslation } from 'react-i18next';
+
 import { useStatistics } from '@/features/statistics/hooks/useCrud.js';
 import { useCountUp } from '@/shared/hooks/countup/useCountup.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
-import { useTranslation } from 'react-i18next';
 
 export const useStatisticsPage = () => {
   const { t } = useTranslation('home');
