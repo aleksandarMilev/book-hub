@@ -63,6 +63,8 @@ export const useRegister = () => {
         }
 
         const decoded = jwtDecode<DecodedToken>(result.token);
+        console.log(decoded);
+
         const user: User = {
           userId: decoded.nameid,
           username: decoded.unique_name,
