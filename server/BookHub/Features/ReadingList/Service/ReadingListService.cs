@@ -68,15 +68,6 @@ public class ReadingListService(
         var bookId = serviceModel.BookId;
         var readingStatus = serviceModel.Status;
 
-        var isCurrentlyReading = serviceModel.Status == ReadingListStatus.CurrentlyReading;
-        var userHasMoreThanFiveCurrentlyReading = await profileService
-            .HasMoreThanFiveCurrentlyReading(userId, token);
-
-        if (isCurrentlyReading && userHasMoreThanFiveCurrentlyReading)
-        {
-            return MoreThanFiveCurrentlyReading;
-        }
-      
         var exists = await data
            .ReadingLists
            .AnyAsync(

@@ -33,4 +33,6 @@ public class CreateProfileWebModel
     public string? Biography { get; init; }
 
     public bool IsPrivate { get; init; }
+
+    public bool RemoveImage { get; init; }
 }

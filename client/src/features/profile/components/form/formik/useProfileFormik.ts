@@ -8,6 +8,7 @@ import type { CreateProfile, Profile } from '@/features/profile/types/profile.js
 import { routes } from '@/shared/lib/constants/api.js';
 import { IsError } from '@/shared/lib/utils/utils.js';
 import { useMessage } from '@/shared/stores/message/message.js';
+import { useMemo } from 'react';
 
 type Props = { profile?: Profile | null };
 
@@ -25,8 +26,8 @@ export const useProfileFormik = ({ profile = null }: Props) => {
   const editHandler = useEdit();
   const { t } = useTranslation('profiles');
 
-  const formik = useFormik<CreateProfile>({
-    initialValues: {
+  const initialValues = useMemo(
+    () => ({
       firstName: profile?.firstName ?? '',
       lastName: profile?.lastName ?? '',
       dateOfBirth: normalizeDate(profile?.dateOfBirth ?? null),
@@ -34,7 +35,14 @@ export const useProfileFormik = ({ profile = null }: Props) => {
       biography: profile?.biography ?? null,
       isPrivate: profile?.isPrivate ?? false,
       image: null,
-    },
+      removeImage: false,
+    }),
+    [profile],
+  );
+
+  const formik = useFormik<CreateProfile>({
+    initialValues,
+    enableReinitialize: true,
     validationSchema: profileSchema,
     onSubmit: async (values, { resetForm, setSubmitting }) => {
       try {

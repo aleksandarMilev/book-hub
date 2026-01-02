@@ -46,10 +46,11 @@
       "firstName": "First Name *",
       "lastName": "Last Name *",
       "image": "Profile Image",
-      "dateOfBirth": "Date of Birth *",
+      "dateOfBirth": "Date of Birth",
       "socialMediaUrl": "Social Media URL",
       "biography": "Biography",
-      "isPrivate": "Keep my profile private"
+      "isPrivate": "Keep my profile private",
+      "removeImage": "Delete current profile image"
     },
     "placeholders": {
       "biography": "Write a short biography... (Optional)"

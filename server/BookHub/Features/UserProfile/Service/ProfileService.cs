@@ -64,15 +64,6 @@ public class ProfileService(
         return dbModel;
     }
 
-    public async Task<bool> HasMoreThanFiveCurrentlyReading(
-        string userId,
-        CancellationToken token = default)
-        => await data
-            .Profiles
-            .Where(p => p.UserId == userId)
-            .Select(p => p.CurrentlyReadingBooksCount)
-            .FirstOrDefaultAsync(token) >= CurrentlyReadingBooksMaxCount;
-
     public async Task<ProfileServiceModel> Create(
         CreateProfileServiceModel serviceModel,
         string userId,
@@ -99,8 +90,8 @@ public class ProfileService(
     }
 
     public async Task<Result> Edit(
-        CreateProfileServiceModel serviceModel,
-        CancellationToken token = default)
+    CreateProfileServiceModel serviceModel,
+    CancellationToken token = default)
     {
         var userId = userService.GetId()!;
         var dbModel = await this.GetDbModel(userId, token);
@@ -110,32 +101,42 @@ public class ProfileService(
             return this.LogAndReturnNotFoundMessage(userId);
         }
 
-        var isNotCurrentUserProfile = dbModel.UserId != userId;
-        if (isNotCurrentUserProfile)
+        if (dbModel.UserId != userId)
         {
-            return this.LogAndReturnUnauthorizedMessage(
-                userId,
-                dbModel.UserId);
+            return this.LogAndReturnUnauthorizedMessage(userId, dbModel.UserId);
         }
 
         var oldImagePath = dbModel.ImagePath;
         var isNewImageUploaded = serviceModel.Image is not null;
+        var shouldRemoveImage = serviceModel.RemoveImage;
 
         serviceModel.UpdateDbModel(dbModel);
 
-        await imageWriter.Write(
-            ProfilesImagePathPrefix,
-            dbModel,
-            serviceModel,
-            null,
-            token);
-
-        if (isNewImageUploaded)
+        if (shouldRemoveImage)
         {
+            dbModel.ImagePath = DefaultImagePath;
+
             imageWriter.Delete(
                 nameof(UserProfile),
                 oldImagePath,
                 DefaultImagePath);
+        }
+        else
+        {
+            await imageWriter.Write(
+                ProfilesImagePathPrefix,
+                dbModel,
+                serviceModel,
+                null,
+                token);
+
+            if (isNewImageUploaded)
+            {
+                imageWriter.Delete(
+                    nameof(UserProfile),
+                    oldImagePath,
+                    DefaultImagePath);
+            }
         }
 
         await data.SaveChangesAsync(token);

@@ -1,4 +1,4 @@
-﻿# pragma warning disable CS1873
+﻿# pragma warning disable CA1873
 namespace BookHub.Features.Identity.Service;
 
 using System.IdentityModel.Tokens.Jwt;

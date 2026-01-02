@@ -93,6 +93,7 @@ public static class ProfileMapping
             SocialMediaUrl = webModel.SocialMediaUrl,
             Biography = webModel.Biography,
             IsPrivate = webModel.IsPrivate,
+            RemoveImage = webModel.RemoveImage,
             Image = webModel.Image
         };
 }
