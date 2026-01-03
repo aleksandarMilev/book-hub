@@ -99,8 +99,9 @@ const ProfileDetails = () => {
                         </h6>
                         <span className="text-secondary">
                           {full
-                            ? formatIsoDate(full.dateOfBirth) ||
-                              t('details.labels.dateOfBirthFallback')
+                            ? full.dateOfBirth
+                              ? formatIsoDate(full.dateOfBirth)
+                              : t('details.labels.dateOfBirthFallback')
                             : t('details.labels.dateOfBirthFallback')}
                         </span>
                       </li>

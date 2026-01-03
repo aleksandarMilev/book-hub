@@ -2,7 +2,7 @@ import './ProfileForm.css';
 
 import { MDBCard, MDBCardBody, MDBCol, MDBContainer, MDBRow } from 'mdb-react-ui-kit';
 import type React from 'react';
-import type { FC } from 'react';
+import { useRef, type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useProfileFormik } from '@/features/profile/components/form/formik/useProfileFormik.js';
@@ -13,6 +13,8 @@ type Props = { profile?: Profile | null };
 const ProfileForm: FC<Props> = ({ profile = null }) => {
   const formik = useProfileFormik({ profile });
   const { t } = useTranslation('profiles');
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   return (
     <div className="profile-form-container">
@@ -76,16 +78,16 @@ const ProfileForm: FC<Props> = ({ profile = null }) => {
                           <div className="text-danger mb-2">{formik.errors.image as string}</div>
                         )}
                         <input
+                          ref={fileInputRef}
                           id="image"
                           name="image"
                           type="file"
                           disabled={formik.values.removeImage}
                           accept=".jpg,.jpeg,.png,.webp,.avif"
-                          className={`form-control ${
-                            formik.touched.image && formik.errors.image ? 'is-invalid' : ''
-                          }`}
-                          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            const file = event.currentTarget.files?.[0] ?? null;
+                          className={`form-control ${formik.touched.image && formik.errors.image ? 'is-invalid' : ''}`}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            const file = e.currentTarget.files?.[0] ?? null;
+
                             formik.setFieldValue('image', file);
                             formik.setFieldTouched('image', true, false);
 
@@ -113,6 +115,10 @@ const ProfileForm: FC<Props> = ({ profile = null }) => {
                                 if (checked) {
                                   formik.setFieldValue('image', null);
                                   formik.setFieldTouched('image', false, false);
+
+                                  if (fileInputRef.current) {
+                                    fileInputRef.current.value = '';
+                                  }
                                 }
                               }}
                               onBlur={formik.handleBlur}

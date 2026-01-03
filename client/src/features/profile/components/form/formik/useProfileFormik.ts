@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { profileSchema } from '@/features/profile/components/form/validation/profileSchema.js';
+import { createProfileSchema } from '@/features/profile/components/form/validation/profileSchema.js';
 import { useEdit } from '@/features/profile/hooks/useCrud.js';
 import type { CreateProfile, Profile } from '@/features/profile/types/profile.js';
 import { routes } from '@/shared/lib/constants/api.js';
@@ -43,7 +43,7 @@ export const useProfileFormik = ({ profile = null }: Props) => {
   const formik = useFormik<CreateProfile>({
     initialValues,
     enableReinitialize: true,
-    validationSchema: profileSchema,
+    validationSchema: createProfileSchema(t),
     onSubmit: async (values, { resetForm, setSubmitting }) => {
       try {
         await editHandler(values);
