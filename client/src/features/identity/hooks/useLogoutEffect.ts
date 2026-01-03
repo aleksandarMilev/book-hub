@@ -1,9 +1,10 @@
-import { routes } from '@/shared/lib/constants/api.js';
-import { useAuth } from '@/shared/stores/auth/auth.js';
-import { useMessage } from '@/shared/stores/message/message.js';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+
+import { routes } from '@/shared/lib/constants/api.js';
+import { useAuth } from '@/shared/stores/auth/auth.js';
+import { useMessage } from '@/shared/stores/message/message.js';
 
 export const useLogoutEffect = () => {
   const { logout, username } = useAuth();

@@ -1,4 +1,5 @@
 import { useFormik } from 'formik';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -8,7 +9,6 @@ import type { CreateProfile, Profile } from '@/features/profile/types/profile.js
 import { routes } from '@/shared/lib/constants/api.js';
 import { IsError } from '@/shared/lib/utils/utils.js';
 import { useMessage } from '@/shared/stores/message/message.js';
-import { useMemo } from 'react';
 
 type Props = { profile?: Profile | null };
 
