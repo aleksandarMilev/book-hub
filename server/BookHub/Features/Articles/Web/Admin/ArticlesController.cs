@@ -16,16 +16,18 @@ public class ArticlesController(IArticleService service) : AdminApiController
     [HttpGet(Id)]
     public async Task<ActionResult<ArticleDetailsServiceModel>> DetailsForEdit(
         Guid id,
-        CancellationToken token = default)
-        => this.Ok(await service.Details(id, true, token));
+        CancellationToken cancellationToken = default)
+        => this.Ok(await service.Details(id, true, cancellationToken));
 
     [HttpPost]
     public async Task<ActionResult<ArticleDetailsServiceModel>> Create(
         CreateArticleWebModel webModel,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var serviceModel = webModel.ToServiceModel();
-        var createdArticle = await service.Create(serviceModel, token);
+        var createdArticle = await service.Create(
+            serviceModel,
+            cancellationToken);
 
         return this.CreatedAtRoute(
             routeName: DetailsRouteName,
@@ -37,13 +39,13 @@ public class ArticlesController(IArticleService service) : AdminApiController
     public async Task<ActionResult> Edit(
         Guid id,
         CreateArticleWebModel webModel,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var serviceModel = webModel.ToServiceModel();
         var result = await service.Edit(
             id,
             serviceModel,
-            token);
+            cancellationToken);
 
         return this.NoContentOrBadRequest(result);
     }
@@ -51,9 +53,11 @@ public class ArticlesController(IArticleService service) : AdminApiController
     [HttpDelete(Id)]
     public async Task<ActionResult> Delete(
         Guid id,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
-        var result = await service.Delete(id, token);
+        var result = await service.Delete(
+            id,
+            cancellationToken);
 
         return this.NoContentOrBadRequest(result);
     }

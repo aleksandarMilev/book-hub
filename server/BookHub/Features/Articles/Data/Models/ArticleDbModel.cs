@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 using static Shared.Constants.Validation;
 
-public class ArticleDbModel:
+public class ArticleDbModel :
     DeletableEntity<Guid>,
     IImageDdModel
 {

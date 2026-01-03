@@ -12,10 +12,9 @@ using static Shared.Constants.RouteNames;
 public class ArticlesController(IArticleService service) : ApiController
 {
     [AllowAnonymous]
-    // We should provide name here so we can construct the location header easier in the admin controller
     [HttpGet(Id, Name = DetailsRouteName)]
     public async Task<ActionResult<ArticleDetailsServiceModel>> Details(
         Guid id,
-        CancellationToken token = default)
-        => this.Ok(await service.Details(id, false, token));
+        CancellationToken cancellationToken = default)
+        => this.Ok(await service.Details(id, false, cancellationToken));
 }
