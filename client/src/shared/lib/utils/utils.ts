@@ -13,7 +13,7 @@ export const slugify = (value: string): string =>
 
 export const getImageUrl = (imagePath: string, resource: string) => {
   if (!imagePath) {
-    return `${baseUrl}/images/${resource}/default.avif`;
+    return `${baseUrl}/images/${resource}/default.jpg`;
   }
 
   if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {

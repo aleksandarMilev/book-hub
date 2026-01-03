@@ -16,6 +16,10 @@ public interface IReadingListService : ITransientService
        int pageSize,
        CancellationToken token);
 
+    Task<BookServiceModel?> LastCurrentlyReading(
+        string userId,
+        CancellationToken token);
+
     Task<Result> Add(
         ReadingListServiceModel model,
         CancellationToken token);

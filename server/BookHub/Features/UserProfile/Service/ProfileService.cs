@@ -94,8 +94,8 @@ public class ProfileService(
     }
 
     public async Task<Result> Edit(
-    CreateProfileServiceModel serviceModel,
-    CancellationToken cancellationToken = default)
+        CreateProfileServiceModel serviceModel,
+        CancellationToken cancellationToken = default)
     {
         var userId = userService.GetId()!;
         var dbModel = await this.GetDbModel(
@@ -113,16 +113,19 @@ public class ProfileService(
         }
 
         var oldImagePath = dbModel.ImagePath;
-        var isNewImageUploaded = serviceModel.Image is not null;
-        var shouldRemoveImage = serviceModel.RemoveImage;
 
         serviceModel.UpdateDbModel(dbModel);
 
-        string? pathToDeleteAfterSave = null;
-        if (shouldRemoveImage)
+        var willDeleteOld =
+            !string.IsNullOrWhiteSpace(oldImagePath) &&
+            !string.Equals(
+                oldImagePath,
+                DefaultImagePath,
+                StringComparison.OrdinalIgnoreCase);
+
+        if (serviceModel.RemoveImage)
         {
             dbModel.ImagePath = DefaultImagePath;
-            pathToDeleteAfterSave = oldImagePath;
         }
         else
         {
@@ -130,41 +133,48 @@ public class ProfileService(
                 ProfilesImagePathPrefix,
                 dbModel,
                 serviceModel,
-                null,
-                cancellationToken);
+                defaultImagePath: null,
+                token: cancellationToken);
 
-            if (isNewImageUploaded)
-            {
-                pathToDeleteAfterSave = oldImagePath;
-            }
+            willDeleteOld &= serviceModel.Image is not null;
         }
 
         await data.SaveChangesAsync(cancellationToken);
-        if (!string.IsNullOrWhiteSpace(pathToDeleteAfterSave))
+
+        var shouldDeleteOldImage = 
+            willDeleteOld &&
+            !string.Equals(
+                oldImagePath,
+                dbModel.ImagePath,
+                StringComparison.OrdinalIgnoreCase);
+
+        if (shouldDeleteOldImage)
         {
-            try
-            {
-                imageWriter.Delete(
-                    ProfilesImagePathPrefix,
-                    pathToDeleteAfterSave,
-                    DefaultImagePath);
-            }
-            catch (Exception exception)
+            var deleted = imageWriter.Delete(
+                ProfilesImagePathPrefix,
+                oldImagePath,
+                DefaultImagePath);
+
+            if (!deleted)
             {
                 logger.LogWarning(
-                    exception,
-                    "Profile image delete failed for user {UserId}. Path: {Path}",
+                    "Profile updated but old image was not deleted. UserId={UserId}, OldImagePath={OldImagePath}, NewImagePath={NewImagePath}",
                     userId,
-                    pathToDeleteAfterSave);
+                    oldImagePath,
+                    dbModel.ImagePath);
             }
         }
 
         logger.LogInformation(
-            "Profile for user with id {UserId} was updated.",
-            userId);
+            "Profile updated. UserId={UserId}, RemoveImage={RemoveImage}, NewImageUploaded={NewImageUploaded}, ImagePath={ImagePath}",
+            userId,
+            serviceModel.RemoveImage,
+            serviceModel.Image is not null,
+            dbModel.ImagePath);
 
         return true;
     }
+
 
     public async Task<Result> Delete(
         string? userToDeleteId = null,
@@ -192,65 +202,43 @@ public class ProfileService(
 
         var imagePathToDelete = dbModel.ImagePath;
 
-        await using var transaction = await data.Database.BeginTransactionAsync(cancellationToken);
-
-        try
+        var user = await userManager.FindByIdAsync(dbModel.UserId);
+        if (user is not null)
         {
-            data.Remove(dbModel);
-            await data.SaveChangesAsync(cancellationToken);
-
-            var user = await userManager.FindByIdAsync(dbModel.UserId);
-            if (user is not null)
+            var identityResult = await userManager.DeleteAsync(user);
+            if (!identityResult.Succeeded)
             {
-                var identityResult = await userManager.DeleteAsync(user);
-                if (!identityResult.Succeeded)
-                {
-                    await transaction.RollbackAsync(cancellationToken);
-                    return string.Join("; ", identityResult.Errors.Select(e => e.Description));
-                }
+                return string.Join(
+                    "; ",
+                    identityResult.Errors.Select(e => e.Description));
             }
 
-            await transaction.CommitAsync(cancellationToken);
-
-            try
-            {
-                imageWriter.Delete(
-                    ProfilesImagePathPrefix,
-                    imagePathToDelete,
-                    DefaultImagePath);
-            }
-            catch (Exception exception)
-            {
-                logger.LogWarning(
-                    exception,
-                    "Profile image delete failed for user {UserId}. Path: {Path}",
-                    userToDeleteId,
-                    imagePathToDelete);
-            }
-
-            logger.LogInformation(
-                "Profile with id: {UserId} was deleted.",
-                userToDeleteId);
+            imageWriter.Delete(
+                ProfilesImagePathPrefix,
+                imagePathToDelete,
+                DefaultImagePath);
 
             return true;
         }
-        catch (Exception exception)
-        {
-            await transaction.RollbackAsync(cancellationToken);
 
-            logger.LogError(
-                exception,
-                "Error deleting profile/user for {UserId}",
-                userToDeleteId);
-
-            return "Delete failed.";
-        }
+        return false;
     }
 
-    public async Task IncrementCreatedBooksCount(
+    public async Task<Result> IncrementCreatedBooksCount(
         string userId,
         CancellationToken cancellationToken = default)
-        => await data
+    {
+        var currentUserId = userService.GetId()!;
+        var isNotCurrentUser = currentUserId != userId;
+
+        if (isNotCurrentUser)
+        {
+            return LogAndReturnUnauthorizedMessage(
+                currentUserId,
+                userId);
+        }
+
+        var rowsAffected = await data
             .Profiles
             .Where(p => p.UserId == userId)
             .ExecuteUpdateAsync(
@@ -259,10 +247,24 @@ public class ProfileService(
                     profile => profile.CreatedBooksCount + 1),
                 cancellationToken);
 
-    public async Task IncrementCreatedAuthorsCount(
+        return rowsAffected > 0;
+    }
+
+    public async Task<Result> IncrementCreatedAuthorsCount(
         string userId,
         CancellationToken cancellationToken = default)
-        => await data
+    {
+        var currentUserId = userService.GetId()!;
+        var isNotCurrentUser = currentUserId != userId;
+
+        if (isNotCurrentUser)
+        {
+            return LogAndReturnUnauthorizedMessage(
+                currentUserId,
+                userId);
+        }
+
+        var rowsAffected = await data
             .Profiles
             .Where(p => p.UserId == userId)
             .ExecuteUpdateAsync(
@@ -271,10 +273,24 @@ public class ProfileService(
                     profile => profile.CreatedAuthorsCount + 1),
                 cancellationToken);
 
-    public async Task IncrementWrittenReviewsCount(
+        return rowsAffected > 0;
+    }
+
+    public async Task<Result> IncrementWrittenReviewsCount(
         string userId,
         CancellationToken cancellationToken = default)
-        => await data
+    {
+        var currentUserId = userService.GetId()!;
+        var isNotCurrentUser = currentUserId != userId;
+
+        if (isNotCurrentUser)
+        {
+            return LogAndReturnUnauthorizedMessage(
+                currentUserId,
+                userId);
+        }
+
+        var rowsAffected = await data
             .Profiles
             .Where(p => p.UserId == userId)
             .ExecuteUpdateAsync(
@@ -283,10 +299,24 @@ public class ProfileService(
                     profile => profile.ReviewsCount + 1),
                 cancellationToken);
 
-    public async Task IncrementCurrentlyReadingBooksCount(
+        return rowsAffected > 0;
+    }
+
+    public async Task<Result> IncrementCurrentlyReadingBooksCount(
         string userId,
         CancellationToken cancellationToken = default)
-        => await data
+    {
+        var currentUserId = userService.GetId()!;
+        var isNotCurrentUser = currentUserId != userId;
+
+        if (isNotCurrentUser)
+        {
+            return LogAndReturnUnauthorizedMessage(
+                currentUserId,
+                userId);
+        }
+
+        var rowsAffected = await data
             .Profiles
             .Where(p => p.UserId == userId)
             .ExecuteUpdateAsync(
@@ -295,10 +325,24 @@ public class ProfileService(
                     profile => profile.CurrentlyReadingBooksCount + 1),
                 cancellationToken);
 
-    public async Task IncrementToReadBooksCount(
+        return rowsAffected > 0;
+    }
+
+    public async Task<Result> IncrementToReadBooksCount(
         string userId,
         CancellationToken cancellationToken = default)
-        => await data
+    {
+        var currentUserId = userService.GetId()!;
+        var isNotCurrentUser = currentUserId != userId;
+
+        if (isNotCurrentUser)
+        {
+            return LogAndReturnUnauthorizedMessage(
+                currentUserId,
+                userId);
+        }
+
+        var rowsAffected = await data
             .Profiles
             .Where(p => p.UserId == userId)
             .ExecuteUpdateAsync(
@@ -307,10 +351,24 @@ public class ProfileService(
                     profile => profile.ToReadBooksCount + 1),
                 cancellationToken);
 
-    public async Task IncrementReadBooksCount(
+        return rowsAffected > 0;
+    }
+
+    public async Task<Result> IncrementReadBooksCount(
         string userId,
         CancellationToken cancellationToken = default)
-        => await data
+    {
+        var currentUserId = userService.GetId()!;
+        var isNotCurrentUser = currentUserId != userId;
+
+        if (isNotCurrentUser)
+        {
+            return LogAndReturnUnauthorizedMessage(
+                currentUserId,
+                userId);
+        }
+
+        var rowsAffected = await data
             .Profiles
             .Where(p => p.UserId == userId)
             .ExecuteUpdateAsync(
@@ -319,10 +377,24 @@ public class ProfileService(
                     profile => profile.ReadBooksCount + 1),
                 cancellationToken);
 
-    public async Task DecrementCurrentlyReadingBooksCount(
-        string userId,
-        CancellationToken cancellationToken = default)
-        => await data
+        return rowsAffected > 0;
+    }
+
+    public async Task<Result> DecrementCurrentlyReadingBooksCount(
+    string userId,
+    CancellationToken cancellationToken = default)
+    {
+        var currentUserId = userService.GetId()!;
+        var isNotCurrentUser = currentUserId != userId;
+
+        if (isNotCurrentUser)
+        {
+            return LogAndReturnUnauthorizedMessage(
+                currentUserId,
+                userId);
+        }
+
+        var rowsAffected = await data
             .Profiles
             .Where(p => p.UserId == userId)
             .ExecuteUpdateAsync(
@@ -331,10 +403,24 @@ public class ProfileService(
                     profile => profile.CurrentlyReadingBooksCount - 1),
                 cancellationToken);
 
-    public async Task DecrementToReadBooksCount(
+        return rowsAffected > 0;
+    }
+
+    public async Task<Result> DecrementToReadBooksCount(
         string userId,
         CancellationToken cancellationToken = default)
-         => await data
+    {
+        var currentUserId = userService.GetId()!;
+        var isNotCurrentUser = currentUserId != userId;
+
+        if (isNotCurrentUser)
+        {
+            return LogAndReturnUnauthorizedMessage(
+                currentUserId,
+                userId);
+        }
+
+        var rowsAffected = await data
             .Profiles
             .Where(p => p.UserId == userId)
             .ExecuteUpdateAsync(
@@ -343,10 +429,24 @@ public class ProfileService(
                     profile => profile.ToReadBooksCount - 1),
                 cancellationToken);
 
-    public async Task DecrementReadBooksCount(
+        return rowsAffected > 0;
+    }
+
+    public async Task<Result> DecrementReadBooksCount(
         string userId,
         CancellationToken cancellationToken = default)
-         => await data
+    {
+        var currentUserId = userService.GetId()!;
+        var isNotCurrentUser = currentUserId != userId;
+
+        if (isNotCurrentUser)
+        {
+            return LogAndReturnUnauthorizedMessage(
+                currentUserId,
+                userId);
+        }
+
+        var rowsAffected = await data
             .Profiles
             .Where(p => p.UserId == userId)
             .ExecuteUpdateAsync(
@@ -354,6 +454,9 @@ public class ProfileService(
                     profile => profile.ReadBooksCount,
                     profile => profile.ReadBooksCount - 1),
                 cancellationToken);
+
+        return rowsAffected > 0;
+    }
 
     private async Task<UserProfile?> GetDbModel(
         string id,
@@ -377,18 +480,18 @@ public class ProfileService(
 
     private string LogAndReturnUnauthorizedMessage(
         string currentUserId,
-        string userToDeleteId)
+        string resourceUserId)
     {
         logger.LogWarning(
             UnauthorizedMessageTemplate,
             currentUserId,
             nameof(UserProfile),
-            userToDeleteId);
+            resourceUserId);
 
         return string.Format(
             UnauthorizedMessage,
             currentUserId,
             nameof(UserProfile),
-            userToDeleteId);
+            resourceUserId);
     }
 }

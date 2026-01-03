@@ -35,6 +35,8 @@ export const errors = {
       'reading list item',
       'Something went wrong while loading your reading list. Please refresh the page or try again later!',
     ),
+    lastCurrentlyReading:
+      "Sorry, we couldn't load your last currently reading book. Please try again later.",
     add: 'Something went wrong while adding this book to your reading list.',
     remove: 'Something went wrong while removing this book from your reading list.',
   },

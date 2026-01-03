@@ -1,3 +1,5 @@
+# pragma warning disable CA1873
+
 using BookHub.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,11 +19,6 @@ builder.Services
     .AddServices()
     .AddSwagger()
     .AddHealthcheck();
-
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-}
 
 var app = builder.Build();
 

@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useChatsNotJoined } from '@/features/chat/hooks/useCrud.js';
 import * as api from '@/features/profile/api/api.js';
 import type { CreateProfile, PrivateProfile, Profile } from '@/features/profile/types/profile.js';
-import { useList } from '@/features/reading-list/hooks/useCrud.js';
+import { useLastCurrentlyReading } from '@/features/reading-list/hooks/useCrud.js';
 import { routes } from '@/shared/lib/constants/api.js';
 import { IsCanceledError, IsError } from '@/shared/lib/utils/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
@@ -70,10 +70,7 @@ export const useDetails = () => {
     refetch: refetchChats,
   } = useChatsNotJoined(otherId ?? undefined);
 
-  const { readingList, isFetching: readingLoading } = useList(
-    'currently reading',
-    null,
-    null,
+  const { book, isFetching: readingLoading } = useLastCurrentlyReading(
     profile?.isPrivate,
     profile?.id,
   );
@@ -89,6 +86,11 @@ export const useDetails = () => {
       },
     }),
     [otherId, profile?.id, profile?.firstName],
+  );
+
+  const onNavigateCurrentlyReading = useCallback(
+    () => navigate(routes.readingList, getNavigateState('currentlyReading')),
+    [navigate, getNavigateState],
   );
 
   const onNavigateToRead = useCallback(
@@ -109,7 +111,7 @@ export const useDetails = () => {
       profile,
       canSeePrivate,
       profileLoading,
-      readingList,
+      book,
       readingLoading,
       showModal,
       toggleModal,
@@ -118,6 +120,7 @@ export const useDetails = () => {
       chatLoading,
       chatError,
       refetchChats,
+      onNavigateCurrentlyReading,
       onNavigateRead,
       onNavigateToRead,
     }),
@@ -128,7 +131,7 @@ export const useDetails = () => {
       profile,
       canSeePrivate,
       profileLoading,
-      readingList,
+      book,
       readingLoading,
       showModal,
       toggleModal,
@@ -137,6 +140,7 @@ export const useDetails = () => {
       chatLoading,
       chatError,
       refetchChats,
+      onNavigateCurrentlyReading,
       onNavigateRead,
       onNavigateToRead,
     ],

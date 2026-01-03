@@ -5,14 +5,34 @@ import { routes } from '@/shared/lib/constants/api.js';
 import { errors } from '@/shared/lib/constants/errorMessages.js';
 import type { PaginatedResult } from '@/shared/types/paginatedResult.js';
 
-export async function get(
+export const getLastCurrentlyReading = async (
+  userId: string,
+  token: string,
+  signal?: AbortSignal,
+) => {
+  try {
+    const params: Record<string, string | number> = { userId };
+    const url = `${routes.lastCurrentlyReading}`;
+
+    const { data } = await http.get<Book>(url, {
+      ...getAuthConfig(token, signal),
+      params,
+    });
+
+    return data;
+  } catch (error) {
+    processError(error, errors.readingList.lastCurrentlyReading);
+  }
+};
+
+export const getList = async (
   userId: string,
   token: string,
   status: ReadingStatusAPI,
   pageIndex?: number | null,
   pageSize?: number | null,
   signal?: AbortSignal,
-) {
+) => {
   try {
     const params: Record<string, string | number> = { userId, status };
     if (pageIndex != null) {
@@ -33,14 +53,14 @@ export async function get(
   } catch (error) {
     processError(error, errors.readingList.all);
   }
-}
+};
 
-export async function add(
+export const add = async (
   bookId: string,
   status: ReadingStatusAPI,
   token: string,
   signal?: AbortSignal,
-) {
+) => {
   try {
     const url = `${routes.readingList}`;
     await http.post(url, { bookId, status }, getAuthConfig(token, signal));
@@ -49,14 +69,14 @@ export async function add(
   } catch (error) {
     processError(error, errors.readingList.add);
   }
-}
+};
 
-export async function remove(
+export const remove = async (
   bookId: string,
   status: ReadingStatusAPI,
   token: string,
   signal?: AbortSignal,
-) {
+) => {
   try {
     const url = `${routes.readingList}`;
     await http.delete(url, { ...getAuthConfig(token, signal), data: { bookId, status } });
@@ -65,4 +85,4 @@ export async function remove(
   } catch (error) {
     processError(error, errors.readingList.remove);
   }
-}
+};

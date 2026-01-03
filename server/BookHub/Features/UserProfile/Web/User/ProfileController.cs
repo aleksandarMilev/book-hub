@@ -2,7 +2,6 @@
 
 using BookHub.Common;
 using Infrastructure.Extensions;
-using Infrastructure.Services.CurrentUser;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
@@ -11,19 +10,13 @@ using Service.Models;
 using Shared;
 
 [Authorize]
-public class ProfileController(
-    IProfileService service,
-    ICurrentUserService users) : ApiController
+public class ProfileController(IProfileService service) : ApiController
 {
     [AllowAnonymous]
     [HttpGet(ApiRoutes.Top)]
     public async Task<ActionResult<IEnumerable<ProfileServiceModel>>> TopThree(
         CancellationToken token = default)
         => this.Ok(await service.TopThree(token));
-
-    [HttpGet("/cid")]
-    public ActionResult<string> Id()
-        => this.Ok(users.GetId());
 
     [HttpGet(ApiRoutes.Mine, Name = nameof(this.Mine))]
     public async Task<ActionResult<ProfileServiceModel>> Mine(

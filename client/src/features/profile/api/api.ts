@@ -19,10 +19,10 @@ export const topThree = async (signal?: AbortSignal) => {
 export const mine = async (token: string, signal?: AbortSignal) => {
   try {
     const url = `${routes.mineProfile}`;
-    const r = await http.get<Profile>(url, getAuthConfig(token, signal));
-    console.log(r);
-    return r.data;
-  } catch (error: unknown) {
+    const { data } = await http.get<Profile>(url, getAuthConfig(token, signal));
+
+    return data;
+  } catch (error) {
     if (isNotFoundError(error)) {
       return null;
     }
