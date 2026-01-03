@@ -9,9 +9,9 @@ public static class Constants
 
     public static class Paths
     {
-        public const string DefaultImagePath = "/images/articles/default.jpg";
+        public const string DefaultImagePath = $"/images/{ImagePathPrefix}/default.jpg";
 
-        public const string ArticlesImagePathPrefix = "articles";
+        public const string ImagePathPrefix = "articles";
     }
 
     public static class Validation

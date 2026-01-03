@@ -20,7 +20,7 @@ public class ArticleService(
     public async Task<ArticleDetailsServiceModel?> Details(
         Guid id,
         bool isEditMode = false,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         if (!isEditMode)
         {
@@ -28,9 +28,9 @@ public class ArticleService(
                 .Articles
                 .Where(a => a.Id == id)
                 .ExecuteUpdateAsync(
-                    s => s.SetProperty
+                    setters => setters.SetProperty
                         (a => a.Views, a => a.Views + 1),
-                    token);
+                    cancellationToken);
 
             if (rowsAffected == 0)
             {
@@ -41,24 +41,26 @@ public class ArticleService(
         return await data
             .Articles
             .ToServiceDetailsModels()
-            .FirstOrDefaultAsync(a => a.Id == id, token);
+            .FirstOrDefaultAsync(
+                a => a.Id == id,
+                cancellationToken);
     }
 
     public async Task<ArticleDetailsServiceModel> Create(
         CreateArticleServiceModel serviceModel,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var dbModel = serviceModel.ToDbModel();
 
         await imageWriter.Write(
-           ArticlesImagePathPrefix,
+           ImagePathPrefix,
            dbModel,
            serviceModel,
            DefaultImagePath,
-           token);
+           cancellationToken);
 
         data.Add(dbModel);
-        await data.SaveChangesAsync(token);
+        await data.SaveChangesAsync(cancellationToken);
 
         logger.LogInformation(
             "New article with Id: {id} was created.",
@@ -70,9 +72,12 @@ public class ArticleService(
     public async Task<Result> Edit(
         Guid id,
         CreateArticleServiceModel serviceModel,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
-        var dbModel = await this.GetDbModel(id, token);
+        var dbModel = await this.GetDbModel(
+            id,
+            cancellationToken);
+
         if (dbModel is null)
         {
             return LogAndReturnNotFoundMessage(id);
@@ -84,21 +89,28 @@ public class ArticleService(
         serviceModel.UpdateDbModel(dbModel);
 
         await imageWriter.Write(
-            ArticlesImagePathPrefix,
+            ImagePathPrefix,
             dbModel,
             serviceModel,
             null,
-            token);
+            cancellationToken);
 
-        if (isNewImageUploaded)
+        await data.SaveChangesAsync(cancellationToken);
+
+        var shouldDeleteOldImage =
+            isNewImageUploaded &&
+            !string.Equals(
+                oldImagePath,
+                dbModel.ImagePath,
+                StringComparison.OrdinalIgnoreCase);
+
+        if (shouldDeleteOldImage)
         {
             imageWriter.Delete(
-                nameof(ArticleDbModel),
+                ImagePathPrefix,
                 oldImagePath,
                 DefaultImagePath);
         }
-
-        await data.SaveChangesAsync(token);
 
         logger.LogInformation(
             "Article with Id: {id} was updated.",
@@ -107,19 +119,21 @@ public class ArticleService(
         return true;
     }
 
-
     public async Task<Result> Delete(
         Guid id,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
-        var dbModel = await this.GetDbModel(id, token);
+        var dbModel = await this.GetDbModel(
+            id,
+            cancellationToken);
+
         if (dbModel is null)
         {
             return LogAndReturnNotFoundMessage(id);
         }
 
         data.Remove(dbModel);
-        await data.SaveChangesAsync(token);
+        await data.SaveChangesAsync(cancellationToken);
 
         logger.LogInformation(
             "Article with Id: {id} was deleted.",
@@ -130,10 +144,10 @@ public class ArticleService(
 
     private async Task<ArticleDbModel?> GetDbModel(
         Guid id,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
         => await data
             .Articles
-            .FindAsync([id], token);
+            .FindAsync([id], cancellationToken);
 
     private string LogAndReturnNotFoundMessage(Guid id)
     {

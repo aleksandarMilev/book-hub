@@ -1,6 +1,9 @@
 services:
   sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    build:
+      context: .
+      dockerfile: sqlserver/Dockerfile
+    image: bookhub-sqlserver-fts:2022
     container_name: sqlserver-dev
     restart: always
     environment:
@@ -8,10 +11,10 @@ services:
       MSSQL_SA_PASSWORD: ${SA_PASSWORD}
     ports:
       - "1433:1433"
-    networks:
-      - backend
     volumes:
       - sql_data_dev:/var/opt/mssql
+    networks:
+      - backend
 
   server:
     build:

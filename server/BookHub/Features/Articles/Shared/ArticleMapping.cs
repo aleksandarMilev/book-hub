@@ -4,7 +4,7 @@ using Data.Models;
 using Service.Models;
 using Web.Models;
 
-public static class Mapping
+public static class ArticleMapping
 {
     public static CreateArticleServiceModel ToServiceModel(
         this CreateArticleWebModel webModel)
