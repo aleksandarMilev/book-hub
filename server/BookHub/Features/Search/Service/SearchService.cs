@@ -15,43 +15,57 @@ public class SearchService(
 {
     public async Task<PaginatedModel<SearchGenreServiceModel>> Genres(
         string? searchTerm,
-        int page,
+        int pageIndex,
         int pageSize,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
+        ClampPageSizeAndIndex(
+            ref pageIndex,
+            ref pageSize);
+
         var genres = data
             .Genres
+            .AsNoTracking()
             .ToSearchSeviceModels();
 
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
             genres = genres
-                .Where(g => g.Name.ToLower().Contains(searchTerm.ToLower()));
+                .Where(g => g.
+                    Name
+                    .ToLower()
+                    .Contains(searchTerm.ToLower()));
         }
 
-        genres = genres.OrderByDescending(b => b.Name);
+        genres = genres
+            .OrderByDescending(b => b.Name);
 
-        var totalGenres = await genres.CountAsync(token);
-        var paginatedGenres = await genres
-            .Skip((page - 1) * pageSize)
+        var total = await genres.CountAsync(cancellationToken);
+        var items = await genres
+            .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
-            .ToListAsync(token);
+            .ToListAsync(cancellationToken);
 
         return new PaginatedModel<SearchGenreServiceModel>(
-            paginatedGenres,
-            totalGenres,
-            page,
+            items,
+            total,
+            pageIndex,
             pageSize);
     }
 
     public async Task<PaginatedModel<SearchBookServiceModel>> Books(
         string? searchTerm,
-        int page,
+        int pageIndex,
         int pageSize,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
+        ClampPageSizeAndIndex(
+            ref pageIndex,
+            ref pageSize);
+
         var books = data
             .Books
+            .AsNoTracking()
             .ToSearchSeviceModels();
 
         if (!string.IsNullOrWhiteSpace(searchTerm))
@@ -63,18 +77,19 @@ public class SearchService(
             );
         }
 
-        books = books.OrderByDescending(b => b.AverageRating);
+        books = books
+            .OrderByDescending(b => b.AverageRating);
 
-        var totalBooks = await books.CountAsync(token);
-        var paginatedBooks = await books
-            .Skip((page - 1) * pageSize)
+        var total = await books.CountAsync(cancellationToken);
+        var items = await books
+            .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
-            .ToListAsync(token);
+            .ToListAsync(cancellationToken);
 
         return new PaginatedModel<SearchBookServiceModel>(
-            paginatedBooks,
-            totalBooks,
-            page,
+            items,
+            total,
+            pageIndex,
             pageSize);
     }
 
@@ -84,8 +99,13 @@ public class SearchService(
         int pageSize,
         CancellationToken cancellationToken = default)
     {
+        ClampPageSizeAndIndex(
+            ref pageIndex,
+            ref pageSize);
+
         var articles = data
             .Articles
+            .AsNoTracking()
             .ToSearchSeviceModels();
 
         if (!string.IsNullOrWhiteSpace(searchTerm))
@@ -115,34 +135,41 @@ public class SearchService(
 
     public async Task<PaginatedModel<SearchAuthorServiceModel>> Authors(
         string? searchTerm,
-        int page,
+        int pageIndex,
         int pageSize,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
+        ClampPageSizeAndIndex(
+            ref pageIndex,
+            ref pageSize);
+
         var authors = data
             .Authors
+            .AsNoTracking()
             .ToSearchSeviceModels();
 
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
-            authors = authors.Where(a =>
-                a.Name.ToLower().Contains(searchTerm.ToLower()) ||
-               (a.PenName != null && a.PenName.ToLower().Contains(searchTerm.ToLower()))
+            authors = authors
+                .Where(a =>
+                    a.Name.ToLower().Contains(searchTerm.ToLower()) ||
+                    (a.PenName != null && a.PenName.ToLower().Contains(searchTerm.ToLower()))
             );
         }
 
-        authors = authors.OrderByDescending(b => b.AverageRating);
+        authors = authors
+            .OrderByDescending(b => b.AverageRating);
 
-        var total = await authors.CountAsync(token);
-        var paginatedAuthors = await authors
-            .Skip((page - 1) * pageSize)
+        var total = await authors.CountAsync(cancellationToken);
+        var items = await authors
+            .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
-            .ToListAsync(token);
+            .ToListAsync(cancellationToken);
 
         return new PaginatedModel<SearchAuthorServiceModel>(
-            paginatedAuthors,
+            items,
             total,
-            page,
+            pageIndex,
             pageSize);
     }
 
@@ -190,38 +217,48 @@ public class SearchService(
 
     public async Task<PaginatedModel<SearchChatServiceModel>> Chats(
         string? searchTerm,
-        int page,
+        int pageIndex,
         int pageSize,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
+        ClampPageSizeAndIndex(
+            ref pageIndex,
+            ref pageSize);
+
         var chats = data
              .Chats
-             .AsQueryable();
+             .AsNoTracking();
 
         if (userService.IsAdmin())
         {
-            chats = chats.Where(c => c.ChatsUsers.Any(cu =>
-                cu.UserId == userService.GetId() &&
-                cu.HasAccepted
-             ));
+            chats = chats
+                .Where(c => c
+                    .ChatsUsers
+                    .Any(cu =>
+                        cu.UserId == userService.GetId() &&
+                        cu.HasAccepted));
         }
 
         var chatModels = chats.ToSearchSeviceModels();
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
-            chatModels = chatModels.Where(c => c.Name.ToLower().Contains(searchTerm.ToLower()));
+            chatModels = chatModels
+                .Where(c => c
+                    .Name
+                    .ToLower()
+                    .Contains(searchTerm.ToLower()));
         }
 
-        var total = await chatModels.CountAsync(token);
-        var paginatedChats = await chatModels
-            .Skip((page - 1) * pageSize)
+        var total = await chatModels.CountAsync(cancellationToken);
+        var items = await chatModels
+            .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
-            .ToListAsync(token);
+            .ToListAsync(cancellationToken);
 
         return new PaginatedModel<SearchChatServiceModel>(
-            paginatedChats,
+            items,
             total,
-            page,
+            pageIndex,
             pageSize);
     }
 
