@@ -6,8 +6,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 [DbContext(typeof(BookHubDbContext))]
-[Migration("20260103132926_Init")]
-partial class Init
+[Migration("20260103190227_FullTextSearch")]
+partial class FullTextSearch
 {
     /// <inheritdoc />
     protected override void BuildTargetModel(ModelBuilder modelBuilder)

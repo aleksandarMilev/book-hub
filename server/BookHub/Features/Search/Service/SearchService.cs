@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Models;
 using Shared;
 
+using static Common.Constants.DefaultValues;
+
 public class SearchService(
     BookHubDbContext data,
     ICurrentUserService userService) : ISearchService
@@ -78,9 +80,9 @@ public class SearchService(
 
     public async Task<PaginatedModel<SearchArticleServiceModel>> Articles(
         string? searchTerm,
-        int page,
+        int pageIndex,
         int pageSize,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var articles = data
             .Articles
@@ -98,16 +100,16 @@ public class SearchService(
             .OrderByDescending(a => a.Views)
             .ThenByDescending(b => b.CreatedOn);
 
-        var totalArticles = await articles.CountAsync(token);
-        var paginatedArticles = await articles
-            .Skip((page - 1) * pageSize)
+        var total = await articles.CountAsync(cancellationToken);
+        var items = await articles
+            .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
-            .ToListAsync(token);
+            .ToListAsync(cancellationToken);
 
         return new PaginatedModel<SearchArticleServiceModel>(
-            paginatedArticles,
-            totalArticles,
-            page,
+            items,
+            total,
+            pageIndex,
             pageSize);
     }
 
@@ -146,33 +148,43 @@ public class SearchService(
 
     public async Task<PaginatedModel<SearchProfileServiceModel>> Profiles(
         string? searchTerm,
-        int page,
+        int pageIndex,
         int pageSize,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
-        var profiles = data
-             .Profiles
-             .ToSearchSeviceModels();
+        ClampPageSizeAndIndex(
+            ref pageIndex,
+            ref pageSize);
 
-        if (!string.IsNullOrWhiteSpace(searchTerm))
+        var profiles = data.Profiles.ToSearchSeviceModels();
+        var term = searchTerm?.Trim();
+
+        if (!string.IsNullOrEmpty(term))
         {
-            profiles = profiles.Where(a =>
-                a.FirstName.ToLower().Contains(searchTerm.ToLower()) ||
-                a.LastName.ToLower().Contains(searchTerm.ToLower()) ||
-                (a.FirstName.ToLower() + " " + a.LastName.ToLower()).Contains(searchTerm.ToLower())
-            );
+            var safe = term.Replace("\"", "\"\"");
+            var fullTextQuery = $"\"{safe}*\"";
+
+            profiles = profiles
+                .Where(p =>
+                    EF.Functions.Contains(p.FirstName, fullTextQuery) ||
+                    EF.Functions.Contains(p.LastName, fullTextQuery));
         }
 
-        var total = await profiles.CountAsync(token);
-        var paginatedProfiles = await profiles
-            .Skip((page - 1) * pageSize)
+        profiles = profiles
+            .OrderBy(p => p.LastName)
+            .ThenBy(p => p.FirstName)
+            .ThenBy(p => p.Id);
+
+        var total = await profiles.CountAsync(cancellationToken);
+        var items = await profiles
+            .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
-            .ToListAsync(token);
+            .ToListAsync(cancellationToken);
 
         return new PaginatedModel<SearchProfileServiceModel>(
-            paginatedProfiles,
+            items,
             total,
-            page,
+            pageIndex,
             pageSize);
     }
 
@@ -211,5 +223,13 @@ public class SearchService(
             total,
             page,
             pageSize);
+    }
+
+    private static void ClampPageSizeAndIndex(
+        ref int pageIndex,
+        ref int pageSize)
+    {
+        pageIndex = pageIndex < DefaultPageIndex ? DefaultPageIndex : pageIndex;
+        pageSize = pageSize < DefaultPageIndex ? DefaultPageSize : pageSize;
     }
 }
