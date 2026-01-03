@@ -6,6 +6,54 @@ import { type ReadingStatusUI, toApiStatus } from '@/features/reading-list/types
 import { IsCanceledError, IsError } from '@/shared/lib/utils/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 
+export function useLastCurrentlyReading(isPrivate = false, ownerId?: string) {
+  const { token, userId } = useAuth();
+  const [book, setBook] = useState<Book | null>(null);
+  const [isFetching, setIsFetching] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchData = useCallback(
+    async (signal?: AbortSignal) => {
+      if (!token) {
+        return;
+      }
+
+      if (isPrivate && ownerId && userId && ownerId !== userId) {
+        setBook(null);
+        setError(null);
+
+        return;
+      }
+
+      try {
+        setIsFetching(true);
+        setError(null);
+
+        const result = await api.getLastCurrentlyReading(ownerId ?? userId!, token, signal);
+        setBook(result);
+      } catch (error) {
+        if (IsCanceledError(error)) {
+          return;
+        }
+
+        const message = IsError(error) ? error.message : 'Failed to load reading list.';
+        setError(message);
+      } finally {
+        setIsFetching(false);
+      }
+    },
+    [token, ownerId, userId, isPrivate],
+  );
+
+  useEffect(() => {
+    const controller = new AbortController();
+    void fetchData(controller.signal);
+    return () => controller.abort();
+  }, [fetchData]);
+
+  return { book, isFetching, error };
+}
+
 export function useList(
   statusUI: ReadingStatusUI,
   page: number | null = null,
@@ -52,7 +100,7 @@ export function useList(
         setIsFetching(true);
         setError(null);
 
-        const result = await api.get(
+        const result = await api.getList(
           ownerId ?? userId!,
           token,
           apiStatus,

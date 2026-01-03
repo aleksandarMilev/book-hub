@@ -27,7 +27,7 @@ public class ReadingListService(
         int pageSize,
         CancellationToken token = default)
     {
-        var readingStatusIsInvalid = !Enum.IsDefined(typeof(ReadingListStatus), status);
+        var readingStatusIsInvalid = !Enum.IsDefined(status);
         if (readingStatusIsInvalid)
         {
             logger.LogWarning(
@@ -58,6 +58,17 @@ public class ReadingListService(
 
         return ResultWith<PaginatedModel<BookServiceModel>>.Success(result);
     }
+
+    public async Task<BookServiceModel?> LastCurrentlyReading(
+        string userId,
+        CancellationToken cancellationToken = default)
+        => await data
+            .ReadingLists
+            .AsNoTracking()
+            .Where(rl => rl.UserId == userId)
+            .OrderByDescending(rl => rl.CreatedOn)
+            .ToBookServiceModels()
+            .FirstOrDefaultAsync(cancellationToken);
 
     public async Task<Result> Add(
         ReadingListServiceModel serviceModel,

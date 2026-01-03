@@ -35,6 +35,7 @@
       "empty": "No currently reading books"
     },
     "shortcuts": {
+      "currentlyReading": "Currently Reading",
       "toRead": "To Read",
       "read": "Read"
     },

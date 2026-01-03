@@ -12,7 +12,7 @@ public interface IImageWriter : IScopedService
         string? defaultImagePath = null,
         CancellationToken token = default);
 
-    void Delete(
+    bool Delete(
         string resourceName,
         string? imagePath,
         string? defaultImagePath = null);

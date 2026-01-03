@@ -10,6 +10,7 @@ using Models;
 using Service;
 using Shared;
 
+using static ApiRoutes;
 using static Common.Constants.DefaultValues;
 
 [Authorize]
@@ -37,6 +38,12 @@ public class ReadingListController(IReadingListService service) : ApiController
 
         return this.BadRequest(result.ErrorMessage);
     }
+
+    [HttpGet(LastCurrentlyReadingRoute)]
+    public async Task<ActionResult<BookServiceModel>> LastCurrentlyReading(
+        string userId,
+        CancellationToken cancelationToken = default)
+        => this.Ok(await service.LastCurrentlyReading(userId, cancelationToken));
 
     [HttpPost]
     public async Task<ActionResult> Add(

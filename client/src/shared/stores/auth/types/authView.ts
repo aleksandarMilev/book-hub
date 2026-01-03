@@ -8,5 +8,6 @@ export type AuthView = {
   isAdmin: boolean;
   isAuthenticated: boolean;
   changeAuthenticationState: (user: User | null) => void;
+  resetAuth: () => void;
   logout: () => void;
 };

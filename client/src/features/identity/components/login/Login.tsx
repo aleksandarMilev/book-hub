@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 
 import image from '@/features/identity/components/login/assets/login.webp';
 import { routes } from '@/shared/lib/constants/api.js';
+
 import { useLoginPage } from '../../hooks/useLoginPage.js';
 
 const Login: FC = () => {

@@ -1,41 +1,33 @@
 ﻿namespace BookHub.Features.UserProfile.Data.Models;
 
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using BookHub.Data.Models.Base;
 using Features.Identity.Data.Models;
 using Infrastructure.Services.ImageWriter.Models.Image;
 
-using static Shared.Constants.Validation;
-
 public class UserProfile:
-    IEntity,
+    IDeletableEntity,
     IImageDdModel
 {
-    [Key]
-    [Required]
-    [ForeignKey(nameof(User))]
+    public bool IsDeleted { get; set; }
+
+    public DateTime? DeletedOn { get; set; }
+
+    public string? DeletedBy { get; set; }
+
     public string UserId { get; set; } = null!;
 
     public UserDbModel User { get; set; } = null!;
 
-    [Required]
-    [MaxLength(NameMaxLength)]
     public string FirstName { get; set; } = null!;
 
-    [Required]
-    [MaxLength(NameMaxLength)]
     public string LastName { get; set; } = null!;
 
-    [Required]
     public string ImagePath { get; set; } = null!;
 
     public DateTime? DateOfBirth { get; set; }
 
-    [MaxLength(UrlMaxLength)]
     public string? SocialMediaUrl { get; set; }
 
-    [MaxLength(BiographyMaxLength)]
     public string? Biography { get; set; }
 
     public int CreatedBooksCount { get; set; }

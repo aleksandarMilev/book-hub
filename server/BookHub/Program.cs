@@ -18,11 +18,6 @@ builder.Services
     .AddSwagger()
     .AddHealthcheck();
 
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-}
-
 var app = builder.Build();
 
 var envIsDev = app.Environment.IsDevelopment();

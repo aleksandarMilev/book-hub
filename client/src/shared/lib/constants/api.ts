@@ -37,6 +37,7 @@ export const routes = {
   notFound: '/error/not-found',
   accessDenied: '/access-denied',
   readingList: '/readingList',
+  lastCurrentlyReading: '/readingList/last-currently-reading',
   notification: '/notifications',
   lastThreeNotifications: '/notifications/last',
   markNotificationRead: '/notifications/markAsRead',

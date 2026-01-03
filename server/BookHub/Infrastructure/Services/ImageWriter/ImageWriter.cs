@@ -7,6 +7,7 @@ public class ImageWriter(
     ILogger<ImageWriter> logger,
     IWebHostEnvironment env) : IImageWriter
 {
+    private const string ImagesPathPrefix = "images";
     private const long MaxImageSizeBytes = 2 * 1_024 * 1_024;
 
     private static readonly string[] AllowedExtensions = [".jpg", ".jpeg", ".png", ".webp", ".avif"];
@@ -17,7 +18,7 @@ public class ImageWriter(
         IImageDdModel dbModel,
         IImageServiceModel serviceModel,
         string? defaultImagePath = null,
-        CancellationToken token = default)
+        CancellationToken cancelationToken = default)
     {
         if (serviceModel.Image is not null)
         {
@@ -32,7 +33,11 @@ public class ImageWriter(
                 throw new InvalidOperationException(validationResult.ErrorMessage);
             }
 
-            await this.SaveImageFile(resourceName, dbModel, serviceModel, token);
+            await this.SaveImageFile(
+                resourceName,
+                dbModel,
+                serviceModel,
+                cancelationToken);
         }
         else 
         {
@@ -43,51 +48,104 @@ public class ImageWriter(
         }
     }
 
-    public void Delete(
+    public bool Delete(
         string resourceName,
         string? imagePath,
         string? defaultImagePath = null)
     {
         if (string.IsNullOrWhiteSpace(imagePath))
         {
-            return;
+            logger.LogInformation(
+                "Delete skipped for {Resource}: empty imagePath.",
+                resourceName);
+
+            return false;
         }
 
-        if (!string.IsNullOrWhiteSpace(defaultImagePath) &&
-            string.Equals(imagePath, defaultImagePath, StringComparison.OrdinalIgnoreCase))
+        var isDefaultImagePath = 
+            !string.IsNullOrWhiteSpace(defaultImagePath) &&
+            string.Equals(
+                imagePath,
+                defaultImagePath,
+                StringComparison.OrdinalIgnoreCase);
+
+        if (isDefaultImagePath)
         {
-            return;
+            logger.LogInformation(
+                "Delete skipped for {Resource}: imagePath is default. Path={Path}",
+                resourceName,
+                imagePath);
+
+            return false;
         }
 
-        if (Uri.TryCreate(imagePath, UriKind.Absolute, out _))
+        if (imagePath.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+            imagePath.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
         {
-            return;
+            logger.LogInformation("Delete skipped for {resourceName}: remote URL. Path={Path}", resourceName, imagePath);
+            return false;
+        }
+
+        var relativePath = imagePath.TrimStart('/', '\\');
+        var physicalPath = Path.Combine(
+            env.WebRootPath,
+            relativePath.Replace('/', Path.DirectorySeparatorChar));
+
+        if (!File.Exists(physicalPath))
+        {
+            var fileName = Path.GetFileName(relativePath);
+            var fallback = Path.Combine(
+                env.WebRootPath,
+                ImagesPathPrefix,
+                resourceName,
+                fileName);
+
+            logger.LogWarning(
+                "Delete: file not found at primary path. Resource={Resource}, Primary={Primary}, Fallback={Fallback}, ExistsFallback={ExistsFallback}",
+                resourceName,
+                physicalPath,
+                fallback,
+                File.Exists(fallback));
+
+            physicalPath = fallback;
+        }
+
+        var exists = File.Exists(physicalPath);
+
+        logger.LogInformation(
+            "Delete attempt. Resource={Resource}, ImagePath={ImagePath}, WebRoot={WebRoot}, Resolved={Resolved}, Exists={Exists}",
+            resourceName,
+            imagePath,
+            env.WebRootPath,
+            physicalPath,
+            exists);
+
+        if (!exists)
+        {
+            return false;
         }
 
         try
         {
-            var relativePath = imagePath.TrimStart('/', '\\');
-            var physicalPath = Path.Combine(
-                env.WebRootPath,
-                relativePath.Replace('/', Path.DirectorySeparatorChar));
-
-            if (File.Exists(physicalPath))
-            {
-                File.Delete(physicalPath);
-                logger.LogInformation(
-                    "Deleted image file for {resourceName} with at path: {Path}",
-                    resourceName,
-                    physicalPath);
-            }
+            File.Delete(physicalPath);
         }
         catch (Exception exception)
         {
             logger.LogWarning(
                 exception,
-                "Failed to delete image file for {resourceName} at path: {Path}",
+                "Failed to delete image file. Resource={Resource}, Resolved={Resolved}",
                 resourceName,
-                imagePath);
+                physicalPath);
+
+            return false;
         }
+
+        logger.LogInformation(
+            "Deleted image file. Resource={Resource}, Resolved={Resolved}",
+            resourceName,
+            physicalPath);
+
+        return true;
     }
 
     private static Result ValidateImageFile(IFormFile image)
@@ -102,7 +160,10 @@ public class ImageWriter(
             return $"Image must be smaller than {MaxImageSizeBytes / 1_024 / 1_024} MB.";
         }
 
-        var extension = Path.GetExtension(image.FileName).ToLowerInvariant();
+        var extension = Path
+            .GetExtension(image.FileName)
+            .ToLowerInvariant();
+
         if (!AllowedExtensions.Contains(extension))
         {
             return $"Invalid image extension. Allowed: {string.Join(", ", AllowedExtensions)}.";
@@ -122,9 +183,16 @@ public class ImageWriter(
         IImageServiceModel serviceModel,
         CancellationToken token = default)
     {
-        var extension = Path.GetExtension(serviceModel.Image!.FileName).ToLowerInvariant();
+        var extension = Path
+            .GetExtension(serviceModel.Image!.FileName)
+            .ToLowerInvariant();
+
         var fileName = $"{Guid.NewGuid()}{extension}";
-        var uploadsRoot = Path.Combine(env.WebRootPath, "images", resourceName);
+
+        var uploadsRoot = Path.Combine(
+            env.WebRootPath,
+            ImagesPathPrefix,
+            resourceName);
 
         Directory.CreateDirectory(uploadsRoot);
 
@@ -135,7 +203,7 @@ public class ImageWriter(
             await using var stream = new FileStream(filePath, FileMode.Create);
             await serviceModel.Image.CopyToAsync(stream, token);
 
-            dbModel.ImagePath = $"/images/{resourceName}/{fileName}";
+            dbModel.ImagePath = $"/{ImagesPathPrefix}/{resourceName}/{fileName}";
         }
         catch (Exception exception)
         {

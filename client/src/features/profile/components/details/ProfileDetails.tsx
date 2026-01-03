@@ -23,7 +23,7 @@ import type { PrivateProfile, Profile } from '@/features/profile/types/profile.j
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
 import DeleteModal from '@/shared/components/delete-modal/DeleteModal.js';
 import { routes } from '@/shared/lib/constants/api.js';
-import { getImageUrl, IsError } from '@/shared/lib/utils/utils.js';
+import { formatIsoDate, getImageUrl, IsError } from '@/shared/lib/utils/utils.js';
 import { useMessage } from '@/shared/stores/message/message.js';
 
 const isFullProfile = (profile: Profile | PrivateProfile | null | undefined): profile is Profile =>
@@ -38,13 +38,14 @@ const ProfileDetails = () => {
     showModal,
     toggleModal,
     deleteHandler,
-    readingList,
+    book,
     readingLoading,
     chatButtons,
     chatLoading,
     chatError,
     onNavigateRead,
     onNavigateToRead,
+    onNavigateCurrentlyReading,
     profileLoading,
     refetchChats,
   } = useDetails();
@@ -98,7 +99,8 @@ const ProfileDetails = () => {
                         </h6>
                         <span className="text-secondary">
                           {full
-                            ? full.dateOfBirth || t('details.labels.dateOfBirthFallback')
+                            ? formatIsoDate(full.dateOfBirth) ||
+                              t('details.labels.dateOfBirthFallback')
                             : t('details.labels.dateOfBirthFallback')}
                         </span>
                       </li>
@@ -259,11 +261,20 @@ const ProfileDetails = () => {
                                   })
                                 : t('details.currentlyReading.ownTitle')}
                             </h1>
-                            {readingList?.length > 0
-                              ? readingList.map((b) => <BookListItem key={b.id} {...b} />)
-                              : t('details.currentlyReading.empty')}
+                            {book !== null ? (
+                              <BookListItem key={book.id} {...book} />
+                            ) : (
+                              t('details.currentlyReading.empty')
+                            )}
                           </div>
                         )}
+                        <div
+                          onClick={onNavigateCurrentlyReading}
+                          className="book-stats favorite-stats"
+                        >
+                          {t('details.shortcuts.currentlyReading')} (
+                          {full ? (full.currentlyReadingBooksCount ?? 0) : 0})
+                        </div>
                         <div onClick={onNavigateToRead} className="book-stats favorite-stats">
                           {t('details.shortcuts.toRead')} ({full ? (full.toReadBooksCount ?? 0) : 0}
                           )

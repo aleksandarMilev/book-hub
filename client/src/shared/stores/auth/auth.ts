@@ -10,6 +10,10 @@ const creator: StateCreator<AuthState> = (set) => ({
   user: null,
   setUser: (user) => set({ user }),
   logout: () => set({ user: null }),
+  resetAuth: () => {
+    set({ user: null });
+    localStorage.removeItem('auth');
+  },
 });
 
 const useAuthStore = createWithEqualityFn<AuthState>()(
@@ -30,4 +34,5 @@ export const useAuth = (): AuthView =>
     isAuthenticated: Boolean(state.user?.username),
     changeAuthenticationState: state.setUser,
     logout: state.logout,
+    resetAuth: state.resetAuth,
   }));
