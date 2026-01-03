@@ -1,5 +1,3 @@
-# pragma warning disable CA1873
-
 using BookHub.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);

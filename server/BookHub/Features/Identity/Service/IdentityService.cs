@@ -1,5 +1,4 @@
-﻿# pragma warning disable CA1873
-namespace BookHub.Features.Identity.Service;
+﻿namespace BookHub.Features.Identity.Service;
 
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -10,6 +9,7 @@ using Features.UserProfile.Service;
 using Infrastructure.Services.Result;
 using Infrastructure.Settings;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Models;
@@ -32,6 +32,34 @@ public class IdentityService(
         RegisterServiceModel serviceModel,
         CancellationToken cancellationToken = default)
     {
+        var normalizedUsername = userManager.NormalizeName(serviceModel.Username);
+        var normalizedEmail = userManager.NormalizeEmail(serviceModel.Email);
+
+        var usersQuery = userManager.Users;
+        usersQuery = usersQuery.IgnoreQueryFilters();
+
+        var usernameTaken = await usersQuery
+            .AnyAsync(
+                u => u.NormalizedUserName == normalizedUsername,
+                cancellationToken);
+
+        if (usernameTaken)
+        {
+            return ResultWith<string>.Failure(
+                $"Username '{serviceModel.Username}' is already taken.");
+        }
+
+        var emailTaken = await usersQuery
+            .AnyAsync(
+                u => u.NormalizedEmail == normalizedEmail,
+                cancellationToken);
+
+        if (emailTaken)
+        {
+            return ResultWith<string>.Failure(
+                $"Email '{serviceModel.Email}' is already taken.");
+        }
+
         var user = new UserDbModel
         {
             Email = serviceModel.Email,
@@ -89,16 +117,23 @@ public class IdentityService(
         LoginServiceModel serviceModel,
         CancellationToken cancellationToken = default)
     {
-        var user = await userManager.FindByNameAsync(
-            serviceModel.Credentials);
+        var user = await userManager
+            .FindByNameAsync(serviceModel.Credentials);
 
         if (user is null)
         {
-            user = await userManager.FindByEmailAsync(serviceModel.Credentials);
+            user = await userManager.FindByEmailAsync(
+                serviceModel.Credentials);
+
             if (user is null)
             {
                 return ResultWith<string>.Failure(InvalidLoginAttempt);
             }
+        }
+
+        if (user.IsDeleted)
+        {
+            return ResultWith<string>.Failure(InvalidLoginAttempt);
         }
 
         if (await userManager.IsLockedOutAsync(user))

@@ -1,6 +1,4 @@
-﻿# pragma warning disable CA1873
-
-namespace BookHub.Features.UserProfile.Service;
+﻿namespace BookHub.Features.UserProfile.Service;
 
 using BookHub.Data;
 using BookHub.Features.Identity.Data.Models;
@@ -175,7 +173,6 @@ public class ProfileService(
         return true;
     }
 
-
     public async Task<Result> Delete(
         string? userToDeleteId = null,
         CancellationToken cancellationToken = default)
@@ -183,46 +180,42 @@ public class ProfileService(
         var currentUserId = userService.GetId()!;
         userToDeleteId ??= currentUserId;
 
-        var dbModel = await this.GetDbModel(
+        var profile = await this.GetDbModel(
             userToDeleteId,
             cancellationToken);
 
-        if (dbModel is null)
+        if (profile is null)
         {
             return this.LogAndReturnNotFoundMessage(userToDeleteId);
         }
 
-        var isNotCurrentUserProfile = dbModel.UserId != currentUserId;
+        var isNotCurrentUserProfile = profile.UserId != currentUserId;
         var userIsNotAdmin = !userService.IsAdmin();
 
         if (isNotCurrentUserProfile && userIsNotAdmin)
         {
-            return this.LogAndReturnUnauthorizedMessage(currentUserId, dbModel.UserId);
+            return this.LogAndReturnUnauthorizedMessage(
+                currentUserId,
+                profile.UserId);
         }
 
-        var imagePathToDelete = dbModel.ImagePath;
+        data.Profiles.Remove(profile);
 
-        var user = await userManager.FindByIdAsync(dbModel.UserId);
-        if (user is not null)
+        var user = await userManager.FindByIdAsync(profile.UserId);
+        if (user is null)
         {
-            var identityResult = await userManager.DeleteAsync(user);
-            if (!identityResult.Succeeded)
-            {
-                return string.Join(
-                    "; ",
-                    identityResult.Errors.Select(e => e.Description));
-            }
-
-            imageWriter.Delete(
-                ProfilesImagePathPrefix,
-                imagePathToDelete,
-                DefaultImagePath);
-
-            return true;
+            return false;
         }
 
-        return false;
+        var identityResult = await userManager.DeleteAsync(user);
+        if (!identityResult.Succeeded)
+        {
+            return string.Join("; ", identityResult.Errors.Select(e => e.Description));
+        }
+
+        return true;
     }
+
 
     public async Task<Result> IncrementCreatedBooksCount(
         string userId,

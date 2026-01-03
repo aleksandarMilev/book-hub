@@ -9,9 +9,15 @@ using Infrastructure.Services.ImageWriter.Models.Image;
 using static Shared.Constants.Validation;
 
 public class UserProfile:
-    IEntity,
+    IDeletableEntity,
     IImageDdModel
 {
+    public bool IsDeleted { get; set; }
+
+    public DateTime? DeletedOn { get; set; }
+
+    public string? DeletedBy { get; set; }
+
     [Key]
     [Required]
     [ForeignKey(nameof(User))]

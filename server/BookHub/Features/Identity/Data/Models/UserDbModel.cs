@@ -11,7 +11,8 @@ using Features.UserProfile.Data.Models;
 using Microsoft.AspNetCore.Identity;
 
 public class UserDbModel :
-    IdentityUser, IEntity 
+    IdentityUser,
+    IDeletableEntity
 {
     public DateTime CreatedOn { get; set; }
 
@@ -20,6 +21,12 @@ public class UserDbModel :
     public DateTime? ModifiedOn { get; set; }
 
     public string? ModifiedBy { get; set; }
+
+    public bool IsDeleted { get; set; }
+
+    public DateTime? DeletedOn { get; set; }
+
+    public string? DeletedBy { get; set; }
 
     public UserProfile? Profile { get; init; }
 
