@@ -8,7 +8,7 @@ using Features.Book.Data.Models;
 using Features.Chat.Data.Models;
 using Features.Genre.Data.Models;
 using Features.Identity.Data.Models;
-using Features.Notification.Data.Models;
+using Features.Notifications.Data.Models;
 using Features.ReadingList.Data.Models;
 using Features.Review.Data.Models;
 using Features.UserProfile.Data.Models;
@@ -62,14 +62,17 @@ public class BookHubDbContext(
     {
         this.ApplyAuditInfo();
 
-        return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        return base.SaveChangesAsync(
+            acceptAllChangesOnSuccess,
+            cancellationToken);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        modelBuilder.ApplyConfigurationsFromAssembly(
+            Assembly.GetExecutingAssembly());
 
         FilterModels(modelBuilder);
     }
@@ -122,14 +125,15 @@ public class BookHubDbContext(
 
                 if (filterExpression is not null)
                 {
-                    modelBuilder.Entity(entityClrType).HasQueryFilter(filterExpression);
+                    modelBuilder
+                    .Entity(entityClrType)
+                    .HasQueryFilter(filterExpression);
                 }
             });
 
     private static LambdaExpression? BuildFilterExpression(Type entityType)
     {
         var parameter = Expression.Parameter(entityType, "e");
-
         Expression? combinedFilter = null;
 
         if (typeof(IDeletableEntity).IsAssignableFrom(entityType))

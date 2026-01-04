@@ -1,4 +1,4 @@
-﻿namespace BookHub.Features.Notification.Web
+﻿namespace BookHub.Features.Notifications.Web
 {
     public static class ApiRoutes
     {

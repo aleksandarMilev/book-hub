@@ -218,6 +218,18 @@
   margin-top: 1.5rem;
 }
 
+.article-details-card {
+  width: 100%;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.article-details-page {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
 @media (max-width: 768px) {
   .article-details-body {
     padding: 1.5rem 1.4rem;

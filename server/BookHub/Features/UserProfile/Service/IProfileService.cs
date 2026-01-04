@@ -7,27 +7,27 @@ using Models;
 public interface IProfileService : ITransientService
 {
     Task<IEnumerable<ProfileServiceModel>> TopThree(
-       CancellationToken token = default);
+       CancellationToken cancellationToken = default);
 
     Task<ProfileServiceModel?> Mine(
-        CancellationToken token = default);
+        CancellationToken cancellationToken = default);
 
     Task<IProfileServiceModel?> OtherUser(
         string id,
-        CancellationToken token = default);
+        CancellationToken cancellationToken = default);
 
     Task<ProfileServiceModel> Create(
         CreateProfileServiceModel model,
         string userId,
-        CancellationToken token = default);
+        CancellationToken cancellationToken = default);
 
     Task<Result> Edit(
         CreateProfileServiceModel model,
-        CancellationToken token = default);
+        CancellationToken cancellationToken = default);
 
     Task<Result> Delete(
         string? userId = null,
-        CancellationToken token = default);
+        CancellationToken cancellationToken = default);
 
     Task<Result> IncrementCreatedBooksCount(
         string userId,

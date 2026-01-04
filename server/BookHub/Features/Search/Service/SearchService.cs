@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Models;
 using Shared;
 
-using static Common.Constants.DefaultValues;
+using static Common.Utils;
 
 public class SearchService(
     BookHubDbContext data,
@@ -260,13 +260,5 @@ public class SearchService(
             total,
             pageIndex,
             pageSize);
-    }
-
-    private static void ClampPageSizeAndIndex(
-        ref int pageIndex,
-        ref int pageSize)
-    {
-        pageIndex = pageIndex < DefaultPageIndex ? DefaultPageIndex : pageIndex;
-        pageSize = pageSize < DefaultPageIndex ? DefaultPageSize : pageSize;
     }
 }

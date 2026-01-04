@@ -6,31 +6,32 @@ using Models;
 
 public class StatisticsService(BookHubDbContext data) : IStatisticsService
 {
-    public async Task<StatisticsServiceModel> All(CancellationToken token = default)
+    public async Task<StatisticsServiceModel> All(
+        CancellationToken cancellationToken = default)
     {
         var users = await data
             .Users
-            .CountAsync(token);
+            .CountAsync(cancellationToken);
 
         var books = await data
             .Books
-            .CountAsync(token);
+            .CountAsync(cancellationToken);
 
         var authors = await data
             .Authors
-            .CountAsync(token);
+            .CountAsync(cancellationToken);
 
         var reviews = await data
             .Reviews
-            .CountAsync(token);
+            .CountAsync(cancellationToken);
 
         var genres = await data
             .Genres
-            .CountAsync(token);
+            .CountAsync(cancellationToken);
 
         var articles = await data
             .Articles
-            .CountAsync(token);
+            .CountAsync(cancellationToken);
 
         return new StatisticsServiceModel(
             users,

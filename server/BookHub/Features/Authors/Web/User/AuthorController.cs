@@ -9,51 +9,61 @@ using Service;
 using Service.Models;
 using Shared;
 
-using static ApiRoutes;
 using static Common.Constants.ApiRoutes;
+using static Shared.Constants.RouteNames;
 
 [Authorize]
 public class AuthorController(IAuthorService service) : ApiController
 {
     [AllowAnonymous]
-    [HttpGet(Author.Top)]
+    [HttpGet(ApiRoutes.Top)]
     public async Task<ActionResult<IEnumerable<AuthorServiceModel>>> TopThree(
-        CancellationToken token = default)
-        => this.Ok(await service.TopThree(token));
+        CancellationToken cancellationToken = default)
+        => this.Ok(await service.TopThree(cancellationToken));
 
-    [HttpGet(Author.Names)]
+    [HttpGet(ApiRoutes.Names)]
     public async Task<ActionResult<IEnumerable<AuthorNamesServiceModel>>> Names(
-        CancellationToken token = default)
-        => this.Ok(await service.Names(token));
+        CancellationToken cancellationToken = default)
+        => this.Ok(await service.Names(cancellationToken));
 
-    [HttpGet(Id)]
+    [HttpGet(Id, Name = DetailsRouteName)]
     public async Task<ActionResult<AuthorDetailsServiceModel>> Details(
         Guid id,
-        CancellationToken token = default)
-        => this.Ok(await service.Details(id, token));
+        CancellationToken cancellationToken = default)
+        => this.Ok(await service.Details(id, cancellationToken));
 
     [HttpPost]
     public async Task<ActionResult<AuthorDetailsServiceModel>> Create(
         CreateAuthorWebModel webModel,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var serviceModel = webModel.ToCreateServiceModel();
-        var createdAuthor = await service.Create(serviceModel, token);
+        var result = await service.Create(
+            serviceModel,
+            cancellationToken);
 
-        return this.CreatedAtAction(
-            actionName: nameof(this.Details),
-            routeValues: new { id = createdAuthor.Id },
-            value: createdAuthor);
+        if (result.Succeeded)
+        {
+            return this.CreatedAtRoute(
+                routeName: DetailsRouteName,
+                routeValues: new { id = result.Data!.Id },
+                value: result.Data);
+        }
+
+        return this.BadRequest(result.ErrorMessage);
     }
 
     [HttpPut(Id)]
     public async Task<ActionResult> Edit(
         Guid id,
         CreateAuthorWebModel webModel,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var serviceModel = webModel.ToCreateServiceModel();
-        var result = await service.Edit(id, serviceModel, token);
+        var result = await service.Edit(
+            id,
+            serviceModel,
+            cancellationToken);
 
         return this.NoContentOrBadRequest(result);
     }
@@ -61,9 +71,11 @@ public class AuthorController(IAuthorService service) : ApiController
     [HttpDelete(Id)]
     public async Task<ActionResult> Delete(
         Guid id,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
-        var result = await service.Delete(id, token);
+        var result = await service.Delete(
+            id,
+            cancellationToken);
 
         return this.NoContentOrBadRequest(result);
     }

@@ -24,5 +24,5 @@ public class ArticleDbModel :
 
     public string ImagePath { get; set; } = null!;
 
-    public int Views { get; set; }
+    public int Views { get; init; }
 }

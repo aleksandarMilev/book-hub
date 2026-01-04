@@ -31,9 +31,7 @@
 .article-list-page .search-bar:focus-within {
   border-color: #6ea8fe;
   background: rgba(255, 255, 255, 0.98);
-  box-shadow:
-    0 0 0 2px rgba(110, 168, 254, 0.45),
-    0 8px 22px rgba(15, 23, 42, 0.18);
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.18);
   transform: translateY(-1px);
 }
 
@@ -113,6 +111,26 @@
   max-width: 420px;
   margin: 8px auto 0;
   color: #666;
+}
+
+.article-list-page .search-bar {
+  overflow: hidden;
+}
+
+.article-list-page .search-bar input {
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.article-list-page .search-bar input:focus,
+.article-list-page .search-bar input:focus-visible {
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 @keyframes fadeIn {

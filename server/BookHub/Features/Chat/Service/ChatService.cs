@@ -7,7 +7,7 @@ using Infrastructure.Services.CurrentUser;
 using Infrastructure.Services.ImageWriter;
 using Infrastructure.Services.Result;
 using Microsoft.EntityFrameworkCore;
-using Notification.Service;
+using Notifications.Service;
 using Service.Models;
 using Shared;
 using UserProfile.Data.Models;
@@ -245,11 +245,10 @@ public class ChatService(
             chatId);
 
         await notificationService
-            .CreateOnChatInvitationStatusChanged(
+            .CreateOnChatInvitationAccepted(
                 chatId,
                 serviceModel.ChatName,
                 serviceModel.ChatCreatorId,
-                true,
                 token);
 
         var profile = await data
@@ -295,11 +294,10 @@ public class ChatService(
             chatId);
 
         await notificationService
-            .CreateOnChatInvitationStatusChanged(
+            .CreateOnChatInvitationRejected(
                 chatId,
                 serviceModel.ChatName,
                 serviceModel.ChatCreatorId,
-                false,
                 token);
 
         return true;

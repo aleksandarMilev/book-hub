@@ -103,31 +103,31 @@ public static class ServiceCollectionExtensions
         IWebHostEnvironment env)
     {
         services
-            .AddIdentityCore<UserDbModel>(opt =>
+            .AddIdentityCore<UserDbModel>(options =>
             {
-                opt.User.RequireUniqueEmail = true;
-                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(AccountLockoutTimeSpan);
-                opt.Lockout.MaxFailedAccessAttempts = MaxFailedLoginAttempts;
+                options.User.RequireUniqueEmail = true;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(AccountLockoutTimeSpan);
+                options.Lockout.MaxFailedAccessAttempts = MaxFailedLoginAttempts;
 
                 if (env.IsDevelopment())
                 {
                     const int RequiredDevLength = 6;
 
-                    opt.Password.RequireDigit = false;
-                    opt.Password.RequireLowercase = false;
-                    opt.Password.RequireUppercase = false;
-                    opt.Password.RequireNonAlphanumeric = false;
-                    opt.Password.RequiredLength = RequiredDevLength;
+                    options.Password.RequireDigit = false;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequiredLength = RequiredDevLength;
                 }
                 else
                 {
                     const int RequiredProdLength = 8;
 
-                    opt.Password.RequireDigit = true;
-                    opt.Password.RequireLowercase = true;
-                    opt.Password.RequireUppercase = true;
-                    opt.Password.RequireNonAlphanumeric = false;
-                    opt.Password.RequiredLength = RequiredProdLength;
+                    options.Password.RequireDigit = true;
+                    options.Password.RequireLowercase = true;
+                    options.Password.RequireUppercase = true;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequiredLength = RequiredProdLength;
                 }
             })
             .AddRoles<IdentityRole>()
@@ -157,15 +157,15 @@ public static class ServiceCollectionExtensions
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddJwtBearer(opt =>
+            .AddJwtBearer(options =>
             {
-                opt.SaveToken = true;
+                options.SaveToken = true;
                 if (env.IsDevelopment())
                 {
-                    opt.RequireHttpsMetadata = false;
-                    opt.IncludeErrorDetails = true;
+                    options.RequireHttpsMetadata = false;
+                    options.IncludeErrorDetails = true;
 
-                    opt.TokenValidationParameters = new TokenValidationParameters
+                    options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = false,
                         ValidateAudience = false,
@@ -178,8 +178,8 @@ public static class ServiceCollectionExtensions
                 {
                     const int ClockSkewMinutes = 2;
 
-                    opt.RequireHttpsMetadata = true;
-                    opt.TokenValidationParameters = new TokenValidationParameters
+                    options.RequireHttpsMetadata = true;
+                    options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(key),

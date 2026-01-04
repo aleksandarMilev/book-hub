@@ -1,9 +1,8 @@
-﻿namespace BookHub.Features.Authors.Service.Models
-{
-    public class AuthorNamesServiceModel
-    {
-        public Guid Id { get; init; }
+﻿namespace BookHub.Features.Authors.Service.Models;
 
-        public string Name { get; init; } = null!;
-    }
+public class AuthorNamesServiceModel
+{
+    public Guid Id { get; init; }
+
+    public string Name { get; init; } = null!;
 }

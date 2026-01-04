@@ -11,6 +11,19 @@ import { useRemove } from '@/features/notification/hooks/useCrud.js';
 import type { NotificationType } from '@/features/notification/types/notification.js';
 import DeleteModal from '@/shared/components/delete-modal/DeleteModal.js';
 
+const getResourceType = (serverResourceType: number) => {
+  switch (serverResourceType) {
+    case 0:
+      return 'Book';
+    case 1:
+      return 'Author';
+    case 2:
+      return 'Chat';
+    default:
+      return 'Unknown resource type';
+  }
+};
+
 const getTypeIcon = (resourceType: string) => {
   switch (resourceType) {
     case 'Book':
@@ -30,6 +43,7 @@ const NotificationItem: FC<{
 }> = ({ notification, refetch }) => {
   const { t } = useTranslation('notifications');
 
+  const resourceType = getResourceType(notification.resourceType);
   const { showModal, toggleModal, deleteHandler } = useRemove(notification.id, refetch);
   const { onClickHandler } = useClickHandler(notification, refetch);
 
@@ -43,7 +57,7 @@ const NotificationItem: FC<{
         <div className="bh-notifications-item__top">
           <div className="bh-notifications-item__type">
             <span className="bh-notifications-item__typeIcon" aria-hidden="true">
-              {getTypeIcon(notification.resourceType)}
+              {getTypeIcon(resourceType)}
             </span>
             <span className="bh-notifications-item__typeText">
               {t(`resourceType.${notification.resourceType}`, {

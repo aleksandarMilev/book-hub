@@ -3,7 +3,6 @@ import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import * as api from '@/features/notification/api/api.js';
-import type { ResourceType } from '@/features/notification/components/last-item/types/resourceType.js';
 import { mapResourceRoute } from '@/features/notification/components/last-item/utils/utils.js';
 import type { NotificationType } from '@/features/notification/types/notification.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
@@ -23,7 +22,7 @@ export const useClickHandler = (
       }
 
       const controller = new AbortController();
-      const base = mapResourceRoute(notification.resourceType as ResourceType);
+      const base = mapResourceRoute(notification.resourceType);
 
       try {
         await api.markAsRead(notification.id, token, controller.signal);

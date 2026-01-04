@@ -1,6 +1,6 @@
-﻿namespace BookHub.Features.Notification.Service;
+﻿namespace BookHub.Features.Notifications.Service;
 
-using BookHub.Common;
+using Common;
 using Infrastructure.Services.Result;
 using Infrastructure.Services.ServiceLifetimes;
 using Models;
@@ -8,47 +8,72 @@ using Models;
 public interface INotificationService : ITransientService
 {
     Task<IEnumerable<NotificationServiceModel>> LastThree(
-        CancellationToken token = default);
+        CancellationToken cancellationToken = default);
 
     Task<PaginatedModel<NotificationServiceModel>> All(
         int pageIndex,
         int pageSize,
-        CancellationToken token = default);
+        CancellationToken cancellationToken = default);
 
-    Task<Guid> CreateOnEntityCreation(
-       Guid resourceId,
-       string resourceType,
-       string nameProp,
-       string receiverId,
-       CancellationToken token = default);
+    Task<Guid> CreateOnBookCreation(
+        Guid bookId,
+        string bookTitle,
+        string receiverId,
+        CancellationToken cancellationToken = default);
 
-    Task<Guid> CreateOnEntityApprovalStatusChange(
-       Guid resourceId,
-       string resourceType,
-       string nameProp,
-       string receiverId,
-       bool isApproved,
-       CancellationToken token = default);
+    Task<Guid> CreateOnAuthorCreation(
+        Guid authorId,
+        string authorName,
+        string receiverId,
+        CancellationToken cancellationToken = default);
+
+    Task<Guid> CreateOnBookApproved(
+        Guid bookId,
+        string bookTitle,
+        string receiverId,
+        CancellationToken cancellationToken = default);
+
+    Task<Guid> CreateOnAuthorApproved(
+        Guid authorId,
+        string authorName,
+        string receiverId,
+        CancellationToken cancellationToken = default);
+
+    Task<Guid> CreateOnBookRejected(
+        Guid bookId,
+        string bookTitle,
+        string receiverId,
+        CancellationToken cancellationToken = default);
+
+    Task<Guid> CreateOnAuthorRejected(
+        Guid authorId,
+        string authorName,
+        string receiverId,
+        CancellationToken cancellationToken = default);
 
     Task<Guid> CreateOnChatInvitation(
         Guid chatId,
         string chatName,
         string receiverId,
-        CancellationToken token = default);
+        CancellationToken cancellationToken = default);
 
-    Task<Guid> CreateOnChatInvitationStatusChanged(
+    Task<Guid> CreateOnChatInvitationAccepted(
         Guid chatId,
         string chatName,
         string receiverId,
-        bool hasAccepted,
-        CancellationToken token = default);
+        CancellationToken cancellationToken = default);
 
+    Task<Guid> CreateOnChatInvitationRejected(
+        Guid chatId,
+        string chatName,
+        string receiverId,
+        CancellationToken cancellationToken = default);
 
     Task<Result> Delete(
-        Guid id,
-        CancellationToken token = default);
+        Guid notificationId,
+        CancellationToken cancellationToken = default);
 
     Task<Result> MarkAsRead(
-        Guid id,
-        CancellationToken token = default);
+        Guid notificationId,
+        CancellationToken cancellationToken = default);
 }

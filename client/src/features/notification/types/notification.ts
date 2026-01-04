@@ -5,5 +5,5 @@ export type NotificationType = {
   isRead: boolean;
   createdOn: string;
   resourceId: string;
-  resourceType: string;
+  resourceType: number;
 };

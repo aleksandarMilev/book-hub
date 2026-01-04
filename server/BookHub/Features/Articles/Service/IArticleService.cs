@@ -1,27 +1,26 @@
 ﻿namespace BookHub.Features.Article.Service;
 
-using BookHub.Infrastructure.Services.Result;
-using Infrastructure.Services;
+using Infrastructure.Services.Result;
 using Infrastructure.Services.ServiceLifetimes;
 using Models;
 
 public interface IArticleService : ITransientService
 {
     Task<ArticleDetailsServiceModel?> Details(
-        Guid id,
+        Guid articleId,
         bool isEditMode = false,
-        CancellationToken token = default);
+        CancellationToken cancelationToken = default);
 
     Task<ArticleDetailsServiceModel> Create(
         CreateArticleServiceModel model,
-        CancellationToken token = default);
+        CancellationToken cancelationToken = default);
 
     Task<Result> Edit(
-        Guid id,
+        Guid articleId,
         CreateArticleServiceModel model,
-        CancellationToken token = default);
+        CancellationToken cancelationToken = default);
 
     Task<Result> Delete(
-        Guid id,
-        CancellationToken token = default);
+        Guid articleId,
+        CancellationToken cancelationToken = default);
 }

@@ -15,36 +15,39 @@ public class ProfileController(IProfileService service) : ApiController
     [AllowAnonymous]
     [HttpGet(ApiRoutes.Top)]
     public async Task<ActionResult<IEnumerable<ProfileServiceModel>>> TopThree(
-        CancellationToken token = default)
-        => this.Ok(await service.TopThree(token));
+        CancellationToken cancellationToken = default)
+        => this.Ok(await service.TopThree(cancellationToken));
 
     [HttpGet(ApiRoutes.Mine, Name = nameof(this.Mine))]
     public async Task<ActionResult<ProfileServiceModel>> Mine(
-        CancellationToken token = default)
-        => this.Ok(await service.Mine(token));
+        CancellationToken cancellationToken = default)
+        => this.Ok(await service.Mine(cancellationToken));
 
     [HttpGet(Common.Constants.ApiRoutes.Id)]
     public async Task<ActionResult<IProfileServiceModel>> OtherUser(
         string id,
-        CancellationToken token = default)
-        => this.Ok(await service.OtherUser(id, token));
+        CancellationToken cancellationToken = default)
+        => this.Ok(await service.OtherUser(id, cancellationToken));
 
     [HttpPut]
     public async Task<ActionResult> Edit(
         CreateProfileWebModel webModel,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var serviceModel = webModel.ToCreateServiceModel();
-        var result = await service.Edit(serviceModel, token);
+        var result = await service.Edit(
+            serviceModel,
+            cancellationToken);
 
         return this.NoContentOrBadRequest(result);
     }
 
     [HttpDelete]
     public async Task<ActionResult> Delete(
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
-        var result = await service.Delete(token: token);
+        var result = await service.Delete(
+            cancellationToken: cancellationToken);
 
         return this.NoContentOrBadRequest(result);
     }

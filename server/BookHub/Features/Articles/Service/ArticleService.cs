@@ -18,7 +18,7 @@ public class ArticleService(
     ILogger<ArticleService> logger) : IArticleService
 {
     public async Task<ArticleDetailsServiceModel?> Details(
-        Guid id,
+        Guid articleId,
         bool isEditMode = false,
         CancellationToken cancellationToken = default)
     {
@@ -26,7 +26,7 @@ public class ArticleService(
         {
             var rowsAffected = await data
                 .Articles
-                .Where(a => a.Id == id)
+                .Where(a => a.Id == articleId)
                 .ExecuteUpdateAsync(
                     setters => setters.SetProperty
                         (a => a.Views, a => a.Views + 1),
@@ -42,7 +42,7 @@ public class ArticleService(
             .Articles
             .ToServiceDetailsModels()
             .FirstOrDefaultAsync(
-                a => a.Id == id,
+                a => a.Id == articleId,
                 cancellationToken);
     }
 
@@ -70,17 +70,17 @@ public class ArticleService(
     }
 
     public async Task<Result> Edit(
-        Guid id,
+        Guid articleId,
         CreateArticleServiceModel serviceModel,
         CancellationToken cancellationToken = default)
     {
         var dbModel = await this.GetDbModel(
-            id,
+            articleId,
             cancellationToken);
 
         if (dbModel is null)
         {
-            return LogAndReturnNotFoundMessage(id);
+            return LogAndReturnNotFoundMessage(articleId);
         }
 
         var oldImagePath = dbModel.ImagePath;
@@ -120,16 +120,16 @@ public class ArticleService(
     }
 
     public async Task<Result> Delete(
-        Guid id,
+        Guid articleId,
         CancellationToken cancellationToken = default)
     {
         var dbModel = await this.GetDbModel(
-            id,
+            articleId,
             cancellationToken);
 
         if (dbModel is null)
         {
-            return LogAndReturnNotFoundMessage(id);
+            return LogAndReturnNotFoundMessage(articleId);
         }
 
         data.Remove(dbModel);
@@ -143,22 +143,22 @@ public class ArticleService(
     }
 
     private async Task<ArticleDbModel?> GetDbModel(
-        Guid id,
+        Guid articleId,
         CancellationToken cancellationToken = default)
         => await data
             .Articles
-            .FindAsync([id], cancellationToken);
+            .FindAsync([articleId], cancellationToken);
 
-    private string LogAndReturnNotFoundMessage(Guid id)
+    private string LogAndReturnNotFoundMessage(Guid articleId)
     {
         logger.LogWarning(
             DbEntityNotFoundTemplate,
             nameof(ArticleDbModel),
-            id);
+            articleId);
 
         return string.Format(
             DbEntityNotFound,
             nameof(ArticleDbModel),
-            id);
+            articleId);
     }
 }

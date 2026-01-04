@@ -3,12 +3,12 @@
 public class Result
 {
     public Result(bool succeeded)
-        => Succeeded = succeeded;
+        => this.Succeeded = succeeded;
 
     public Result(string errorMessage)
     {
-        Succeeded = false;
-        ErrorMessage = errorMessage;
+        this.Succeeded = false;
+        this.ErrorMessage = errorMessage;
     }
 
     public bool Succeeded { get; init; }
