@@ -25,12 +25,10 @@ async function search<T>(
   try {
     const url = `${baseUrl}${route}`;
     const params = { searchTerm, page, pageSize };
-    const options = token
-      ? {
-          ...getAuthConfig(token, signal),
-          params,
-        }
-      : getPublicConfig(signal);
+    const options = {
+      ...(token ? getAuthConfig(token, signal) : getPublicConfig(signal)),
+      params,
+    };
 
     const response = await axios.get<PaginatedResult<T>>(url, options);
 
