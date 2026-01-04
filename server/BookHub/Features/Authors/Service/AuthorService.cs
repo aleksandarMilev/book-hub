@@ -72,13 +72,13 @@ public class AuthorService(
         CreateAuthorServiceModel serviceModel,
         CancellationToken cancellationToken = default)
     {
-        var genderIsInvalid = !ValidateGender(serviceModel.Gender);
+        var genderIsInvalid = !GenderIsValidEnum(serviceModel.Gender);
         if (genderIsInvalid)
         {
             return $"{serviceModel.Gender} is not valid Gender enumeartion!";
         }
 
-        var nationalityIsInvalid = !ValidateNationality(serviceModel.Nationality);
+        var nationalityIsInvalid = !NationalityIsValidEnum(serviceModel.Nationality);
         if (nationalityIsInvalid)
         {
             return $"{serviceModel.Nationality} is not valid Nationality enumeartion!";
@@ -125,13 +125,13 @@ public class AuthorService(
         CreateAuthorServiceModel serviceModel,
         CancellationToken cancellationToken = default)
     {
-        var genderIsInvalid = !ValidateGender(serviceModel.Gender);
+        var genderIsInvalid = !GenderIsValidEnum(serviceModel.Gender);
         if (genderIsInvalid)
         {
             return $"{serviceModel.Gender} is not valid Gender enumeartion!";
         }
 
-        var nationalityIsInvalid = !ValidateNationality(serviceModel.Nationality);
+        var nationalityIsInvalid = !NationalityIsValidEnum(serviceModel.Nationality);
         if (nationalityIsInvalid)
         {
             return $"{serviceModel.Nationality} is not valid Nationality enumeartion!";
@@ -339,11 +339,11 @@ public class AuthorService(
             authorId);
     }
 
-    private static bool ValidateGender(
+    private static bool GenderIsValidEnum(
         Gender gender)
         => Enum.IsDefined(gender);
 
-    private static bool ValidateNationality(
+    private static bool NationalityIsValidEnum(
         Nationality nationality)
         => Enum.IsDefined(nationality);
 }

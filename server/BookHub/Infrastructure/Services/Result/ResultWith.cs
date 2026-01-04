@@ -7,9 +7,9 @@ public class ResultWith<T>
         T? data = default,
         string? errorMessage = null)
     {
-        Succeeded = succeeded;
-        Data = data;
-        ErrorMessage = errorMessage;
+        this.Succeeded = succeeded;
+        this.Data = data;
+        this.ErrorMessage = errorMessage;
     }
 
     public bool Succeeded { get; init; }

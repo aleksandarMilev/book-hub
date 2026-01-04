@@ -50,7 +50,6 @@ public static class AppBuilderExtensions
         this IApplicationBuilder app)
         => app.UseCors(CorsPolicyName);
 
-
     public static async Task<IApplicationBuilder> UseAdminRole(
         this IApplicationBuilder app)
     {
