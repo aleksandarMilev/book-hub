@@ -7,37 +7,37 @@ using Models;
 public interface IAuthorService : ITransientService
 {
     Task<IEnumerable<AuthorNamesServiceModel>> Names(
-        CancellationToken token = default);
+        CancellationToken cancelationToken = default);
 
     Task<IEnumerable<AuthorServiceModel>> TopThree(
-        CancellationToken token = default);
+        CancellationToken cancelationToken = default);
 
     Task<AuthorDetailsServiceModel?> Details(
-        Guid id,
-        CancellationToken token = default);
+        Guid authorId,
+        CancellationToken cancelationToken = default);
 
     Task<AuthorDetailsServiceModel?> AdminDetails(
-        Guid id,
-        CancellationToken token = default);
+        Guid authorId,
+        CancellationToken cancelationToken = default);
 
-    Task<AuthorDetailsServiceModel> Create(
+    Task<ResultWith<AuthorDetailsServiceModel>> Create(
         CreateAuthorServiceModel serviceModel,
-        CancellationToken token = default);
+        CancellationToken cancelationToken = default);
 
     Task<Result> Edit(
-        Guid id,
+        Guid authorId,
         CreateAuthorServiceModel serviceModel,
-        CancellationToken token = default);
+        CancellationToken cancelationToken = default);
 
     Task<Result> Delete(
         Guid authorId,
-        CancellationToken token = default);
+        CancellationToken cancelationToken = default);
 
     Task<Result> Approve(
-        Guid id,
-        CancellationToken token = default);
-    Task<Result> Reject(
-        Guid id,
-        CancellationToken token = default);
+        Guid authorId,
+        CancellationToken cancelationToken = default);
 
+    Task<Result> Reject(
+        Guid authorId,
+        CancellationToken cancelationToken = default);
 }

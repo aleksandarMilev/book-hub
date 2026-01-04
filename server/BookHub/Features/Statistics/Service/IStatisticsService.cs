@@ -5,5 +5,6 @@ using Models;
 
 public interface IStatisticsService : ITransientService
 {
-    Task<StatisticsServiceModel> All(CancellationToken token = default);
+    Task<StatisticsServiceModel> All(
+        CancellationToken cancellationToken = default);
 }

@@ -1,8 +1,7 @@
-﻿namespace BookHub.Features.Notification.Service;
+﻿namespace BookHub.Features.Notifications.Service;
 
 using BookHub.Common;
 using BookHub.Data;
-using Chat.Data.Models;
 using Data.Models;
 using Infrastructure.Services.CurrentUser;
 using Infrastructure.Services.Result;
@@ -11,8 +10,8 @@ using Service.Models;
 using Shared;
 
 using static Common.Constants.ErrorMessages;
-using static Shared.Constants.Messages;
-using static Shared.Constants.Statuses;
+using static Common.Utils;
+using static Shared.Constants;
 
 public class NotificationService(
     BookHubDbContext data,
@@ -20,204 +19,299 @@ public class NotificationService(
     ILogger<NotificationService> logger) : INotificationService
 {
     public async Task<IEnumerable<NotificationServiceModel>> LastThree(
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
         => await data
             .Notifications
-            .Where(n => n.ReceiverId == userService.GetId())
+            .AsNoTracking()
+            .Where(n => n.ReceiverId == userService.GetId()!)
             .OrderByDescending(n => n.CreatedOn)
             .Take(3)
             .ToServiceModels()
-            .ToListAsync(token);
+            .ToListAsync(cancellationToken);
 
     public async Task<PaginatedModel<NotificationServiceModel>> All(
         int pageIndex,
         int pageSize,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
+        ClampPageSizeAndIndex(
+            ref pageIndex,
+            ref pageSize);
+
         var notifications = data
             .Notifications
+            .AsNoTracking()
             .Where(n => n.ReceiverId == userService.GetId())
             .OrderBy(n => n.IsRead)
             .ThenByDescending(n => n.CreatedOn)
             .ToServiceModels();
 
-        var total = await notifications.CountAsync(token);
-        var paginatedNotifications = await notifications
+        var total = await notifications.CountAsync(cancellationToken);
+        var items = await notifications
             .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
-            .ToListAsync(token);
+            .ToListAsync(cancellationToken);
 
         return new PaginatedModel<NotificationServiceModel>(
-            paginatedNotifications,
+            items,
             total,
             pageIndex,
             pageSize);
     }
 
-    public async Task<Guid> CreateOnEntityCreation(
-        Guid resourceId,
-        string resourceType,
-        string nameProp,
+    public async Task<Guid> CreateOnBookCreation(
+        Guid bookId,
+        string bookTitle,
         string receiverId,
-        CancellationToken token = default)
-    {
-        var username = userService.GetUsername()!;
-        var message = string.Format(Created, username, nameProp);
-
-        var notification = new Notification
-        {
-            ResourceId = resourceId,
-            ResourceType = resourceType,
-            Message = message,
-            ReceiverId = receiverId
-        };
-
-        data.Add(notification);
-        await data.SaveChangesAsync(token);
-
-        return notification.Id;
-    }
-
-    public async Task<Guid> CreateOnEntityApprovalStatusChange(
-        Guid resourceId,
-        string resourceType,
-        string nameProp,
-        string receiverId,
-        bool isApproved,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var message = string.Format(
-            ApprovalStatusChange,
-            nameProp,
-            isApproved ? Approved : Rejected);
+            Messages.Created,
+            userService.GetUsername(),
+            bookTitle);
 
-        var notification = new Notification
-        {
-            ResourceId = resourceId,
-            ResourceType = resourceType,
-            Message = message,
-            ReceiverId = receiverId
-        };
+        return await this.CreateNewNotification(
+            bookId,
+            ResourceType.Book,
+            message,
+            receiverId,
+            cancellationToken);
+    }
 
-        data.Add(notification);
-        await data.SaveChangesAsync(token);
+    public async Task<Guid> CreateOnAuthorCreation(
+        Guid authorId,
+        string authorName,
+        string receiverId,
+        CancellationToken cancellationToken = default)
+    {
+        var message = string.Format(
+            Messages.Created,
+            userService.GetUsername(),
+            authorName);
 
-        return notification.Id;
+        return await this.CreateNewNotification(
+            authorId,
+            ResourceType.Author,
+            message,
+            receiverId,
+            cancellationToken);
+    }
+
+    public async Task<Guid> CreateOnBookApproved(
+        Guid bookId,
+        string bookTitle,
+        string receiverId,
+        CancellationToken cancellationToken = default)
+    {
+        var message = string.Format(
+            Messages.Approved,
+            bookTitle);
+
+        return await this.CreateNewNotification(
+            bookId,
+            ResourceType.Book,
+            message,
+            receiverId,
+            cancellationToken);
+    }
+
+    public async Task<Guid> CreateOnAuthorApproved(
+        Guid authorId,
+        string authorName,
+        string receiverId,
+        CancellationToken cancellationToken = default)
+    {
+        var message = string.Format(
+            Messages.Approved,
+            authorName);
+
+        return await this.CreateNewNotification(
+            authorId,
+            ResourceType.Author,
+            message,
+            receiverId,
+            cancellationToken);
+    }
+
+    public async Task<Guid> CreateOnBookRejected(
+        Guid bookId,
+        string bookTitle,
+        string receiverId,
+        CancellationToken cancellationToken = default)
+    {
+        var message = string.Format(
+            Messages.Rejected,
+            bookTitle);
+
+        return await this.CreateNewNotification(
+            bookId,
+            ResourceType.Book,
+            message,
+            receiverId,
+            cancellationToken);
+    }
+
+    public async Task<Guid> CreateOnAuthorRejected(
+        Guid authorId,
+        string authorName,
+        string receiverId,
+        CancellationToken cancellationToken = default)
+    {
+        var message = string.Format(
+            Messages.Rejected,
+            authorName);
+
+        return await this.CreateNewNotification(
+            authorId,
+            ResourceType.Book,
+            message,
+            receiverId,
+            cancellationToken);
     }
 
     public async Task<Guid> CreateOnChatInvitation(
         Guid chatId,
         string chatName,
         string receiverId,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var username = userService.GetUsername()!;
-        var message = string.Format(ChatInvitation, username, chatName);
+        var message = string.Format(
+            Messages.ChatInvitation,
+            username,
+            chatName);
 
-        var notification = new Notification
-        {
-            ResourceId = chatId,
-            ResourceType = nameof(ChatDbModel),
-            Message = message,
-            ReceiverId = receiverId
-        };
-
-        data.Add(notification);
-        await data.SaveChangesAsync(token);
-
-        return notification.Id;
+        return await this.CreateNewNotification(
+            chatId,
+            ResourceType.Chat,
+            message,
+            receiverId,
+            cancellationToken);
     }
 
-    public async Task<Guid> CreateOnChatInvitationStatusChanged(
+    public async Task<Guid> CreateOnChatInvitationAccepted(
         Guid chatId,
         string chatName,
         string receiverId,
-        bool hasAccepted,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var message = string.Format(
-            ChatInvitationStatusChange,
-            userService.GetUsername()!,
-            hasAccepted
-                ? Accepted
-                : Rejected,
+            Messages.ChatInvitationAccepted,
+            userService.GetUsername(),
             chatName);
 
-        var notification = new Notification
-        {
-            ResourceId = chatId,
-            ResourceType = nameof(ChatDbModel),
-            Message = message,
-            ReceiverId = receiverId
-        };
+        return await this.CreateNewNotification(
+           chatId,
+           ResourceType.Chat,
+           message,
+           receiverId,
+           cancellationToken);
+    }
 
-        data.Add(notification);
-        await data.SaveChangesAsync(token);
+    public async Task<Guid> CreateOnChatInvitationRejected(
+        Guid chatId,
+        string chatName,
+        string receiverId,
+        CancellationToken cancellationToken = default)
+    {
+        var message = string.Format(
+            Messages.ChatInvitationRejected,
+            userService.GetUsername(),
+            chatName);
 
-        return notification.Id;
+        return await this.CreateNewNotification(
+           chatId,
+           ResourceType.Chat,
+           message,
+           receiverId,
+           cancellationToken);
     }
 
     public async Task<Result> Delete(
-        Guid id,
-        CancellationToken token = default)
+        Guid notificationId,
+        CancellationToken cancellationToken = default)
     {
         var userId = userService.GetId()!;
         var notification = await data
              .Notifications
-             .FindAsync([id], token);
+             .FindAsync(
+                [notificationId],
+                cancellationToken);
 
         if (notification is null)
         {
-            return this.LogAndReturnNotFoundMessage(id);
+            return this.LogAndReturnNotFoundMessage(notificationId);
         }
 
         if (notification.ReceiverId != userId)
         {
-            return this.LogAndReturnUnauthorizedMessage(id, userId);
+            return this.LogAndReturnUnauthorizedMessage(
+                notificationId,
+                userId);
         }
 
         data.Remove(notification);
-        await data.SaveChangesAsync(token);
+        await data.SaveChangesAsync(cancellationToken);
 
         return true;
     }
 
     public async Task<Result> MarkAsRead(
-        Guid id,
-        CancellationToken token = default)
+        Guid notificationId,
+        CancellationToken cancellationToken = default)
     {
-        var userId = userService.GetId()!;
-        var notification = await data
-             .Notifications
-             .FindAsync([id], token);
+        var rowsAffected = await data
+            .Notifications
+            .Where(n =>
+                n.Id == notificationId &&
+                n.ReceiverId == userService.GetId()!)
+            .ExecuteUpdateAsync(
+                setters => 
+                    setters.SetProperty(
+                        n => n.IsRead,
+                        _ => true), 
+                cancellationToken);
 
-        if (notification is null)
+        if (rowsAffected == 0)
         {
-            return this.LogAndReturnNotFoundMessage(id);
+            return this.LogAndReturnNotFoundMessage(notificationId);
         }
-
-        if (notification.ReceiverId != userId)
-        {
-            return this.LogAndReturnUnauthorizedMessage(id, userId);
-        }
-
-        notification.IsRead = true;
-        await data.SaveChangesAsync(token);
 
         return true;
     }
 
-    private string LogAndReturnNotFoundMessage(Guid id)
+    private async Task<Guid> CreateNewNotification(
+        Guid resourceId,
+        ResourceType resourceType,
+        string message,
+        string receiverId,
+        CancellationToken cancellationToken = default)
+    {
+        var notification = new Notification
+        {
+            ResourceId = resourceId,
+            ResourceType = resourceType,
+            Message = message,
+            ReceiverId = receiverId
+        };
+
+        data.Add(notification);
+        await data.SaveChangesAsync(cancellationToken);
+
+        return notification.Id;
+    }
+
+    private string LogAndReturnNotFoundMessage(Guid notificationId)
     {
         logger.LogWarning(
             DbEntityNotFoundTemplate,
             nameof(Notification),
-            id);
+            notificationId);
 
         return string.Format(
             DbEntityNotFound,
             nameof(Notification),
-            id);
+            notificationId);
     }
 
     private string LogAndReturnUnauthorizedMessage(

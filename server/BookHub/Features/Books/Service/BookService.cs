@@ -13,7 +13,7 @@ using Infrastructure.Services.ImageWriter;
 using Infrastructure.Services.Result;
 using Microsoft.EntityFrameworkCore;
 using Models;
-using Notification.Service;
+using Notifications.Service;
 using UserProfile.Service;
 
 using static Common.Constants.ErrorMessages;
@@ -147,9 +147,8 @@ public class BookService(
 
         if (!isAdmin)
         {
-            await notificationService.CreateOnEntityCreation(
+            await notificationService.CreateOnBookCreation(
                 dbModel.Id,
-                nameof(BookDbModel),
                 dbModel.Title,
                 await adminService.GetId(),
                 token);
@@ -269,12 +268,11 @@ public class BookService(
             "Book with Id: {id} was approved.",
             dbModel.Id);
 
-        await notificationService.CreateOnEntityApprovalStatusChange(
+        await notificationService.CreateOnBookApproved(
             id,
-            "Book",
             dbModel.Title,
             dbModel.CreatorId!,
-            true);
+            token);
 
         await profileService.IncrementCreatedBooksCount(
             dbModel.CreatorId!,
@@ -307,12 +305,11 @@ public class BookService(
             "Book with Id: {id} was rejected.",
             dbModel.Id);
 
-        await notificationService.CreateOnEntityApprovalStatusChange(
+        await notificationService.CreateOnBookRejected(
             id,
-            "Book",
             dbModel.Title,
             dbModel.CreatorId!,
-            false);
+            token);
 
         return true;
     }

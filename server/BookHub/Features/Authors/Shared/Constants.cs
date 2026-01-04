@@ -19,8 +19,15 @@ public static class Constants
 
     public static class Paths
     {
-        public const string DefaultImagePath = "/images/authors/default.jpg";
+        public const string DefaultImagePath = $"/images/{ImagePathPrefix}/default.jpg";
 
-        public const string AuthorsImagePathPrefix = "authors";
+        public const string ImagePathPrefix = "authors";
+
+        public const string AuthorString = "Author";
+    }
+
+    public static class RouteNames
+    {
+        public const string DetailsRouteName = "AuthorDetails";
     }
 }

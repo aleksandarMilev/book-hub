@@ -1,7 +1,7 @@
-﻿namespace BookHub.Features.Notification.Shared;
+﻿namespace BookHub.Features.Notifications.Shared;
 
-using Service.Models;
 using Data.Models;
+using Service.Models;
 
 public static class NotificationMapping
 {

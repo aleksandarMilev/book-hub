@@ -1,9 +1,10 @@
-﻿namespace BookHub.Features.Notification.Data.Models;
+﻿namespace BookHub.Features.Notifications.Data.Models;
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using BookHub.Data.Models.Base;
 using Identity.Data.Models;
+using Shared;
 
 using static Shared.Constants.Validation;
 
@@ -24,5 +25,5 @@ public class Notification : DeletableEntity<Guid>
     [ForeignKey(nameof(ResourceType))]
     public Guid ResourceId { get; init; }
 
-    public string ResourceType { get; set; } = null!;
+    public ResourceType ResourceType { get; set; }
 }

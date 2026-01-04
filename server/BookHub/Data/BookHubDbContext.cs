@@ -8,7 +8,7 @@ using Features.Book.Data.Models;
 using Features.Chat.Data.Models;
 using Features.Genre.Data.Models;
 using Features.Identity.Data.Models;
-using Features.Notification.Data.Models;
+using Features.Notifications.Data.Models;
 using Features.ReadingList.Data.Models;
 using Features.Review.Data.Models;
 using Features.UserProfile.Data.Models;

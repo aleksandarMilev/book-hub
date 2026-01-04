@@ -16,16 +16,24 @@ public class SearchController(ISearchService service) : ApiController
         string? searchTerm,
         int page = DefaultPageIndex,
         int pageSize = DefaultPageSize,
-        CancellationToken token = default)
-        => this.Ok(await service.Books(searchTerm, page, pageSize));
+        CancellationToken cancellationToken = default)
+        => this.Ok(await service.Books(
+            searchTerm,
+            page,
+            pageSize,
+            cancellationToken));
 
     [HttpGet(ApiRoutes.Genres)]
     public async Task<ActionResult<PaginatedModel<SearchBookServiceModel>>> Genres(
         string? searchTerm,
         int page = DefaultPageIndex,
         int pageSize = DefaultPageSize,
-        CancellationToken token = default)
-        => this.Ok(await service.Genres(searchTerm, page, pageSize, token));
+        CancellationToken cancellationToken = default)
+        => this.Ok(await service.Genres(
+            searchTerm,
+            page,
+            pageSize,
+            cancellationToken));
 
     [AllowAnonymous]
     [HttpGet(ApiRoutes.Articles)]
@@ -33,30 +41,46 @@ public class SearchController(ISearchService service) : ApiController
         string? searchTerm,
         int page = DefaultPageIndex,
         int pageSize = DefaultPageSize,
-        CancellationToken token = default)
-        => this.Ok(await service.Articles(searchTerm, page, pageSize, token));
+        CancellationToken cancellationToken = default)
+        => this.Ok(await service.Articles(
+            searchTerm,
+            page,
+            pageSize,
+            cancellationToken));
 
     [HttpGet(ApiRoutes.Authors)]
     public async Task<ActionResult<PaginatedModel<SearchAuthorServiceModel>>> Authors(
        string? searchTerm,
        int page = DefaultPageIndex,
        int pageSize = DefaultPageSize,
-        CancellationToken token = default)
-       => this.Ok(await service.Authors(searchTerm, page, pageSize, token));
+        CancellationToken cancellationToken = default)
+       => this.Ok(await service.Authors(
+           searchTerm,
+           page,
+           pageSize,
+           cancellationToken));
 
     [HttpGet(ApiRoutes.Profiles)]
     public async Task<ActionResult<PaginatedModel<SearchProfileServiceModel>>> Profiles(
        string? searchTerm,
        int page = DefaultPageIndex,
        int pageSize = DefaultPageSize,
-        CancellationToken token = default)
-       => this.Ok(await service.Profiles(searchTerm, page, pageSize, token));
+        CancellationToken cancellationToken = default)
+       => this.Ok(await service.Profiles(
+           searchTerm,
+           page,
+           pageSize,
+           cancellationToken));
 
     [HttpGet(ApiRoutes.Chats)]
     public async Task<ActionResult<PaginatedModel<SearchChatServiceModel>>> Chats(
         string? searchTerm,
         int page = DefaultPageIndex,
         int pageSize = DefaultPageSize,
-        CancellationToken token = default)
-        => this.Ok(await service.Chats(searchTerm, page, pageSize, token));
+        CancellationToken cancellationToken = default)
+        => this.Ok(await service.Chats(
+            searchTerm,
+            page,
+            pageSize,
+            cancellationToken));
 }

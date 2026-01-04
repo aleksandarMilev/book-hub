@@ -1,4 +1,4 @@
-﻿namespace BookHub.Features.Notification.Web;
+﻿namespace BookHub.Features.Notifications.Web;
 
 using BookHub.Common;
 using Infrastructure.Extensions;
@@ -15,22 +15,24 @@ public class NotificationsController(INotificationService service) : ApiControll
 {
     [HttpGet(ApiRoutes.Last)]
     public async Task<ActionResult<IEnumerable<NotificationServiceModel>>> LastThree(
-        CancellationToken token = default)
-        => this.Ok(await service.LastThree(token));
+        CancellationToken cancellationToken = default)
+        => this.Ok(await service.LastThree(cancellationToken));
 
     [HttpGet]
     public async Task<ActionResult<PaginatedModel<NotificationServiceModel>>> All(
        int pageIndex = DefaultPageIndex,
        int pageSize = DefaultPageSize,
-       CancellationToken token = default)
-       => this.Ok(await service.All(pageIndex, pageSize, token));
+       CancellationToken cancellationToken = default)
+       => this.Ok(await service.All(pageIndex, pageSize, cancellationToken));
 
     [HttpDelete(Id)]
     public async Task<ActionResult> Delete(
         Guid id,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
-        var result = await service.Delete(id, token);
+        var result = await service.Delete(
+            id,
+            cancellationToken);
 
         return this.NoContentOrBadRequest(result);
     }
@@ -38,9 +40,11 @@ public class NotificationsController(INotificationService service) : ApiControll
     [HttpPatch(Id + ApiRoutes.Read)]
     public async Task<ActionResult> MarkRead(
         Guid id,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
-        var result = await service.MarkAsRead(id, token);
+        var result = await service.MarkAsRead(
+            id,
+            cancellationToken);
 
         return this.NoContentOrBadRequest(result);
     }

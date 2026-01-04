@@ -12,6 +12,6 @@ public class StatisticsController(IStatisticsService service) : ApiController
     [HttpGet]
     [AllowAnonymous]
     public async Task<ActionResult<StatisticsServiceModel>> All(
-        CancellationToken token = default)
-        => this.Ok(await service.All(token));
+        CancellationToken cancellationToken = default)
+        => this.Ok(await service.All(cancellationToken));
 }

@@ -1,4 +1,6 @@
-﻿namespace BookHub.Features.Notification.Service.Models;
+﻿namespace BookHub.Features.Notifications.Service.Models;
+
+using Shared;
 
 public class NotificationServiceModel
 {
@@ -12,5 +14,5 @@ public class NotificationServiceModel
 
     public Guid ResourceId { get; init; }
 
-    public string ResourceType { get; init; } = null!;
+    public ResourceType ResourceType { get; init; }
 }
