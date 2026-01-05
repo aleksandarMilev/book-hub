@@ -2,18 +2,19 @@
   font-family: 'Inter', sans-serif;
 }
 
+.author-details-col {
+  margin: 0 auto;
+}
+
 .author-details-card {
   border-radius: 18px;
   box-shadow: 0 8px 26px rgba(0, 0, 0, 0.12);
   border: none;
+  overflow: hidden;
 }
 
 .author-details-body {
   padding: 2.2rem 2.4rem;
-}
-
-.author-details-col {
-  margin: 0 auto;
 }
 
 .author-details-breadcrumb {
@@ -25,6 +26,7 @@
   background: transparent;
   padding: 0;
   margin-bottom: 0.4rem;
+  flex-wrap: wrap;
 }
 
 .author-details-breadcrumb .breadcrumb-item + .breadcrumb-item::before {
@@ -59,6 +61,8 @@
 .author-subtitle {
   font-size: 0.95rem;
   color: #6c757d !important;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .author-image-container {
@@ -94,6 +98,8 @@
   color: #9da3b0;
   font-weight: 600;
   font-size: 0.95rem;
+  text-align: center;
+  padding: 0 12px;
 }
 
 .author-header-meta {
@@ -106,11 +112,13 @@
 .author-meta-pill {
   display: inline-flex;
   align-items: center;
+  gap: 6px;
   padding: 6px 12px;
   border-radius: 999px;
   background: #f5f5f8;
   font-size: 0.9rem;
   color: #4a4f63;
+  max-width: 100%;
 }
 
 .author-meta-pill .fa-star,
@@ -120,13 +128,13 @@
   color: #ffc107;
 }
 
-.author-details-body strong {
-  font-weight: 600;
+.author-meta-pill svg,
+.author-meta-pill i {
+  flex: 0 0 auto;
 }
 
-.author-meta {
-  font-size: 0.95rem;
-  color: #6c757d;
+.author-details-body strong {
+  font-weight: 600;
 }
 
 .author-details-actions {
@@ -134,17 +142,8 @@
 }
 
 .author-details-actions .btn-warning,
-.author-details-actions .btn-danger {
-  border-radius: 14px;
-  font-weight: 600;
-}
-
-.author-actions {
-  display: flex;
-  gap: 10px;
-}
-
-.author-actions .btn {
+.author-details-actions .btn-danger,
+.author-details-body .btn.btn-primary {
   border-radius: 14px;
   font-weight: 600;
 }
@@ -155,12 +154,6 @@
   color: #3b2c4f;
   margin-top: 2rem;
   margin-bottom: 0.8rem;
-}
-
-.author-details-body .btn.btn-primary {
-  border-radius: 14px;
-  padding: 10px 22px;
-  font-weight: 600;
 }
 
 .author-details-content {
@@ -223,36 +216,112 @@
   padding: 0.15rem 0.35rem;
 }
 
+.author-details-content pre {
+  max-width: 100%;
+  overflow: auto;
+}
+
 .author-details-content pre code {
   display: block;
   padding: 0.75rem 1rem;
   border-radius: 8px;
+  white-space: pre;
 }
 
-@media (max-width: 768px) {
+/* Top books responsiveness */
+.author-details-page .book-list-item {
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 780px) {
+  .author-details-page {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
   .author-details-body {
-    padding: 1.5rem 1.4rem;
+    padding: 1.5rem 1.25rem;
+  }
+
+  .author-header-row {
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .author-image-container {
+    width: 180px;
+    height: 180px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .author-title {
     font-size: 2rem;
   }
 
-  .author-image-container {
-    width: 180px;
-    height: 180px;
-    margin-bottom: 0.6rem;
-  }
-
-  .author-header-row {
-    text-align: center;
-  }
-
   .author-header-meta {
     justify-content: center;
   }
 
+  .author-meta-pill {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .author-details-content {
+    max-width: 100%;
+  }
+
   .author-details-content p {
     font-size: 0.98rem;
+    line-height: 1.85;
+  }
+
+  .author-details-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .author-details-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .author-details-page .book-list-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+@media (max-width: 576px) {
+  .author-details-body {
+    padding: 1.25rem 1rem;
+  }
+
+  .author-image-container {
+    width: 160px;
+    height: 160px;
+  }
+
+  .author-title {
+    font-size: 1.75rem;
+  }
+
+  .author-header-meta {
+    gap: 0.5rem;
+  }
+
+  .author-meta-pill {
+    width: 100%;
+    border-radius: 14px;
+    padding: 8px 10px;
+  }
+
+  .author-details-page .book-list-item {
+    max-width: 100%;
   }
 }

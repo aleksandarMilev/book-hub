@@ -234,6 +234,16 @@
   color: #fff;
 }
 
+.fancy-navbar {
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+.fancy-navbar::before {
+  inset: 0;
+  transform: scale(2);
+}
+
 @media (max-width: 991px) {
   .fancy-navbar {
     padding: 0.55rem 0.75rem;

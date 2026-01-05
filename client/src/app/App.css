@@ -27,6 +27,20 @@
   --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
 html,
 body {
   min-height: 100%;
@@ -119,6 +133,16 @@ body::before {
   animation: appBlob2 30s var(--ease-out) infinite alternate;
 }
 
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(110, 168, 254, 0.35);
+}
+
+body::before {
+  inset: 0;
+  transform: scale(1.8);
+}
+
 @keyframes appBlob1 {
   0% {
     transform: translate3d(0, 0, 0) scale(1);
@@ -137,26 +161,14 @@ body::before {
   }
 }
 
-:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(110, 168, 254, 0.35);
-}
-
 @media (max-width: 420px) {
   html,
   body {
-    width: 100%;
-    max-width: 100%;
-    overflow-x: clip;
+    overflow-x: hidden;
   }
   #root,
   .app-shell {
-    width: 100%;
-    max-width: 100%;
-    overflow-x: clip;
-  }
-  * {
-    max-width: 100%;
+    overflow-x: hidden;
   }
   .app-shell::before {
     width: 260px;
@@ -173,15 +185,11 @@ body::before {
 @media (max-width: 768px) {
   html,
   body {
-    width: 100%;
-    max-width: 100%;
-    overflow-x: clip;
+    overflow-x: hidden;
   }
 
   #root,
   .app-shell {
-    width: 100%;
-    max-width: 100%;
-    overflow-x: clip;
+    overflow-x: hidden;
   }
 }
