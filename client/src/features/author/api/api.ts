@@ -39,17 +39,22 @@ export const topThree = async (signal?: AbortSignal) => {
   }
 };
 
-export async function details(id: string, token: string, isAdmin: boolean, signal?: AbortSignal) {
+export const details = async (
+  id: string,
+  token: string,
+  isAdmin: boolean,
+  signal?: AbortSignal,
+) => {
   try {
     const url = `${routes.author}/${id}`;
     const httpClient = isAdmin ? httpAdmin : http;
     const { data } = await httpClient.get<AuthorDetailsDto>(url, getAuthConfig(token, signal));
-
+    console.log(data);
     return mapAuthorDetailsDto(data);
   } catch (error) {
     processError(error, errors.author.byId);
   }
-}
+};
 
 export const create = async (author: CreateAuthor, token: string, signal?: AbortSignal) => {
   try {

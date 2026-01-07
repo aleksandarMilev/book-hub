@@ -51,6 +51,8 @@ export const routes = {
   rejectChatInvitation: '/chat/invite/reject',
   removeChatUser: '/chat/remove/user',
   admin: {
+    book: '/admin/book',
+    author: '/admin/author',
     createArticle: '/admin/article/new',
     editArticle: '/admin/article/edit',
     approveBook: '/book/approve',

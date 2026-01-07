@@ -1,44 +1,73 @@
 ﻿namespace BookHub.Features.Statistics.Service;
 
-using Data;
-using Microsoft.EntityFrameworkCore;
+using Data.Queries.AllStatistics;
+using Microsoft.Extensions.Caching.Memory;
 using Models;
 
-public class StatisticsService(BookHubDbContext data) : IStatisticsService
+public class StatisticsService(
+    IStatisticsQuery data,
+    IMemoryCache cache) : IStatisticsService
 {
+    private const string CacheKey = "home_statistics";
+    private static readonly SemaphoreSlim lockObject = new(1, 1);
+
     public async Task<StatisticsServiceModel> All(
         CancellationToken cancellationToken = default)
     {
-        var users = await data
-            .Users
-            .CountAsync(cancellationToken);
+        if (this.TryGetCached(out var cached))
+        {
+            return cached;
+        }
 
-        var books = await data
-            .Books
-            .CountAsync(cancellationToken);
+        await lockObject.WaitAsync(cancellationToken);
 
-        var authors = await data
-            .Authors
-            .CountAsync(cancellationToken);
+        try
+        {
+            if (this.TryGetCached(out cached))
+            {
+                return cached;
+            }
 
-        var reviews = await data
-            .Reviews
-            .CountAsync(cancellationToken);
+            var statistics = await data.All(cancellationToken);
+            var serviceModel = new StatisticsServiceModel(
+                statistics.Profiles,
+                statistics.Books,
+                statistics.Authors,
+                statistics.Reviews,
+                statistics.Genres,
+                statistics.Articles);
 
-        var genres = await data
-            .Genres
-            .CountAsync(cancellationToken);
+            var cacheOptions = new MemoryCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30)
+            };
 
-        var articles = await data
-            .Articles
-            .CountAsync(cancellationToken);
+            cache.Set(
+                CacheKey,
+                serviceModel,
+                cacheOptions);
 
-        return new StatisticsServiceModel(
-            users,
-            books,
-            authors,
-            reviews,
-            genres,
-            articles);
+            return serviceModel;
+        }
+        finally
+        {
+            lockObject.Release();
+        }
+    }
+
+    private bool TryGetCached(out StatisticsServiceModel value)
+    {
+        var isCached = cache.TryGetValue(
+            CacheKey,
+            out StatisticsServiceModel? cached);
+
+        if (isCached && cached is not null)
+        {
+            value = cached;
+            return true;
+        }
+
+        value = null!;
+        return false;
     }
 }

@@ -7,7 +7,7 @@ import { slugify } from '@/shared/lib/utils/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 
 export const useDetailsPage = () => {
-  const { id, slug } = useParams<{ id: string; slug: string }>();
+  const { id, slug } = useParams<{ id: string; slug?: string }>();
 
   const firstReviewRef = useRef<HTMLDivElement | null>(null);
   const [showFullDescription, setShowFullDescription] = useState(false);
@@ -36,7 +36,6 @@ export const useDetailsPage = () => {
     }
 
     const canonicalSlug = slugify(book.title);
-
     if (!slug || slug !== canonicalSlug) {
       navigate(`${routes.book}/${id}/${canonicalSlug}`, { replace: true });
     }

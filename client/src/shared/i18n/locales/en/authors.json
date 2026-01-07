@@ -1,5 +1,11 @@
 {
   "details": {
+    "nationality": {
+      "label": "Nationality"
+    },
+    "sex": {
+      "label": "Sex:"
+    },
     "breadcrumb": {
       "home": "Home",
       "list": "Authors"
@@ -63,7 +69,7 @@
       "image": "Image",
       "bornAt": "Date of birth",
       "diedAt": "Date of death (if applicable)",
-      "biography": "Biography"
+      "biography": "Biography *"
     },
     "placeholders": {
       "biography": "Write the author's biography here..."
@@ -107,6 +113,7 @@
       "gender": "Gender",
       "image": "Image"
     },
+    "invalidDate": "{{field}} is not a valid date",
     "required": "{{field}} is required!",
     "min": "{{field}} must be at least {{min}} characters long",
     "max": "{{field}} must be less than {{max}} characters",

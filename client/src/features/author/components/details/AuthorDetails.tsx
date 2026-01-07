@@ -111,9 +111,17 @@ const AuthorDetails: FC = () => {
                 <MDBCol md="8">
                   <MDBCardTitle className="author-title">{author.name}</MDBCardTitle>
                   <MDBCardText className="author-subtitle">
+                    <strong>{t('details.nationality.label')}</strong>{' '}
                     {getNationalityName(author.nationality)}
-                    {author.penName &&
-                      ` \u00B7 ${t('details.penName', { penName: author.penName })}`}
+                    {author.penName && (
+                      <>
+                        <br />
+                        {t('details.penName', { penName: author.penName })}
+                      </>
+                    )}
+                  </MDBCardText>
+                  <MDBCardText className="text-muted mt-2">
+                    <strong>{t('details.sex.label')}</strong> {author.gender}
                   </MDBCardText>
                   <div className="author-header-meta">
                     <div className="author-meta-pill">

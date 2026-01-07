@@ -16,10 +16,19 @@
   padding: 2.2rem 2.4rem;
 }
 
+.author-form-row {
+  align-items: stretch;
+}
+
+.author-form-image-col {
+  display: flex;
+}
+
 .author-form-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
 .author-form-card .fw-bold,
@@ -28,6 +37,26 @@
   font-weight: 800 !important;
   color: #3b2c4f;
   margin-bottom: 25px !important;
+}
+
+.author-form {
+  width: 100%;
+}
+
+.author-form-field {
+  margin-bottom: 1rem;
+}
+
+.author-form-label {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #3b2c4f;
+  margin-bottom: 8px;
+}
+
+.author-form-control {
+  margin-bottom: 0 !important;
 }
 
 .author-form-card .form-control {
@@ -51,10 +80,15 @@
   min-height: 200px;
 }
 
+.author-form-file-input {
+  width: 100%;
+}
+
 .author-form-card .text-danger {
   font-size: 0.9rem;
   font-weight: 600;
   color: #ff6b6b !important;
+  margin-top: 8px;
 }
 
 .author-form-card .fw-bold.text-danger,
@@ -71,6 +105,10 @@
   margin-bottom: 18px;
 }
 
+.author-form-card .author-form-nationality {
+  position: relative;
+}
+
 .author-form-card .author-form-gender h6,
 .author-form-card .author-form-nationality h6 {
   font-size: 0.95rem;
@@ -84,11 +122,16 @@
 }
 
 .author-form-nationality-dropdown {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 8px);
   max-height: 200px;
   overflow-y: auto;
   border-radius: 12px;
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
-  z-index: 5;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.98);
 }
 
 .author-form-nationality-item {
@@ -102,13 +145,14 @@
 }
 
 .author-form-actions {
-  margin-top: 20px;
+  margin-top: 18px;
   display: flex;
   justify-content: flex-end;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
-.author-form-card .btn {
+.author-form-btn {
   border-radius: 14px;
   padding: 12px 22px;
   font-size: 0.95rem;
@@ -127,32 +171,31 @@
   border: none;
 }
 
-.author-form-card .btn-light {
+.author-form-btn--reset {
   background: #f4f4f6;
   color: #555;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
 }
 
-.author-form-card .btn-light:hover:not(:disabled) {
+.author-form-btn--reset:hover:not(:disabled) {
   background: #e7e7ec;
   transform: translateY(-1px);
 }
 
-.author-form-card .btn-warning {
+.author-form-btn--submit {
   padding: 12px 24px;
   font-weight: 700;
   background: linear-gradient(90deg, #6ea8fe, #9a6bff, #ff6ec7);
   color: #fff;
   box-shadow: 0 6px 16px rgba(154, 107, 255, 0.45);
-  border: none;
 }
 
-.author-form-card .btn-warning:hover:not(:disabled) {
+.author-form-btn--submit:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(154, 107, 255, 0.6);
 }
 
-.author-form-card .btn:disabled {
+.author-form-btn:disabled {
   opacity: 0.7;
   cursor: not-allowed;
   transform: none;
@@ -160,6 +203,10 @@
 }
 
 @media (max-width: 768px) {
+  .author-form-container {
+    padding-top: 18px;
+  }
+
   .author-form-card .card-body {
     padding: 1.6rem 1.5rem;
   }
@@ -174,7 +221,22 @@
     align-items: stretch;
   }
 
-  .author-form-card .btn {
+  .author-form-btn {
     width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .author-form-card .card-body {
+    padding: 1.25rem 1rem;
+  }
+
+  .author-form-label {
+    font-size: 0.92rem;
+  }
+
+  .author-form-textarea,
+  .author-form-card textarea#biography {
+    min-height: 170px;
   }
 }
