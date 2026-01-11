@@ -45,13 +45,11 @@ const AuthorForm: FC<Props> = ({ authorData = null, isEditMode = false }) => {
               <MDBCol md="6" className="d-none d-md-block author-form-image-col">
                 <MDBCardImage src={image} alt="Author" className="author-form-image" fluid />
               </MDBCol>
-
               <MDBCol md="6">
                 <MDBCardBody className="text-black d-flex flex-column justify-content-center">
                   <h3 className="mb-4 fw-bold">
                     {isEditMode ? t('form.titleEdit') : t('form.titleCreate')}
                   </h3>
-
                   <form onSubmit={formik.handleSubmit} className="author-form">
                     <div className="author-form-field">
                       <label htmlFor="name" className="author-form-label">
@@ -69,7 +67,6 @@ const AuthorForm: FC<Props> = ({ authorData = null, isEditMode = false }) => {
                         <div className="text-danger">{formik.errors.name}</div>
                       )}
                     </div>
-
                     <div className="author-form-field">
                       <label htmlFor="penName" className="author-form-label">
                         {t('form.labels.penName')}
@@ -88,7 +85,6 @@ const AuthorForm: FC<Props> = ({ authorData = null, isEditMode = false }) => {
                         <div className="text-danger">{formik.errors.penName}</div>
                       )}
                     </div>
-
                     <div className="author-form-field">
                       <label htmlFor="image" className="author-form-label">
                         {t('form.labels.image')}
@@ -111,7 +107,6 @@ const AuthorForm: FC<Props> = ({ authorData = null, isEditMode = false }) => {
                         <div className="text-danger">{formik.errors.image}</div>
                       )}
                     </div>
-
                     <div className="author-form-field">
                       <label htmlFor="bornAt" className="author-form-label">
                         {t('form.labels.bornAt')}
@@ -130,7 +125,6 @@ const AuthorForm: FC<Props> = ({ authorData = null, isEditMode = false }) => {
                         <div className="text-danger">{formik.errors.bornAt}</div>
                       )}
                     </div>
-
                     <div className="author-form-field">
                       <label htmlFor="diedAt" className="author-form-label">
                         {t('form.labels.diedAt')}
@@ -149,15 +143,20 @@ const AuthorForm: FC<Props> = ({ authorData = null, isEditMode = false }) => {
                         <div className="text-danger">{formik.errors.diedAt}</div>
                       )}
                     </div>
-
-                    <GenderRadio formik={formik as FormikProps<AuthorFormValues>} />
-
-                    <NationalitySearch
-                      nationalities={nationalities}
-                      loading={isFetching}
-                      formik={formik as FormikProps<AuthorFormValues>}
-                    />
-
+                    <div className="author-form-field">
+                      <div className="author-form-gender">
+                        <GenderRadio formik={formik as FormikProps<AuthorFormValues>} />
+                      </div>
+                    </div>
+                    <div className="author-form-field">
+                      <div className="author-form-nationality">
+                        <NationalitySearch
+                          nationalities={nationalities}
+                          loading={isFetching}
+                          formik={formik as FormikProps<AuthorFormValues>}
+                        />
+                      </div>
+                    </div>
                     <div className="author-form-field">
                       <label htmlFor="biography" className="author-form-label">
                         {t('form.labels.biography')}
@@ -175,7 +174,6 @@ const AuthorForm: FC<Props> = ({ authorData = null, isEditMode = false }) => {
                         <div className="text-danger">{formik.errors.biography}</div>
                       )}
                     </div>
-
                     <p className="text-danger fw-bold author-form-required-note">
                       {t('form.requiredNote')}
                     </p>

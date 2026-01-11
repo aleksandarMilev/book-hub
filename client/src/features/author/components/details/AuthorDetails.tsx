@@ -162,7 +162,7 @@ const AuthorDetails: FC = () => {
                   )}
                 </MDBCol>
               </MDBRow>
-              {(isCreator || isAdmin) && (
+              {(isCreator || isAdmin) && author.isApproved && (
                 <div className="author-details-actions d-flex gap-2 mt-4">
                   <Link
                     to={`${routes.editAuthor}/${id}`}
@@ -188,7 +188,7 @@ const AuthorDetails: FC = () => {
                     authorName={author.name}
                     initialIsApproved={author.isApproved ?? false}
                     token={token}
-                    onSuccess={(msg, success) => showMessage(msg, !!success)}
+                    onSuccess={(message, success) => showMessage(message, !!success)}
                   />
                 </div>
               )}

@@ -78,7 +78,7 @@
       "label": "Пол: *",
       "male": "Мъж",
       "female": "Жена",
-      "other": "Друго"
+      "other": "Друг"
     },
     "nationality": {
       "label": "Националност:",

@@ -17,7 +17,8 @@ builder.Services
     .AddApiControllers()
     .AddServices()
     .AddSwagger()
-    .AddHealthcheck();
+    .AddHealthcheck()
+    .AddMemoryCache();
 
 var app = builder.Build();
 
