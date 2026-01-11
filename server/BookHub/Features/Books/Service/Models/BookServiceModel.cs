@@ -1,4 +1,4 @@
-﻿namespace BookHub.Features.Book.Service.Models;
+﻿namespace BookHub.Features.Books.Service.Models;
 
 using Genre.Service.Models;
 

@@ -1,6 +1,6 @@
 ﻿namespace BookHub.Features.ReadingList.Shared;
 
-using Book.Service.Models;
+using Books.Service.Models;
 using Genre.Service.Models;
 using ReadingList.Data.Models;
 using ReadingList.Service.Models;

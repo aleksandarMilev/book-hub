@@ -2,12 +2,12 @@
 
 using BookHub.Data.Models.Base;
 using BookHub.Data.Models.Shared.ChatUser;
-using Features.Authors.Data.Models;
-using Features.Book.Data.Models;
-using Features.Chat.Data.Models;
-using Features.ReadingList.Data.Models;
-using Features.Review.Data.Models;
-using Features.UserProfile.Data.Models;
+using Authors.Data.Models;
+using Books.Data.Models;
+using Chat.Data.Models;
+using ReadingList.Data.Models;
+using Review.Data.Models;
+using UserProfile.Data.Models;
 using Microsoft.AspNetCore.Identity;
 
 public class UserDbModel :

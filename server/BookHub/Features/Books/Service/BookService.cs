@@ -1,12 +1,10 @@
-﻿namespace BookHub.Features.Book.Service;
+﻿namespace BookHub.Features.Books.Service;
 
 using Areas.Admin.Service;
 using BookHub.Common;
 using BookHub.Data;
 using BookHub.Data.Models.Shared.BookGenre.Models;
 using Data.Models;
-using Features.Authors.Data.Models;
-using Features.UserProfile.Data.Models;
 using Infrastructure.Extensions;
 using Infrastructure.Services.CurrentUser;
 using Infrastructure.Services.ImageWriter;
@@ -17,6 +15,7 @@ using Notifications.Service;
 using UserProfile.Service;
 
 using static Common.Constants.ErrorMessages;
+using static Common.Utils;
 using static Shared.BookMapping;
 using static Shared.Constants.Paths;
 
@@ -30,87 +29,104 @@ public class BookService(
     IProfileService profileService) : IBookService
 {
     public async Task<IEnumerable<BookServiceModel>> TopThree(
-        CancellationToken token = default)
+        CancellationToken cancellationToken)
         => await data
             .Books
+            .AsNoTracking()
             .ToServiceModels()
             .OrderByDescending(b => b.AverageRating)
             .Take(3)
-            .ToListAsync(token);
+            .ToListAsync(cancellationToken);
 
     public async Task<PaginatedModel<BookServiceModel>> ByGenre(
         Guid genreId,
-        int page,
+        int pageIndex,
         int pageSize,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
+        ClampPageSizeAndIndex(
+            ref pageIndex,
+            ref pageSize);
+
         var books = data
             .Books
+            .AsNoTracking()
             .Where(b => b.BooksGenres
                 .Any(bg => bg.GenreId == genreId))
             .ToServiceModels()
             .OrderByDescending(b => b.AverageRating);
 
-        var totalBooks = await books.CountAsync(token);
-        var paginatedBooks = await books
-            .Skip((page - 1) * pageSize)
+        var total = await books.CountAsync(cancellationToken);
+        var items = await books
+            .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
-            .ToListAsync(token);
+            .ToListAsync(cancellationToken);
 
         return new PaginatedModel<BookServiceModel>(
-            paginatedBooks,
-            totalBooks,
-            page,
+            items,
+            total,
+            pageIndex,
             pageSize);
     }
 
     public async Task<PaginatedModel<BookServiceModel>> ByAuthor(
         Guid authorId, 
-        int page, 
+        int pageIndex, 
         int pageSize,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
+        ClampPageSizeAndIndex(
+            ref pageIndex,
+            ref pageSize);
+
         var books = data
             .Books
+            .AsNoTracking()
             .Where(b => b.AuthorId == authorId)
             .ToServiceModels()
             .OrderByDescending(b => b.AverageRating);
 
-        var totalBooks = await books.CountAsync(token);
-        var paginatedBooks = await books
-            .Skip((page - 1) * pageSize)
+        var total = await books.CountAsync(cancellationToken);
+        var items = await books
+            .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
-            .ToListAsync(token);
+            .ToListAsync(cancellationToken);
 
         return new PaginatedModel<BookServiceModel>(
-            paginatedBooks, 
-            totalBooks, 
-            page, 
+            items, 
+            total, 
+            pageIndex, 
             pageSize);
     }
 
     public async Task<BookDetailsServiceModel?> Details(
-        Guid id,
-        CancellationToken token = default)
+        Guid bookId,
+        CancellationToken cancellationToken = default)
         => await data
             .Books
+            .AsNoTracking()
             .AsQueryable()
             .ToDetailsServiceModels(userService.GetId()!)
-            .FirstOrDefaultAsync(b => b.Id == id, token);
+            .FirstOrDefaultAsync(
+                b => b.Id == bookId,
+                cancellationToken);
 
     public async Task<BookDetailsServiceModel?> AdminDetails(
-        Guid id,
-        CancellationToken token = default)
+        Guid bookId,
+        CancellationToken cancellationToken = default)
         => await data
             .Books
+            .AsNoTracking()
             .IgnoreQueryFilters()
             .ApplyIsDeletedFilter()
             .ToDetailsServiceModels(userService.GetId()!)
-            .FirstOrDefaultAsync(b => b.Id == id, token);
+            .FirstOrDefaultAsync(
+                b => b.Id == bookId,
+                cancellationToken);
 
     public async Task<BookDetailsServiceModel> Create(
         CreateBookServiceModel serviceModel,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var dbModel = serviceModel.ToDbModel();
         var userId = userService.GetId()!;
@@ -118,7 +134,7 @@ public class BookService(
         dbModel.CreatorId = userId;
         dbModel.AuthorId = await this.MapAuthorToBook(
             serviceModel.AuthorId,
-            token);
+            cancellationToken);
 
         var isAdmin = userService.IsAdmin();
         if (isAdmin)
@@ -127,19 +143,24 @@ public class BookService(
         }
 
         await imageWriter.Write(
-           BooksImagePathPrefix,
+           ImagePathPrefix,
            dbModel,
            serviceModel,
            DefaultImagePath,
-           token);
+           cancellationToken);
 
         data.Add(dbModel);
-        await data.SaveChangesAsync(token);
+        await data.SaveChangesAsync(cancellationToken);
+
+        var genredIds = (serviceModel.Genres ?? [])
+            .Where(id => id != Guid.Empty)
+            .Distinct()
+            .ToList();
 
         await this.MapBookAndGenres(
             dbModel.Id,
-            serviceModel.Genres,
-            token);
+            genredIds,
+            cancellationToken);
 
         logger.LogInformation(
             "New book with Id: {id} was created.",
@@ -151,7 +172,7 @@ public class BookService(
                 dbModel.Id,
                 dbModel.Title,
                 await adminService.GetId(),
-                token);
+                cancellationToken);
         }
 
         return dbModel.ToDetailsServiceModel(userId);
@@ -160,9 +181,12 @@ public class BookService(
     public async Task<Result> Edit(
         Guid id,
         CreateBookServiceModel serviceModel,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
-        var dbModel = await this.GetDbModel(id, token);
+        var dbModel = await this.GetDbModel(
+            id,
+            cancellationToken);
+
         if (dbModel is null)
         {
             return this.LogAndReturnNotFoundMessage(id);
@@ -180,30 +204,30 @@ public class BookService(
         serviceModel.UpdateDbModel(dbModel);
 
         await imageWriter.Write(
-            BooksImagePathPrefix,
+            ImagePathPrefix,
             dbModel,
             serviceModel,
             null,
-            token);
+            cancellationToken);
 
         if (isNewImageUploaded)
         {
             imageWriter.Delete(
-                nameof(AuthorDbModel),
+                nameof(BookDbModel),
                 oldImagePath,
                 DefaultImagePath);
         }
 
         dbModel.AuthorId = await this.MapAuthorToBook(
             serviceModel.AuthorId,
-            token);
+            cancellationToken);
 
-        await data.SaveChangesAsync(token);
+        await data.SaveChangesAsync(cancellationToken);
 
         await this.MapBookAndGenres(
             dbModel.Id,
             serviceModel.Genres,
-            token);
+            cancellationToken);
 
         logger.LogInformation(
             "Book with Id: {id} was updated.",
@@ -214,9 +238,12 @@ public class BookService(
 
     public async Task<Result> Delete(
         Guid bookId,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
-        var dbModel = await this.GetDbModel(bookId, token);
+        var dbModel = await this.GetDbModel(
+            bookId,
+            cancellationToken);
+
         if (dbModel is null)
         {
             return LogAndReturnNotFoundMessage(bookId);
@@ -232,7 +259,7 @@ public class BookService(
         }
 
         data.Remove(dbModel);
-        await data.SaveChangesAsync(token);
+        await data.SaveChangesAsync(cancellationToken);
 
         logger.LogInformation(
             "Book with Id: {id} was deleted.",
@@ -242,188 +269,166 @@ public class BookService(
     }
 
     public async Task<Result> Approve(
-        Guid id,
-        CancellationToken token = default)
+        Guid bookId,
+        CancellationToken cancellationToken = default)
     {
         var dbModel = await data
              .Books
              .IgnoreQueryFilters()
              .ApplyIsDeletedFilter()
-             .FirstOrDefaultAsync(a => a.Id == id, token);
+             .FirstOrDefaultAsync(
+                b => b.Id == bookId,
+                cancellationToken);
 
         if (dbModel is null)
         {
-            return LogAndReturnNotFoundMessage(id);
+            return LogAndReturnNotFoundMessage(bookId);
         }
 
         if (!userService.IsAdmin())
         {
-            return LogAndReturnUnauthorizedMessage(id, userService.GetId()!);
+            return LogAndReturnUnauthorizedMessage(
+                bookId,
+                userService.GetId()!);
         }
 
         dbModel.IsApproved = true;
-        await data.SaveChangesAsync(token);
+        await data.SaveChangesAsync(cancellationToken);
 
         logger.LogInformation(
             "Book with Id: {id} was approved.",
             dbModel.Id);
 
         await notificationService.CreateOnBookApproved(
-            id,
+            bookId,
             dbModel.Title,
             dbModel.CreatorId!,
-            token);
+            cancellationToken);
 
         await profileService.IncrementCreatedBooksCount(
             dbModel.CreatorId!,
-            token);
+            cancellationToken);
 
         return true;
     }
 
     public async Task<Result> Reject(
-        Guid id,
-        CancellationToken token = default)
+        Guid bookId,
+        CancellationToken cancellationToken = default)
     {
         var dbModel = await data
             .Books
             .IgnoreQueryFilters()
             .ApplyIsDeletedFilter()
-            .FirstOrDefaultAsync(a => a.Id == id, token);
+            .FirstOrDefaultAsync(
+                b => b.Id == bookId,
+                cancellationToken);
 
         if (dbModel is null)
         {
-            return LogAndReturnNotFoundMessage(id);
+            return LogAndReturnNotFoundMessage(bookId);
         }
 
         if (!userService.IsAdmin())
         {
-            return LogAndReturnUnauthorizedMessage(id, userService.GetId()!);
+            return LogAndReturnUnauthorizedMessage(
+                bookId,
+                userService.GetId()!);
         }
+
+        data.Remove(dbModel);
 
         logger.LogInformation(
             "Book with Id: {id} was rejected.",
             dbModel.Id);
 
         await notificationService.CreateOnBookRejected(
-            id,
+            bookId,
             dbModel.Title,
             dbModel.CreatorId!,
-            token);
+            cancellationToken);
 
         return true;
     }
 
     private async Task<Guid?> MapAuthorToBook(
-        Guid? id,
-        CancellationToken token = default) 
+        Guid? authorId,
+        CancellationToken cancellationToken = default)
     {
-        Guid authorId = await data
-            .Authors
-            .Select(a => a.Id)
-            .FirstOrDefaultAsync(a => a == id, token);
-
-        if (authorId == Guid.Empty)
+        if (authorId is null || authorId == Guid.Empty)
         {
             return null;
         }
 
-        return authorId;
+        var exists = await data
+            .Authors
+            .AsNoTracking()
+            .AnyAsync(
+                a => a.Id == authorId,
+                cancellationToken);
+
+        return exists ? authorId : null;
     }
 
     private async Task MapBookAndGenres(
-        Guid bookId, 
-        IEnumerable<Guid> genreIds,
-        CancellationToken token = default)
-    {
-        await this.RemoveExistingBookGenres(bookId, token);
-
-        if (genreIds.Any())
-        {
-            foreach (var genreId in genreIds)
-            {
-                var bookGenreExists = !await this.BookGenreExists(
-                    bookId,
-                    genreId,
-                    token);
-
-                if (bookGenreExists)
-                {
-                    continue;
-                }
-
-                var bookGenre = new BookGenreDbModel
-                {
-                    BookId = bookId,
-                    GenreId = genreId
-                };
-
-                data.Add(bookGenre);
-            }
-        }
-        else
-        {
-            var otherGenreId = await data
-                .Genres
-                .Where(g => g.Name == "Other")
-                .Select(g => g.Id)
-                .FirstOrDefaultAsync(token);
-
-            var bookGenreExists = !await this.BookGenreExists(
-                bookId,
-                otherGenreId,
-                token);
-
-            if (bookGenreExists)
-            {
-                var bookGenre = new BookGenreDbModel
-                {
-                    BookId = bookId,
-                    GenreId = otherGenreId
-                };
-
-                data.Add(bookGenre);
-            }
-        }
-
-        await data.SaveChangesAsync(token);
-    }
-
-    private async Task<bool> BookGenreExists(
         Guid bookId,
-        Guid genreId,
-        CancellationToken token = default)
-        => await data
+        ICollection<Guid> genreIds,
+        CancellationToken cancellationToken = default)
+    {
+        await using var transaction = await data
+            .Database
+            .BeginTransactionAsync(cancellationToken);
+
+        await data
             .BooksGenres
-            .AsNoTracking()
-            .AnyAsync(
-                bg => bg.BookId == bookId && bg.GenreId == genreId,
-                token);
+            .Where(bg => bg.BookId == bookId)
+            .ExecuteDeleteAsync(cancellationToken);
 
-    private async Task RemoveExistingBookGenres(
-        Guid bookId,
-        CancellationToken token = default) 
-    {
-        var existingMaps = await data
-           .BooksGenres
-           .Where(bg => bg.BookId == bookId)
-           .ToListAsync(token);
+        if (!genreIds.Any())
+        {
+            const string Other = "Other";
 
-        data.RemoveRange(existingMaps);
-        await data.SaveChangesAsync(token);
+            var otherId = await data
+                .Genres
+                .AsNoTracking()
+                .Where(g => g.Name == Other)
+                .Select(g => g.Id)
+                .SingleOrDefaultAsync(cancellationToken);
+
+            if (otherId == Guid.Empty)
+            {
+                throw new InvalidOperationException($"Genre {Other} not found.");
+            }
+
+            genreIds.Add(otherId);
+        }
+
+        var mapModels = genreIds
+            .Select(genreId => new BookGenreDbModel
+            {
+                BookId = bookId,
+                GenreId = genreId
+            });
+
+        data
+            .BooksGenres
+            .AddRange(mapModels);
+
+        await data.SaveChangesAsync(cancellationToken);
+        await transaction.CommitAsync(cancellationToken);
     }
 
-    private string LogAndReturnNotFoundMessage(Guid id)
+    private string LogAndReturnNotFoundMessage(Guid bookId)
     {
         logger.LogWarning(
             DbEntityNotFoundTemplate,
             nameof(BookDbModel),
-            id);
+            bookId);
 
         return string.Format(
             DbEntityNotFound,
             nameof(BookDbModel),
-            id);
+            bookId);
     }
 
     private string LogAndReturnUnauthorizedMessage(
@@ -445,8 +450,8 @@ public class BookService(
 
     private async Task<BookDbModel?> GetDbModel(
         Guid id,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
         => await data
             .Books
-            .FindAsync([id], token);
+            .FindAsync([id], cancellationToken);
 }

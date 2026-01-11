@@ -1,6 +1,6 @@
 ﻿namespace BookHub.Features.ReadingList.Web;
 
-using Book.Service.Models;
+using Books.Service.Models;
 using BookHub.Common;
 using Data.Models;
 using Infrastructure.Extensions;

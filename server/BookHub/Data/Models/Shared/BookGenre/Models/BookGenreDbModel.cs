@@ -1,7 +1,7 @@
 ﻿namespace BookHub.Data.Models.Shared.BookGenre.Models;
 
 using System.ComponentModel.DataAnnotations.Schema;
-using Features.Book.Data.Models;
+using Features.Books.Data.Models;
 using Features.Genre.Data.Models;
 using Microsoft.EntityFrameworkCore;
 

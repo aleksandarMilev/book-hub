@@ -1,6 +1,6 @@
 ﻿namespace BookHub.Features.Genre.Shared;
 
-using Book.Service.Models;
+using Books.Service.Models;
 using Data.Models;
 using Service.Models;
 

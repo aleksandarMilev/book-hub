@@ -1,7 +1,7 @@
 ﻿namespace BookHub.Features.ReadingList.Data.Models;
 
 using System.ComponentModel.DataAnnotations.Schema;
-using Book.Data.Models;
+using Books.Data.Models;
 using BookHub.Data.Models.Base;
 using Identity.Data.Models;
 using Microsoft.EntityFrameworkCore;

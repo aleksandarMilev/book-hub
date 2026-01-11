@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { ALL_NATIONALITIES, type Nationality } from '@/features/author/types/author.js';
 import { useDebounce } from '@/shared/hooks/debounce/useDebounce.js';
-import { useTranslation } from 'react-i18next';
 
 export const useAll = () => {
   const [nationalities, setNationalities] = useState<Nationality[]>([]);

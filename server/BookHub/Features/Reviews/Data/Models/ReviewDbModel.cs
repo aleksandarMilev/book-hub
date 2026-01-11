@@ -1,31 +1,30 @@
-﻿namespace BookHub.Features.Review.Data.Models
+﻿namespace BookHub.Features.Review.Data.Models;
+
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using BookHub.Data.Models.Base;
+using Books.Data.Models;
+using Identity.Data.Models;
+
+using static Shared.Constants.Validation;
+
+public class ReviewDbModel : DeletableEntity<Guid>
 {
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using BookHub.Data.Models.Base;
-    using Features.Book.Data.Models;
-    using Features.Identity.Data.Models;
+    [MaxLength(ContentMaxLength)]
+    public string Content { get; set; } = null!;
 
-    using static Shared.Constants.Validation;
+    public int Rating { get; set; }
 
-    public class ReviewDbModel : DeletableEntity<Guid>
-    {
-        [MaxLength(ContentMaxLength)]
-        public string Content { get; set; } = null!;
+    [Required]
+    [ForeignKey(nameof(Creator))]
+    public string CreatorId { get; set; } = null!;
 
-        public int Rating { get; set; }
+    public UserDbModel Creator { get; set; } = null!;
 
-        [Required]
-        [ForeignKey(nameof(Creator))]
-        public string CreatorId { get; set; } = null!;
+    [ForeignKey(nameof(Book))]
+    public Guid BookId { get; set; }
 
-        public UserDbModel Creator { get; set; } = null!;
+    public BookDbModel Book { get; set; } = null!;
 
-        [ForeignKey(nameof(Book))]
-        public Guid BookId { get; set; }
-
-        public BookDbModel Book { get; set; } = null!;
-
-        public ICollection<VoteDbModel> Votes { get; set; } = new HashSet<VoteDbModel>();
-    }
+    public ICollection<VoteDbModel> Votes { get; set; } = new HashSet<VoteDbModel>();
 }
