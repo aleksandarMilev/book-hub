@@ -28,13 +28,15 @@ public class SearchService(
             .AsNoTracking()
             .ToSearchSeviceModels();
 
-        if (!string.IsNullOrWhiteSpace(searchTerm))
+        var term = searchTerm?.Trim();
+
+        if (!string.IsNullOrEmpty(term))
         {
+            var safe = term.Replace("\"", "\"\"");
+            var fullTextQuery = $"\"{safe}*\"";
+
             genres = genres
-                .Where(g => g.
-                    Name
-                    .ToLower()
-                    .Contains(searchTerm.ToLower()));
+                .Where(g => EF.Functions.Contains(g.Name, fullTextQuery));
         }
 
         genres = genres
@@ -68,13 +70,16 @@ public class SearchService(
             .AsNoTracking()
             .ToSearchSeviceModels();
 
-        if (!string.IsNullOrWhiteSpace(searchTerm))
+        var term = searchTerm?.Trim();
+        if (!string.IsNullOrEmpty(term))
         {
+            var safe = term.Replace("\"", "\"\"");
+            var fullTextQuery = $"\"{safe}*\"";
+
             books = books.Where(b =>
-                b.Title.ToLower().Contains(searchTerm.ToLower()) ||
-                b.ShortDescription.ToLower().Contains(searchTerm.ToLower()) ||
-                b.AuthorName != null && b.AuthorName.ToLower().Contains(searchTerm.ToLower())
-            );
+                EF.Functions.Contains(b.Title, fullTextQuery) ||
+                EF.Functions.Contains(b.ShortDescription, fullTextQuery) ||
+                (b.AuthorName != null && EF.Functions.Contains(b.AuthorName, fullTextQuery)));
         }
 
         books = books
@@ -108,12 +113,15 @@ public class SearchService(
             .AsNoTracking()
             .ToSearchSeviceModels();
 
-        if (!string.IsNullOrWhiteSpace(searchTerm))
+        var term = searchTerm?.Trim();
+        if (!string.IsNullOrEmpty(term))
         {
+            var safe = term.Replace("\"", "\"\"");
+            var fullTextQuery = $"\"{safe}*\"";
+
             articles = articles.Where(a =>
-                a.Title.ToLower().Contains(searchTerm.ToLower()) ||
-                a.Introduction.ToLower().Contains(searchTerm.ToLower())
-            );
+                EF.Functions.Contains(a.Title, fullTextQuery) ||
+                EF.Functions.Contains(a.Introduction, fullTextQuery));
         }
 
         articles = articles
@@ -148,13 +156,16 @@ public class SearchService(
             .AsNoTracking()
             .ToSearchSeviceModels();
 
-        if (!string.IsNullOrWhiteSpace(searchTerm))
+        var term = searchTerm?.Trim();
+
+        if (!string.IsNullOrEmpty(term))
         {
-            authors = authors
-                .Where(a =>
-                    a.Name.ToLower().Contains(searchTerm.ToLower()) ||
-                    (a.PenName != null && a.PenName.ToLower().Contains(searchTerm.ToLower()))
-            );
+            var safe = term.Replace("\"", "\"\"");
+            var fullTextQuery = $"\"{safe}*\"";
+
+            authors = authors.Where(a =>
+                EF.Functions.Contains(a.Name, fullTextQuery) ||
+                (a.PenName != null && EF.Functions.Contains(a.PenName, fullTextQuery)));
         }
 
         authors = authors
@@ -229,7 +240,7 @@ public class SearchService(
              .Chats
              .AsNoTracking();
 
-        if (userService.IsAdmin())
+        if (!userService.IsAdmin())
         {
             chats = chats
                 .Where(c => c
@@ -240,14 +251,18 @@ public class SearchService(
         }
 
         var chatModels = chats.ToSearchSeviceModels();
-        if (!string.IsNullOrWhiteSpace(searchTerm))
+        var term = searchTerm?.Trim();
+
+        if (!string.IsNullOrEmpty(term))
         {
+            var safe = term.Replace("\"", "\"\"");
+            var fullTextQuery = $"\"{safe}*\"";
+
             chatModels = chatModels
-                .Where(c => c
-                    .Name
-                    .ToLower()
-                    .Contains(searchTerm.ToLower()));
+                .Where(c => EF.Functions.Contains(c.Name, fullTextQuery));
         }
+
+        chatModels = chatModels.OrderBy(c => c.Name);
 
         var total = await chatModels.CountAsync(cancellationToken);
         var items = await chatModels
