@@ -16,6 +16,7 @@ import { useMessage } from '@/shared/stores/message/message.js';
 
 import { ApproveRejectButtons } from './approve-reject-buttons/ApproveRejectButtons.js';
 import { ReadingListButtons } from './reading-list-buttons/ReadingListButtons.js';
+import { toParagraphs } from './utils/utils.js';
 
 type Props = {
   book: BookDetails;
@@ -45,6 +46,9 @@ const BookFullInfo: FC<Props> = ({
 
   const ratingsCount = book.ratingsCount ?? 0;
   const authorDisplayName = book.authorName || t('list.unknownAuthor');
+
+  const fullText = book.longDescription ?? '';
+  const paragraphs = toParagraphs(fullText);
 
   return (
     <div className="book-info-card shadow-lg">
@@ -89,9 +93,13 @@ const BookFullInfo: FC<Props> = ({
                 </Link>
               ))}
             </div>
-            <p className="book-description card-text">
-              {showFullDescription ? (book.longDescription ?? '') : `${descriptionPreview}...`}
-            </p>
+            <div className="book-description">
+              {(showFullDescription ? paragraphs : [`${descriptionPreview}...`]).map((p, idx) => (
+                <p key={idx} className="book-description-paragraph">
+                  {p}
+                </p>
+              ))}
+            </div>
             {book.longDescription && book.longDescription.length > descriptionPreview.length && (
               <button
                 onClick={() => setShowFullDescription((prev) => !prev)}
