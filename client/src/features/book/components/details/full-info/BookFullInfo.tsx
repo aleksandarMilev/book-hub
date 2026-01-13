@@ -133,7 +133,7 @@ const BookFullInfo: FC<Props> = ({
                   <FaEdit /> Edit
                 </Link>
               )}
-              {(isCreator || isAdmin) && (
+              {book.isApproved && (isCreator || isAdmin) && (
                 <button
                   className="btn btn-danger d-flex align-items-center gap-2"
                   onClick={deleteHandler}

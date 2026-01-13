@@ -1,4 +1,4 @@
-﻿namespace BookHub.Features.Genre.Web;
+﻿namespace BookHub.Features.Genres.Web;
 
 using BookHub.Common;
 using Microsoft.AspNetCore.Authorization;
@@ -13,12 +13,12 @@ public class GenresController(IGenreService service) : ApiController
 {
     [HttpGet]
     public async Task<ActionResult<IEnumerable<GenreNameServiceModel>>> Names(
-        CancellationToken token = default)
-       => this.Ok(await service.Names(token));
+        CancellationToken cancellationToken = default)
+       => this.Ok(await service.Names(cancellationToken));
 
     [HttpGet(Id)]
     public async Task<ActionResult<IEnumerable<GenreNameServiceModel>>> Details(
         Guid id,
-        CancellationToken token = default)
-       => this.Ok(await service.Details(id, token));
+        CancellationToken cancellationToken = default)
+       => this.Ok(await service.Details(id, cancellationToken));
 }

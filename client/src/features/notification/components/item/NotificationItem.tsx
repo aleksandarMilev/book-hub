@@ -10,19 +10,7 @@ import { useClickHandler } from '@/features/notification/hooks/useClickHandler.j
 import { useRemove } from '@/features/notification/hooks/useCrud.js';
 import type { NotificationType } from '@/features/notification/types/notification.js';
 import DeleteModal from '@/shared/components/delete-modal/DeleteModal.js';
-
-const getResourceType = (serverResourceType: number) => {
-  switch (serverResourceType) {
-    case 0:
-      return 'Book';
-    case 1:
-      return 'Author';
-    case 2:
-      return 'Chat';
-    default:
-      return 'Unknown resource type';
-  }
-};
+import { getResourceType } from '../../utils/utils.js';
 
 const getTypeIcon = (resourceType: string) => {
   switch (resourceType) {
@@ -60,8 +48,8 @@ const NotificationItem: FC<{
               {getTypeIcon(resourceType)}
             </span>
             <span className="bh-notifications-item__typeText">
-              {t(`resourceType.${notification.resourceType}`, {
-                defaultValue: notification.resourceType,
+              {t(`resourceType.${getResourceType(notification.resourceType)}`, {
+                defaultValue: getResourceType(notification.resourceType),
               })}
             </span>
             {!notification.isRead && <span className="bh-notifications-item__dot" aria-hidden />}

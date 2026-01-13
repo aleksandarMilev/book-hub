@@ -2,7 +2,7 @@
 
 using System.ComponentModel.DataAnnotations.Schema;
 using Features.Books.Data.Models;
-using Features.Genre.Data.Models;
+using Features.Genres.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
 [PrimaryKey(nameof(BookId), nameof(GenreId))]

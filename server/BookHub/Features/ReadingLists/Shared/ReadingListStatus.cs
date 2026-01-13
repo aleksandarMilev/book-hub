@@ -1,4 +1,4 @@
-﻿namespace BookHub.Features.ReadingList.Data.Models;
+﻿namespace BookHub.Features.ReadingLists.Shared;
 
 public enum ReadingListStatus
 {

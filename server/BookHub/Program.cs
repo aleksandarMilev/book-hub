@@ -1,5 +1,4 @@
 using BookHub.Infrastructure.Extensions;
-using System.Xml;
 
 var builder = WebApplication.CreateBuilder(args);
 

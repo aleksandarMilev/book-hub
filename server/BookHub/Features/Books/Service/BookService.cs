@@ -4,6 +4,7 @@ using Areas.Admin.Service;
 using BookHub.Common;
 using BookHub.Data;
 using BookHub.Data.Models.Shared.BookGenre.Models;
+using BookHub.Features.Books.Shared;
 using Data.Models;
 using Infrastructure.Extensions;
 using Infrastructure.Services.CurrentUser;
@@ -175,7 +176,16 @@ public class BookService(
                 cancellationToken);
         }
 
-        return dbModel.ToDetailsServiceModel(userId);
+        return await data
+            .Books
+            .AsNoTracking()
+            .IgnoreQueryFilters()
+            .ApplyIsDeletedFilter()
+            .ToDetailsServiceModels(userId)
+            .SingleOrDefaultAsync(
+                b => b.Id == dbModel.Id,
+                cancellationToken) 
+            ?? throw new InvalidOperationException($"Created book {dbModel.Id} could not be loaded.");
     }
 
     public async Task<Result> Edit(
@@ -355,7 +365,11 @@ public class BookService(
         Guid? authorId,
         CancellationToken cancellationToken = default)
     {
-        if (authorId is null || authorId == Guid.Empty)
+        var isNullOrEmptyGuid = 
+            authorId is null || 
+            authorId == Guid.Empty;
+
+        if (isNullOrEmptyGuid)
         {
             return null;
         }
@@ -375,48 +389,38 @@ public class BookService(
         ICollection<Guid> genreIds,
         CancellationToken cancellationToken = default)
     {
-        await using var transaction = await data
-            .Database
-            .BeginTransactionAsync(cancellationToken);
+        var strategy = data.Database.CreateExecutionStrategy();
 
-        await data
-            .BooksGenres
-            .Where(bg => bg.BookId == bookId)
-            .ExecuteDeleteAsync(cancellationToken);
-
-        if (!genreIds.Any())
+        await strategy.ExecuteAsync(async () =>
         {
-            const string Other = "Other";
+            await using var transaction = await data
+                .Database
+                .BeginTransactionAsync(cancellationToken);
 
-            var otherId = await data
-                .Genres
-                .AsNoTracking()
-                .Where(g => g.Name == Other)
-                .Select(g => g.Id)
-                .SingleOrDefaultAsync(cancellationToken);
+            await data.BooksGenres
+                .Where(bg => bg.BookId == bookId)
+                .ExecuteDeleteAsync(cancellationToken);
 
-            if (otherId == Guid.Empty)
+            if (genreIds.Count == 0)
             {
-                throw new InvalidOperationException($"Genre {Other} not found.");
+                var OtherGenreId = new Guid("52e607d4-c347-440a-8d55-cf2e01d88a6c");
+                genreIds.Add(OtherGenreId);
             }
 
-            genreIds.Add(otherId);
-        }
+            var mapModels = genreIds
+                .Select(genreId => new BookGenreDbModel
+                {
+                    BookId = bookId,
+                    GenreId = genreId
+                });
 
-        var mapModels = genreIds
-            .Select(genreId => new BookGenreDbModel
-            {
-                BookId = bookId,
-                GenreId = genreId
-            });
+            data.BooksGenres.AddRange(mapModels);
 
-        data
-            .BooksGenres
-            .AddRange(mapModels);
-
-        await data.SaveChangesAsync(cancellationToken);
-        await transaction.CommitAsync(cancellationToken);
+            await data.SaveChangesAsync(cancellationToken);
+            await transaction.CommitAsync(cancellationToken);
+        });
     }
+
 
     private string LogAndReturnNotFoundMessage(Guid bookId)
     {

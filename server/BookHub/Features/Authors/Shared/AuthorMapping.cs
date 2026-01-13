@@ -2,7 +2,7 @@
 
 using Books.Service.Models;
 using Data.Models;
-using Genre.Service.Models;
+using Genres.Service.Models;
 using Service.Models;
 using Web.User.Models;
 

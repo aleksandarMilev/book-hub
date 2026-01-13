@@ -1,4 +1,4 @@
-﻿namespace BookHub.Features.Genre.Service;
+﻿namespace BookHub.Features.Genres.Service;
 
 using Infrastructure.Services.ServiceLifetimes;
 using Models;
@@ -6,9 +6,9 @@ using Models;
 public interface IGenreService : ITransientService
 {
     Task<IEnumerable<GenreNameServiceModel>> Names(
-        CancellationToken token = default);
+        CancellationToken cancellationToken = default);
 
     Task<GenreDetailsServiceModel?> Details(
         Guid id,
-        CancellationToken token = default);
+        CancellationToken cancellationToken = default);
 }

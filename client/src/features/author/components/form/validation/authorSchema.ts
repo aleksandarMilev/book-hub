@@ -23,7 +23,7 @@ const FIELD_KEYS = {
   image: 'authors:validation.fields.image',
 } as const;
 
-const isIsoDate = (v: string) => isValid(parseISO(v)); // e
+const isIsoDate = (value: string) => isValid(parseISO(value));
 const getFieldLabel = (field: keyof typeof FIELD_KEYS) => i18n.t(FIELD_KEYS[field]);
 
 export const authorSchema = Yup.object({
@@ -115,7 +115,10 @@ export const authorSchema = Yup.object({
           field: getFieldLabel('bornAt'),
         }) as string,
       (value) => {
-        if (!value) return true;
+        if (!value) {
+          return true;
+        }
+
         return parseISO(value) <= new Date();
       },
     ),

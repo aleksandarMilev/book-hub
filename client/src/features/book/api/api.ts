@@ -96,6 +96,7 @@ export const create = async (book: CreateBook, token: string, signal?: AbortSign
 
 export const edit = async (id: string, book: CreateBook, token: string, signal?: AbortSignal) => {
   try {
+    console.log(book);
     const url = `${routes.book}/${id}`;
     const formData = new FormData();
 
@@ -112,7 +113,7 @@ export const edit = async (id: string, book: CreateBook, token: string, signal?:
 export const remove = async (id: string, token: string, signal?: AbortSignal) => {
   try {
     const url = `${routes.book}/${id}`;
-    await httpAdmin.delete(url, getAuthConfig(token, signal));
+    await http.delete(url, getAuthConfig(token, signal));
 
     return true;
   } catch (error) {

@@ -5,7 +5,7 @@ using BookHub.Data.Models.Shared.ChatUser;
 using Authors.Data.Models;
 using Books.Data.Models;
 using Chat.Data.Models;
-using ReadingList.Data.Models;
+using ReadingLists.Data.Models;
 using Review.Data.Models;
 using UserProfile.Data.Models;
 using Microsoft.AspNetCore.Identity;
@@ -38,7 +38,7 @@ public class UserDbModel :
 
     public ICollection<ReviewDbModel> Reviews { get; init; } = new HashSet<ReviewDbModel>();
 
-    public ICollection<ReadingList> ReadingLists { get; init; } = new HashSet<ReadingList>();
+    public ICollection<ReadingListDbModel> ReadingLists { get; init; } = new HashSet<ReadingListDbModel>();
 
     public ICollection<ChatUser> ChatsUsers { get; init; } = new HashSet<ChatUser>();
 

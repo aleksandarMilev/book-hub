@@ -1,7 +1,6 @@
 import './BookForm.css';
 
 import {
-  MDBBtn,
   MDBCard,
   MDBCardBody,
   MDBCardImage,
@@ -64,9 +63,12 @@ const BookForm: FC<Props> = ({ bookData = null, isEditMode = false }) => {
                         {formik.touched.title && formik.errors.title && (
                           <div className="text-danger mb-2">{formik.errors.title}</div>
                         )}
+                        <label htmlFor="title" className="form-label book-form-image-label">
+                          {t('form.labels.title')}
+                        </label>
                         <MDBInput
                           wrapperClass="mb-4"
-                          label={t('form.labels.title')}
+                          label=""
                           size="lg"
                           id="title"
                           type="text"
@@ -77,11 +79,13 @@ const BookForm: FC<Props> = ({ bookData = null, isEditMode = false }) => {
                         />
                       </MDBCol>
                     </MDBRow>
+
                     <MDBRow>
                       <MDBCol md="12">
                         <AuthorSearch authors={authors} loading={authorsLoading} formik={formik} />
                       </MDBCol>
                     </MDBRow>
+
                     <MDBRow>
                       <MDBCol md="12">
                         {formik.touched.genres && formik.errors.genres && (
@@ -102,8 +106,12 @@ const BookForm: FC<Props> = ({ bookData = null, isEditMode = false }) => {
                         />
                       </MDBCol>
                     </MDBRow>
+
                     <MDBRow>
                       <MDBCol md="12">
+                        {formik.touched.image && formik.errors.image && (
+                          <div className="text-danger mb-2">{formik.errors.image as string}</div>
+                        )}
                         <label htmlFor="image" className="form-label book-form-image-label">
                           {t('form.labels.image')}
                         </label>
@@ -121,11 +129,9 @@ const BookForm: FC<Props> = ({ bookData = null, isEditMode = false }) => {
                             formik.setFieldTouched('image', true, false);
                           }}
                         />
-                        {formik.touched.image && formik.errors.image && (
-                          <div className="text-danger mb-2">{formik.errors.image as string}</div>
-                        )}
                       </MDBCol>
                     </MDBRow>
+
                     <MDBRow>
                       <MDBCol md="12">
                         {formik.touched.publishedDate && formik.errors.publishedDate && (
@@ -133,9 +139,12 @@ const BookForm: FC<Props> = ({ bookData = null, isEditMode = false }) => {
                             {formik.errors.publishedDate as string}
                           </div>
                         )}
+                        <label htmlFor="publishedDate" className="form-label book-form-image-label">
+                          {t('form.labels.publishedDate')}
+                        </label>
                         <MDBInput
                           wrapperClass="mb-4"
-                          label={t('form.labels.publishedDate')}
+                          label=""
                           size="lg"
                           id="publishedDate"
                           type="date"
@@ -148,14 +157,21 @@ const BookForm: FC<Props> = ({ bookData = null, isEditMode = false }) => {
                         />
                       </MDBCol>
                     </MDBRow>
+
                     <MDBRow>
                       <MDBCol md="12">
                         {formik.touched.shortDescription && formik.errors.shortDescription && (
                           <div className="text-danger mb-2">{formik.errors.shortDescription}</div>
                         )}
+                        <label
+                          htmlFor="shortDescription"
+                          className="form-label book-form-image-label"
+                        >
+                          {t('form.labels.shortDescription')}
+                        </label>
                         <MDBInput
                           wrapperClass="mb-4"
-                          label={t('form.labels.shortDescription')}
+                          label=""
                           size="lg"
                           id="shortDescription"
                           type="text"
@@ -168,11 +184,18 @@ const BookForm: FC<Props> = ({ bookData = null, isEditMode = false }) => {
                         />
                       </MDBCol>
                     </MDBRow>
+
                     <MDBRow>
                       <MDBCol md="12">
                         {formik.touched.longDescription && formik.errors.longDescription && (
                           <div className="text-danger mb-2">{formik.errors.longDescription}</div>
                         )}
+                        <label
+                          htmlFor="longDescription"
+                          className="form-label book-form-image-label"
+                        >
+                          {t('form.labels.longDescription')}
+                        </label>
                         <textarea
                           id="longDescription"
                           rows={8}
@@ -186,22 +209,26 @@ const BookForm: FC<Props> = ({ bookData = null, isEditMode = false }) => {
                         />
                       </MDBCol>
                     </MDBRow>
+
                     <p className="text-danger fw-bold mt-2 book-form-required-note">
                       {t('form.requiredNote')}
                     </p>
                     <div className="d-flex justify-content-end pt-3 book-form-actions">
-                      <MDBBtn color="light" size="lg" type="button" onClick={formik.handleReset}>
+                      <button
+                        className="book-form-btn book-form-btn-light"
+                        type="button"
+                        onClick={formik.handleReset}
+                      >
                         {t('form.buttons.reset')}
-                      </MDBBtn>
-                      <MDBBtn
-                        className="ms-2"
-                        color="warning"
-                        size="lg"
+                      </button>
+
+                      <button
+                        className="book-form-btn book-form-btn-warning"
                         type="submit"
                         disabled={formik.isSubmitting}
                       >
                         {submitLabel}
-                      </MDBBtn>
+                      </button>
                     </div>
                   </form>
                 </MDBCardBody>

@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -16,6 +16,14 @@ import { routes } from '@/shared/lib/constants/api.js';
 import { slugify } from '@/shared/lib/utils/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 import { useMessage } from '@/shared/stores/message/message.js';
+
+const toDateInput = (value?: string | null): string => {
+  if (!value) {
+    return '';
+  }
+
+  return value.slice(0, 10);
+};
 
 type Props = {
   bookData?: BookDetails | null;
@@ -42,18 +50,21 @@ export const useBookFormik = ({ bookData = null, isEditMode = false }: Props) =>
     }
   }, [bookData]);
 
-  const formik = useFormik<BookFormValues>({
-    initialValues: {
+  const initialValues = useMemo<BookFormValues>(
+    () => ({
       title: bookData?.title ?? '',
       authorId: bookData?.author?.id ?? null,
       image: null,
-      publishedDate: null,
+      publishedDate: toDateInput(bookData?.publishedDate),
       shortDescription: bookData?.shortDescription ?? '',
       longDescription: bookData?.longDescription ?? '',
-      genres:
-        bookData?.genres?.map((g) => g.id) ??
-        (selectedGenres.length ? selectedGenres.map((g) => g.id) : []),
-    },
+      genres: bookData?.genres?.map((g) => g.id) ?? [],
+    }),
+    [bookData],
+  );
+
+  const formik = useFormik<BookFormValues>({
+    initialValues,
     enableReinitialize: true,
     validationSchema: bookSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {

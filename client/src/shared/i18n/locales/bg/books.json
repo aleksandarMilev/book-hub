@@ -1,78 +1,91 @@
 {
-  "form": {
-    "titleCreate": "Създаване на книга",
-    "titleEdit": "Редактиране на книга",
-    "labels": {
-      "title": "Заглавие",
-      "image": "Корица",
-      "publishedDate": "Дата на издаване",
-      "shortDescription": "Кратко описание",
-      "longDescription": "Подробно описание"
-    },
-    "placeholders": {
-      "longDescription": "Въведете подробно описание на книгата..."
-    },
-    "buttons": {
-      "reset": "Нулиране",
-      "submitCreate": "Създай",
-      "submittingCreate": "Създаване...",
-      "submitEdit": "Запази промените",
-      "submittingEdit": "Запазване..."
-    },
-    "requiredNote": "Полетата, отбелязани с *, са задължителни.",
-    "fallbackTitle": "тази книга",
-    "fallbackName": "тази книга",
-    "messages": {
-      "updateSuccess": "\"{{title}}\" беше успешно обновена.",
-      "createSuccessAdmin": "\"{{name}}\" беше успешно създадена.",
-      "createSuccessUser": "Благодарим ви, че сте част от нашата общност! Нашият екип скоро ще прегледа \"{{name}}\".",
-      "operationFailed": "Нещо се обърка. Моля, опитайте отново."
-    }
-  },
   "validation": {
+    "invalidDate": "{{field}} не е валидна дата",
     "fields": {
       "title": "Заглавие",
       "shortDescription": "Кратко описание",
       "longDescription": "Подробно описание",
-      "publishedDate": "Дата на издаване",
-      "image": "Изображение",
+      "publishedDate": "Дата на публикуване",
+      "image": "Корица",
       "genres": "Жанрове"
     },
-    "min": "{{field}} трябва да е поне {{min}} символа.",
-    "max": "{{field}} трябва да е най-много {{max}} символа.",
-    "required": "Полето {{field}} е задължително.",
-    "datePast": "{{field}} трябва да е в миналото.",
+    "required": "{{field}} е задължително!",
+    "min": "{{field}} трябва да е поне {{min}} символа",
+    "max": "{{field}} трябва да е по-малко от {{max}} символа",
+    "datePast": "{{field}} трябва да е в миналото",
     "image": {
-      "tooLarge": "Избраната снимка е твърде голяма. Максималният размер е 2 MB.",
-      "invalidType": "Невалиден тип изображение. Позволени са: {{types}}."
+      "tooLarge": "Изображението трябва да е най-много 2MB",
+      "invalidType": "Изображението трябва да е от следните типове: {{types}}"
     },
     "genres": {
-      "min": "Моля, изберете поне един жанр."
+      "min": "Необходим е поне един жанр"
+    }
+  },
+  "form": {
+    "authorSearch": {
+      "label": "Автор",
+      "helper": "Започнете да пишете, за да потърсите и изберете автор",
+      "placeholder": "Търсене на автор...",
+      "noMatches": "Няма намерени автори"
+    },
+    "genreSearch": {
+      "label": "Жанрове*",
+      "helper": "Потърсете и изберете един или повече жанра (изберете „Other“, ако не сте сигурни)",
+      "placeholder": "Търсене на жанрове...",
+      "noMatches": "Няма намерени жанрове"
+    },
+    "titleCreate": "Добавете нова книга в нашата колекция!",
+    "titleEdit": "Редактиране на книга",
+    "labels": {
+      "title": "Заглавие *",
+      "image": "Корица",
+      "publishedDate": "Дата на публикуване",
+      "shortDescription": "Кратко описание *",
+      "longDescription": "Пълно описание *"
+    },
+    "placeholders": {
+      "longDescription": "Напишете пълното описание на книгата тук... *"
+    },
+    "buttons": {
+      "reset": "Нулиране на всичко",
+      "submitCreate": "Изпрати формуляра",
+      "submittingCreate": "Изпращане...",
+      "submitEdit": "Обнови книгата",
+      "submittingEdit": "Запазване..."
+    },
+    "requiredNote": "Полетата, отбелязани с *, са задължителни",
+    "fallbackTitle": "тази книга",
+    "fallbackName": "тази книга",
+    "messages": {
+      "updateSuccess": "„{{title}}“ беше успешно обновена.",
+      "createSuccessAdmin": "„{{name}}“ беше успешно създадена.",
+      "createSuccessUser": "Благодарим ви, че допринасяте към нашата общност! Екипът ни скоро ще прегледа „{{name}}“.",
+      "operationFailed": "Нещо се обърка. Моля, опитайте отново."
     }
   },
   "list": {
     "searchPlaceholder": "Търсене на книги...",
-    "emptyAlt": "Няма намерени книги",
-    "emptyTitle": "Не открихме книги",
-    "emptyMessage": "Опитайте да промените критериите за търсене или разгледайте останалите ни заглавия.",
+    "emptyTitle": "Не намерихме никакви книги",
+    "emptyMessage": "Опитайте да промените термините за търсене или разгледайте колекцията ни за повече възможности.",
+    "emptyAlt": "Илюстрация за празен списък с книги",
     "unknownAuthor": "Неизвестен автор",
     "noGenres": "Няма жанрове",
     "view": "Виж детайли",
     "byAuthor": "От {{author}}"
   },
   "details": {
-    "reviewsTitle": "Рецензии",
-    "noReviews": "Все още няма рецензии.",
-    "allReviews": "Всички рецензии",
-    "createReviewTitle": "Създаване на рецензия",
-    "createProfile": "Създаване на профил",
-    "publishedLabel": "Дата на издаване:",
+    "reviewsTitle": "Отзиви",
+    "noReviews": "Все още няма отзиви.",
+    "allReviews": "Всички отзиви",
+    "createReviewTitle": "Създай отзив",
+    "createProfile": "Създай профил",
+    "publishedLabel": "Публикувана:",
     "breadcrumb": {
       "home": "Начало",
       "list": "Книги"
     },
     "genresLabel": "Жанрове:",
-    "showMore": "Виж повече",
-    "showLess": "Виж по-малко"
+    "showMore": "Покажи повече",
+    "showLess": "Покажи по-малко"
   }
 }
