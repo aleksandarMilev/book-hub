@@ -1,93 +1,92 @@
-﻿namespace BookHub.Features.Email
+﻿namespace BookHub.Features.Emails;
+
+using Templates;
+using Infrastructure.Settings;
+using MailKit.Net.Smtp;
+using MailKit.Security;
+using Microsoft.Extensions.Options;
+using MimeKit;
+
+public class EmailSender(
+    IOptions<EmailSettings> options,
+    ILogger<EmailSender> logger) : IEmailSender
 {
-    using BookHub.Features.Email.Templates;
-    using Infrastructure.Settings;
-    using MailKit.Net.Smtp;
-    using MailKit.Security;
-    using Microsoft.Extensions.Options;
-    using MimeKit;
+    private readonly EmailSettings settings = options.Value;
 
-    public class EmailSender(
-        IOptions<EmailSettings> options,
-        ILogger<EmailSender> logger) : IEmailSender
+    public async Task SendWelcome(
+        string email,
+        string username)
     {
-        private readonly EmailSettings settings = options.Value;
-
-        public async Task SendWelcome(
-            string email,
-            string username)
+        try
         {
-            try
-            {
-                var body = WelcomeEmailTemplate.Build(username);
+            var body = WelcomeEmailTemplate.Build(username);
 
-                await this.Send(
-                   email,
-                   "Welcome to BookHub 📚",
-                   WelcomeEmailTemplate.Build(username));
+            await this.Send(
+               email,
+               "Welcome to BookHub 📚",
+               WelcomeEmailTemplate.Build(username));
 
-                logger.LogInformation(
-                    "User with email: {Email} and Username: {Username} successfully received email after registration",
-                    email,
-                    username);
-            }
-            catch (Exception exception)
-            {
-                logger.LogError(exception, "Failed to send welcome email to {Email}", email);
-            }
+            logger.LogInformation(
+                "User with email: {Email} and Username: {Username} successfully received email after registration",
+                email,
+                username);
         }
-
-        private async Task Send(
-            string to,
-            string subject,
-            string htmlBody,
-            CancellationToken cancellationToken = default)
+        catch (Exception exception)
         {
-            var message = new MimeMessage();
+            logger.LogError(exception, "Failed to send welcome email to {Email}", email);
+        }
+    }
 
-            message.From.Add(MailboxAddress.Parse(settings.From));
-            message.To.Add(MailboxAddress.Parse(to));
-            message.Subject = subject;
-            message.Body = new TextPart("html")
+    private async Task Send(
+        string to,
+        string subject,
+        string htmlBody,
+        CancellationToken cancellationToken = default)
+    {
+        var message = new MimeMessage();
+
+        message.From.Add(MailboxAddress.Parse(settings.From));
+        message.To.Add(MailboxAddress.Parse(to));
+        message.Subject = subject;
+        message.Body = new TextPart("html")
+        {
+            Text = htmlBody
+        };
+
+        using var client = new SmtpClient();
+
+        try
+        {
+            var secureOption = settings.UseSsl
+                ? SecureSocketOptions.StartTls
+                : SecureSocketOptions.Auto;
+
+            await client.ConnectAsync(
+                settings.Host,
+                settings.Port,
+                secureOption,
+                cancellationToken);
+
+            if (!string.IsNullOrWhiteSpace(settings.Username))
             {
-                Text = htmlBody
-            };
-
-            using var client = new SmtpClient();
-
-            try
-            {
-                var secureOption = settings.UseSsl
-                    ? SecureSocketOptions.StartTls
-                    : SecureSocketOptions.Auto;
-
-                await client.ConnectAsync(
-                    settings.Host,
-                    settings.Port,
-                    secureOption,
+                await client.AuthenticateAsync(
+                    settings.Username,
+                    settings.Password,
                     cancellationToken);
-
-                if (!string.IsNullOrWhiteSpace(settings.Username))
-                {
-                    await client.AuthenticateAsync(
-                        settings.Username,
-                        settings.Password,
-                        cancellationToken);
-                }
-
-                await client.SendAsync(message, cancellationToken);
             }
-            catch (Exception exception)
+
+            await client.SendAsync(message, cancellationToken);
+        }
+        catch (Exception exception)
+        {
+            logger.LogError(exception, "Error sending email to {Recipient}", to);
+            throw;
+        }
+        finally
+        {
+            if (client.IsConnected)
             {
-                logger.LogError(exception, "Error sending email to {Recipient}", to);
-                throw;
-            }
-            finally
-            {
-                if (client.IsConnected)
-                {
-                    await client.DisconnectAsync(true, cancellationToken);
-                }
+                await client.DisconnectAsync(true, cancellationToken);
             }
         }
     }

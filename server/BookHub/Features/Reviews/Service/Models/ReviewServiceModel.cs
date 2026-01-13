@@ -1,4 +1,4 @@
-﻿namespace BookHub.Features.Review.Service.Models;
+﻿namespace BookHub.Features.Reviews.Service.Models;
 
 public class ReviewServiceModel
 {

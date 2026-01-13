@@ -287,7 +287,7 @@ public class NotificationService(
         string receiverId,
         CancellationToken cancellationToken = default)
     {
-        var notification = new Notification
+        var notification = new NotificationDbModel
         {
             ResourceId = resourceId,
             ResourceType = resourceType,
@@ -305,12 +305,12 @@ public class NotificationService(
     {
         logger.LogWarning(
             DbEntityNotFoundTemplate,
-            nameof(Notification),
+            nameof(NotificationDbModel),
             notificationId);
 
         return string.Format(
             DbEntityNotFound,
-            nameof(Notification),
+            nameof(NotificationDbModel),
             notificationId);
     }
 
@@ -321,13 +321,13 @@ public class NotificationService(
         logger.LogWarning(
             UnauthorizedMessageTemplate,
             userId,
-            nameof(Notification),
+            nameof(NotificationDbModel),
             notificationId);
 
         return string.Format(
             UnauthorizedMessage,
             userId,
-            nameof(Notification),
+            nameof(NotificationDbModel),
             notificationId);
     }
 }

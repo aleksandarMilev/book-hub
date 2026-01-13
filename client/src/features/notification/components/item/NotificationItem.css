@@ -3,14 +3,11 @@
   justify-content: space-between;
   gap: 14px;
   padding: 16px 18px;
-
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.35);
-
   background: rgba(255, 255, 255, 0.65);
   backdrop-filter: blur(12px);
   box-shadow: 0 8px 26px rgba(0, 0, 0, 0.12);
-
   transition:
     transform 0.22s ease,
     box-shadow 0.22s ease,
@@ -145,13 +142,28 @@
 }
 
 .bh-notifications-item__btn {
-  border-radius: 14px !important;
-  font-weight: 700 !important;
+  appearance: none;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  font-weight: 700;
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   transition:
     transform 0.18s ease,
     box-shadow 0.18s ease,
     opacity 0.18s ease,
-    background 0.18s ease;
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.bh-notifications-item__btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .bh-notifications-item__btn--view {
@@ -172,7 +184,24 @@
 }
 
 .bh-notifications-item__btn--delete {
-  padding: 9px 12px !important;
+  padding: 9px 12px;
+  background: transparent;
+  border-color: rgba(220, 53, 69, 0.35);
+  color: #dc3545;
+}
+
+.bh-notifications-item__btn--delete:hover {
+  background: rgba(220, 53, 69, 0.08);
+  border-color: rgba(220, 53, 69, 0.55);
+  transform: translateY(-1px);
+}
+
+.bh-notifications-item__btn--delete:active {
+  transform: translateY(0);
+}
+
+.bh-notifications-item__deleteIcon {
+  flex: 0 0 auto;
 }
 
 @media (max-width: 768px) {

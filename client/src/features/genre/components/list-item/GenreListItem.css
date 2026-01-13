@@ -1,88 +1,108 @@
 .genre-list-item {
   display: flex;
-  flex-direction: row;
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(10px);
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 18px;
   border-radius: 16px;
-  padding: 14px 18px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.1);
   transition:
-    transform 0.28s ease,
-    box-shadow 0.28s ease;
-  animation: genreFadeInUp 0.45s ease forwards;
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+  animation: genreFadeInUp 0.35s ease forwards;
   opacity: 0;
+  min-height: 92px;
 }
 
 .genre-list-item:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.86);
+  border-color: rgba(110, 168, 254, 0.38);
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.14);
 }
 
 .genre-card-image {
-  width: 110px;
-  height: 110px;
+  width: 62px;
+  height: 62px;
+  border-radius: 16px;
   object-fit: cover;
-  border-radius: 50%;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+  flex: 0 0 auto;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.14);
 }
 
 .genre-list-item-content {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-width: 0;
+  flex: 1;
 }
 
 .genre-list-item-name {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: #1b2838;
+  font-size: 1.12rem;
+  font-weight: 800;
+  color: #111827;
+  line-height: 1.15;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.genre-list-item-pen-name {
-  font-size: 0.95rem;
-  color: #6c757d;
-}
-
+.genre-list-item-pen-name,
 .genre-list-item-rating {
-  color: #f4b400;
-  font-size: 1rem;
+  display: none;
 }
 
 .genre-list-item-btn {
   text-decoration: none;
-  font-size: 0.9rem;
-  color: #fff;
-  padding: 8px 18px;
-  background: linear-gradient(90deg, #6ea8fe, #9a6bff);
-  border: none;
+  color: #0b5cff;
+  background: rgba(11, 92, 255, 0.12);
+  border: 1px solid rgba(11, 92, 255, 0.22);
+  padding: 9px 14px;
+  font-size: 0.95rem;
+  font-weight: 700;
   border-radius: 999px;
+  white-space: nowrap;
   transition:
-    background 0.2s ease,
-    transform 0.18s ease,
-    box-shadow 0.18s ease;
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
 }
 
 .genre-list-item-btn:hover {
-  background: linear-gradient(90deg, #5b93e6, #8251ff);
+  background: rgba(11, 92, 255, 0.16);
+  border-color: rgba(11, 92, 255, 0.32);
   transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(154, 107, 255, 0.6);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 420px) {
   .genre-list-item {
-    flex-direction: column;
-    text-align: center;
+    padding: 14px 14px;
+    min-height: 86px;
   }
 
   .genre-card-image {
-    margin-bottom: 10px;
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+  }
+
+  .genre-list-item-btn {
+    padding: 9px 12px;
+    font-size: 0.92rem;
   }
 }
 
 @keyframes genreFadeInUp {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;

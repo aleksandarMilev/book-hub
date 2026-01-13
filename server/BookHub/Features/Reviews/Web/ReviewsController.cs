@@ -1,4 +1,4 @@
-﻿namespace BookHub.Features.Review.Web;
+﻿namespace BookHub.Features.Reviews.Web;
 
 using BookHub.Common;
 using Infrastructure.Extensions;
@@ -12,6 +12,8 @@ using Shared;
 using static ApiRoutes;
 using static Common.Constants.ApiRoutes;
 using static Common.Constants.DefaultValues;
+using static Shared.Constants.RouteNames;
+
 
 [Authorize]
 public class ReviewsController(IReviewService service) : ApiController
@@ -21,42 +23,51 @@ public class ReviewsController(IReviewService service) : ApiController
         Guid id,
         int pageIndex = DefaultPageIndex,
         int pageSize = DefaultPageSize,
-        CancellationToken token = default)
-        => this.Ok(await service.AllForBook(id, pageIndex, pageSize, token));
+        CancellationToken cancellationToken = default)
+        => this.Ok(await service.AllForBook(
+            id,
+            pageIndex,
+            pageSize,
+            cancellationToken));
 
-    [HttpGet(Id)]
+    [HttpGet(Id, Name = DetailsRouteName)]
     public async Task<ActionResult<ReviewServiceModel>> Details(
         Guid id,
-        CancellationToken token = default)
-        => this.Ok(await service.Details(id, token));
+        CancellationToken cancellationToken = default)
+        => this.Ok(await service.Details(id, cancellationToken));
 
     [HttpPost]
     public async Task<ActionResult<ReviewServiceModel>> Create(
         CreateReviewWebModel webModel,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var serviceModel = webModel.ToServiceModel();
-        var result = await service.Create(serviceModel, token);
+        var result = await service.Create(
+            serviceModel,
+            cancellationToken);
 
-        if (result.Data is null)
+        if (result.Succeeded)
         {
-            return this.BadRequest(result.ErrorMessage);
+            return this.CreatedAtRoute(
+                routeName: DetailsRouteName,
+                routeValues: new { id = result.Data!.Id },
+                value: result.Data);
         }
 
-        return this.CreatedAtAction(
-            actionName: nameof(this.Details),
-            routeValues: new { id = result.Data.Id },
-            value: result.Data);
+        return this.BadRequest(result.ErrorMessage);
     }
 
     [HttpPut(Id)]
     public async Task<ActionResult> Edit(
         Guid id,
         CreateReviewWebModel webModel,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var serviceModel = webModel.ToServiceModel();
-        var result = await service.Edit(id, serviceModel, token);
+        var result = await service.Edit(
+            id,
+            serviceModel,
+            cancellationToken);
 
         return this.NoContentOrBadRequest(result);
     }
@@ -64,9 +75,11 @@ public class ReviewsController(IReviewService service) : ApiController
     [HttpDelete(Id)]
     public async Task<ActionResult> Delete(
         Guid id,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
-        var result = await service.Delete(id, token);
+        var result = await service.Delete(
+            id,
+            cancellationToken);
 
         return this.NoContentOrBadRequest(result);
     }

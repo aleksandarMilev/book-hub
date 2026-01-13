@@ -4,7 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Data.Models;
-using Email;
+using Emails;
 using Features.UserProfile.Service;
 using Infrastructure.Services.Result;
 using Infrastructure.Settings;

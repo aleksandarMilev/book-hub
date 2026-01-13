@@ -1,18 +1,19 @@
-﻿namespace BookHub.Features.Review.Service;
+﻿namespace BookHub.Features.Reviews.Service;
 
 using BookHub.Common;
 using BookHub.Data;
 using Data.Models;
-using Features.UserProfile.Data.Models;
 using Infrastructure.Services.CurrentUser;
 using Infrastructure.Services.Result;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Shared;
+using System.Net;
+using System.Threading;
 using UserProfile.Service;
 
 using static Common.Constants.ErrorMessages;
-using static Common.Constants.DefaultValues;
+using static Common.Utils;
 
 public class ReviewService(
     BookHubDbContext data,
@@ -24,46 +25,54 @@ public class ReviewService(
         Guid bookId,
         int pageIndex,
         int pageSize,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
-        pageIndex = pageIndex <= 0 ? 1 : pageIndex;
-        pageSize = pageSize <= 0 ? DefaultPageSize : pageSize;
+        ClampPageSizeAndIndex(
+            ref pageIndex,
+            ref pageSize);
 
         var reviews = data
            .Reviews
+           .AsNoTracking()
            .Where(r => r.BookId == bookId)
            .OrderByDescending(r => r.Votes.Count())
            .ToServiceModels();
 
-        var totalReviews = await reviews.CountAsync(token);
-        var paginatedReviews = await reviews
+        var total = await reviews.CountAsync(cancellationToken);
+        var items = await reviews
             .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
-            .ToListAsync(token);
+            .ToListAsync(cancellationToken);
 
         return new PaginatedModel<ReviewServiceModel>(
-            paginatedReviews,
-            totalReviews,
+            items,
+            total,
             pageIndex,
             pageSize);
     }
 
     public async Task<ReviewServiceModel?> Details(
        Guid id,
-       CancellationToken token = default)
+       CancellationToken cancellationToken = default)
         => await data
             .Reviews
+            .AsNoTracking()
             .ToServiceModels()
-            .FirstOrDefaultAsync(r => r.Id == id, token);
+            .FirstOrDefaultAsync(
+                r => r.Id == id,
+                cancellationToken);
 
     public async Task<ResultWith<ReviewServiceModel>> Create(
         CreateReviewServiceModel serviceModel,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var bookId = serviceModel.BookId;
         var userId = userService.GetId()!;
 
-        var bookIdIsInvalid = await this.BookIdIsInvalid(bookId, token);
+        var bookIdIsInvalid = await this.BookIdIsInvalid(
+            bookId,
+            cancellationToken);
+
         if (bookIdIsInvalid)
         {
             return this.LogAndReturnInvalidBookIdMessage(bookId, userId);
@@ -72,7 +81,7 @@ public class ReviewService(
         var reviewIsDuplicated = await this.UserAlreadyReviewedTheBook(
             userId,
             serviceModel.BookId,
-            token);
+            cancellationToken);
 
         if (reviewIsDuplicated)
         {
@@ -83,7 +92,7 @@ public class ReviewService(
         dbModel.CreatorId = userId;
 
         data.Add(dbModel);
-        await data.SaveChangesAsync(token);
+        await data.SaveChangesAsync(cancellationToken);
 
         logger.LogInformation(
             "Review with Id: {id} was created.",
@@ -92,30 +101,33 @@ public class ReviewService(
         await this.CalculateBookRating(
             bookId,
             serviceModel.Rating,
-            token: token);
+            cancellationToken: cancellationToken);
 
         await this.CalculateAuthorRating(
             bookId,
             serviceModel.Rating,
-            token: token);
+            cancellationToken: cancellationToken);
 
-        await profileService.IncrementCreatedAuthorsCount(
+        await profileService.IncrementWrittenReviewsCount(
             userId,
-            token);
+            cancellationToken);
 
         var result = dbModel.ToServiceModel();
         return ResultWith<ReviewServiceModel>.Success(result);
     }
 
     public async Task<Result> Edit(
-        Guid id,
+        Guid reviewId,
         CreateReviewServiceModel serviceModel,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
-        var dbModel = await this.GetDbModel(id, token);
+        var dbModel = await this.GetDbModel(
+            reviewId,
+            cancellationToken);
+
         if (dbModel is null)
         {
-            return this.LogAndReturnNotFoundMessage(id);
+            return this.LogAndReturnNotFoundMessage(reviewId);
         }
 
         var userId = userService.GetId()!;
@@ -123,41 +135,53 @@ public class ReviewService(
 
         if (isNotCreator)
         {
-            return LogAndReturnUnauthorizedMessage(id, userId);
+            return LogAndReturnUnauthorizedMessage(reviewId, userId);
         }
 
         var oldRating = dbModel.Rating;
+        var bookId = dbModel.BookId;
+
+        if (serviceModel.BookId != bookId)
+        {
+            logger.LogWarning(
+                "User attempted to change review book from {OldBookId} to {NewBookId} for review {ReviewId}",
+                bookId,
+                serviceModel.BookId,
+                reviewId);
+
+            return "BookId cannot be changed when editing a review.";
+        }
+
         serviceModel.UpdateDbModel(dbModel);
 
-        await data.SaveChangesAsync(token);
-
-        logger.LogInformation(
-            "Review with Id: {id} was update.",
-            dbModel.Id);
+        await data.SaveChangesAsync(cancellationToken);
 
         await this.CalculateBookRating(
-            serviceModel.BookId,
-            serviceModel.Rating,
+            bookId,
+            dbModel.Rating,
             oldRating,
-            token: token);
+            cancellationToken: cancellationToken);
 
         await this.CalculateAuthorRating(
-            serviceModel.BookId,
-            serviceModel.Rating,
+            bookId,
+            dbModel.Rating,
             oldRating,
-            token: token);
+            cancellationToken: cancellationToken);
 
         return true;
     }
 
     public async Task<Result> Delete(
-        Guid id,
-        CancellationToken token = default)
+        Guid reviewId,
+        CancellationToken cancellationToken = default)
     {
-        var dbModel = await this.GetDbModel(id, token);
+        var dbModel = await this.GetDbModel(
+            reviewId,
+            cancellationToken);
+
         if (dbModel is null)
         {
-            return LogAndReturnNotFoundMessage(id);
+            return LogAndReturnNotFoundMessage(reviewId);
         }
 
         var userId = userService.GetId()!;
@@ -166,50 +190,50 @@ public class ReviewService(
 
         if (isNotCreator && isNotAdmin)
         {
-            return LogAndReturnUnauthorizedMessage(id, userId);
+            return LogAndReturnUnauthorizedMessage(reviewId, userId);
         }
 
         var oldRating = dbModel.Rating;
         var bookId = dbModel.BookId;
 
         data.Remove(dbModel);
-        await data.SaveChangesAsync(token);
+        await data.SaveChangesAsync(cancellationToken);
 
         await this.CalculateBookRating(
             bookId,
             0,
             oldRating,
             true,
-            token);
+            cancellationToken);
 
         await this.CalculateAuthorRating(
             bookId,
             0,
             oldRating,
             true,
-            token);
+            cancellationToken);
 
         return true;
     }
 
     private async Task<ReviewDbModel?> GetDbModel(
-        Guid id,
-        CancellationToken token = default)
+        Guid reviewId,
+        CancellationToken cancellationToken = default)
         => await data
             .Reviews
-            .FindAsync([id], token);
+            .FindAsync([reviewId], cancellationToken);
 
-    private string LogAndReturnNotFoundMessage(Guid id)
+    private string LogAndReturnNotFoundMessage(Guid reviewId)
     {
         logger.LogWarning(
             DbEntityNotFoundTemplate,
             nameof(ReviewDbModel),
-            id);
+            reviewId);
 
         return string.Format(
             DbEntityNotFound,
             nameof(ReviewDbModel),
-            id);
+            reviewId);
     }
 
     private string LogAndReturnUnauthorizedMessage(
@@ -261,67 +285,77 @@ public class ReviewService(
 
     private async Task<bool> BookIdIsInvalid(
         Guid bookId,
-        CancellationToken token = default)
-    {
-        var id = await data
-           .Books
-           .Where(b => b.Id == bookId)
-           .Select(b => b.Id)
-           .FirstOrDefaultAsync(token);
-
-        return id == Guid.Empty;
-    }
+        CancellationToken cancellationToken = default)
+        => !await data
+            .Books
+            .AsNoTracking()
+            .AnyAsync(
+                b => b.Id == bookId,
+                cancellationToken);
 
     private async Task<bool> UserAlreadyReviewedTheBook(
         string userId,
         Guid bookId,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
         => await data
             .Reviews
+            .AsNoTracking()
             .AnyAsync(
                 r => r.CreatorId == userId && r.BookId == bookId,
-                token);
+                cancellationToken);
 
     private async Task CalculateBookRating(
         Guid bookId,
         int newRating,
         int? oldRating = null,
         bool isDeleteMode = false,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var book = await data
            .Books
-           .FindAsync([bookId], token);
+           .FindAsync([bookId], cancellationToken);
 
         if (book is null) 
         {
             return;
         }
 
-        double newAverageRating;
         var newRatingsCount = isDeleteMode
             ? Math.Max(0, book.RatingsCount - 1)
             : book.RatingsCount;
 
+        if (oldRating.HasValue && newRatingsCount == 0)
+        {
+            book.AverageRating = 0;
+            book.RatingsCount = 0;
+
+            await data.SaveChangesAsync(cancellationToken);
+
+            return;
+        }
+
+        double newAverageRating;
+
         if (oldRating.HasValue)
         {
-            newAverageRating = ((book.AverageRating * book.RatingsCount) - oldRating.Value + newRating) / newRatingsCount;
+            newAverageRating =
+                ((book.AverageRating * book.RatingsCount) - oldRating.Value + newRating) / newRatingsCount;
         }
         else
         {
             newRatingsCount++;
-            newAverageRating = ((book.AverageRating * book.RatingsCount) + newRating) / newRatingsCount;
+            newAverageRating =
+                ((book.AverageRating * book.RatingsCount) + newRating) / newRatingsCount;
         }
 
-        if (newRatingsCount == 0)
-        {
-            newAverageRating = 0;
-        }
+        book.AverageRating = newRatingsCount == 0 
+            ? 0
+            : newAverageRating;
 
-        book.AverageRating = newAverageRating;
         book.RatingsCount = newRatingsCount;
 
-        await data.SaveChangesAsync(token);
+        await data.SaveChangesAsync(cancellationToken);
+
     }
 
     private async Task CalculateAuthorRating(
@@ -329,46 +363,53 @@ public class ReviewService(
         int newRating,
         int? oldRating = null,
         bool isDeleteMode = false,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var authorId = await data
            .Books
            .Where(b => b.Id == bookId)
            .Select(b => b.AuthorId)
-           .FirstOrDefaultAsync(token);
+           .FirstOrDefaultAsync(cancellationToken);
 
         var author = await data
            .Authors
-           .FindAsync([authorId], token);
+           .FindAsync([authorId], cancellationToken);
 
         if (author is null) 
         {
             return;
         }
 
-        double newAverageRating;
         var newRatingsCount = isDeleteMode
             ? Math.Max(0, author.RatingsCount - 1)
             : author.RatingsCount;
 
+        if (oldRating.HasValue && newRatingsCount == 0)
+        {
+            author.AverageRating = 0;
+            author.RatingsCount = 0;
+
+            await data.SaveChangesAsync(cancellationToken);
+
+            return;
+        }
+
+        double newAverageRating;
         if (oldRating.HasValue)
         {
-            newAverageRating = ((author.AverageRating * author.RatingsCount) - oldRating.Value + newRating) / newRatingsCount;
+            newAverageRating =
+                ((author.AverageRating * author.RatingsCount) - oldRating.Value + newRating) / newRatingsCount;
         }
         else
         {
             newRatingsCount++;
-            newAverageRating = ((author.AverageRating * author.RatingsCount) + newRating) / newRatingsCount;
+            newAverageRating =
+                ((author.AverageRating * author.RatingsCount) + newRating) / newRatingsCount;
         }
 
-        if (newRatingsCount == 0)
-        {
-            newAverageRating = 0; 
-        }
-
-        author.AverageRating = newAverageRating;
+        author.AverageRating = newRatingsCount == 0 ? 0 : newAverageRating;
         author.RatingsCount = newRatingsCount;
 
-        await data.SaveChangesAsync(token);
+        await data.SaveChangesAsync(cancellationToken);
     }
 }

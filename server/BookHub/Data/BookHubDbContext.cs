@@ -10,7 +10,7 @@ using Features.Genres.Data.Models;
 using Features.Identity.Data.Models;
 using Features.Notifications.Data.Models;
 using Features.ReadingLists.Data.Models;
-using Features.Review.Data.Models;
+using Features.Reviews.Data.Models;
 using Features.UserProfile.Data.Models;
 using Infrastructure.Services.CurrentUser;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -41,7 +41,7 @@ public class BookHubDbContext(
 
     public DbSet<ArticleDbModel> Articles { get; init; }
 
-    public DbSet<Notification> Notifications { get; init; }
+    public DbSet<NotificationDbModel> Notifications { get; init; }
 
     public DbSet<ChatMessageDbModel> ChatMessages { get; init; }
 

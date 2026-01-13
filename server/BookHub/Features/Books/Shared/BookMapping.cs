@@ -3,7 +3,7 @@
 using Authors.Service.Models;
 using Data.Models;
 using Genres.Service.Models;
-using Review.Service.Models;
+using Reviews.Service.Models;
 using Service.Models;
 using Web.Models;
 

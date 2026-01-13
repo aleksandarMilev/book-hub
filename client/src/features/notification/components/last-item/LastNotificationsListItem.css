@@ -1,4 +1,5 @@
 .bh-notifications-dd-item {
+  box-sizing: border-box;
   padding: 12px 12px;
   border-radius: 14px;
   margin: 6px 8px;
@@ -87,4 +88,42 @@
   background: rgba(108, 117, 125, 0.1);
   border-color: rgba(108, 117, 125, 0.14);
   color: #6c757d;
+}
+
+@media (max-width: 550px) {
+  .bh-notifications-dd-item {
+    margin: 6px 6px;
+    padding: 10px 10px;
+  }
+
+  .bh-notifications-dd-item__row {
+    gap: 8px;
+  }
+
+  .bh-notifications-dd-item__icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+  }
+
+  .bh-notifications-dd-item__top {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 4px 8px;
+  }
+
+  .bh-notifications-dd-item__date {
+    flex-basis: 100%;
+    white-space: normal;
+    font-size: 0.8rem;
+  }
+
+  .bh-notifications-dd-item__message {
+    font-size: 0.9rem;
+  }
+
+  .bh-notifications-dd-item__pill {
+    font-size: 0.75rem;
+    padding: 4px 9px;
+  }
 }

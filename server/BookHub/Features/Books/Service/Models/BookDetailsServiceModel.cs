@@ -1,7 +1,7 @@
 ﻿namespace BookHub.Features.Books.Service.Models;
 
 using Authors.Service.Models;
-using Review.Service.Models;
+using Reviews.Service.Models;
 
 public class BookDetailsServiceModel : BookServiceModel
 {

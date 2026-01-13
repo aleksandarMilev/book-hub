@@ -1,4 +1,4 @@
-﻿namespace BookHub.Features.Review.Data.Configuration;
+﻿namespace BookHub.Features.Reviews.Data.Configuration;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

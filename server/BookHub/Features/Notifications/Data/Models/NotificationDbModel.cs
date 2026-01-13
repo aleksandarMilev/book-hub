@@ -8,7 +8,7 @@ using Shared;
 
 using static Shared.Constants.Validation;
 
-public class Notification : DeletableEntity<Guid>
+public class NotificationDbModel : DeletableEntity<Guid>
 {
     [Required]
     [MaxLength(MessageMaxLength)]

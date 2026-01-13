@@ -1,4 +1,4 @@
-﻿namespace BookHub.Features.Review.Web;
+﻿namespace BookHub.Features.Reviews.Web;
 
 using BookHub.Common;
 using Microsoft.AspNetCore.Authorization;
