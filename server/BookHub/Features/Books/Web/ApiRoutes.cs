@@ -1,4 +1,4 @@
-﻿namespace BookHub.Features.Book.Web;
+﻿namespace BookHub.Features.Books.Web;
 
 public static class ApiRoutes
 {

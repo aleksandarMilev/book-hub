@@ -1,4 +1,4 @@
-﻿namespace BookHub.Features.Book.Web.Admin;
+﻿namespace BookHub.Features.Books.Web.Admin;
 
 using Areas.Admin.Web;
 using Infrastructure.Extensions;
@@ -15,15 +15,17 @@ public class BooksController(IBookService service) : AdminApiController
     [HttpGet(Id)]
     public async Task<ActionResult<BookDetailsServiceModel>> Details(
         Guid id,
-        CancellationToken token = default)
-        => this.Ok(await service.AdminDetails(id, token));
+        CancellationToken cancellationToken = default)
+        => this.Ok(await service.AdminDetails(id, cancellationToken));
 
     [HttpPatch(Id + ApiRoutes.Approve)]
     public async Task<ActionResult> Approve(
         Guid id,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
-        var result = await service.Approve(id, token);
+        var result = await service.Approve(
+            id,
+            cancellationToken);
 
         return this.NoContentOrBadRequest(result);
     }
@@ -31,9 +33,11 @@ public class BooksController(IBookService service) : AdminApiController
     [HttpPatch(Id + ApiRoutes.Reject)]
     public async Task<ActionResult> Reject(
         Guid id,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
-        var result = await service.Reject(id, token);
+        var result = await service.Reject(
+            id,
+            cancellationToken);
 
         return this.NoContentOrBadRequest(result);
     }

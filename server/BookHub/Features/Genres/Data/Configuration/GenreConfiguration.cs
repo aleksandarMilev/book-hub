@@ -1,4 +1,4 @@
-﻿namespace BookHub.Features.Genre.Data.Configuration;
+﻿namespace BookHub.Features.Genres.Data.Configuration;
 
 using BookHub.Data.Seeder;
 using Microsoft.EntityFrameworkCore;

@@ -13,6 +13,14 @@ import { IsError, slugify } from '@/shared/lib/utils/utils.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
 import { useMessage } from '@/shared/stores/message/message.js';
 
+const toDateInput = (value?: string | null): string => {
+  if (!value) {
+    return '';
+  }
+
+  return value.slice(0, 10);
+};
+
 type Props = {
   authorData?: AuthorDetails | null;
   isEditMode?: boolean;
@@ -30,12 +38,13 @@ export const useAuthorFormik = ({ authorData = null, isEditMode = false }: Props
   const initialNationality = isEditMode && authorData ? authorData.nationality : null;
 
   const formik = useFormik<AuthorFormValues>({
+    enableReinitialize: true,
     initialValues: {
       name: authorData?.name ?? '',
       penName: authorData?.penName ?? '',
       image: null,
-      bornAt: null,
-      diedAt: null,
+      bornAt: toDateInput(authorData?.bornAt),
+      diedAt: toDateInput(authorData?.diedAt),
       gender: (authorData?.gender as AuthorFormValues['gender']) ?? '',
       nationality: initialNationality,
       biography: authorData?.biography ?? '',

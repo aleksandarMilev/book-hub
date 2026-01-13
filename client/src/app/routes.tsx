@@ -92,6 +92,10 @@ export const router = createBrowserRouter([
         element: withSuspense(<AuthenticatedRoute element={<BookList />} />),
       },
       {
+        path: `${routes.book}/:id`,
+        element: withSuspense(<AuthenticatedRoute element={<BookDetails />} />),
+      },
+      {
         path: `${routes.book}/:id/:slug`,
         element: withSuspense(<AuthenticatedRoute element={<BookDetails />} />),
       },
@@ -125,6 +129,10 @@ export const router = createBrowserRouter([
       {
         path: routes.author,
         element: withSuspense(<AuthenticatedRoute element={<AuthorList />} />),
+      },
+      {
+        path: `${routes.author}/:id`,
+        element: withSuspense(<AuthenticatedRoute element={<AuthorDetails />} />),
       },
       {
         path: `${routes.author}/:id/:slug`,

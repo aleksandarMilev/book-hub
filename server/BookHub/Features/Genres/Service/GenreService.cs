@@ -1,4 +1,4 @@
-﻿namespace BookHub.Features.Genre.Service;
+﻿namespace BookHub.Features.Genres.Service;
 
 using BookHub.Data;
 using Shared;
@@ -8,17 +8,21 @@ using Models;
 public class GenreService(BookHubDbContext data) : IGenreService
 {
     public async Task<IEnumerable<GenreNameServiceModel>> Names(
-        CancellationToken token = default)
-      => await data
-          .Genres
-          .ToNameServiceModels()
-          .ToListAsync(token);
+        CancellationToken cancellationToken = default)
+        => await data
+            .Genres
+            .AsNoTracking()
+            .ToNameServiceModels()
+            .ToListAsync(cancellationToken);
 
     public async Task<GenreDetailsServiceModel?> Details(
-        Guid id,
-        CancellationToken token = default)
-       => await data
-           .Genres
-           .ToDetailsServiceModels()
-           .FirstOrDefaultAsync(g => g.Id == id, token);
+        Guid genreId,
+        CancellationToken cancellationToken = default)
+        => await data
+            .Genres
+            .AsNoTracking()
+            .ToDetailsServiceModels()
+            .FirstOrDefaultAsync(
+                g => g.Id == genreId,
+                cancellationToken);
 }

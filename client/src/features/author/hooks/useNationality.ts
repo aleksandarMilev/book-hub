@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { ALL_NATIONALITIES, type Nationality } from '@/features/author/types/author.js';
 import { useDebounce } from '@/shared/hooks/debounce/useDebounce.js';
 
-export function useAll() {
+export const useAll = () => {
   const [nationalities, setNationalities] = useState<Nationality[]>([]);
   const [isFetching, setIsFetching] = useState(false);
 
@@ -16,22 +17,36 @@ export function useAll() {
   }, []);
 
   return { nationalities, isFetching };
-}
+};
 
-export function useSearchNationalities(allNationalities: Nationality[]) {
+export const useSearchNationalities = (
+  allNationalities: Nationality[],
+  selectedId?: number | null,
+) => {
+  const { t } = useTranslation('authors');
   const [searchTerm, setSearchTerm] = useState('');
   const debounced = useDebounce(searchTerm, 150);
   const [filteredNationalities, setFilteredNationalities] = useState<Nationality[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
+    if (selectedId == null) {
+      setSearchTerm('');
+      return;
+    }
+
+    const match = allNationalities.find((n) => n.id === selectedId);
+    setSearchTerm(match?.name ?? '');
+  }, [selectedId, allNationalities]);
+
+  useEffect(() => {
     const term = debounced.trim().toLowerCase();
     if (!term) {
       setFilteredNationalities([]);
       setShowDropdown(false);
-
       return;
     }
+
     setFilteredNationalities(allNationalities.filter((n) => n.name.toLowerCase().includes(term)));
   }, [debounced, allNationalities]);
 
@@ -49,6 +64,7 @@ export function useSearchNationalities(allNationalities: Nationality[]) {
   const hideDropdownOnBlur = useCallback(() => setShowDropdown(false), []);
 
   return {
+    t,
     searchTerm,
     filteredNationalities,
     showDropdown,
@@ -57,4 +73,4 @@ export function useSearchNationalities(allNationalities: Nationality[]) {
     showDropdownOnFocus,
     hideDropdownOnBlur,
   };
-}
+};

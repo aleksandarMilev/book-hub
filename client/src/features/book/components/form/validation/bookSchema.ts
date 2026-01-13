@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 
 import i18n from '@/shared/i18n/i18n.js';
+import { isValid, parseISO } from 'date-fns';
 
 const constraints = {
   title: { min: 2, max: 200 },
@@ -21,6 +22,7 @@ const FIELD_KEYS = {
   genres: 'books:validation.fields.genres',
 } as const;
 
+const isIsoDate = (value: string) => isValid(parseISO(value));
 const getFieldLabel = (field: keyof typeof FIELD_KEYS) => i18n.t(FIELD_KEYS[field]);
 
 export const bookSchema = Yup.object({
@@ -129,14 +131,17 @@ export const bookSchema = Yup.object({
         field: getFieldLabel('genres'),
       }),
     ),
-  publishedDate: Yup.date()
-    .transform((value, originalValue) => (originalValue === '' ? null : value))
-    .max(new Date(), () =>
-      i18n.t('books:validation.datePast', {
-        field: getFieldLabel('publishedDate'),
-      }),
-    )
-    .nullable(),
+  publishedDate: Yup.string()
+    .transform((_, originalValue) => (originalValue === '' ? null : originalValue))
+    .nullable()
+    .test(
+      'publishedDate-valid',
+      () =>
+        i18n.t('books:validation.invalidDate', {
+          field: getFieldLabel('publishedDate'),
+        }) as string,
+      (value) => !value || isIsoDate(value),
+    ),
 });
 
 export type BookFormValues = Yup.InferType<typeof bookSchema>;

@@ -18,44 +18,41 @@ const AuthorListItem: FC<AuthorsSearchResult> = ({
   penName,
 }) => {
   const { t } = useTranslation('authors');
-
   const displayName = name || penName || t('list.unknownAuthor');
 
   return (
-    <div className="row p-3 bg-light border rounded mb-3 shadow-sm author-list-item">
-      <div className="col-md-3 col-4 mt-1 d-flex justify-content-center align-items-center">
+    <article className="author-list-item">
+      <div className="author-list-item__media">
         <img
           src={getImageUrl(imagePath, 'authors')}
           alt={displayName}
           className="author-card-image"
         />
       </div>
-      <div className="col-md-6 col-8 mt-1 author-list-item-content">
-        <h5 className="mb-2 author-list-item-name">
+      <div className="author-list-item__content">
+        <h5 className="author-list-item-name">
           <FaUser className="me-2" />
           {displayName}
         </h5>
         {penName && (
-          <h6 className="text-muted mb-2 author-list-item-pen-name">
+          <div className="author-list-item-pen-name">
             <FaPenFancy className="me-2" />
             {t('list.penNameLabel', { penName })}
-          </h6>
+          </div>
         )}
-        <div className="d-flex flex-row mb-2 author-list-item-rating">
+        <div className="author-list-item-rating">
           <RenderStars rating={averageRating ?? 0} />
         </div>
       </div>
-      <div className="col-md-3 d-flex align-items-center justify-content-center mt-1">
-        <div className="d-flex flex-column align-items-center">
-          <Link
-            to={`${routes.author}/${id}/${slugify(displayName)}`}
-            className="btn btn-sm btn-primary author-list-item-btn"
-          >
-            {t('list.view')}
-          </Link>
-        </div>
+      <div className="author-list-item__actions">
+        <Link
+          to={`${routes.author}/${id}/${slugify(displayName)}`}
+          className="author-list-item-btn"
+        >
+          {t('list.view')}
+        </Link>
       </div>
-    </div>
+    </article>
   );
 };
 

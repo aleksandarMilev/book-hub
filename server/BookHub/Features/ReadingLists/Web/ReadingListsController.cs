@@ -1,8 +1,7 @@
-﻿namespace BookHub.Features.ReadingList.Web;
+﻿namespace BookHub.Features.ReadingLists.Web;
 
-using Book.Service.Models;
 using BookHub.Common;
-using Data.Models;
+using Books.Service.Models;
 using Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +13,7 @@ using static ApiRoutes;
 using static Common.Constants.DefaultValues;
 
 [Authorize]
-public class ReadingListController(IReadingListService service) : ApiController
+public class ReadingListsController(IReadingListService service) : ApiController
 {
     [HttpGet]
     public async Task<ActionResult<IEnumerable<BookServiceModel>>> All(
@@ -48,12 +47,12 @@ public class ReadingListController(IReadingListService service) : ApiController
     [HttpPost]
     public async Task<ActionResult> Add(
         ReadingListWebModel webModel,
-        CancellationToken token = default) 
+        CancellationToken cancelationToken = default) 
     {
         var serviceModel = webModel.ToServiceModel();
         var result = await service.Add(
             serviceModel,
-            token);
+            cancelationToken);
 
         return this.NoContentOrBadRequest(result);
     }
@@ -61,12 +60,12 @@ public class ReadingListController(IReadingListService service) : ApiController
     [HttpDelete]
     public async Task<ActionResult> Delete(
         ReadingListWebModel webModel,
-        CancellationToken token = default)
+        CancellationToken cancelationToken = default)
     {
         var serviceModel = webModel.ToServiceModel();
         var result = await service.Delete(
             serviceModel,
-            token);
+            cancelationToken);
 
         return this.NoContentOrBadRequest(result);
     }

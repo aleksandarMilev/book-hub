@@ -1,16 +1,17 @@
-﻿namespace BookHub.Features.ReadingList.Data.Models;
+﻿namespace BookHub.Features.ReadingLists.Data.Models;
 
 using System.ComponentModel.DataAnnotations.Schema;
-using Book.Data.Models;
 using BookHub.Data.Models.Base;
+using Books.Data.Models;
 using Identity.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using Shared;
 
 [PrimaryKey(
     nameof(UserId),
     nameof(BookId),
     nameof(Status))]
-public class ReadingList : IDeletableEntity
+public class ReadingListDbModel : IDeletableEntity
 {
     [ForeignKey(nameof(User))]
     public string UserId { get; set; } = null!;

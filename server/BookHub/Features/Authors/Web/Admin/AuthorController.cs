@@ -16,7 +16,7 @@ public class AuthorController(IAuthorService service) : AdminApiController
     public async Task<ActionResult<AuthorDetailsServiceModel>> Details(
         Guid id,
         CancellationToken cancellationToken = default)
-      => this.Ok(await service.AdminDetails(id, cancellationToken));
+        => this.Ok(await service.AdminDetails(id, cancellationToken));
 
     [HttpPatch(Id + ApiRoutes.Approve)]
     public async Task<ActionResult> Approve(

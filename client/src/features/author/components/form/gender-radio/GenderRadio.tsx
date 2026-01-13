@@ -13,35 +13,37 @@ const GenderRadio: FC<{ formik: FormikProps<AuthorFormValues> }> = ({ formik }) 
   };
 
   return (
-    <div className="d-md-flex justify-content-start align-items-center mb-4">
-      <h6 className="fw-bold mb-0 me-4">{t('form.gender.label')}</h6>
-      <MDBRadio
-        name="gender"
-        id="genderMale"
-        value="male"
-        label={t('form.gender.male')}
-        inline
-        onChange={handleChange}
-        checked={formik.values.gender === 'male'}
-      />
-      <MDBRadio
-        name="gender"
-        id="genderFemale"
-        value="female"
-        label={t('form.gender.female')}
-        inline
-        onChange={handleChange}
-        checked={formik.values.gender === 'female'}
-      />
-      <MDBRadio
-        name="gender"
-        id="genderOther"
-        value="other"
-        label={t('form.gender.other')}
-        inline
-        onChange={handleChange}
-        checked={formik.values.gender === 'other'}
-      />
+    <div>
+      <label className="author-form-label">{t('form.gender.label')}</label>
+      <div className="author-form-radio-control author-form-radio-surface">
+        <MDBRadio
+          name="gender"
+          id="genderMale"
+          value="male"
+          label={t('form.gender.male')}
+          inline
+          onChange={handleChange}
+          checked={formik.values.gender === 'male'}
+        />
+        <MDBRadio
+          name="gender"
+          id="genderFemale"
+          value="female"
+          label={t('form.gender.female')}
+          inline
+          onChange={handleChange}
+          checked={formik.values.gender === 'female'}
+        />
+        <MDBRadio
+          name="gender"
+          id="genderOther"
+          value="other"
+          label={t('form.gender.other')}
+          inline
+          onChange={handleChange}
+          checked={formik.values.gender === 'other'}
+        />
+      </div>
       {formik.touched.gender && formik.errors.gender && (
         <div className="text-danger">{formik.errors.gender}</div>
       )}

@@ -1,10 +1,10 @@
-﻿namespace BookHub.Features.ReadingList.Shared;
+﻿namespace BookHub.Features.ReadingLists.Shared;
 
-using Book.Service.Models;
-using Genre.Service.Models;
-using ReadingList.Data.Models;
-using ReadingList.Service.Models;
-using ReadingList.Web.Models;
+using Books.Service.Models;
+using Data.Models;
+using Genres.Service.Models;
+using Service.Models;
+using Web.Models;
 
 public static class ReadingListMapping
 {
@@ -17,7 +17,7 @@ public static class ReadingListMapping
         };
 
     public static IQueryable<BookServiceModel> ToBookServiceModels(
-        this IQueryable<ReadingList> readingLists)
+        this IQueryable<ReadingListDbModel> readingLists)
         => readingLists
             .Select(rl => new BookServiceModel()
             {

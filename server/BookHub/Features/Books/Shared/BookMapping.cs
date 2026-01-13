@@ -1,8 +1,8 @@
-﻿namespace BookHub.Features.Book.Shared;
+﻿namespace BookHub.Features.Books.Shared;
 
 using Authors.Service.Models;
 using Data.Models;
-using Genre.Service.Models;
+using Genres.Service.Models;
 using Review.Service.Models;
 using Service.Models;
 using Web.Models;
@@ -25,6 +25,7 @@ public static class BookMapping
                    AverageRating = b.AverageRating,
                    Genres = b
                        .BooksGenres
+                       .Where(bg => bg.Genre != null)
                        .Select(bg => new GenreNameServiceModel
                        {
                            Id = bg.GenreId,

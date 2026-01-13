@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 [DbContext(typeof(BookHubDbContext))]
-[Migration("20260103190227_FullTextSearch")]
+[Migration("20260104204903_FullTextSearch")]
 partial class FullTextSearch
 {
     /// <inheritdoc />

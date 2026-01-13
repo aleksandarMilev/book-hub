@@ -3,9 +3,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using BookHub.Data.Models.Base;
+using Books.Data.Models;
+using Identity.Data.Models;
 using Infrastructure.Services.ImageWriter.Models.Image;
-using Features.Book.Data.Models;
-using Features.Identity.Data.Models;
 using Shared;
 
 using static Shared.Constants.Validation;

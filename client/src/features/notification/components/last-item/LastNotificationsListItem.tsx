@@ -8,6 +8,7 @@ import { useClickHandler } from '@/features/notification/hooks/useClickHandler.j
 import type { NotificationType } from '@/features/notification/types/notification.js';
 
 import { getIcon } from './utils/utils.js';
+import { getResourceType } from '../../utils/utils.js';
 
 type Props = {
   notification: NotificationType;
@@ -32,7 +33,9 @@ const LastNotificationsListItem: FC<Props> = ({ notification, refetchNotificatio
 
         <div className="bh-notifications-dd-item__body">
           <div className="bh-notifications-dd-item__top">
-            <strong className="bh-notifications-dd-item__type">{notification.resourceType}</strong>
+            <strong className="bh-notifications-dd-item__type">
+              {getResourceType(notification.resourceType)}
+            </strong>
             <span className="bh-notifications-dd-item__date">
               {format(new Date(notification.createdOn), 'dd MMM yyyy')}
             </span>

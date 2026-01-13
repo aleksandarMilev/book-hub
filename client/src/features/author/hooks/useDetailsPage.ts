@@ -9,7 +9,7 @@ import { useMessage } from '@/shared/stores/message/message.js';
 
 export const useDetailsPage = () => {
   const navigate = useNavigate();
-  const { id, slug } = useParams<{ id: string; slug: string }>();
+  const { id, slug } = useParams<{ id: string; slug?: string }>();
 
   const { showMessage } = useMessage();
   const { token, isAdmin, userId } = useAuth();
@@ -22,7 +22,6 @@ export const useDetailsPage = () => {
     }
 
     const canonicalSlug = slugify(author.name);
-
     if (!slug || slug !== canonicalSlug) {
       navigate(`${routes.author}/${id}/${canonicalSlug}`, { replace: true });
     }

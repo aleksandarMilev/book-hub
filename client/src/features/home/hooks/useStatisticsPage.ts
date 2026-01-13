@@ -9,7 +9,7 @@ export const useStatisticsPage = () => {
   const { isAuthenticated } = useAuth();
   const { statistics, isFetching, error } = useStatistics();
 
-  const users = useCountUp(statistics?.users ?? 0, 2_000);
+  const users = useCountUp(statistics?.profiles ?? 0, 2_000);
   const books = useCountUp(statistics?.books ?? 0, 2_000);
   const authors = useCountUp(statistics?.authors ?? 0, 2_000);
   const reviews = useCountUp(statistics?.reviews ?? 0, 2_000);

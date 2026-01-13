@@ -1,11 +1,11 @@
-﻿namespace BookHub.Features.ReadingList.Service;
+﻿namespace BookHub.Features.ReadingLists.Service;
 
-using Book.Service.Models;
 using BookHub.Common;
+using Books.Service.Models;
 using Infrastructure.Services.Result;
 using Infrastructure.Services.ServiceLifetimes;
-using ReadingList.Data.Models;
-using ReadingList.Service.Models;
+using Service.Models;
+using Shared;
 
 public interface IReadingListService : ITransientService
 {
@@ -14,17 +14,17 @@ public interface IReadingListService : ITransientService
        ReadingListStatus status,
        int pageIndex,
        int pageSize,
-       CancellationToken token);
+       CancellationToken cancellationToken);
 
     Task<BookServiceModel?> LastCurrentlyReading(
         string userId,
-        CancellationToken token);
+        CancellationToken cancellationToken);
 
     Task<Result> Add(
         ReadingListServiceModel model,
-        CancellationToken token);
+        CancellationToken cancellationToken);
 
     Task<Result> Delete(
         ReadingListServiceModel model,
-        CancellationToken token);
+        CancellationToken cancellationToken);
 }

@@ -1,5 +1,5 @@
 export interface Statistics {
-  users: number;
+  profiles: number;
   books: number;
   authors: number;
   reviews: number;

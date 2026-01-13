@@ -1,4 +1,5 @@
 {
+  "invalidDate": "{{field}} is not a valid date",
   "validation": {
     "fields": {
       "title": "Title",
@@ -21,6 +22,18 @@
     }
   },
   "form": {
+    "authorSearch": {
+      "label": "Author",
+      "helper": "Start typing to search and select an author",
+      "placeholder": "Search author...",
+      "noMatches": "No authors found"
+    },
+    "genreSearch": {
+      "label": "Genres*",
+      "helper": "Search and select one or more genres (Choose „Other“ if you are not sure)",
+      "placeholder": "Search genres...",
+      "noMatches": "No genres found"
+    },
     "titleCreate": "Add a New Book to Our Collection!",
     "titleEdit": "Edit Book",
     "labels": {

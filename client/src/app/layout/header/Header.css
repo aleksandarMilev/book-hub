@@ -1,7 +1,7 @@
 .navbar-custom {
   position: sticky;
   top: 0;
-  z-index: 50;
+  z-index: 1050;
 }
 
 .fancy-navbar {
@@ -9,14 +9,11 @@
   padding: 0.65rem 1rem;
   background: var(--grad-brand) !important;
   color: white !important;
-
   backdrop-filter: blur(14px);
   box-shadow: 0 10px 26px rgba(0, 0, 0, 0.14);
   border: 1px solid rgba(255, 255, 255, 0.18);
-
   position: relative;
-  overflow: hidden;
-
+  overflow: visible;
   animation: fadeDown 0.45s var(--ease-out);
 }
 
@@ -235,6 +232,16 @@
 .lang-separator {
   opacity: 0.5;
   color: #fff;
+}
+
+.fancy-navbar {
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+.fancy-navbar::before {
+  inset: 0;
+  transform: scale(2);
 }
 
 @media (max-width: 991px) {

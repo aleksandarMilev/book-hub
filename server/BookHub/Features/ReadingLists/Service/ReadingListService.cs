@@ -1,17 +1,16 @@
-﻿namespace BookHub.Features.ReadingList.Service;
+﻿namespace BookHub.Features.ReadingLists.Service;
 
-using Book.Service.Models;
 using BookHub.Common;
 using BookHub.Data;
+using Books.Service.Models;
 using Data.Models;
 using Infrastructure.Services.CurrentUser;
 using Infrastructure.Services.Result;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Shared;
-using UserProfile.Data.Models;
 using UserProfile.Service;
-
+using static Common.Utils;
 using static Shared.Constants.ErrorMessages;
 
 public class ReadingListService(
@@ -25,8 +24,12 @@ public class ReadingListService(
         ReadingListStatus status,
         int pageIndex,
         int pageSize,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
+        ClampPageSizeAndIndex(
+            ref pageIndex,
+            ref pageSize);
+
         var readingStatusIsInvalid = !Enum.IsDefined(status);
         if (readingStatusIsInvalid)
         {
@@ -39,19 +42,20 @@ public class ReadingListService(
 
         var books = data
             .ReadingLists
+            .AsNoTracking()
             .Where(rl =>
                 rl.UserId == userId &&
                 rl.Status == status)
             .ToBookServiceModels();
 
-        var total = await books.CountAsync(token);
-        var paginatedBooks = await books
+        var total = await books.CountAsync(cancellationToken);
+        var items = await books
             .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
-            .ToListAsync(token);
+            .ToListAsync(cancellationToken);
 
         var result = new PaginatedModel<BookServiceModel>(
-            paginatedBooks,
+            items,
             total,
             pageIndex,
             pageSize);
@@ -72,34 +76,34 @@ public class ReadingListService(
 
     public async Task<Result> Add(
         ReadingListServiceModel serviceModel,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var userId = userService.GetId()!;
-
         var bookId = serviceModel.BookId;
         var readingStatus = serviceModel.Status;
 
         var exists = await data
            .ReadingLists
+           .AsNoTracking()
            .AnyAsync(
                rl =>
                    rl.UserId == userId &&
                    rl.BookId == bookId &&
                    rl.Status == readingStatus,
-               token);
+               cancellationToken);
 
         if (exists)
         {
             return BookAlreadyInTheList;
         }
 
-        var bookIsNotValid = !await this.BookIsValid(bookId, token);
+        var bookIsNotValid = !await this.BookIsValid(bookId, cancellationToken);
         if (bookIsNotValid)
         {
             return "Invalid Book Id!";
         }
 
-        var mapEntity = new ReadingList
+        var mapEntity = new ReadingListDbModel
         {
             UserId = userId,
             BookId = bookId,
@@ -107,25 +111,25 @@ public class ReadingListService(
         };
 
         data.Add(mapEntity);
-        await data.SaveChangesAsync(token);
+        await data.SaveChangesAsync(cancellationToken);
 
         switch (readingStatus)
         {
             case ReadingListStatus.Read:
                 await profileService.IncrementReadBooksCount(
                     userId,
-                    token);
+                    cancellationToken);
 
                 break;
             case ReadingListStatus.ToRead:
                 await profileService.IncrementToReadBooksCount(
                     userId,
-                    token);
+                    cancellationToken);
                 break;
             case ReadingListStatus.CurrentlyReading:
                 await profileService.IncrementCurrentlyReadingBooksCount(
                     userId,
-                    token);
+                    cancellationToken);
 
                 break;
             default:
@@ -137,21 +141,21 @@ public class ReadingListService(
 
     public async Task<Result> Delete(
         ReadingListServiceModel serviceModel,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var userId = userService.GetId()!;
-
         var bookId = serviceModel.BookId;
         var readingStatus = serviceModel.Status;
 
         var mapEntity = await data
             .ReadingLists
+            .AsNoTracking()
             .FirstOrDefaultAsync(
                 rl =>
                     rl.UserId == userId &&
                     rl.BookId == bookId &&
                     rl.Status == readingStatus,
-                token);
+                cancellationToken);
 
         if (mapEntity is null) 
         {
@@ -159,25 +163,25 @@ public class ReadingListService(
         }
 
         data.Remove(mapEntity);
-        await data.SaveChangesAsync(token);
+        await data.SaveChangesAsync(cancellationToken);
 
         switch (readingStatus)
         {
             case ReadingListStatus.Read:
                 await profileService.DecrementReadBooksCount(
                     userId,
-                    token);
+                    cancellationToken);
 
                 break;
             case ReadingListStatus.ToRead:
                 await profileService.DecrementToReadBooksCount(
                     userId,
-                    token);
+                    cancellationToken);
                 break;
             case ReadingListStatus.CurrentlyReading:
                 await profileService.DecrementCurrentlyReadingBooksCount(
                     userId,
-                    token);
+                    cancellationToken);
 
                 break;
             default:
@@ -188,10 +192,12 @@ public class ReadingListService(
     }
 
     private async Task<bool> BookIsValid(
-        Guid id,
-        CancellationToken token = default)
+        Guid bookId,
+        CancellationToken cancellationToken = default)
         => await data
             .Books
             .AsNoTracking()
-            .AnyAsync(b => b.Id == id, token);
+            .AnyAsync(
+                b => b.Id == bookId,
+                cancellationToken);
 }

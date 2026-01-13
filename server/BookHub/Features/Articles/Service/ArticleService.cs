@@ -40,6 +40,7 @@ public class ArticleService(
 
         return await data
             .Articles
+            .AsNoTracking()
             .ToServiceDetailsModels()
             .FirstOrDefaultAsync(
                 a => a.Id == articleId,

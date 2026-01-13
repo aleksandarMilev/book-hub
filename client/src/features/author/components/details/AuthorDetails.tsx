@@ -111,9 +111,17 @@ const AuthorDetails: FC = () => {
                 <MDBCol md="8">
                   <MDBCardTitle className="author-title">{author.name}</MDBCardTitle>
                   <MDBCardText className="author-subtitle">
+                    <strong>{t('details.nationality.label')}</strong>{' '}
                     {getNationalityName(author.nationality)}
-                    {author.penName &&
-                      ` \u00B7 ${t('details.penName', { penName: author.penName })}`}
+                    {author.penName && (
+                      <>
+                        <br />
+                        {t('details.penName', { penName: author.penName })}
+                      </>
+                    )}
+                  </MDBCardText>
+                  <MDBCardText className="text-muted mt-2">
+                    <strong>{t('details.sex.label')}</strong> {author.gender}
                   </MDBCardText>
                   <div className="author-header-meta">
                     <div className="author-meta-pill">
@@ -154,7 +162,7 @@ const AuthorDetails: FC = () => {
                   )}
                 </MDBCol>
               </MDBRow>
-              {(isCreator || isAdmin) && (
+              {(isCreator || isAdmin) && author.isApproved && (
                 <div className="author-details-actions d-flex gap-2 mt-4">
                   <Link
                     to={`${routes.editAuthor}/${id}`}
@@ -180,7 +188,7 @@ const AuthorDetails: FC = () => {
                     authorName={author.name}
                     initialIsApproved={author.isApproved ?? false}
                     token={token}
-                    onSuccess={(msg, success) => showMessage(msg, !!success)}
+                    onSuccess={(message, success) => showMessage(message, !!success)}
                   />
                 </div>
               )}

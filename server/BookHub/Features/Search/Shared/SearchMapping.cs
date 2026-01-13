@@ -2,10 +2,10 @@
 
 using Article.Data.Models;
 using Authors.Data.Models;
-using Book.Data.Models;
+using Books.Data.Models;
 using Chat.Data.Models;
-using Genre.Data.Models;
-using Genre.Service.Models;
+using Genres.Data.Models;
+using Genres.Service.Models;
 using Service.Models;
 using UserProfile.Data.Models;
 

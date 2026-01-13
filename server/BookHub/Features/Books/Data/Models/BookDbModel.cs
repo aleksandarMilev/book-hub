@@ -1,14 +1,14 @@
-﻿namespace BookHub.Features.Book.Data.Models;
+﻿namespace BookHub.Features.Books.Data.Models;
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Authors.Data.Models;
 using BookHub.Data.Models.Base;
 using BookHub.Data.Models.Shared.BookGenre.Models;
-using Features.Authors.Data.Models;
-using Features.Identity.Data.Models;
-using Features.ReadingList.Data.Models;
-using Features.Review.Data.Models;
+using Identity.Data.Models;
 using Infrastructure.Services.ImageWriter.Models.Image;
+using ReadingLists.Data.Models;
+using Review.Data.Models;
 
 using static Shared.Constants.Validation;
 
@@ -54,5 +54,5 @@ public class BookDbModel:
 
     public ICollection<ReviewDbModel> Reviews { get; set; } = new HashSet<ReviewDbModel>();
 
-    public ICollection<ReadingList> ReadingLists { get; set; } = new HashSet<ReadingList>();
+    public ICollection<ReadingListDbModel> ReadingLists { get; set; } = new HashSet<ReadingListDbModel>();
 }

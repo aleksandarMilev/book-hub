@@ -1,4 +1,4 @@
-﻿namespace BookHub.Features.Book.Shared;
+﻿namespace BookHub.Features.Books.Shared;
 
 public static class Constants
 {
@@ -26,8 +26,13 @@ public static class Constants
 
     public static class Paths
     {
-        public const string DefaultImagePath = "/images/books/default.jpg";
+        public const string DefaultImagePath = $"/images/{ImagePathPrefix}/default.jpg";
 
-        public const string BooksImagePathPrefix = "books";
+        public const string ImagePathPrefix = "books";
+    }
+
+    public static class RouteNames
+    {
+        public const string DetailsRouteName = "BookDetails";
     }
 }

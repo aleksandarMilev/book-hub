@@ -1,6 +1,6 @@
-﻿namespace BookHub.Features.ReadingList.Service.Models;
+﻿namespace BookHub.Features.ReadingLists.Service.Models;
 
-using Data.Models;
+using Shared;
 
 public class ReadingListServiceModel
 {

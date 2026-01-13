@@ -93,6 +93,7 @@ public static class ServiceCollectionExtensions
                  {
                      sqlOptions.MigrationsAssembly(
                          typeof(BookHubDbContext).Assembly.FullName);
+
                      sqlOptions.EnableRetryOnFailure();
                  });
             });

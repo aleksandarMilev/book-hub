@@ -1,6 +1,6 @@
 ﻿namespace BookHub.Features.Authors.Service.Models;
 
-using Book.Service.Models;
+using Books.Service.Models;
 using Shared;
 
 public class AuthorDetailsServiceModel

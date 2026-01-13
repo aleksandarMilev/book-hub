@@ -1,3 +1,4 @@
+import { isValid, parseISO } from 'date-fns';
 import * as Yup from 'yup';
 
 import i18n from '@/shared/i18n/i18n.js';
@@ -22,6 +23,7 @@ const FIELD_KEYS = {
   image: 'authors:validation.fields.image',
 } as const;
 
+const isIsoDate = (value: string) => isValid(parseISO(value));
 const getFieldLabel = (field: keyof typeof FIELD_KEYS) => i18n.t(FIELD_KEYS[field]);
 
 export const authorSchema = Yup.object({
@@ -95,22 +97,69 @@ export const authorSchema = Yup.object({
         return hasValidExtension;
       },
     ),
-  bornAt: Yup.date()
-    .transform((value, originalValue) => (originalValue === '' ? null : value))
-    .max(new Date(), () =>
-      i18n.t('authors:validation.datePast', {
-        field: getFieldLabel('bornAt'),
-      }),
+  bornAt: Yup.string()
+    .transform((_, originalValue) => (originalValue === '' ? null : originalValue))
+    .nullable()
+    .test(
+      'bornAt-valid',
+      () =>
+        i18n.t('authors:validation.invalidDate', {
+          field: getFieldLabel('bornAt'),
+        }) as string,
+      (value) => !value || isIsoDate(value),
     )
-    .nullable(),
-  diedAt: Yup.date()
-    .max(new Date(), () =>
-      i18n.t('authors:validation.datePast', {
-        field: getFieldLabel('diedAt'),
-      }),
+    .test(
+      'bornAt-past',
+      () =>
+        i18n.t('authors:validation.datePast', {
+          field: getFieldLabel('bornAt'),
+        }) as string,
+      (value) => {
+        if (!value) {
+          return true;
+        }
+
+        return parseISO(value) <= new Date();
+      },
+    ),
+  diedAt: Yup.string()
+    .transform((_, originalValue) => (originalValue === '' ? null : originalValue))
+    .nullable()
+    .test(
+      'diedAt-valid',
+      () =>
+        i18n.t('authors:validation.invalidDate', {
+          field: getFieldLabel('diedAt'),
+        }) as string,
+      (value) => !value || isIsoDate(value),
     )
-    .min(Yup.ref('bornAt'), () => i18n.t('authors:validation.deathBeforeBirth'))
-    .nullable(),
+    .test(
+      'diedAt-past',
+      () =>
+        i18n.t('authors:validation.datePast', {
+          field: getFieldLabel('diedAt'),
+        }) as string,
+      (value) => {
+        if (!value) {
+          return true;
+        }
+
+        return parseISO(value) <= new Date();
+      },
+    )
+    .test(
+      'deathAfterBirth',
+      () => i18n.t('authors:validation.deathBeforeBirth') as string,
+      function (diedAt) {
+        const { bornAt } = this.parent as { bornAt: string | null };
+        if (!diedAt || !bornAt) {
+          return true;
+        }
+
+        return parseISO(diedAt) >= parseISO(bornAt);
+      },
+    ),
+
   gender: Yup.string().required(() =>
     i18n.t('authors:validation.required', {
       field: getFieldLabel('gender'),

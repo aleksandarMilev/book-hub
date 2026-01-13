@@ -1,4 +1,4 @@
-﻿namespace BookHub.Features.Book.Web.Models;
+﻿namespace BookHub.Features.Books.Web.Models;
 
 using System.ComponentModel.DataAnnotations;
 

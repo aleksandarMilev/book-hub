@@ -1,7 +1,7 @@
-﻿namespace BookHub.Features.ReadingList.Web.Models;
+﻿namespace BookHub.Features.ReadingLists.Web.Models;
 
 using System.ComponentModel.DataAnnotations;
-using Data.Models;
+using Shared;
 
 public class ReadingListWebModel : IValidatableObject
 {
@@ -12,7 +12,7 @@ public class ReadingListWebModel : IValidatableObject
     public IEnumerable<ValidationResult> Validate(
         ValidationContext validationContext)
     {
-        if (!Enum.IsDefined(typeof(ReadingListStatus), this.Status))
+        if (!Enum.IsDefined(this.Status))
         {
             yield return new ValidationResult(
                 "Invalid Stattus value.",

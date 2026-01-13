@@ -4,12 +4,12 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Features.Article.Data.Models;
 using Features.Authors.Data.Models;
-using Features.Book.Data.Models;
+using Features.Books.Data.Models;
 using Features.Chat.Data.Models;
-using Features.Genre.Data.Models;
+using Features.Genres.Data.Models;
 using Features.Identity.Data.Models;
 using Features.Notifications.Data.Models;
-using Features.ReadingList.Data.Models;
+using Features.ReadingLists.Data.Models;
 using Features.Review.Data.Models;
 using Features.UserProfile.Data.Models;
 using Infrastructure.Services.CurrentUser;
@@ -29,7 +29,7 @@ public class BookHubDbContext(
 
     public DbSet<BookGenreDbModel> BooksGenres { get; init; }
 
-    public DbSet<ReadingList> ReadingLists { get; init; }
+    public DbSet<ReadingListDbModel> ReadingLists { get; init; }
 
     public DbSet<AuthorDbModel> Authors { get; init; }
 

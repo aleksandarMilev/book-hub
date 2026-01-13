@@ -57,6 +57,10 @@
   font-weight: 600;
 }
 
+.book-form-file-input {
+  margin-bottom: 1rem;
+}
+
 .book-form-card .text-danger {
   font-size: 0.9rem;
   font-weight: 600;
@@ -75,7 +79,7 @@
   gap: 12px;
 }
 
-.book-form-card .btn {
+.book-form-btn {
   border-radius: 14px;
   padding: 12px 22px;
   font-size: 0.95rem;
@@ -94,32 +98,31 @@
   border: none;
 }
 
-.book-form-card .btn-light {
+.book-form-btn-light {
   background: #f4f4f6;
   color: #555;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
 }
 
-.book-form-card .btn-light:hover:not(:disabled) {
+.book-form-btn-light:hover:not(:disabled) {
   background: #e7e7ec;
   transform: translateY(-1px);
 }
 
-.book-form-card .btn-warning {
+.book-form-btn-warning {
   padding: 12px 24px;
   font-weight: 700;
   background: linear-gradient(90deg, #6ea8fe, #9a6bff, #ff6ec7);
   color: #fff;
   box-shadow: 0 6px 16px rgba(154, 107, 255, 0.45);
-  border: none;
 }
 
-.book-form-card .btn-warning:hover:not(:disabled) {
+.book-form-btn-warning:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(154, 107, 255, 0.6);
 }
 
-.book-form-card .btn:disabled {
+.book-form-btn:disabled {
   opacity: 0.7;
   cursor: not-allowed;
   transform: none;
@@ -140,7 +143,7 @@
     align-items: stretch;
   }
 
-  .book-form-card .btn {
+  .book-form-btn {
     width: 100%;
   }
 }

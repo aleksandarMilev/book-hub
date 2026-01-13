@@ -120,15 +120,70 @@
 @media (max-width: 768px) {
   .book-list-item {
     flex-direction: column;
-    text-align: center;
+    align-items: center;
+    text-align: left;
+    padding: 14px 14px;
+    gap: 12px;
   }
 
   .book-list-item-image {
-    margin-bottom: 10px;
+    width: 120px;
+    height: 175px;
+    margin: 0;
+    flex-shrink: 0;
+  }
+
+  .book-list-item-content {
+    width: 100%;
+    align-items: flex-start;
+  }
+
+  .book-list-item-title {
+    width: 100%;
+    justify-content: flex-start;
+    font-size: 1.05rem;
+    line-height: 1.25;
+  }
+
+  .book-list-item-author,
+  .book-list-item-rating {
+    width: 100%;
   }
 
   .book-list-item-genres {
-    justify-content: center;
+    width: 100%;
+    justify-content: flex-start;
+    gap: 0.35rem;
+  }
+
+  .book-list-item-description {
+    width: 100%;
+    font-size: 0.92rem;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+  }
+
+  .book-list-item-btn {
+    width: 100%;
+    text-align: center;
+    padding: 10px 16px;
+  }
+}
+
+@media (max-width: 420px) {
+  .book-list-item {
+    padding: 12px 12px;
+    border-radius: 14px;
+  }
+
+  .book-list-item-image {
+    width: 105px;
+    height: 155px;
+    border-radius: 10px;
+  }
+
+  .book-list-item-title {
+    font-size: 1rem;
   }
 }
 

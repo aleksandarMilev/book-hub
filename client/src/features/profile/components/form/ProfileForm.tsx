@@ -2,7 +2,7 @@ import './ProfileForm.css';
 
 import { MDBCard, MDBCardBody, MDBCol, MDBContainer, MDBRow } from 'mdb-react-ui-kit';
 import type React from 'react';
-import { useRef, type FC } from 'react';
+import { type FC,useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useProfileFormik } from '@/features/profile/components/form/formik/useProfileFormik.js';
