@@ -52,7 +52,7 @@ export const remove = async (id: string, token: string, signal?: AbortSignal) =>
     await http.delete<void>(url, getAuthConfig(token, signal));
 
     return true;
-  } catch (error: unknown) {
+  } catch (error) {
     if (IsError(error) && IsCanceledError(error)) {
       throw error;
     }

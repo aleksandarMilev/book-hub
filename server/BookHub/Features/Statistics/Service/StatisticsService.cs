@@ -8,7 +8,9 @@ public class StatisticsService(
     IStatisticsQuery data,
     IMemoryCache cache) : IStatisticsService
 {
+    private const int ExpirationSeconds = 30;
     private const string CacheKey = "home_statistics";
+
     private static readonly SemaphoreSlim lockObject = new(1, 1);
 
     public async Task<StatisticsServiceModel> All(
@@ -39,7 +41,7 @@ public class StatisticsService(
 
             var cacheOptions = new MemoryCacheEntryOptions
             {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30)
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(ExpirationSeconds)
             };
 
             cache.Set(
@@ -55,7 +57,8 @@ public class StatisticsService(
         }
     }
 
-    private bool TryGetCached(out StatisticsServiceModel value)
+    private bool TryGetCached(
+        out StatisticsServiceModel serviceModel)
     {
         var isCached = cache.TryGetValue(
             CacheKey,
@@ -63,11 +66,11 @@ public class StatisticsService(
 
         if (isCached && cached is not null)
         {
-            value = cached;
+            serviceModel = cached;
             return true;
         }
 
-        value = null!;
+        serviceModel = null!;
         return false;
     }
 }

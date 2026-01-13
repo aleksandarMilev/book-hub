@@ -26,7 +26,9 @@
 }
 
 .bh-notifications-dd__menu {
-  width: min(420px, 92vw);
+  box-sizing: border-box;
+  width: min(420px, calc(100vw - 24px));
+  max-width: calc(100vw - 24px);
   padding: 10px 10px 8px;
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.35);
@@ -84,4 +86,25 @@
 .bh-notifications-dd__all:hover {
   color: #fff;
   background: linear-gradient(90deg, #5b93e6, #8251ff);
+}
+
+@media (max-width: 550px) {
+  .bh-notifications-dd__menu {
+    width: calc(100vw - 16px);
+    max-width: calc(100vw - 16px);
+    padding: 8px 8px 6px;
+    border-radius: 14px;
+  }
+
+  .bh-notifications-dd__items {
+    max-height: min(360px, 55vh);
+  }
+
+  .bh-notifications-dd__header {
+    padding: 8px 8px 6px;
+  }
+
+  .bh-notifications-dd__footer {
+    padding: 6px 6px 2px;
+  }
 }

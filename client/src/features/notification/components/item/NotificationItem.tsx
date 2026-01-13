@@ -1,7 +1,7 @@
 import './NotificationItem.css';
+import { createPortal } from 'react-dom';
 
 import { format } from 'date-fns';
-import { MDBBtn } from 'mdb-react-ui-kit';
 import { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaBook, FaComments, FaTrashAlt, FaUser } from 'react-icons/fa';
@@ -87,18 +87,25 @@ const NotificationItem: FC<{
           </span>
         </button>
 
-        <MDBBtn
-          outline
-          color="danger"
-          size="sm"
+        <button
+          type="button"
           onClick={toggleModal}
           className="bh-notifications-item__btn bh-notifications-item__btn--delete"
         >
-          <FaTrashAlt className="me-1" /> {t('actions.delete')}
-        </MDBBtn>
+          <FaTrashAlt className="bh-notifications-item__deleteIcon" aria-hidden="true" />
+          {t('actions.delete')}
+        </button>
       </div>
 
-      <DeleteModal showModal={showModal} toggleModal={toggleModal} deleteHandler={deleteHandler} />
+      {typeof document !== 'undefined' &&
+        createPortal(
+          <DeleteModal
+            showModal={showModal}
+            toggleModal={toggleModal}
+            deleteHandler={deleteHandler}
+          />,
+          document.body,
+        )}
     </li>
   );
 };

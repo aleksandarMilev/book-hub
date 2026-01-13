@@ -1,4 +1,4 @@
-﻿namespace BookHub.Features.Email;
+﻿namespace BookHub.Features.Emails;
 
 using Infrastructure.Services.ServiceLifetimes;
 
