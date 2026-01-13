@@ -6,7 +6,7 @@ using Authors.Data.Models;
 using Books.Data.Models;
 using Chat.Data.Models;
 using ReadingLists.Data.Models;
-using Review.Data.Models;
+using Reviews.Data.Models;
 using UserProfile.Data.Models;
 using Microsoft.AspNetCore.Identity;
 

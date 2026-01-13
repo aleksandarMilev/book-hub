@@ -8,7 +8,7 @@ using BookHub.Data.Models.Shared.BookGenre.Models;
 using Identity.Data.Models;
 using Infrastructure.Services.ImageWriter.Models.Image;
 using ReadingLists.Data.Models;
-using Review.Data.Models;
+using Reviews.Data.Models;
 
 using static Shared.Constants.Validation;
 

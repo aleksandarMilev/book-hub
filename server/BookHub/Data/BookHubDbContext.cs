@@ -10,7 +10,7 @@ using Features.Genres.Data.Models;
 using Features.Identity.Data.Models;
 using Features.Notifications.Data.Models;
 using Features.ReadingLists.Data.Models;
-using Features.Review.Data.Models;
+using Features.Reviews.Data.Models;
 using Features.UserProfile.Data.Models;
 using Infrastructure.Services.CurrentUser;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

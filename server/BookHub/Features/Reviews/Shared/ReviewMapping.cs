@@ -1,4 +1,4 @@
-﻿namespace BookHub.Features.Review.Shared;
+﻿namespace BookHub.Features.Reviews.Shared;
 
 using Data.Models;
 using Web.Models;

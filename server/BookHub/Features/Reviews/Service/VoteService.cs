@@ -1,4 +1,4 @@
-﻿namespace BookHub.Features.Review.Service;
+﻿namespace BookHub.Features.Reviews.Service;
 
 using BookHub.Data;
 using Data.Models;
@@ -12,13 +12,14 @@ public class VoteService(
     public async Task<int?> Create(
         Guid reviewId,
         bool isUpvote,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var reviewExists = await data
             .Reviews
+            .AsNoTracking()
             .AnyAsync(
                 r => r.Id == reviewId,
-                token);
+                cancellationToken);
 
         if (!reviewExists)
         {
@@ -26,43 +27,42 @@ public class VoteService(
         }
 
         var userId = userService.GetId()!;
-        var voteExists = await data
-            .Votes
-            .AnyAsync(
-                v => 
-                    v.ReviewId == reviewId &&
-                    v.IsUpvote == isUpvote &&
-                    v.CreatorId == userId,
-                token);
 
-        if (voteExists)
-        {
-            return null;
-        }
-
-        var oppositeVote = await data
-            .Votes
+        var existingVote = await data.Votes
             .FirstOrDefaultAsync(
                 v =>
                     v.ReviewId == reviewId &&
-                    v.IsUpvote == !isUpvote &&
                     v.CreatorId == userId,
-                token);
+                cancellationToken);
 
-        if (oppositeVote != null)
+        if (existingVote is not null)
         {
-            data.Remove(oppositeVote);
+            if (existingVote.IsUpvote == isUpvote)
+            {
+                data.Remove(existingVote);
+
+                await data.SaveChangesAsync(cancellationToken);
+
+                return null;
+            }
+
+            existingVote.IsUpvote = isUpvote;
+
+            await data.SaveChangesAsync(cancellationToken);
+
+            return existingVote.Id;
         }
 
         var vote = new VoteDbModel
-        { 
+        {
             ReviewId = reviewId,
             IsUpvote = isUpvote,
             CreatorId = userId
         };
 
         data.Add(vote);
-        await data.SaveChangesAsync(token);
+
+        await data.SaveChangesAsync(cancellationToken);
 
         return vote.Id;
     }

@@ -1,4 +1,4 @@
-﻿namespace BookHub.Features.Review.Data.Models;
+﻿namespace BookHub.Features.Reviews.Data.Models;
 
 using System.ComponentModel.DataAnnotations.Schema;
 using BookHub.Data.Models.Base;
