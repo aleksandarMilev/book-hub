@@ -17,4 +17,9 @@ public static class Constants
 
         public const string ImagePathPrefix = "chats";
     }
+
+    public static class RouteNames
+    {
+        public const string DetailsRouteName = "ChatDetails";
+    }
 }

@@ -10,18 +10,18 @@ public interface IChatMessageService : ITransientService
         Guid chatId,
         int? before = null,
         int take = 50,
-        CancellationToken token = default);
+        CancellationToken cancellationToken = default);
 
     Task<ResultWith<ChatMessageServiceModel>> Create(
         CreateChatMessageServiceModel model,
-        CancellationToken token = default);
+        CancellationToken cancellationToken = default);
 
     Task<ResultWith<ChatMessageServiceModel>> Edit(
-        int id,
+        int chatMessageId,
         CreateChatMessageServiceModel model,
-        CancellationToken token = default);
+        CancellationToken cancellationToken = default);
 
     Task<Result> Delete(
-        int id,
-        CancellationToken token = default);
+        int chatMessageId,
+        CancellationToken cancellationToken = default);
 }

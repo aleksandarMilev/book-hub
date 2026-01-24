@@ -7,12 +7,11 @@ using Infrastructure.Services.CurrentUser;
 using Infrastructure.Services.ImageWriter;
 using Infrastructure.Services.Result;
 using Microsoft.EntityFrameworkCore;
+using Models;
 using Notifications.Service;
-using Service.Models;
 using Shared;
 using UserProfile.Data.Models;
 using UserProfile.Service.Models;
-
 using static Common.Constants.ErrorMessages;
 using static Shared.Constants.Paths;
 
@@ -25,11 +24,14 @@ public class ChatService(
 {
     public async Task<ChatDetailsServiceModel?> Details(
         Guid chatId,
-        CancellationToken token = default)
+        CancellationToken cancelationToken = default)
     {
         var userId = userService.GetId()!;
+        var canAccessChat = await this.CanAccessChat(
+            chatId,
+            userId,
+            cancelationToken);
 
-        var canAccessChat = await this.CanAccessChat(chatId, userId, token);
         if (!canAccessChat)
         {
             return null;
@@ -37,8 +39,11 @@ public class ChatService(
 
         var chat = await data
             .Chats
+            .AsNoTracking()
             .ToChatDetailsServiceModels()
-            .FirstOrDefaultAsync(c => c.Id == chatId, token);
+            .FirstOrDefaultAsync(
+                c => c.Id == chatId,
+                cancelationToken);
 
         if (chat is null)
         {
@@ -47,11 +52,12 @@ public class ChatService(
 
         var messages = await data
             .ChatMessages
+            .AsNoTracking()
             .Where(m => m.ChatId == chatId)
             .ToServiceModels()
             .OrderByDescending(m => m.Id)
             .Take(20)
-            .ToListAsync(token);
+            .ToListAsync(cancelationToken);
 
         messages.Reverse();
         chat.Messages = messages;
@@ -61,42 +67,45 @@ public class ChatService(
 
     public async Task<IEnumerable<ChatServiceModel>> NotJoined(
         string userToJoinId,
-        CancellationToken token = default)
+        CancellationToken cancelationToken = default)
         => await data
             .Chats
+            .AsNoTracking()
             .Where(c => 
                 c.CreatorId == userService.GetId() && 
                 !c.ChatsUsers.Any(cu => cu.UserId == userToJoinId))
             .ToChatServiceModels()
-            .ToListAsync(token);
+            .ToListAsync(cancelationToken);
 
     public async Task<bool> CanAccessChat(
         Guid chatId,
         string userId,
-        CancellationToken token = default)
+        CancellationToken cancelationToken = default)
         => await data
             .Chats
+            .AsNoTracking()
             .AnyAsync(
                 c =>
                     c.Id == chatId &&
                     c.ChatsUsers.Any(cu => cu.UserId == userId && cu.HasAccepted),
-                token);
+                cancelationToken);
 
     public async Task<bool> IsInvited(
             Guid chatId,
             string userId,
-            CancellationToken token = default)
+            CancellationToken cancelationToken = default)
             => await data
                 .Chats
+                .AsNoTracking()
                 .AnyAsync(
                     c =>
                         c.Id == chatId &&
                         c.ChatsUsers.Any(cu => cu.UserId == userId && !cu.HasAccepted),
-                    token);
+                    cancelationToken);
 
     public async Task<ResultWith<ChatDetailsServiceModel>> Create(
         CreateChatServiceModel serviceModel,
-        CancellationToken token = default)
+        CancellationToken cancelationToken = default)
     {
         var creatorId = userService.GetId()!;
 
@@ -108,7 +117,7 @@ public class ChatService(
            dbModel,
            serviceModel,
            DefaultImagePath,
-           token);
+           cancelationToken);
 
         data.Add(dbModel);
 
@@ -116,29 +125,39 @@ public class ChatService(
             dbModel.Id,
             creatorId,
             true,
-            token);
+            cancelationToken);
 
         if (!chatUserEntityCreationResult.Succeeded)
         {
             return chatUserEntityCreationResult.ErrorMessage!;
         }
 
-        await data.SaveChangesAsync(token);
+        await data.SaveChangesAsync(cancelationToken);
 
         logger.LogInformation(
             "New chat with Id: {id} was created.",
             dbModel.Id);
 
-        var serviceModelResult = dbModel.ToChatDetailsServiceModels();
-        return ResultWith<ChatDetailsServiceModel>.Success(serviceModelResult);
+        var serviceModelResult = await data
+            .Chats
+            .AsNoTracking()
+            .ToChatDetailsServiceModels()
+            .FirstOrDefaultAsync(
+                c => c.Id == dbModel.Id,
+                cancelationToken);
+
+        return ResultWith<ChatDetailsServiceModel>.Success(serviceModelResult!);
     }
 
     public async Task<Result> Edit(
         Guid chatId,
         CreateChatServiceModel serviceModel,
-        CancellationToken token = default)
+        CancellationToken cancelationToken = default)
     {
-        var dbModel = await this.GetChatDbModel(chatId, token);
+        var dbModel = await this.GetChatDbModel(
+            chatId,
+            cancelationToken);
+
         if (dbModel is null)
         {
             return this.LogAndReturnNotFoundMessage(
@@ -165,7 +184,7 @@ public class ChatService(
             dbModel,
             serviceModel,
             null,
-            token);
+            cancelationToken);
 
         if (isNewImageUploaded)
         {
@@ -175,7 +194,7 @@ public class ChatService(
                 DefaultImagePath);
         }
 
-        await data.SaveChangesAsync(token);
+        await data.SaveChangesAsync(cancelationToken);
 
         logger.LogInformation(
             "Chat with Id: {id} was updated.",
@@ -186,9 +205,12 @@ public class ChatService(
 
     public async Task<Result> Delete(
         Guid chatId,
-        CancellationToken token = default)
+        CancellationToken cancelationToken = default)
     {
-        var dbModel = await this.GetChatDbModel(chatId, token);
+        var dbModel = await this.GetChatDbModel(
+            chatId,
+            cancelationToken);
+
         if (dbModel is null)
         {
             return LogAndReturnNotFoundMessage(
@@ -209,7 +231,7 @@ public class ChatService(
         }
 
         data.Remove(dbModel);
-        await data.SaveChangesAsync(token);
+        await data.SaveChangesAsync(cancelationToken);
 
         logger.LogInformation(
             "Chat with Id: {id} was deleted.",
@@ -220,14 +242,14 @@ public class ChatService(
 
     public async Task<ResultWith<PrivateProfileServiceModel>> Accept(
         ProcessChatInvitationServiceModel serviceModel,
-        CancellationToken token = default)
+        CancellationToken cancelationToken = default)
     {
         var chatId = serviceModel.ChatId;
         var invitedUserId = userService.GetId()!;
         var mapEntity = await this.GetChatUserDbModel(
             invitedUserId,
             chatId,
-            token);
+            cancelationToken);
 
         if (mapEntity is null)
         {
@@ -237,7 +259,7 @@ public class ChatService(
         }
 
         mapEntity.HasAccepted = true;
-        await data.SaveChangesAsync(token);
+        await data.SaveChangesAsync(cancelationToken);
 
         logger.LogInformation(
             "User with Id: {userId} accepted to in chat with Id: {chatId}",
@@ -249,13 +271,13 @@ public class ChatService(
                 chatId,
                 serviceModel.ChatName,
                 serviceModel.ChatCreatorId,
-                token);
+                cancelationToken);
 
         var profile = await data
             .Profiles
             .Where(p => p.UserId == invitedUserId)
             .ToPrivateProfileServiceModel()
-            .FirstOrDefaultAsync(token);
+            .FirstOrDefaultAsync(cancelationToken);
 
         if (profile is null)
         {
@@ -269,14 +291,14 @@ public class ChatService(
 
     public async Task<Result> Reject(
         ProcessChatInvitationServiceModel serviceModel,
-        CancellationToken token = default)
+        CancellationToken cancelationToken = default)
     {
         var chatId = serviceModel.ChatId;
         var invitedUserId = userService.GetId()!;
         var mapEntity = await this.GetChatUserDbModel(
             invitedUserId,
             chatId,
-            token);
+            cancelationToken);
 
         if (mapEntity is null)
         {
@@ -286,7 +308,7 @@ public class ChatService(
         }
 
         data.Remove(mapEntity);
-        await data.SaveChangesAsync(token);
+        await data.SaveChangesAsync(cancelationToken);
 
         logger.LogInformation(
             "User with Id: {userId} rejected to in chat with Id: {chatId}",
@@ -298,7 +320,7 @@ public class ChatService(
                 chatId,
                 serviceModel.ChatName,
                 serviceModel.ChatCreatorId,
-                token);
+                cancelationToken);
 
         return true;
     }
@@ -306,15 +328,16 @@ public class ChatService(
     public async Task<Result> InviteUserToChat(
        Guid chatId,
        AddUserToChatServiceModel serviceModel,
-       CancellationToken token = default)
+       CancellationToken cancelationToken = default)
     {
         var userToInviteId = serviceModel.UserId;
         var currentUserId = userService.GetId()!;
         var chatCreatorId = await data
            .Chats
+           .AsNoTracking()
            .Where(c => c.Id == chatId)
            .Select(c => c.CreatorId)
-           .FirstOrDefaultAsync(token);
+           .FirstOrDefaultAsync(cancelationToken);
 
         if (chatCreatorId != currentUserId)
         {
@@ -328,14 +351,14 @@ public class ChatService(
             chatId,
             userToInviteId,
             false,
-            token);
+            cancelationToken);
 
         if (!chatUserEntityCreationResult.Succeeded)
         {
             return chatUserEntityCreationResult.ErrorMessage!;
         }
 
-        await data.SaveChangesAsync(token);
+        await data.SaveChangesAsync(cancelationToken);
 
         logger.LogInformation(
             "User with Id: {userToInviteId} was invited to join in chat with Id: {chatId}",
@@ -346,7 +369,7 @@ public class ChatService(
             chatId,
             serviceModel.ChatName,
             userToInviteId,
-            token);
+            cancelationToken);
 
         return true;
     }
@@ -354,14 +377,15 @@ public class ChatService(
     public async Task<Result> RemoveUserFromChat(
         Guid chatId,
         string userToRemoveId,
-        CancellationToken token = default)
+        CancellationToken cancelationToken = default)
     {
         var currentUserId = userService.GetId()!;
         var chatCreatorId = await data
             .Chats
+            .AsNoTracking()
             .Where(c => c.Id == chatId)
             .Select(c => c.CreatorId)
-            .FirstOrDefaultAsync(token);
+            .FirstOrDefaultAsync(cancelationToken);
 
         var isNotCreator = chatCreatorId != currentUserId;
         var notToBeRemoved = userToRemoveId != currentUserId;
@@ -377,7 +401,7 @@ public class ChatService(
         var mapEntity = await this.GetChatUserDbModel(
             userToRemoveId,
             chatId,
-            token);
+            cancelationToken);
 
         if (mapEntity is null)
         {
@@ -387,7 +411,7 @@ public class ChatService(
         }
 
         data.Remove(mapEntity);
-        await data.SaveChangesAsync(token);
+        await data.SaveChangesAsync(cancelationToken);
 
         logger.LogInformation(
             "User with Id: {userToRemoveId} was removed from chat with Id: {chatId}",
@@ -429,20 +453,20 @@ public class ChatService(
 
     private async Task<ChatDbModel?> GetChatDbModel(
         Guid id,
-        CancellationToken token = default)
+        CancellationToken cancelationToken = default)
         => await data
             .Chats
-            .FindAsync([id], token);
+            .FindAsync([id], cancelationToken);
 
     private async Task<ChatUser?> GetChatUserDbModel(
         string userId,
         Guid chatId,
-        CancellationToken token = default)
+        CancellationToken cancelationToken = default)
         => await data
             .ChatsUsers
             .FirstOrDefaultAsync(
                 cu => cu.UserId == userId && cu.ChatId == chatId,
-                token);
+                cancelationToken);
 
     private string LogAndReturnNotFoundMessage<TId>(
         string entityName,

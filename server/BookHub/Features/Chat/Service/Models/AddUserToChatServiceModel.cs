@@ -2,7 +2,7 @@
 
 public class AddUserToChatServiceModel
 {
-    public string UserId { get; init; } = null!;
+    public string UserId { get; init; } = default!;
 
-    public string ChatName { get; init; } = null!;
+    public string ChatName { get; init; } = default!;
 }

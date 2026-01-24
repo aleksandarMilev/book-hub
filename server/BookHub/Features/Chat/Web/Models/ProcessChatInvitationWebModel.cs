@@ -12,8 +12,8 @@ public class ProcessChatInvitationWebModel
     [StringLength(
         NameMaxLength,
         MinimumLength = NameMinLength)]
-    public string ChatName { get; init; } = null!;
+    public string ChatName { get; init; } = default!;
 
     [Required]
-    public string ChatCreatorId { get; init; } = null!;
+    public string ChatCreatorId { get; init; } = default!;
 }

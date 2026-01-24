@@ -9,9 +9,11 @@ using Models;
 using Service;
 using Service.Models;
 using Shared;
+using System.Threading;
 using UserProfile.Service.Models;
 
 using static Common.Constants.ApiRoutes;
+using static Shared.Constants.RouteNames;
 
 [Authorize]
 public class ChatController(
@@ -23,13 +25,13 @@ public class ChatController(
         Guid id,
         int? before,
         int take = 50,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var result = await messageService.GetForChat(
             id,
             before,
             take,
-            token);
+            cancellationToken);
 
         if (result.Succeeded)
         {
@@ -42,41 +44,43 @@ public class ChatController(
     [HttpGet(Id)]
     public async Task<ActionResult<ChatDetailsServiceModel>> Details(
         Guid id,
-        CancellationToken token = default)
-       => this.Ok(await service.Details(id, token));
+        CancellationToken cancellationToken = default)
+       => this.Ok(await service.Details(id, cancellationToken));
 
     [HttpGet(ApiRoutes.NotJoined)]
     public async Task<ActionResult<IEnumerable<ChatServiceModel>>> NotJoined(
         string userId,
-        CancellationToken token = default)
-        => this.Ok(await service.NotJoined(userId, token));
+        CancellationToken cancellationToken = default)
+        => this.Ok(await service.NotJoined(userId, cancellationToken));
 
     [HttpGet(Id + ApiRoutes.Access)]
     public async Task<ActionResult<bool>> CanAccessChat(
         Guid id,
         string userId,
-        CancellationToken token = default)
-        => this.Ok(await service.CanAccessChat(id, userId, token));
+        CancellationToken cancellationToken = default)
+        => this.Ok(await service.CanAccessChat(id, userId, cancellationToken));
 
     [HttpGet(Id + ApiRoutes.Invited)]
     public async Task<ActionResult<bool>> IsInvited(
         Guid id,
         string userId,
-        CancellationToken token = default)
-        => this.Ok(await service.IsInvited(id, userId, token));
+        CancellationToken cancellationToken = default)
+        => this.Ok(await service.IsInvited(id, userId, cancellationToken));
 
     [HttpPost]
     public async Task<ActionResult<ChatDetailsServiceModel>> Create(
         CreateChatWebModel webModel,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var serviceModel = webModel.ToCreateChatServiceModel();
-        var result = await service.Create(serviceModel, token);
+        var result = await service.Create(
+            serviceModel,
+            cancellationToken);
 
         if (result.Succeeded)
         {
-            return this.CreatedAtAction(
-                actionName: nameof(this.Details),
+            return this.CreatedAtRoute(
+                routeName: DetailsRouteName,
                 routeValues: new { id = result.Data!.Id },
                 value: result.Data);
         }
@@ -88,10 +92,13 @@ public class ChatController(
     public async Task<ActionResult<Result>> Edit(
         Guid id,
         CreateChatWebModel webModel,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var serviceModel = webModel.ToCreateChatServiceModel();
-        var result = await service.Edit(id, serviceModel, token);
+        var result = await service.Edit(
+            id,
+            serviceModel,
+            cancellationToken);
 
         return this.NoContentOrBadRequest(result);
     }
@@ -99,9 +106,11 @@ public class ChatController(
     [HttpDelete(Id)]
     public async Task<ActionResult<Result>> Delete(
         Guid id,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
-        var result = await service.Delete(id, token);
+        var result = await service.Delete(
+            id,
+            cancellationToken);
 
         return this.NoContentOrBadRequest(result);
     }
@@ -109,10 +118,12 @@ public class ChatController(
     [HttpPost(ApiRoutes.AcceptInvite)]
     public async Task<ActionResult<ResultWith<PrivateProfileServiceModel>>> Accept(
         ProcessChatInvitationWebModel webModel,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var serviceModel = webModel.ToProcessChatInvitationServiceModel();
-        var result = await service.Accept(serviceModel, token);
+        var result = await service.Accept(
+            serviceModel,
+            cancellationToken);
 
         if (result.Succeeded)
         {
@@ -125,10 +136,12 @@ public class ChatController(
     [HttpPost(ApiRoutes.RejectInvite)]
     public async Task<ActionResult<Result>> Reject(
         ProcessChatInvitationWebModel webModel,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var serviceModel = webModel.ToProcessChatInvitationServiceModel();
-        var result = await service.Reject(serviceModel, token);
+        var result = await service.Reject(
+            serviceModel,
+            cancellationToken);
 
         return this.NoContentOrBadRequest(result);
     }
@@ -137,13 +150,13 @@ public class ChatController(
     public async Task<ActionResult<int>> InviteUser(
        Guid id,
        AddUserToChatWebModel webModel,
-       CancellationToken token = default)
+       CancellationToken cancellationToken = default)
     {
         var serviceModel = webModel.ToAddUserToChatWebModel();
         var result = await service.InviteUserToChat(
             id,
             serviceModel,
-            token);
+            cancellationToken);
 
         return this.NoContentOrBadRequest(result);
     }
@@ -152,12 +165,12 @@ public class ChatController(
     public async Task<ActionResult<Result>> RemoveUser(
         Guid id,
         string userId,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var result = await service.RemoveUserFromChat(
             id,
             userId,
-            token);
+            cancellationToken);
 
         return this.NoContentOrBadRequest(result);
     }

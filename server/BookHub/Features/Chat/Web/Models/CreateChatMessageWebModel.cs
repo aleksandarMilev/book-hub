@@ -1,17 +1,16 @@
-﻿namespace BookHub.Features.Chat.Web.Models
+﻿namespace BookHub.Features.Chat.Web.Models;
+
+using System.ComponentModel.DataAnnotations;
+
+using static Shared.Constants.Validation;
+
+public class CreateChatMessageWebModel
 {
-    using System.ComponentModel.DataAnnotations;
+    [Required]
+    [StringLength(
+        MessageMaxLength,
+        MinimumLength = MessageMinLength)]
+    public string Message { get; init; } = default!;
 
-    using static Shared.Constants.Validation;
-
-    public class CreateChatMessageWebModel
-    {
-        [Required]
-        [StringLength(
-            MessageMaxLength,
-            MinimumLength = MessageMinLength)]
-        public string Message { get; init; } = null!;
-
-        public Guid ChatId { get; init; }
-    }
+    public Guid ChatId { get; init; }
 }

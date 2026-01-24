@@ -2,7 +2,7 @@
 
 public class ChatMessageProfileServiceModel
 {
-    public string Name { get; init; } = null!;
+    public string Name { get; init; } = default!;
 
-    public string ImagePath { get; init; } = null!;
+    public string ImagePath { get; init; } = default!;
 }

@@ -8,51 +8,51 @@ using UserProfile.Service.Models;
 public interface IChatService : ITransientService
 {
     Task<ChatDetailsServiceModel?> Details(
-        Guid id,
-        CancellationToken token = default);
+        Guid chatId,
+        CancellationToken cancellationToken = default);
 
     Task<IEnumerable<ChatServiceModel>> NotJoined(
         string userToJoinId,
-        CancellationToken token = default);
+        CancellationToken cancellationToken = default);
 
     Task<bool> CanAccessChat(
         Guid chatId,
         string userId,
-        CancellationToken token = default);
+        CancellationToken cancellationToken = default);
 
     Task<bool> IsInvited(
         Guid chatId,
         string userId,
-        CancellationToken token = default);
+        CancellationToken cancellationToken = default);
 
     Task<ResultWith<ChatDetailsServiceModel>> Create(
         CreateChatServiceModel serviceModel,
-        CancellationToken token = default);
+        CancellationToken cancellationToken = default);
 
     Task<Result> Edit(
         Guid chatId,
         CreateChatServiceModel serviceModel,
-        CancellationToken token = default);
+        CancellationToken cancellationToken = default);
 
     Task<Result> Delete(
         Guid chatId,
-        CancellationToken token = default);
+        CancellationToken cancellationToken = default);
 
     Task<ResultWith<PrivateProfileServiceModel>> Accept(
         ProcessChatInvitationServiceModel model,
-        CancellationToken token = default);
+        CancellationToken cancellationToken = default);
 
     Task<Result> Reject(
         ProcessChatInvitationServiceModel model,
-        CancellationToken token = default);
+        CancellationToken cancellationToken = default);
 
     Task<Result> InviteUserToChat(
        Guid chatId,
        AddUserToChatServiceModel model,
-       CancellationToken token = default);
+       CancellationToken cancellationToken = default);
 
     Task<Result> RemoveUserFromChat(
         Guid chatId,
         string userToRemoveId,
-        CancellationToken token = default);
+        CancellationToken cancellationToken = default);
 }
