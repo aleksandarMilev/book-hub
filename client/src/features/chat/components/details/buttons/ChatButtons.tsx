@@ -19,12 +19,12 @@ const ChatButtons: FC<{
 
   if (isInvited) {
     return (
-      <div className="invite-box">
-        <p>{t('buttons.invite.message', { chatName })}</p>
-        <span className="invite-button accept-button" onClick={onAcceptClick}>
+      <div className="chat-invite-box">
+        <p className="chat-invite-text">{t('buttons.invite.message', { chatName })}</p>
+        <span className="chat-invite-button chat-invite-button--accept" onClick={onAcceptClick}>
           {t('buttons.invite.accept')}
         </span>
-        <span className="invite-button reject-button" onClick={onRejectClick}>
+        <span className="chat-invite-button chat-invite-button--reject" onClick={onRejectClick}>
           {t('buttons.invite.reject')}
         </span>
       </div>
@@ -32,8 +32,11 @@ const ChatButtons: FC<{
   }
 
   return userId === chatCreatorId ? null : (
-    <div className="invite-box">
-      <span className="invite-button reject-button" onClick={() => onLeaveClick(userId!)}>
+    <div className="chat-invite-box">
+      <span
+        className="chat-invite-button chat-invite-button--reject"
+        onClick={() => onLeaveClick(userId!)}
+      >
         {t('buttons.leave')}
       </span>
     </div>

@@ -29,9 +29,8 @@ const ChatList: FC = () => {
 
   const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
 
-  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-    setPage(pagination.defaultPageIndex);
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
   };
 
   const handlePageChange = (newPage: number) => {

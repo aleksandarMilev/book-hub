@@ -1,101 +1,66 @@
-import './ChatList.css';
+import './ChatListItem.css';
 
-import { type ChangeEvent, type FC, useEffect, useState } from 'react';
-import { FaSearch } from 'react-icons/fa';
-import { useTranslation } from 'react-i18next';
+import { MDBIcon } from 'mdb-react-ui-kit';
+import { type FC } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
-import image from '@/features/chat/components/form/assets/chat.avif';
-import ChatListItem from '@/features/chat/components/list-item/ChatListItem.js';
-import { useSearchChats } from '@/features/search/hooks/useCrud.js';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
-import Pagination from '@/shared/components/pagination/Pagination.js';
-import { useDebounce } from '@/shared/hooks/debounce/useDebounce.js';
-import { pagination } from '@/shared/lib/constants/defaultValues.js';
+import { useDeleteChat } from '@/features/chat/hooks/useCrud.js';
+import DeleteModal from '@/shared/components/delete-modal/DeleteModal.js';
+import { routes } from '@/shared/lib/constants/api.js';
+import { useAuth } from '@/shared/stores/auth/auth.js';
 
-const ChatList: FC = () => {
-  const { t } = useTranslation('chats');
+type Props = {
+  id: string;
+  name: string;
+  imagePath: string | null;
+  creatorId: string;
+};
 
-  const [searchTerm, setSearchTerm] = useState('');
-  const debouncedSearch = useDebounce(searchTerm);
+const ChatListItem: FC<Props> = ({ id, name, imagePath, creatorId }) => {
+  const navigate = useNavigate();
+  const { userId, isAdmin } = useAuth();
 
-  const [page, setPage] = useState(pagination.defaultPageIndex);
-  const pageSize = pagination.defaultPageSize;
-
-  useEffect(() => {
-    setPage(pagination.defaultPageIndex);
-  }, [debouncedSearch]);
-
-  const { items: chats, totalItems, isFetching } = useSearchChats(debouncedSearch, page, pageSize);
-
-  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
-
-  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-    setPage(pagination.defaultPageIndex);
+  const onEditClick = () => {
+    navigate(routes.editChat, { state: { chat: { id, name, imagePath, creatorId } } });
   };
 
-  const handlePageChange = (newPage: number) => {
-    if (newPage < 1 || newPage > totalPages) {
-      return;
-    }
-
-    setPage(newPage);
-  };
-
-  const clearSearch = () => {
-    setSearchTerm('');
-    setPage(pagination.defaultPageIndex);
-  };
+  const { showModal, toggleModal, deleteHandler } = useDeleteChat(id, name);
 
   return (
-    <div className="chat-list-page container">
-      <div className="search-wrapper">
-        <div className="search-bar">
-          <FaSearch className="search-icon" />
-          <input
-            type="text"
-            placeholder={t('list.search.placeholder')}
-            value={searchTerm}
-            onChange={handleSearchChange}
-            aria-label={t('list.search.ariaLabel')}
-          />
+    <>
+      <div className="row chat-list-item p-2 bg-light border rounded mb-3 shadow-sm">
+        <div className="col-3 d-flex justify-content-center align-items-center">
+          <img className="img-fluid chat-list-item-image" src={imagePath || ''} alt={name} />
+        </div>
+        <div className="col-7 d-flex flex-column justify-content-between chat-list-item-content">
+          <h5 className="mb-1 chat-list-item-name">{name}</h5>
+          <div className="d-flex mt-2">
+            {userId === creatorId && (
+              <MDBIcon
+                icon="pen"
+                className="cursor-pointer"
+                title="Edit Chat"
+                onClick={onEditClick}
+              />
+            )}
+            {userId === creatorId || isAdmin ? (
+              <MDBIcon
+                icon="trash"
+                className="cursor-pointer ms-2"
+                onClick={deleteHandler}
+                title="Delete Chat"
+              />
+            ) : null}
+          </div>
+          <Link to={`${routes.chat}/${id}`} className="chat-list-item-btn">
+            Details
+          </Link>
         </div>
       </div>
-      <div className="d-flex justify-content-center row">
-        <div className="col-md-10">
-          {isFetching ? (
-            <DefaultSpinner />
-          ) : chats.length > 0 ? (
-            <>
-              {chats.map((c) => (
-                <ChatListItem key={c.id} {...c} />
-              ))}
-              <Pagination
-                page={page}
-                totalPages={totalPages}
-                disabled={isFetching}
-                onPageChange={handlePageChange}
-              />
-            </>
-          ) : (
-            <div className="d-flex flex-column align-items-center justify-content-center mt-5">
-              <img
-                src={image}
-                alt={t('list.empty.imageAlt')}
-                className="mb-4 clickable"
-                style={{ maxWidth: '200px', opacity: 0.7, cursor: 'pointer' }}
-                onClick={clearSearch}
-              />
-              <h5 className="text-muted">{t('list.empty.title')}</h5>
-              <p className="text-muted text-center" style={{ maxWidth: '400px' }}>
-                {t('list.empty.message')}
-              </p>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
+
+      <DeleteModal showModal={showModal} toggleModal={toggleModal} deleteHandler={deleteHandler} />
+    </>
   );
 };
 
-export default ChatList;
+export default ChatListItem;

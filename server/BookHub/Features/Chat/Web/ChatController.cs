@@ -41,7 +41,7 @@ public class ChatController(
         return this.BadRequest(result.ErrorMessage);
     }
 
-    [HttpGet(Id)]
+    [HttpGet(Id, Name = DetailsRouteName)]
     public async Task<ActionResult<ChatDetailsServiceModel>> Details(
         Guid id,
         CancellationToken cancellationToken = default)

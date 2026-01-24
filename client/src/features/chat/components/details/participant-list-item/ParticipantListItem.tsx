@@ -23,27 +23,24 @@ const ParticipantListItem: FC<Props> = ({
 
   return (
     <li
-      className="d-flex align-items-center mb-3 profile-item"
+      className="chat-participant-item d-flex align-items-center mb-3 chat-profile-item"
       onClick={() => onProfileClickHandler(participant.id)}
     >
       <MDBCardImage
         src={participant.imagePath || ''}
         alt={participant.firstName}
-        style={{
-          width: '40px',
-          height: '40px',
-          borderRadius: '50%',
-          objectFit: 'cover',
-          marginRight: '10px',
-        }}
+        className="chat-participant-avatar"
       />
-      <span>
+
+      <span className="chat-participant-name">
         {index === 0 ? (
           <>
             <strong>
               {participant.firstName} {participant.lastName}
             </strong>{' '}
-            <span className="text-muted">{t('participants.creatorSuffix')}</span>
+            <span className="text-muted chat-participant-creator">
+              {t('participants.creatorSuffix')}
+            </span>
           </>
         ) : (
           <>
@@ -52,7 +49,7 @@ const ParticipantListItem: FC<Props> = ({
               <MDBIcon
                 fas
                 icon="times"
-                className="ms-2 cursor-pointer"
+                className="ms-2 chat-icon-button chat-participant-remove"
                 onClick={(e: React.MouseEvent) => {
                   e.stopPropagation();
                   onDeleteHandler(participant.id, participant.firstName);

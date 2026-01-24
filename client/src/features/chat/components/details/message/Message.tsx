@@ -32,38 +32,52 @@ const Message: FC<Props> = ({
   const avatar = sender?.imagePath || message.senderImagePath || fallbackAvatar;
 
   return (
-    <div className={`d-flex flex-row justify-content-${isSentByUser ? 'end' : 'start'} mb-4`}>
+    <div
+      className={[
+        'chat-message-row',
+        'd-flex',
+        'flex-row',
+        `justify-content-${isSentByUser ? 'end' : 'start'}`,
+        'mb-4',
+        isSentByUser ? 'chat-message-row--sent' : 'chat-message-row--received',
+      ].join(' ')}
+    >
       <div
-        className={`p-3 ${isSentByUser ? 'me-3 border' : 'ms-3'}`}
-        style={{
-          borderRadius: '15px',
-          backgroundColor: isSentByUser ? '#fbfbfb' : 'rgba(57, 192, 237,.2)',
-        }}
+        className={[
+          'chat-message-bubble',
+          isSentByUser ? 'chat-message-bubble--sent me-3' : 'chat-message-bubble--received ms-3',
+        ].join(' ')}
       >
-        <p className="small mb-0">{message.message}</p>
-        <small className="text-muted">
-          {modified ? `${modified}${t('message.modifiedSuffix')}` : created}
-        </small>
-        {isSentByUser && (
-          <>
-            <MDBIcon
-              fas
-              icon="pencil-alt"
-              className="ms-2 cursor-pointer"
-              onClick={() => onEdit(message)}
-            />
-            <MDBIcon
-              fas
-              icon="trash"
-              className="ms-2 cursor-pointer"
-              onClick={() => onDelete(message.id)}
-            />
-          </>
-        )}
+        <p className="chat-message-text small mb-0">{message.message}</p>
+
+        <div className="chat-message-meta">
+          <small className="text-muted">
+            {modified ? `${modified}${t('message.modifiedSuffix')}` : created}
+          </small>
+
+          {isSentByUser && (
+            <span className="chat-message-actions">
+              <MDBIcon
+                fas
+                icon="pencil-alt"
+                className="chat-icon-button ms-2"
+                onClick={() => onEdit(message)}
+              />
+              <MDBIcon
+                fas
+                icon="trash"
+                className="chat-icon-button ms-2"
+                onClick={() => onDelete(message.id)}
+              />
+            </span>
+          )}
+        </div>
       </div>
-      <img src={avatar} alt={t('message.avatarAlt')} style={{ width: '45px', height: '100%' }} />
+
+      <img src={avatar} alt={t('message.avatarAlt')} className="chat-message-avatar" />
+
       <div
-        className="ms-2 profile-item"
+        className="ms-2 chat-profile-item chat-message-sender"
         onClick={() => sender && onProfileClick(sender.id)}
         title={displayName}
       >
