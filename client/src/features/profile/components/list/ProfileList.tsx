@@ -38,65 +38,63 @@ const ProfileList: FC = () => {
     setPage(newPage);
   };
 
+  const showEmpty = !isFetching && profiles.length === 0;
+
   return (
     <div className="profile-list-page container">
-      <div className="row mb-4">
-        <div className="col-md-10 mx-auto d-flex">
-          <div className="search-bar-container d-flex w-100">
-            <input
-              type="text"
-              className="form-control search-input"
-              placeholder={t('list.searchPlaceholder')}
-              value={searchTerm}
-              onChange={handleSearchChange}
-              disabled={isFetching}
-            />
-            <button
-              className="btn btn-light search-btn"
-              disabled={isFetching}
-              aria-label={t('list.searchAria')}
-            >
-              <FaSearch size={20} />
-            </button>
-          </div>
+      <div className="search-wrapper">
+        <div className="search-bar">
+          <FaSearch className="search-icon" />
+          <input
+            type="text"
+            placeholder={t('list.searchPlaceholder')}
+            value={searchTerm}
+            onChange={handleSearchChange}
+            disabled={isFetching}
+            aria-label={t('list.searchAria')}
+          />
         </div>
       </div>
-      <div className="d-flex justify-content-center row">
-        <div className="col-md-10">
-          {isFetching ? (
-            <DefaultSpinner />
-          ) : profiles.length > 0 ? (
-            <>
-              {profiles.map((p) => {
-                const mapped = {
-                  id: p.id.toString(),
-                  imageUrl: p.imageUrl ?? '',
-                  firstName: p.firstName,
-                  lastName: p.lastName,
-                  isPrivate: p.isPrivate,
-                };
-                return <ProfileListItem key={mapped.id} {...mapped} />;
-              })}
-              <Pagination
-                page={page}
-                totalPages={totalPages}
-                disabled={isFetching}
-                onPageChange={handlePageChange}
-              />
-            </>
-          ) : (
-            <div className="d-flex flex-column align-items-center justify-content-center mt-5">
-              <img
-                src={noUsersImage}
-                alt="No users found"
-                className="empty-state-image"
-                onClick={() => setSearchTerm('')}
-              />
-              <h5 className="empty-state-title text-center">{t('list.emptyTitle')}</h5>
-              <p className="empty-state-text text-center">{t('list.emptyText')}</p>
+
+      <div className="profile-container">
+        {isFetching && <DefaultSpinner />}
+
+        {!isFetching && !showEmpty && (
+          <>
+            <div className="profile-list">
+              {profiles.map((p) => (
+                <ProfileListItem
+                  key={p.id}
+                  id={p.id.toString()}
+                  imagePath={p.imagePath ?? ''}
+                  firstName={p.firstName}
+                  lastName={p.lastName}
+                  isPrivate={p.isPrivate}
+                />
+              ))}
             </div>
-          )}
-        </div>
+
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              disabled={isFetching}
+              onPageChange={handlePageChange}
+            />
+          </>
+        )}
+
+        {showEmpty && (
+          <div className="d-flex flex-column align-items-center justify-content-center mt-5">
+            <img
+              src={noUsersImage}
+              alt="No users found"
+              className="empty-state-image"
+              onClick={() => setSearchTerm('')}
+            />
+            <h5 className="empty-state-title text-center">{t('list.emptyTitle')}</h5>
+            <p className="empty-state-text text-center">{t('list.emptyText')}</p>
+          </div>
+        )}
       </div>
     </div>
   );
