@@ -1,48 +1,142 @@
 .review-list {
-  margin: 20px auto;
-  max-width: 800px;
-  padding: 10px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: min(920px, 100%);
+  margin: clamp(12px, 2.5vw, 28px) auto;
+  padding: clamp(12px, 2.5vw, 22px);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(245, 247, 255, 0.9));
+  border: 1px solid rgba(20, 30, 70, 0.08);
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.08),
+    0 2px 8px rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(10px);
 }
 
 .review-list h1 {
-  font-size: 2.5rem;
-  font-weight: bold;
+  margin: 0 0 clamp(12px, 2.4vw, 22px) 0;
   text-align: center;
-  color: #333;
-  margin-bottom: 20px;
+  font-weight: 900;
+  letter-spacing: 0.3px;
+  font-size: clamp(1.2rem, 4.8vw, 2.2rem);
+  color: rgba(20, 24, 38, 0.92);
+  line-height: 1.15;
+}
+
+.review-list h1::after {
+  content: '';
+  display: block;
+  width: min(120px, 40%);
+  height: 3px;
+  margin: 10px auto 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(77, 104, 255, 0.9), rgba(126, 76, 255, 0.9));
+  opacity: 0.9;
+}
+
+.review-list > p {
+  margin: 0;
+  padding: 14px 12px;
+  border-radius: 14px;
+  text-align: center;
+  font-weight: 600;
+  color: rgba(60, 70, 95, 0.92);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(20, 30, 70, 0.08);
 }
 
 .pagination-controls {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
+  gap: 10px;
+  margin-top: clamp(14px, 2.6vw, 22px);
+  padding-top: clamp(10px, 2.2vw, 16px);
+  border-top: 1px solid rgba(20, 30, 70, 0.08);
 }
 
 .pagination-controls button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 8px 16px;
-  margin: 0 10px;
+  appearance: none;
+  border: 1px solid rgba(20, 30, 70, 0.12);
+  border-radius: 14px;
+  padding: 10px 14px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: 0.2px;
+  color: rgba(255, 255, 255, 0.98);
+  background: linear-gradient(135deg, rgba(77, 104, 255, 1), rgba(126, 76, 255, 1));
+  box-shadow:
+    0 10px 18px rgba(90, 120, 255, 0.22),
+    0 4px 10px rgba(126, 76, 255, 0.16);
   cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.pagination-controls button:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    filter 160ms ease,
+    opacity 160ms ease;
+  min-width: 92px;
 }
 
 .pagination-controls button:hover:not(:disabled) {
-  background-color: #0056b3;
+  transform: translateY(-1px);
+  filter: brightness(1.03);
+  box-shadow:
+    0 12px 22px rgba(90, 120, 255, 0.26),
+    0 6px 14px rgba(126, 76, 255, 0.2);
+}
+
+.pagination-controls button:active:not(:disabled) {
+  transform: translateY(0);
+  filter: brightness(0.98);
+}
+
+.pagination-controls button:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 4px rgba(90, 120, 255, 0.35),
+    0 12px 22px rgba(90, 120, 255, 0.26);
+}
+
+.pagination-controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  filter: grayscale(0.15);
+  box-shadow: none;
 }
 
 .pagination-controls span {
-  font-size: 1rem;
-  color: #333;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: rgba(35, 40, 55, 0.92);
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(20, 30, 70, 0.08);
+}
+
+/* Responsive tweaks */
+@media (max-width: 480px) {
+  .review-list {
+    border-radius: 14px;
+    padding: 12px;
+  }
+
+  .pagination-controls {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .pagination-controls button {
+    min-width: 42%;
+    padding: 10px 12px;
+  }
+
+  .pagination-controls span {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (min-width: 900px) {
+  .review-list {
+    padding: 24px;
+  }
 }

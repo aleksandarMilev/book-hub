@@ -47,6 +47,10 @@ const bgNotifications = await import('@/shared/i18n/locales/bg/notifications.jso
   assert: { type: 'json' },
 }).then((mod) => mod.default);
 
+const bgReviews = await import('@/shared/i18n/locales/bg/reviews.json', {
+  assert: { type: 'json' },
+}).then((mod) => mod.default);
+
 const enLayout = await import('@/shared/i18n/locales/en/layout.json', {
   assert: { type: 'json' },
 }).then((mod) => mod.default);
@@ -91,6 +95,10 @@ const enNotifications = await import('@/shared/i18n/locales/en/notifications.jso
   assert: { type: 'json' },
 }).then((mod) => mod.default);
 
+const enReviews = await import('@/shared/i18n/locales/en/reviews.json', {
+  assert: { type: 'json' },
+}).then((mod) => mod.default);
+
 const storedLanguage = typeof window !== 'undefined' ? localStorage.getItem('language') : null;
 
 const initialLanguage = storedLanguage || DEFAULT_LOCALE;
@@ -115,6 +123,7 @@ void i18n.use(initReactI18next).init({
       profiles: enProfiles,
       readingList: enReadingList,
       notifications: enNotifications,
+      reviews: enReviews,
     },
     'bg-BG': {
       layout: bgLayout,
@@ -128,6 +137,7 @@ void i18n.use(initReactI18next).init({
       profiles: bgProfiles,
       readingList: bgReadingList,
       notifications: bgNotifications,
+      reviews: bgReviews,
     },
   },
 });

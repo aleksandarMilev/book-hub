@@ -1,7 +1,7 @@
+import { isValid, parseISO } from 'date-fns';
 import * as Yup from 'yup';
 
 import i18n from '@/shared/i18n/i18n.js';
-import { isValid, parseISO } from 'date-fns';
 
 const constraints = {
   title: { min: 2, max: 200 },

@@ -1,0 +1,38 @@
+{
+  "form": {
+    "titleCreate": "Оставете ревю",
+    "titleEdit": "Редактиране на ревю",
+    "ratingAriaLabel": "Изберете оценка",
+    "contentLabel": "Напишете вашето ревю *",
+    "buttons": {
+      "submitCreate": "Изпрати ревю",
+      "submitEdit": "Обнови ревю",
+      "submittingCreate": "Изпращане...",
+      "submittingEdit": "Запазване..."
+    },
+    "errors": {
+      "submit": "Грешка при изпращане на ревю. Моля, опитайте отново."
+    }
+  },
+  "list": {
+    "empty": "Няма намерени ревюта.",
+    "titleFallback": "Ревюта"
+  },
+  "item": {
+    "delete": "Изтрий"
+  },
+  "validation": {
+    "fields": {
+      "review": "Ревю",
+      "reviewContent": "Съдържание на ревюто",
+      "rating": "Оценка"
+    },
+    "required": "{{field}} е задължително поле!",
+    "min": "{{field}} трябва да съдържа поне {{min}} символа",
+    "max": "{{field}} не може да надвишава {{max}} символа",
+    "rating": {
+      "select": "Моля, изберете оценка",
+      "max": "Оценката не може да е по-голяма от 5"
+    }
+  }
+}

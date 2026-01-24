@@ -1,7 +1,9 @@
 import './ReviewListItem.css';
 
-import { MDBBtn, MDBIcon } from 'mdb-react-ui-kit';
+import { MDBIcon } from 'mdb-react-ui-kit';
 import { type FC, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { useTranslation } from 'react-i18next';
 
 import { useRemove } from '@/features/review/hooks/useCrud.js';
 import { useVoteHandlers } from '@/features/review/hooks/useVote.js';
@@ -12,10 +14,12 @@ import { useAuth } from '@/shared/stores/auth/auth.js';
 
 type Props = {
   review: Review;
-  onVote: () => void | Promise<void>;
+  onVote?: () => void | Promise<void>;
 };
 
 const ReviewListItem: FC<Props> = ({ review, onVote }) => {
+  const { t } = useTranslation('reviews');
+
   const { userId, isAuthenticated } = useAuth();
   const { id, content, rating, creatorId, createdBy, upvotes, downvotes } = review;
 
@@ -24,7 +28,11 @@ const ReviewListItem: FC<Props> = ({ review, onVote }) => {
   const [upvoteCount, setUpvoteCount] = useState<number>(upvotes ?? 0);
   const [downvoteCount, setDownvoteCount] = useState<number>(downvotes ?? 0);
 
-  const { showModal, toggleModal, deleteHandler } = useRemove(id, onVote);
+  const { showModal, toggleModal, deleteHandler } = useRemove(
+    id,
+    onVote ? () => onVote() : undefined,
+  );
+
   const { handleUpvote, handleDownvote } = useVoteHandlers({
     id,
     isAuthenticated,
@@ -34,50 +42,71 @@ const ReviewListItem: FC<Props> = ({ review, onVote }) => {
     setDownvoteCount,
     setUpvoteClicked,
     setDownvoteClicked,
-    onVote,
   });
 
   return (
-    <div className="review-item card shadow-sm p-3 mb-4 review-card">
-      <div className="review-header d-flex justify-content-between align-items-center">
+    <article className="review-item review-card" aria-label="Review">
+      <header className="review-header">
         <div className="rating-container">
           <RenderStars rating={rating ?? 0} />
         </div>
-        <div className="creator-info d-flex align-items-center">
+
+        <div className="creator-info">
           <span className="creator-id">{createdBy}</span>
-          <MDBIcon icon="user-circle" className="user-icon ms-2" />
+          <MDBIcon icon="user-circle" className="user-icon" />
         </div>
-      </div>
+      </header>
+
       <p className="review-content">{content}</p>
-      <div className="review-footer d-flex justify-content-between align-items-center">
+
+      <footer className="review-footer">
         {isAuthenticated && (
-          <div className="review-votes d-flex align-items-center">
-            <MDBIcon
-              style={{ color: upvoteClicked ? 'blue' : 'black', cursor: 'pointer' }}
-              icon="arrow-up"
-              className="vote-icon"
+          <div className="review-votes" aria-label="Votes">
+            <button
+              type="button"
+              className={`vote-btn ${upvoteClicked ? 'vote-btn--up-active' : ''}`}
               onClick={handleUpvote}
-            />
-            <span>{upvoteCount}</span>
-            <MDBIcon
-              style={{ color: downvoteClicked ? 'red' : 'black', cursor: 'pointer' }}
-              icon="arrow-down"
-              className="vote-icon ms-2"
+              aria-label="Upvote"
+            >
+              <MDBIcon icon="arrow-up" className="vote-icon" />
+            </button>
+            <span className="vote-count" aria-label="Upvotes">
+              {upvoteCount}
+            </span>
+
+            <button
+              type="button"
+              className={`vote-btn ${downvoteClicked ? 'vote-btn--down-active' : ''}`}
               onClick={handleDownvote}
-            />
-            <span>{downvoteCount}</span>
+              aria-label="Downvote"
+            >
+              <MDBIcon icon="arrow-down" className="vote-icon" />
+            </button>
+            <span className="vote-count" aria-label="Downvotes">
+              {downvoteCount}
+            </span>
           </div>
         )}
+
         {String(userId) === String(creatorId) && (
           <div className="review-actions">
-            <MDBBtn color="danger" size="sm" onClick={toggleModal}>
-              Delete
-            </MDBBtn>
+            <button type="button" className="review-delete-btn" onClick={toggleModal}>
+              {t('item.delete')}
+            </button>
           </div>
         )}
-      </div>
-      <DeleteModal showModal={showModal} toggleModal={toggleModal} deleteHandler={deleteHandler} />
-    </div>
+      </footer>
+
+      {typeof document !== 'undefined' &&
+        createPortal(
+          <DeleteModal
+            showModal={showModal}
+            toggleModal={toggleModal}
+            deleteHandler={deleteHandler}
+          />,
+          document.body,
+        )}
+    </article>
   );
 };
 
