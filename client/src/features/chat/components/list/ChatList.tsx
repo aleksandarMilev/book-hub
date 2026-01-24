@@ -1,5 +1,8 @@
+import './ChatList.css';
+
 import { type ChangeEvent, type FC, useEffect, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 
 import image from '@/features/chat/components/form/assets/chat.avif';
 import ChatListItem from '@/features/chat/components/list-item/ChatListItem.js';
@@ -10,6 +13,8 @@ import { useDebounce } from '@/shared/hooks/debounce/useDebounce.js';
 import { pagination } from '@/shared/lib/constants/defaultValues.js';
 
 const ChatList: FC = () => {
+  const { t } = useTranslation('chats');
+
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearch = useDebounce(searchTerm);
 
@@ -24,9 +29,8 @@ const ChatList: FC = () => {
 
   const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
 
-  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-    setPage(pagination.defaultPageIndex);
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
   };
 
   const handlePageChange = (newPage: number) => {
@@ -43,32 +47,17 @@ const ChatList: FC = () => {
   };
 
   return (
-    <div className="container mt-5 mb-5">
-      <div className="row mb-4">
-        <div className="col-md-10 mx-auto d-flex">
-          <div className="search-bar-container d-flex w-100">
-            <input
-              type="text"
-              className="form-control search-input"
-              placeholder="Search chats..."
-              value={searchTerm}
-              onChange={handleSearchChange}
-              disabled={isFetching}
-            />
-            <button
-              type="button"
-              className="btn btn-light search-btn"
-              disabled={isFetching}
-              aria-label="Search chats"
-              onClick={() => {
-                if (searchTerm.trim().length > 0) {
-                  clearSearch();
-                }
-              }}
-            >
-              <FaSearch size={20} />
-            </button>
-          </div>
+    <div className="chat-list-page container">
+      <div className="search-wrapper">
+        <div className="search-bar">
+          <FaSearch className="search-icon" />
+          <input
+            type="text"
+            placeholder={t('list.search.placeholder')}
+            value={searchTerm}
+            onChange={handleSearchChange}
+            aria-label={t('list.search.ariaLabel')}
+          />
         </div>
       </div>
       <div className="d-flex justify-content-center row">
@@ -91,14 +80,14 @@ const ChatList: FC = () => {
             <div className="d-flex flex-column align-items-center justify-content-center mt-5">
               <img
                 src={image}
-                alt="No chats found"
+                alt={t('list.empty.imageAlt')}
                 className="mb-4 clickable"
                 style={{ maxWidth: '200px', opacity: 0.7, cursor: 'pointer' }}
                 onClick={clearSearch}
               />
-              <h5 className="text-muted">We couldn&apos;t find any chats</h5>
+              <h5 className="text-muted">{t('list.empty.title')}</h5>
               <p className="text-muted text-center" style={{ maxWidth: '400px' }}>
-                Try adjusting your search terms or exploring our collection for more options.
+                {t('list.empty.message')}
               </p>
             </div>
           )}

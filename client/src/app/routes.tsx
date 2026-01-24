@@ -50,6 +50,8 @@ const NotificationList = lazy(
   () => import('@/features/notification/components/list/NotificationList.jsx'),
 );
 
+const CreateChat = lazy(() => import('@/features/chat/components/create/CreateChat.jsx'));
+const EditChat = lazy(() => import('@/features/chat/components/edit/EditChat.jsx'));
 const ChatList = lazy(() => import('@/features/chat/components/list/ChatList.jsx'));
 const ChatDetails = lazy(() => import('@/features/chat/components/details/ChatDetails.jsx'));
 
@@ -169,6 +171,14 @@ export const router = createBrowserRouter([
         element: withSuspense(<AuthenticatedRoute element={<NotificationList />} />),
       },
 
+      {
+        path: routes.createChat,
+        element: withSuspense(<AuthenticatedRoute element={<CreateChat />} />),
+      },
+      {
+        path: `${routes.editChat}/:id`,
+        element: withSuspense(<AuthenticatedRoute element={<EditChat />} />),
+      },
       {
         path: routes.chat,
         element: withSuspense(<AuthenticatedRoute element={<ChatList />} />),

@@ -2,7 +2,7 @@
 
 public class CreateChatMessageServiceModel 
 {
-    public string Message { get; init; } = null!;
+    public string Message { get; init; } = default!;
 
     public Guid ChatId { get; init; }
 }

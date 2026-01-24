@@ -1,6 +1,6 @@
 import { useFormik } from 'formik';
 import type React from 'react';
-import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useCreate, useEdit } from '@/features/review/hooks/useCrud.js';
 import type { CreateReview, Review } from '@/features/review/types/review.js';
@@ -20,8 +20,9 @@ export const useReviewFormik = ({
   setIsReviewCreatedOrEdited,
   existingReview = null,
 }: Props) => {
+  const { t } = useTranslation('reviews');
+
   const isEditMode = !!existingReview;
-  const [rating, setRating] = useState<number>(existingReview?.rating || 0);
 
   const createReview = useCreate();
   const editReview = useEdit();
@@ -33,11 +34,11 @@ export const useReviewFormik = ({
   }>({
     initialValues: {
       content: existingReview?.content || '',
-      rating,
+      rating: existingReview?.rating || 0,
       submit: '',
     },
     enableReinitialize: true,
-    validationSchema: reviewSchema,
+    validationSchema: reviewSchema(t),
     onSubmit: async (values, { setErrors, resetForm, setSubmitting }) => {
       try {
         const payload: CreateReview = { ...values, bookId };
@@ -50,7 +51,6 @@ export const useReviewFormik = ({
             await Promise.resolve(refreshReviews());
 
             resetForm({ values: { content: '', rating: 0, submit: '' } });
-            setRating(0);
           }
         } else {
           const newId = await createReview(payload);
@@ -60,11 +60,10 @@ export const useReviewFormik = ({
             await Promise.resolve(refreshReviews());
 
             resetForm({ values: { content: '', rating: 0, submit: '' } });
-            setRating(0);
           }
         }
       } catch {
-        setErrors({ submit: 'Error submitting review. Please try again.' });
+        setErrors({ submit: t('form.errors.submit') });
       } finally {
         setSubmitting(false);
       }
@@ -72,9 +71,8 @@ export const useReviewFormik = ({
   });
 
   const handleRating = (value: number) => {
-    setRating(value);
     formik.setFieldValue('rating', value);
   };
 
-  return { formik, rating, handleRating, isEditMode };
+  return { formik, handleRating, isEditMode };
 };

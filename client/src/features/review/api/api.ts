@@ -12,7 +12,7 @@ export async function all(
   signal?: AbortSignal,
 ) {
   try {
-    const url = `${routes.review}/${bookId}?pageIndex=${pageIndex}&pageSize=${pageSize}`;
+    const url = `${routes.review}/book/${bookId}?pageIndex=${pageIndex}&pageSize=${pageSize}`;
     const { data } = await http.get<PaginatedResult<Review>>(url, getAuthConfig(token, signal));
 
     return data;

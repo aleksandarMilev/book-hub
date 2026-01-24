@@ -53,6 +53,7 @@ export const useDownvote = () => {
   return downvoteHandler;
 };
 
+// useVote.ts
 export const useVoteHandlers = ({
   id,
   isAuthenticated,
@@ -62,7 +63,6 @@ export const useVoteHandlers = ({
   setDownvoteCount,
   setUpvoteClicked,
   setDownvoteClicked,
-  onVote,
 }: {
   id: string;
   isAuthenticated: boolean;
@@ -72,7 +72,6 @@ export const useVoteHandlers = ({
   setDownvoteCount: Dispatch<SetStateAction<number>>;
   setUpvoteClicked: Dispatch<SetStateAction<boolean>>;
   setDownvoteClicked: Dispatch<SetStateAction<boolean>>;
-  onVote?: () => void | Promise<void>;
 }) => {
   const { token } = useAuth();
 
@@ -80,9 +79,7 @@ export const useVoteHandlers = ({
   const downvote = useDownvote();
 
   const handleUpvote = useCallback(async () => {
-    if (!token || !isAuthenticated) {
-      return;
-    }
+    if (!token || !isAuthenticated) return;
 
     const success = await upvote(id, setUpvoteCount);
     if (success) {
@@ -90,9 +87,7 @@ export const useVoteHandlers = ({
       if (downvoteCount > 0) {
         setDownvoteCount((prev) => Math.max(0, prev - 1));
       }
-
       setUpvoteClicked(true);
-      onVote?.();
     }
   }, [
     token,
@@ -104,24 +99,18 @@ export const useVoteHandlers = ({
     setDownvoteCount,
     setUpvoteClicked,
     setDownvoteClicked,
-    onVote,
   ]);
 
   const handleDownvote = useCallback(async () => {
-    if (!token || !isAuthenticated) {
-      return;
-    }
+    if (!token || !isAuthenticated) return;
 
     const success = await downvote(id, setDownvoteCount);
     if (success) {
       setUpvoteClicked(false);
-
       if (upvoteCount > 0) {
         setUpvoteCount((prev) => Math.max(0, prev - 1));
       }
-
       setDownvoteClicked(true);
-      onVote?.();
     }
   }, [
     token,
@@ -133,7 +122,6 @@ export const useVoteHandlers = ({
     setDownvoteCount,
     setUpvoteClicked,
     setDownvoteClicked,
-    onVote,
   ]);
 
   return { handleUpvote, handleDownvote };

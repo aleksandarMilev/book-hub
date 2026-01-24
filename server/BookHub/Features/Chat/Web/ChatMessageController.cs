@@ -16,10 +16,12 @@ public class ChatMessageController(IChatMessageService service) : ApiController
     [HttpPost]
     public async Task<ActionResult<ChatMessageServiceModel>> Create(
         CreateChatMessageWebModel webModel,
-        CancellationToken token = default)
+        CancellationToken cancellationTokentoken = default)
     {
         var serviceModel = webModel.ToCreateChatMessageServiceModel();
-        var result = await service.Create(serviceModel, token);
+        var result = await service.Create(
+            serviceModel,
+            cancellationTokentoken);
 
         if (result.Succeeded)
         {
@@ -33,13 +35,13 @@ public class ChatMessageController(IChatMessageService service) : ApiController
     public async Task<ActionResult<ResultWith<ChatMessageServiceModel>>> Edit(
         int id,
         CreateChatMessageWebModel webModel,
-        CancellationToken token = default)
+        CancellationToken cancellationTokentoken = default)
     {
         var serviceModel = webModel.ToCreateChatMessageServiceModel();
         var result = await service.Edit(
             id,
             serviceModel,
-            token);
+            cancellationTokentoken);
 
         if (result.Succeeded)
         {
@@ -52,9 +54,11 @@ public class ChatMessageController(IChatMessageService service) : ApiController
     [HttpDelete(Id)]
     public async Task<ActionResult<Result>> Delete(
         int id,
-        CancellationToken token = default)
+        CancellationToken cancellationTokentoken = default)
     {
-        var result = await service.Delete(id, token);
+        var result = await service.Delete(
+            id,
+            cancellationTokentoken);
 
         return this.NoContentOrBadRequest(result);
     }

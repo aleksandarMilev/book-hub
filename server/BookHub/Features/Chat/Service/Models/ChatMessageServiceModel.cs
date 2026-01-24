@@ -4,13 +4,13 @@ public class ChatMessageServiceModel
 {
     public int Id { get; init; }
 
-    public string Message { get; init; } = null!;
+    public string Message { get; init; } = default!;
 
-    public string SenderId { get; init; } = null!;
+    public string SenderId { get; init; } = default!;
 
-    public string SenderName { get; init; } = null!;
+    public string SenderName { get; init; } = default!;
 
-    public string SenderImagePath { get; init; } = null!;
+    public string SenderImagePath { get; init; } = default!;
 
     public DateTime CreatedOn { get; init; }
 

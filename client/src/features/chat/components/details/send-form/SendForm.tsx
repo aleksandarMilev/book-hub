@@ -1,6 +1,7 @@
 import type { FormikProps } from 'formik';
 import { MDBBtn, MDBTextArea } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   formik: FormikProps<{
@@ -12,37 +13,42 @@ type Props = {
 };
 
 const SendForm: FC<Props> = ({ formik, isEditMode, handleCancelEdit }) => {
+  const { t } = useTranslation('chats');
   const hasError = formik.touched.message && !!formik.errors.message;
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form onSubmit={formik.handleSubmit} className="chat-send-form">
       {isEditMode && (
-        <div className="alert alert-warning">
-          You are editing a message.{' '}
-          <span className="cancel-button" onClick={handleCancelEdit}>
-            Cancel
+        <div className="chat-edit-alert alert alert-warning">
+          {t('sendForm.editingAlert')}{' '}
+          <span className="chat-cancel-button" onClick={handleCancelEdit}>
+            {t('sendForm.cancel')}
           </span>
         </div>
       )}
       <div className="mb-3">
         <MDBTextArea
-          className={`form-outline ${hasError ? 'is-invalid' : ''}`}
-          label="Type your message"
+          className={`chat-send-textarea form-outline ${hasError ? 'is-invalid' : ''}`}
+          label={t('sendForm.messageLabel')}
           name="message"
           value={formik.values.message}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           rows={4}
         />
-        {hasError && <div className="invalid-feedback d-block">{formik.errors.message}</div>}
+        {hasError && (
+          <div className="chat-invalid-feedback invalid-feedback d-block">
+            {formik.errors.message}
+          </div>
+        )}
       </div>
       <MDBBtn
         type="submit"
         color="primary"
-        className="mt-3"
+        className="chat-send-btn mt-3"
         disabled={formik.isSubmitting || (formik.submitCount > 0 && !formik.isValid)}
       >
-        {isEditMode ? 'Update Message' : 'Send Message'}
+        {isEditMode ? t('sendForm.buttonEdit') : t('sendForm.buttonSend')}
       </MDBBtn>
     </form>
   );

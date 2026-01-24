@@ -1,8 +1,8 @@
 import './NotificationItem.css';
-import { createPortal } from 'react-dom';
 
 import { format } from 'date-fns';
 import { type FC } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { FaBook, FaComments, FaTrashAlt, FaUser } from 'react-icons/fa';
 
@@ -10,6 +10,7 @@ import { useClickHandler } from '@/features/notification/hooks/useClickHandler.j
 import { useRemove } from '@/features/notification/hooks/useCrud.js';
 import type { NotificationType } from '@/features/notification/types/notification.js';
 import DeleteModal from '@/shared/components/delete-modal/DeleteModal.js';
+
 import { getResourceType } from '../../utils/utils.js';
 
 const getTypeIcon = (resourceType: string) => {

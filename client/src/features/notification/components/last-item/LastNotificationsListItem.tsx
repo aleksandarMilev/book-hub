@@ -7,8 +7,8 @@ import { Dropdown } from 'react-bootstrap';
 import { useClickHandler } from '@/features/notification/hooks/useClickHandler.js';
 import type { NotificationType } from '@/features/notification/types/notification.js';
 
-import { getIcon } from './utils/utils.js';
 import { getResourceType } from '../../utils/utils.js';
+import { getIcon } from './utils/utils.js';
 
 type Props = {
   notification: NotificationType;

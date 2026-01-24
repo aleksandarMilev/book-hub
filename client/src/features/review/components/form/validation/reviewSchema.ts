@@ -1,3 +1,4 @@
+import type { TFunction } from 'i18next';
 import * as Yup from 'yup';
 
 const constraints = {
@@ -5,19 +6,30 @@ const constraints = {
   rating: { min: 1, max: 5 },
 };
 
-const messages = {
-  required: (field: string) => `${field} is required!`,
-  min: (field: string, min: number) => `${field} must be at least ${min} characters`,
-  max: (field: string, max: number) => `${field} cannot exceed ${max} characters`,
-};
-
-export const reviewSchema = Yup.object({
-  content: Yup.string()
-    .min(constraints.content.min, messages.min('Review', constraints.content.min))
-    .max(constraints.content.max, messages.max('Review', constraints.content.max))
-    .required(messages.required('Review content')),
-  rating: Yup.number()
-    .min(constraints.rating.min, 'Please select a rating')
-    .max(constraints.rating.max, 'Rating cannot exceed 5')
-    .required('Please select a rating'),
-});
+export const reviewSchema = (t: TFunction<'reviews'>) =>
+  Yup.object({
+    content: Yup.string()
+      .min(
+        constraints.content.min,
+        t('validation.min', {
+          field: t('validation.fields.review'),
+          min: constraints.content.min,
+        }),
+      )
+      .max(
+        constraints.content.max,
+        t('validation.max', {
+          field: t('validation.fields.review'),
+          max: constraints.content.max,
+        }),
+      )
+      .required(
+        t('validation.required', {
+          field: t('validation.fields.reviewContent'),
+        }),
+      ),
+    rating: Yup.number()
+      .min(constraints.rating.min, t('validation.rating.select'))
+      .max(constraints.rating.max, t('validation.rating.max'))
+      .required(t('validation.rating.select')),
+  });

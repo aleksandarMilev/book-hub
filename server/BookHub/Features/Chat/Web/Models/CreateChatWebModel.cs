@@ -10,7 +10,7 @@ public class CreateChatWebModel
     [StringLength(
         NameMaxLength,
         MinimumLength = NameMinLength)]
-    public string Name { get; init; } = null!;
+    public string Name { get; init; } = default!;
 
     public IFormFile? Image { get; init; }
 }

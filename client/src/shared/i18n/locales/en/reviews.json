@@ -1,0 +1,38 @@
+{
+  "form": {
+    "titleCreate": "Leave a Review",
+    "titleEdit": "Edit Review",
+    "ratingAriaLabel": "Select rating",
+    "contentLabel": "Write your review *",
+    "buttons": {
+      "submitCreate": "Submit Review",
+      "submitEdit": "Update Review",
+      "submittingCreate": "Submitting...",
+      "submittingEdit": "Saving..."
+    },
+    "errors": {
+      "submit": "Error submitting review. Please try again."
+    }
+  },
+  "list": {
+    "empty": "No reviews found.",
+    "titleFallback": "Reviews"
+  },
+  "item": {
+    "delete": "Delete"
+  },
+  "validation": {
+    "fields": {
+      "review": "Review",
+      "reviewContent": "Review content",
+      "rating": "Rating"
+    },
+    "required": "{{field}} is required!",
+    "min": "{{field}} must be at least {{min}} characters",
+    "max": "{{field}} cannot exceed {{max}} characters",
+    "rating": {
+      "select": "Please select a rating",
+      "max": "Rating cannot exceed 5"
+    }
+  }
+}

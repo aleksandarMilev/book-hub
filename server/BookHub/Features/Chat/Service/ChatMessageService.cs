@@ -5,7 +5,7 @@ using Data.Models;
 using Infrastructure.Services.CurrentUser;
 using Infrastructure.Services.Result;
 using Microsoft.EntityFrameworkCore;
-using Service.Models;
+using Models;
 using Shared;
 using UserProfile.Data.Models;
 
@@ -21,11 +21,14 @@ public class ChatMessageService(
         Guid chatId,
         int? before = null,
         int take = 50,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var userId = userService.GetId()!;
+        var canAccessChat = await chatService.CanAccessChat(
+            chatId,
+            userId,
+            cancellationToken);
 
-        var canAccessChat = await chatService.CanAccessChat(chatId, userId, token);
         if (!canAccessChat)
         {
             return this.LogAndReturnUnauthorizedMessage(
@@ -38,6 +41,7 @@ public class ChatMessageService(
 
         var query = data
             .ChatMessages
+            .AsNoTracking()
             .Where(m => m.ChatId == chatId);
 
         if (before.HasValue)
@@ -49,24 +53,24 @@ public class ChatMessageService(
             .ToServiceModels()
             .OrderByDescending(m => m.Id)
             .Take(take)
-            .ToListAsync(token);
+            .ToListAsync(cancellationToken);
 
         items.Reverse();
 
-        return ResultWith<IEnumerable<ChatMessageServiceModel>>.Success(items);
+        return ResultWith<IEnumerable<ChatMessageServiceModel>>
+            .Success(items);
     }
 
     public async Task<ResultWith<ChatMessageServiceModel>> Create(
         CreateChatMessageServiceModel serviceModel,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var userId = userService.GetId()!;
         var chatId = serviceModel.ChatId;
-
         var canAccessChat = await chatService.CanAccessChat(
             chatId,
             userId,
-            token);
+            cancellationToken);
 
         if (!canAccessChat)
         {
@@ -80,9 +84,12 @@ public class ChatMessageService(
         dbModel.SenderId = userId;
 
         data.Add(dbModel);
-        await data.SaveChangesAsync(token);
+        await data.SaveChangesAsync(cancellationToken);
 
-        var result = await this.GetServiceModelById(dbModel.Id, token);
+        var result = await this.GetServiceModelById(
+            dbModel.Id,
+            cancellationToken);
+
         if (result is null)
         {
             return this.LogAndReturnProfileNotFoundMessage(userId);
@@ -94,11 +101,13 @@ public class ChatMessageService(
     public async Task<ResultWith<ChatMessageServiceModel>> Edit(
         int chatMessageId, 
         CreateChatMessageServiceModel serviceModel,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var userId = userService.GetId()!;
-        
-        var dbModel = await this.GetDbModel(chatMessageId, token);
+        var dbModel = await this.GetDbModel(
+            chatMessageId,
+            cancellationToken);
+
         if (dbModel is null)
         {
             return this.LogAndReturnChatMessageNotFoundMessage(chatMessageId);
@@ -116,7 +125,7 @@ public class ChatMessageService(
         var canAccessChat = await chatService.CanAccessChat(
             chatId,
             userId,
-            token);
+            cancellationToken);
 
         if (!canAccessChat)
         {
@@ -127,9 +136,12 @@ public class ChatMessageService(
         }
 
         serviceModel.UpdateChatMessageDbModel(dbModel);
-        await data.SaveChangesAsync(token);
+        await data.SaveChangesAsync(cancellationToken);
 
-        var result = await this.GetServiceModelById(dbModel.Id, token);
+        var result = await this.GetServiceModelById(
+            dbModel.Id,
+            cancellationToken);
+
         if (result is null)
         {
             return this.LogAndReturnProfileNotFoundMessage(userId);
@@ -140,11 +152,13 @@ public class ChatMessageService(
 
     public async Task<Result> Delete(
         int chatMessageId,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var userId = userService.GetId()!;
+        var dbModel = await this.GetDbModel(
+            chatMessageId,
+            cancellationToken);
 
-        var dbModel = await this.GetDbModel(chatMessageId, token);
         if (dbModel is null)
         {
             return this.LogAndReturnChatMessageNotFoundMessage(chatMessageId);
@@ -154,7 +168,7 @@ public class ChatMessageService(
         var canAccessChat = await chatService.CanAccessChat(
             chatId,
             userId,
-            token);
+            cancellationToken);
 
         if (!canAccessChat)
         {
@@ -173,42 +187,42 @@ public class ChatMessageService(
         }
 
         data.Remove(dbModel);
-        await data.SaveChangesAsync(token);
+        await data.SaveChangesAsync(cancellationToken);
 
         return true;
     }
 
     private async Task<ChatMessageDbModel?> GetDbModel(
-        int id,
-        CancellationToken token = default)
+        int chatMessageId,
+        CancellationToken cancellationToken = default)
         => await data
             .ChatMessages
-            .FindAsync([id], token);
+            .FindAsync([chatMessageId], cancellationToken);
 
-    private string LogAndReturnProfileNotFoundMessage(string id)
+    private string LogAndReturnProfileNotFoundMessage(string profileId)
     {
         logger.LogWarning(
             DbEntityNotFoundTemplate,
             nameof(UserProfile),
-            id);
+            profileId);
 
         return string.Format(
             DbEntityNotFound,
             nameof(UserProfile),
-            id);
+            profileId);
     }
 
-    private string LogAndReturnChatMessageNotFoundMessage(int id)
+    private string LogAndReturnChatMessageNotFoundMessage(int chatMessageId)
     {
         logger.LogWarning(
             DbEntityNotFoundTemplate,
             nameof(ChatMessageDbModel),
-            id);
+            chatMessageId);
 
         return string.Format(
             DbEntityNotFound,
             nameof(ChatMessageDbModel),
-            id);
+            chatMessageId);
     }
 
     private string LogAndReturnUnauthorizedMessage<TId>(
@@ -230,10 +244,13 @@ public class ChatMessageService(
     }
 
     private Task<ChatMessageServiceModel?> GetServiceModelById(
-        int id,
-        CancellationToken token)
-        => data.ChatMessages
-            .Where(m => m.Id == id)
+        int chatMessageId,
+        CancellationToken cancellationToken)
+        => data
+            .ChatMessages
+            .AsNoTracking()
             .ToServiceModels()
-            .FirstOrDefaultAsync(token);
+            .FirstOrDefaultAsync(
+                m => m.Id == chatMessageId,
+                cancellationToken);
 }

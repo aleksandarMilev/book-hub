@@ -4,7 +4,7 @@ public class ProcessChatInvitationServiceModel
 {
     public Guid ChatId { get; init; }
 
-    public string ChatName { get; init; } = null!;
+    public string ChatName { get; init; } = default!;
 
-    public string ChatCreatorId { get; init; } = null!;
+    public string ChatCreatorId { get; init; } = default!;
 }

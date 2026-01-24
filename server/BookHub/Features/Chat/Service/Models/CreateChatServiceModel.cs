@@ -4,7 +4,7 @@ using Infrastructure.Services.ImageWriter.Models.Image;
 
 public class CreateChatServiceModel : IImageServiceModel
 {
-    public string Name { get; init; } = null!;
+    public string Name { get; init; } = default!;
 
     public IFormFile? Image { get; init; }
 }

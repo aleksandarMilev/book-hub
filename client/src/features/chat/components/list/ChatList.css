@@ -1,0 +1,211 @@
+.chat-list-page {
+  margin-top: 50px;
+  margin-bottom: 60px;
+  font-family: 'Inter', sans-serif;
+}
+
+.chat-list-page .search-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0 1.5rem;
+  padding: 0 10px;
+}
+
+.chat-list-page .search-bar {
+  position: relative;
+  width: 100%;
+  max-width: 650px;
+  display: flex;
+  align-items: center;
+  padding: 0.45rem 1.1rem;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(17, 24, 39, 0.1);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.12);
+  transition:
+    box-shadow 0.22s ease,
+    border-color 0.22s ease,
+    background 0.22s ease,
+    transform 0.18s ease;
+}
+
+.chat-list-page .search-bar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(700px 240px at 20% 0%, rgba(154, 107, 255, 0.16), transparent 60%);
+  opacity: 0.75;
+}
+
+.chat-list-page .search-bar:focus-within {
+  border-color: rgba(110, 168, 254, 0.75);
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow:
+    0 0 0 2px rgba(110, 168, 254, 0.28),
+    0 10px 26px rgba(15, 23, 42, 0.18);
+  transform: translateY(-1px);
+}
+
+.chat-list-page .search-icon {
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  color: rgba(17, 24, 39, 0.45);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.chat-list-page .search-bar input {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: 0.5rem 0.25rem 0.5rem 2.25rem;
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  border-radius: 999px;
+  background: transparent !important;
+  font-size: 0.98rem;
+  color: #111827;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.chat-list-page .search-bar input::placeholder {
+  color: rgba(107, 114, 128, 0.75);
+}
+
+.chat-list-page .search-bar input:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.chat-list-page .search-bar input:focus,
+.chat-list-page .search-bar input:focus-visible {
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.chat-list-page .row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.chat-list-page .col-md-10 {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.chat-list-page .clickable {
+  cursor: pointer;
+  transition:
+    transform 0.25s ease,
+    opacity 0.25s ease,
+    filter 0.25s ease;
+}
+
+.chat-list-page .clickable:hover {
+  transform: translateY(-4px);
+  opacity: 1 !important;
+  filter: saturate(1.05);
+}
+
+.chat-list-page .mt-5 h5.text-muted {
+  font-weight: 800;
+  color: #3d2d52 !important;
+  margin-bottom: 0.35rem;
+}
+
+.chat-list-page .mt-5 p.text-muted {
+  color: rgba(74, 79, 99, 0.9) !important;
+  line-height: 1.75;
+  font-size: 0.98rem;
+}
+
+@media (min-width: 1400px) {
+  .chat-list-page {
+    margin-top: 60px;
+    margin-bottom: 70px;
+  }
+
+  .chat-list-page .search-bar {
+    max-width: 720px;
+  }
+}
+
+@media (max-width: 992px) {
+  .chat-list-page {
+    margin-top: 40px;
+    margin-bottom: 52px;
+  }
+
+  .chat-list-page .search-wrapper {
+    margin: 1.6rem 0 1.2rem;
+  }
+
+  .chat-list-page .search-bar {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .chat-list-page {
+    margin-top: 32px;
+    margin-bottom: 46px;
+  }
+
+  .chat-list-page .search-wrapper {
+    margin: 1.25rem 0 0.95rem;
+    padding: 0 12px;
+  }
+
+  .chat-list-page .search-bar {
+    padding: 0.42rem 0.95rem;
+  }
+
+  .chat-list-page .search-icon {
+    left: 14px;
+  }
+
+  .chat-list-page .search-bar input {
+    font-size: 0.95rem;
+    padding-left: 2.15rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .chat-list-page .search-wrapper {
+    padding: 0 10px;
+  }
+
+  .chat-list-page .search-bar {
+    padding: 0.4rem 0.85rem;
+  }
+
+  .chat-list-page .search-icon {
+    left: 12px;
+  }
+
+  .chat-list-page .search-bar input {
+    padding-left: 2.05rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-list-page .search-bar,
+  .chat-list-page .clickable {
+    transition: none !important;
+  }
+
+  .chat-list-page .search-bar:focus-within,
+  .chat-list-page .clickable:hover {
+    transform: none !important;
+  }
+}

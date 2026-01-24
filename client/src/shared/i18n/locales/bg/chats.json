@@ -1,0 +1,87 @@
+{
+  "buttons": {
+    "invite": {
+      "message": "Поканени сте да се присъедините към {{chatName}}",
+      "accept": "Приеми",
+      "reject": "Откажи"
+    },
+    "leave": "Напусни"
+  },
+  "details": {
+    "chatImageAlt": "Чат",
+    "loadOlder": "Зареди по-стари съобщения",
+    "participantsTitle": "Участници"
+  },
+  "message": {
+    "modifiedSuffix": " (Редактирано)",
+    "avatarAlt": "аватар"
+  },
+  "participants": {
+    "creatorSuffix": "(Създател на чата)"
+  },
+  "sendForm": {
+    "editingAlert": "Редактирате съобщение.",
+    "cancel": "Отказ",
+    "messageLabel": "Напишете съобщение",
+    "buttonEdit": "Обнови съобщението",
+    "buttonSend": "Изпрати"
+  },
+  "form": {
+    "titleCreate": "Създай нов чат",
+    "titleEdit": "Редакция на чат",
+    "labels": {
+      "name": "Име",
+      "image": "Изображение за чат (по избор)"
+    },
+    "placeholders": {
+      "name": "Въведете име на чата"
+    },
+    "image": {
+      "selected": "Избран файл: {{fileName}}",
+      "remove": "Премахни",
+      "currentPath": "Текущ път до изображението: {{path}}"
+    },
+    "buttons": {
+      "creating": "Създаване...",
+      "saving": "Запазване...",
+      "submitCreate": "Създай чат",
+      "submitEdit": "Обнови чата"
+    },
+    "messages": {
+      "editSuccess": "Успешно редактирахте {{name}}",
+      "createSuccess": "Успешно създадохте {{name}}",
+      "saveFailed": "Нещо се обърка при запазване на чата, моля опитайте отново!"
+    }
+  },
+  "validation": {
+    "fields": {
+      "name": "Име",
+      "image": "Изображение"
+    },
+    "min": "{{field}} трябва да е поне {{min}} символа",
+    "max": "{{field}} трябва да е най-много {{max}} символа",
+    "required": "{{field}} е задължително поле!",
+    "image": {
+      "tooLarge": "{{field}} е твърде голямо (макс 2MB)",
+      "invalidType": "{{field}} е с невалиден тип. Позволени: {{types}}"
+    }
+  },
+  "list": {
+    "search": {
+      "placeholder": "Търсене на чатове...",
+      "ariaLabel": "Търсене на чатове"
+    },
+    "empty": {
+      "imageAlt": "Няма намерени чатове",
+      "title": "Не открихме чатове",
+      "message": "Опитайте да промените търсенето или разгледайте колекцията ни за още опции."
+    }
+  },
+  "listItem": {
+    "actions": {
+      "editTitle": "Редактирай чата",
+      "deleteTitle": "Изтрий чата",
+      "details": "Детайли"
+    }
+  }
+}

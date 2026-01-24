@@ -43,6 +43,6 @@ export type ProfilesSearchResult = {
   id: string;
   firstName: string;
   lastName: string;
-  imageUrl: string;
+  imagePath: string;
   isPrivate: boolean;
 };

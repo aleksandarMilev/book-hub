@@ -1,6 +1,7 @@
 import './ReviewList.css';
 
 import { type FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import ReviewListItem from '@/features/review/components/list-item/ReviewListItem.js';
 import { useAll } from '@/features/review/hooks/useCrud.js';
@@ -8,23 +9,17 @@ import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.j
 import Pagination from '@/shared/components/pagination/Pagination.js';
 
 const ReviewList: FC = () => {
-  const {
-    reviews,
-    isFetching,
-    bookTitle,
-    page,
-    totalPages,
-    handleNextPage,
-    handlePreviousPage,
-    fetchData,
-  } = useAll();
+  const { t } = useTranslation('reviews');
+
+  const { reviews, isFetching, bookTitle, page, totalPages, handleNextPage, handlePreviousPage } =
+    useAll();
 
   if (isFetching) {
     return <DefaultSpinner />;
   }
 
   if (!reviews?.length) {
-    return <p>No reviews found.</p>;
+    return <p>{t('list.empty')}</p>;
   }
 
   const handlePageChange = (newPage: number) => {
@@ -37,10 +32,10 @@ const ReviewList: FC = () => {
 
   return (
     <div className="review-list">
-      <h1>{bookTitle || 'Reviews'}</h1>
+      <h1>{bookTitle || t('list.titleFallback')}</h1>
 
       {reviews.map((r) => (
-        <ReviewListItem key={r.id} review={r} onVote={() => fetchData(page)} />
+        <ReviewListItem key={r.id} review={r} />
       ))}
 
       <Pagination

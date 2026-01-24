@@ -99,8 +99,7 @@ BEGIN
     CREATE FULLTEXT INDEX ON [dbo].[Books]
     (
         [Title],
-        [ShortDescription],
-        [AuthorName]
+        [ShortDescription]
     )
     KEY INDEX ' + QUOTENAME(@BooksPkIndexName) + N'
     WITH CHANGE_TRACKING = AUTO;';
