@@ -96,7 +96,6 @@ export const create = async (book: CreateBook, token: string, signal?: AbortSign
 
 export const edit = async (id: string, book: CreateBook, token: string, signal?: AbortSignal) => {
   try {
-    console.log(book);
     const url = `${routes.book}/${id}`;
     const formData = new FormData();
 

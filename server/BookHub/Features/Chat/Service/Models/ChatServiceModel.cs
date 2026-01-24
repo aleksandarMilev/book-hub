@@ -4,9 +4,9 @@ public class ChatServiceModel
 {
     public Guid Id { get; init; }
 
-    public string Name { get; init; } = null!;
+    public string Name { get; init; } = default!;
 
-    public string ImagePath { get; init; } = null!;
+    public string ImagePath { get; init; } = default!;
 
-    public string CreatorId { get; init; } = null!;
+    public string CreatorId { get; init; } = default!;
 }

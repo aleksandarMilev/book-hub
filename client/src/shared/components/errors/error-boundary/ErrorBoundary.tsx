@@ -24,8 +24,6 @@ export default class ErrorBoundary extends Component<Props, State> {
   override componentDidCatch(error: unknown, info: unknown) {
     if (this.props.onError) {
       this.props.onError(error, JSON.stringify(info));
-    } else {
-      console.error('ErrorBoundary caught an error:', error, info);
     }
   }
 

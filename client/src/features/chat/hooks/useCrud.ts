@@ -1,6 +1,6 @@
 import { useFormik } from 'formik';
 import type React from 'react';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import * as api from '@/features/chat/api/api.js';
@@ -19,6 +19,7 @@ import { useAuth } from '@/shared/stores/auth/auth.js';
 import { useMessage } from '@/shared/stores/message/message.js';
 
 import { chatMessageSchema } from '../components/details/send-form/validation/chatMessageSchema.js';
+import { useTranslation } from 'react-i18next';
 
 export const useChatDetails = () => {
   const navigate = useNavigate();
@@ -568,6 +569,7 @@ export const useSendFormFormik = ({
   setMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
   token: string;
 }) => {
+  const { t } = useTranslation('chats');
   const { showMessage } = useMessage();
 
   const createMessage = useCreateMessage();
@@ -608,7 +610,7 @@ export const useSendFormFormik = ({
   const formik = useFormik<{ chatId: string; message: string }>({
     enableReinitialize: true,
     initialValues: { chatId, message: '' },
-    validationSchema: chatMessageSchema,
+    validationSchema: chatMessageSchema(t),
     onSubmit: async (formValues, { resetForm }) => {
       const messagePayload: CreateChatMessage = {
         chatId: formValues.chatId,

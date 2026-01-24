@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import fallbackAvatar from '@/features/chat/components/details/message/assets/message.webp';
 import type { ChatMessage } from '@/features/chat/types/chat.js';
 import type { PrivateProfile } from '@/features/profile/types/profile.js';
-import { formatIsoDate } from '@/shared/lib/utils/utils.js';
+import { formatIsoDate, getImageUrl } from '@/shared/lib/utils/utils.js';
 
 type Props = {
   message: ChatMessage;
@@ -29,7 +29,7 @@ const Message: FC<Props> = ({
   const created = formatIsoDate(message.createdOn);
   const modified = message.modifiedOn ? formatIsoDate(message.modifiedOn) : null;
   const displayName = sender ? `${sender.firstName} ${sender.lastName}` : message.senderName;
-  const avatar = sender?.imagePath || message.senderImagePath || fallbackAvatar;
+  const avatar = sender?.imagePath ? getImageUrl(sender.imagePath, 'profiles') : fallbackAvatar;
 
   return (
     <div

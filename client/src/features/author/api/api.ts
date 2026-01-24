@@ -49,7 +49,7 @@ export const details = async (
     const url = `${routes.author}/${id}`;
     const httpClient = isAdmin ? httpAdmin : http;
     const { data } = await httpClient.get<AuthorDetailsDto>(url, getAuthConfig(token, signal));
-    console.log(data);
+
     return mapAuthorDetailsDto(data);
   } catch (error) {
     processError(error, errors.author.byId);
