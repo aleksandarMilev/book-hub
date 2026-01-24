@@ -26,7 +26,6 @@ const ChatList: FC = () => {
   }, [debouncedSearch]);
 
   const { items: chats, totalItems, isFetching } = useSearchChats(debouncedSearch, page, pageSize);
-
   const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -34,10 +33,7 @@ const ChatList: FC = () => {
   };
 
   const handlePageChange = (newPage: number) => {
-    if (newPage < 1 || newPage > totalPages) {
-      return;
-    }
-
+    if (newPage < 1 || newPage > totalPages) return;
     setPage(newPage);
   };
 
@@ -45,6 +41,8 @@ const ChatList: FC = () => {
     setSearchTerm('');
     setPage(pagination.defaultPageIndex);
   };
+
+  const showEmpty = !isFetching && chats.length === 0;
 
   return (
     <div className="chat-list-page container">
@@ -60,38 +58,31 @@ const ChatList: FC = () => {
           />
         </div>
       </div>
-      <div className="d-flex justify-content-center row">
-        <div className="col-md-10">
-          {isFetching ? (
-            <DefaultSpinner />
-          ) : chats.length > 0 ? (
-            <>
+
+      <div className="chat-container">
+        {isFetching && <DefaultSpinner />}
+        {!isFetching && !showEmpty && (
+          <>
+            <div className="chat-list">
               {chats.map((c) => (
                 <ChatListItem key={c.id} {...c} />
               ))}
-              <Pagination
-                page={page}
-                totalPages={totalPages}
-                disabled={isFetching}
-                onPageChange={handlePageChange}
-              />
-            </>
-          ) : (
-            <div className="d-flex flex-column align-items-center justify-content-center mt-5">
-              <img
-                src={image}
-                alt={t('list.empty.imageAlt')}
-                className="mb-4 clickable"
-                style={{ maxWidth: '200px', opacity: 0.7, cursor: 'pointer' }}
-                onClick={clearSearch}
-              />
-              <h5 className="text-muted">{t('list.empty.title')}</h5>
-              <p className="text-muted text-center" style={{ maxWidth: '400px' }}>
-                {t('list.empty.message')}
-              </p>
             </div>
-          )}
-        </div>
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              disabled={isFetching}
+              onPageChange={handlePageChange}
+            />
+          </>
+        )}
+        {showEmpty && (
+          <div className="empty-state">
+            <img src={image} alt={t('list.empty.imageAlt')} onClick={clearSearch} />
+            <h4>{t('list.empty.title')}</h4>
+            <p>{t('list.empty.message')}</p>
+          </div>
+        )}
       </div>
     </div>
   );

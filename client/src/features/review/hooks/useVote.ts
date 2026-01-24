@@ -53,7 +53,6 @@ export const useDownvote = () => {
   return downvoteHandler;
 };
 
-// useVote.ts
 export const useVoteHandlers = ({
   id,
   isAuthenticated,

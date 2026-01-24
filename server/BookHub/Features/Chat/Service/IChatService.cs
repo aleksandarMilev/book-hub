@@ -20,6 +20,11 @@ public interface IChatService : ITransientService
         string userId,
         CancellationToken cancellationToken = default);
 
+    Task<bool> CanAccessChatAndHasAcceptedInvitation(
+        Guid chatId,
+        string userId,
+        CancellationToken cancellationToken = default);
+
     Task<bool> IsInvited(
         Guid chatId,
         string userId,

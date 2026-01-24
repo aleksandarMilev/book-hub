@@ -24,7 +24,7 @@ public class ChatMessageService(
         CancellationToken cancellationToken = default)
     {
         var userId = userService.GetId()!;
-        var canAccessChat = await chatService.CanAccessChat(
+        var canAccessChat = await chatService.CanAccessChatAndHasAcceptedInvitation(
             chatId,
             userId,
             cancellationToken);
@@ -67,7 +67,7 @@ public class ChatMessageService(
     {
         var userId = userService.GetId()!;
         var chatId = serviceModel.ChatId;
-        var canAccessChat = await chatService.CanAccessChat(
+        var canAccessChat = await chatService.CanAccessChatAndHasAcceptedInvitation(
             chatId,
             userId,
             cancellationToken);
@@ -122,7 +122,7 @@ public class ChatMessageService(
         }
 
         var chatId = dbModel.ChatId;
-        var canAccessChat = await chatService.CanAccessChat(
+        var canAccessChat = await chatService.CanAccessChatAndHasAcceptedInvitation(
             chatId,
             userId,
             cancellationToken);
@@ -165,7 +165,7 @@ public class ChatMessageService(
         }
 
         var chatId = dbModel.ChatId;
-        var canAccessChat = await chatService.CanAccessChat(
+        var canAccessChat = await chatService.CanAccessChatAndHasAcceptedInvitation(
             chatId,
             userId,
             cancellationToken);

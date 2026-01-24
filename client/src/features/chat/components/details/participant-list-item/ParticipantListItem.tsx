@@ -3,6 +3,7 @@ import React, { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { PrivateProfile } from '@/features/profile/types/profile.js';
+import { getImageUrl } from '@/shared/lib/utils/utils.js';
 
 type Props = {
   participant: PrivateProfile;
@@ -27,7 +28,7 @@ const ParticipantListItem: FC<Props> = ({
       onClick={() => onProfileClickHandler(participant.id)}
     >
       <MDBCardImage
-        src={participant.imagePath || ''}
+        src={getImageUrl(participant.imagePath, 'profiles')}
         alt={participant.firstName}
         className="chat-participant-avatar"
       />

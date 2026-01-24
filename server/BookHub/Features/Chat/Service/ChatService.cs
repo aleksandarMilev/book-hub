@@ -87,6 +87,19 @@ public class ChatService(
             .AnyAsync(
                 c =>
                     c.Id == chatId &&
+                    c.ChatsUsers.Any(cu => cu.UserId == userId),
+                cancelationToken);
+
+    public async Task<bool> CanAccessChatAndHasAcceptedInvitation(
+        Guid chatId,
+        string userId,
+        CancellationToken cancelationToken = default)
+        => await data
+            .Chats
+            .AsNoTracking()
+            .AnyAsync(
+                c =>
+                    c.Id == chatId &&
                     c.ChatsUsers.Any(cu => cu.UserId == userId && cu.HasAccepted),
                 cancelationToken);
 

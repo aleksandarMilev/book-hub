@@ -15,8 +15,8 @@ export const useClickHandler = (
   const navigate = useNavigate();
 
   const onClickHandler = useCallback(
-    async (e: React.MouseEvent) => {
-      e.preventDefault();
+    async (event: React.MouseEvent) => {
+      event.preventDefault();
       if (!token) {
         return;
       }
