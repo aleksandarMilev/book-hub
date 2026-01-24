@@ -1,3 +1,5 @@
+import './ChatList.css';
+
 import { type ChangeEvent, type FC, useEffect, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 
@@ -43,32 +45,17 @@ const ChatList: FC = () => {
   };
 
   return (
-    <div className="container mt-5 mb-5">
-      <div className="row mb-4">
-        <div className="col-md-10 mx-auto d-flex">
-          <div className="search-bar-container d-flex w-100">
-            <input
-              type="text"
-              className="form-control search-input"
-              placeholder="Search chats..."
-              value={searchTerm}
-              onChange={handleSearchChange}
-              disabled={isFetching}
-            />
-            <button
-              type="button"
-              className="btn btn-light search-btn"
-              disabled={isFetching}
-              aria-label="Search chats"
-              onClick={() => {
-                if (searchTerm.trim().length > 0) {
-                  clearSearch();
-                }
-              }}
-            >
-              <FaSearch size={20} />
-            </button>
-          </div>
+    <div className="chat-list-page container">
+      <div className="search-wrapper">
+        <div className="search-bar">
+          <FaSearch className="search-icon" />
+          <input
+            type="text"
+            placeholder="Search chats..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+            aria-label="Search chats"
+          />
         </div>
       </div>
       <div className="d-flex justify-content-center row">

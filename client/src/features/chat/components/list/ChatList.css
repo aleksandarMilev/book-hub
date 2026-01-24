@@ -1,0 +1,96 @@
+.chat-list-page {
+  margin-top: 50px;
+  margin-bottom: 60px;
+  font-family: 'Inter', sans-serif;
+}
+
+.chat-list-page .search-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0 1.5rem;
+}
+
+.chat-list-page .search-bar {
+  position: relative;
+  max-width: 650px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.12);
+  padding: 0.35rem 1.1rem;
+  display: flex;
+  align-items: center;
+  transition:
+    box-shadow 0.22s ease,
+    border-color 0.22s ease,
+    background 0.22s ease,
+    transform 0.18s ease;
+}
+
+.chat-list-page .search-bar:focus-within {
+  border-color: #6ea8fe;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.18);
+  transform: translateY(-1px);
+}
+
+.chat-list-page .search-icon {
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.chat-list-page .search-bar input {
+  width: 100%;
+  padding: 0.4rem 0.25rem 0.4rem 2.2rem;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  font-size: 0.95rem;
+  outline: none;
+  color: #111827;
+}
+
+.chat-list-page .search-bar input::placeholder {
+  color: #9ca3af;
+}
+
+.chat-list-page .search-bar input:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.chat-list-page .search-bar {
+  overflow: hidden;
+}
+
+.chat-list-page .search-bar input {
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.chat-list-page .search-bar input:focus,
+.chat-list-page .search-bar input:focus-visible {
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 576px) {
+  .chat-list-page .search-wrapper {
+    margin: 1.5rem 0 1rem;
+  }
+
+  .chat-list-page .search-bar {
+    max-width: 100%;
+  }
+}

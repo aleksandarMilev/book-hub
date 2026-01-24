@@ -3,7 +3,7 @@ import './ChatForm.css';
 import type { FC } from 'react';
 import { useRef } from 'react';
 
-import image from '@/chat.avif';
+import image from './assets/chat.avif';
 import type { Chat } from '@/features/chat/types/chat.js';
 
 import { useChatFormik } from './formik/useChatFormik.js';
