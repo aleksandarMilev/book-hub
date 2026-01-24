@@ -79,14 +79,7 @@ const ChatForm: FC<Props> = ({ chatData = null, isEditMode = false }) => {
                 </button>
               </div>
             )}
-
-            {isEditMode && chatData?.imagePath && (
-              <div className="hint">
-                {t('form.image.currentPath', { path: chatData.imagePath })}
-              </div>
-            )}
           </div>
-
           <button type="submit" className="form-submit-btn" disabled={formik.isSubmitting}>
             {formik.isSubmitting
               ? isEditMode

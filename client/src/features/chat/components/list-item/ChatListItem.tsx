@@ -8,6 +8,7 @@ import { useDeleteChat } from '@/features/chat/hooks/useCrud.js';
 import DeleteModal from '@/shared/components/delete-modal/DeleteModal.js';
 import { routes } from '@/shared/lib/constants/api.js';
 import { useAuth } from '@/shared/stores/auth/auth.js';
+import { getImageUrl } from '@/shared/lib/utils/utils.js';
 
 type Props = {
   id: string;
@@ -21,20 +22,22 @@ const ChatListItem: FC<Props> = ({ id, name, imagePath, creatorId }) => {
   const { userId, isAdmin } = useAuth();
 
   const onEditClick = () => {
-    navigate(routes.editChat, { state: { chat: { id, name, imagePath, creatorId } } });
+    navigate(`${routes.editChat}/${id}`, {
+      state: { chat: { id, name, imagePath, creatorId } },
+    });
   };
 
   const { showModal, toggleModal, deleteHandler } = useDeleteChat(id, name);
 
   return (
     <>
-      <div className="row chat-list-item p-2 bg-light border rounded mb-3 shadow-sm">
-        <div className="col-3 d-flex justify-content-center align-items-center">
-          <img className="img-fluid chat-list-item-image" src={imagePath || ''} alt={name} />
+      <div className="row p-3 bg-light border rounded mb-0 shadow-sm chat-list-item">
+        <div className="col-md-3 col-4 mt-1 d-flex justify-content-center align-items-center">
+          <img className="chat-list-item-image" src={getImageUrl(imagePath!, 'chats')} alt={name} />
         </div>
-        <div className="col-7 d-flex flex-column justify-content-between chat-list-item-content">
-          <h5 className="mb-1 chat-list-item-name">{name}</h5>
-          <div className="d-flex mt-2">
+        <div className="col-md-6 col-8 mt-1 chat-list-item-content">
+          <h5 className="mb-2 chat-list-item-name">{name}</h5>
+          <div className="chat-list-item-icons">
             {userId === creatorId && (
               <MDBIcon
                 icon="pen"
@@ -52,12 +55,13 @@ const ChatListItem: FC<Props> = ({ id, name, imagePath, creatorId }) => {
               />
             ) : null}
           </div>
+        </div>
+        <div className="col-md-3 d-flex align-items-center justify-content-center mt-1">
           <Link to={`${routes.chat}/${id}`} className="chat-list-item-btn">
             Details
           </Link>
         </div>
       </div>
-
       <DeleteModal showModal={showModal} toggleModal={toggleModal} deleteHandler={deleteHandler} />
     </>
   );

@@ -112,7 +112,6 @@
   border: 1px solid rgba(20, 30, 70, 0.08);
 }
 
-/* Responsive tweaks */
 @media (max-width: 480px) {
   .review-list {
     border-radius: 14px;

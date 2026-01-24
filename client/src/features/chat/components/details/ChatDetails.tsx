@@ -19,6 +19,7 @@ import ParticipantListItem from '@/features/chat/components/details/participant-
 import SendForm from '@/features/chat/components/details/send-form/SendForm.js';
 import { useChatDetails } from '@/features/chat/hooks/useCrud.js';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
+import { getImageUrl } from '@/shared/lib/utils/utils.js';
 
 const ChatDetails: FC = () => {
   const { t } = useTranslation('chats');
@@ -59,7 +60,7 @@ const ChatDetails: FC = () => {
                 <MDBCard id="chat1" className="chat-card">
                   <MDBCardHeader className="chat-card-header">
                     <MDBCardImage
-                      src={chat.imagePath || ''}
+                      src={getImageUrl(chat.imagePath, 'chats')}
                       alt={t('details.chatImageAlt')}
                       className="chat-card-header-img"
                     />
