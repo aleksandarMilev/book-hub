@@ -264,7 +264,7 @@ export const useEdit = () => {
 
 export const useRemove = (id?: string) => {
   const navigate = useNavigate();
-  const { token, isAdmin, resetAuth } = useAuth();
+  const { token, isAdmin, logout } = useAuth();
   const { t } = useTranslation('profiles');
 
   const [showModal, setShowModal] = useState(false);
@@ -285,11 +285,11 @@ export const useRemove = (id?: string) => {
     try {
       if (id && isAdmin) {
         await api.removeAsAdmin(id, token, controller.signal);
-        resetAuth();
       } else {
         await api.remove(token, controller.signal);
       }
 
+      logout();
       navigate(routes.home);
     } catch (error) {
       if (IsCanceledError(error)) {
@@ -302,7 +302,7 @@ export const useRemove = (id?: string) => {
       toggleModal();
       controller.abort();
     }
-  }, [token, id, isAdmin, navigate, showModal, toggleModal, t, resetAuth]);
+  }, [token, id, isAdmin, navigate, showModal, toggleModal, t, logout]);
 
   return { showModal, toggleModal, deleteHandler };
 };
