@@ -1,0 +1,87 @@
+{
+  "buttons": {
+    "invite": {
+      "message": "You were invited to join {{chatName}}",
+      "accept": "Accept",
+      "reject": "Reject"
+    },
+    "leave": "Leave"
+  },
+  "details": {
+    "chatImageAlt": "Chat",
+    "loadOlder": "Load older messages",
+    "participantsTitle": "Participants"
+  },
+  "message": {
+    "modifiedSuffix": " (Modified)",
+    "avatarAlt": "avatar"
+  },
+  "participants": {
+    "creatorSuffix": "(Chat Creator)"
+  },
+  "sendForm": {
+    "editingAlert": "You are editing a message.",
+    "cancel": "Cancel",
+    "messageLabel": "Type your message",
+    "buttonEdit": "Update Message",
+    "buttonSend": "Send Message"
+  },
+  "form": {
+    "titleCreate": "Create New Chat",
+    "titleEdit": "Edit Chat",
+    "labels": {
+      "name": "Name",
+      "image": "Chat image (optional)"
+    },
+    "placeholders": {
+      "name": "Enter chat name"
+    },
+    "image": {
+      "selected": "Selected: {{fileName}}",
+      "remove": "Remove",
+      "currentPath": "Current image path: {{path}}"
+    },
+    "buttons": {
+      "creating": "Creating...",
+      "saving": "Saving...",
+      "submitCreate": "Create Chat",
+      "submitEdit": "Update Chat"
+    },
+    "messages": {
+      "editSuccess": "You have successfully edited {{name}}",
+      "createSuccess": "You have successfully created {{name}}",
+      "saveFailed": "Something went wrong while saving your chat, please try again!"
+    }
+  },
+  "validation": {
+    "fields": {
+      "name": "Name",
+      "image": "Image"
+    },
+    "min": "{{field}} must be at least {{min}} characters",
+    "max": "{{field}} must be at most {{max}} characters",
+    "required": "{{field}} is required!",
+    "image": {
+      "tooLarge": "{{field}} is too large (max 2MB)",
+      "invalidType": "{{field}} has an invalid type. Allowed: {{types}}"
+    }
+  },
+  "list": {
+    "search": {
+      "placeholder": "Search chats...",
+      "ariaLabel": "Search chats"
+    },
+    "empty": {
+      "imageAlt": "No chats found",
+      "title": "We couldn't find any chats",
+      "message": "Try adjusting your search terms or exploring our collection for more options."
+    }
+  },
+  "listItem": {
+    "actions": {
+      "editTitle": "Edit Chat",
+      "deleteTitle": "Delete Chat",
+      "details": "Details"
+    }
+  }
+}

@@ -11,6 +11,7 @@ import {
   MDBRow,
 } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import ChatButtons from '@/features/chat/components/details/buttons/ChatButtons.js';
 import Message from '@/features/chat/components/details/message/Message.js';
@@ -20,6 +21,8 @@ import { useChatDetails } from '@/features/chat/hooks/useCrud.js';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
 
 const ChatDetails: FC = () => {
+  const { t } = useTranslation('chats');
+
   const {
     chat,
     isFetching,
@@ -57,7 +60,7 @@ const ChatDetails: FC = () => {
                   <MDBCardHeader className="chat-card-header">
                     <MDBCardImage
                       src={chat.imagePath || ''}
-                      alt="Chat"
+                      alt={t('details.chatImageAlt')}
                       className="chat-card-header-img"
                     />
                     <p className="mb-0 fw-bold">{chat.name}</p>
@@ -70,7 +73,7 @@ const ChatDetails: FC = () => {
                         onClick={() => loadMoreMessages(50)}
                         disabled={!messages || messages.length === 0}
                       >
-                        Load older messages
+                        {t('details.loadOlder')}
                       </MDBBtn>
                     </div>
                     {messages?.map((m) => {
@@ -100,7 +103,7 @@ const ChatDetails: FC = () => {
               <MDBCol md="4" lg="4" className="h-100">
                 <MDBCard className="participants-card">
                   <MDBCardHeader className="participants-card-header">
-                    <h6 className="mb-0">Participants</h6>
+                    <h6 className="mb-0">{t('details.participantsTitle')}</h6>
                   </MDBCardHeader>
                   <MDBCardBody className="participants-card-body">
                     <ul className="participants-list">

@@ -1,5 +1,6 @@
 import { MDBIcon } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import fallbackAvatar from '@/features/chat/components/details/message/assets/message.webp';
 import type { ChatMessage } from '@/features/chat/types/chat.js';
@@ -23,6 +24,8 @@ const Message: FC<Props> = ({
   onDelete,
   onProfileClick,
 }) => {
+  const { t } = useTranslation('chats');
+
   const created = formatIsoDate(message.createdOn);
   const modified = message.modifiedOn ? formatIsoDate(message.modifiedOn) : null;
   const displayName = sender ? `${sender.firstName} ${sender.lastName}` : message.senderName;
@@ -38,7 +41,9 @@ const Message: FC<Props> = ({
         }}
       >
         <p className="small mb-0">{message.message}</p>
-        <small className="text-muted">{modified ? `${modified} (Modified)` : created}</small>
+        <small className="text-muted">
+          {modified ? `${modified}${t('message.modifiedSuffix')}` : created}
+        </small>
         {isSentByUser && (
           <>
             <MDBIcon
@@ -56,7 +61,7 @@ const Message: FC<Props> = ({
           </>
         )}
       </div>
-      <img src={avatar} alt="avatar" style={{ width: '45px', height: '100%' }} />
+      <img src={avatar} alt={t('message.avatarAlt')} style={{ width: '45px', height: '100%' }} />
       <div
         className="ms-2 profile-item"
         onClick={() => sender && onProfileClick(sender.id)}

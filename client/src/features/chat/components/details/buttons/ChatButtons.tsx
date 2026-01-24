@@ -1,4 +1,5 @@
 import { type FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useChatButtons } from '@/features/chat/hooks/useCrud.js';
 import type { PrivateProfile } from '@/features/profile/types/profile.js';
@@ -8,6 +9,8 @@ const ChatButtons: FC<{
   chatCreatorId?: string;
   refreshParticipantsList: (p: PrivateProfile) => void;
 }> = ({ chatName = '', chatCreatorId, refreshParticipantsList }) => {
+  const { t } = useTranslation('chats');
+
   const { userId, isInvited, onAcceptClick, onRejectClick, onLeaveClick } = useChatButtons(
     chatName,
     chatCreatorId,
@@ -17,12 +20,12 @@ const ChatButtons: FC<{
   if (isInvited) {
     return (
       <div className="invite-box">
-        <p>You were invited to join in {chatName}</p>
+        <p>{t('buttons.invite.message', { chatName })}</p>
         <span className="invite-button accept-button" onClick={onAcceptClick}>
-          Accept
+          {t('buttons.invite.accept')}
         </span>
         <span className="invite-button reject-button" onClick={onRejectClick}>
-          Reject
+          {t('buttons.invite.reject')}
         </span>
       </div>
     );
@@ -31,7 +34,7 @@ const ChatButtons: FC<{
   return userId === chatCreatorId ? null : (
     <div className="invite-box">
       <span className="invite-button reject-button" onClick={() => onLeaveClick(userId!)}>
-        Leave
+        {t('buttons.leave')}
       </span>
     </div>
   );

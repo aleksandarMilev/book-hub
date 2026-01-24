@@ -1,5 +1,6 @@
 import { MDBCardImage, MDBIcon } from 'mdb-react-ui-kit';
 import React, { type FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import type { PrivateProfile } from '@/features/profile/types/profile.js';
 
@@ -18,6 +19,8 @@ const ParticipantListItem: FC<Props> = ({
   onDeleteHandler,
   currentUserIsChatCreator,
 }) => {
+  const { t } = useTranslation('chats');
+
   return (
     <li
       className="d-flex align-items-center mb-3 profile-item"
@@ -40,7 +43,7 @@ const ParticipantListItem: FC<Props> = ({
             <strong>
               {participant.firstName} {participant.lastName}
             </strong>{' '}
-            <span className="text-muted">(Chat Creator)</span>
+            <span className="text-muted">{t('participants.creatorSuffix')}</span>
           </>
         ) : (
           <>

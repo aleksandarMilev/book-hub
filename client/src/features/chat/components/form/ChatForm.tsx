@@ -2,6 +2,7 @@ import './ChatForm.css';
 
 import type { FC } from 'react';
 import { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import image from './assets/chat.avif';
 import type { Chat } from '@/features/chat/types/chat.js';
@@ -11,6 +12,8 @@ import { useChatFormik } from './formik/useChatFormik.js';
 type Props = { chatData?: Chat; isEditMode?: boolean };
 
 const ChatForm: FC<Props> = ({ chatData = null, isEditMode = false }) => {
+  const { t } = useTranslation('chats');
+
   const formik = useChatFormik({ chatData, isEditMode });
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -18,16 +21,18 @@ const ChatForm: FC<Props> = ({ chatData = null, isEditMode = false }) => {
     <div className="chat-form-container">
       <div className="chat-form-card">
         <div className="chat-form-image">
-          <img src={image} alt="Chat Illustration" />
+          <img src={image} alt={t('details.chatImageAlt')} />
         </div>
-        <h2 className="chat-form-title">{isEditMode ? 'Edit Chat' : 'Create New Chat'}</h2>
+        <h2 className="chat-form-title">
+          {isEditMode ? t('form.titleEdit') : t('form.titleCreate')}
+        </h2>
         <form className="chat-form" onSubmit={formik.handleSubmit}>
           <div className="form-group">
-            <label htmlFor="name">Name</label>
+            <label htmlFor="name">{t('form.labels.name')}</label>
             <input
               id="name"
               name="name"
-              placeholder="Enter chat name"
+              placeholder={t('form.placeholders.name')}
               value={formik.values.name}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -37,8 +42,9 @@ const ChatForm: FC<Props> = ({ chatData = null, isEditMode = false }) => {
               <div className="error-message">{formik.errors.name}</div>
             )}
           </div>
+
           <div className="form-group">
-            <label htmlFor="image">Chat image (optional)</label>
+            <label htmlFor="image">{t('form.labels.image')}</label>
             <input
               ref={fileInputRef}
               id="image"
@@ -55,9 +61,10 @@ const ChatForm: FC<Props> = ({ chatData = null, isEditMode = false }) => {
             {formik.touched.image && formik.errors.image && (
               <div className="error-message">{formik.errors.image as string}</div>
             )}
+
             {formik.values.image && (
               <div className="hint">
-                Selected: <strong>{formik.values.image.name}</strong>
+                {t('form.image.selected', { fileName: formik.values.image.name })}{' '}
                 <button
                   type="button"
                   className="link-button"
@@ -68,24 +75,26 @@ const ChatForm: FC<Props> = ({ chatData = null, isEditMode = false }) => {
                     }
                   }}
                 >
-                  Remove
+                  {t('form.image.remove')}
                 </button>
               </div>
             )}
+
             {isEditMode && chatData?.imagePath && (
               <div className="hint">
-                Current image path: <strong>{chatData.imagePath}</strong>
+                {t('form.image.currentPath', { path: chatData.imagePath })}
               </div>
             )}
           </div>
+
           <button type="submit" className="form-submit-btn" disabled={formik.isSubmitting}>
             {formik.isSubmitting
               ? isEditMode
-                ? 'Saving...'
-                : 'Creating...'
+                ? t('form.buttons.saving')
+                : t('form.buttons.creating')
               : isEditMode
-                ? 'Update Chat'
-                : 'Create Chat'}
+                ? t('form.buttons.submitEdit')
+                : t('form.buttons.submitCreate')}
           </button>
         </form>
       </div>

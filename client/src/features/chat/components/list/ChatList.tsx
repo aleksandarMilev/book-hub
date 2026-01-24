@@ -2,6 +2,7 @@ import './ChatList.css';
 
 import { type ChangeEvent, type FC, useEffect, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 
 import image from '@/features/chat/components/form/assets/chat.avif';
 import ChatListItem from '@/features/chat/components/list-item/ChatListItem.js';
@@ -12,6 +13,8 @@ import { useDebounce } from '@/shared/hooks/debounce/useDebounce.js';
 import { pagination } from '@/shared/lib/constants/defaultValues.js';
 
 const ChatList: FC = () => {
+  const { t } = useTranslation('chats');
+
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearch = useDebounce(searchTerm);
 
@@ -51,10 +54,10 @@ const ChatList: FC = () => {
           <FaSearch className="search-icon" />
           <input
             type="text"
-            placeholder="Search chats..."
+            placeholder={t('list.search.placeholder')}
             value={searchTerm}
             onChange={handleSearchChange}
-            aria-label="Search chats"
+            aria-label={t('list.search.ariaLabel')}
           />
         </div>
       </div>
@@ -78,14 +81,14 @@ const ChatList: FC = () => {
             <div className="d-flex flex-column align-items-center justify-content-center mt-5">
               <img
                 src={image}
-                alt="No chats found"
+                alt={t('list.empty.imageAlt')}
                 className="mb-4 clickable"
                 style={{ maxWidth: '200px', opacity: 0.7, cursor: 'pointer' }}
                 onClick={clearSearch}
               />
-              <h5 className="text-muted">We couldn&apos;t find any chats</h5>
+              <h5 className="text-muted">{t('list.empty.title')}</h5>
               <p className="text-muted text-center" style={{ maxWidth: '400px' }}>
-                Try adjusting your search terms or exploring our collection for more options.
+                {t('list.empty.message')}
               </p>
             </div>
           )}

@@ -1,6 +1,7 @@
 import type { FormikProps } from 'formik';
 import { MDBBtn, MDBTextArea } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   formik: FormikProps<{
@@ -12,22 +13,24 @@ type Props = {
 };
 
 const SendForm: FC<Props> = ({ formik, isEditMode, handleCancelEdit }) => {
+  const { t } = useTranslation('chats');
+
   const hasError = formik.touched.message && !!formik.errors.message;
 
   return (
     <form onSubmit={formik.handleSubmit}>
       {isEditMode && (
         <div className="alert alert-warning">
-          You are editing a message.{' '}
+          {t('sendForm.editingAlert')}{' '}
           <span className="cancel-button" onClick={handleCancelEdit}>
-            Cancel
+            {t('sendForm.cancel')}
           </span>
         </div>
       )}
       <div className="mb-3">
         <MDBTextArea
           className={`form-outline ${hasError ? 'is-invalid' : ''}`}
-          label="Type your message"
+          label={t('sendForm.messageLabel')}
           name="message"
           value={formik.values.message}
           onChange={formik.handleChange}
@@ -42,7 +45,7 @@ const SendForm: FC<Props> = ({ formik, isEditMode, handleCancelEdit }) => {
         className="mt-3"
         disabled={formik.isSubmitting || (formik.submitCount > 0 && !formik.isValid)}
       >
-        {isEditMode ? 'Update Message' : 'Send Message'}
+        {isEditMode ? t('sendForm.buttonEdit') : t('sendForm.buttonSend')}
       </MDBBtn>
     </form>
   );
