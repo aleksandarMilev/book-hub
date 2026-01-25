@@ -1,6 +1,7 @@
 ﻿namespace BookHub.Common;
 
 using static Constants.DefaultValues;
+
 public static class Utils
 {
     public static DateTime? StringToDateTime(string? dateTimeString)

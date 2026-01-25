@@ -10,7 +10,7 @@ public interface IImageWriter : IScopedService
         IImageDdModel dbModel,
         IImageServiceModel serviceModel,
         string? defaultImagePath = null,
-        CancellationToken token = default);
+        CancellationToken cancellationToken = default);
 
     bool Delete(
         string resourceName,

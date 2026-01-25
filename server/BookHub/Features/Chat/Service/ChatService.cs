@@ -12,6 +12,7 @@ using Notifications.Service;
 using Shared;
 using UserProfile.Data.Models;
 using UserProfile.Service.Models;
+
 using static Common.Constants.ErrorMessages;
 using static Shared.Constants.Paths;
 

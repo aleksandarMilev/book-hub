@@ -8,7 +8,7 @@ public class ArticleDetailsServiceModel : ArticleBaseModel
 
     public int Views { get; init; }
 
-    public string ImagePath { get; init; } = null!;
+    public string ImagePath { get; init; } = default!;
 
     public DateTime CreatedOn { get; init; }
 

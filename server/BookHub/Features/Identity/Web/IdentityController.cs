@@ -8,12 +8,10 @@ using Models;
 using Service;
 using Service.Models;
 
+using static ApiRoutes;
+
 public class IdentityController(IIdentityService service) : ApiController
 {
-    private const string RegisterRoute = "register/";
-
-    private const string LoginRoute = "login/";
-
     [HttpPost(RegisterRoute)]
     public async Task<ActionResult<JwtTokenServiceModel>> Register(
         RegisterWebModel webModel,

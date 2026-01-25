@@ -10,19 +10,19 @@ public class CreateArticleWebModel
     [StringLength(
         TitleMaxLength,
         MinimumLength = TitleMinLength)]
-    public string Title { get; init; } = null!;
+    public string Title { get; init; } = default!;
 
     [Required]
     [StringLength(
         IntroductionMaxLength,
         MinimumLength = IntroductionMinLength)]
-    public string Introduction { get; init; } = null!;
+    public string Introduction { get; init; } = default!;
 
     [Required]
     [StringLength(
         ContentMaxLength,
         MinimumLength = ContentMinLength)]
-    public string Content { get; init; } = null!;
+    public string Content { get; init; } = default!;
 
     public IFormFile? Image { get; init; }
 }

@@ -25,6 +25,7 @@ public class ProfileService(
         CancellationToken cancellationToken = default)
         => await data
             .Profiles
+            .AsNoTracking()
             .OrderByDescending(p =>
                 p.CreatedBooksCount +
                 p.CreatedAuthorsCount +
@@ -37,6 +38,7 @@ public class ProfileService(
         CancellationToken cancellationToken = default)
         => await data
             .Profiles
+            .AsNoTracking()
             .ToServiceModels()
             .FirstOrDefaultAsync(
                 p => p.Id == userService.GetId(),
@@ -48,6 +50,7 @@ public class ProfileService(
     {
         var dbModel = await data
             .Profiles
+            .AsNoTracking()
             .ToServiceModels()
             .FirstOrDefaultAsync(
                 p => p.Id == id,
@@ -132,7 +135,7 @@ public class ProfileService(
                 dbModel,
                 serviceModel,
                 defaultImagePath: null,
-                token: cancellationToken);
+                cancellationToken);
 
             willDeleteOld &= serviceModel.Image is not null;
         }
@@ -215,7 +218,6 @@ public class ProfileService(
 
         return true;
     }
-
 
     public async Task<Result> IncrementCreatedBooksCount(
         string userId,
