@@ -1,4 +1,4 @@
-import './AuthorDetails.css';
+﻿import './AuthorDetails.css';
 
 import {
   MDBCard,
@@ -17,17 +17,17 @@ import ReactMarkdown from 'react-markdown';
 import { Link } from 'react-router-dom';
 import remarkGfm from 'remark-gfm';
 
-import ApproveRejectButtons from '@/features/author/components/details/approve-reject-buttons/ApproveRejectButtons.js';
-import { useDetailsPage } from '@/features/author/hooks/useDetailsPage.js';
-import { getNationalityName } from '@/features/author/types/author.js';
-import { formatBiography } from '@/features/author/utils/utils.js';
-import BookListItem from '@/features/book/components/list-item/BookListItem.js';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
-import DeleteModal from '@/shared/components/delete-modal/DeleteModal.js';
-import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect.js';
-import { RenderStars } from '@/shared/components/render-stars/RenderStars.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { calculateAge, formatIsoDate, getImageUrl } from '@/shared/lib/utils/utils.js';
+import ApproveRejectButtons from '@/features/author/components/details/approve-reject-buttons/ApproveRejectButtons';
+import { useDetailsPage } from '@/features/author/hooks/useDetailsPage';
+import { getNationalityName } from '@/features/author/types/author';
+import { formatBiography } from '@/features/author/utils/utils';
+import BookListItem from '@/features/book/components/list-item/BookListItem';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import DeleteModal from '@/shared/components/delete-modal/DeleteModal';
+import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect';
+import { RenderStars } from '@/shared/components/render-stars/RenderStars';
+import { routes } from '@/shared/lib/constants/api';
+import { calculateAge, formatIsoDate, getImageUrl } from '@/shared/lib/utils/utils';
 
 const AuthorDetails: FC = () => {
   const { t } = useTranslation('authors');
@@ -235,3 +235,5 @@ const AuthorDetails: FC = () => {
 };
 
 export default AuthorDetails;
+
+

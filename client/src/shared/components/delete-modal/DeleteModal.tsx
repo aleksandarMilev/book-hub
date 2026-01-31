@@ -1,4 +1,4 @@
-import './DeleteModal.css';
+﻿import './DeleteModal.css';
 
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -41,3 +41,4 @@ const DeleteModal: FC<{
 };
 
 export default DeleteModal;
+

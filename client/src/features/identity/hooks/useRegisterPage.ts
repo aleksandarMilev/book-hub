@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+﻿import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useRegisterFormik } from '../components/register/formik/useRegisterFormik.js';
@@ -19,3 +19,4 @@ export const useRegisterPage = () => {
 
   return { t, isSubmitting, formik, submitErrorRef };
 };
+

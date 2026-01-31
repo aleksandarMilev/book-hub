@@ -1,7 +1,9 @@
-import type { FC } from 'react';
+﻿import type { FC } from 'react';
 
-import ChatForm from '@/features/chat/components/form/ChatForm.js';
+import ChatForm from '@/features/chat/components/form/ChatForm';
 
 const CreateChat: FC = () => <ChatForm />;
 
 export default CreateChat;
+
+

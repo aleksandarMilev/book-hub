@@ -1,8 +1,8 @@
-import type { CreateReview, Review, VoteRequest } from '@/features/review/types/review.js';
-import { getAuthConfig, http, processError } from '@/shared/api/http.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { errors } from '@/shared/lib/constants/errorMessages.js';
-import type { PaginatedResult } from '@/shared/types/paginatedResult.js';
+﻿import type { CreateReview, Review, VoteRequest } from '@/features/review/types/review';
+import { getAuthConfig, http, processError } from '@/shared/api/http';
+import { routes } from '@/shared/lib/constants/api';
+import { errors } from '@/shared/lib/constants/errorMessages';
+import type { PaginatedResult } from '@/shared/types/paginatedResult';
 
 export async function all(
   bookId: string,
@@ -77,3 +77,5 @@ export async function downvote(id: string, token: string, signal?: AbortSignal) 
     processError(error, errors.review.vote.down);
   }
 }
+
+

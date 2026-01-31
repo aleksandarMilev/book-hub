@@ -1,4 +1,4 @@
-import './Pagination.css';
+﻿import './Pagination.css';
 
 import { type FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -60,3 +60,4 @@ const Pagination: FC<{
 };
 
 export default Pagination;
+

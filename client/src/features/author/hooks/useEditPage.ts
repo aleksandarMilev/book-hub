@@ -1,6 +1,6 @@
-import { useParams } from 'react-router-dom';
+﻿import { useParams } from 'react-router-dom';
 
-import { useDetails } from '@/features/author/hooks/useCrud.js';
+import { useDetails } from '@/features/author/hooks/useCrud';
 
 export const useEditPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -12,3 +12,5 @@ export const useEditPage = () => {
     error,
   };
 };
+
+

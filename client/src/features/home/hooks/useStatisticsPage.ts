@@ -1,8 +1,8 @@
-import { useTranslation } from 'react-i18next';
+﻿import { useTranslation } from 'react-i18next';
 
-import { useStatistics } from '@/features/statistics/hooks/useCrud.js';
-import { useCountUp } from '@/shared/hooks/countup/useCountup.js';
-import { useAuth } from '@/shared/stores/auth/auth.js';
+import { useStatistics } from '@/features/statistics/hooks/useCrud';
+import { useCountUp } from '@/shared/hooks/countup/useCountup';
+import { useAuth } from '@/shared/stores/auth/auth';
 
 export const useStatisticsPage = () => {
   const { t } = useTranslation('home');
@@ -31,3 +31,5 @@ export const useStatisticsPage = () => {
     },
   };
 };
+
+

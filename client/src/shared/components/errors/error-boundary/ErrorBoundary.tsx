@@ -1,4 +1,4 @@
-import { Component, type ReactNode } from 'react';
+﻿import { Component, type ReactNode } from 'react';
 
 import errorIllustration from './err-b.webp';
 
@@ -106,3 +106,4 @@ const fallbackStyles = {
     boxShadow: '0 8px 20px rgba(154, 107, 255, 0.4)',
   },
 };
+

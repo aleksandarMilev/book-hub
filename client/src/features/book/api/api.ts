@@ -1,15 +1,15 @@
-import {
+﻿import {
   getAuthConfig,
   getAuthConfigForFile,
   getPublicConfig,
   http,
   httpAdmin,
   processError,
-} from '@/shared/api/http.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { pagination } from '@/shared/lib/constants/defaultValues.js';
-import { baseErrors, errors } from '@/shared/lib/constants/errorMessages.js';
-import type { PaginatedResult } from '@/shared/types/paginatedResult.js';
+} from '@/shared/api/http';
+import { routes } from '@/shared/lib/constants/api';
+import { pagination } from '@/shared/lib/constants/defaultValues';
+import { baseErrors, errors } from '@/shared/lib/constants/errorMessages';
+import type { PaginatedResult } from '@/shared/types/paginatedResult';
 
 import type { Book, BookDetails, CreateBook } from '../types/book.js';
 
@@ -163,3 +163,5 @@ const writeFormData = (formData: FormData, book: CreateBook) => {
     book.genres.forEach((g) => formData.append('genres', String(g)));
   }
 };
+
+

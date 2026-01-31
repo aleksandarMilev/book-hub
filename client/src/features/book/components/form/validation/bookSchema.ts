@@ -1,7 +1,7 @@
-import { isValid, parseISO } from 'date-fns';
+﻿import { isValid, parseISO } from 'date-fns';
 import * as Yup from 'yup';
 
-import i18n from '@/shared/i18n/i18n.js';
+import i18n from '@/shared/i18n/i18n';
 
 const constraints = {
   title: { min: 2, max: 200 },
@@ -145,3 +145,5 @@ export const bookSchema = Yup.object({
 });
 
 export type BookFormValues = Yup.InferType<typeof bookSchema>;
+
+

@@ -1,7 +1,7 @@
-import type { Author } from '@/features/author/types/author.js';
-import type { GenreName } from '@/features/genre/types/genre.js';
-import type { ReadingStatusAPI } from '@/features/reading-list/types/readingList.js';
-import type { Review } from '@/features/review/types/review.js';
+﻿import type { Author } from '@/features/author/types/author';
+import type { GenreName } from '@/features/genre/types/genre';
+import type { ReadingStatusAPI } from '@/features/reading-list/types/readingList';
+import type { Review } from '@/features/review/types/review';
 
 export interface Book {
   id: string;
@@ -34,3 +34,5 @@ export interface BookDetails extends Book {
   author?: Author | null;
   reviews: Review[];
 }
+
+

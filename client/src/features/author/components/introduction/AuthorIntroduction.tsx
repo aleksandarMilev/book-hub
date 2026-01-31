@@ -1,13 +1,13 @@
-import './AuthorIntroduction.css';
+﻿import './AuthorIntroduction.css';
 
 import { t } from 'i18next';
 import type { FC } from 'react';
 import { FaBook } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-import type { Author } from '@/features/author/types/author.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { getImageUrl, slugify } from '@/shared/lib/utils/utils.js';
+import type { Author } from '@/features/author/types/author';
+import { routes } from '@/shared/lib/constants/api';
+import { getImageUrl, slugify } from '@/shared/lib/utils/utils';
 
 type Props = { author?: Author | null };
 
@@ -72,3 +72,5 @@ const AuthorIntroduction: FC<Props> = ({ author }) => {
 };
 
 export default AuthorIntroduction;
+
+

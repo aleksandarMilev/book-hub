@@ -1,8 +1,8 @@
-import './ApproveRejectButtons.css';
+﻿import './ApproveRejectButtons.css';
 
 import { type FC, useState } from 'react';
 
-import { useApproval } from '@/features/book/hooks/useApproval.js';
+import { useApproval } from '@/features/book/hooks/useApproval';
 
 type Props = {
   id: string;
@@ -37,3 +37,5 @@ export const ApproveRejectButtons: FC<Props> = ({ id, initialIsApproved, token, 
     </div>
   );
 };
+
+

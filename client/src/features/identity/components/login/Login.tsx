@@ -1,11 +1,11 @@
-import './Login.css';
+﻿import './Login.css';
 
 import { MDBCheckbox, MDBCol, MDBContainer, MDBRow } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
 import { Link } from 'react-router-dom';
 
 import image from '@/features/identity/components/login/assets/login.webp';
-import { routes } from '@/shared/lib/constants/api.js';
+import { routes } from '@/shared/lib/constants/api';
 
 import { useLoginPage } from '../../hooks/useLoginPage.js';
 
@@ -87,3 +87,5 @@ const Login: FC = () => {
 };
 
 export default Login;
+
+

@@ -1,11 +1,11 @@
-import './ArticleForm.css';
+﻿import './ArticleForm.css';
 
 import { MDBCard, MDBCardBody, MDBCol, MDBContainer, MDBRow } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useArticleFormik } from '@/features/article/components/form/formik/useArticleFormik.js';
-import type { ArticleDetails } from '@/features/article/types/article.js';
+import { useArticleFormik } from '@/features/article/components/form/formik/useArticleFormik';
+import type { ArticleDetails } from '@/features/article/types/article';
 
 type Props = {
   article?: ArticleDetails | null;
@@ -134,3 +134,5 @@ const ArticleForm: FC<Props> = ({ article = null, isEditMode = false }) => {
 };
 
 export default ArticleForm;
+
+

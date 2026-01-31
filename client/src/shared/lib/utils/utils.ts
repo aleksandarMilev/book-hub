@@ -1,7 +1,7 @@
-import { HttpStatusCode, isAxiosError } from 'axios';
+﻿import { HttpStatusCode, isAxiosError } from 'axios';
 import { format } from 'date-fns';
 
-import { baseUrl } from '@/shared/lib/constants/api.js';
+import { baseUrl } from '@/shared/lib/constants/api';
 
 export const slugify = (value: string): string =>
   value
@@ -69,3 +69,5 @@ export const IsDomAbortError = (error: unknown): error is DOMException => {
 export const isNotFoundError = (error: unknown): error is Error => {
   return isAxiosError(error) && error.response?.status === HttpStatusCode.NotFound;
 };
+
+

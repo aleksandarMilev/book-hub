@@ -1,13 +1,13 @@
-import './Statistics.css';
+﻿import './Statistics.css';
 
 import { type FC } from 'react';
 import { FaBook, FaCommentDots, FaNewspaper, FaTags, FaUsers, FaUserTie } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-import { useStatisticsPage } from '@/features/home/hooks/useStatisticsPage.js';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
-import HomePageError from '@/shared/components/errors/home-page/HomePageError.js';
-import { routes } from '@/shared/lib/constants/api.js';
+import { useStatisticsPage } from '@/features/home/hooks/useStatisticsPage';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import HomePageError from '@/shared/components/errors/home-page/HomePageError';
+import { routes } from '@/shared/lib/constants/api';
 
 const Statistics: FC = () => {
   const { t, isAuthenticated, isFetching, error, counts } = useStatisticsPage();
@@ -86,3 +86,5 @@ const Statistics: FC = () => {
 };
 
 export default Statistics;
+
+

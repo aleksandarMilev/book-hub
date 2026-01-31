@@ -1,4 +1,4 @@
-export type PrivateProfile = {
+﻿export type PrivateProfile = {
   id: string;
   firstName: string;
   lastName: string;
@@ -28,3 +28,4 @@ export type CreateProfile = {
   image?: File | null;
   removeImage: boolean;
 };
+

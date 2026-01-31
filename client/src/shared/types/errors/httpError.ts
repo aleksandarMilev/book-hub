@@ -1,4 +1,4 @@
-import { HttpStatusCode } from 'axios';
+﻿import { HttpStatusCode } from 'axios';
 
 export class HttpError extends Error {
   status: number;
@@ -48,3 +48,4 @@ export class HttpError extends Error {
     return new Builder();
   }
 }
+

@@ -1,4 +1,4 @@
-import type { PrivateProfile } from '@/features/profile/types/profile.js';
+﻿import type { PrivateProfile } from '@/features/profile/types/profile';
 
 export interface Chat {
   id: string;
@@ -36,3 +36,5 @@ export interface ChatMessagesQuery {
   before?: number;
   take?: number;
 }
+
+

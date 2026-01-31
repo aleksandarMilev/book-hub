@@ -1,4 +1,4 @@
-import './BookFullInfo.css';
+﻿import './BookFullInfo.css';
 
 import type React from 'react';
 import type { FC } from 'react';
@@ -6,13 +6,13 @@ import { useTranslation } from 'react-i18next';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-import type { BookDetails } from '@/features/book/types/book.js';
-import { toUiStatus } from '@/features/reading-list/types/readingList.js';
-import { RenderStars } from '@/shared/components/render-stars/RenderStars.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { formatIsoDate, getImageUrl, slugify } from '@/shared/lib/utils/utils.js';
-import { useAuth } from '@/shared/stores/auth/auth.js';
-import { useMessage } from '@/shared/stores/message/message.js';
+import type { BookDetails } from '@/features/book/types/book';
+import { toUiStatus } from '@/features/reading-list/types/readingList';
+import { RenderStars } from '@/shared/components/render-stars/RenderStars';
+import { routes } from '@/shared/lib/constants/api';
+import { formatIsoDate, getImageUrl, slugify } from '@/shared/lib/utils/utils';
+import { useAuth } from '@/shared/stores/auth/auth';
+import { useMessage } from '@/shared/stores/message/message';
 
 import { ApproveRejectButtons } from './approve-reject-buttons/ApproveRejectButtons.js';
 import { ReadingListButtons } from './reading-list-buttons/ReadingListButtons.js';
@@ -158,3 +158,5 @@ const BookFullInfo: FC<Props> = ({
 };
 
 export default BookFullInfo;
+
+

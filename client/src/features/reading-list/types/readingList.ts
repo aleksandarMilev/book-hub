@@ -1,4 +1,4 @@
-export type ReadingStatusUI = 'read' | 'to read' | 'currently reading' | null;
+﻿export type ReadingStatusUI = 'read' | 'to read' | 'currently reading' | null;
 
 export type ReadingStatusAPI = 0 | 1 | 2;
 
@@ -27,3 +27,4 @@ export const toUiStatus = (status: number | null | undefined): ReadingStatusUI =
       return null;
   }
 };
+

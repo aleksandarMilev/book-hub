@@ -1,7 +1,7 @@
-import { type FC, useState } from 'react';
+﻿import { type FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useAuthorApproval } from '@/features/author/hooks/useApproval.js';
+import { useAuthorApproval } from '@/features/author/hooks/useApproval';
 
 type Props = {
   authorId: string;
@@ -59,3 +59,5 @@ const ApproveRejectButtons: FC<Props> = ({
 };
 
 export default ApproveRejectButtons;
+
+

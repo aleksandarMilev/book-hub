@@ -1,9 +1,9 @@
-import type { Book } from '@/features/book/types/book.js';
-import type { ReadingStatusAPI } from '@/features/reading-list/types/readingList.js';
-import { getAuthConfig, http, processError } from '@/shared/api/http.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { errors } from '@/shared/lib/constants/errorMessages.js';
-import type { PaginatedResult } from '@/shared/types/paginatedResult.js';
+﻿import type { Book } from '@/features/book/types/book';
+import type { ReadingStatusAPI } from '@/features/reading-list/types/readingList';
+import { getAuthConfig, http, processError } from '@/shared/api/http';
+import { routes } from '@/shared/lib/constants/api';
+import { errors } from '@/shared/lib/constants/errorMessages';
+import type { PaginatedResult } from '@/shared/types/paginatedResult';
 
 export const getLastCurrentlyReading = async (
   userId: string,
@@ -86,3 +86,5 @@ export const remove = async (
     processError(error, errors.readingList.remove);
   }
 };
+
+

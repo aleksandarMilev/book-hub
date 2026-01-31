@@ -1,11 +1,11 @@
-import './LastNotificationsListItem.css';
+﻿import './LastNotificationsListItem.css';
 
 import { format } from 'date-fns';
 import { type FC } from 'react';
 import { Dropdown } from 'react-bootstrap';
 
-import { useClickHandler } from '@/features/notification/hooks/useClickHandler.js';
-import type { NotificationType } from '@/features/notification/types/notification.js';
+import { useClickHandler } from '@/features/notification/hooks/useClickHandler';
+import type { NotificationType } from '@/features/notification/types/notification';
 
 import { getResourceType } from '../../utils/utils.js';
 import { getIcon } from './utils/utils.js';
@@ -61,3 +61,5 @@ const LastNotificationsListItem: FC<Props> = ({ notification, refetchNotificatio
 };
 
 export default LastNotificationsListItem;
+
+

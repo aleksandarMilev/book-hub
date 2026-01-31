@@ -1,14 +1,14 @@
-import { useFormik } from 'formik';
+﻿import { useFormik } from 'formik';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { createProfileSchema } from '@/features/profile/components/form/validation/profileSchema.js';
-import { useEdit } from '@/features/profile/hooks/useCrud.js';
-import type { CreateProfile, Profile } from '@/features/profile/types/profile.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { IsError } from '@/shared/lib/utils/utils.js';
-import { useMessage } from '@/shared/stores/message/message.js';
+import { createProfileSchema } from '@/features/profile/components/form/validation/profileSchema';
+import { useEdit } from '@/features/profile/hooks/useCrud';
+import type { CreateProfile, Profile } from '@/features/profile/types/profile';
+import { routes } from '@/shared/lib/constants/api';
+import { IsError } from '@/shared/lib/utils/utils';
+import { useMessage } from '@/shared/stores/message/message';
 
 type Props = { profile?: Profile | null };
 
@@ -62,3 +62,5 @@ export const useProfileFormik = ({ profile = null }: Props) => {
 
   return formik;
 };
+
+

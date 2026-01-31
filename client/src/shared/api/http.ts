@@ -1,7 +1,7 @@
-import axios, { type AxiosRequestConfig } from 'axios';
+﻿import axios, { type AxiosRequestConfig } from 'axios';
 
-import { baseAdminUrl, baseUrl } from '@/shared/lib/constants/api.js';
-import { IsCanceledError } from '@/shared/lib/utils/utils.js';
+import { baseAdminUrl, baseUrl } from '@/shared/lib/constants/api';
+import { IsCanceledError } from '@/shared/lib/utils/utils';
 
 export const http = axios.create({ baseURL: baseUrl });
 export const httpAdmin = axios.create({ baseURL: baseAdminUrl });
@@ -66,3 +66,5 @@ export function processError(error: unknown, fallbackMessage: string): never {
 
   throw new Error(fallbackMessage);
 }
+
+

@@ -1,12 +1,12 @@
-import './ReviewList.css';
+﻿import './ReviewList.css';
 
 import { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import ReviewListItem from '@/features/review/components/list-item/ReviewListItem.js';
-import { useAll } from '@/features/review/hooks/useCrud.js';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
-import Pagination from '@/shared/components/pagination/Pagination.js';
+import ReviewListItem from '@/features/review/components/list-item/ReviewListItem';
+import { useAll } from '@/features/review/hooks/useCrud';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import Pagination from '@/shared/components/pagination/Pagination';
 
 const ReviewList: FC = () => {
   const { t } = useTranslation('reviews');
@@ -49,3 +49,5 @@ const ReviewList: FC = () => {
 };
 
 export default ReviewList;
+
+

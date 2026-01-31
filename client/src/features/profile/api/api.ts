@@ -1,8 +1,8 @@
-import type { CreateProfile, PrivateProfile, Profile } from '@/features/profile/types/profile.js';
-import { getAuthConfig, http, httpAdmin, processError } from '@/shared/api/http.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { errors } from '@/shared/lib/constants/errorMessages.js';
-import { isNotFoundError } from '@/shared/lib/utils/utils.js';
+﻿import type { CreateProfile, PrivateProfile, Profile } from '@/features/profile/types/profile';
+import { getAuthConfig, http, httpAdmin, processError } from '@/shared/api/http';
+import { routes } from '@/shared/lib/constants/api';
+import { errors } from '@/shared/lib/constants/errorMessages';
+import { isNotFoundError } from '@/shared/lib/utils/utils';
 
 export const topThree = async (signal?: AbortSignal) => {
   try {
@@ -108,3 +108,5 @@ export const removeAsAdmin = async (id: string, token: string, signal?: AbortSig
     processError(error, errors.profile.delete);
   }
 };
+
+

@@ -1,13 +1,13 @@
-import './TopUsers.css';
+﻿import './TopUsers.css';
 
 import { type FC } from 'react';
 import { FaBookReader } from 'react-icons/fa';
 
-import { useTopProfilesPage } from '@/features/home/hooks/useTopProfilesPage.js';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
-import EmptyState from '@/shared/components/empty-state/EmptyState.js';
-import HomePageError from '@/shared/components/errors/home-page/HomePageError.js';
-import { getImageUrl } from '@/shared/lib/utils/utils.js';
+import { useTopProfilesPage } from '@/features/home/hooks/useTopProfilesPage';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import EmptyState from '@/shared/components/empty-state/EmptyState';
+import HomePageError from '@/shared/components/errors/home-page/HomePageError';
+import { getImageUrl } from '@/shared/lib/utils/utils';
 
 const TopUsers: FC = () => {
   const { t, profiles, isFetching, error, onProfileClickHandler } = useTopProfilesPage();
@@ -68,3 +68,5 @@ const TopUsers: FC = () => {
 };
 
 export default TopUsers;
+
+

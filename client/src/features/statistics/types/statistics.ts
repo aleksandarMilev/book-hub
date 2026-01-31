@@ -1,4 +1,4 @@
-export interface Statistics {
+﻿export interface Statistics {
   profiles: number;
   books: number;
   authors: number;
@@ -6,3 +6,4 @@ export interface Statistics {
   genres: number;
   articles: number;
 }
+

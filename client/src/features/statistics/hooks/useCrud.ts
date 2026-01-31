@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from 'react';
+﻿import { useCallback, useEffect, useState } from 'react';
 
-import * as api from '@/features/statistics/api/api.js';
-import type { Statistics } from '@/features/statistics/types/statistics.js';
-import { IsError } from '@/shared/lib/utils/utils.js';
+import * as api from '@/features/statistics/api/api';
+import type { Statistics } from '@/features/statistics/types/statistics';
+import { IsError } from '@/shared/lib/utils/utils';
 
 export function useStatistics() {
   const [statistics, setStatistics] = useState<Statistics | null>(null);
@@ -30,3 +30,5 @@ export function useStatistics() {
 
   return { statistics, isFetching, error, refetch: fetchData };
 }
+
+

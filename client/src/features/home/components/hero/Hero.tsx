@@ -1,10 +1,10 @@
-import './Hero.css';
+﻿import './Hero.css';
 
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-import { routes } from '@/shared/lib/constants/api.js';
+import { routes } from '@/shared/lib/constants/api';
 
 const Hero: FC = () => {
   const { t } = useTranslation('home');
@@ -33,3 +33,5 @@ const Hero: FC = () => {
 };
 
 export default Hero;
+
+

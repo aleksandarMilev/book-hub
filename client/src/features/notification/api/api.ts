@@ -1,9 +1,9 @@
-import type { NotificationType } from '@/features/notification/types/notification.js';
-import { getAuthConfig, http, processError } from '@/shared/api/http.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { errors } from '@/shared/lib/constants/errorMessages.js';
-import { IsCanceledError, IsError } from '@/shared/lib/utils/utils.js';
-import type { PaginatedResult } from '@/shared/types/paginatedResult.js';
+﻿import type { NotificationType } from '@/features/notification/types/notification';
+import { getAuthConfig, http, processError } from '@/shared/api/http';
+import { routes } from '@/shared/lib/constants/api';
+import { errors } from '@/shared/lib/constants/errorMessages';
+import { IsCanceledError, IsError } from '@/shared/lib/utils/utils';
+import type { PaginatedResult } from '@/shared/types/paginatedResult';
 
 export const lastThree = async (token: string, signal?: AbortSignal) => {
   try {
@@ -60,3 +60,5 @@ export const remove = async (id: string, token: string, signal?: AbortSignal) =>
     return false;
   }
 };
+
+

@@ -1,6 +1,6 @@
-import * as Yup from 'yup';
+﻿import * as Yup from 'yup';
 
-import i18n from '@/shared/i18n/i18n.js';
+import i18n from '@/shared/i18n/i18n';
 
 const constraints = {
   title: { min: 10, max: 100 },
@@ -117,3 +117,5 @@ export const articleSchema = Yup.object({
 });
 
 export type ArticleFormValues = Yup.InferType<typeof articleSchema>;
+
+

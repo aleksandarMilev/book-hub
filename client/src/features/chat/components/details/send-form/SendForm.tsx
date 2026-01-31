@@ -1,4 +1,4 @@
-import type { FormikProps } from 'formik';
+﻿import type { FormikProps } from 'formik';
 import { MDBBtn, MDBTextArea } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -55,3 +55,4 @@ const SendForm: FC<Props> = ({ formik, isEditMode, handleCancelEdit }) => {
 };
 
 export default SendForm;
+

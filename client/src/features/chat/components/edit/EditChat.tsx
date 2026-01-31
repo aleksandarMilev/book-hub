@@ -1,7 +1,7 @@
-import type { FC } from 'react';
+﻿import type { FC } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import ChatForm from '@/features/chat/components/form/ChatForm.js';
+import ChatForm from '@/features/chat/components/form/ChatForm';
 
 const EditChat: FC = () => {
   const location = useLocation();
@@ -9,3 +9,5 @@ const EditChat: FC = () => {
 };
 
 export default EditChat;
+
+

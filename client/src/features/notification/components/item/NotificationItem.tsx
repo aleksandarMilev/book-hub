@@ -1,4 +1,4 @@
-import './NotificationItem.css';
+﻿import './NotificationItem.css';
 
 import { format } from 'date-fns';
 import { type FC } from 'react';
@@ -6,10 +6,10 @@ import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { FaBook, FaComments, FaTrashAlt, FaUser } from 'react-icons/fa';
 
-import { useClickHandler } from '@/features/notification/hooks/useClickHandler.js';
-import { useRemove } from '@/features/notification/hooks/useCrud.js';
-import type { NotificationType } from '@/features/notification/types/notification.js';
-import DeleteModal from '@/shared/components/delete-modal/DeleteModal.js';
+import { useClickHandler } from '@/features/notification/hooks/useClickHandler';
+import { useRemove } from '@/features/notification/hooks/useCrud';
+import type { NotificationType } from '@/features/notification/types/notification';
+import DeleteModal from '@/shared/components/delete-modal/DeleteModal';
 
 import { getResourceType } from '../../utils/utils.js';
 
@@ -84,7 +84,7 @@ const NotificationItem: FC<{
         >
           {t('actions.view')}
           <span className="bh-notifications-item__arrow" aria-hidden>
-            →
+            â†’
           </span>
         </button>
 
@@ -112,3 +112,5 @@ const NotificationItem: FC<{
 };
 
 export default NotificationItem;
+
+

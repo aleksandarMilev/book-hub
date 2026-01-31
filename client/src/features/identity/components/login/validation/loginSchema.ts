@@ -1,4 +1,4 @@
-import type { TFunction } from 'i18next';
+﻿import type { TFunction } from 'i18next';
 import * as Yup from 'yup';
 
 export const createLoginSchema = (t: TFunction<'identity'>) =>
@@ -7,3 +7,4 @@ export const createLoginSchema = (t: TFunction<'identity'>) =>
     password: Yup.string().required(t('login.validation.passwordRequired')),
     rememberMe: Yup.boolean(),
   });
+

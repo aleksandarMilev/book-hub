@@ -1,12 +1,12 @@
-import './AuthorSearch.css';
+﻿import './AuthorSearch.css';
 
 import type { FormikProps } from 'formik';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useSearchNames } from '@/features/author/hooks/useCrud.js';
-import type { AuthorNames } from '@/features/author/types/author.js';
-import type { BookFormValues } from '@/features/book/components/form/validation/bookSchema.js';
+import { useSearchNames } from '@/features/author/hooks/useCrud';
+import type { AuthorNames } from '@/features/author/types/author';
+import type { BookFormValues } from '@/features/book/components/form/validation/bookSchema';
 
 type Props = {
   authors: AuthorNames[];
@@ -87,3 +87,5 @@ const AuthorSearch: FC<Props> = ({ authors, loading, formik }) => {
 };
 
 export default AuthorSearch;
+
+

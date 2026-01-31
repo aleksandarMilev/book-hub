@@ -1,4 +1,4 @@
-import './HomePageError.css';
+﻿import './HomePageError.css';
 
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -26,3 +26,4 @@ const HomePageError: FC<{
 };
 
 export default HomePageError;
+

@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import * as api from '@/features/chat/api/api.js';
-import { useAuth } from '@/shared/stores/auth/auth.js';
+import * as api from '@/features/chat/api/api';
+import { useAuth } from '@/shared/stores/auth/auth';
 
 export const useHasAccess = () => {
   const { id } = useParams<{ id: string }>();
@@ -24,3 +24,5 @@ export const useHasAccess = () => {
 
   return { isAuthenticated, hasAccess, isLoading };
 };
+
+

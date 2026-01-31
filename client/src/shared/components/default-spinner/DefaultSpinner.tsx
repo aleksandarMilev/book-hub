@@ -1,4 +1,4 @@
-import './DefaultSpinner.css';
+﻿import './DefaultSpinner.css';
 
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -15,3 +15,4 @@ const DefaultSpinner: FC = () => {
 };
 
 export default DefaultSpinner;
+

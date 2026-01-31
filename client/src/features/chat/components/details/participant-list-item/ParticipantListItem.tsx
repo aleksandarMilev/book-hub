@@ -1,9 +1,9 @@
-import { MDBCardImage, MDBIcon } from 'mdb-react-ui-kit';
+﻿import { MDBCardImage, MDBIcon } from 'mdb-react-ui-kit';
 import React, { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { PrivateProfile } from '@/features/profile/types/profile.js';
-import { getImageUrl } from '@/shared/lib/utils/utils.js';
+import type { PrivateProfile } from '@/features/profile/types/profile';
+import { getImageUrl } from '@/shared/lib/utils/utils';
 
 type Props = {
   participant: PrivateProfile;
@@ -65,3 +65,5 @@ const ParticipantListItem: FC<Props> = ({
 };
 
 export default ParticipantListItem;
+
+

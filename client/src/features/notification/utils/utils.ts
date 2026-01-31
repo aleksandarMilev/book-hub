@@ -1,4 +1,4 @@
-export const getResourceType = (serverResourceType: number) => {
+﻿export const getResourceType = (serverResourceType: number) => {
   switch (serverResourceType) {
     case 0:
       return 'Book';
@@ -10,3 +10,4 @@ export const getResourceType = (serverResourceType: number) => {
       return 'Unknown resource type';
   }
 };
+

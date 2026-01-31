@@ -1,14 +1,14 @@
-import './ArticleList.css';
+﻿import './ArticleList.css';
 
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaSearch } from 'react-icons/fa';
 
 import emptyImg from '@/assets/images/no-books-found.png';
-import ArticleListItem from '@/features/article/components/list-item/ArticleListItem.js';
-import { useListPage } from '@/features/article/hooks/useListPage.js';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
-import Pagination from '@/shared/components/pagination/Pagination.js';
+import ArticleListItem from '@/features/article/components/list-item/ArticleListItem';
+import { useListPage } from '@/features/article/hooks/useListPage';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import Pagination from '@/shared/components/pagination/Pagination';
 
 const ArticleList: FC = () => {
   const { t } = useTranslation('articles');
@@ -68,3 +68,5 @@ const ArticleList: FC = () => {
 };
 
 export default ArticleList;
+
+

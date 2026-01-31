@@ -1,9 +1,9 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { useList } from '@/features/reading-list/hooks/useCrud.js';
-import type { ReadingStatusUI } from '@/features/reading-list/types/readingList.js';
-import { pagination } from '@/shared/lib/constants/defaultValues.js';
+import { useList } from '@/features/reading-list/hooks/useCrud';
+import type { ReadingStatusUI } from '@/features/reading-list/types/readingList';
+import { pagination } from '@/shared/lib/constants/defaultValues';
 
 export const useReadingListPage = () => {
   const location = useLocation();
@@ -45,3 +45,5 @@ export const useReadingListPage = () => {
     readingList,
   };
 };
+
+

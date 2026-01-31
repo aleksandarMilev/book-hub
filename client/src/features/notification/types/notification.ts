@@ -1,4 +1,4 @@
-// naming rule violation to avoid the JS built-in class name
+﻿// naming rule violation to avoid the JS built-in class name
 export type NotificationType = {
   id: string;
   message: string;
@@ -7,3 +7,4 @@ export type NotificationType = {
   resourceId: string;
   resourceType: number;
 };
+

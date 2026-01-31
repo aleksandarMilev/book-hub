@@ -1,4 +1,4 @@
-export type Review = {
+﻿export type Review = {
   id: string;
   content: string;
   rating: number;
@@ -21,3 +21,4 @@ export type VoteRequest = {
   reviewId: string;
   isUpvote: boolean;
 };
+

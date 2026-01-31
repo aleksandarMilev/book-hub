@@ -1,9 +1,9 @@
-import { shallow } from 'zustand/shallow';
+﻿import { shallow } from 'zustand/shallow';
 import { createWithEqualityFn } from 'zustand/traditional';
 
-import type { MessageState } from '@/shared/stores/message/types/messageState.js';
-import type { MessageView } from '@/shared/stores/message/types/messageView.js';
-import type { TimeoutHandle } from '@/shared/stores/message/types/timeoutHandle.js';
+import type { MessageState } from '@/shared/stores/message/types/messageState';
+import type { MessageView } from '@/shared/stores/message/types/messageView';
+import type { TimeoutHandle } from '@/shared/stores/message/types/timeoutHandle';
 
 let hideTimer: TimeoutHandle = null;
 
@@ -49,3 +49,5 @@ export const useMessage = (): MessageView =>
     }),
     shallow,
   );
+
+

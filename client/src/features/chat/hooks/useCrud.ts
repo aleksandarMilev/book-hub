@@ -1,9 +1,9 @@
-import { useFormik } from 'formik';
+﻿import { useFormik } from 'formik';
 import type React from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import * as api from '@/features/chat/api/api.js';
+import * as api from '@/features/chat/api/api';
 import type {
   Chat,
   ChatDetails,
@@ -11,12 +11,12 @@ import type {
   ChatMessagesQuery,
   CreateChat,
   CreateChatMessage,
-} from '@/features/chat/types/chat.js';
-import type { PrivateProfile } from '@/features/profile/types/profile.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { IsCanceledError, IsError } from '@/shared/lib/utils/utils.js';
-import { useAuth } from '@/shared/stores/auth/auth.js';
-import { useMessage } from '@/shared/stores/message/message.js';
+} from '@/features/chat/types/chat';
+import type { PrivateProfile } from '@/features/profile/types/profile';
+import { routes } from '@/shared/lib/constants/api';
+import { IsCanceledError, IsError } from '@/shared/lib/utils/utils';
+import { useAuth } from '@/shared/stores/auth/auth';
+import { useMessage } from '@/shared/stores/message/message';
 
 import { chatMessageSchema } from '../components/details/send-form/validation/chatMessageSchema.js';
 import { useTranslation } from 'react-i18next';
@@ -636,3 +636,5 @@ export const useSendFormFormik = ({
 
   return formik;
 };
+
+

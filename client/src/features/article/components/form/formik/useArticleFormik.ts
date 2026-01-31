@@ -1,16 +1,16 @@
-import { useFormik } from 'formik';
+﻿import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import {
   type ArticleFormValues,
   articleSchema,
-} from '@/features/article/components/form/validation/articleSchema.js';
-import { useCreate, useEdit } from '@/features/article/hooks/useCrud.js';
-import type { ArticleDetails, CreateArticle } from '@/features/article/types/article.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { IsError, slugify } from '@/shared/lib/utils/utils.js';
-import { useMessage } from '@/shared/stores/message/message.js';
+} from '@/features/article/components/form/validation/articleSchema';
+import { useCreate, useEdit } from '@/features/article/hooks/useCrud';
+import type { ArticleDetails, CreateArticle } from '@/features/article/types/article';
+import { routes } from '@/shared/lib/constants/api';
+import { IsError, slugify } from '@/shared/lib/utils/utils';
+import { useMessage } from '@/shared/stores/message/message';
 
 type Props = {
   article?: ArticleDetails | null;
@@ -66,3 +66,5 @@ export const useArticleFormik = ({ article = null, isEditMode = false }: Props) 
 
   return formik;
 };
+
+

@@ -1,4 +1,4 @@
-import type { User } from '@/shared/stores/auth/types/user.js';
+﻿import type { User } from '@/shared/stores/auth/types/user';
 
 export interface AuthState {
   user: User | null;
@@ -6,3 +6,5 @@ export interface AuthState {
   logout: () => void;
   resetAuth: () => void;
 }
+
+

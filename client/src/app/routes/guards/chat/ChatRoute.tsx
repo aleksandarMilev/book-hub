@@ -1,9 +1,9 @@
-import type { FC } from 'react';
+﻿import type { FC } from 'react';
 import { Navigate } from 'react-router-dom';
 
-import { useHasAccess } from '@/app/routes/guards/chat/hooks/useHasAccess.js';
-import type { JsxElementProps } from '@/app/types/jsxElementProps.js';
-import { routes } from '@/shared/lib/constants/api.js';
+import { useHasAccess } from '@/app/routes/guards/chat/hooks/useHasAccess';
+import type { JsxElementProps } from '@/app/types/jsxElementProps';
+import { routes } from '@/shared/lib/constants/api';
 
 const ChatRoute: FC<JsxElementProps> = ({ element }: JsxElementProps) => {
   const { isAuthenticated, hasAccess, isLoading } = useHasAccess();
@@ -20,3 +20,5 @@ const ChatRoute: FC<JsxElementProps> = ({ element }: JsxElementProps) => {
 };
 
 export default ChatRoute;
+
+

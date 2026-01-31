@@ -1,4 +1,4 @@
-export interface LoginResponse {
+﻿export interface LoginResponse {
   token: string;
 }
 
@@ -31,3 +31,4 @@ export type DecodedToken = {
 export interface RegisterFormValues extends RegisterRequest {
   confirmPassword: string;
 }
+

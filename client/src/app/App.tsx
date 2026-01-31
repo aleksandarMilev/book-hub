@@ -1,12 +1,12 @@
-import './App.css';
+﻿import './App.css';
 
 import { Outlet, ScrollRestoration } from 'react-router-dom';
 
-import Footer from '@/app/layout/footer/Footer.js';
-import Header from '@/app/layout/header/Header.js';
-import ErrorBoundary from '@/shared/components/errors/error-boundary/ErrorBoundary.js';
-import MessageDisplay from '@/shared/components/message/Message.js';
-import { useMessage } from '@/shared/stores/message/message.js';
+import Footer from '@/app/layout/footer/Footer';
+import Header from '@/app/layout/header/Header';
+import ErrorBoundary from '@/shared/components/errors/error-boundary/ErrorBoundary';
+import MessageDisplay from '@/shared/components/message/Message';
+import { useMessage } from '@/shared/stores/message/message';
 
 export default function App() {
   const { message, isShowing, isSuccess } = useMessage();
@@ -25,3 +25,5 @@ export default function App() {
     </>
   );
 }
+
+

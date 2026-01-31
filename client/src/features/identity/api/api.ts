@@ -1,11 +1,11 @@
-import type {
+﻿import type {
   LoginRequest,
   LoginResponse,
   RegisterRequest,
-} from '@/features/identity/types/identity.js';
-import { http, processError } from '@/shared/api/http.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { errors } from '@/shared/lib/constants/errorMessages.js';
+} from '@/features/identity/types/identity';
+import { http, processError } from '@/shared/api/http';
+import { routes } from '@/shared/lib/constants/api';
+import { errors } from '@/shared/lib/constants/errorMessages';
 
 export const register = async (request: RegisterRequest, signal?: AbortSignal) => {
   try {
@@ -65,3 +65,5 @@ const getConfig = (signal?: AbortSignal) => {
     ...(signal ? { signal } : {}),
   };
 };
+
+

@@ -1,9 +1,9 @@
-import type { FC } from 'react';
+﻿import type { FC } from 'react';
 import { Navigate } from 'react-router-dom';
 
-import type { JsxElementProps } from '@/app/types/jsxElementProps.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { useAuth } from '@/shared/stores/auth/auth.js';
+import type { JsxElementProps } from '@/app/types/jsxElementProps';
+import { routes } from '@/shared/lib/constants/api';
+import { useAuth } from '@/shared/stores/auth/auth';
 
 const AdminRoute: FC<JsxElementProps> = ({ element }: JsxElementProps) => {
   const { isAuthenticated, isAdmin } = useAuth();
@@ -20,3 +20,5 @@ const AdminRoute: FC<JsxElementProps> = ({ element }: JsxElementProps) => {
 };
 
 export default AdminRoute;
+
+

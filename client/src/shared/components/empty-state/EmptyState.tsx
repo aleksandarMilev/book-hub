@@ -1,4 +1,4 @@
-import './EmptyState.css';
+﻿import './EmptyState.css';
 
 import type { FC, ReactNode } from 'react';
 
@@ -26,3 +26,4 @@ const EmptyState: FC<{
 };
 
 export default EmptyState;
+

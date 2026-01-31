@@ -1,4 +1,4 @@
-import './Register.css';
+﻿import './Register.css';
 
 import {
   MDBCard,
@@ -283,3 +283,4 @@ const Register: FC = () => {
 };
 
 export default Register;
+

@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
+﻿import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import * as api from '@/features/search/api/api.js';
+import * as api from '@/features/search/api/api';
 import type {
   ArticlesSearchResult,
   AuthorsSearchResult,
@@ -9,12 +9,12 @@ import type {
   ChatsSearchResult,
   GenresSearchResult,
   ProfilesSearchResult,
-} from '@/features/search/types/search.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { pagination } from '@/shared/lib/constants/defaultValues.js';
-import { IsCanceledError, IsError } from '@/shared/lib/utils/utils.js';
-import { useAuth } from '@/shared/stores/auth/auth.js';
-import type { PaginatedResult } from '@/shared/types/paginatedResult.js';
+} from '@/features/search/types/search';
+import { routes } from '@/shared/lib/constants/api';
+import { pagination } from '@/shared/lib/constants/defaultValues';
+import { IsCanceledError, IsError } from '@/shared/lib/utils/utils';
+import { useAuth } from '@/shared/stores/auth/auth';
+import type { PaginatedResult } from '@/shared/types/paginatedResult';
 
 function useSearch<T>(
   search: (
@@ -114,3 +114,5 @@ export function useSearchArticles(
 ) {
   return useSearch<ArticlesSearchResult>(api.searchArticles, searchTerm, page, pageSize);
 }
+
+

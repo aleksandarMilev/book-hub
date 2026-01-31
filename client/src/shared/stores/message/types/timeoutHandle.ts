@@ -1,1 +1,2 @@
-export type TimeoutHandle = ReturnType<typeof setTimeout> | null;
+﻿export type TimeoutHandle = ReturnType<typeof setTimeout> | null;
+

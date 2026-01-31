@@ -1,11 +1,11 @@
-import './ChatForm.css';
+﻿import './ChatForm.css';
 
 import type { FC } from 'react';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import image from './assets/chat.avif';
-import type { Chat } from '@/features/chat/types/chat.js';
+import type { Chat } from '@/features/chat/types/chat';
 
 import { useChatFormik } from './formik/useChatFormik.js';
 
@@ -96,3 +96,5 @@ const ChatForm: FC<Props> = ({ chatData = null, isEditMode = false }) => {
 };
 
 export default ChatForm;
+
+
