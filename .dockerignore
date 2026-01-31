@@ -5,3 +5,8 @@
 Dockerfile*
 docker-compose*.yml
 node_modules
+
+.vs
+**/.vs
+**/*.user
+**/*.suo
