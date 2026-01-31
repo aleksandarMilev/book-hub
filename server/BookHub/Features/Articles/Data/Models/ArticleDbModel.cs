@@ -1,8 +1,8 @@
 ﻿namespace BookHub.Features.Article.Data.Models;
 
+using System.ComponentModel.DataAnnotations;
 using BookHub.Data.Models.Base;
 using Infrastructure.Services.ImageWriter.Models.Image;
-using System.ComponentModel.DataAnnotations;
 
 using static Shared.Constants.Validation;
 

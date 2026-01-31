@@ -1,4 +1,6 @@
 .env*
 !.env.example
 appsettings.* 
-.vscode/
+.vscode/# local Azure/ACA patch artifacts
+api-*.yaml
+api-*.json

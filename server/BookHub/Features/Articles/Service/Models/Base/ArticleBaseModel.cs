@@ -2,9 +2,9 @@
 
 public abstract class ArticleBaseModel
 {
-    public string Title { get; init; } = null!;
+    public string Title { get; init; } = default!;
 
-    public string Introduction { get; init; } = null!;
+    public string Introduction { get; init; } = default!;
 
-    public string Content { get; init; } = null!;
+    public string Content { get; init; } = default!;
 }

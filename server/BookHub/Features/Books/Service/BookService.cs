@@ -185,7 +185,7 @@ public class BookService(
             .SingleOrDefaultAsync(
                 b => b.Id == dbModel.Id,
                 cancellationToken) 
-            ?? throw new InvalidOperationException($"Created book {dbModel.Id} could not be loaded.");
+            ?? throw new InvalidOperationException($"Created book with Id: {dbModel.Id} could not be loaded.");
     }
 
     public async Task<Result> Edit(

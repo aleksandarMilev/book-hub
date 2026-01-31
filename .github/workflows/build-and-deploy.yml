@@ -1,0 +1,79 @@
+name: Build (develop) / Deploy (master)
+
+on:
+  push:
+    branches: [develop, master]
+
+env:
+  RG: bookhub-rg
+  ACR_NAME: bookhubacr39945
+  ACR_LOGIN_SERVER: bookhubacr39945.azurecr.io
+  API_APP: bookhub-api-39945
+  WEB_APP: bookhub-web-39945
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build API (dotnet)
+        run: |
+          dotnet --info
+          dotnet restore server/BookHub/BookHub.csproj
+          dotnet build server/BookHub/BookHub.csproj -c Release --no-restore
+
+      - name: Build Web (node)
+        working-directory: client
+        run: |
+          npm ci
+          npm run build
+
+  deploy:
+    if: github.ref == 'refs/heads/master'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: ACR login
+        run: az acr login -n $ACR_NAME
+
+      - name: Build & push API image
+        run: |
+          docker build -f server/BookHub/Dockerfile.prod -t $ACR_LOGIN_SERVER/bookhub-api:${{ github.sha }} .
+          docker push $ACR_LOGIN_SERVER/bookhub-api:${{ github.sha }}
+
+      - name: Deploy API (Container App update)
+        run: |
+          az containerapp update \
+            --name $API_APP \
+            --resource-group $RG \
+            --image $ACR_LOGIN_SERVER/bookhub-api:${{ github.sha }}
+
+      - name: Get API FQDN
+        id: apifqdn
+        run: |
+          API_FQDN=$(az containerapp show -n $API_APP -g $RG --query "properties.configuration.ingress.fqdn" -o tsv)
+          echo "API_FQDN=$API_FQDN" >> $GITHUB_OUTPUT
+
+      - name: Build & push Web image
+        run: |
+          docker build \
+            -f client/Dockerfile.prod \
+            -t $ACR_LOGIN_SERVER/bookhub-web:${{ github.sha }} \
+            --build-arg VITE_REACT_APP_SERVER_URL=https://${{ steps.apifqdn.outputs.API_FQDN }} \
+            client
+          docker push $ACR_LOGIN_SERVER/bookhub-web:${{ github.sha }}
+
+      - name: Deploy Web (Container App update)
+        run: |
+          az containerapp update \
+            --name $WEB_APP \
+            --resource-group $RG \
+            --image $ACR_LOGIN_SERVER/bookhub-web:${{ github.sha }}
