@@ -25,6 +25,8 @@ jobs:
 
       - name: Build Web (node)
         working-directory: client
+        env:
+          HUSKY: 0
         run: |
           npm ci
           npm run build
