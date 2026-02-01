@@ -106,7 +106,7 @@ const Footer: FC = () => {
         </MDBContainer>
       </section>
       <div className="footer-bottom">
-        Â© {currentYear} {t('brand')} Â·{' '}
+        © {currentYear} {t('brand')} ·{' '}
         <a
           className="footer-link"
           href="https://github.com/aleksandarMilev/book-hub"
@@ -121,5 +121,3 @@ const Footer: FC = () => {
 };
 
 export default Footer;
-
-
