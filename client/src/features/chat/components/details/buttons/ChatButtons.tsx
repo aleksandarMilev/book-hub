@@ -1,8 +1,8 @@
-import { type FC } from 'react';
+﻿import { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useChatButtons } from '@/features/chat/hooks/useCrud.js';
-import type { PrivateProfile } from '@/features/profile/types/profile.js';
+import { useChatButtons } from '@/features/chat/hooks/useCrud';
+import type { PrivateProfile } from '@/features/profile/types/profile';
 
 const ChatButtons: FC<{
   chatName?: string;
@@ -44,3 +44,5 @@ const ChatButtons: FC<{
 };
 
 export default ChatButtons;
+
+

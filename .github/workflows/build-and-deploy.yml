@@ -25,6 +25,8 @@ jobs:
 
       - name: Build Web (node)
         working-directory: client
+        env:
+          HUSKY: 0
         run: |
           npm ci
           npm run build
@@ -41,13 +43,23 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: Set subscription
+        run: az account set --subscription "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+
       - name: ACR login
         run: az acr login -n $ACR_NAME
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Build & push API image
         run: |
           docker build -f server/BookHub/Dockerfile.prod -t $ACR_LOGIN_SERVER/bookhub-api:${{ github.sha }} .
           docker push $ACR_LOGIN_SERVER/bookhub-api:${{ github.sha }}
+
+      - name: Install containerapp extension
+        run: |
+          az extension add --name containerapp --upgrade
 
       - name: Deploy API (Container App update)
         run: |

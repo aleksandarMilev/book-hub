@@ -1,4 +1,4 @@
-import * as Yup from 'yup';
+﻿import * as Yup from 'yup';
 import type { TFunction } from 'i18next';
 
 const constraints = {
@@ -73,3 +73,4 @@ export const chatSchema = (t: TFunction<'chats'>) =>
   });
 
 export type ChatFormValues = Yup.InferType<ReturnType<typeof chatSchema>>;
+

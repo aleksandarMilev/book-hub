@@ -4,3 +4,8 @@ appsettings.*
 .vscode/# local Azure/ACA patch artifacts
 api-*.yaml
 api-*.json
+
+# IDE
+.vscode/
+client/.vscode/
+

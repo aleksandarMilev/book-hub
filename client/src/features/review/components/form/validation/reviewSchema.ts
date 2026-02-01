@@ -1,4 +1,4 @@
-import type { TFunction } from 'i18next';
+﻿import type { TFunction } from 'i18next';
 import * as Yup from 'yup';
 
 const constraints = {
@@ -33,3 +33,4 @@ export const reviewSchema = (t: TFunction<'reviews'>) =>
       .max(constraints.rating.max, t('validation.rating.max'))
       .required(t('validation.rating.select')),
   });
+

@@ -1,4 +1,4 @@
-import './ChatDetails.css';
+﻿import './ChatDetails.css';
 
 import {
   MDBBtn,
@@ -13,13 +13,13 @@ import {
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import ChatButtons from '@/features/chat/components/details/buttons/ChatButtons.js';
-import Message from '@/features/chat/components/details/message/Message.js';
-import ParticipantListItem from '@/features/chat/components/details/participant-list-item/ParticipantListItem.js';
-import SendForm from '@/features/chat/components/details/send-form/SendForm.js';
-import { useChatDetails } from '@/features/chat/hooks/useCrud.js';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
-import { getImageUrl } from '@/shared/lib/utils/utils.js';
+import ChatButtons from '@/features/chat/components/details/buttons/ChatButtons';
+import ParticipantListItem from '@/features/chat/components/details/participant-list-item/ParticipantListItem';
+import SendForm from '@/features/chat/components/details/send-form/SendForm';
+import { useChatDetails } from '@/features/chat/hooks/useCrud';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import Message from '@/shared/components/message/Message';
+import { getImageUrl } from '@/shared/lib/utils/utils';
 
 const ChatDetails: FC = () => {
   const { t } = useTranslation('chats');
@@ -136,3 +136,5 @@ const ChatDetails: FC = () => {
 };
 
 export default ChatDetails;
+
+

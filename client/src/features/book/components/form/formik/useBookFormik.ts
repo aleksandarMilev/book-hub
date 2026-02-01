@@ -1,21 +1,21 @@
-import { useFormik } from 'formik';
+﻿import { useFormik } from 'formik';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { useNames } from '@/features/author/hooks/useCrud.js';
+import { useNames } from '@/features/author/hooks/useCrud';
 import {
   type BookFormValues,
   bookSchema,
-} from '@/features/book/components/form/validation/bookSchema.js';
-import { useCreate, useEdit } from '@/features/book/hooks/useCrud.js';
-import type { BookDetails } from '@/features/book/types/book.js';
-import { useAll } from '@/features/genre/hooks/useCrud.js';
-import type { GenreName } from '@/features/genre/types/genre.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { slugify } from '@/shared/lib/utils/utils.js';
-import { useAuth } from '@/shared/stores/auth/auth.js';
-import { useMessage } from '@/shared/stores/message/message.js';
+} from '@/features/book/components/form/validation/bookSchema';
+import { useCreate, useEdit } from '@/features/book/hooks/useCrud';
+import type { BookDetails } from '@/features/book/types/book';
+import { useAll } from '@/features/genre/hooks/useCrud';
+import type { GenreName } from '@/features/genre/types/genre';
+import { routes } from '@/shared/lib/constants/api';
+import { slugify } from '@/shared/lib/utils/utils';
+import { useAuth } from '@/shared/stores/auth/auth';
+import { useMessage } from '@/shared/stores/message/message';
 
 const toDateInput = (value?: string | null): string => {
   if (!value) {
@@ -139,3 +139,5 @@ export const useBookFormik = ({ bookData = null, isEditMode = false }: Props) =>
     setSelectedGenres,
   };
 };
+
+

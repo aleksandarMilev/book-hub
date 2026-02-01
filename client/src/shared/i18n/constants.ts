@@ -1,1 +1,2 @@
-export const DEFAULT_LOCALE = 'bg-BG';
+﻿export const DEFAULT_LOCALE = 'bg-BG';
+

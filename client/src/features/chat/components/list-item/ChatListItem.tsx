@@ -1,14 +1,14 @@
-import './ChatListItem.css';
+﻿import './ChatListItem.css';
 
 import { MDBIcon } from 'mdb-react-ui-kit';
 import { type FC } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { useDeleteChat } from '@/features/chat/hooks/useCrud.js';
-import DeleteModal from '@/shared/components/delete-modal/DeleteModal.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { useAuth } from '@/shared/stores/auth/auth.js';
-import { getImageUrl } from '@/shared/lib/utils/utils.js';
+import { useDeleteChat } from '@/features/chat/hooks/useCrud';
+import DeleteModal from '@/shared/components/delete-modal/DeleteModal';
+import { routes } from '@/shared/lib/constants/api';
+import { useAuth } from '@/shared/stores/auth/auth';
+import { getImageUrl } from '@/shared/lib/utils/utils';
 
 type Props = {
   id: string;
@@ -68,3 +68,5 @@ const ChatListItem: FC<Props> = ({ id, name, imagePath, creatorId }) => {
 };
 
 export default ChatListItem;
+
+

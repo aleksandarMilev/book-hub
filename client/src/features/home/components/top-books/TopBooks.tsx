@@ -1,4 +1,4 @@
-import './TopBooks.css';
+﻿import './TopBooks.css';
 
 import {
   MDBCard,
@@ -12,13 +12,13 @@ import { type FC } from 'react';
 import { FaBook, FaBookReader } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-import { useTopThree } from '@/features/book/hooks/useCrud.js';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
-import EmptyState from '@/shared/components/empty-state/EmptyState.js';
-import HomePageError from '@/shared/components/errors/home-page/HomePageError.js';
-import { RenderStars } from '@/shared/components/render-stars/RenderStars.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { getImageUrl, slugify } from '@/shared/lib/utils/utils.js';
+import { useTopThree } from '@/features/book/hooks/useCrud';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import EmptyState from '@/shared/components/empty-state/EmptyState';
+import HomePageError from '@/shared/components/errors/home-page/HomePageError';
+import { RenderStars } from '@/shared/components/render-stars/RenderStars';
+import { routes } from '@/shared/lib/constants/api';
+import { getImageUrl, slugify } from '@/shared/lib/utils/utils';
 
 const TopBooks: FC = () => {
   const { t, books, isFetching, error } = useTopThree();
@@ -95,3 +95,5 @@ const TopBooks: FC = () => {
 };
 
 export default TopBooks;
+
+

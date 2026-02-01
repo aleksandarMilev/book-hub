@@ -1,12 +1,12 @@
-import './GenreListItem.css';
+﻿import './GenreListItem.css';
 
 import { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-import type { GenresSearchResult } from '@/features/search/types/search.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { getImageUrl, slugify } from '@/shared/lib/utils/utils.js';
+import type { GenresSearchResult } from '@/features/search/types/search';
+import { routes } from '@/shared/lib/constants/api';
+import { getImageUrl, slugify } from '@/shared/lib/utils/utils';
 
 const GenreListItem: FC<GenresSearchResult> = ({ id, name, imagePath }) => {
   const { t } = useTranslation('genres');
@@ -34,3 +34,5 @@ const GenreListItem: FC<GenresSearchResult> = ({ id, name, imagePath }) => {
 };
 
 export default GenreListItem;
+
+

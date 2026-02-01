@@ -1,13 +1,13 @@
-import './ProfileListItem.css';
+﻿import './ProfileListItem.css';
 
 import { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaLock, FaUnlock } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
-import { routes } from '@/shared/lib/constants/api.js';
-import { getImageUrl } from '@/shared/lib/utils/utils.js';
-import { useAuth } from '@/shared/stores/auth/auth.js';
+import { routes } from '@/shared/lib/constants/api';
+import { getImageUrl } from '@/shared/lib/utils/utils';
+import { useAuth } from '@/shared/stores/auth/auth';
 
 type Props = {
   id: string;
@@ -73,3 +73,5 @@ const ProfileListItem: FC<Props> = ({
 };
 
 export default ProfileListItem;
+
+

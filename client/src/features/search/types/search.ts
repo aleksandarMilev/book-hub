@@ -1,4 +1,4 @@
-import type { GenreName } from '@/features/genre/types/genre.js';
+﻿import type { GenreName } from '@/features/genre/types/genre';
 
 export type GenresSearchResult = {
   id: string;
@@ -46,3 +46,5 @@ export type ProfilesSearchResult = {
   imagePath: string;
   isPrivate: boolean;
 };
+
+

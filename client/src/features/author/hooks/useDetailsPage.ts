@@ -1,11 +1,11 @@
-import { useEffect } from 'react';
+﻿import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { useDetails, useRemove } from '@/features/author/hooks/useCrud.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { slugify } from '@/shared/lib/utils/utils.js';
-import { useAuth } from '@/shared/stores/auth/auth.js';
-import { useMessage } from '@/shared/stores/message/message.js';
+import { useDetails, useRemove } from '@/features/author/hooks/useCrud';
+import { routes } from '@/shared/lib/constants/api';
+import { slugify } from '@/shared/lib/utils/utils';
+import { useAuth } from '@/shared/stores/auth/auth';
+import { useMessage } from '@/shared/stores/message/message';
 
 export const useDetailsPage = () => {
   const navigate = useNavigate();
@@ -42,3 +42,5 @@ export const useDetailsPage = () => {
     showMessage,
   };
 };
+
+

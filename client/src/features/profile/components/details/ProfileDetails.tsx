@@ -1,4 +1,4 @@
-import './ProfileDetails.css';
+﻿import './ProfileDetails.css';
 
 import {
   faBirthdayCake,
@@ -16,15 +16,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-import BookListItem from '@/features/book/components/list-item/BookListItem.js';
-import { useInviteToChat } from '@/features/chat/hooks/useCrud.js';
-import { useDetails } from '@/features/profile/hooks/useCrud.js';
-import type { PrivateProfile, Profile } from '@/features/profile/types/profile.js';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
-import DeleteModal from '@/shared/components/delete-modal/DeleteModal.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { formatIsoDate, getImageUrl, IsError } from '@/shared/lib/utils/utils.js';
-import { useMessage } from '@/shared/stores/message/message.js';
+import BookListItem from '@/features/book/components/list-item/BookListItem';
+import { useInviteToChat } from '@/features/chat/hooks/useCrud';
+import { useDetails } from '@/features/profile/hooks/useCrud';
+import type { PrivateProfile, Profile } from '@/features/profile/types/profile';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import DeleteModal from '@/shared/components/delete-modal/DeleteModal';
+import { routes } from '@/shared/lib/constants/api';
+import { formatIsoDate, getImageUrl, IsError } from '@/shared/lib/utils/utils';
+import { useMessage } from '@/shared/stores/message/message';
 
 const isFullProfile = (profile: Profile | PrivateProfile | null | undefined): profile is Profile =>
   !!profile && 'createdBooksCount' in profile;
@@ -314,3 +314,5 @@ const ProfileDetails = () => {
 };
 
 export default ProfileDetails;
+
+

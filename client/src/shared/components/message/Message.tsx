@@ -1,9 +1,9 @@
-import './Message.css';
+﻿import './Message.css';
 
 import type { FC } from 'react';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 
-import type { MessageDisplayProps } from '@/shared/components/message/types/messageDisplayProps.type.js';
+import type { MessageDisplayProps } from '@/shared/components/message/types/messageDisplayProps.type';
 
 const MessageDisplay: FC<MessageDisplayProps> = ({ message, isSuccess }) => {
   return (
@@ -19,3 +19,5 @@ const MessageDisplay: FC<MessageDisplayProps> = ({ message, isSuccess }) => {
 };
 
 export default MessageDisplay;
+
+

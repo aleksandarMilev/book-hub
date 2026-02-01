@@ -1,14 +1,14 @@
-import { useCallback, useEffect, useState } from 'react';
+﻿import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import * as api from '@/features/notification/api/api.js';
-import type { NotificationType } from '@/features/notification/types/notification.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { pagination } from '@/shared/lib/constants/defaultValues.js';
-import { IsCanceledError, IsError } from '@/shared/lib/utils/utils.js';
-import { useAuth } from '@/shared/stores/auth/auth.js';
-import { useMessage } from '@/shared/stores/message/message.js';
+import * as api from '@/features/notification/api/api';
+import type { NotificationType } from '@/features/notification/types/notification';
+import { routes } from '@/shared/lib/constants/api';
+import { pagination } from '@/shared/lib/constants/defaultValues';
+import { IsCanceledError, IsError } from '@/shared/lib/utils/utils';
+import { useAuth } from '@/shared/stores/auth/auth';
+import { useMessage } from '@/shared/stores/message/message';
 
 export const useLastThree = () => {
   const { token } = useAuth();
@@ -127,3 +127,5 @@ export const useRemove = (id: string, refetch: () => void | Promise<void>) => {
 
   return { showModal, toggleModal, deleteHandler };
 };
+
+

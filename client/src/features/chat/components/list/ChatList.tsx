@@ -1,16 +1,16 @@
-import './ChatList.css';
+﻿import './ChatList.css';
 
 import { type ChangeEvent, type FC, useEffect, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 
 import image from '@/features/chat/components/form/assets/chat.avif';
-import ChatListItem from '@/features/chat/components/list-item/ChatListItem.js';
-import { useSearchChats } from '@/features/search/hooks/useCrud.js';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
-import Pagination from '@/shared/components/pagination/Pagination.js';
-import { useDebounce } from '@/shared/hooks/debounce/useDebounce.js';
-import { pagination } from '@/shared/lib/constants/defaultValues.js';
+import ChatListItem from '@/features/chat/components/list-item/ChatListItem';
+import { useSearchChats } from '@/features/search/hooks/useCrud';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import Pagination from '@/shared/components/pagination/Pagination';
+import { useDebounce } from '@/shared/hooks/debounce/useDebounce';
+import { pagination } from '@/shared/lib/constants/defaultValues';
 
 const ChatList: FC = () => {
   const { t } = useTranslation('chats');
@@ -89,3 +89,5 @@ const ChatList: FC = () => {
 };
 
 export default ChatList;
+
+

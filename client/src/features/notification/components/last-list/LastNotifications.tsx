@@ -1,4 +1,4 @@
-import './LastNotifications.css';
+﻿import './LastNotifications.css';
 
 import type { FC } from 'react';
 import { Badge, Dropdown } from 'react-bootstrap';
@@ -6,10 +6,10 @@ import { useTranslation } from 'react-i18next';
 import { FaBell } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-import LastNotificationsListItem from '@/features/notification/components/last-item/LastNotificationsListItem.js';
-import { useLastThree } from '@/features/notification/hooks/useCrud.js';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
-import { routes } from '@/shared/lib/constants/api.js';
+import LastNotificationsListItem from '@/features/notification/components/last-item/LastNotificationsListItem';
+import { useLastThree } from '@/features/notification/hooks/useCrud';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import { routes } from '@/shared/lib/constants/api';
 
 const LastNotifications: FC = () => {
   const { t } = useTranslation('notifications');
@@ -73,3 +73,5 @@ const LastNotifications: FC = () => {
 };
 
 export default LastNotifications;
+
+

@@ -1,9 +1,9 @@
-import { useTranslation } from 'react-i18next';
+﻿import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { useTopProfiles } from '@/features/profile/hooks/useCrud.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { useAuth } from '@/shared/stores/auth/auth.js';
+import { useTopProfiles } from '@/features/profile/hooks/useCrud';
+import { routes } from '@/shared/lib/constants/api';
+import { useAuth } from '@/shared/stores/auth/auth';
 
 export const useTopProfilesPage = () => {
   const { t } = useTranslation('home');
@@ -19,3 +19,5 @@ export const useTopProfilesPage = () => {
 
   return { t, profiles, isFetching, error, onProfileClickHandler };
 };
+
+

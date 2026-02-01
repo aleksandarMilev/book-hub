@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+﻿import type { FC } from 'react';
 
 import { useLogoutEffect } from '../../hooks/useLogoutEffect.js';
 
@@ -8,3 +8,4 @@ const Logout: FC = () => {
 };
 
 export default Logout;
+

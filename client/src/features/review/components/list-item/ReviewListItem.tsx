@@ -1,16 +1,16 @@
-import './ReviewListItem.css';
+﻿import './ReviewListItem.css';
 
 import { MDBIcon } from 'mdb-react-ui-kit';
 import { type FC, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 
-import { useRemove } from '@/features/review/hooks/useCrud.js';
-import { useVoteHandlers } from '@/features/review/hooks/useVote.js';
-import type { Review } from '@/features/review/types/review.js';
-import DeleteModal from '@/shared/components/delete-modal/DeleteModal.js';
-import { RenderStars } from '@/shared/components/render-stars/RenderStars.js';
-import { useAuth } from '@/shared/stores/auth/auth.js';
+import { useRemove } from '@/features/review/hooks/useCrud';
+import { useVoteHandlers } from '@/features/review/hooks/useVote';
+import type { Review } from '@/features/review/types/review';
+import DeleteModal from '@/shared/components/delete-modal/DeleteModal';
+import { RenderStars } from '@/shared/components/render-stars/RenderStars';
+import { useAuth } from '@/shared/stores/auth/auth';
 
 type Props = {
   review: Review;
@@ -111,3 +111,5 @@ const ReviewListItem: FC<Props> = ({ review, onVote }) => {
 };
 
 export default ReviewListItem;
+
+

@@ -1,4 +1,4 @@
-import * as Yup from 'yup';
+﻿import * as Yup from 'yup';
 import type { TFunction } from 'i18next';
 
 const lengths = {
@@ -19,3 +19,4 @@ export const chatMessageSchema = (t: TFunction<'chats'>) =>
       )
       .required(t('validation.required', { field: t('sendForm.messageLabel') })),
   });
+

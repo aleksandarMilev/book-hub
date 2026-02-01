@@ -1,14 +1,14 @@
-import './ReadingList.css';
+﻿import './ReadingList.css';
 
 import { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 import noBooksImage from '@/assets/images/no-books-found.png';
-import BookListItem from '@/features/book/components/list-item/BookListItem.js';
-import { getTitle, getTotalPages } from '@/features/reading-list/components/list/utils/utils.js';
-import { useReadingListPage } from '@/features/reading-list/hooks/useReadingListPage.js';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
+import BookListItem from '@/features/book/components/list-item/BookListItem';
+import { getTitle, getTotalPages } from '@/features/reading-list/components/list/utils/utils';
+import { useReadingListPage } from '@/features/reading-list/hooks/useReadingListPage';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
 
 const ReadingList: FC = () => {
   const { t } = useTranslation('readingList');
@@ -84,3 +84,5 @@ const ReadingList: FC = () => {
 };
 
 export default ReadingList;
+
+

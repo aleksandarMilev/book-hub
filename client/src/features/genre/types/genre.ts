@@ -1,4 +1,4 @@
-import type { Book } from '@/features/book/types/book.js';
+﻿import type { Book } from '@/features/book/types/book';
 
 export interface GenreName {
   id: string;
@@ -10,3 +10,5 @@ export interface GenreDetails extends GenreName {
   imagePath: string;
   topBooks: Book[];
 }
+
+

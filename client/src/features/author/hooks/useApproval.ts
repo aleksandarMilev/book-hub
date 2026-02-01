@@ -1,9 +1,9 @@
-import { useCallback } from 'react';
+﻿import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import * as api from '@/features/author/api/api.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { IsError } from '@/shared/lib/utils/utils.js';
+import * as api from '@/features/author/api/api';
+import { routes } from '@/shared/lib/constants/api';
+import { IsError } from '@/shared/lib/utils/utils';
 
 export const useAuthorApproval = ({
   authorId,
@@ -42,3 +42,5 @@ export const useAuthorApproval = ({
 
   return { approveHandler, rejectHandler };
 };
+
+

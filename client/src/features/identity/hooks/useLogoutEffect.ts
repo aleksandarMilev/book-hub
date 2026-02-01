@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
+﻿import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { routes } from '@/shared/lib/constants/api.js';
-import { useAuth } from '@/shared/stores/auth/auth.js';
-import { useMessage } from '@/shared/stores/message/message.js';
+import { routes } from '@/shared/lib/constants/api';
+import { useAuth } from '@/shared/stores/auth/auth';
+import { useMessage } from '@/shared/stores/message/message';
 
 export const useLogoutEffect = () => {
   const { logout, username } = useAuth();
@@ -24,3 +24,5 @@ export const useLogoutEffect = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };
+
+

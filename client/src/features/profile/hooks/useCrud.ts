@@ -1,14 +1,14 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+﻿import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { useChatsNotJoined } from '@/features/chat/hooks/useCrud.js';
-import * as api from '@/features/profile/api/api.js';
-import type { CreateProfile, PrivateProfile, Profile } from '@/features/profile/types/profile.js';
-import { useLastCurrentlyReading } from '@/features/reading-list/hooks/useCrud.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { IsCanceledError, IsError } from '@/shared/lib/utils/utils.js';
-import { useAuth } from '@/shared/stores/auth/auth.js';
+import { useChatsNotJoined } from '@/features/chat/hooks/useCrud';
+import * as api from '@/features/profile/api/api';
+import type { CreateProfile, PrivateProfile, Profile } from '@/features/profile/types/profile';
+import { useLastCurrentlyReading } from '@/features/reading-list/hooks/useCrud';
+import { routes } from '@/shared/lib/constants/api';
+import { IsCanceledError, IsError } from '@/shared/lib/utils/utils';
+import { useAuth } from '@/shared/stores/auth/auth';
 
 const useProfile = (otherId?: string) => {
   const { token } = useAuth();
@@ -306,3 +306,5 @@ export const useRemove = (id?: string) => {
 
   return { showModal, toggleModal, deleteHandler };
 };
+
+

@@ -1,17 +1,17 @@
-import { useFormik } from 'formik';
+﻿import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import {
   type AuthorFormValues,
   authorSchema,
-} from '@/features/author/components/form/validation/authorSchema.js';
-import { useCreate, useEdit } from '@/features/author/hooks/useCrud.js';
-import type { AuthorDetails, CreateAuthor } from '@/features/author/types/author.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { IsError, slugify } from '@/shared/lib/utils/utils.js';
-import { useAuth } from '@/shared/stores/auth/auth.js';
-import { useMessage } from '@/shared/stores/message/message.js';
+} from '@/features/author/components/form/validation/authorSchema';
+import { useCreate, useEdit } from '@/features/author/hooks/useCrud';
+import type { AuthorDetails, CreateAuthor } from '@/features/author/types/author';
+import { routes } from '@/shared/lib/constants/api';
+import { IsError, slugify } from '@/shared/lib/utils/utils';
+import { useAuth } from '@/shared/stores/auth/auth';
+import { useMessage } from '@/shared/stores/message/message';
 
 const toDateInput = (value?: string | null): string => {
   if (!value) {
@@ -114,3 +114,5 @@ export const useAuthorFormik = ({ authorData = null, isEditMode = false }: Props
 
   return formik;
 };
+
+

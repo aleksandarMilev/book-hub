@@ -1,7 +1,7 @@
-import type { Dispatch, FC, SetStateAction } from 'react';
+﻿import type { Dispatch, FC, SetStateAction } from 'react';
 
-import ReviewForm from '@/features/review/components/form/ReviewForm.js';
-import type { Review } from '@/features/review/types/review.js';
+import ReviewForm from '@/features/review/components/form/ReviewForm';
+import type { Review } from '@/features/review/types/review';
 
 type Props = {
   bookId: string;
@@ -22,3 +22,5 @@ const EditReview: FC<Props> = ({ bookId, refreshReviews, existingReview, setIsRe
 };
 
 export default EditReview;
+
+

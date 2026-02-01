@@ -1,17 +1,17 @@
-import { jwtDecode } from 'jwt-decode';
+﻿import { jwtDecode } from 'jwt-decode';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import * as identityApi from '@/features/identity/api/api.js';
+import * as identityApi from '@/features/identity/api/api';
 import type {
   DecodedToken,
   LoginResponse,
   RegisterFormValues,
-} from '@/features/identity/types/identity.js';
-import { IsCanceledError } from '@/shared/lib/utils/utils.js';
-import { useAuth } from '@/shared/stores/auth/auth.js';
-import type { User } from '@/shared/stores/auth/types/user.js';
-import { useMessage } from '@/shared/stores/message/message.js';
+} from '@/features/identity/types/identity';
+import { IsCanceledError } from '@/shared/lib/utils/utils';
+import { useAuth } from '@/shared/stores/auth/auth';
+import type { User } from '@/shared/stores/auth/types/user';
+import { useMessage } from '@/shared/stores/message/message';
 
 export const useLogin = () => {
   const { showMessage } = useMessage();
@@ -81,3 +81,5 @@ const userFromDecodedToken = (decoded: DecodedToken, token: string): User => ({
   isAdmin: Boolean(decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']),
   token,
 });
+
+

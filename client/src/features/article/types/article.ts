@@ -1,4 +1,4 @@
-export interface CreateArticle {
+﻿export interface CreateArticle {
   title: string;
   introduction: string;
   content: string;
@@ -15,3 +15,4 @@ export interface ArticleDetails {
   createdOn: string;
   modifiedOn: string | null;
 }
+

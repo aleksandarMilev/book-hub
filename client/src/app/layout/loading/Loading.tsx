@@ -1,4 +1,4 @@
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
+﻿import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
 
 export default function Loading() {
   return (
@@ -7,3 +7,5 @@ export default function Loading() {
     </div>
   );
 }
+
+

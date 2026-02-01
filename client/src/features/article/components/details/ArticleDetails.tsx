@@ -1,4 +1,4 @@
-import './ArticleDetails.css';
+﻿import './ArticleDetails.css';
 
 import {
   MDBCard,
@@ -17,12 +17,12 @@ import ReactMarkdown from 'react-markdown';
 import { Link } from 'react-router-dom';
 import remarkGfm from 'remark-gfm';
 
-import { useDetailsPage } from '@/features/article/hooks/useDetailsPage.js';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
-import DeleteModal from '@/shared/components/delete-modal/DeleteModal.js';
-import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { getImageUrl } from '@/shared/lib/utils/utils.js';
+import { useDetailsPage } from '@/features/article/hooks/useDetailsPage';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import DeleteModal from '@/shared/components/delete-modal/DeleteModal';
+import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect';
+import { routes } from '@/shared/lib/constants/api';
+import { getImageUrl } from '@/shared/lib/utils/utils';
 
 const ArticleDetails: FC = () => {
   const { t } = useTranslation(['articles', 'layout']);
@@ -153,3 +153,5 @@ const ArticleDetails: FC = () => {
 };
 
 export default ArticleDetails;
+
+

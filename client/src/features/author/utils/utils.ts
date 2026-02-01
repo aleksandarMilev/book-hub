@@ -1,4 +1,4 @@
-export const formatBiography = (bio: string): string => {
+﻿export const formatBiography = (bio: string): string => {
   if (!bio) {
     return '';
   }
@@ -25,3 +25,4 @@ export const formatBiography = (bio: string): string => {
 
   return chunks.join('\n\n');
 };
+

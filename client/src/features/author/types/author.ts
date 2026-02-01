@@ -1,4 +1,4 @@
-import type { Book } from '@/features/book/types/book.js';
+﻿import type { Book } from '@/features/book/types/book';
 
 export type Gender = 'male' | 'female' | 'other';
 
@@ -266,3 +266,5 @@ export type CreateAuthor = {
   bornAt?: string | null | undefined;
   diedAt?: string | null | undefined;
 };
+
+

@@ -1,12 +1,12 @@
-import { useFormik } from 'formik';
+﻿import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { createRegisterSchema } from '@/features/identity/components/register/validation/registerSchema.js';
-import { useRegister } from '@/features/identity/hooks/useIdentity.js';
-import type { RegisterFormValues } from '@/features/identity/types/identity.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { IsError } from '@/shared/lib/utils/utils.js';
+import { createRegisterSchema } from '@/features/identity/components/register/validation/registerSchema';
+import { useRegister } from '@/features/identity/hooks/useIdentity';
+import type { RegisterFormValues } from '@/features/identity/types/identity';
+import { routes } from '@/shared/lib/constants/api';
+import { IsError } from '@/shared/lib/utils/utils';
 
 const registerInitialValues: RegisterFormValues = {
   username: '',
@@ -48,3 +48,5 @@ export const useRegisterFormik = () => {
 
   return formik;
 };
+
+

@@ -1,13 +1,13 @@
-/* eslint-disable react-refresh/only-export-components */
+﻿/* eslint-disable react-refresh/only-export-components */
 import React, { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
-import App from '@/app/App.js';
-import Loading from '@/app/layout/loading/Loading.js';
-import AdminRoute from '@/app/routes/guards/admin/AdminRoute.js';
-import AuthenticatedRoute from '@/app/routes/guards/authenticated/AuthenticatedRoute.js';
-import ChatRoute from '@/app/routes/guards/chat/ChatRoute.js';
-import { routes } from '@/shared/lib/constants/api.js';
+import App from '@/app/App';
+import Loading from '@/app/layout/loading/Loading';
+import AdminRoute from '@/app/routes/guards/admin/AdminRoute';
+import AuthenticatedRoute from '@/app/routes/guards/authenticated/AuthenticatedRoute';
+import ChatRoute from '@/app/routes/guards/chat/ChatRoute';
+import { routes } from '@/shared/lib/constants/api';
 
 const Fallback = () => <Loading />;
 
@@ -195,3 +195,5 @@ export const router = createBrowserRouter([
     ],
   },
 ]);
+
+

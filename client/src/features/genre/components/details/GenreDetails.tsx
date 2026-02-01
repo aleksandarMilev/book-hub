@@ -1,4 +1,4 @@
-import './GenreDetails.css';
+﻿import './GenreDetails.css';
 
 import {
   MDBCard,
@@ -14,12 +14,12 @@ import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-import BookListItem from '@/features/book/components/list-item/BookListItem.js';
-import { useGenreDetailsPage } from '@/features/genre/hooks/useGenreDetailsPage.js';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
-import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { getImageUrl } from '@/shared/lib/utils/utils.js';
+import BookListItem from '@/features/book/components/list-item/BookListItem';
+import { useGenreDetailsPage } from '@/features/genre/hooks/useGenreDetailsPage';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect';
+import { routes } from '@/shared/lib/constants/api';
+import { getImageUrl } from '@/shared/lib/utils/utils';
 
 const GenreDetails: FC = () => {
   const { t } = useTranslation('genres');
@@ -112,3 +112,5 @@ const GenreDetails: FC = () => {
 };
 
 export default GenreDetails;
+
+

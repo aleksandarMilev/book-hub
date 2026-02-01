@@ -1,9 +1,9 @@
-import { useFormik } from 'formik';
+﻿import { useFormik } from 'formik';
 import type React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useCreate, useEdit } from '@/features/review/hooks/useCrud.js';
-import type { CreateReview, Review } from '@/features/review/types/review.js';
+import { useCreate, useEdit } from '@/features/review/hooks/useCrud';
+import type { CreateReview, Review } from '@/features/review/types/review';
 
 import { reviewSchema } from '../validation/reviewSchema.js';
 
@@ -76,3 +76,5 @@ export const useReviewFormik = ({
 
   return { formik, handleRating, isEditMode };
 };
+
+

@@ -1,4 +1,4 @@
-import './AuthorForm.css';
+﻿import './AuthorForm.css';
 
 import type { FormikProps } from 'formik';
 import {
@@ -14,12 +14,12 @@ import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import image from '@/features/author/components/form/assets/create-author.jpg';
-import { useAuthorFormik } from '@/features/author/components/form/formik/useAuthorFormik.js';
-import GenderRadio from '@/features/author/components/form/gender-radio/GenderRadio.js';
-import NationalitySearch from '@/features/author/components/form/nationality-search/NationalitySearch.js';
-import type { AuthorFormValues } from '@/features/author/components/form/validation/authorSchema.js';
-import { useAll } from '@/features/author/hooks/useNationality.js';
-import type { AuthorDetails } from '@/features/author/types/author.js';
+import { useAuthorFormik } from '@/features/author/components/form/formik/useAuthorFormik';
+import GenderRadio from '@/features/author/components/form/gender-radio/GenderRadio';
+import NationalitySearch from '@/features/author/components/form/nationality-search/NationalitySearch';
+import type { AuthorFormValues } from '@/features/author/components/form/validation/authorSchema';
+import { useAll } from '@/features/author/hooks/useNationality';
+import type { AuthorDetails } from '@/features/author/types/author';
 
 type Props = { authorData?: AuthorDetails | null; isEditMode?: boolean };
 
@@ -206,3 +206,5 @@ const AuthorForm: FC<Props> = ({ authorData = null, isEditMode = false }) => {
 };
 
 export default AuthorForm;
+
+

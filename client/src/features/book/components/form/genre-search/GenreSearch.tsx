@@ -1,13 +1,13 @@
-import './GenreSearch.css';
+﻿import './GenreSearch.css';
 
 import type { FormikProps } from 'formik';
 import type React from 'react';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { BookFormValues } from '@/features/book/components/form/validation/bookSchema.js';
-import { useSearch } from '@/features/genre/hooks/useCrud.js';
-import type { GenreName } from '@/features/genre/types/genre.js';
+import type { BookFormValues } from '@/features/book/components/form/validation/bookSchema';
+import { useSearch } from '@/features/genre/hooks/useCrud';
+import type { GenreName } from '@/features/genre/types/genre';
 
 type Props = {
   genres: GenreName[];
@@ -118,3 +118,5 @@ const GenreSearch: FC<Props> = ({ genres, loading, formik, selectedGenres, setSe
 };
 
 export default GenreSearch;
+
+

@@ -1,12 +1,12 @@
-import './ArticleListItem.css';
+﻿import './ArticleListItem.css';
 
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-import type { ArticlesSearchResult } from '@/features/search/types/search.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { formatIsoDate, getImageUrl, slugify } from '@/shared/lib/utils/utils.js';
+import type { ArticlesSearchResult } from '@/features/search/types/search';
+import { routes } from '@/shared/lib/constants/api';
+import { formatIsoDate, getImageUrl, slugify } from '@/shared/lib/utils/utils';
 
 const ArticleListItem: FC<ArticlesSearchResult> = ({
   id,
@@ -36,3 +36,5 @@ const ArticleListItem: FC<ArticlesSearchResult> = ({
 };
 
 export default ArticleListItem;
+
+

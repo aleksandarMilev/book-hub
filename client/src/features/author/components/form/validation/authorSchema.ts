@@ -1,7 +1,7 @@
-import { isValid, parseISO } from 'date-fns';
+﻿import { isValid, parseISO } from 'date-fns';
 import * as Yup from 'yup';
 
-import i18n from '@/shared/i18n/i18n.js';
+import i18n from '@/shared/i18n/i18n';
 
 const constraints = {
   name: { min: 2, max: 200 },
@@ -187,3 +187,5 @@ export const authorSchema = Yup.object({
 });
 
 export type AuthorFormValues = Yup.InferType<typeof authorSchema>;
+
+

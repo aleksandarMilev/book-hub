@@ -1,17 +1,17 @@
-import './TopAuthors.css';
+﻿import './TopAuthors.css';
 
 import { MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
 import { type FC } from 'react';
 import { FaBookReader } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-import { useTopThree } from '@/features/author/hooks/useCrud.js';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
-import EmptyState from '@/shared/components/empty-state/EmptyState.js';
-import HomePageError from '@/shared/components/errors/home-page/HomePageError.js';
-import { RenderStars } from '@/shared/components/render-stars/RenderStars.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { getImageUrl } from '@/shared/lib/utils/utils.js';
+import { useTopThree } from '@/features/author/hooks/useCrud';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import EmptyState from '@/shared/components/empty-state/EmptyState';
+import HomePageError from '@/shared/components/errors/home-page/HomePageError';
+import { RenderStars } from '@/shared/components/render-stars/RenderStars';
+import { routes } from '@/shared/lib/constants/api';
+import { getImageUrl } from '@/shared/lib/utils/utils';
 
 const TopAuthors: FC = () => {
   const { t, authors, isFetching, error } = useTopThree();
@@ -81,3 +81,5 @@ const TopAuthors: FC = () => {
 };
 
 export default TopAuthors;
+
+

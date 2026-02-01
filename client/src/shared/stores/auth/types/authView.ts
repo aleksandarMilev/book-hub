@@ -1,4 +1,4 @@
-import type { User } from '@/shared/stores/auth/types/user.js';
+﻿import type { User } from '@/shared/stores/auth/types/user';
 
 export type AuthView = {
   userId: string;
@@ -11,3 +11,5 @@ export type AuthView = {
   resetAuth: () => void;
   logout: () => void;
 };
+
+

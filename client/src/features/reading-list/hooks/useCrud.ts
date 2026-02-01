@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useState } from 'react';
+﻿import { useCallback, useEffect, useState } from 'react';
 
-import type { Book } from '@/features/book/types/book.js';
-import * as api from '@/features/reading-list/api/api.js';
-import { type ReadingStatusUI, toApiStatus } from '@/features/reading-list/types/readingList.js';
-import { IsCanceledError, IsError } from '@/shared/lib/utils/utils.js';
-import { useAuth } from '@/shared/stores/auth/auth.js';
+import type { Book } from '@/features/book/types/book';
+import * as api from '@/features/reading-list/api/api';
+import { type ReadingStatusUI, toApiStatus } from '@/features/reading-list/types/readingList';
+import { IsCanceledError, IsError } from '@/shared/lib/utils/utils';
+import { useAuth } from '@/shared/stores/auth/auth';
 
 export function useLastCurrentlyReading(isPrivate = false, ownerId?: string) {
   const { token, userId } = useAuth();
@@ -181,3 +181,5 @@ export function useListActions(
 
   return { addToList, removeFromList };
 }
+
+

@@ -1,12 +1,12 @@
-import { useFormik } from 'formik';
+﻿import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { chatSchema } from '@/features/chat/components/form/validation/chatSchema.js';
-import { useCreate, useEdit } from '@/features/chat/hooks/useCrud.js';
-import type { Chat, CreateChat } from '@/features/chat/types/chat.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { useMessage } from '@/shared/stores/message/message.js';
+import { chatSchema } from '@/features/chat/components/form/validation/chatSchema';
+import { useCreate, useEdit } from '@/features/chat/hooks/useCrud';
+import type { Chat, CreateChat } from '@/features/chat/types/chat';
+import { routes } from '@/shared/lib/constants/api';
+import { useMessage } from '@/shared/stores/message/message';
 
 type Props = {
   chatData?: Chat | null;
@@ -51,3 +51,5 @@ export function useChatFormik({ chatData = null, isEditMode = false }: Props) {
 
   return formik;
 }
+
+

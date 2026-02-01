@@ -1,7 +1,7 @@
-import i18n from 'i18next';
+﻿import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
-import { DEFAULT_LOCALE } from '@/shared/i18n/constants.js';
+import { DEFAULT_LOCALE } from '@/shared/i18n/constants';
 
 const bgLayout = await import('@/shared/i18n/locales/bg/layout.json', {
   assert: { type: 'json' },
@@ -153,3 +153,5 @@ void i18n.use(initReactI18next).init({
 });
 
 export default i18n;
+
+

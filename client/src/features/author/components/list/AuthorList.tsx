@@ -1,15 +1,15 @@
-import './AuthorList.css';
+﻿import './AuthorList.css';
 
 import { type ChangeEvent, type FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import emptyImg from '@/assets/images/no-books-found.png';
-import AuthorListItem from '@/features/author/components/list-item/AuthorListItem.js';
-import { useSearchAuthors } from '@/features/search/hooks/useCrud.js';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
-import Pagination from '@/shared/components/pagination/Pagination.js';
-import { useDebounce } from '@/shared/hooks/debounce/useDebounce.js';
-import { pagination } from '@/shared/lib/constants/defaultValues.js';
+import AuthorListItem from '@/features/author/components/list-item/AuthorListItem';
+import { useSearchAuthors } from '@/features/search/hooks/useCrud';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import Pagination from '@/shared/components/pagination/Pagination';
+import { useDebounce } from '@/shared/hooks/debounce/useDebounce';
+import { pagination } from '@/shared/lib/constants/defaultValues';
 
 const AuthorList: FC = () => {
   const { t } = useTranslation('authors');
@@ -81,3 +81,5 @@ const AuthorList: FC = () => {
 };
 
 export default AuthorList;
+
+

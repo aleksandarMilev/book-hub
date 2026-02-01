@@ -1,14 +1,14 @@
-import './AuthorListItem.css';
+﻿import './AuthorListItem.css';
 
 import { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaPenFancy, FaUser } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-import type { AuthorsSearchResult } from '@/features/search/types/search.js';
-import { RenderStars } from '@/shared/components/render-stars/RenderStars.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { getImageUrl, slugify } from '@/shared/lib/utils/utils.js';
+import type { AuthorsSearchResult } from '@/features/search/types/search';
+import { RenderStars } from '@/shared/components/render-stars/RenderStars';
+import { routes } from '@/shared/lib/constants/api';
+import { getImageUrl, slugify } from '@/shared/lib/utils/utils';
 
 const AuthorListItem: FC<AuthorsSearchResult> = ({
   id,
@@ -57,3 +57,5 @@ const AuthorListItem: FC<AuthorsSearchResult> = ({
 };
 
 export default AuthorListItem;
+
+

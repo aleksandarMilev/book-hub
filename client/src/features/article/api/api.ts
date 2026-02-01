@@ -1,4 +1,4 @@
-import type { ArticleDetails, CreateArticle } from '@/features/article/types/article.js';
+﻿import type { ArticleDetails, CreateArticle } from '@/features/article/types/article';
 import {
   getAuthConfig,
   getAuthConfigForFile,
@@ -6,9 +6,9 @@ import {
   http,
   httpAdmin,
   processError,
-} from '@/shared/api/http.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { errors } from '@/shared/lib/constants/errorMessages.js';
+} from '@/shared/api/http';
+import { routes } from '@/shared/lib/constants/api';
+import { errors } from '@/shared/lib/constants/errorMessages';
 
 export const details = async (id: string, signal?: AbortSignal) => {
   try {
@@ -91,3 +91,5 @@ const writeFormData = (formData: FormData, article: CreateArticle) => {
     formData.append('image', article.image);
   }
 };
+
+

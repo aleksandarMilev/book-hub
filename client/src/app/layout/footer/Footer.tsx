@@ -1,11 +1,11 @@
-import './Footer.css';
+﻿import './Footer.css';
 
 import { MDBCol, MDBContainer, MDBFooter, MDBIcon, MDBRow } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-import { routes } from '@/shared/lib/constants/api.js';
+import { routes } from '@/shared/lib/constants/api';
 
 const Footer: FC = () => {
   const { t } = useTranslation('layout');
@@ -106,7 +106,7 @@ const Footer: FC = () => {
         </MDBContainer>
       </section>
       <div className="footer-bottom">
-        © {currentYear} {t('brand')} ·{' '}
+        Â© {currentYear} {t('brand')} Â·{' '}
         <a
           className="footer-link"
           href="https://github.com/aleksandarMilev/book-hub"
@@ -121,3 +121,5 @@ const Footer: FC = () => {
 };
 
 export default Footer;
+
+

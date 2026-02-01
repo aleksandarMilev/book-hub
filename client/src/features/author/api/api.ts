@@ -1,11 +1,11 @@
-import type {
+﻿import type {
   Author,
   AuthorDetails,
   AuthorDetailsDto,
   AuthorNames,
   CreateAuthor,
-} from '@/features/author/types/author.js';
-import { genderFromServer, GenderToServer } from '@/features/author/types/author.js';
+} from '@/features/author/types/author';
+import { genderFromServer, GenderToServer } from '@/features/author/types/author';
 import {
   getAuthConfig,
   getAuthConfigForFile,
@@ -13,9 +13,9 @@ import {
   http,
   httpAdmin,
   processError,
-} from '@/shared/api/http.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { baseErrors, errors } from '@/shared/lib/constants/errorMessages.js';
+} from '@/shared/api/http';
+import { routes } from '@/shared/lib/constants/api';
+import { baseErrors, errors } from '@/shared/lib/constants/errorMessages';
 
 export const names = async (token: string, signal?: AbortSignal) => {
   try {
@@ -159,3 +159,5 @@ const writeFormData = (formData: FormData, author: CreateAuthor) => {
     formData.append('diedAt', author.diedAt);
   }
 };
+
+

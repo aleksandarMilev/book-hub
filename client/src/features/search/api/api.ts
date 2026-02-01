@@ -1,4 +1,4 @@
-import axios from 'axios';
+﻿import axios from 'axios';
 
 import type {
   ArticlesSearchResult,
@@ -7,12 +7,12 @@ import type {
   ChatsSearchResult,
   GenresSearchResult,
   ProfilesSearchResult,
-} from '@/features/search/types/search.js';
-import { getAuthConfig, getPublicConfig, processError } from '@/shared/api/http.js';
-import { baseUrl, routes } from '@/shared/lib/constants/api.js';
-import { pagination } from '@/shared/lib/constants/defaultValues.js';
-import { errors } from '@/shared/lib/constants/errorMessages.js';
-import type { PaginatedResult } from '@/shared/types/paginatedResult.js';
+} from '@/features/search/types/search';
+import { getAuthConfig, getPublicConfig, processError } from '@/shared/api/http';
+import { baseUrl, routes } from '@/shared/lib/constants/api';
+import { pagination } from '@/shared/lib/constants/defaultValues';
+import { errors } from '@/shared/lib/constants/errorMessages';
+import type { PaginatedResult } from '@/shared/types/paginatedResult';
 
 async function search<T>(
   route: string,
@@ -118,3 +118,5 @@ export async function searchArticles(
     signal,
   );
 }
+
+

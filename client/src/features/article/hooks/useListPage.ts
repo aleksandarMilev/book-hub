@@ -1,8 +1,8 @@
-import { type ChangeEvent, useState } from 'react';
+﻿import { type ChangeEvent, useState } from 'react';
 
-import { useSearchArticles } from '@/features/search/hooks/useCrud.js';
-import { useDebounce } from '@/shared/hooks/debounce/useDebounce.js';
-import { pagination } from '@/shared/lib/constants/defaultValues.js';
+import { useSearchArticles } from '@/features/search/hooks/useCrud';
+import { useDebounce } from '@/shared/hooks/debounce/useDebounce';
+import { pagination } from '@/shared/lib/constants/defaultValues';
 
 export const useListPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -45,3 +45,5 @@ export const useListPage = () => {
     showEmpty,
   };
 };
+
+

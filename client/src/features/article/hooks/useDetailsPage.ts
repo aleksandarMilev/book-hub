@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
+﻿import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { useDetails, useRemove } from '@/features/article/hooks/useCrud.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { formatIsoDate, slugify } from '@/shared/lib/utils/utils.js';
-import { useAuth } from '@/shared/stores/auth/auth.js';
+import { useDetails, useRemove } from '@/features/article/hooks/useCrud';
+import { routes } from '@/shared/lib/constants/api';
+import { formatIsoDate, slugify } from '@/shared/lib/utils/utils';
+import { useAuth } from '@/shared/stores/auth/auth';
 
 export const useDetailsPage = () => {
   const { isAdmin } = useAuth();
@@ -45,3 +45,5 @@ export const useDetailsPage = () => {
     deleteHandler,
   };
 };
+
+

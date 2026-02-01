@@ -1,9 +1,9 @@
-import './ReadingListButtons.css';
+﻿import './ReadingListButtons.css';
 
 import { type FC, useState } from 'react';
 
-import { useListActions } from '@/features/reading-list/hooks/useCrud.js';
-import type { ReadingStatusUI } from '@/features/reading-list/types/readingList.js';
+import { useListActions } from '@/features/reading-list/hooks/useCrud';
+import type { ReadingStatusUI } from '@/features/reading-list/types/readingList';
 
 type Props = {
   bookId: string;
@@ -90,3 +90,5 @@ export const ReadingListButtons: FC<Props> = ({
     </div>
   );
 };
+
+

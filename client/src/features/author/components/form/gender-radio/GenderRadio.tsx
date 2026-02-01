@@ -1,4 +1,4 @@
-import type { FormikProps } from 'formik';
+﻿import type { FormikProps } from 'formik';
 import { MDBRadio } from 'mdb-react-ui-kit';
 import type { ChangeEvent, FC } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -52,3 +52,4 @@ const GenderRadio: FC<{ formik: FormikProps<AuthorFormValues> }> = ({ formik }) 
 };
 
 export default GenderRadio;
+

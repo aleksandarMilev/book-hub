@@ -1,11 +1,11 @@
-import { MDBIcon } from 'mdb-react-ui-kit';
+﻿import { MDBIcon } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import fallbackAvatar from '@/features/chat/components/details/message/assets/message.webp';
-import type { ChatMessage } from '@/features/chat/types/chat.js';
-import type { PrivateProfile } from '@/features/profile/types/profile.js';
-import { formatIsoDate, getImageUrl } from '@/shared/lib/utils/utils.js';
+import type { ChatMessage } from '@/features/chat/types/chat';
+import type { PrivateProfile } from '@/features/profile/types/profile';
+import { formatIsoDate, getImageUrl } from '@/shared/lib/utils/utils';
 
 type Props = {
   message: ChatMessage;
@@ -88,3 +88,5 @@ const Message: FC<Props> = ({
 };
 
 export default Message;
+
+

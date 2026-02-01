@@ -1,4 +1,4 @@
-import './BookForm.css';
+﻿import './BookForm.css';
 
 import {
   MDBCard,
@@ -13,10 +13,10 @@ import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import image from '@/features/book/components/form/assets/create-book.jpg';
-import AuthorSearch from '@/features/book/components/form/author-search/AuthorSearch.js';
-import { useBookFormik } from '@/features/book/components/form/formik/useBookFormik.js';
-import GenreSearch from '@/features/book/components/form/genre-search/GenreSearch.js';
-import type { BookDetails } from '@/features/book/types/book.js';
+import AuthorSearch from '@/features/book/components/form/author-search/AuthorSearch';
+import { useBookFormik } from '@/features/book/components/form/formik/useBookFormik';
+import GenreSearch from '@/features/book/components/form/genre-search/GenreSearch';
+import type { BookDetails } from '@/features/book/types/book';
 
 type Props = {
   bookData?: BookDetails | null;
@@ -242,3 +242,5 @@ const BookForm: FC<Props> = ({ bookData = null, isEditMode = false }) => {
 };
 
 export default BookForm;
+
+

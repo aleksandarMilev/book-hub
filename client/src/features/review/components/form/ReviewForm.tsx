@@ -1,12 +1,12 @@
-import './ReviewForm.css';
+﻿import './ReviewForm.css';
 
 import { MDBIcon, MDBTextArea } from 'mdb-react-ui-kit';
 import type React from 'react';
 import type { Dispatch, FC, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useReviewFormik } from '@/features/review/components/form/formik/useReviewFormik.js';
-import type { Review } from '@/features/review/types/review.js';
+import { useReviewFormik } from '@/features/review/components/form/formik/useReviewFormik';
+import type { Review } from '@/features/review/types/review';
 
 import { POSSIBLE_RATINGS } from '../../utils/constants.js';
 
@@ -102,3 +102,5 @@ const ReviewForm: FC<Props> = ({
 };
 
 export default ReviewForm;
+
+

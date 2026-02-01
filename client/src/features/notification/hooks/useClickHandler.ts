@@ -1,11 +1,11 @@
-import type React from 'react';
+﻿import type React from 'react';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import * as api from '@/features/notification/api/api.js';
-import { mapResourceRoute } from '@/features/notification/components/last-item/utils/utils.js';
-import type { NotificationType } from '@/features/notification/types/notification.js';
-import { useAuth } from '@/shared/stores/auth/auth.js';
+import * as api from '@/features/notification/api/api';
+import { mapResourceRoute } from '@/features/notification/components/last-item/utils/utils';
+import type { NotificationType } from '@/features/notification/types/notification';
+import { useAuth } from '@/shared/stores/auth/auth';
 
 export const useClickHandler = (
   notification: NotificationType,
@@ -38,3 +38,5 @@ export const useClickHandler = (
 
   return { onClickHandler };
 };
+
+

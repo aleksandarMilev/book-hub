@@ -1,4 +1,4 @@
-import './RenderStars.css';
+﻿import './RenderStars.css';
 
 import type { FC } from 'react';
 import { FaRegStar,FaStar } from 'react-icons/fa';
@@ -22,3 +22,4 @@ export const RenderStars: FC<{
     </div>
   );
 };
+

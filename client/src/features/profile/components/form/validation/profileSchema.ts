@@ -1,4 +1,4 @@
-import type { TFunction } from 'i18next';
+﻿import type { TFunction } from 'i18next';
 import * as Yup from 'yup';
 
 const NAME_MIN = 2;
@@ -130,3 +130,4 @@ export const createProfileSchema = (t: TFunction<'identity'>) =>
         },
       ),
   });
+

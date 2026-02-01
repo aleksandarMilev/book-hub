@@ -1,14 +1,14 @@
-import './BookListItem.css';
+﻿import './BookListItem.css';
 
 import { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaBook, FaTag, FaUser } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-import type { GenreName } from '@/features/genre/types/genre.js';
-import { RenderStars } from '@/shared/components/render-stars/RenderStars.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { getImageUrl, slugify } from '@/shared/lib/utils/utils.js';
+import type { GenreName } from '@/features/genre/types/genre';
+import { RenderStars } from '@/shared/components/render-stars/RenderStars';
+import { routes } from '@/shared/lib/constants/api';
+import { getImageUrl, slugify } from '@/shared/lib/utils/utils';
 
 type Props = {
   id: string;
@@ -81,3 +81,5 @@ const BookListItem: FC<Props> = ({
 };
 
 export default BookListItem;
+
+

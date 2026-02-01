@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 
 export const useCountUp = (end: number, duration = 2_000) => {
   const [value, setValue] = useState(0);
@@ -23,3 +23,4 @@ export const useCountUp = (end: number, duration = 2_000) => {
 
   return value;
 };
+

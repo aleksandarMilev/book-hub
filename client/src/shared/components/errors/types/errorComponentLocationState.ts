@@ -1,3 +1,4 @@
-export interface ErrorComponentLocationState {
+﻿export interface ErrorComponentLocationState {
   message?: string;
 }
+

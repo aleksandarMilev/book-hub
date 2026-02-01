@@ -1,4 +1,4 @@
-export const toParagraphs = (text: string): string[] => {
+﻿export const toParagraphs = (text: string): string[] => {
   const normalized = text.replace(/\r\n/g, '\n').trim();
 
   if (/\n\s*\n/.test(normalized)) {
@@ -24,3 +24,4 @@ export const toParagraphs = (text: string): string[] => {
 
   return result;
 };
+

@@ -1,5 +1,5 @@
-import { FaBook, FaUser, FaComments } from 'react-icons/fa';
-import { routes } from '@/shared/lib/constants/api.js';
+﻿import { FaBook, FaUser, FaComments } from 'react-icons/fa';
+import { routes } from '@/shared/lib/constants/api';
 
 export const getIcon = (resourceType: number) => {
   switch (resourceType) {
@@ -26,3 +26,5 @@ export const mapResourceRoute = (resourceType: number) => {
       return routes.home;
   }
 };
+
+

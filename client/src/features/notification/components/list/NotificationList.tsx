@@ -1,13 +1,13 @@
-import './NotificationList.css';
+﻿import './NotificationList.css';
 
 import { type FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaBell } from 'react-icons/fa';
 
-import { useAll } from '@/features/notification/hooks/useCrud.js';
-import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner.js';
-import Pagination from '@/shared/components/pagination/Pagination.js';
-import { pagination } from '@/shared/lib/constants/defaultValues.js';
+import { useAll } from '@/features/notification/hooks/useCrud';
+import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
+import Pagination from '@/shared/components/pagination/Pagination';
+import { pagination } from '@/shared/lib/constants/defaultValues';
 
 import NotificationItem from '../item/NotificationItem.js';
 
@@ -73,3 +73,5 @@ const NotificationList: FC = () => {
 };
 
 export default NotificationList;
+
+

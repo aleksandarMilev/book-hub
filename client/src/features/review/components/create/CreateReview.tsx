@@ -1,6 +1,6 @@
-import type { Dispatch, FC, SetStateAction } from 'react';
+﻿import type { Dispatch, FC, SetStateAction } from 'react';
 
-import ReviewForm from '@/features/review/components/form/ReviewForm.js';
+import ReviewForm from '@/features/review/components/form/ReviewForm';
 
 type Props = {
   bookId: string;
@@ -19,3 +19,5 @@ const CreateReview: FC<Props> = ({ bookId, refreshReviews, setIsReviewCreated })
 };
 
 export default CreateReview;
+
+

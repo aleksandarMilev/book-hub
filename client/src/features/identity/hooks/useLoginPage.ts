@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next';
+﻿import { useTranslation } from 'react-i18next';
 
 import { useLoginFormik } from '../components/login/formik/useLoginFormik.js';
 
@@ -8,3 +8,4 @@ export const useLoginPage = () => {
 
   return { t, formik };
 };
+

@@ -1,12 +1,12 @@
-import './ProfileForm.css';
+﻿import './ProfileForm.css';
 
 import { MDBCard, MDBCardBody, MDBCol, MDBContainer, MDBRow } from 'mdb-react-ui-kit';
 import type React from 'react';
 import { type FC,useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useProfileFormik } from '@/features/profile/components/form/formik/useProfileFormik.js';
-import type { Profile } from '@/features/profile/types/profile.js';
+import { useProfileFormik } from '@/features/profile/components/form/formik/useProfileFormik';
+import type { Profile } from '@/features/profile/types/profile';
 
 type Props = { profile?: Profile | null };
 
@@ -254,3 +254,5 @@ const ProfileForm: FC<Props> = ({ profile = null }) => {
 };
 
 export default ProfileForm;
+
+

@@ -1,7 +1,7 @@
-import type { GenreDetails, GenreName } from '@/features/genre/types/genre.js';
-import { getAuthConfig, http, processError } from '@/shared/api/http.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { errors } from '@/shared/lib/constants/errorMessages.js';
+﻿import type { GenreDetails, GenreName } from '@/features/genre/types/genre';
+import { getAuthConfig, http, processError } from '@/shared/api/http';
+import { routes } from '@/shared/lib/constants/api';
+import { errors } from '@/shared/lib/constants/errorMessages';
 
 export const all = async (token: string, signal?: AbortSignal) => {
   try {
@@ -24,3 +24,5 @@ export const details = async (id: string, token: string, signal?: AbortSignal) =
     processError(error, errors.genre.byId);
   }
 };
+
+

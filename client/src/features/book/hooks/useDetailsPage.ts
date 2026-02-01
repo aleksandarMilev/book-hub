@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+﻿import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { useFullInfo, useRemove } from '@/features/book/hooks/useCrud.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { slugify } from '@/shared/lib/utils/utils.js';
-import { useAuth } from '@/shared/stores/auth/auth.js';
+import { useFullInfo, useRemove } from '@/features/book/hooks/useCrud';
+import { routes } from '@/shared/lib/constants/api';
+import { slugify } from '@/shared/lib/utils/utils';
+import { useAuth } from '@/shared/stores/auth/auth';
 
 export const useDetailsPage = () => {
   const { id, slug } = useParams<{ id: string; slug?: string }>();
@@ -60,3 +60,5 @@ export const useDetailsPage = () => {
     setIsReviewCreated,
   };
 };
+
+

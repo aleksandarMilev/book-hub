@@ -1,4 +1,4 @@
-const createEntityErrors = (entity: string, allMessage?: string) => ({
+﻿const createEntityErrors = (entity: string, allMessage?: string) => ({
   all:
     allMessage ??
     `Something went wrong while loading ${entity}s. Please refresh the page or try again later!`,
@@ -76,3 +76,4 @@ export const errors = {
     },
   },
 };
+

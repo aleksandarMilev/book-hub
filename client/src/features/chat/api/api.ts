@@ -1,15 +1,15 @@
-import type {
+﻿import type {
   Chat,
   ChatDetails,
   ChatMessage,
   ChatMessagesQuery,
   CreateChat,
   CreateChatMessage,
-} from '@/features/chat/types/chat.js';
-import type { PrivateProfile } from '@/features/profile/types/profile.js';
-import { getAuthConfig, getAuthConfigForFile, http, processError } from '@/shared/api/http.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { baseErrors, errors } from '@/shared/lib/constants/errorMessages.js';
+} from '@/features/chat/types/chat';
+import type { PrivateProfile } from '@/features/profile/types/profile';
+import { getAuthConfig, getAuthConfigForFile, http, processError } from '@/shared/api/http';
+import { routes } from '@/shared/lib/constants/api';
+import { baseErrors, errors } from '@/shared/lib/constants/errorMessages';
 
 const buildFormData = (chat: CreateChat) => {
   const fd = new FormData();
@@ -262,3 +262,5 @@ export const removeMessage = async (id: number, token: string, signal?: AbortSig
     processError(error, errors.chatMessage.delete);
   }
 };
+
+

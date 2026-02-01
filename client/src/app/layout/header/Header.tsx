@@ -1,13 +1,13 @@
-import './Header.css';
+﻿import './Header.css';
 
 import { type FC, useState } from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-import LastNotifications from '@/features/notification/components/last-list/LastNotifications.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { useAuth } from '@/shared/stores/auth/auth.js';
+import LastNotifications from '@/features/notification/components/last-list/LastNotifications';
+import { routes } from '@/shared/lib/constants/api';
+import { useAuth } from '@/shared/stores/auth/auth';
 
 const Header: FC = () => {
   const [expanded, setExpanded] = useState<boolean>(false);
@@ -37,7 +37,7 @@ const Header: FC = () => {
       >
         <Container fluid>
           <Navbar.Brand as={Link} to={routes.home} className="brand-title">
-            📚 {t('brand')}
+            ðŸ“š {t('brand')}
           </Navbar.Brand>
           <Navbar.Toggle
             aria-controls="responsive-navbar-nav"
@@ -151,3 +151,5 @@ const Header: FC = () => {
 };
 
 export default Header;
+
+

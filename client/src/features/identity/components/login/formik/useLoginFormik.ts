@@ -1,12 +1,12 @@
-import { useFormik } from 'formik';
+﻿import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { createLoginSchema } from '@/features/identity/components/login/validation/loginSchema.js';
-import { useLogin } from '@/features/identity/hooks/useIdentity.js';
-import type { LoginRequest } from '@/features/identity/types/identity.js';
-import { routes } from '@/shared/lib/constants/api.js';
-import { IsError } from '@/shared/lib/utils/utils.js';
+import { createLoginSchema } from '@/features/identity/components/login/validation/loginSchema';
+import { useLogin } from '@/features/identity/hooks/useIdentity';
+import type { LoginRequest } from '@/features/identity/types/identity';
+import { routes } from '@/shared/lib/constants/api';
+import { IsError } from '@/shared/lib/utils/utils';
 
 const loginInitialValues: LoginRequest = {
   credentials: '',
@@ -35,3 +35,5 @@ export const useLoginFormik = () => {
 
   return formik;
 };
+
+
