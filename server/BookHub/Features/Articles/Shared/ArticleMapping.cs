@@ -1,8 +1,8 @@
-﻿namespace BookHub.Features.Article.Shared;
+﻿namespace BookHub.Features.Articles.Shared;
 
 using Data.Models;
 using Service.Models;
-using Web.Models;
+using Web.Admin.Models;
 
 public static class ArticleMapping
 {

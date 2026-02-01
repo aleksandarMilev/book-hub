@@ -1,6 +1,6 @@
-﻿using BookHub.Features.Articles.Service.Models.Base;
+﻿namespace BookHub.Features.Articles.Service.Models;
 
-namespace BookHub.Features.Article.Service.Models;
+using Base;
 
 public class ArticleDetailsServiceModel : ArticleBaseModel
 {

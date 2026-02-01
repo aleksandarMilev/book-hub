@@ -14,8 +14,8 @@ using Microsoft.OpenApi;
 using Services.ServiceLifetimes;
 using Settings;
 
-using static Features.Identity.Shared.Constants.Lockout;
 using static Common.Constants.Cors;
+using static Features.Identity.Shared.Constants.Lockout;
 
 public static class ServiceCollectionExtensions
 {

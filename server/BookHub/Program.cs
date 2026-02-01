@@ -4,11 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
     .AddHttpContextAccessor()
-    .AddCorsPolicy(
-        builder.Configuration,
-        builder.Environment)
     .AddAppSettings(builder.Configuration)
-    .AddDatabase(builder.Configuration)
     .AddIdentity(builder.Environment)
     .AddJwtAuthentication(
         builder.Configuration,
@@ -18,6 +14,20 @@ builder.Services
     .AddSwagger()
     .AddHealthcheck()
     .AddMemoryCache();
+
+if (!builder.Environment.IsEnvironment("Testing"))
+{
+    builder
+        .Services
+        .AddCorsPolicy(
+            builder.Configuration,
+            builder.Environment);
+
+    builder
+        .Services
+        .AddDatabase(builder.Configuration);
+}
+
 
 var app = builder.Build();
 
@@ -35,8 +45,14 @@ else
 
 app
     .UseRouting()
-    .UseStaticFiles()
-    .UseAllowedCors()
+    .UseStaticFiles();
+
+if (!app.Environment.IsEnvironment("Testing"))
+{
+    app.UseAllowedCors();
+}
+
+app
     .UseAuthentication()
     .UseAuthorization()
     .UseAppEndpoints();

@@ -3,15 +3,13 @@
 using Models.Image;
 using Result;
 
+using static Common.Utils;
+
 public class ImageWriter(
     ILogger<ImageWriter> logger,
     IWebHostEnvironment env) : IImageWriter
 {
     private const string ImagesPathPrefix = "images";
-    private const long MaxImageSizeBytes = 2 * 1_024 * 1_024;
-
-    private static readonly string[] AllowedExtensions = [".jpg", ".jpeg", ".png", ".webp", ".avif"];
-    private static readonly string[] AllowedContentTypes = ["image/jpeg", "image/png", "image/webp", "image/avif"];
 
     public async Task Write(
         string resourceName,
@@ -144,35 +142,6 @@ public class ImageWriter(
             "Deleted image file. Resource={Resource}, Resolved={Resolved}",
             resourceName,
             physicalPath);
-
-        return true;
-    }
-
-    private static Result ValidateImageFile(IFormFile image)
-    {
-        if (image.Length == 0)
-        {
-            return "Image file is empty.";
-        }
-
-        if (image.Length > MaxImageSizeBytes)
-        {
-            return $"Image must be smaller than {MaxImageSizeBytes / 1_024 / 1_024} MB.";
-        }
-
-        var extension = Path
-            .GetExtension(image.FileName)
-            .ToLowerInvariant();
-
-        if (!AllowedExtensions.Contains(extension))
-        {
-            return $"Invalid image extension. Allowed: {string.Join(", ", AllowedExtensions)}.";
-        }
-
-        if (!AllowedContentTypes.Contains(image.ContentType))
-        {
-            return $"Invalid image content type. Allowed: {string.Join(", ", AllowedContentTypes)}.";
-        }
 
         return true;
     }

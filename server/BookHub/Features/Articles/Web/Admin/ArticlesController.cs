@@ -1,11 +1,11 @@
-﻿namespace BookHub.Features.Article.Web.Admin;
+﻿namespace BookHub.Features.Articles.Web.Admin;
 
 using Areas.Admin.Web;
-using BookHub.Features.Article.Service.Models;
 using Infrastructure.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Service;
+using Service.Models;
 using Shared;
 
 using static Common.Constants.ApiRoutes;

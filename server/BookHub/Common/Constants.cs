@@ -39,4 +39,9 @@ public static class Constants
     {
         public const string ISO8601 = "yyyy-MM-dd";
     }
+
+    public static class Validation
+    {
+        public const int ImagePathMaxLength = 512;
+    }
 }

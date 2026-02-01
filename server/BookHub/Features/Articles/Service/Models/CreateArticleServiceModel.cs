@@ -1,6 +1,6 @@
-﻿namespace BookHub.Features.Article.Service.Models;
+﻿namespace BookHub.Features.Articles.Service.Models;
 
-using BookHub.Features.Articles.Service.Models.Base;
+using Base;
 using Infrastructure.Services.ImageWriter.Models.Image;
 
 public class CreateArticleServiceModel : 
