@@ -37,7 +37,7 @@ const Header: FC = () => {
       >
         <Container fluid>
           <Navbar.Brand as={Link} to={routes.home} className="brand-title">
-            📚 {t('brand')}
+            {t('brand')}
           </Navbar.Brand>
           <Navbar.Toggle
             aria-controls="responsive-navbar-nav"
