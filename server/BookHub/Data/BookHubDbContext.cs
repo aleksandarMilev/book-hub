@@ -2,7 +2,7 @@
 
 using System.Linq.Expressions;
 using System.Reflection;
-using Features.Article.Data.Models;
+using Features.Articles.Data.Models;
 using Features.Authors.Data.Models;
 using Features.Books.Data.Models;
 using Features.Chat.Data.Models;

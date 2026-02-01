@@ -1,6 +1,6 @@
 ﻿namespace BookHub.Features.Search.Shared;
 
-using Article.Data.Models;
+using Articles.Data.Models;
 using Authors.Data.Models;
 using Books.Data.Models;
 using Chat.Data.Models;

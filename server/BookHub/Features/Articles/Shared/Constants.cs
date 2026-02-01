@@ -1,4 +1,4 @@
-﻿namespace BookHub.Features.Article.Shared;
+﻿namespace BookHub.Features.Articles.Shared;
 
 public static class Constants
 {
