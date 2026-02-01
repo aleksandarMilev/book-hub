@@ -37,7 +37,7 @@ const Header: FC = () => {
       >
         <Container fluid>
           <Navbar.Brand as={Link} to={routes.home} className="brand-title">
-            ðŸ“š {t('brand')}
+            📚 {t('brand')}
           </Navbar.Brand>
           <Navbar.Toggle
             aria-controls="responsive-navbar-nav"
@@ -151,5 +151,3 @@ const Header: FC = () => {
 };
 
 export default Header;
-
-
