@@ -5,11 +5,11 @@ using Shared;
 
 public class CreateAuthorServiceModel : IImageServiceModel
 {
-    public string Name { get; init; } = null!;
+    public string Name { get; init; } = default!;
 
     public IFormFile? Image { get; init; }
 
-    public string Biography { get; init; } = null!;
+    public string Biography { get; init; } = default!;
 
     public string? PenName { get; init; }
 
@@ -17,7 +17,7 @@ public class CreateAuthorServiceModel : IImageServiceModel
 
     public Gender Gender { get; init; }
 
-    public string? BornAt { get; init; }
+    public DateTime? BornAt { get; init; }
 
-    public string? DiedAt { get; init; }
+    public DateTime? DiedAt { get; init; }
 }

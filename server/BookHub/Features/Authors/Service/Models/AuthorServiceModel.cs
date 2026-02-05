@@ -4,11 +4,11 @@ public class AuthorServiceModel
 {
     public Guid Id { get; init; }
 
-    public string Name { get; init; } = null!;
+    public string Name { get; init; } = default!;
 
-    public string ImagePath { get; init; } = null!;
+    public string ImagePath { get; init; } = default!;
 
-    public string Biography { get; init; } = null!;
+    public string Biography { get; init; } = default!;
 
     public int BooksCount { get; init; }
 
