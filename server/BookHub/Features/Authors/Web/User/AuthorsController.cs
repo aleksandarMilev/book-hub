@@ -13,7 +13,7 @@ using static Common.Constants.ApiRoutes;
 using static Shared.Constants.RouteNames;
 
 [Authorize]
-public class AuthorController(IAuthorService service) : ApiController
+public class AuthorsController(IAuthorService service) : ApiController
 {
     [AllowAnonymous]
     [HttpGet(ApiRoutes.Top)]

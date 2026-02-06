@@ -10,7 +10,7 @@ using Service.Models;
 using static Common.Constants.ApiRoutes;
 
 [Authorize]
-public class AuthorController(IAuthorService service) : AdminApiController
+public class AuthorsController(IAuthorService service) : AdminApiController
 {
     [HttpGet(Id)]
     public async Task<ActionResult<AuthorDetailsServiceModel>> Details(
