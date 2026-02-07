@@ -5,7 +5,7 @@ using Data.Models;
 using Genres.Service.Models;
 using Reviews.Service.Models;
 using Service.Models;
-using Web.Models;
+using Web.User.Models;
 
 using static BookHub.Common.Utils;
 
@@ -178,7 +178,7 @@ public static class BookMapping
             Title = serviceModel.Title,
             ShortDescription = serviceModel.ShortDescription,
             LongDescription = serviceModel.LongDescription,
-            PublishedDate = StringToDateTime(serviceModel.PublishedDate),
+            PublishedDate = serviceModel.PublishedDate,
         };
 
     public static void UpdateDbModel(
@@ -188,6 +188,6 @@ public static class BookMapping
             dbModel.Title = serviceModel.Title;
             dbModel.ShortDescription = serviceModel.ShortDescription;
             dbModel.LongDescription = serviceModel.LongDescription;
-            dbModel.PublishedDate = StringToDateTime(serviceModel.PublishedDate);
+            dbModel.PublishedDate = serviceModel.PublishedDate;
         }
 }

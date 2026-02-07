@@ -1,17 +1,18 @@
-﻿namespace BookHub.Tests.Authors.Integration;
+﻿namespace BookHub.Tests.Authors;
 
-using BookHub.Data;
-using BookHub.Features.Authors.Data.Models;
-using BookHub.Features.Authors.Service.Models;
-using BookHub.Features.Authors.Shared;
-using BookHub.Features.Identity.Data.Models;
-using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
-using static BookHub.Features.Authors.Shared.Constants.Paths;
+using Data;
+using Features.Authors.Data.Models;
+using Features.Authors.Service.Models;
+using Features.Authors.Shared;
+using Features.Identity.Data.Models;
+using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+
+using static Features.Authors.Shared.Constants.Paths;
 
 public sealed class AuthorsIntegration : IAsyncLifetime
 {
@@ -23,8 +24,8 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             .httpClientFactory
             .ResetDatabase();
 
-        await this.SeedUserAsync("test-user", "user");
-        await this.SeedUserAsync("test-admin-id", "admin");
+        await this.SeedUser("test-user", "user");
+        await this.SeedUser("test-admin-id", "admin");
     }
 
     public Task DisposeAsync()
@@ -39,7 +40,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
         var httpClient = this.httpClientFactory.CreateUserClient();
 
         var formData = BuildAuthorForm(
-            name: "A valid author name",
+            authorName: "A valid author name",
             biography: new string('b', 120),
             penName: "Valid pen name",
             nationality: Nationality.Bulgaria,
@@ -91,7 +92,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
         var httpClient = this.httpClientFactory.CreateAdminClient();
 
         var formData = BuildAuthorForm(
-            name: "Admin created author",
+            authorName: "Admin created author",
             biography: new string('b', 140),
             penName: null,
             nationality: Nationality.UnitedStates,
@@ -133,7 +134,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
         var httpClient = this.httpClientFactory.CreateUserClient();
 
         var formData = BuildAuthorForm(
-            name: "a",
+            authorName: "a",
             biography: "short",
             penName: null,
             nationality: (Nationality)999_999_999,
@@ -163,7 +164,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
         var httpClient = this.httpClientFactory.CreateUserClient();
 
         var formData = BuildAuthorForm(
-            name: "Edited author name",
+            authorName: "Edited author name",
             biography: new string('x', 200),
             penName: "Edited pen name",
             nationality: Nationality.France,
@@ -203,7 +204,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
         var nonExistingId = Guid.NewGuid();
 
         var formData = BuildAuthorForm(
-            name: "Edited author name",
+            authorName: "Edited author name",
             biography: new string('x', 200),
             penName: "Edited pen name",
             nationality: Nationality.France,
@@ -419,7 +420,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     }
 
     private static MultipartFormDataContent BuildAuthorForm(
-        string name,
+        string authorName,
         string biography,
         string? penName,
         Nationality nationality,
@@ -429,7 +430,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     {
         var form = new MultipartFormDataContent
         {
-            { new StringContent(name), "Name" },
+            { new StringContent(authorName), "Name" },
             { new StringContent(biography), "Biography" },
             { new StringContent(((int)nationality).ToString()), "Nationality" },
             { new StringContent(((int)gender).ToString()), "Gender" }
@@ -437,17 +438,26 @@ public sealed class AuthorsIntegration : IAsyncLifetime
 
         if (!string.IsNullOrWhiteSpace(penName))
         {
-            form.Add(new StringContent(penName), "PenName");
+            var content = new StringContent(penName);
+            var name = "PenName";
+
+            form.Add(content, name);
         }
 
         if (bornAt is not null)
         {
-            form.Add(new StringContent(bornAt.Value.ToString("O")), "BornAt");
+            var content = new StringContent(bornAt.Value.ToString("O"));
+            var name = "BornAt";
+
+            form.Add(content, name);
         }
 
         if (diedAt is not null)
         {
-            form.Add(new StringContent(diedAt.Value.ToString("O")), "DiedAt");
+            var content = new StringContent(diedAt.Value.ToString("O"));
+            var name = "DiedAt";
+
+            form.Add(content, name);
         }
 
         return form;
@@ -487,10 +497,10 @@ public sealed class AuthorsIntegration : IAsyncLifetime
         return authorDbModel.Id;
     }
 
-    private async Task SeedUserAsync(
-    string id,
-    string username,
-    string? email = null)
+    private async Task SeedUser(
+        string id,
+        string username,
+        string? email = null)
     {
         using var scope = this
             .httpClientFactory
@@ -529,7 +539,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             IsDeleted = false
         };
 
-        data.Set<UserDbModel>().Add(user);
+        data.Users.Add(user);
         await data.SaveChangesAsync();
     }
 }

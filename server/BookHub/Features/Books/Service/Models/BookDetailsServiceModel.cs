@@ -9,7 +9,7 @@ public class BookDetailsServiceModel : BookServiceModel
 
     public int RatingsCount { get; init; }
 
-    public string LongDescription { get; init; } = null!;
+    public string LongDescription { get; init; } = default!;
 
     public string? CreatorId { get; init; }
 

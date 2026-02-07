@@ -1,9 +1,10 @@
 ﻿namespace BookHub.Tests;
 
+using System.Data.Common;
+using System.Net.Http.Headers;
 using BookHub.Areas.Admin.Service;
 using BookHub.Tests.Shared.Data;
 using Data;
-using Infrastructure.Services.CurrentUser;
 using Infrastructure.Services.ImageWriter;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
@@ -14,10 +15,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Shared.Identity;
 using Shared.Mocks;
-using System.Data.Common;
-using System.Net.Http.Headers;
-using System.Reflection;
-
 
 public sealed class BookHubWebApplicationFactory : WebApplicationFactory<Program>
 {
@@ -28,7 +25,6 @@ public sealed class BookHubWebApplicationFactory : WebApplicationFactory<Program
         string username = "user")
     {
         var client = this.CreateClient();
-
         client
             .DefaultRequestHeaders
             .Authorization = new AuthenticationHeaderValue(
@@ -43,7 +39,6 @@ public sealed class BookHubWebApplicationFactory : WebApplicationFactory<Program
         string username = "admin")
     {
         var client = this.CreateClient();
-
         client
             .DefaultRequestHeaders
             .Authorization = new AuthenticationHeaderValue(
@@ -64,11 +59,11 @@ public sealed class BookHubWebApplicationFactory : WebApplicationFactory<Program
         await data.Database.EnsureCreatedAsync();
     }
 
-    public FakeImageWriter GetImageWriterMock()
+    public ImageWriterMock GetImageWriterMock()
     {
         using var scope = this.Services.CreateScope();
 
-        return (FakeImageWriter)scope
+        return (ImageWriterMock)scope
             .ServiceProvider
             .GetRequiredService<IImageWriter>();
     }
@@ -90,7 +85,7 @@ public sealed class BookHubWebApplicationFactory : WebApplicationFactory<Program
                         options => options.UseSqlite(this.connection))
                     .AddHttpContextAccessor()
                     .RemoveAll<IImageWriter>()
-                    .AddSingleton<IImageWriter, FakeImageWriter>()
+                    .AddSingleton<IImageWriter, ImageWriterMock>()
                     .RemoveAll<IAdminService>()
                     .AddScoped<IAdminService>(_ => new AdminServiceMock("test-admin-id"))
                     .AddAuthentication(options =>

@@ -1,7 +1,7 @@
 ﻿namespace BookHub.Features.Articles.Data.Models;
 
 using BookHub.Data.Models.Base;
-using Infrastructure.Services.ImageWriter.Models.Image;
+using Infrastructure.Services.ImageWriter.Models;
 
 public class ArticleDbModel :
     DeletableEntity<Guid>,

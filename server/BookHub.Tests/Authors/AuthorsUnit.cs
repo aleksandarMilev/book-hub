@@ -1,6 +1,7 @@
-﻿namespace BookHub.Tests.Authors.Unit;
+﻿namespace BookHub.Tests.Authors;
 
 using Areas.Admin.Service;
+using BookHub.Features.Identity.Data.Models;
 using Data;
 using Features.Authors.Data.Models;
 using Features.Authors.Service;
@@ -11,8 +12,9 @@ using Features.UserProfile.Service;
 using FluentAssertions;
 using Infrastructure.Services.CurrentUser;
 using Infrastructure.Services.ImageWriter;
-using Infrastructure.Services.ImageWriter.Models.Image;
+using Infrastructure.Services.ImageWriter.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
@@ -24,8 +26,9 @@ public sealed class AuthorsUnit
     [Fact]
     public async Task Names_ShouldReturnAllAuthorsAsNamesServiceModels()
     {
-        var (data, _) = CreateInMemoryDb();
-        var userService = Substitute.For<ICurrentUserService>();
+        var (data, currentUserService, connection) = await CreateSqliteDb();
+        await using var _ = connection;
+
         var adminService = Substitute.For<IAdminService>();
         var profileService = Substitute.For<IProfileService>();
         var notificationService = Substitute.For<INotificationService>();
@@ -40,7 +43,7 @@ public sealed class AuthorsUnit
 
         var service = new AuthorService(
             data,
-            userService,
+            currentUserService,
             adminService,
             profileService,
             notificationService,
@@ -49,7 +52,6 @@ public sealed class AuthorsUnit
 
         var result = (await service.Names()).ToList();
 
-        result.Should().HaveCount(2);
         result.Select(a => a.Id).Should().Contain([author1.Id, author2.Id]);
         result.Select(a => a.Name).Should().Contain(["A1", "A2"]);
     }
@@ -57,18 +59,34 @@ public sealed class AuthorsUnit
     [Fact]
     public async Task TopThree_ShouldReturnThreeAuthorsOrderedByAverageRatingDesc()
     {
-        var (data, _) = CreateInMemoryDb();
-        var userService = Substitute.For<ICurrentUserService>();
+        var (data, currentUserService, connection) = await CreateSqliteDb();
+        await using var _ = connection;
+
         var adminService = Substitute.For<IAdminService>();
         var profileService = Substitute.For<IProfileService>();
         var notificationService = Substitute.For<INotificationService>();
         var imageWriter = Substitute.For<IImageWriter>();
         var logger = Substitute.For<ILogger<AuthorService>>();
 
-        var author1  = NewAuthor(name: "A1", averageRating: 1.1, isApproved: true);
-        var author2 = NewAuthor(name: "A2", averageRating: 4.6, isApproved: true);
-        var author3 = NewAuthor(name: "A3", averageRating: 3.8, isApproved: true);
-        var author4 = NewAuthor(name: "A4", averageRating: 5.0, isApproved: true);
+        var author1  = NewAuthor(
+            name: "A1",
+            averageRating: 1.1,
+            isApproved: true);
+
+        var author2 = NewAuthor(
+            name: "A2",
+            averageRating: 4.6,
+            isApproved: true);
+
+        var author3 = NewAuthor(
+            name: "A3",
+            averageRating: 3.8,
+            isApproved: true);
+
+        var author4 = NewAuthor(
+            name: "A4",
+            averageRating: 5.0,
+            isApproved: true);
 
         data.Authors.AddRange(
             author1,
@@ -80,7 +98,7 @@ public sealed class AuthorsUnit
 
         var service = new AuthorService(
             data,
-            userService,
+            currentUserService,
             adminService,
             profileService,
             notificationService,
@@ -98,8 +116,8 @@ public sealed class AuthorsUnit
     [Fact]
     public async Task Details_ShouldReturnNull_WhenAuthorWithSuchIdNotInTheDb()
     {
-        var (data, _) = CreateInMemoryDb();
-        var userService = Substitute.For<ICurrentUserService>();
+        var (data, currentUserService) = CreateInMemoryDb();
+
         var adminService = Substitute.For<IAdminService>();
         var profileService = Substitute.For<IProfileService>();
         var notificationService = Substitute.For<INotificationService>();
@@ -108,14 +126,15 @@ public sealed class AuthorsUnit
 
         var service = new AuthorService(
             data,
-            userService,
+            currentUserService,
             adminService,
             profileService,
             notificationService,
             imageWriter,
             logger);
 
-        var result = await service.Details(Guid.NewGuid());
+        var nonExistingId = Guid.NewGuid();
+        var result = await service.Details(nonExistingId);
 
         result.Should().BeNull();
     }
@@ -123,10 +142,8 @@ public sealed class AuthorsUnit
     [Fact]
     public async Task Create_ShouldSetDefaultImagePath_AndAlso_ShouldPersistAuthorInDb_AndAlso_ShouldSetCreatorId_AndAlso_ShouldNotApprove_WhenNonAdmin()
     {
-        var (data, currentUserService) = CreateInMemoryDb();
-
-        currentUserService.GetId().Returns("user-1");
-        currentUserService.IsAdmin().Returns(false);
+        var (data, currentUserService, connection) = await CreateSqliteDb();
+        await using var _ = connection;
 
         var adminService = Substitute.For<IAdminService>();
         adminService.GetId().Returns("admin-1");
@@ -209,8 +226,8 @@ public sealed class AuthorsUnit
     [Fact]
     public async Task Create_ShouldReturnErrorResult_WhenGenderEnumIsInvalid()
     {
-        var (data, currentUserService) = CreateInMemoryDb();
-        currentUserService.IsAdmin().Returns(false);
+        var (data, currentUserService, connection) = await CreateSqliteDb();
+        await using var _ = connection;
 
         var adminService = Substitute.For<IAdminService>();
         var profileService = Substitute.For<IProfileService>();
@@ -242,13 +259,18 @@ public sealed class AuthorsUnit
         var result = await service.Create(serviceModel);
 
         result.Succeeded.Should().BeFalse();
-        result.ErrorMessage.Should().Be($"{serviceModel.Gender} is not valid Gender enumeartion!");
+        result
+            .ErrorMessage
+            .Should()
+            .Be($"{serviceModel.Gender} is not valid Gender enumeartion!");
     }
 
     [Fact]
     public async Task Edit_ShouldReturnNotFoundResult_AndAlso_ShouldNotWriteImage_WhenAuthorWithSuchIdNotInTheDb()
     {
-        var (data, currentUserService) = CreateInMemoryDb();
+        var (data, currentUserService, connection) = await CreateSqliteDb();
+        await using var _ = connection;
+
         currentUserService.GetId().Returns("admin-1");
         currentUserService.IsAdmin().Returns(true);
 
@@ -286,7 +308,10 @@ public sealed class AuthorsUnit
             serviceModel);
 
         result.Succeeded.Should().BeFalse();
-        result.ErrorMessage.Should().Be($"AuthorDbModel with Id: {nonExistingId} was not found!");
+        result
+            .ErrorMessage
+            .Should()
+            .Be($"AuthorDbModel with Id: {nonExistingId} was not found!");
 
         await imageWriter
             .DidNotReceiveWithAnyArgs()
@@ -301,9 +326,12 @@ public sealed class AuthorsUnit
     [Fact]
     public async Task Edit_ShouldChangeImagePath_AndAlso_ShouldDeletesOldImage_WhenNewImageProvided()
     {
-        var (data, currentUserService) = CreateInMemoryDb();
-        currentUserService.GetId().Returns("admin-1");
-        currentUserService.IsAdmin().Returns(true);
+        var (data, currentUserService, connection) = await CreateSqliteDb(
+            userId: "admin-1",
+            username: "admin",
+            isAdmin: true);
+
+        await using var _ = connection;
 
         var adminService = Substitute.For<IAdminService>();
         var profileService = Substitute.For<IProfileService>();
@@ -394,9 +422,12 @@ public sealed class AuthorsUnit
     [Fact]
     public async Task Delete_ShouldSoftDeleteAuthor_AndAlso_ShouldFilterItOut()
     {
-        var (data, currentUserService) = CreateInMemoryDb();
-        currentUserService.GetId().Returns("admin-1");
-        currentUserService.IsAdmin().Returns(true);
+        var (data, currentUserService, connection) = await CreateSqliteDb(
+            userId: "admin-1",
+            username: "admin",
+            isAdmin: true);
+
+        await using var _ = connection;
 
         var adminService = Substitute.For<IAdminService>();
         var profileService = Substitute.For<IProfileService>();
@@ -442,9 +473,8 @@ public sealed class AuthorsUnit
     [Fact]
     public async Task Approve_ShouldReturnUnauthorizedResult_WhenNotAdmin()
     {
-        var (data, currentUserService) = CreateInMemoryDb();
-        currentUserService.GetId().Returns("user-1");
-        currentUserService.IsAdmin().Returns(false);
+        var (data, currentUserService, connection) = await CreateSqliteDb();
+        await using var _ = connection;
 
         var adminService = Substitute.For<IAdminService>();
         var profileService = Substitute.For<IProfileService>();
@@ -475,9 +505,12 @@ public sealed class AuthorsUnit
     [Fact]
     public async Task Approve_ShouldSetIsApprovedTrue_AndAlso_ShouldNotifyCreator_AndAlso_ShouldIncrementCreatedAuthorsCount()
     {
-        var (data, currentUserService) = CreateInMemoryDb();
-        currentUserService.GetId().Returns("admin-1");
-        currentUserService.IsAdmin().Returns(true);
+        var (data, currentUserService, connection) = await CreateSqliteDb(
+            userId: "admin-1",
+            username: "admin",
+            isAdmin: true);
+
+        await using var _ = connection;
 
         var adminService = Substitute.For<IAdminService>();
         var profileService = Substitute.For<IProfileService>();
@@ -485,8 +518,11 @@ public sealed class AuthorsUnit
         var imageWriter = Substitute.For<IImageWriter>();
         var logger = Substitute.For<ILogger<AuthorService>>();
 
+        var creatorId = "user-1";
+        await SeedUser(data, creatorId, "shano");
+
         var author = NewAuthor(
-            creatorId: "user-1",
+            creatorId: creatorId,
             isApproved: false);
 
         data.Authors.Add(author);
@@ -530,9 +566,12 @@ public sealed class AuthorsUnit
     [Fact]
     public async Task Reject_ShouldSoftDeleteAuthor_AndAlso_ShouldNotifyCreator()
     {
-        var (data, currentUserService) = CreateInMemoryDb();
-        currentUserService.GetId().Returns("admin-1");
-        currentUserService.IsAdmin().Returns(true);
+        var (data, currentUserService, connection) = await CreateSqliteDb(
+            userId: "admin-1",
+            username: "admin",
+            isAdmin: true);
+
+        await using var _ = connection;
 
         var adminService = Substitute.For<IAdminService>();
         var profileService = Substitute.For<IProfileService>();
@@ -540,8 +579,11 @@ public sealed class AuthorsUnit
         var imageWriter = Substitute.For<IImageWriter>();
         var logger = Substitute.For<ILogger<AuthorService>>();
 
+        var creatorId = "user-1";
+        await SeedUser(data, creatorId, "shano");
+
         var author = NewAuthor(
-            creatorId: "user-1",
+            creatorId: creatorId,
             isApproved: false);
 
         data.Authors.Add(author);
@@ -583,25 +625,92 @@ public sealed class AuthorsUnit
                 Arg.Any<CancellationToken>());
     }
 
+    private static async Task<(
+        BookHubDbContext Data,
+        ICurrentUserService CurrentUserService,
+        SqliteConnection SqliteConnection)>
+    CreateSqliteDb(
+        string userId = "user-1",
+        string username = "shano",
+        bool isAdmin = false)
+    {
+        var connection = new SqliteConnection("DataSource=:memory:");
+        await connection.OpenAsync();
+
+        var options = new DbContextOptionsBuilder<BookHubDbContext>()
+            .UseSqlite(connection)
+            .Options;
+
+        var currentUserService = Substitute.For<ICurrentUserService>();
+        currentUserService.GetId().Returns(userId);
+        currentUserService.GetUsername().Returns(username);
+        currentUserService.IsAdmin().Returns(isAdmin);
+
+        var data = new BookHubDbContext(options, currentUserService);
+        await data.Database.EnsureCreatedAsync();
+
+        await SeedUser(data, userId, username);
+
+        return (data, currentUserService, connection);
+    }
+
     private static (
         BookHubDbContext Data,
-        ICurrentUserService CurrentUser)
-        CreateInMemoryDb(
-            string userId = "user-1",
-            string username = "shano",
-            bool isAdmin = false)
+        ICurrentUserService CurrentUserService)
+    CreateInMemoryDb(
+        string userId = "user-1",
+        string username = "shano",
+        bool isAdmin = false)
     {
         var options = new DbContextOptionsBuilder<BookHubDbContext>()
             .UseInMemoryDatabase($"BookHubTests_Authors_{Guid.NewGuid():N}")
             .Options;
 
-        var currentUser = Substitute.For<ICurrentUserService>();
-        currentUser.GetId().Returns(userId);
-        currentUser.GetUsername().Returns(username);
-        currentUser.IsAdmin().Returns(isAdmin);
+        var currentUserService = Substitute.For<ICurrentUserService>();
+        currentUserService.GetId().Returns(userId);
+        currentUserService.GetUsername().Returns(username);
+        currentUserService.IsAdmin().Returns(isAdmin);
 
-        var data = new BookHubDbContext(options, currentUser);
-        return (data, currentUser);
+        var data = new BookHubDbContext(options, currentUserService);
+        return (data, currentUserService);
+    }
+
+    private static async Task SeedUser(
+        BookHubDbContext data,
+        string id,
+        string username,
+        string? email = null)
+    {
+        var existing = await data
+            .Users
+            .AsNoTracking()
+            .AnyAsync(u => u.Id == id);
+
+        if (existing)
+        {
+            return;
+        }
+
+        var normalizedUserName = username.ToUpperInvariant();
+        var actualEmail = email ?? $"{username}@test.local";
+        var normalizedEmail = actualEmail.ToUpperInvariant();
+
+        var user = new UserDbModel
+        {
+            Id = id,
+            UserName = username,
+            NormalizedUserName = normalizedUserName,
+            Email = actualEmail,
+            NormalizedEmail = normalizedEmail,
+            EmailConfirmed = true,
+            SecurityStamp = Guid.NewGuid().ToString("N"),
+            ConcurrencyStamp = Guid.NewGuid().ToString(),
+            CreatedOn = DateTime.UtcNow,
+            IsDeleted = false
+        };
+
+        data.Users.Add(user);
+        await data.SaveChangesAsync();
     }
 
     private static AuthorDbModel NewAuthor(

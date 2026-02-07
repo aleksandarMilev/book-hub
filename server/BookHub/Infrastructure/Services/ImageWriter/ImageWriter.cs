@@ -1,7 +1,6 @@
 ﻿namespace BookHub.Infrastructure.Services.ImageWriter;
 
-using Models.Image;
-using Result;
+using Models;
 
 using static Common.Utils;
 

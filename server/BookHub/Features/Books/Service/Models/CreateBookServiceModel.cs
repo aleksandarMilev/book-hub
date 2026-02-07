@@ -1,20 +1,20 @@
 ﻿namespace BookHub.Features.Books.Service.Models;
 
-using Infrastructure.Services.ImageWriter.Models.Image;
+using Infrastructure.Services.ImageWriter.Models;
 
 public class CreateBookServiceModel : IImageServiceModel
 {
-    public string Title { get; init; } = null!;
+    public string Title { get; init; } = default!;
 
     public Guid? AuthorId { get; init; }
 
     public IFormFile? Image { get; init; }
 
-    public string ShortDescription { get; init; } = null!;
+    public string ShortDescription { get; init; } = default!;
 
-    public string LongDescription { get; init; } = null!;
+    public string LongDescription { get; init; } = default!;
 
-    public string? PublishedDate { get; init; }
+    public DateTime? PublishedDate { get; init; }
 
     public ICollection<Guid> Genres { get; init; } = new HashSet<Guid>();
 }

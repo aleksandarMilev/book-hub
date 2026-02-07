@@ -3,7 +3,7 @@
 using BookHub.Data.Models.Base;
 using Books.Data.Models;
 using Identity.Data.Models;
-using Infrastructure.Services.ImageWriter.Models.Image;
+using Infrastructure.Services.ImageWriter.Models;
 using Shared;
 
 public class AuthorDbModel:

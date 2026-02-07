@@ -347,6 +347,7 @@ public class BookService(
         }
 
         data.Remove(dbModel);
+        await data.SaveChangesAsync(cancellationToken);
 
         logger.LogInformation(
             "Book with Id: {id} was rejected.",
