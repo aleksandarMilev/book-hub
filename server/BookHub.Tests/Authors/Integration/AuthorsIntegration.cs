@@ -1,16 +1,16 @@
 ﻿namespace BookHub.Tests.Authors.Integration;
 
-using System.Net;
-using System.Net.Http.Json;
-using System.Text.Json;
 using BookHub.Data;
 using BookHub.Features.Authors.Data.Models;
 using BookHub.Features.Authors.Service.Models;
 using BookHub.Features.Authors.Shared;
+using BookHub.Features.Identity.Data.Models;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-
+using System.Net;
+using System.Net.Http.Json;
+using System.Text.Json;
 using static BookHub.Features.Authors.Shared.Constants.Paths;
 
 public sealed class AuthorsIntegration : IAsyncLifetime
@@ -18,7 +18,14 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     private readonly BookHubWebApplicationFactory httpClientFactory = new();
 
     public async Task InitializeAsync()
-        => await this.httpClientFactory.ResetDatabase();
+    {
+        await this
+            .httpClientFactory
+            .ResetDatabase();
+
+        await this.SeedUserAsync("test-user", "user");
+        await this.SeedUserAsync("test-admin-id", "admin");
+    }
 
     public Task DisposeAsync()
     {
@@ -29,7 +36,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     [Fact]
     public async Task Create_ShouldReturnCreatedAtRoute_AndAlso_ShouldPersistTheAuthorInTheDb_AndAlso_ShouldSetDefaultImage_WhenNoImageProvided()
     {
-        var httpClient = this.httpClientFactory.CreateClient();
+        var httpClient = this.httpClientFactory.CreateUserClient();
 
         var formData = BuildAuthorForm(
             name: "A valid author name",
@@ -123,7 +130,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     [Fact]
     public async Task Create_ShouldReturnBadRequest_WhenInvalidModelProvided()
     {
-        var httpClient = this.httpClientFactory.CreateClient();
+        var httpClient = this.httpClientFactory.CreateUserClient();
 
         var formData = BuildAuthorForm(
             name: "a",
@@ -153,7 +160,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             isApproved: true,
             imagePath: "/images/authors/seed.jpg");
 
-        var httpClient = this.httpClientFactory.CreateAdminClient();
+        var httpClient = this.httpClientFactory.CreateUserClient();
 
         var formData = BuildAuthorForm(
             name: "Edited author name",
@@ -192,7 +199,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     [Fact]
     public async Task Edit_ShouldReturnBadRequestWithErrorMessage_WhenAuthorDoesNotExist()
     {
-        var httpClient = this.httpClientFactory.CreateAdminClient();
+        var httpClient = this.httpClientFactory.CreateUserClient();
         var nonExistingId = Guid.NewGuid();
 
         var formData = BuildAuthorForm(
@@ -231,7 +238,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
         var authorId = await this.SeedAuthor(
             isApproved: true);
 
-        var httpClient = this.httpClientFactory.CreateAdminClient();
+        var httpClient = this.httpClientFactory.CreateUserClient();
 
         var response = await httpClient.DeleteAsync(
             $"/Authors/{authorId}/");
@@ -265,7 +272,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     [Fact]
     public async Task Delete_ShouldReturnBadRequestWithErrorMessage_WhenAuthorDoesNotExist()
     {
-        var httpClient = this.httpClientFactory.CreateAdminClient();
+        var httpClient = this.httpClientFactory.CreateUserClient();
         var nonExistingId = Guid.NewGuid();
 
         var response = await httpClient.DeleteAsync(
@@ -471,12 +478,58 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             DiedAt = null,
             ImagePath = imagePath,
             IsApproved = isApproved,
-            CreatorId = null
+            CreatorId = "test-user"
         };
 
         data.Authors.Add(authorDbModel);
         await data.SaveChangesAsync();
 
         return authorDbModel.Id;
+    }
+
+    private async Task SeedUserAsync(
+    string id,
+    string username,
+    string? email = null)
+    {
+        using var scope = this
+            .httpClientFactory
+            .Services
+            .CreateScope();
+
+        var data = scope
+            .ServiceProvider
+            .GetRequiredService<BookHubDbContext>();
+
+        var existing = await data
+            .Set<UserDbModel>()
+            .AsNoTracking()
+            .AnyAsync(u => u.Id == id);
+
+        if (existing) 
+        {
+            return;
+        }
+
+        var normalizedUserName = username.ToUpperInvariant();
+        var actualEmail = email ?? $"{username}@test.local";
+        var normalizedEmail = actualEmail.ToUpperInvariant();
+
+        var user = new UserDbModel
+        {
+            Id = id,
+            UserName = username,
+            NormalizedUserName = normalizedUserName,
+            Email = actualEmail,
+            NormalizedEmail = normalizedEmail,
+            EmailConfirmed = true,
+            SecurityStamp = Guid.NewGuid().ToString("N"),
+            ConcurrencyStamp = Guid.NewGuid().ToString(),
+            CreatedOn = DateTime.UtcNow,
+            IsDeleted = false
+        };
+
+        data.Set<UserDbModel>().Add(user);
+        await data.SaveChangesAsync();
     }
 }
