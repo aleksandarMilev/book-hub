@@ -2,7 +2,7 @@
 
 using BookHub.Data.Models.Base;
 using Features.Identity.Data.Models;
-using Infrastructure.Services.ImageWriter.Models.Image;
+using Infrastructure.Services.ImageWriter.Models;
 
 public class UserProfile:
     IDeletableEntity,

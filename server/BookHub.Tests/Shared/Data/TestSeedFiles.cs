@@ -3,17 +3,20 @@
 public static class TestSeedFiles
 {
     public static void EnsureSeedFileExists()
-        => EnsureArticleSeedFileExists();
+    {
+        CheckSeedFileExists("Articles");
+        CheckSeedFileExists("Authors");
+    }
 
-    private static void EnsureArticleSeedFileExists()
+    private static void CheckSeedFileExists(string featureName)
     {
         var path = Path.Combine(
             AppContext.BaseDirectory,
             "Features",
-            "Articles",
+            featureName,
             "Data",
             "Seed",
-            "articles_seed.json");
+            $"{featureName.ToLower()}_seed.json");
 
         var directory = Path.GetDirectoryName(path)!;
         Directory.CreateDirectory(directory);

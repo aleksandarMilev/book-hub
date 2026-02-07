@@ -1,33 +1,23 @@
 ﻿namespace BookHub.Features.Books.Data.Models;
 
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using Authors.Data.Models;
 using BookHub.Data.Models.Base;
 using BookHub.Data.Models.Shared.BookGenre.Models;
 using Identity.Data.Models;
-using Infrastructure.Services.ImageWriter.Models.Image;
+using Infrastructure.Services.ImageWriter.Models;
 using ReadingLists.Data.Models;
 using Reviews.Data.Models;
-
-using static Shared.Constants.Validation;
 
 public class BookDbModel:
     DeletableEntity<Guid>,
     IApprovableEntity,
     IImageDdModel
 {
-    [Required]
-    [MaxLength(TitleMaxLength)]
-    public string Title { get; set; } = null!;
+    public string Title { get; set; } = default!;
 
-    [Required]
-    [MaxLength(ShortDescriptionMaxLength)]
-    public string ShortDescription { get; set; } = null!;
+    public string ShortDescription { get; set; } = default!;
 
-    [Required]
-    [MaxLength(LongDescriptionMaxLength)]
-    public string LongDescription { get; set; } = null!;
+    public string LongDescription { get; set; } = default!;
 
     public double AverageRating { get; set; }
 
@@ -35,15 +25,12 @@ public class BookDbModel:
 
     public DateTime? PublishedDate { get; set; }
 
-    [Required]
-    public string ImagePath { get; set; } = null!;
+    public string ImagePath { get; set; } = default!;
 
-    [ForeignKey(nameof(Author))]
     public Guid? AuthorId { get; set; }
 
     public AuthorDbModel? Author { get; set; }
 
-    [ForeignKey(nameof(UserDbModel))]
     public string? CreatorId { get; set; }
 
     public UserDbModel? Creator { get; set; }

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using BookHub.Data.Models.Base;
 using BookHub.Data.Models.Shared.ChatUser;
 using Features.Identity.Data.Models;
-using Infrastructure.Services.ImageWriter.Models.Image;
+using Infrastructure.Services.ImageWriter.Models;
 using Microsoft.EntityFrameworkCore;
 
 using static Shared.Constants.Validation;

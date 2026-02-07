@@ -1,6 +1,6 @@
 ﻿namespace BookHub.Infrastructure.Services.ImageWriter;
 
-using Models.Image;
+using Models;
 using ServiceLifetimes;
 
 public interface IImageWriter : IScopedService

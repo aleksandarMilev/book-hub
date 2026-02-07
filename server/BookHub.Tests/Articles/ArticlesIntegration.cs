@@ -1,9 +1,9 @@
-﻿namespace BookHub.Tests.Articles.Integration;
+﻿namespace BookHub.Tests.Articles;
 
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
-using BookHub.Data;
+using Data;
 using Features.Articles.Data.Models;
 using Features.Articles.Service.Models;
 using FluentAssertions;
@@ -76,7 +76,6 @@ public sealed class ArticlesIntegration : IAsyncLifetime
         var nonExistingId = Guid.NewGuid();
 
         var response = await httpClient.GetAsync($"/Articles/{nonExistingId}/");
-
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
@@ -123,7 +122,6 @@ public sealed class ArticlesIntegration : IAsyncLifetime
             content: new string('c', 200));
 
         var response = await httpClient.PostAsync("/Administrator/Articles", formData);
-
         response.StatusCode.Should().Be(HttpStatusCode.Created);
         response.Headers.Location.Should().NotBeNull();
 

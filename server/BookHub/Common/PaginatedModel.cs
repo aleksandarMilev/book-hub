@@ -1,16 +1,34 @@
 ﻿namespace BookHub.Common;
 
-public class PaginatedModel<T>(
-    IEnumerable<T> items,
-    int totalItems,
-    int page,
-    int pageSize)
+public class PaginatedModel<T> 
 {
-    public IEnumerable<T> Items { get; init; } = items;
+    // In unit tests we need this class with parametless constructor.
+    // Use the one with parameters in the business logic
+    private PaginatedModel()
+    {
+        this.Items = [];
+        this.TotalItems = default;
+        this.PageIndex = default;
+        this.PageSize = default;
+    }
 
-    public int TotalItems { get; init; } = totalItems;
+    public PaginatedModel(
+        IEnumerable<T> items,
+        int totalItems,
+        int pageIndex,
+        int pageSize)
+    {
+        this.Items = items;
+        this.TotalItems = totalItems;
+        this.PageIndex = pageIndex;
+        this.PageSize = pageSize;
+    }
 
-    public int PageIndex { get; init; } = page;
+    public IEnumerable<T> Items { get; init; }
 
-    public int PageSize { get; init; } = pageSize;
+    public int TotalItems { get; init; }
+
+    public int PageIndex { get; init; }
+
+    public int PageSize { get; init; }
 }

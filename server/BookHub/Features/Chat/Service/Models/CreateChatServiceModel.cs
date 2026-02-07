@@ -1,6 +1,6 @@
 ﻿namespace BookHub.Features.Chat.Service.Models;
 
-using Infrastructure.Services.ImageWriter.Models.Image;
+using Infrastructure.Services.ImageWriter.Models;
 
 public class CreateChatServiceModel : IImageServiceModel
 {

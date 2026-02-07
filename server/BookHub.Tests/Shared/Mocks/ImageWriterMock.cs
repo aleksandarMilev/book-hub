@@ -1,9 +1,9 @@
 ﻿namespace BookHub.Tests.Shared.Mocks;
 
-using BookHub.Infrastructure.Services.ImageWriter;
-using BookHub.Infrastructure.Services.ImageWriter.Models.Image;
+using Infrastructure.Services.ImageWriter;
+using Infrastructure.Services.ImageWriter.Models;
 
-public sealed class FakeImageWriter : IImageWriter
+public sealed class ImageWriterMock : IImageWriter
 {
     public int WriteCalls { get; private set; }
 

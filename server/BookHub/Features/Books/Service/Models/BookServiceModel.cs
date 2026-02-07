@@ -6,13 +6,13 @@ public class BookServiceModel
 {
     public Guid Id { get; init; }
 
-    public string Title { get; init; } = null!;
+    public string Title { get; init; } = default!;
 
     public string? AuthorName { get; init; }
 
-    public string ImagePath { get; init; } = null!;
+    public string ImagePath { get; init; } = default!;
 
-    public string ShortDescription { get; init; } = null!;
+    public string ShortDescription { get; init; } = default!;
 
     public double AverageRating { get; init; } 
 

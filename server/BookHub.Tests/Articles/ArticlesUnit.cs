@@ -1,13 +1,13 @@
-﻿namespace BookHub.Tests.Articles.Unit;
+﻿namespace BookHub.Tests.Articles;
 
-using BookHub.Data;
+using Data;
 using Features.Articles.Data.Models;
 using Features.Articles.Service;
 using Features.Articles.Service.Models;
 using FluentAssertions;
 using Infrastructure.Services.CurrentUser;
 using Infrastructure.Services.ImageWriter;
-using Infrastructure.Services.ImageWriter.Models.Image;
+using Infrastructure.Services.ImageWriter.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -199,7 +199,10 @@ public sealed class ArticlesUnit
             serviceModel);
 
         result.Succeeded.Should().BeFalse();
-        result.ErrorMessage.Should().Be($"ArticleDbModel with Id: {nonExistingId} was not found!");
+        result
+            .ErrorMessage
+            .Should()
+            .Be($"ArticleDbModel with Id: {nonExistingId} was not found!");
 
         await imageWriter
             .DidNotReceiveWithAnyArgs()
@@ -381,11 +384,17 @@ public sealed class ArticlesUnit
         var result = await service.Delete(nonExistingId);
 
         result.Succeeded.Should().BeFalse();
-        result.ErrorMessage.Should().Be($"ArticleDbModel with Id: {nonExistingId} was not found!");
+        result
+            .ErrorMessage
+            .Should()
+            .Be($"ArticleDbModel with Id: {nonExistingId} was not found!");
     }
 
-    private static async Task<(BookHubDbContext Data, SqliteConnection Connection)> CreateSqliteDb(
-       string username = "shano")
+    private static async Task<(
+        BookHubDbContext Data,
+        SqliteConnection SqliteConnection)> 
+    CreateSqliteDb(
+        string username = "shano")
     {
         var connection = new SqliteConnection("DataSource=:memory:");
         await connection.OpenAsync();
@@ -394,12 +403,12 @@ public sealed class ArticlesUnit
             .UseSqlite(connection)
             .Options;
 
-        var currentUsername = Substitute.For<ICurrentUserService>();
-        currentUsername
+        var currentUserService = Substitute.For<ICurrentUserService>();
+        currentUserService
             .GetUsername()
             .Returns(username);
 
-        var data = new BookHubDbContext(options, currentUsername);
+        var data = new BookHubDbContext(options, currentUserService);
         await data.Database.EnsureCreatedAsync();
 
         return (data, connection);
