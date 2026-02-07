@@ -288,9 +288,10 @@ public class AuthorService(
         }
 
         data.Remove(dbModel);
+        await data.SaveChangesAsync(cancellationToken);
 
         logger.LogInformation(
-            "Author with Id: {id} was rejected.",
+            "Author with Id: {id} was rejected and deleted.",
             dbModel.Id);
 
         await notificationService.CreateOnAuthorRejected(

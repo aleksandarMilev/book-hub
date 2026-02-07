@@ -1,32 +1,22 @@
 ﻿namespace BookHub.Features.Authors.Data.Models;
 
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using BookHub.Data.Models.Base;
 using Books.Data.Models;
 using Identity.Data.Models;
 using Infrastructure.Services.ImageWriter.Models.Image;
 using Shared;
 
-using static Shared.Constants.Validation;
-
 public class AuthorDbModel:
     DeletableEntity<Guid>,
     IApprovableEntity,
     IImageDdModel
 {
-    [Required]
-    [MaxLength(NameMaxLength)]
-    public string Name { get; set; } = null!;
+    public string Name { get; set; } = default!;
 
-    [Required]
-    public string ImagePath { get; set; } = null!;
+    public string ImagePath { get; set; } = default!;
 
-    [Required]
-    [MaxLength(BiographyMaxLength)]
-    public string Biography { get; set; } = null!;
+    public string Biography { get; set; } = default!;
 
-    [MaxLength(PenNameMaxLength)]
     public string? PenName { get; set; }
 
     public int RatingsCount { get; set; }
@@ -41,7 +31,6 @@ public class AuthorDbModel:
 
     public DateTime? DiedAt { get; set; }
 
-    [ForeignKey(nameof(UserDbModel))]
     public string? CreatorId { get; set; }
 
     public UserDbModel? Creator { get; set; }

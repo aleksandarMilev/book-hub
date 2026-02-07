@@ -11,7 +11,7 @@ public class CreateAuthorWebModel : IValidatableObject
     [StringLength(
         NameMaxLength,
         MinimumLength = NameMinLength)]
-    public string Name { get; init; } = null!;
+    public string Name { get; init; } = default!;
 
     public IFormFile? Image { get; init; }
 
@@ -19,7 +19,7 @@ public class CreateAuthorWebModel : IValidatableObject
     [StringLength(
         BiographyMaxLength,
         MinimumLength = BiographyMinLength)]
-    public string Biography { get; init; } = null!;
+    public string Biography { get; init; } = default!;
 
     [StringLength(
         PenNameMaxLength,
@@ -30,9 +30,9 @@ public class CreateAuthorWebModel : IValidatableObject
 
     public Gender Gender { get; init; } = Gender.Other;
 
-    public string? BornAt { get; init; }
+    public DateTime? BornAt { get; init; }
 
-    public string? DiedAt { get; init; }
+    public DateTime? DiedAt { get; init; }
 
     public IEnumerable<ValidationResult> Validate(
         ValidationContext validationContext)

@@ -145,8 +145,8 @@ public static class AuthorMapping
         PenName = serviceModel.PenName,
         Nationality = serviceModel.Nationality,
         Gender = serviceModel.Gender,
-        BornAt = StringToDateTime(serviceModel.BornAt),
-        DiedAt = StringToDateTime(serviceModel.DiedAt)
+        BornAt = serviceModel.BornAt,
+        DiedAt = serviceModel.DiedAt
     };
 
     public static void UpdateDbModel(
@@ -158,7 +158,7 @@ public static class AuthorMapping
         dbModel.PenName = serviceModel.PenName;
         dbModel.Nationality = serviceModel.Nationality;
         dbModel.Gender = serviceModel.Gender;
-        dbModel.BornAt = StringToDateTime(serviceModel.BornAt);
-        dbModel.DiedAt = StringToDateTime(serviceModel.DiedAt);
+        dbModel.BornAt = serviceModel.BornAt;
+        dbModel.DiedAt = serviceModel.DiedAt;
     }
 }

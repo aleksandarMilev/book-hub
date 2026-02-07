@@ -11,11 +11,11 @@ public class AuthorDetailsServiceModel
 
     public double AverageRating { get; init; }
 
-    public string Name { get; init; } = null!;
+    public string Name { get; init; } = default!;
 
-    public string ImagePath { get; init; } = null!;
+    public string ImagePath { get; init; } = default!;
 
-    public string Biography { get; init; } = null!;
+    public string Biography { get; init; } = default!;
 
     public string? PenName { get; init; }
 
@@ -31,5 +31,5 @@ public class AuthorDetailsServiceModel
 
     public bool IsApproved { get; init; }
 
-    public ICollection<BookServiceModel> TopBooks { get; init; } = new List<BookServiceModel>();
+    public ICollection<BookServiceModel> TopBooks { get; init; } = new HashSet<BookServiceModel>();
 }

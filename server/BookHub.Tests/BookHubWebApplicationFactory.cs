@@ -1,5 +1,6 @@
 ﻿namespace BookHub.Tests;
 
+using BookHub.Areas.Admin.Service;
 using BookHub.Tests.Shared.Data;
 using Data;
 using Infrastructure.Services.CurrentUser;
@@ -9,8 +10,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Shared.Identity;
@@ -19,11 +18,14 @@ using System.Data.Common;
 using System.Net.Http.Headers;
 using System.Reflection;
 
+
 public sealed class BookHubWebApplicationFactory : WebApplicationFactory<Program>
 {
     private DbConnection? connection;
 
-    public HttpClient CreateAdminClient()
+    public HttpClient CreateUserClient(
+        string userId = "test-user",
+        string username = "user")
     {
         var client = this.CreateClient();
 
@@ -31,7 +33,22 @@ public sealed class BookHubWebApplicationFactory : WebApplicationFactory<Program
             .DefaultRequestHeaders
             .Authorization = new AuthenticationHeaderValue(
                 IdentityHandler.SchemeName,
-                "admin");
+                $"user:{userId}:{username}");
+
+        return client;
+    }
+
+    public HttpClient CreateAdminClient(
+        string userId = "test-admin-id",
+        string username = "admin")
+    {
+        var client = this.CreateClient();
+
+        client
+            .DefaultRequestHeaders
+            .Authorization = new AuthenticationHeaderValue(
+                IdentityHandler.SchemeName,
+                $"admin:{userId}:{username}");
 
         return client;
     }
@@ -71,11 +88,11 @@ public sealed class BookHubWebApplicationFactory : WebApplicationFactory<Program
                     .AddSingleton(this.connection)
                     .AddDbContext<BookHubDbContext>(
                         options => options.UseSqlite(this.connection))
-                    .RemoveAll<ICurrentUserService>()
-                    .AddScoped<ICurrentUserService>(
-                        _ => new CurrentUserServiceMock("test-user"))
+                    .AddHttpContextAccessor()
                     .RemoveAll<IImageWriter>()
                     .AddSingleton<IImageWriter, FakeImageWriter>()
+                    .RemoveAll<IAdminService>()
+                    .AddScoped<IAdminService>(_ => new AdminServiceMock("test-admin-id"))
                     .AddAuthentication(options =>
                     {
                         options.DefaultAuthenticateScheme = IdentityHandler.SchemeName;
@@ -96,41 +113,5 @@ public sealed class BookHubWebApplicationFactory : WebApplicationFactory<Program
             this.connection?.Dispose();
             this.connection = null;
         }
-    }
-
-    private static bool IsSqlServerDescriptor(ServiceDescriptor descriptor)
-    {
-        static bool IsFromSqlServerAssembly(Assembly? assembly)
-            => assembly?
-                .GetName()
-                .Name?
-                .StartsWith("Microsoft.EntityFrameworkCore.SqlServer") == true;
-
-        if (IsFromSqlServerAssembly(descriptor.ImplementationType?.Assembly))
-        {
-            return true;
-        }
-
-        if (IsFromSqlServerAssembly(descriptor.ImplementationInstance?.GetType().Assembly))
-        {
-            return true;
-        }
-
-        if (descriptor.ImplementationFactory is not null)
-        {
-            var method = descriptor.ImplementationFactory.GetMethodInfo();
-            if (IsFromSqlServerAssembly(method.DeclaringType?.Assembly))
-            {
-                return true;
-            }
-
-            if (descriptor.ImplementationFactory.Target is not null &&
-                IsFromSqlServerAssembly(descriptor.ImplementationFactory.Target.GetType().Assembly))
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
