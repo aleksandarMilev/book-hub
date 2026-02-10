@@ -1,6 +1,7 @@
 ﻿namespace BookHub.Tests.Authors;
 
 using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 using Data;
@@ -13,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 using static Features.Authors.Shared.Constants.Paths;
+using static Shared.Utils.Constants;
 
 public sealed class AuthorsIntegration : IAsyncLifetime
 {
@@ -32,6 +34,53 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     {
         this.httpClientFactory.Dispose();
         return Task.CompletedTask;
+    }
+
+    [Fact]
+    public async Task Create_ShouldPersistNonDefaultImage_WhenImageProvided_AndAlso_ShouldUseImageWriter()
+    {
+        var httpClient = this.httpClientFactory.CreateUserClient();
+        var imageWriterMock = this.httpClientFactory.GetImageWriterMock();
+
+        var formData = BuildAuthorFormWithImage(
+            authorName: "A valid author name",
+            biography: new string('b', 120),
+            penName: "Valid pen name",
+            nationality: Nationality.Bulgaria,
+            gender: Gender.Male,
+            bornAt: new DateTime(1950, 1, 1),
+            diedAt: null);
+
+        var response = await httpClient.PostAsync("/Authors", formData);
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
+
+        var createdAuthor = await response
+            .Content
+            .ReadFromJsonAsync<AuthorDetailsServiceModel>();
+
+        createdAuthor.Should().NotBeNull();
+        createdAuthor.ImagePath.Should().NotBe(DefaultImagePath);
+        createdAuthor.ImagePath.Should().StartWith("/images/authors/test-");
+
+        imageWriterMock.WriteCalls.Should().Be(1);
+        imageWriterMock.LastWrittenPath.Should().NotBeNull();
+        imageWriterMock.LastWrittenPath!.Should().StartWith("/images/authors/test-");
+
+        using var scope = this
+            .httpClientFactory
+            .Services
+            .CreateScope();
+
+        var data = scope
+            .ServiceProvider
+            .GetRequiredService<BookHubDbContext>();
+
+        var dbModel = await data
+            .Authors
+            .IgnoreQueryFilters()
+            .SingleAsync(a => a.Id == createdAuthor.Id);
+
+        dbModel.ImagePath.Should().Be(createdAuthor.ImagePath);
     }
 
     [Fact]
@@ -58,7 +107,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             .ReadFromJsonAsync<AuthorDetailsServiceModel>();
 
         createdAuthor.Should().NotBeNull();
-        createdAuthor!.Id.Should().NotBeEmpty();
+        createdAuthor.Id.Should().NotBeEmpty();
         createdAuthor.ImagePath.Should().Be(DefaultImagePath);
 
         response
@@ -234,6 +283,86 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     }
 
     [Fact]
+    public async Task Edit_ShouldReturnBadRequest_WhenInvalidModelProvided()
+    {
+        var authorId = await this.SeedAuthor(isApproved: true);
+
+        var httpClient = this.httpClientFactory.CreateUserClient();
+
+        var formData = BuildAuthorForm(
+            authorName: "a",
+            biography: "short",
+            penName: null,
+            nationality: (Nationality)999_999_999,
+            gender: (Gender)999_999_999,
+            bornAt: null,
+            diedAt: null);
+
+        var response = await httpClient.PutAsync(
+            $"/Authors/{authorId}/",
+            formData);
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        response
+            .Content
+            .Headers
+            .ContentType!
+            .MediaType
+            .Should()
+            .Contain("application/problem+json");
+    }
+
+    [Fact]
+    public async Task Edit_ShouldUpdateImage_AndAlso_ShouldDeleteOldImage_WhenNewImageProvided()
+    {
+        var authorId = await this.SeedAuthor(
+            isApproved: true,
+            imagePath: "/images/authors/old.jpg");
+
+        var httpClient = this.httpClientFactory.CreateUserClient();
+        var imageWriterMock = this.httpClientFactory.GetImageWriterMock();
+
+        var formData = BuildAuthorFormWithImage(
+            authorName: "Edited author name",
+            biography: new string('x', 200),
+            penName: "Edited pen name",
+            nationality: Nationality.France,
+            gender: Gender.Other,
+            bornAt: new DateTime(1940, 2, 2),
+            diedAt: new DateTime(2020, 3, 3));
+
+        var response = await httpClient.PutAsync(
+            $"/Authors/{authorId}/",
+            formData);
+
+        response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+
+        imageWriterMock.WriteCalls.Should().Be(1);
+        imageWriterMock.DeleteCalls.Should().Be(1);
+        imageWriterMock.LastDeletedPath.Should().Be("/images/authors/old.jpg");
+        imageWriterMock.LastWrittenPath.Should().NotBeNull();
+        imageWriterMock.LastWrittenPath!.Should().StartWith("/images/authors/test-");
+
+        using var scope = this
+            .httpClientFactory
+            .Services
+            .CreateScope();
+
+        var data = scope
+            .ServiceProvider
+            .GetRequiredService<BookHubDbContext>();
+
+        var dbModel = await data
+            .Authors
+            .IgnoreQueryFilters()
+            .SingleAsync(a => a.Id == authorId);
+
+        dbModel.ImagePath.Should().NotBe("/images/authors/old.jpg");
+        dbModel.ImagePath.Should().StartWith("/images/authors/test-");
+        dbModel.ModifiedOn.Should().NotBeNull();
+    }
+
+    [Fact]
     public async Task Delete_ShouldReturnNoContent_AndAlso_ShouldSoftDelete_WhenAuthorExists()
     {
         var authorId = await this.SeedAuthor(
@@ -294,6 +423,20 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             .GetString()
             .Should()
             .Be($"AuthorDbModel with Id: {nonExistingId} was not found!");
+    }
+
+    [Fact]
+    public async Task Approve_ShouldReturnForbidden_WhenUserIsNotAdmin()
+    {
+        var authorId = await this.SeedAuthor(isApproved: false);
+
+        var httpClient = this.httpClientFactory.CreateUserClient();
+
+        var response = await httpClient.PatchAsync(
+            $"/Administrator/Authors/{authorId}/approve/",
+            content: null);
+
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
 
     [Fact]
@@ -393,6 +536,20 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     }
 
     [Fact]
+    public async Task Reject_ShouldReturnForbidden_WhenUserIsNotAdmin()
+    {
+        var authorId = await this.SeedAuthor(isApproved: false);
+
+        var httpClient = this.httpClientFactory.CreateUserClient();
+
+        var response = await httpClient.PatchAsync(
+            $"/Administrator/Authors/{authorId}/reject/",
+            content: null);
+
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+    }
+
+    [Fact]
     public async Task Reject_ShouldReturnBadRequestWithErrorMessage_WhenAuthorDoesNotExist()
     {
         var httpClient = this.httpClientFactory.CreateAdminClient();
@@ -460,6 +617,35 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             form.Add(content, name);
         }
 
+        return form;
+    }
+
+    private static MultipartFormDataContent BuildAuthorFormWithImage(
+        string authorName,
+        string biography,
+        string? penName,
+        Nationality nationality,
+        Gender gender,
+        DateTime? bornAt,
+        DateTime? diedAt)
+    {
+        var form = BuildAuthorForm(
+            authorName,
+            biography,
+            penName,
+            nationality,
+            gender,
+            bornAt,
+            diedAt);
+
+        var bytes = Convert.FromBase64String(MockImageBytes);
+        var fileContent = new ByteArrayContent(bytes);
+
+        fileContent
+            .Headers
+            .ContentType = new MediaTypeHeaderValue("image/jpeg");
+
+        form.Add(fileContent, "Image", "test.jpg");
         return form;
     }
 

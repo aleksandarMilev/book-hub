@@ -2,10 +2,9 @@
 
 using System.Data.Common;
 using System.Net.Http.Headers;
-using BookHub.Areas.Admin.Service;
-using BookHub.Tests.Shared.Data;
+using Areas.Admin.Service;
+using BookHub.Infrastructure.Services.ImageWriter;
 using Data;
-using Infrastructure.Services.ImageWriter;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -16,7 +15,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Shared.Identity;
 using Shared.Mocks;
 
-public sealed class BookHubWebApplicationFactory : WebApplicationFactory<Program>
+public class BookHubWebApplicationFactory : WebApplicationFactory<Program>
 {
     private DbConnection? connection;
 
@@ -69,10 +68,7 @@ public sealed class BookHubWebApplicationFactory : WebApplicationFactory<Program
     }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
-    {
-        TestSeedFiles.EnsureSeedFileExists();
-
-        builder
+        => builder
             .UseEnvironment("Testing")
             .ConfigureServices(services =>
             {
@@ -97,7 +93,6 @@ public sealed class BookHubWebApplicationFactory : WebApplicationFactory<Program
                     .AddScheme<AuthenticationSchemeOptions, IdentityHandler>(
                         IdentityHandler.SchemeName, _ => { });
             });
-    }
 
     protected override void Dispose(bool disposing)
     {

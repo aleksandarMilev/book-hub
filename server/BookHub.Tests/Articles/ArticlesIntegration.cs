@@ -1,6 +1,7 @@
 ﻿namespace BookHub.Tests.Articles;
 
 using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 using Data;
@@ -11,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 using static Features.Articles.Shared.Constants.Paths;
+using static Shared.Utils.Constants;
 
 public sealed class ArticlesIntegration : IAsyncLifetime
 {
@@ -28,7 +30,7 @@ public sealed class ArticlesIntegration : IAsyncLifetime
     [Fact]
     public async Task GetDetails_ShouldIncrementsViews()
     {
-        var articleId = await SeedArticle(views: 0);
+        var articleId = await this.SeedArticle(views: 0);
         var httpClient = this.httpClientFactory.CreateClient();
 
         var url = $"/Articles/{articleId}/";
@@ -80,9 +82,36 @@ public sealed class ArticlesIntegration : IAsyncLifetime
     }
 
     [Fact]
+    public async Task Create_ShouldReturnForbidden_WhenUserIsNotAdmin()
+    {
+        var httpClient = this.httpClientFactory.CreateUserClient();
+
+        var formData = BuildArticleForm(
+            title: "A sufficiently long valid title",
+            intro: "A sufficiently long valid introduction",
+            content: new string('c', 200));
+
+        var response = await httpClient.PostAsync("/Administrator/Articles", formData);
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+    }
+
+    [Fact]
+    public async Task Delete_ShouldReturnForbidden_WhenUserIsNotAdmin()
+    {
+        var articleId = await this.SeedArticle();
+        var httpClient = this.httpClientFactory.CreateUserClient();
+
+        var response = await httpClient.DeleteAsync(
+            $"/Administrator/Articles/{articleId}/");
+
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+    }
+
+
+    [Fact]
     public async Task GetDetails_ShouldNotIncrementViews_FromTheAdminController()
     {
-        var artcileId = await SeedArticle(views: 5);
+        var artcileId = await this.SeedArticle(views: 5);
         var httpClient = this.httpClientFactory.CreateAdminClient();
 
         var response = await httpClient.GetAsync($"/Administrator/Articles/{artcileId}/");
@@ -130,7 +159,7 @@ public sealed class ArticlesIntegration : IAsyncLifetime
             .ReadFromJsonAsync<ArticleDetailsServiceModel>();
 
         createdArticle.Should().NotBeNull();
-        createdArticle!.Id.Should().NotBeEmpty();
+        createdArticle.Id.Should().NotBeEmpty();
         createdArticle.ImagePath.Should().Be(DefaultImagePath);
 
         response
@@ -155,6 +184,51 @@ public sealed class ArticlesIntegration : IAsyncLifetime
             .SingleAsync(a => a.Id == createdArticle.Id);
 
         articleDbModel.ImagePath.Should().Be(DefaultImagePath);
+    }
+
+    [Fact]
+    public async Task Create_ShouldPersistNonDefaultImage_WhenImageProvided_AndAlso_ShouldUseImageWriter()
+    {
+        var httpClient = this.httpClientFactory.CreateAdminClient();
+
+        var imageWriterMock = this.httpClientFactory.GetImageWriterMock();
+
+        var formData = BuildArticleFormWithImage(
+            title: "A sufficiently long valid title",
+            intro: "A sufficiently long valid introduction",
+            content: new string('c', 200));
+
+        var response = await httpClient.PostAsync("/Administrator/Articles", formData);
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
+
+        var createdArticle = await response
+            .Content
+            .ReadFromJsonAsync<ArticleDetailsServiceModel>();
+
+        createdArticle.Should().NotBeNull();
+        createdArticle.ImagePath.Should().NotBe(DefaultImagePath);
+        createdArticle.ImagePath.Should().StartWith("/images/articles/test-");
+
+        imageWriterMock.WriteCalls.Should().Be(1);
+        imageWriterMock.LastWrittenPath.Should().NotBeNull();
+        imageWriterMock.LastWrittenPath!.Should().NotBe(DefaultImagePath);
+        imageWriterMock.LastWrittenPath.Should().StartWith("/images/articles/test-");
+
+        using var scope = this
+            .httpClientFactory
+            .Services
+            .CreateScope();
+
+        var data = scope
+            .ServiceProvider
+            .GetRequiredService<BookHubDbContext>();
+
+        var articleDbModel = await data
+            .Articles
+            .IgnoreQueryFilters()
+            .SingleAsync(a => a.Id == createdArticle.Id);
+
+        articleDbModel.ImagePath.Should().Be(createdArticle.ImagePath);
     }
 
     [Fact]
@@ -184,7 +258,7 @@ public sealed class ArticlesIntegration : IAsyncLifetime
     [Fact]
     public async Task Edit_ShouldReturnsNoContent_AndAlso_ShouldUpdateFields_WhenArticleExists()
     {
-        var articleId = await SeedArticle();
+        var articleId = await this.SeedArticle();
 
         var httpClient = this.httpClientFactory.CreateAdminClient();
         var formData = BuildArticleForm(
@@ -250,9 +324,78 @@ public sealed class ArticlesIntegration : IAsyncLifetime
     }
 
     [Fact]
+    public async Task Edit_ShouldUpdateImage_AndAlso_ShouldDeleteOldImage_WhenNewImageProvided()
+    {
+        var articleId = await this.SeedArticle(imagePath: "/images/articles/old.jpg");
+        var httpClient = this.httpClientFactory.CreateAdminClient();
+
+        var imageWriterMock = this.httpClientFactory.GetImageWriterMock();
+
+        var formData = BuildArticleFormWithImage(
+            title: "Edited valid title long enough",
+            intro: "Edited valid introduction long enough",
+            content: new string('z', 250));
+
+        var response = await httpClient.PutAsync(
+            $"/Administrator/Articles/{articleId}/",
+            formData);
+
+        response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+
+        imageWriterMock.WriteCalls.Should().Be(1);
+        imageWriterMock.DeleteCalls.Should().Be(1);
+        imageWriterMock.LastDeletedPath.Should().Be("/images/articles/old.jpg");
+        imageWriterMock.LastWrittenPath.Should().NotBeNull();
+        imageWriterMock.LastWrittenPath!.Should().StartWith("/images/articles/test-");
+
+        using var scope = this
+            .httpClientFactory
+            .Services
+            .CreateScope();
+
+        var data = scope
+            .ServiceProvider
+            .GetRequiredService<BookHubDbContext>();
+
+        var articleDbModel = await data
+            .Articles
+            .IgnoreQueryFilters()
+            .SingleAsync(a => a.Id == articleId);
+
+        articleDbModel.ImagePath.Should().NotBe("/images/articles/old.jpg");
+        articleDbModel.ImagePath.Should().StartWith("/images/articles/test-");
+        articleDbModel.ModifiedOn.Should().NotBeNull();
+    }
+
+    [Fact]
+    public async Task Edit_ShouldReturnBadRequest_WhenInvalidModelProvided()
+    {
+        var articleId = await this.SeedArticle();
+        var httpClient = this.httpClientFactory.CreateAdminClient();
+
+        var formData = BuildArticleForm(
+            title: "short",
+            intro: "short",
+            content: "too short");
+
+        var response = await httpClient.PutAsync(
+            $"/Administrator/Articles/{articleId}/",
+            formData);
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        response
+            .Content
+            .Headers
+            .ContentType!
+            .MediaType
+            .Should()
+            .Contain("application/problem+json");
+    }
+
+    [Fact]
     public async Task Delete_ShouldReturnNoContent_AndAlso_ShouldSoftDelete_WhenArticleExists()
     {
-        var articleId = await SeedArticle();
+        var articleId = await this.SeedArticle();
         var httpClient = this.httpClientFactory.CreateAdminClient();
 
         var response = await httpClient.DeleteAsync(
@@ -322,6 +465,28 @@ public sealed class ArticlesIntegration : IAsyncLifetime
             { new StringContent(content), "Content" }
         };
     }
+
+    private static MultipartFormDataContent BuildArticleFormWithImage(
+        string title,
+        string intro,
+        string content)
+    {
+        var bytes = Convert.FromBase64String(MockImageBytes);
+        var fileContent = new ByteArrayContent(bytes);
+
+        fileContent
+            .Headers
+            .ContentType = new MediaTypeHeaderValue("image/png");
+
+        return new()
+        {
+            { new StringContent(title), "Title" },
+            { new StringContent(intro), "Introduction" },
+            { new StringContent(content), "Content" },
+            { fileContent, "Image", "test.png" }
+        };
+    }
+
 
     private async Task<Guid> SeedArticle(
         string imagePath = "/images/articles/seed.jpg",

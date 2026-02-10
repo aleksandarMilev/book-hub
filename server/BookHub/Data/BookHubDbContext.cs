@@ -81,31 +81,31 @@ public class BookHubDbContext(
         => this.ChangeTracker
             .Entries()
             .ToList()
-            .ForEach(e =>
+            .ForEach(entry =>
             {
                 var utcNow = DateTime.UtcNow;
                 var username = userService.GetUsername();
 
-                if (e.State == EntityState.Deleted && 
-                    e.Entity is IDeletableEntity deletableEntity)
+                if (entry.State == EntityState.Deleted && 
+                    entry.Entity is IDeletableEntity deletableEntity)
                 {
                     deletableEntity.DeletedOn = utcNow;
                     deletableEntity.DeletedBy = username;
                     deletableEntity.IsDeleted = true;
 
-                    e.State = EntityState.Modified;
+                    entry.State = EntityState.Modified;
 
                     return;
                 }
 
-                if (e.Entity is IDeletableEntity entity)
+                if (entry.Entity is IDeletableEntity entity)
                 {
-                    if (e.State == EntityState.Added)
+                    if (entry.State == EntityState.Added)
                     {
                         entity.CreatedOn = utcNow;
                         entity.CreatedBy = username!;
                     }
-                    else if (e.State == EntityState.Modified)
+                    else if (entry.State == EntityState.Modified)
                     {
                         entity.ModifiedOn = utcNow;
                         entity.ModifiedBy = username;

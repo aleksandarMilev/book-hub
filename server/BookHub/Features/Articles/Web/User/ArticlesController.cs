@@ -1,6 +1,6 @@
 ﻿namespace BookHub.Features.Articles.Web.User;
 
-using BookHub.Common;
+using Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service;

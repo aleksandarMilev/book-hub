@@ -1,6 +1,6 @@
 ﻿namespace BookHub.Features.Books.Web.User;
 
-using BookHub.Common;
+using Common;
 using Features.Authors.Service.Models;
 using Features.Authors.Shared;
 using Infrastructure.Extensions;
@@ -22,7 +22,7 @@ public class BooksController(IBookService service) : ApiController
     [HttpGet(ApiRoutes.Top)]
     public async Task<ActionResult<IEnumerable<BookServiceModel>>> TopThree(
         CancellationToken cancellationToken = default)
-      => this.Ok(await service.TopThree(cancellationToken));
+        => this.Ok(await service.TopThree(cancellationToken));
 
     [HttpGet(ApiRoutes.ByGenre + Id)]
     public async Task<ActionResult<PaginatedModel<BookServiceModel>>> ByGenre(

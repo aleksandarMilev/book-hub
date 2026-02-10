@@ -257,9 +257,9 @@ public static class ServiceCollectionExtensions
         this IServiceCollection services)
     {
         services
-            .AddControllers(opt =>
+            .AddControllers(options =>
             {
-                opt.Filters.Add<ModelOrNotFoundActionFilter>();
+                options.Filters.Add<ModelOrNotFoundActionFilter>();
             });
 
         return services;

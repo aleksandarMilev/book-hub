@@ -1,23 +1,15 @@
 ﻿namespace BookHub.Features.Genres.Data.Models;
 
-using System.ComponentModel.DataAnnotations;
 using BookHub.Data.Models.Base;
 using BookHub.Data.Models.Shared.BookGenre.Models;
 
-using static Shared.Constants.Validation;
-
 public class GenreDbModel : DeletableEntity<Guid>
 {
-    [Required]
-    [MaxLength(NameMaxLength)]
-    public string Name { get; set; } = null!;
+    public string Name { get; set; } = default!;
 
-    [Required]
-    public string ImagePath { get; set; } = null!;
+    public string ImagePath { get; set; } = default!;
 
-    [Required]
-    [MaxLength(DescriptionMaxLength)]
-    public string Description { get; set; } = null!;
+    public string Description { get; set; } = default!;
 
     public ICollection<BookGenreDbModel> BooksGenres { get; set; } = new HashSet<BookGenreDbModel>();
 }

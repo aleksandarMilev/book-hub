@@ -1,6 +1,6 @@
 ﻿namespace BookHub.Features.Identity.Web;
 
-using BookHub.Common;
+using Common;
 using Identity.Shared;
 using Infrastructure.Extensions;
 using Microsoft.AspNetCore.Mvc;
