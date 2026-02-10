@@ -12,32 +12,32 @@ public class RegisterWebModel
     [StringLength(
         UsernameMaxLength,
         MinimumLength = UsernameMinLength)]
-    public string Username { get; init; } = null!;
+    public string Username { get; init; } = default!;
 
     [Required]
     [EmailAddress]
     [StringLength(
         EmailMaxLength,
         MinimumLength = EmailMinLength)]
-    public string Email { get; init; } = null!;
+    public string Email { get; init; } = default!;
 
     [Required]
     [StringLength(
         PasswordMaxLength,
         MinimumLength = PasswordMinLength)]
-    public string Password { get; init; } = null!;
+    public string Password { get; init; } = default!;
 
     [Required]
     [StringLength(
         NameMaxLength,
         MinimumLength = NameMinLength)]
-    public string FirstName { get; init; } = null!;
+    public string FirstName { get; init; } = default!;
 
     [Required]
     [StringLength(
         NameMaxLength,
         MinimumLength = NameMinLength)]
-    public string LastName { get; init; } = null!;
+    public string LastName { get; init; } = default!;
 
     public IFormFile? Image { get; init; }
 

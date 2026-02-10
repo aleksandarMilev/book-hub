@@ -220,10 +220,17 @@ public class BookService(
             null,
             cancellationToken);
 
-        if (isNewImageUploaded)
+        var shouldDeleteOldImage =
+            isNewImageUploaded &&
+            !string.Equals(
+                oldImagePath,
+                dbModel.ImagePath,
+                StringComparison.OrdinalIgnoreCase);
+
+        if (shouldDeleteOldImage)
         {
             imageWriter.Delete(
-                nameof(BookDbModel),
+                ImagePathPrefix,
                 oldImagePath,
                 DefaultImagePath);
         }

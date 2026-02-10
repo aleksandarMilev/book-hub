@@ -5,10 +5,28 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Models;
 
+using static Common.Constants.Validation;
+using static Shared.Constants.Validation;
+
 public class GenreConfiguration : IEntityTypeConfiguration<GenreDbModel>
 {
     public void Configure(EntityTypeBuilder<GenreDbModel> builder)
     {
+        builder
+            .Property(g => g.Name)
+            .IsRequired()
+            .HasMaxLength(NameMaxLength);
+
+        builder
+            .Property(g => g.Description)
+            .IsRequired()
+            .HasMaxLength(DescriptionMaxLength);
+
+        builder
+            .Property(g => g.ImagePath)
+            .IsRequired()
+            .HasMaxLength(ImagePathMaxLength);
+
         var path = Path.Combine(
             AppContext.BaseDirectory,
             "Features",

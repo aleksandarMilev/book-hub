@@ -1,9 +1,6 @@
 ﻿namespace BookHub.Tests.Books;
 
 using Areas.Admin.Service;
-using Azure;
-using BookHub.Data.Models.Shared.BookGenre.Models;
-using BookHub.Features.Identity.Data.Models;
 using Data;
 using Features.Authors.Data.Models;
 using Features.Authors.Shared;
@@ -11,6 +8,7 @@ using Features.Books.Data.Models;
 using Features.Books.Service;
 using Features.Books.Service.Models;
 using Features.Genres.Data.Models;
+using Features.Identity.Data.Models;
 using Features.Notifications.Service;
 using Features.UserProfile.Service;
 using FluentAssertions;
@@ -20,10 +18,8 @@ using Infrastructure.Services.ImageWriter.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
-
 using static Features.Books.Shared.Constants.Paths;
 
 public sealed class BooksUnit
@@ -200,11 +196,11 @@ public sealed class BooksUnit
         var imageWriter = Substitute.For<IImageWriter>();
         imageWriter
             .When(writer => writer.Write(
-                Arg.Any<string>(),
-                Arg.Any<IImageDdModel>(),
-                Arg.Any<IImageServiceModel>(),
-                Arg.Any<string?>(),
-                Arg.Any<CancellationToken>()))
+                resourceName: Arg.Any<string>(),
+                dbModel: Arg.Any<IImageDdModel>(),
+                serviceModel: Arg.Any<IImageServiceModel>(),
+                defaultImagePath: Arg.Any<string?>(),
+                cancellationToken: Arg.Any<CancellationToken>()))
             .Do(callInfo =>
             {
                 var dbModel = (IImageDdModel)callInfo[1];
@@ -270,11 +266,146 @@ public sealed class BooksUnit
         await imageWriter
             .Received(1)
             .Write(
-                ImagePathPrefix,
-                Arg.Any<IImageDdModel>(),
-                Arg.Any<IImageServiceModel>(),
-                DefaultImagePath,
-                Arg.Any<CancellationToken>());
+                resourceName: ImagePathPrefix,
+                dbModel: Arg.Any<IImageDdModel>(),
+                serviceModel: Arg.Any<IImageServiceModel>(),
+                defaultImagePath: DefaultImagePath,
+                cancellationToken: Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Create_ShouldSetAuthorIdNull_WhenAuthorDoesNotExist()
+    {
+        var (data, currentUserService, connection) = await CreateSqliteDb();
+        await using var _ = connection;
+
+        await SeedGenre(data, OtherGenreId, "Other");
+
+        var adminService = Substitute.For<IAdminService>();
+        adminService.GetId().Returns("admin-1");
+
+        var notificationService = Substitute.For<INotificationService>();
+        var profileService = Substitute.For<IProfileService>();
+        var imageWriter = Substitute.For<IImageWriter>();
+        imageWriter
+            .When(writer => writer.Write(
+                resourceName: Arg.Any<string>(),
+                dbModel: Arg.Any<IImageDdModel>(),
+                serviceModel: Arg.Any<IImageServiceModel>(),
+                defaultImagePath: Arg.Any<string?>(),
+                cancellationToken: Arg.Any<CancellationToken>()))
+            .Do(callInfo =>
+            {
+                var dbModel = (IImageDdModel)callInfo[1];
+                var defaultPath = (string?)callInfo[3];
+
+                dbModel.ImagePath = defaultPath!;
+            });
+
+        var logger = Substitute.For<ILogger<BookService>>();
+
+        var service = new BookService(
+            data,
+            currentUserService,
+            adminService,
+            notificationService,
+            imageWriter,
+            logger,
+            profileService);
+
+        var nonExistingAuthorId = Guid.NewGuid();
+
+        var serviceModel = new CreateBookServiceModel
+        {
+            Title = "A valid book title",
+            AuthorId = nonExistingAuthorId,
+            Image = null,
+            ShortDescription = "A valid short description",
+            LongDescription = new string('l', 200),
+            PublishedDate = null,
+            Genres = []
+        };
+
+        var created = await service.Create(serviceModel);
+        var dbModel = await data
+            .Books
+            .IgnoreQueryFilters()
+            .SingleAsync(b => b.Id == created.Id);
+
+        dbModel.AuthorId.Should().BeNull();
+    }
+
+
+    [Fact]
+    public async Task Create_ShouldSetNonDefaultImagePath_WhenImageProvided()
+    {
+        var (data, currentUserService, connection) = await CreateSqliteDb();
+        await using var _ = connection;
+
+        await SeedGenre(data, OtherGenreId, "Other");
+
+        var adminService = Substitute.For<IAdminService>();
+        adminService.GetId().Returns("admin-1");
+
+        var notificationService = Substitute.For<INotificationService>();
+        var profileService = Substitute.For<IProfileService>();
+
+        var imageWriter = Substitute.For<IImageWriter>();
+        imageWriter
+            .When(writer => writer.Write(
+                resourceName: Arg.Any<string>(),
+                dbModel: Arg.Any<IImageDdModel>(),
+                serviceModel: Arg.Any<IImageServiceModel>(),
+                defaultImagePath: Arg.Any<string?>(),
+                cancellationToken: Arg.Any<CancellationToken>()))
+            .Do(callInfo =>
+            {
+                var dbModel = (IImageDdModel)callInfo[1];
+                dbModel.ImagePath = "/images/books/new.jpg";
+            });
+
+        var logger = Substitute.For<ILogger<BookService>>();
+
+        var service = new BookService(
+            data,
+            currentUserService,
+            adminService,
+            notificationService,
+            imageWriter,
+            logger,
+            profileService);
+
+        var dummyFile = new FormFile(
+            baseStream: new MemoryStream([1, 2, 3]),
+            baseStreamOffset: 0,
+            length: 3,
+            name: "Image",
+            fileName: "test.jpg");
+
+        var serviceModel = new CreateBookServiceModel
+        {
+            Title = "A valid book title",
+            AuthorId = null,
+            Image = dummyFile,
+            ShortDescription = "A valid short description",
+            LongDescription = new string('l', 200),
+            PublishedDate = null,
+            Genres = []
+        };
+
+        var created = await service.Create(serviceModel);
+
+        created.ImagePath.Should().Be("/images/books/new.jpg");
+        created.ImagePath.Should().NotBe(DefaultImagePath);
+
+        await imageWriter
+            .Received(1)
+            .Write(
+                resourceName: ImagePathPrefix,
+                dbModel: Arg.Any<IImageDdModel>(),
+                serviceModel: Arg.Any<IImageServiceModel>(),
+                defaultImagePath: DefaultImagePath,
+                cancellationToken: Arg.Any<CancellationToken>());
     }
 
     [Fact]
@@ -297,11 +428,11 @@ public sealed class BooksUnit
         var imageWriter = Substitute.For<IImageWriter>();
         imageWriter
             .When(writer => writer.Write(
-                Arg.Any<string>(),
-                Arg.Any<IImageDdModel>(),
-                Arg.Any<IImageServiceModel>(),
-                Arg.Any<string?>(),
-                Arg.Any<CancellationToken>()))
+                resourceName: Arg.Any<string>(),
+                dbModel: Arg.Any<IImageDdModel>(),
+                serviceModel: Arg.Any<IImageServiceModel>(),
+                defaultImagePath: Arg.Any<string?>(),
+                cancellationToken: Arg.Any<CancellationToken>()))
             .Do(callInfo =>
             {
                 var dbModel = (IImageDdModel)callInfo[1];
@@ -347,6 +478,49 @@ public sealed class BooksUnit
                 bookTitle: default!,
                 receiverId: default!,
                 cancellationToken: default);
+    }
+
+    [Fact]
+    public async Task Edit_ShouldSetAuthorId_WhenAuthorExists()
+    {
+        var (data, currentUserService, connection) = await CreateSqliteDb();
+        await using var _ = connection;
+
+        await SeedGenre(data, OtherGenreId, "Other");
+
+        var authorId = Guid.NewGuid();
+        data.Authors.Add(NewAuthor(authorId));
+        await data.SaveChangesAsync();
+
+        var service = NewBooksService(data, currentUserService);
+
+        var book = NewBookDbModel(
+            creatorId: "user-1",
+            isApproved: true);
+
+        data.Books.Add(book);
+        await data.SaveChangesAsync();
+
+        var serviceModel = new CreateBookServiceModel
+        {
+            Title = "Updated title is valid",
+            AuthorId = authorId,
+            Image = null,
+            ShortDescription = "Updated short description",
+            LongDescription = new string('u', 200),
+            PublishedDate = null,
+            Genres = []
+        };
+
+        var result = await service.Edit(book.Id, serviceModel);
+        result.Succeeded.Should().BeTrue();
+
+        var dbModel = await data
+            .Books
+            .IgnoreQueryFilters()
+            .SingleAsync(b => b.Id == book.Id);
+
+        dbModel.AuthorId.Should().Be(authorId);
     }
 
     [Fact]
@@ -434,11 +608,11 @@ public sealed class BooksUnit
         var imageWriter = Substitute.For<IImageWriter>();
         imageWriter
             .When(writer => writer.Write(
-                Arg.Any<string>(),
-                Arg.Any<IImageDdModel>(),
-                Arg.Any<IImageServiceModel>(),
-                Arg.Any<string?>(),
-                Arg.Any<CancellationToken>()))
+                resourceName: Arg.Any<string>(),
+                dbModel: Arg.Any<IImageDdModel>(),
+                serviceModel: Arg.Any<IImageServiceModel>(),
+                defaultImagePath: Arg.Any<string?>(),
+                cancellationToken: Arg.Any<CancellationToken>()))
             .Do(callInfo =>
             {
                 var dbModel = (IImageDdModel)callInfo[1];
@@ -508,7 +682,7 @@ public sealed class BooksUnit
         imageWriter
             .Received(1)
             .Delete(
-                nameof(BookDbModel),
+                ImagePathPrefix,
                 "/images/books/old.jpg",
                 DefaultImagePath);
 
@@ -520,6 +694,135 @@ public sealed class BooksUnit
 
         mapEntities.Should().HaveCount(1);
         mapEntities[0].GenreId.Should().Be(fantasyId);
+    }
+
+    [Fact]
+    public async Task Edit_ShouldCallImageWriterWithNullDefaultImagePath()
+    {
+        var (data, currentUserService, connection) = await CreateSqliteDb();
+        await using var _ = connection;
+
+        await SeedGenre(data, OtherGenreId, "Other");
+
+        var imageWriter = Substitute.For<IImageWriter>();
+        var adminService = Substitute.For<IAdminService>();
+        var notificationService = Substitute.For<INotificationService>();
+        var profileService = Substitute.For<IProfileService>();
+        var logger = Substitute.For<ILogger<BookService>>();
+
+        var service = new BookService(
+            data,
+            currentUserService,
+            adminService,
+            notificationService,
+            imageWriter,
+            logger,
+            profileService);
+
+        var book = NewBookDbModel(
+            creatorId: "user-1",
+            imagePath: "/images/books/old.jpg",
+            isApproved: true);
+
+        data.Books.Add(book);
+        await data.SaveChangesAsync();
+
+        var serviceModel = new CreateBookServiceModel
+        {
+            Title = "Updated title is valid",
+            AuthorId = null,
+            Image = null,
+            ShortDescription = "Updated short description",
+            LongDescription = new string('u', 200),
+            PublishedDate = null,
+            Genres = []
+        };
+
+        var result = await service.Edit(book.Id, serviceModel);
+
+        result.Succeeded.Should().BeTrue();
+
+        await imageWriter
+           .Received(1)
+           .Write(
+               resourceName: ImagePathPrefix,
+               dbModel: Arg.Any<IImageDdModel>(),
+               serviceModel: Arg.Any<IImageServiceModel>(),
+               defaultImagePath: null,
+               cancellationToken: Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Edit_ShouldNotDeleteOldImage_WhenNewImageProvided_ButImagePathDoesNotChange()
+    {
+        var (data, currentUserService, connection) = await CreateSqliteDb();
+        await using var _ = connection;
+
+        await SeedGenre(data, OtherGenreId, "Other");
+
+        var imageWriter = Substitute.For<IImageWriter>();
+        imageWriter
+             .When(writer => writer.Write(
+                resourceName: Arg.Any<string>(),
+                dbModel: Arg.Any<IImageDdModel>(),
+                serviceModel: Arg.Any<IImageServiceModel>(),
+                defaultImagePath: Arg.Any<string?>(),
+                cancellationToken: Arg.Any<CancellationToken>()))
+            .Do(callInfo =>
+            {
+                var dbModel = (IImageDdModel)callInfo[1];
+                dbModel.ImagePath = "/images/books/old.jpg";
+            });
+
+        var adminService = Substitute.For<IAdminService>();
+        var notificationService = Substitute.For<INotificationService>();
+        var profileService = Substitute.For<IProfileService>();
+        var logger = Substitute.For<ILogger<BookService>>();
+
+        var service = new BookService(
+            data,
+            currentUserService,
+            adminService,
+            notificationService,
+            imageWriter,
+            logger,
+            profileService);
+
+        var book = NewBookDbModel(
+            creatorId: "user-1",
+            imagePath: "/images/books/old.jpg",
+            isApproved: true);
+
+        data.Books.Add(book);
+        await data.SaveChangesAsync();
+
+        var dummyFile = new FormFile(
+            baseStream: new MemoryStream([1, 2, 3]),
+            baseStreamOffset: 0,
+            length: 3,
+            name: "Image",
+            fileName: "test.jpg");
+
+        var serviceModel = new CreateBookServiceModel
+        {
+            Title = "Updated title is valid",
+            AuthorId = null,
+            Image = dummyFile,
+            ShortDescription = "Updated short description",
+            LongDescription = new string('u', 200),
+            PublishedDate = null,
+            Genres = []
+        };
+
+        var result = await service.Edit(book.Id, serviceModel);
+        result.Succeeded.Should().BeTrue();
+
+        imageWriter
+            .DidNotReceive()
+            .Delete(
+                resourceName: Arg.Any<string>(),
+                imagePath: Arg.Any<string?>(),
+                defaultImagePath: Arg.Any<string?>());
     }
 
     [Fact]

@@ -10,13 +10,13 @@ public class LoginWebModel
     [StringLength(
        CredentialsMaxLength,
        MinimumLength = CredentialsMinLength)]
-    public string Credentials { get; init; } = null!;
+    public string Credentials { get; init; } = default!;
 
     [Required]
     [StringLength(
        PasswordMaxLength,
        MinimumLength = PasswordMinLength)]
-    public string Password { get; init; } = null!;
+    public string Password { get; init; } = default!;
 
     public bool RememberMe { get; init; }
 }

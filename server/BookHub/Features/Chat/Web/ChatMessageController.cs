@@ -1,7 +1,7 @@
 ﻿namespace BookHub.Features.Chat.Web;
 
-using BookHub.Common;
-using BookHub.Features.Chat.Shared;
+using Common;
+using Features.Chat.Shared;
 using Infrastructure.Extensions;
 using Infrastructure.Services.Result;
 using Microsoft.AspNetCore.Mvc;

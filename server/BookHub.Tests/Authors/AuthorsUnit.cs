@@ -224,6 +224,79 @@ public sealed class AuthorsUnit
     }
 
     [Fact]
+    public async Task Create_ShouldSetNonDefaultImagePath_WhenImageProvided()
+    {
+        var (data, currentUserService, connection) = await CreateSqliteDb();
+        await using var _ = connection;
+
+        var adminService = Substitute.For<IAdminService>();
+        adminService.GetId().Returns("admin-1");
+
+        var profileService = Substitute.For<IProfileService>();
+        var notificationService = Substitute.For<INotificationService>();
+
+        var imageWriter = Substitute.For<IImageWriter>();
+        imageWriter
+            .When(writer => writer.Write(
+                Arg.Any<string>(),
+                Arg.Any<IImageDdModel>(),
+                Arg.Any<IImageServiceModel>(),
+                Arg.Any<string?>(),
+                Arg.Any<CancellationToken>()))
+            .Do(callInfo =>
+            {
+                var dbModel = (IImageDdModel)callInfo[1];
+                dbModel.ImagePath = "/images/authors/new.jpg";
+            });
+
+        var logger = Substitute.For<ILogger<AuthorService>>();
+
+        var service = new AuthorService(
+            data,
+            currentUserService,
+            adminService,
+            profileService,
+            notificationService,
+            imageWriter,
+            logger);
+
+        var dummyFile = new FormFile(
+            baseStream: new MemoryStream([1, 2, 3]),
+            baseStreamOffset: 0,
+            length: 3,
+            name: "Image",
+            fileName: "test.jpg");
+
+        var serviceModel = new CreateAuthorServiceModel
+        {
+            Name = "Valid author name",
+            Biography = new string('b', 120),
+            PenName = "Pen",
+            Nationality = Nationality.Bulgaria,
+            Gender = Gender.Male,
+            BornAt = null,
+            DiedAt = null,
+            Image = dummyFile
+        };
+
+        var result = await service.Create(serviceModel);
+
+        result.Succeeded.Should().BeTrue();
+        result.Data.Should().NotBeNull();
+        result.Data.ImagePath.Should().Be("/images/authors/new.jpg");
+        result.Data.ImagePath.Should().NotBe(DefaultImagePath);
+
+        await imageWriter
+            .Received(1)
+            .Write(
+                resourceName: ImagePathPrefix,
+                dbModel: Arg.Any<IImageDdModel>(),
+                serviceModel: Arg.Any<IImageServiceModel>(),
+                defaultImagePath: DefaultImagePath,
+                cancellationToken: Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
     public async Task Create_ShouldReturnErrorResult_WhenGenderEnumIsInvalid()
     {
         var (data, currentUserService, connection) = await CreateSqliteDb();
@@ -263,6 +336,147 @@ public sealed class AuthorsUnit
             .ErrorMessage
             .Should()
             .Be($"{serviceModel.Gender} is not valid Gender enumeartion!");
+    }
+
+    [Fact]
+    public async Task Edit_ShouldNotDeleteOldImage_WhenNewImageProvided_ButImagePathDoesNotChange()
+    {
+        var (data, currentUserService, connection) = await CreateSqliteDb(
+            userId: "admin-1",
+            username: "admin",
+            isAdmin: true);
+
+        await using var _ = connection;
+
+        var adminService = Substitute.For<IAdminService>();
+        var profileService = Substitute.For<IProfileService>();
+        var notificationService = Substitute.For<INotificationService>();
+
+        var imageWriter = Substitute.For<IImageWriter>();
+        imageWriter
+            .When(writer => writer.Write(
+                Arg.Any<string>(),
+                Arg.Any<IImageDdModel>(),
+                Arg.Any<IImageServiceModel>(),
+                Arg.Any<string?>(),
+                Arg.Any<CancellationToken>()))
+            .Do(callInfo =>
+            {
+                var dbModel = (IImageDdModel)callInfo[1];
+                dbModel.ImagePath = "/images/authors/old.jpg";
+            });
+
+        var logger = Substitute.For<ILogger<AuthorService>>();
+
+        var service = new AuthorService(
+            data,
+            currentUserService,
+            adminService,
+            profileService,
+            notificationService,
+            imageWriter,
+            logger);
+
+        var author = NewAuthor(
+            creatorId: "admin-1",
+            imagePath: "/images/authors/old.jpg",
+            isApproved: true);
+
+        data.Authors.Add(author);
+        await data.SaveChangesAsync();
+
+        var dummyFile = new FormFile(
+            baseStream: new MemoryStream([1, 2, 3]),
+            baseStreamOffset: 0,
+            length: 3,
+            name: "Image",
+            fileName: "test.jpg");
+
+        var serviceModel = new CreateAuthorServiceModel
+        {
+            Name = "Updated name",
+            Biography = new string('b', 180),
+            PenName = "Updated pen",
+            Nationality = Nationality.Bulgaria,
+            Gender = Gender.Male,
+            BornAt = null,
+            DiedAt = null,
+            Image = dummyFile
+        };
+
+        var result = await service.Edit(
+            author.Id,
+            serviceModel);
+
+        result.Succeeded.Should().BeTrue();
+
+        imageWriter
+            .DidNotReceive()
+            .Delete(
+                resourceName: Arg.Any<string>(),
+                imagePath: Arg.Any<string?>(),
+                defaultImagePath: Arg.Any<string?>());
+    }
+
+    [Fact]
+    public async Task Edit_ShouldCallImageWriterWithNullDefaultImagePath()
+    {
+        var (data, currentUserService, connection) = await CreateSqliteDb(
+            userId: "admin-1",
+            username: "admin",
+            isAdmin: true);
+
+        await using var _ = connection;
+
+        var adminService = Substitute.For<IAdminService>();
+        var profileService = Substitute.For<IProfileService>();
+        var notificationService = Substitute.For<INotificationService>();
+        var imageWriter = Substitute.For<IImageWriter>();
+        var logger = Substitute.For<ILogger<AuthorService>>();
+
+        var service = new AuthorService(
+            data,
+            currentUserService,
+            adminService,
+            profileService,
+            notificationService,
+            imageWriter,
+            logger);
+
+        var author = NewAuthor(
+            creatorId: "admin-1",
+            imagePath: "/images/authors/old.jpg",
+            isApproved: true);
+
+        data.Authors.Add(author);
+        await data.SaveChangesAsync();
+
+        var serviceModel = new CreateAuthorServiceModel
+        {
+            Name = "Updated name",
+            Biography = new string('b', 180),
+            PenName = "Updated pen",
+            Nationality = Nationality.Bulgaria,
+            Gender = Gender.Male,
+            BornAt = null,
+            DiedAt = null,
+            Image = null
+        };
+
+        var result = await service.Edit(
+            author.Id,
+            serviceModel);
+
+        result.Succeeded.Should().BeTrue();
+
+        await imageWriter
+            .Received(1)
+            .Write(
+                resourceName: ImagePathPrefix,
+                dbModel: Arg.Any<IImageDdModel>(),
+                serviceModel: Arg.Any<IImageServiceModel>(),
+                defaultImagePath: null,
+                cancellationToken: Arg.Any<CancellationToken>());
     }
 
     [Fact]

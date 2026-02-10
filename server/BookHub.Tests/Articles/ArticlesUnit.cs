@@ -111,6 +111,62 @@ public sealed class ArticlesUnit
     }
 
     [Fact]
+    public async Task Create_ShouldSetNonDefaultImagePath_WhenImageProvided()
+    {
+        var (data, connection) = await CreateSqliteDb();
+        await using var _ = connection;
+
+        var imageWriter = Substitute.For<IImageWriter>();
+        imageWriter
+            .When(writer => writer.Write(
+                Arg.Any<string>(),
+                Arg.Any<IImageDdModel>(),
+                Arg.Any<IImageServiceModel>(),
+                Arg.Any<string?>(),
+                Arg.Any<CancellationToken>()))
+            .Do(callInfo =>
+            {
+                var dbModel = (IImageDdModel)callInfo[1];
+                dbModel.ImagePath = "/images/articles/new.jpg";
+            });
+
+        var logger = Substitute.For<ILogger<ArticleService>>();
+        var service = new ArticleService(
+            data,
+            imageWriter,
+            logger);
+
+        var dummyFile = new FormFile(
+            baseStream: new MemoryStream([1, 2, 3]),
+            baseStreamOffset: 0,
+            length: 3,
+            name: "Image",
+            fileName: "test.jpg");
+
+        var serviceModel = new CreateArticleServiceModel
+        {
+            Title = "A valid article title",
+            Introduction = "A valid article introduction long enough",
+            Content = new string('c', 200),
+            Image = dummyFile
+        };
+
+        var createdArticle = await service.Create(serviceModel);
+
+        createdArticle.ImagePath.Should().Be("/images/articles/new.jpg");
+        createdArticle.ImagePath.Should().NotBe(DefaultImagePath);
+
+        await imageWriter
+            .Received(1)
+            .Write(
+                resourceName: ImagePathPrefix,
+                dbModel: Arg.Any<IImageDdModel>(),
+                serviceModel: Arg.Any<IImageServiceModel>(),
+                defaultImagePath: DefaultImagePath,
+                cancellationToken: Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
     public async Task Create_ShouldSetDefaultImagePath_AndAlso_ShouldPersistArticleInDb_AndAlso_ShouldReturnServiceModel_WhenImageNotProvided()
     {
         var (data, connection) = await CreateSqliteDb();
@@ -168,6 +224,107 @@ public sealed class ArticlesUnit
                 Arg.Any<IImageDdModel>(),
                 Arg.Any<IImageServiceModel>(),
                 DefaultImagePath,
+                Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Edit_ShouldNotDeleteOldImage_WhenNewImageProvided_ButImagePathDoesNotChange()
+    {
+        var (data, connection) = await CreateSqliteDb();
+        await using var _ = connection;
+
+        var imageWriter = Substitute.For<IImageWriter>();
+        imageWriter
+            .When(writter => writter.Write(
+                Arg.Any<string>(),
+                Arg.Any<IImageDdModel>(),
+                Arg.Any<IImageServiceModel>(),
+                Arg.Any<string?>(),
+                Arg.Any<CancellationToken>()))
+            .Do(callInfo =>
+            {
+                var dbModel = (IImageDdModel)callInfo[1];
+                dbModel.ImagePath = "/images/articles/old.jpg";
+            });
+
+        var logger = Substitute.For<ILogger<ArticleService>>();
+        var service = new ArticleService(
+            data,
+            imageWriter,
+            logger);
+
+        var article = NewArticle(imagePath: "/images/articles/old.jpg");
+        data.Articles.Add(article);
+        await data.SaveChangesAsync();
+
+        var dummyFile = new FormFile(
+            baseStream: new MemoryStream([1, 2, 3]),
+            baseStreamOffset: 0,
+            length: 3,
+            name: "Image",
+            fileName: "test.jpg");
+
+        var serviceModel = new CreateArticleServiceModel
+        {
+            Title = "Updated title is valid",
+            Introduction = "Updated introduction is valid",
+            Content = new string('u', 200),
+            Image = dummyFile
+        };
+
+        var result = await service.Edit(
+            article.Id,
+            serviceModel);
+
+        result.Succeeded.Should().BeTrue();
+
+        imageWriter
+            .DidNotReceive()
+            .Delete(
+                resourceName: Arg.Any<string>(),
+                imagePath: Arg.Any<string?>(),
+                defaultImagePath: Arg.Any<string?>());
+    }
+
+    [Fact]
+    public async Task Edit_ShouldCallImageWriterWithNullDefaultImagePath()
+    {
+        var (data, connection) = await CreateSqliteDb();
+        await using var _ = connection;
+
+        var imageWriter = Substitute.For<IImageWriter>();
+        var logger = Substitute.For<ILogger<ArticleService>>();
+
+        var service = new ArticleService(
+            data,
+            imageWriter,
+            logger);
+
+        var article = NewArticle(imagePath: "/images/articles/old.jpg");
+        data.Articles.Add(article);
+        await data.SaveChangesAsync();
+
+        var serviceModel = new CreateArticleServiceModel
+        {
+            Title = "Updated title is valid",
+            Introduction = "Updated introduction is valid",
+            Content = new string('u', 200),
+            Image = null
+        };
+
+        var result = await service.Edit(
+            article.Id,
+            serviceModel);
+
+        result.Succeeded.Should().BeTrue();
+
+        await imageWriter
+            .Received(1)
+            .Write(
+                ImagePathPrefix,
+                Arg.Any<IImageDdModel>(),
+                Arg.Any<IImageServiceModel>(),
+                null,
                 Arg.Any<CancellationToken>());
     }
 

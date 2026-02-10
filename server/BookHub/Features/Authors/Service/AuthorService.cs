@@ -170,7 +170,14 @@ public class AuthorService(
             null,
             cancellationToken);
 
-        if (isNewImageUploaded)
+        var shouldDeleteOldImage =
+            isNewImageUploaded &&
+            !string.Equals(
+                oldImagePath,
+                dbModel.ImagePath,
+                StringComparison.OrdinalIgnoreCase);
+
+        if (shouldDeleteOldImage)
         {
             imageWriter.Delete(
                 nameof(AuthorDbModel),
