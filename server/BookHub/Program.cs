@@ -80,17 +80,3 @@ logger.LogInformation(
     app.Environment.ToString());
 
 await app.RunAsync();
-
-$RG = "bookhub-rg"
-$APP = "bookhub-api-39945"
-
-$AdminEmail = "admin@mail.com"
-$AdminPass = "Polokizaq123!"
-$AdminRole = "Administrator"
-
-az containerapp update -g $RG -n $APP --set-env-vars `
-  BootstrapAdmin__Enabled="true" `
-  BootstrapAdmin__Email="$AdminEmail" `
-  BootstrapAdmin__Password="$AdminPass" `
-  BootstrapAdmin__Role="$AdminRole" `
-  REDEPLOY_TOKEN="$(Get-Date -Format yyyyMMdd-HHmmss)"
