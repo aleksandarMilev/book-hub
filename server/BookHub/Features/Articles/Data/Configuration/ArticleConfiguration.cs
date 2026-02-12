@@ -13,6 +13,9 @@ public class ArticleConfiguration : IEntityTypeConfiguration<ArticleDbModel>
     public void Configure(EntityTypeBuilder<ArticleDbModel> builder)
     {
         builder
+            .HasKey(a => a.Id);
+
+        builder
           .Property(a => a.Title)
           .IsRequired()
           .HasMaxLength(TitleMaxLength);

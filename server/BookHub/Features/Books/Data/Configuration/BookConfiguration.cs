@@ -13,6 +13,9 @@ public sealed class BookConfiguration : IEntityTypeConfiguration<BookDbModel>
     public void Configure(EntityTypeBuilder<BookDbModel> builder)
     {
         builder
+            .HasKey(b => b.Id);
+
+        builder
             .Property(b => b.Title)
             .IsRequired()
             .HasMaxLength(TitleMaxLength);

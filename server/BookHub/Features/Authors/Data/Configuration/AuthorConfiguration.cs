@@ -13,6 +13,9 @@ public class AuthorConfiguration : IEntityTypeConfiguration<AuthorDbModel>
     public void Configure(EntityTypeBuilder<AuthorDbModel> builder)
     {
         builder
+            .HasKey(a => a.Id);
+
+        builder
             .Property(a => a.Name)
             .IsRequired()
             .HasMaxLength(NameMaxLength);

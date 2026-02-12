@@ -1,9 +1,9 @@
 ﻿namespace BookHub.Features.Identity.Data.Configuration;
 
-using BookHub.Features.Identity.Data.Models;
-using BookHub.Features.UserProfile.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Models;
+using UserProfile.Data.Models;
 
 public sealed class UserDbModelConfiguration : IEntityTypeConfiguration<UserDbModel>
 {

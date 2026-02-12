@@ -1,12 +1,11 @@
 # BookHub
 
-BookHub is a full-stack book community platform for discovering and sharing books, authors, reviews, and articles, with user profiles, reading lists, chat, notifications, and admin moderation.
+BookHub is a full-stack book community platform for discovering and sharing books, authors, reviews, and articles. It includes user profiles, reading lists, chats, notifications, and admin moderation.
 
 ## Highlights
-
-- Account registration/login with JWT auth and welcome emails
+- JWT-based auth with welcome emails on registration
 - Book and author catalogs with approval workflow and top lists
-- Genres, search, and statistics dashboards
+- Genres, statistics dashboard, and full-text search
 - Reading lists (To Read, Currently Reading, Read)
 - Reviews with voting
 - Articles (public reading, admin authoring)
@@ -15,71 +14,55 @@ BookHub is a full-stack book community platform for discovering and sharing book
 - Image uploads for books, authors, articles, chats, and profiles
 - Admin tools for approvals and profile management
 
-## Tech stack
+## Architecture
+- `client/` React 18 + Vite SPA
+- `server/` ASP.NET Core Web API (.NET 10) with EF Core and Identity
+- `sqlserver/` SQL Server 2022 image with Full-Text Search enabled
+- Docker Compose for dev and prod stacks
 
-- **Frontend:** React 18 + Vite, TypeScript, React Router, Zustand, Formik/Yup, Bootstrap/MDB, i18next, Axios, Vitest
-- **Backend:** ASP.NET Core (.NET 10), EF Core, Identity, JWT auth, Swagger, MailKit, health checks
-- **Database:** SQL Server 2022 with Full-Text Search
-- **Containers:** Docker + Docker Compose (dev/prod)
+## Tech Stack
+- Frontend: React 18, Vite, TypeScript, React Router, Zustand, Formik/Yup, Bootstrap + MDB, i18next, Axios, Vitest
+- Backend: ASP.NET Core 10, EF Core, Identity, JWT auth, Swagger, MailKit, health checks
+- Database: SQL Server 2022 + Full-Text Search
+- Tooling: ESLint, Prettier, Husky, Docker
 
-## Project structure
+## Project Structure
+- `client/` frontend app
+- `server/` API and tests
+- `sqlserver/` SQL Server Docker image with FTS
+- `docker-compose.dev.yml` local dev stack
+- `docker-compose.prod.yml` production stack
+- `.env.example` environment template
 
-- `client/` — React + Vite frontend
-- `server/` — ASP.NET Core Web API
-- `sqlserver/` — SQL Server image with Full-Text Search
-- `docker-compose.dev.yml` — local development stack
-- `docker-compose.prod.yml` — production stack
-- `.env.example` — environment template
-
-## Getting started
-
-### Prerequisites
-
-- Docker Desktop (recommended for fastest setup)
-- Node.js 20+ (frontend tooling)
-- .NET 10 SDK (for running the API outside Docker)
-
-### 1) Configure environment
-
-Copy the template and adjust values as needed:
+## Quick Start (Docker)
+1. Copy the env template and adjust values as needed.
 
 ```bash
 cp .env.example .env
 ```
 
-The most important settings:
-
-- `SA_PASSWORD` — SQL Server SA password
-- `DB_NAME` — database name
-- `APP_SECRET` — JWT signing key (>= 16 chars)
-- `ISSUER`, `AUDIENCE` — JWT issuer/audience
-- `SMTP_*` — SMTP settings used for welcome emails
-- `CORS_ALLOWED_ORIGINS` — semicolon-separated list of allowed origins (prod)
-
-### 2) Run with Docker (recommended)
+2. Start the dev stack.
 
 ```bash
 docker compose -f docker-compose.dev.yml --env-file .env up --build
 ```
 
 Services:
-
 - Client: `http://localhost:5173`
-- API + Swagger UI: `http://localhost:8080`
+- API + Swagger UI (Development only): `http://localhost:8080`
 - Health check: `http://localhost:8080/health`
 
-### 3) Run locally (without Docker)
-
-1. Start SQL Server locally (ensure Full-Text Search is available if you use search).
-2. Configure environment variables or `server/BookHub/appsettings.Development.json`.
-3. Start the API:
+## Local Development (no Docker)
+1. Start SQL Server locally. Full-Text Search is required for the search endpoints.
+2. Configure the API connection string and app settings. You can set `ConnectionStrings__DefaultConnection` as an environment variable or edit `server/BookHub/appsettings.Development.json`.
+3. Start the API.
 
 ```bash
 dotnet restore server/BookHub/BookHub.csproj
 dotnet run --project server/BookHub/BookHub.csproj
 ```
 
-4. Start the client:
+4. Start the client.
 
 ```bash
 cd client
@@ -87,61 +70,75 @@ npm install
 npm run dev
 ```
 
-The client reads `VITE_REACT_APP_SERVER_URL` from `client/.env`. If unset, it defaults to `http://localhost:8080`.
+The client uses `VITE_REACT_APP_SERVER_URL` from `client/.env`. If it is not set, the default is `http://localhost:8080`.
 
-## Default admin (development only)
+## Environment Variables
+These are the primary env vars used by the Docker stacks. For local runs you can use the same names, or configure `server/BookHub/appsettings.Development.json`.
 
-In Development, the API auto-creates an admin role and user:
+| Variable | Purpose |
+| --- | --- |
+| `SA_PASSWORD` | SQL Server `sa` password for the Docker image |
+| `DB_NAME` | Database name used in the connection string |
+| `APP_SECRET` | JWT signing key (16+ characters recommended) |
+| `ISSUER` | JWT issuer |
+| `AUDIENCE` | JWT audience |
+| `SMTP_HOST` | SMTP host used for welcome emails |
+| `SMTP_PORT` | SMTP port |
+| `SMTP_USER` | SMTP username |
+| `SMTP_PASSWORD` | SMTP password |
+| `SMTP_FROM` | From address for emails |
+| `SMTP_USE_SSL` | `true` or `false` |
+| `CORS_ALLOWED_ORIGINS` | Semicolon-separated list of allowed origins (Production only) |
 
+Optional, mainly for local runs:
+- `ConnectionStrings__DefaultConnection` to override the DB connection string
+- `VITE_REACT_APP_SERVER_URL` for the client base API URL
+
+## Ports
+- Client dev server: `5173`
+- API: `8080` (HTTP)
+- API: `8081` (HTTPS)
+- SQL Server: `1433`
+
+## API Notes
+- Swagger UI is enabled only in Development and is hosted at the API root (`http://localhost:8080`).
+- Admin endpoints are under `Administrator/*` and require the `Administrator` role.
+- Health check endpoint is `/health`.
+
+## Database, Migrations, and Seeding
+- Migrations are applied automatically on startup in Development only.
+- Seed data is loaded from JSON files in `server/BookHub/Features/*/Data/Seed/*.json`.
+- The Docker SQL Server image includes Full-Text Search for the search feature.
+
+## Default Admin (Development Only)
+A default admin role and user are created in Development on startup:
 - Email: `admin@mail.com`
 - Password: `admin1234`
 
-This only runs in Development on startup.
+## Scripts
+Client scripts (run from `client/`):
+- `npm run dev`
+- `npm run build`
+- `npm run preview`
+- `npm run lint`
+- `npm run lint:fix`
+- `npm run typecheck`
+- `npm run test`
+- `npm run test:watch`
+- `npm run format`
+- `npm run format:check`
 
-## Data seeding
+Server scripts:
+- `dotnet run --project server/BookHub/BookHub.csproj`
+- `dotnet test server/BookHub.sln`
 
-Seed data is provided for books, authors, genres, and articles in:
-
-- `server/BookHub/Features/**/Data/Seed/*.json`
-
-Migrations run automatically in Development (`UseMigrations()`), which applies the seed data.
-
-## API notes
-
-- Base API URL: `http://localhost:8080`
-- Swagger UI: `http://localhost:8080`
-- Swagger JSON: `http://localhost:8080/swagger/v1/swagger.json`
-- Admin endpoints are under the `Administrator` area (e.g., `/Administrator/Books`)
-
-## Client scripts
-
-Run from `client/`:
-
-```bash
-npm run dev
-npm run build
-npm run preview
-npm run lint
-npm run typecheck
-npm run test
-```
-
-## Production
-
-To build and run the production stack:
-
-```bash
-docker compose -f docker-compose.prod.yml --env-file .env up --build
-```
-
-Notes:
-
-- Client is served on port `80`
-- API listens on ports `8080` (HTTP) and `8081` (HTTPS)
-- Uploaded images are stored in a Docker volume (`server_uploads`)
+## Production Notes
+- Swagger UI is disabled outside Development.
+- `CORS_ALLOWED_ORIGINS` must be set in Production or startup will fail.
+- Uploaded files are stored under `server/BookHub/wwwroot` in dev and in the `server_uploads` Docker volume in production.
+- The production stack does not auto-apply migrations. Apply migrations as part of your deployment process.
 
 ## Troubleshooting
-
-- **Registration fails:** the welcome email is required; check `SMTP_*` settings.
-- **CORS errors in production:** ensure `CORS_ALLOWED_ORIGINS` is set and uses `;` separators.
-- **Search not working:** the SQL Server image includes Full-Text Search; ensure your SQL Server has it enabled.
+- Registration fails: welcome emails are required and SMTP must be configured correctly.
+- CORS errors in Production: ensure `CORS_ALLOWED_ORIGINS` is set and uses `;` separators.
+- Search not working: ensure SQL Server Full-Text Search is installed and enabled.
