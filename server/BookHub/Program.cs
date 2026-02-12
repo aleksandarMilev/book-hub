@@ -1,4 +1,5 @@
 using BookHub.Infrastructure.Extensions;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,7 @@ if (!builder.Environment.IsEnvironment("Testing"))
 var app = builder.Build();
 
 var envIsDev = app.Environment.IsDevelopment();
+var envIsProd = app.Environment.IsProduction();
 if (envIsDev)
 {
     app.UseDeveloperExceptionPage();
@@ -61,7 +63,11 @@ if (envIsDev)
 {
     app.UseSwaggerUI();
     await app.UseMigrations();
-    await app.UseAdminRole();
+    await app.UseDevAdminRole();
+}
+else if (envIsProd)
+{
+    await app.useProductionAdminRole();
 }
 
 var logger = app.Logger;
@@ -74,3 +80,17 @@ logger.LogInformation(
     app.Environment.ToString());
 
 await app.RunAsync();
+
+$RG = "bookhub-rg"
+$APP = "bookhub-api-39945"
+
+$AdminEmail = "admin@mail.com"
+$AdminPass = "Polokizaq123!"
+$AdminRole = "Administrator"
+
+az containerapp update -g $RG -n $APP --set-env-vars `
+  BootstrapAdmin__Enabled="true" `
+  BootstrapAdmin__Email="$AdminEmail" `
+  BootstrapAdmin__Password="$AdminPass" `
+  BootstrapAdmin__Role="$AdminRole" `
+  REDEPLOY_TOKEN="$(Get-Date -Format yyyyMMdd-HHmmss)"
