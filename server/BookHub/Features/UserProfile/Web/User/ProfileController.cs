@@ -18,7 +18,7 @@ public class ProfileController(IProfileService service) : ApiController
         CancellationToken cancellationToken = default)
         => this.Ok(await service.TopThree(cancellationToken));
 
-    [HttpGet(ApiRoutes.Mine, Name = nameof(this.Mine))]
+    [HttpGet(ApiRoutes.Mine, Name = nameof(Mine))]
     public async Task<ActionResult<ProfileServiceModel>> Mine(
         CancellationToken cancellationToken = default)
         => this.Ok(await service.Mine(cancellationToken));

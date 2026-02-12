@@ -13,6 +13,9 @@ public class GenreConfiguration : IEntityTypeConfiguration<GenreDbModel>
     public void Configure(EntityTypeBuilder<GenreDbModel> builder)
     {
         builder
+            .HasKey(g => g.Id);
+
+        builder
             .Property(g => g.Name)
             .IsRequired()
             .HasMaxLength(NameMaxLength);
