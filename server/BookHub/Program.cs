@@ -1,4 +1,5 @@
 using BookHub.Infrastructure.Extensions;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,7 @@ if (!builder.Environment.IsEnvironment("Testing"))
 var app = builder.Build();
 
 var envIsDev = app.Environment.IsDevelopment();
+var envIsProd = app.Environment.IsProduction();
 if (envIsDev)
 {
     app.UseDeveloperExceptionPage();
@@ -61,7 +63,11 @@ if (envIsDev)
 {
     app.UseSwaggerUI();
     await app.UseMigrations();
-    await app.UseAdminRole();
+    await app.UseDevAdminRole();
+}
+else if (envIsProd)
+{
+    await app.UseProductionAdminRole();
 }
 
 var logger = app.Logger;
