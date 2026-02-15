@@ -19,6 +19,8 @@ public class BookDbModel:
 
     public string LongDescription { get; set; } = default!;
 
+    public int? Pages { get; set; }
+
     public double AverageRating { get; set; }
 
     public int RatingsCount { get; set; }
@@ -37,9 +39,12 @@ public class BookDbModel:
 
     public bool IsApproved { get; set; }
 
-    public ICollection<BookGenreDbModel> BooksGenres { get; set; } = new HashSet<BookGenreDbModel>();
+    public ICollection<BookGenreDbModel> BooksGenres { get; set; }
+        = new HashSet<BookGenreDbModel>();
 
-    public ICollection<ReviewDbModel> Reviews { get; set; } = new HashSet<ReviewDbModel>();
+    public ICollection<ReviewDbModel> Reviews { get; set; }
+        = new HashSet<ReviewDbModel>();
 
-    public ICollection<ReadingListDbModel> ReadingLists { get; set; } = new HashSet<ReadingListDbModel>();
+    public ICollection<ReadingListDbModel> ReadingLists { get; set; }
+        = new HashSet<ReadingListDbModel>();
 }

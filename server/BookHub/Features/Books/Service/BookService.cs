@@ -649,6 +649,7 @@ public class BookService(
             Title = pending.Title,
             ShortDescription = pending.ShortDescription,
             LongDescription = pending.LongDescription,
+            Pages = pending.Pages,
             PublishedDate = DateTimeToString(pending.PublishedDate),
             ImagePath = pending.ImagePath,
             AuthorName = baseModel.AuthorName,

@@ -2,6 +2,7 @@
 
 using System.Linq.Expressions;
 using System.Reflection;
+using BookHub.Features.Challenges.Data.Models;
 using Features.Articles.Data.Models;
 using Features.Authors.Data.Models;
 using Features.Books.Data.Models;
@@ -56,6 +57,10 @@ public class BookHubDbContext(
     public DbSet<ChatDbModel> Chats { get; init; }
 
     public DbSet<ChatUser> ChatsUsers { get; init; }
+
+    public DbSet<ReadingChallengeDbModel> ReadingChallenges { get; init; }
+
+    public DbSet<ReadingCheckInDbModel> ReadingCheckIns { get; init; }
 
     public override int SaveChanges(bool acceptAllChangesOnSuccess)
     {

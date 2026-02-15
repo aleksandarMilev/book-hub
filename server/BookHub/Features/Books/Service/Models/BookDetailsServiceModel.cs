@@ -11,6 +11,8 @@ public class BookDetailsServiceModel : BookServiceModel
 
     public string LongDescription { get; init; } = default!;
 
+    public int? Pages { get; init; }
+
     public string? CreatorId { get; init; }
 
     public bool MoreThanFiveReviews { get; init; }
