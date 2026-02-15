@@ -179,8 +179,6 @@ public class BookService(
         return await data
             .Books
             .AsNoTracking()
-            .IgnoreQueryFilters()
-            .ApplyIsDeletedFilter()
             .ToDetailsServiceModels(userId)
             .SingleOrDefaultAsync(
                 b => b.Id == dbModel.Id,
@@ -239,12 +237,23 @@ public class BookService(
             serviceModel.AuthorId,
             cancellationToken);
 
+        dbModel.IsApproved = false;
+
         await data.SaveChangesAsync(cancellationToken);
 
         await this.MapBookAndGenres(
             dbModel.Id,
             serviceModel.Genres,
             cancellationToken);
+
+        if (!userService.IsAdmin())
+        {
+            await notificationService.CreateOnBookEdition(
+                dbModel.Id,
+                dbModel.Title,
+                await adminService.GetId(),
+                cancellationToken);
+        }
 
         logger.LogInformation(
             "Book with Id: {id} was updated.",

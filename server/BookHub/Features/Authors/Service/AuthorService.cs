@@ -185,7 +185,18 @@ public class AuthorService(
                 DefaultImagePath);
         }
 
+        dbModel.IsApproved = false;
+
         await data.SaveChangesAsync(cancellationToken);
+
+        if (!userService.IsAdmin())
+        {
+            await notificationService.CreateOnAuthorEdition(
+               dbModel.Id,
+               dbModel.Name,
+               await adminService.GetId(),
+               cancellationToken);
+        }
 
         logger.LogInformation(
             "Author with Id: {id} was updated.",
