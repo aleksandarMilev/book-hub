@@ -73,7 +73,7 @@ public static class AuthorMapping
             DiedAt = DateTimeToString(dbModel.DiedAt),
             CreatorId = dbModel.CreatorId,
             IsApproved = dbModel.IsApproved,
-            TopBooks = dbModel
+            TopBooks = [.. dbModel
                 .Books
                 .Take(3)
                 .Select(b => new BookServiceModel
@@ -92,8 +92,7 @@ public static class AuthorMapping
                         Name = bg.Genre.Name
                     })
                     .ToHashSet()
-                })
-                .ToList(),
+                })],
         };
 
     public static IQueryable<AuthorDetailsServiceModel> ToDetailsServiceModels(

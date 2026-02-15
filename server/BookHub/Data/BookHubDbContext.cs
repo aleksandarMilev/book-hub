@@ -163,10 +163,9 @@ public class BookHubDbContext(
                 isApprovedProp,
                 Expression.Constant(true));
 
-            var isAdmin = Expression.Call(
-                EfPropertyMethod.MakeGenericMethod(typeof(bool)),
+            var isAdmin = Expression.Property(
                 thisContext,
-                Expression.Constant(nameof(this.IsAdmin)));
+                nameof(this.IsAdmin));
 
             var isAdminTrue = Expression.Equal(
                 isAdmin,
@@ -184,10 +183,9 @@ public class BookHubDbContext(
                     entityTypeParam,
                     creatorIdProp);
 
-                var currentUserId = Expression.Call(
-                    EfPropertyMethod.MakeGenericMethod(typeof(string)),
+                var currentUserId = Expression.Property(
                     thisContext,
-                    Expression.Constant(nameof(this.CurrentUserId)));
+                    nameof(CurrentUserId));
 
                 var currentUserNotNull = Expression.NotEqual(
                     currentUserId,
@@ -215,7 +213,4 @@ public class BookHubDbContext(
             ? null
             : Expression.Lambda(combined, entityTypeParam);
     }
-
-    private static readonly MethodInfo EfPropertyMethod =
-        typeof(EF).GetMethod(nameof(EF.Property))!;
 }
