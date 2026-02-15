@@ -77,9 +77,7 @@ public class SearchService(
 
             dbModels = dbModels.Where(b =>
                 EF.Functions.Contains(b.Title, fullTextQuery) ||
-                EF.Functions.Contains(b.ShortDescription, fullTextQuery) ||
-                (b.Author != null && EF.Functions.Contains(b.Author.Name, fullTextQuery)) ||
-                (b.Author != null && b.Author.PenName != null && EF.Functions.Contains(b.Author.PenName, fullTextQuery)));
+                EF.Functions.Contains(b.ShortDescription, fullTextQuery));
         }
 
         var books = dbModels
