@@ -29,6 +29,8 @@ public class BookHubDbContext(
 
     public DbSet<BookDbModel> Books { get; init; }
 
+    public DbSet<BookEditDbModel> BookEdits { get; init; }
+
     public DbSet<GenreDbModel> Genres { get; init; }
 
     public DbSet<BookGenreDbModel> BooksGenres { get; init; }
@@ -36,6 +38,8 @@ public class BookHubDbContext(
     public DbSet<ReadingListDbModel> ReadingLists { get; init; }
 
     public DbSet<AuthorDbModel> Authors { get; init; }
+
+    public DbSet<AuthorEditDbModel> AuthorEdits { get; init; }
 
     public DbSet<ReviewDbModel> Reviews { get; init; }
 

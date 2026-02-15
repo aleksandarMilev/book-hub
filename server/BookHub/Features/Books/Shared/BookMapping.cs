@@ -5,6 +5,7 @@ using Data.Models;
 using Genres.Service.Models;
 using Reviews.Service.Models;
 using Service.Models;
+using System.Text.Json;
 using Web.User.Models;
 
 using static BookHub.Common.Utils;
@@ -190,4 +191,49 @@ public static class BookMapping
             dbModel.LongDescription = serviceModel.LongDescription;
             dbModel.PublishedDate = serviceModel.PublishedDate;
         }
+
+    public static void UpdatePendingDbModel(
+        this CreateBookServiceModel serviceModel,
+        BookEditDbModel pendingDbModel)
+    {
+        pendingDbModel.Title = serviceModel.Title;
+        pendingDbModel.ShortDescription = serviceModel.ShortDescription;
+        pendingDbModel.LongDescription = serviceModel.LongDescription;
+        pendingDbModel.PublishedDate = serviceModel.PublishedDate;
+        pendingDbModel.AuthorId = serviceModel.AuthorId;
+
+        var genreIds = (serviceModel.Genres ?? [])
+            .Where(id => id != Guid.Empty)
+            .Distinct()
+            .ToList();
+
+        pendingDbModel.GenresJson = JsonSerializer.Serialize(genreIds);
+    }
+
+    public static void ApplyPendingToBook(
+        this BookEditDbModel pendingDbModel,
+        BookDbModel dbModel)
+    {
+        dbModel.Title = pendingDbModel.Title;
+        dbModel.ShortDescription = pendingDbModel.ShortDescription;
+        dbModel.LongDescription = pendingDbModel.LongDescription;
+        dbModel.PublishedDate = pendingDbModel.PublishedDate;
+        dbModel.ImagePath = pendingDbModel.ImagePath;
+        dbModel.AuthorId = pendingDbModel.AuthorId;
+    }
+
+    public static ICollection<Guid> GetPendingGenres(
+        this BookEditDbModel pendingDbModel)
+    {
+        try
+        {
+            return JsonSerializer
+                    .Deserialize<ICollection<Guid>>(pendingDbModel.GenresJson)
+                    ?? new HashSet<Guid>();
+        }
+        catch
+        {
+            return new HashSet<Guid>();
+        }
+    }
 }

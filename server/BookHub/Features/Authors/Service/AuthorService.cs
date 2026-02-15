@@ -14,6 +14,7 @@ using Shared;
 using UserProfile.Service;
 
 using static Common.Constants.ErrorMessages;
+using static Common.Utils;
 using static Shared.AuthorMapping;
 using static Shared.Constants.Paths;
 
@@ -47,7 +48,8 @@ public class AuthorService(
     public async Task<AuthorDetailsServiceModel?> Details(
         Guid authorId,
         CancellationToken cancellationToken = default)
-        => await data
+    {
+        var authorDetails = await data
             .Authors
             .AsNoTracking()
             .ToDetailsServiceModels()
@@ -55,18 +57,69 @@ public class AuthorService(
                 a => a.Id == authorId,
                 cancellationToken);
 
+        if (authorDetails is null)
+        {
+            return null;
+        }
+
+        var currentUserId = userService.GetId();
+        var isCreator = string.Equals(
+            authorDetails.CreatorId,
+            currentUserId,
+            StringComparison.OrdinalIgnoreCase);
+
+        var isAdmin = userService.IsAdmin();
+        if (!isCreator && !isAdmin)
+        {
+            return authorDetails;
+        }
+
+        var pending = await data
+            .AuthorEdits
+            .AsNoTracking()
+            .FirstOrDefaultAsync(
+                e => e.AuthorId == authorId,
+                cancellationToken);
+
+        if (pending is null)
+        {
+            return authorDetails;
+        }
+
+        return ApplyPendingEdit(authorDetails, pending);
+    }
+
     public async Task<AuthorDetailsServiceModel?> AdminDetails(
         Guid authorId,
         CancellationToken cancellationToken = default)
-         => await data
-             .Authors
-             .AsNoTracking()
-             .IgnoreQueryFilters()
-             .ApplyIsDeletedFilter()
-             .ToDetailsServiceModels()
-             .FirstOrDefaultAsync(
+    {
+        var authorDetails = await data
+            .Authors
+            .AsNoTracking()
+            .IgnoreQueryFilters()
+            .ApplyIsDeletedFilter()
+            .ToDetailsServiceModels()
+            .FirstOrDefaultAsync(
                 a => a.Id == authorId,
                 cancellationToken);
+
+        if (authorDetails is null)
+        {
+            return null;
+        }
+
+        var pending = await data.AuthorEdits
+            .AsNoTracking()
+            .IgnoreQueryFilters()
+            .ApplyIsDeletedFilter()
+            .FirstOrDefaultAsync(
+                e => e.AuthorId == authorId,
+                cancellationToken);
+
+        return pending is null
+            ? authorDetails
+            : ApplyPendingEdit(authorDetails, pending);
+    }
 
     public async Task<ResultWith<AuthorDetailsServiceModel>> Create(
         CreateAuthorServiceModel serviceModel,
@@ -94,7 +147,7 @@ public class AuthorService(
         }
 
         await imageWriter.Write(
-            ImagePathPrefix,
+            resourceName: ImagePathPrefix,
             dbModel,
             serviceModel,
             DefaultImagePath,
@@ -137,70 +190,99 @@ public class AuthorService(
             return $"{serviceModel.Nationality} is not valid Nationality enumeartion!";
         }
 
-        var dbModel = await this.GetDbModel(
-            authorId,
-            cancellationToken);
-
-        if (dbModel is null)
+        var author = await this.GetDbModel(authorId, cancellationToken);
+        if (author is null)
         {
             return this.LogAndReturnNotFoundMessage(authorId);
         }
 
         var userId = userService.GetId()!;
-
-        var isNotCreator = dbModel.CreatorId != userId;
+        var isNotCreator = author.CreatorId != userId;
         var isNotAdmin = !userService.IsAdmin();
 
         if (isNotCreator && isNotAdmin)
         {
-            return LogAndReturnUnauthorizedMessage(
-                authorId,
-                userId);
+            return LogAndReturnUnauthorizedMessage(authorId, userId);
         }
 
-        var oldImagePath = dbModel.ImagePath;
-        var isNewImageUploaded = serviceModel.Image is not null;
+        var pending = await data
+            .AuthorEdits
+            .FirstOrDefaultAsync(
+                a => a.AuthorId == authorId,
+                cancellationToken);
 
-        serviceModel.UpdateDbModel(dbModel);
-
-        await imageWriter.Write(
-            ImagePathPrefix,
-            dbModel,
-            serviceModel,
-            null,
-            cancellationToken);
-
-        var shouldDeleteOldImage =
-            isNewImageUploaded &&
-            !string.Equals(
-                oldImagePath,
-                dbModel.ImagePath,
-                StringComparison.OrdinalIgnoreCase);
-
-        if (shouldDeleteOldImage)
+        if (pending is null)
         {
-            imageWriter.Delete(
-                nameof(AuthorDbModel),
-                oldImagePath,
-                DefaultImagePath);
+            pending = new()
+            {
+                AuthorId = authorId,
+                RequestedById = userId,
+                ImagePath = author.ImagePath
+            };
+
+            data.AuthorEdits.Add(pending);
+        }
+        else
+        {
+            pending.RequestedById = userId;
         }
 
-        dbModel.IsApproved = false;
+        var oldPendingImagePath = pending.ImagePath;
+        var newImageUploaded = serviceModel.Image is not null;
+
+        serviceModel.UpdatePendingDbModel(pending);
+
+        if (newImageUploaded)
+        {
+            await imageWriter.Write(
+                resourceName: PendingImagePathPrefix,
+                dbModel: pending,
+                serviceModel,
+                defaultImagePath: null,
+                cancellationToken);
+
+            var shouldDeleteOldPendingImage =
+                !string.Equals(
+                    oldPendingImagePath,
+                    pending.ImagePath,
+                    StringComparison.OrdinalIgnoreCase) &&
+                !string.Equals(
+                    oldPendingImagePath,
+                    DefaultImagePath,
+                    StringComparison.OrdinalIgnoreCase) &&
+                !string.Equals(
+                    oldPendingImagePath,
+                    author.ImagePath,
+                    StringComparison.OrdinalIgnoreCase);
+
+            if (shouldDeleteOldPendingImage)
+            {
+                imageWriter.Delete(
+                    resourceName: PendingImagePathPrefix,
+                    imagePath: oldPendingImagePath,
+                    DefaultImagePath);
+            }
+        }
+        else
+        {
+            pending.ImagePath = author.ImagePath;
+        }
 
         await data.SaveChangesAsync(cancellationToken);
 
         if (!userService.IsAdmin())
         {
             await notificationService.CreateOnAuthorEdition(
-               dbModel.Id,
-               dbModel.Name,
-               await adminService.GetId(),
-               cancellationToken);
+                author.Id,
+                author.Name,
+                receiverId: await adminService.GetId(),
+                cancellationToken);
         }
 
         logger.LogInformation(
-            "Author with Id: {id} was updated.",
-            dbModel.Id);
+            "Author edit request created/updated for AuthorId: {id}. Pending edit id: {pendingId}",
+            author.Id,
+            pending.Id);
 
         return true;
     }
@@ -249,19 +331,70 @@ public class AuthorService(
         }
 
         var dbModel = await data
-             .Authors
-             .IgnoreQueryFilters()
-             .ApplyIsDeletedFilter()
-             .FirstOrDefaultAsync(
-                a => a.Id == authorId,
-                cancellationToken);
+            .Authors
+            .IgnoreQueryFilters()
+            .ApplyIsDeletedFilter()
+            .FirstOrDefaultAsync(a => a.Id == authorId, cancellationToken);
 
         if (dbModel is null)
         {
             return LogAndReturnNotFoundMessage(authorId);
         }
 
+        var pendingDbModel = await data
+            .AuthorEdits
+            .IgnoreQueryFilters()
+            .ApplyIsDeletedFilter()
+            .FirstOrDefaultAsync(
+                a => a.AuthorId == authorId,
+                cancellationToken);
+
+        if (pendingDbModel is not null)
+        {
+            var oldAuthorImagePath = dbModel.ImagePath;
+
+            pendingDbModel.UpdatePendingDbModel(dbModel);
+
+            data.AuthorEdits.Remove(pendingDbModel);
+
+            dbModel.IsApproved = true;
+
+            await data.SaveChangesAsync(cancellationToken);
+
+            var shouldDeleteOldAuthorImage =
+                !string.Equals(
+                    oldAuthorImagePath,
+                    dbModel.ImagePath,
+                    StringComparison.OrdinalIgnoreCase) &&
+                !string.Equals(
+                    oldAuthorImagePath,
+                    DefaultImagePath,
+                    StringComparison.OrdinalIgnoreCase);
+
+            if (shouldDeleteOldAuthorImage)
+            {
+                imageWriter.Delete(
+                    resourceName: ImagePathPrefix,
+                    imagePath: oldAuthorImagePath,
+                    defaultImagePath: DefaultImagePath);
+            }
+
+            logger.LogInformation(
+                "Pending edit for AuthorId: {id} approved and applied.",
+                dbModel.Id);
+
+            await notificationService.CreateOnAuthorApproved(
+                authorId,
+                dbModel.Name,
+                receiverId: dbModel.CreatorId!,
+                cancellationToken);
+
+            return true;
+        }
+
+        var wasPreviouslyUnapproved = !dbModel.IsApproved;
         dbModel.IsApproved = true;
+
         await data.SaveChangesAsync(cancellationToken);
 
         logger.LogInformation(
@@ -271,12 +404,15 @@ public class AuthorService(
         await notificationService.CreateOnAuthorApproved(
             authorId,
             dbModel.Name,
-            dbModel.CreatorId!,
+            receiverId: dbModel.CreatorId!,
             cancellationToken);
 
-        await profileService.IncrementCreatedAuthorsCount(
-            dbModel.CreatorId!,
-            cancellationToken);
+        if (wasPreviouslyUnapproved)
+        {
+            await profileService.IncrementCreatedAuthorsCount(
+                userId: dbModel.CreatorId!,
+                cancellationToken);
+        }
 
         return true;
     }
@@ -305,6 +441,52 @@ public class AuthorService(
             return LogAndReturnNotFoundMessage(authorId);
         }
 
+        var pendingDbModel = await data
+            .AuthorEdits
+            .IgnoreQueryFilters()
+            .ApplyIsDeletedFilter()
+            .FirstOrDefaultAsync(
+                a => a.AuthorId == authorId,
+                cancellationToken);
+
+        if (pendingDbModel is not null)
+        {
+            var pendingImagePath = pendingDbModel.ImagePath;
+
+            data.AuthorEdits.Remove(pendingDbModel);
+            await data.SaveChangesAsync(cancellationToken);
+
+            var shouldDeletePendingImage =
+                !string.Equals(
+                    pendingImagePath,
+                    dbModel.ImagePath,
+                    StringComparison.OrdinalIgnoreCase) &&
+                !string.Equals(
+                    pendingImagePath,
+                    DefaultImagePath,
+                    StringComparison.OrdinalIgnoreCase);
+
+            if (shouldDeletePendingImage)
+            {
+                imageWriter.Delete(
+                    resourceName: PendingImagePathPrefix,
+                    imagePath: pendingImagePath,
+                    DefaultImagePath);
+            }
+
+            logger.LogInformation(
+                "Pending edit for AuthorId: {id} was rejected (author unchanged).",
+                dbModel.Id);
+
+            await notificationService.CreateOnAuthorRejected(
+                authorId,
+                dbModel.Name,
+                receiverId: dbModel.CreatorId!,
+                cancellationToken);
+
+            return true;
+        }
+
         data.Remove(dbModel);
         await data.SaveChangesAsync(cancellationToken);
 
@@ -315,11 +497,32 @@ public class AuthorService(
         await notificationService.CreateOnAuthorRejected(
             authorId,
             dbModel.Name,
-            dbModel.CreatorId!,
+            receiverId: dbModel.CreatorId!,
             cancellationToken);
 
         return true;
     }
+
+    private static AuthorDetailsServiceModel ApplyPendingEdit(
+        AuthorDetailsServiceModel serviceModel,
+        AuthorEditDbModel pendingDbModel)
+        => new ()
+        {
+            Id = serviceModel.Id,
+            BooksCount = serviceModel.BooksCount,
+            AverageRating = serviceModel.AverageRating,
+            TopBooks = serviceModel.TopBooks,
+            Name = pendingDbModel.Name,
+            ImagePath = pendingDbModel.ImagePath,
+            Biography = pendingDbModel.Biography,
+            PenName = pendingDbModel.PenName,
+            Nationality = pendingDbModel.Nationality,
+            Gender = pendingDbModel.Gender,
+            BornAt = DateTimeToString(pendingDbModel.BornAt),
+            DiedAt = DateTimeToString(pendingDbModel.DiedAt),
+            CreatorId = serviceModel.CreatorId,
+            IsApproved = serviceModel.IsApproved
+        };
 
     private async Task<AuthorDbModel?> GetDbModel(
         Guid authorId,

@@ -138,15 +138,15 @@ public static class AuthorMapping
     public static AuthorDbModel ToDbModel(
         this CreateAuthorServiceModel serviceModel)
         => new()
-    {
-        Name = serviceModel.Name,
-        Biography = serviceModel.Biography,
-        PenName = serviceModel.PenName,
-        Nationality = serviceModel.Nationality,
-        Gender = serviceModel.Gender,
-        BornAt = serviceModel.BornAt,
-        DiedAt = serviceModel.DiedAt
-    };
+        {
+            Name = serviceModel.Name,
+            Biography = serviceModel.Biography,
+            PenName = serviceModel.PenName,
+            Nationality = serviceModel.Nationality,
+            Gender = serviceModel.Gender,
+            BornAt = serviceModel.BornAt,
+            DiedAt = serviceModel.DiedAt
+        };
 
     public static void UpdateDbModel(
         this CreateAuthorServiceModel serviceModel,
@@ -159,5 +159,32 @@ public static class AuthorMapping
         dbModel.Gender = serviceModel.Gender;
         dbModel.BornAt = serviceModel.BornAt;
         dbModel.DiedAt = serviceModel.DiedAt;
+    }
+
+    public static void UpdatePendingDbModel(
+        this CreateAuthorServiceModel serviceModel,
+        AuthorEditDbModel pendingDbModel)
+    {
+        pendingDbModel.Name = serviceModel.Name;
+        pendingDbModel.Biography = serviceModel.Biography;
+        pendingDbModel.PenName = serviceModel.PenName;
+        pendingDbModel.Nationality = serviceModel.Nationality;
+        pendingDbModel.Gender = serviceModel.Gender;
+        pendingDbModel.BornAt = serviceModel.BornAt;
+        pendingDbModel.DiedAt = serviceModel.DiedAt;
+    }
+
+    public static void UpdatePendingDbModel(
+        this AuthorEditDbModel pendingDbModel,
+        AuthorDbModel dbModel)
+    {
+        dbModel.Name = pendingDbModel.Name;
+        dbModel.Biography = pendingDbModel.Biography;
+        dbModel.PenName = pendingDbModel.PenName;
+        dbModel.Nationality = pendingDbModel.Nationality;
+        dbModel.Gender = pendingDbModel.Gender;
+        dbModel.BornAt = pendingDbModel.BornAt;
+        dbModel.DiedAt = pendingDbModel.DiedAt;
+        dbModel.ImagePath = pendingDbModel.ImagePath;
     }
 }
