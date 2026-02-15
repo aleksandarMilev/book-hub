@@ -12,6 +12,7 @@ using Models;
 using Shared;
 
 using static Common.Constants.ErrorMessages;
+using static Common.Utils;
 using static Shared.Constants.Paths;
 
 public class ProfileService(
@@ -462,31 +463,36 @@ public class ProfileService(
 
     private string LogAndReturnNotFoundMessage(string id)
     {
+        var sanitizedId = id.SanitizeStringForLog();
+
         logger.LogWarning(
             DbEntityNotFoundTemplate,
             nameof(UserProfile),
-            id);
+            sanitizedId);
 
         return string.Format(
             DbEntityNotFound,
             nameof(UserProfile),
-            id);
+            sanitizedId);
     }
 
     private string LogAndReturnUnauthorizedMessage(
         string currentUserId,
         string resourceUserId)
     {
+        var sanitizedCurrentUserId = currentUserId.SanitizeStringForLog();
+        var sanitizedResourceUserId = resourceUserId.SanitizeStringForLog();
+
         logger.LogWarning(
             UnauthorizedMessageTemplate,
-            currentUserId,
+            sanitizedCurrentUserId,
             nameof(UserProfile),
-            resourceUserId);
+            sanitizedResourceUserId);
 
         return string.Format(
             UnauthorizedMessage,
-            currentUserId,
+            sanitizedCurrentUserId,
             nameof(UserProfile),
-            resourceUserId);
+            sanitizedResourceUserId);
     }
 }

@@ -84,5 +84,3 @@ const ReadingList: FC = () => {
 };
 
 export default ReadingList;
-
-
