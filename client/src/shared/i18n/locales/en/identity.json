@@ -27,7 +27,7 @@
       "email": "Email",
       "password": "Password",
       "confirmPassword": "Repeat your password",
-      "dateOfBirth": "Date of birth (optional)",
+      "dateOfBirth": "Date of birth",
       "socialMediaUrl": "Website or social media URL (optional)",
       "image": "Profile image (optional)",
       "biography": "Biography (optional)",
@@ -58,6 +58,8 @@
       "imageTooLarge": "Image is too large (max 2MB)",
       "imageInvalidType": "Invalid image type. Allowed: {{types}}",
       "dateOfBirthInvalid": "Invalid date of birth",
+      "dateOfBirthRequired": "Date of birth is required.",
+      "dateOfBirthTooYoung": "You must be at least {{years}} years old.",
       "dateOfBirthTooOld": "Date of birth cannot be more than {{years}} years ago",
       "dateOfBirthInFuture": "Date of birth cannot be in the future"
     }

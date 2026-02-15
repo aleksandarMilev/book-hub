@@ -65,7 +65,7 @@ public static class ProfileMapping
         {
             FirstName = serviceModel.FirstName,
             LastName = serviceModel.LastName,
-            DateOfBirth = StringToDateTime(serviceModel.DateOfBirth),
+            DateOfBirth = serviceModel.DateOfBirth,
             SocialMediaUrl = serviceModel.SocialMediaUrl,
             Biography = serviceModel.Biography,
             IsPrivate = serviceModel.IsPrivate,
@@ -77,7 +77,7 @@ public static class ProfileMapping
     {
         dbModel.FirstName = serviceModel.FirstName;
         dbModel.LastName = serviceModel.LastName;
-        dbModel.DateOfBirth = StringToDateTime(serviceModel.DateOfBirth);
+        dbModel.DateOfBirth = serviceModel.DateOfBirth;
         dbModel.SocialMediaUrl = serviceModel.SocialMediaUrl;
         dbModel.Biography = serviceModel.Biography;
         dbModel.IsPrivate = serviceModel.IsPrivate;

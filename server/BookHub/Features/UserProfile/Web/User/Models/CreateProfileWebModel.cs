@@ -1,5 +1,6 @@
 ﻿namespace BookHub.Features.UserProfile.Web.Models;
 
+using BookHub.Infrastructure.Validation;
 using System.ComponentModel.DataAnnotations;
 
 using static Shared.Constants.Validation;
@@ -10,17 +11,20 @@ public class CreateProfileWebModel
     [StringLength(
         NameMaxLength,
         MinimumLength = NameMinLength)]
-    public string FirstName { get; init; } = null!;
+    public string FirstName { get; init; } = default!;
 
     [Required]
     [StringLength(
         NameMaxLength,
         MinimumLength = NameMinLength)]
-    public string LastName { get; init; } = null!;
+    public string LastName { get; init; } = default!;
 
     public IFormFile? Image { get; init; }
 
-    public string? DateOfBirth { get; init; }
+    [MinAge]
+    [MaxAge]
+    [Required]
+    public DateTime DateOfBirth { get; init; }
 
     [StringLength(
         UrlMaxLength,

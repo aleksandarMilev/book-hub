@@ -1,6 +1,7 @@
 ﻿namespace BookHub.Features.Authors.Web.User.Models;
 
 using System.ComponentModel.DataAnnotations;
+using Infrastructure.Validation;
 using Shared;
 
 using static Shared.Constants.Validation;
@@ -13,6 +14,7 @@ public class CreateAuthorWebModel : IValidatableObject
         MinimumLength = NameMinLength)]
     public string Name { get; init; } = default!;
 
+    [ImageUpload]
     public IFormFile? Image { get; init; }
 
     [Required]

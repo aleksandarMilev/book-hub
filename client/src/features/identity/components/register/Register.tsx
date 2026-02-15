@@ -174,6 +174,7 @@ const Register: FC = () => {
                     <input
                       id="dateOfBirth"
                       type="date"
+                      required
                       className={`auth-input ${
                         formik.touched.dateOfBirth && formik.errors.dateOfBirth ? 'is-invalid' : ''
                       }`}
@@ -283,4 +284,3 @@ const Register: FC = () => {
 };
 
 export default Register;
-

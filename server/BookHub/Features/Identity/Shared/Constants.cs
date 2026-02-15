@@ -26,8 +26,6 @@ public static class Constants
 
         public const int CredentialsMinLength = UsernameMinLength;
         public const int CredentialsMaxLength = EmailMaxLength;
-
-        public const int MaxAgeYears = 110;
     }
 
     public static class Lockout
