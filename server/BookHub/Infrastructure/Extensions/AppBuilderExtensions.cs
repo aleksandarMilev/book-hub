@@ -86,87 +86,80 @@ public static class AppBuilderExtensions
         return app;
     }
 
-    public static async Task<IApplicationBuilder> useProductionAdminRole(
+    public static async Task<IApplicationBuilder> UseProductionAdminRole(
         this IApplicationBuilder app)
     {
-        using var scope = app
-            .ApplicationServices
-            .CreateScope();
-
+        using var scope = app.ApplicationServices.CreateScope();
         var services = scope.ServiceProvider;
+
+        var logger = services.GetRequiredService<ILoggerFactory>()
+            .CreateLogger("BootstrapAdmin");
+
         var config = services.GetRequiredService<IConfiguration>();
 
-        var enabledEnvVar = config["BootstrapAdmin:Enabled"];
-        var isEnabled = !string.Equals(
-            enabledEnvVar,
+        var enabled = string.Equals(
+            config["BootstrapAdmin:Enabled"],
             "true",
             StringComparison.OrdinalIgnoreCase);
 
-        if (isEnabled)
-        {
+        logger.LogInformation("BootstrapAdmin Enabled = {Enabled}", enabled);
+
+        if (!enabled)
             return app;
-        }
 
         var email = config["BootstrapAdmin:Email"];
         var password = config["BootstrapAdmin:Password"];
         var roleName = config["BootstrapAdmin:Role"] ?? "Administrator";
 
-        var passwordOrEmailNotProvided = 
-            string.IsNullOrWhiteSpace(email) || 
-            string.IsNullOrWhiteSpace(password);
-
-        if (passwordOrEmailNotProvided)
-        {
-            throw new InvalidOperationException(
-                "BootstrapAdmin enabled, but Email/Password not set.");
-        }
+        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+            throw new InvalidOperationException("BootstrapAdmin enabled but Email/Password not set.");
 
         var userManager = services.GetRequiredService<UserManager<UserDbModel>>();
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-        var roleDoNotExist = !await roleManager.RoleExistsAsync(roleName);
-        if (roleDoNotExist)
+        if (!await roleManager.RoleExistsAsync(roleName))
         {
-            var role = new IdentityRole
-            {
-                Name = roleName
-            };
+            var roleRes = await roleManager.CreateAsync(new IdentityRole(roleName));
+            if (!roleRes.Succeeded)
+                throw new InvalidOperationException("Failed to create role: " +
+                    string.Join("; ", roleRes.Errors.Select(e => e.Description)));
 
-            var roleResult = await roleManager.CreateAsync(role);
-            if (!roleResult.Succeeded)
-            {
-                throw new InvalidOperationException(
-                    "Failed to create role: " + string.Join("; ", roleResult.Errors.Select(e => e.Description)));
-            }
+            logger.LogInformation("Created role {Role}", roleName);
+        }
+        else
+        {
+            logger.LogInformation("Role {Role} already exists", roleName);
         }
 
-        var user = await userManager.FindByEmailAsync(email!);
-        if (user is null)
+        var user = await userManager.FindByEmailAsync(email);
+        if (user == null)
         {
-            user = new UserDbModel
-            {
-                Email = email,
-                UserName = email
-            };
+            user = new UserDbModel { Email = email, UserName = email };
 
-            var createResult = await userManager.CreateAsync(user, password!);
-            if (!createResult.Succeeded)
-            {
-                var errorMessage = string.Join("; ", createResult.Errors.Select(e => e.Description));
-                throw new InvalidOperationException(
-                    "Failed to create admin user: " + errorMessage);
-            }
+            var createRes = await userManager.CreateAsync(user, password);
+            if (!createRes.Succeeded)
+                throw new InvalidOperationException("Failed to create admin user: " +
+                    string.Join("; ", createRes.Errors.Select(e => e.Description)));
+
+            logger.LogInformation("Created user {Email}", email);
+        }
+        else
+        {
+            logger.LogInformation("User {Email} already exists", email);
         }
 
         if (!await userManager.IsInRoleAsync(user, roleName))
         {
-            var addRoleResult = await userManager.AddToRoleAsync(user, roleName);
-            if (!addRoleResult.Succeeded)
-            {
-                var errorMessage = string.Join("; ", addRoleResult.Errors.Select(e => e.Description));
-                throw new InvalidOperationException(
-                    "Failed to add role: " + errorMessage);
-            }
+            var addRes = await userManager.AddToRoleAsync(user, roleName);
+            if (!addRes.Succeeded)
+                throw new InvalidOperationException("Failed to add role: " +
+                    string.Join("; ", addRes.Errors.Select(e => e.Description)));
+
+            logger.LogInformation("Added user {Email} to role {Role}", email, roleName);
+        }
+        else
+        {
+            logger.LogInformation("User {Email} already in role {Role}", email, roleName);
         }
 
         return app;

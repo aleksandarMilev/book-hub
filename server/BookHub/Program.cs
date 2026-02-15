@@ -67,7 +67,7 @@ if (envIsDev)
 }
 else if (envIsProd)
 {
-    await app.useProductionAdminRole();
+    await app.UseProductionAdminRole();
 }
 
 var logger = app.Logger;
