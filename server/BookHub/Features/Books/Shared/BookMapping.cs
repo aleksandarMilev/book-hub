@@ -36,6 +36,7 @@ public static class BookMapping
                    PublishedDate = DateTimeToString(b.PublishedDate),
                    RatingsCount = b.RatingsCount,
                    LongDescription = b.LongDescription,
+                   Pages = b.Pages,
                    CreatorId = b.CreatorId,
                    IsApproved = b.IsApproved,
                    Author = b.Author == null
@@ -98,6 +99,7 @@ public static class BookMapping
                PublishedDate = DateTimeToString(dbModel.PublishedDate),
                RatingsCount = dbModel.RatingsCount,
                LongDescription = dbModel.LongDescription,
+               Pages = dbModel.Pages,
                CreatorId = dbModel.CreatorId,
                IsApproved = dbModel.IsApproved,
                Author = dbModel.Author == null
@@ -168,6 +170,7 @@ public static class BookMapping
             AuthorId = webModel.AuthorId,
             ShortDescription = webModel.ShortDescription,
             LongDescription = webModel.LongDescription,
+            Pages = webModel.Pages,
             PublishedDate = webModel.PublishedDate,
             Genres = webModel.Genres
         };
@@ -179,6 +182,7 @@ public static class BookMapping
             Title = serviceModel.Title,
             ShortDescription = serviceModel.ShortDescription,
             LongDescription = serviceModel.LongDescription,
+            Pages = serviceModel.Pages,
             PublishedDate = serviceModel.PublishedDate,
         };
 
@@ -189,6 +193,7 @@ public static class BookMapping
             dbModel.Title = serviceModel.Title;
             dbModel.ShortDescription = serviceModel.ShortDescription;
             dbModel.LongDescription = serviceModel.LongDescription;
+            dbModel.Pages = serviceModel.Pages;
             dbModel.PublishedDate = serviceModel.PublishedDate;
         }
 
@@ -199,6 +204,7 @@ public static class BookMapping
         pendingDbModel.Title = serviceModel.Title;
         pendingDbModel.ShortDescription = serviceModel.ShortDescription;
         pendingDbModel.LongDescription = serviceModel.LongDescription;
+        pendingDbModel.Pages = serviceModel.Pages;
         pendingDbModel.PublishedDate = serviceModel.PublishedDate;
         pendingDbModel.AuthorId = serviceModel.AuthorId;
 
@@ -217,6 +223,7 @@ public static class BookMapping
         dbModel.Title = pendingDbModel.Title;
         dbModel.ShortDescription = pendingDbModel.ShortDescription;
         dbModel.LongDescription = pendingDbModel.LongDescription;
+        dbModel.Pages = pendingDbModel.Pages;
         dbModel.PublishedDate = pendingDbModel.PublishedDate;
         dbModel.ImagePath = pendingDbModel.ImagePath;
         dbModel.AuthorId = pendingDbModel.AuthorId;

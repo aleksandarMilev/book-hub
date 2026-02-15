@@ -30,6 +30,8 @@ public class CreateBookWebModel
         MinimumLength = LongDescriptionMinLength)]
     public string LongDescription { get; init; } = default!;
 
+    public int? Pages { get; init; }
+
     public DateTime? PublishedDate { get; init; }
 
     public ICollection<Guid> Genres { get; init; } = new HashSet<Guid>();

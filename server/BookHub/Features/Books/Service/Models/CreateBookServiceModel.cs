@@ -14,6 +14,8 @@ public class CreateBookServiceModel : IImageServiceModel
 
     public string LongDescription { get; init; } = default!;
 
+    public int? Pages { get; set; }
+
     public DateTime? PublishedDate { get; init; }
 
     public ICollection<Guid> Genres { get; init; } = new HashSet<Guid>();

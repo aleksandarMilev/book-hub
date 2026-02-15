@@ -19,6 +19,8 @@ public class BookEditDbModel :
 
     public string LongDescription { get; set; } = default!;
 
+    public int? Pages { get; set; }
+
     public DateTime? PublishedDate { get; set; }
 
     public string ImagePath { get; set; } = default!;

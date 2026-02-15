@@ -16,5 +16,6 @@ public class BookServiceModel
 
     public double AverageRating { get; init; } 
 
-    public ICollection<GenreNameServiceModel> Genres { get; init; } = new HashSet<GenreNameServiceModel>();
+    public ICollection<GenreNameServiceModel> Genres { get; init; }
+        = new HashSet<GenreNameServiceModel>();
 }
