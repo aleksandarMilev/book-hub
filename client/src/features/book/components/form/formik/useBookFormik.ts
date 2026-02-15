@@ -112,7 +112,7 @@ export const useBookFormik = ({ bookData = null, isEditMode = false }: Props) =>
               : 'form.messages.createSuccessUser';
 
             showMessage(t(messageKey, { name: nameForMessage }), true);
-            navigate(`${routes.author}/${created.id}/${slugify(payload.title)}`, { replace: true });
+            navigate(`${routes.book}/${created.id}/${slugify(payload.title)}`, { replace: true });
             resetForm();
           }
         }

@@ -13,7 +13,5 @@ export const getTitle = (t: TFunction, statusUI: ReadingStatusUI, firstName: str
         ? t('status.toRead')
         : t('status.currentlyReading');
 
-  return `${firstName} Â· ${statusText}`;
+  return `${firstName} · ${statusText}`;
 };
-
-

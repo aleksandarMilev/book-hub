@@ -84,7 +84,7 @@ const NotificationItem: FC<{
         >
           {t('actions.view')}
           <span className="bh-notifications-item__arrow" aria-hidden>
-            â†’
+            →
           </span>
         </button>
 
@@ -112,5 +112,3 @@ const NotificationItem: FC<{
 };
 
 export default NotificationItem;
-
-
