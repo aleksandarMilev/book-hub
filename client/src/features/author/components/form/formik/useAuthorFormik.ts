@@ -97,11 +97,7 @@ export const useAuthorFormik = ({ authorData = null, isEditMode = false }: Props
               : 'form.messages.createSuccessUser';
 
             showMessage(t(messageKey, { name: nameForMessage }), true);
-
-            navigate(
-              isAdmin ? `${routes.author}/${created.id}/${slugify(payload.name)}` : routes.home,
-              { replace: true },
-            );
+            navigate(`${routes.author}/${created.id}/${slugify(payload.name)}`, { replace: true });
             resetForm();
           }
         }
@@ -114,5 +110,3 @@ export const useAuthorFormik = ({ authorData = null, isEditMode = false }: Props
 
   return formik;
 };
-
-
