@@ -1,5 +1,6 @@
 ﻿namespace BookHub.Features.Chat.Service;
 
+using BookHub.Common;
 using BookHub.Data;
 using BookHub.Data.Models.Shared.ChatUser;
 using Data.Models;
@@ -376,7 +377,7 @@ public class ChatService(
 
         logger.LogInformation(
             "User with Id: {userToInviteId} was invited to join in chat with Id: {chatId}",
-            userToInviteId,
+            userToInviteId.SanitizeStringForLog(),
             chatId);
 
         await notificationService.CreateOnChatInvitation(
@@ -429,7 +430,7 @@ public class ChatService(
 
         logger.LogInformation(
             "User with Id: {userToRemoveId} was removed from chat with Id: {chatId}",
-            userToRemoveId,
+            userToRemoveId.SanitizeStringForLog(),
             chatId);
 
         return true;
@@ -486,15 +487,19 @@ public class ChatService(
         string entityName,
         TId id)
     {
+        var sanitizedId = id is string str
+            ? str.SanitizeStringForLog()
+            : (object?)id;
+
         logger.LogWarning(
             DbEntityNotFoundTemplate,
             entityName,
-            id);
+            sanitizedId);
 
         return string.Format(
             DbEntityNotFound,
             entityName,
-            id);
+            sanitizedId);
     }
 
     private string LogAndReturnUnauthorizedMessage<TId>(
@@ -502,16 +507,21 @@ public class ChatService(
         string resourceName,
         TId resourceId)
     {
+        var sanitizedUserId = userId.SanitizeStringForLog();
+        var sanitizedResourceId = resourceId is string str
+            ? str.SanitizeStringForLog()
+            : (object?)resourceId;
+
         logger.LogWarning(
             UnauthorizedMessageTemplate,
-            userId,
+            sanitizedUserId,
             resourceName,
-            resourceId);
+            sanitizedResourceId);
 
         return string.Format(
             UnauthorizedMessage,
-            userId,
+            sanitizedUserId,
             resourceName,
-            resourceId);
+            sanitizedResourceId);
     }
 }

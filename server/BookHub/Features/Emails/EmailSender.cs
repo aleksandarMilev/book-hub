@@ -14,6 +14,7 @@ public class EmailSender(
     private readonly EmailSettings settings = options.Value;
 
     public async Task SendWelcome(
+        string userId,
         string email,
         string username)
     {
@@ -24,16 +25,18 @@ public class EmailSender(
             await this.Send(
                email,
                "Welcome to BookHub 📚",
-               WelcomeEmailTemplate.Build(username));
+               body);
 
             logger.LogInformation(
-                "User with email: {Email} and Username: {Username} successfully received email after registration",
-                email,
-                username);
+                "Welcome email sent after registration. UserId={UserId}",
+                userId);
         }
         catch (Exception exception)
         {
-            logger.LogError(exception, "Failed to send welcome email to {Email}", email);
+            logger.LogError(
+                exception,
+                "Failed to send welcome email after registration. UserId={UserId}",
+                userId);
         }
     }
 
@@ -79,7 +82,7 @@ public class EmailSender(
         }
         catch (Exception exception)
         {
-            logger.LogError(exception, "Error sending email to {Recipient}", to);
+            logger.LogError(exception, "Error sending email.");
             throw;
         }
         finally

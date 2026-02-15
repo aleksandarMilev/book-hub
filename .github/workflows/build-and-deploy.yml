@@ -4,6 +4,9 @@ on:
   push:
     branches: [develop, master]
 
+permissions:
+  contents: read
+
 env:
   RG: bookhub-rg
   ACR_NAME: bookhubacr39945

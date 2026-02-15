@@ -80,10 +80,7 @@ public class IdentityService(
                     serviceModel.Username,
                     serviceModel.Email);
 
-                logger.LogInformation(
-                    "User with email: {Email} and Username: {Username} successfully registered.",
-                    serviceModel.Email,
-                    serviceModel.Username);
+                logger.LogInformation("User successfully registered. UserId={UserId}", user.Id);
 
                 await profileService.Create(
                     serviceModel.ToCreateProfileServiceModel(),
@@ -91,6 +88,7 @@ public class IdentityService(
                     cancellationToken);
 
                 await emailSender.SendWelcome(
+                    user.Id,
                     serviceModel.Email,
                     serviceModel.Username);
 
@@ -99,8 +97,8 @@ public class IdentityService(
             catch (Exception exception)
             {
                 logger.LogError(exception,
-                    "Failed to complete registration for {Email}",
-                    serviceModel.Email);
+                    "Failed to complete registration. UserId={UserId}",
+                    user.Id);
 
                 await userManager.DeleteAsync(user);
 

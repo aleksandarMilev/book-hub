@@ -18,6 +18,18 @@ public static class Utils
         new[] { "image/jpeg", "image/png", "image/webp", "image/avif" }
             .ToFrozenSet(StringComparer.OrdinalIgnoreCase);
 
+    public static string SanitizeStringForLog(this string value)
+    {
+        if (string.IsNullOrEmpty(value)) 
+        {
+            return "<null>";
+        }
+
+        return value
+            .Replace("\r", "\\r")
+            .Replace("\n", "\\n");
+    }
+
     public static DateTime? StringToDateTime(string? dateTimeString)
     {
         if (string.IsNullOrEmpty(dateTimeString))

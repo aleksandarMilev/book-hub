@@ -36,7 +36,7 @@ public static class WelcomeEmailTemplate
                             </p>
 
                             <p style=""margin:24px 0;"">
-                                <a href=""https://your-bookhub-domain.example"" 
+                                <a href=""https://www.book-hub.net/"" 
                                    style=""display:inline-block;padding:12px 24px;border-radius:999px;
                                           background-color:#4f46e5;color:#ffffff;text-decoration:none;
                                           font-weight:600;font-size:14px;"">
