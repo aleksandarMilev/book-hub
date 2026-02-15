@@ -103,27 +103,82 @@ public class BookService(
     public async Task<BookDetailsServiceModel?> Details(
         Guid bookId,
         CancellationToken cancellationToken = default)
-        => await data
+    {
+        var userId = userService.GetId() ?? string.Empty;
+        var dbModel = await data
             .Books
             .AsNoTracking()
-            .AsQueryable()
-            .ToDetailsServiceModels(userService.GetId()!)
+            .ToDetailsServiceModels(userId)
             .FirstOrDefaultAsync(
                 b => b.Id == bookId,
                 cancellationToken);
 
+        if (dbModel is null)
+        {
+            return null;
+        }
+
+        var isAdmin = userService.IsAdmin();
+        var currentUserId = userService.GetId();
+        var isCreator = string.Equals(
+            dbModel.CreatorId,
+            currentUserId,
+            StringComparison.OrdinalIgnoreCase);
+
+        if (!isCreator && !isAdmin)
+        {
+            return dbModel;
+        }
+
+        var pendingDbModel = await data
+            .BookEdits
+            .AsNoTracking()
+            .FirstOrDefaultAsync(
+                b => b.BookId == bookId,
+                cancellationToken);
+
+        if (pendingDbModel is null)
+        {
+            return dbModel;
+        }
+
+        return ApplyPendingEdit(dbModel, pendingDbModel);
+    }
+
+
     public async Task<BookDetailsServiceModel?> AdminDetails(
         Guid bookId,
         CancellationToken cancellationToken = default)
-        => await data
+    {
+        var userId = userService.GetId()!;
+        var dbModel = await data
             .Books
             .AsNoTracking()
             .IgnoreQueryFilters()
             .ApplyIsDeletedFilter()
-            .ToDetailsServiceModels(userService.GetId()!)
+            .ToDetailsServiceModels(userId)
             .FirstOrDefaultAsync(
                 b => b.Id == bookId,
                 cancellationToken);
+
+        if (dbModel is null)
+        {
+            return null;
+        }
+
+        var pendingDbModel = await data
+            .BookEdits
+            .AsNoTracking()
+            .IgnoreQueryFilters()
+            .ApplyIsDeletedFilter()
+            .FirstOrDefaultAsync(
+                b => b.BookId == bookId,
+                cancellationToken);
+
+        return pendingDbModel is null
+            ? dbModel
+            : ApplyPendingEdit(dbModel, pendingDbModel);
+    }
 
     public async Task<BookDetailsServiceModel> Create(
         CreateBookServiceModel serviceModel,
@@ -191,73 +246,103 @@ public class BookService(
         CreateBookServiceModel serviceModel,
         CancellationToken cancellationToken = default)
     {
-        var dbModel = await this.GetDbModel(
-            id,
-            cancellationToken);
-
+        var dbModel = await this.GetDbModel(id, cancellationToken);
         if (dbModel is null)
         {
             return this.LogAndReturnNotFoundMessage(id);
         }
 
         var userId = userService.GetId()!;
-        if (dbModel.CreatorId != userId)
+        var isNotCreator = dbModel.CreatorId != userId;
+        var isNotAdmin = !userService.IsAdmin();
+
+        if (isNotCreator && isNotAdmin)
         {
             return LogAndReturnUnauthorizedMessage(id, userId);
         }
 
-        var oldImagePath = dbModel.ImagePath;
-        var isNewImageUploaded = serviceModel.Image is not null;
+        var pending = await data
+            .BookEdits
+            .FirstOrDefaultAsync(
+                b => b.BookId == id,
+                cancellationToken);
 
-        serviceModel.UpdateDbModel(dbModel);
-
-        await imageWriter.Write(
-            ImagePathPrefix,
-            dbModel,
-            serviceModel,
-            null,
-            cancellationToken);
-
-        var shouldDeleteOldImage =
-            isNewImageUploaded &&
-            !string.Equals(
-                oldImagePath,
-                dbModel.ImagePath,
-                StringComparison.OrdinalIgnoreCase);
-
-        if (shouldDeleteOldImage)
+        if (pending is null)
         {
-            imageWriter.Delete(
-                ImagePathPrefix,
-                oldImagePath,
-                DefaultImagePath);
+            pending = new()
+            {
+                BookId = id,
+                RequestedById = userId,
+                ImagePath = dbModel.ImagePath
+            };
+
+            data.BookEdits.Add(pending);
+        }
+        else
+        {
+            pending.RequestedById = userId;
         }
 
-        dbModel.AuthorId = await this.MapAuthorToBook(
+        var oldPendingImagePath = pending.ImagePath;
+        var newImageUploaded = serviceModel.Image is not null;
+
+        serviceModel.UpdatePendingDbModel(pending);
+
+        pending.AuthorId = await this.MapAuthorToBook(
             serviceModel.AuthorId,
             cancellationToken);
 
-        dbModel.IsApproved = false;
+        if (newImageUploaded)
+        {
+            await imageWriter.Write(
+                resourceName: PendingImagePathPrefix,
+                dbModel: pending,
+                serviceModel,
+                defaultImagePath: null,
+                cancellationToken);
+
+            var shouldDeleteOldPendingImage =
+                !string.Equals(
+                    oldPendingImagePath,
+                    pending.ImagePath,
+                    StringComparison.OrdinalIgnoreCase) &&
+                !string.Equals(
+                    oldPendingImagePath,
+                    DefaultImagePath,
+                    StringComparison.OrdinalIgnoreCase) &&
+                !string.Equals(
+                    oldPendingImagePath,
+                    dbModel.ImagePath,
+                    StringComparison.OrdinalIgnoreCase);
+
+            if (shouldDeleteOldPendingImage)
+            {
+                imageWriter.Delete(
+                    resourceName: PendingImagePathPrefix,
+                    imagePath: oldPendingImagePath,
+                    DefaultImagePath);
+            }
+        }
+        else
+        {
+            pending.ImagePath = dbModel.ImagePath;
+        }
 
         await data.SaveChangesAsync(cancellationToken);
-
-        await this.MapBookAndGenres(
-            dbModel.Id,
-            serviceModel.Genres,
-            cancellationToken);
 
         if (!userService.IsAdmin())
         {
             await notificationService.CreateOnBookEdition(
                 dbModel.Id,
                 dbModel.Title,
-                await adminService.GetId(),
+                receiverId: await adminService.GetId(),
                 cancellationToken);
         }
 
         logger.LogInformation(
-            "Book with Id: {id} was updated.",
-            dbModel.Id);
+            "Book edit request created/updated for BookId: {id}. Pending edit id: {pendingId}",
+            dbModel.Id,
+            pending.Id);
 
         return true;
     }
@@ -299,10 +384,10 @@ public class BookService(
         CancellationToken cancellationToken = default)
     {
         var dbModel = await data
-             .Books
-             .IgnoreQueryFilters()
-             .ApplyIsDeletedFilter()
-             .FirstOrDefaultAsync(
+            .Books
+            .IgnoreQueryFilters()
+            .ApplyIsDeletedFilter()
+            .FirstOrDefaultAsync(
                 b => b.Id == bookId,
                 cancellationToken);
 
@@ -318,6 +403,67 @@ public class BookService(
                 userService.GetId()!);
         }
 
+        var pending = await data
+            .BookEdits
+            .IgnoreQueryFilters()
+            .ApplyIsDeletedFilter()
+            .FirstOrDefaultAsync(
+                b => b.BookId == bookId,
+                cancellationToken);
+
+        if (pending is not null)
+        {
+            var oldBookImagePath = dbModel.ImagePath;
+
+            pending.ApplyPendingToBook(dbModel);
+
+            dbModel.AuthorId = await this.MapAuthorToBook(
+                dbModel.AuthorId,
+                cancellationToken);
+
+            data.BookEdits.Remove(pending);
+
+            dbModel.IsApproved = true;
+            await data.SaveChangesAsync(cancellationToken);
+
+            await this.MapBookAndGenres(
+                dbModel.Id,
+                pending.GetPendingGenres(),
+                cancellationToken);
+
+            var shouldDeleteOldBookImage =
+                !string.Equals(
+                    oldBookImagePath,
+                    dbModel.ImagePath,
+                    StringComparison.OrdinalIgnoreCase) &&
+                !string.Equals(
+                    oldBookImagePath,
+                    DefaultImagePath,
+                    StringComparison.OrdinalIgnoreCase);
+
+            if (shouldDeleteOldBookImage)
+            {
+                imageWriter.Delete(
+                    resourceName: ImagePathPrefix,
+                    imagePath: oldBookImagePath,
+                    DefaultImagePath);
+            }
+
+            logger.LogInformation(
+                "Pending edit for BookId: {id} approved and applied.",
+                dbModel.Id);
+
+            await notificationService.CreateOnBookApproved(
+                bookId,
+                dbModel.Title,
+                receiverId: dbModel.CreatorId!,
+                cancellationToken);
+
+            return true;
+        }
+
+        var wasPreviouslyUnapproved = !dbModel.IsApproved;
+
         dbModel.IsApproved = true;
         await data.SaveChangesAsync(cancellationToken);
 
@@ -328,12 +474,15 @@ public class BookService(
         await notificationService.CreateOnBookApproved(
             bookId,
             dbModel.Title,
-            dbModel.CreatorId!,
+            receiverId: dbModel.CreatorId!,
             cancellationToken);
 
-        await profileService.IncrementCreatedBooksCount(
-            dbModel.CreatorId!,
-            cancellationToken);
+        if (wasPreviouslyUnapproved)
+        {
+            await profileService.IncrementCreatedBooksCount(
+                dbModel.CreatorId!,
+                cancellationToken);
+        }
 
         return true;
     }
@@ -362,6 +511,52 @@ public class BookService(
                 userService.GetId()!);
         }
 
+        var pending = await data
+            .BookEdits
+            .IgnoreQueryFilters()
+            .ApplyIsDeletedFilter()
+            .FirstOrDefaultAsync(
+                a => a.BookId == bookId,
+                cancellationToken);
+
+        if (pending is not null)
+        {
+            var pendingImagePath = pending.ImagePath;
+
+            data.BookEdits.Remove(pending);
+            await data.SaveChangesAsync(cancellationToken);
+
+            var shouldDeletePendingImage =
+                !string.Equals(
+                    pendingImagePath,
+                    dbModel.ImagePath,
+                    StringComparison.OrdinalIgnoreCase) &&
+                !string.Equals(
+                    pendingImagePath,
+                    DefaultImagePath,
+                    StringComparison.OrdinalIgnoreCase);
+
+            if (shouldDeletePendingImage)
+            {
+                imageWriter.Delete(
+                    resourceName: PendingImagePathPrefix,
+                    imagePath: pendingImagePath,
+                    DefaultImagePath);
+            }
+
+            logger.LogInformation(
+                "Pending edit for BookId: {id} was rejected (book unchanged).",
+                dbModel.Id);
+
+            await notificationService.CreateOnBookRejected(
+                bookId,
+                dbModel.Title,
+                receiverId: dbModel.CreatorId!,
+                cancellationToken);
+
+            return true;
+        }
+
         data.Remove(dbModel);
         await data.SaveChangesAsync(cancellationToken);
 
@@ -372,7 +567,7 @@ public class BookService(
         await notificationService.CreateOnBookRejected(
             bookId,
             dbModel.Title,
-            dbModel.CreatorId!,
+            receiverId: dbModel.CreatorId!,
             cancellationToken);
 
         return true;
@@ -438,6 +633,28 @@ public class BookService(
         });
     }
 
+    private static BookDetailsServiceModel ApplyPendingEdit(
+        BookDetailsServiceModel baseModel,
+        BookEditDbModel pending)
+        => new()
+        {
+            Id = baseModel.Id,
+            AverageRating = baseModel.AverageRating,
+            RatingsCount = baseModel.RatingsCount,
+            Reviews = baseModel.Reviews,
+            MoreThanFiveReviews = baseModel.MoreThanFiveReviews,
+            ReadingStatus = baseModel.ReadingStatus,
+            CreatorId = baseModel.CreatorId,
+            IsApproved = baseModel.IsApproved,
+            Title = pending.Title,
+            ShortDescription = pending.ShortDescription,
+            LongDescription = pending.LongDescription,
+            PublishedDate = DateTimeToString(pending.PublishedDate),
+            ImagePath = pending.ImagePath,
+            AuthorName = baseModel.AuthorName,
+            Genres = baseModel.Genres,
+            Author = baseModel.Author
+        };
 
     private string LogAndReturnNotFoundMessage(Guid bookId)
     {
