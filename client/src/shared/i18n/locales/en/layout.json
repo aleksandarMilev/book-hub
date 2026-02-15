@@ -31,11 +31,17 @@
       "description2": "Your next great story awaits."
     },
     "columns": {
+      "legal": "Legal",
       "quickLinks": "Quick Links",
       "forUsers": "For Users",
       "newsletter": "Newsletter"
     },
     "links": {
+      "legal": {
+        "privacy": "Privacy Policy",
+        "terms": "Terms of Service",
+        "cookies": "Cookie Policy"
+      },
       "home": "Home",
       "books": "Books",
       "authors": "Authors",

@@ -24,7 +24,7 @@ public class UserProfile:
 
     public string ImagePath { get; set; } = null!;
 
-    public DateTime? DateOfBirth { get; set; }
+    public DateTime DateOfBirth { get; set; }
 
     public string? SocialMediaUrl { get; set; }
 

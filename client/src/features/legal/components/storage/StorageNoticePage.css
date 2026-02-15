@@ -1,0 +1,61 @@
+.legal-notice-wrap {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1050;
+  padding: 14px;
+}
+
+.legal-notice-card {
+  max-width: 980px;
+  margin: 0 auto;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 12px 14px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.legal-notice-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  color: #243047;
+  line-height: 1.45;
+}
+
+.legal-notice-link {
+  color: #6f42c1;
+  text-decoration: none;
+  font-weight: 650;
+}
+
+.legal-notice-link:hover {
+  text-decoration: underline;
+}
+
+.legal-notice-actions {
+  display: flex;
+  align-items: center;
+}
+
+.legal-notice-btn {
+  border-radius: 12px !important;
+  font-weight: 650 !important;
+}
+
+@media (max-width: 576px) {
+  .legal-notice-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .legal-notice-actions {
+    justify-content: flex-end;
+  }
+}

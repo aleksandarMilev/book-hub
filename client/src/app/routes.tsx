@@ -13,6 +13,10 @@ const Fallback = () => <Loading />;
 
 const Home = lazy(() => import('@/features/home/components/Home.jsx'));
 
+const TermsPage = lazy(() => import('@/features/legal/components/terms/TermsPage.jsx'));
+const PrivacyPage = lazy(() => import('@/features/legal/components/privacy/PrivacyPage.jsx'));
+const CookiesPage = lazy(() => import('@/features/legal/components/cookies/CookiesPage.jsx'));
+
 const Login = lazy(() => import('@/features/identity/components/login/Login.jsx'));
 const Register = lazy(() => import('@/features/identity/components/register/Register.jsx'));
 const Logout = lazy(() => import('@/features/identity/components/logout/Logout.jsx'));
@@ -71,6 +75,10 @@ export const router = createBrowserRouter([
     element: <App />,
     children: [
       { index: true, element: withSuspense(<Home />) },
+
+      { path: routes.legal.terms, element: withSuspense(<TermsPage />) },
+      { path: routes.legal.privacy, element: withSuspense(<PrivacyPage />) },
+      { path: routes.legal.cookies, element: withSuspense(<CookiesPage />) },
 
       { path: routes.login, element: withSuspense(<Login />) },
       { path: routes.register, element: withSuspense(<Register />) },
@@ -195,5 +203,3 @@ export const router = createBrowserRouter([
     ],
   },
 ]);
-
-

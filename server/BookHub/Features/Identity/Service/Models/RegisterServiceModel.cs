@@ -14,7 +14,7 @@ public class RegisterServiceModel
 
     public IFormFile? Image { get; init; }
 
-    public string? DateOfBirth { get; init; }
+    public DateTime DateOfBirth { get; init; }
 
     public string? SocialMediaUrl { get; init; }
 

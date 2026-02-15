@@ -10,6 +10,7 @@ const URL_MAX = 2_000;
 const BIO_MIN = 10;
 const BIO_MAX = 1_000;
 
+const MIN_AGE_YEARS = 13;
 const MAX_AGE_YEARS = 110;
 
 const MAX_IMAGE_SIZE_BYTES = 2 * 1_024 * 1_024;
@@ -22,6 +23,10 @@ today.setHours(23, 59, 59, 999);
 const oldestAllowed = new Date();
 oldestAllowed.setHours(0, 0, 0, 0);
 oldestAllowed.setFullYear(oldestAllowed.getFullYear() - MAX_AGE_YEARS);
+
+const youngestAllowed = new Date();
+youngestAllowed.setHours(23, 59, 59, 999);
+youngestAllowed.setFullYear(youngestAllowed.getFullYear() - MIN_AGE_YEARS);
 
 export const createRegisterSchema = (t: TFunction<'identity'>) =>
   Yup.object({
@@ -41,39 +46,60 @@ export const createRegisterSchema = (t: TFunction<'identity'>) =>
       .min(NAME_MIN, t('register.validation.lastNameMin', { min: NAME_MIN }))
       .max(NAME_MAX, t('register.validation.lastNameMax', { max: NAME_MAX }))
       .required(t('register.validation.lastNameRequired')),
-    dateOfBirth: Yup.date()
-      .nullable()
-      .transform((originalValue) => {
-        const isNullOrEmptyString =
-          originalValue === null ||
-          (typeof originalValue === 'string' && originalValue.trim() === '');
-
-        if (isNullOrEmptyString) {
-          return null;
+    dateOfBirth: Yup.string()
+      .required(t('register.validation.dateOfBirthRequired'))
+      .test('dob-valid', t('register.validation.dateOfBirthInvalid'), (value) => {
+        if (!value || value.trim() === '') {
+          return false;
         }
 
-        const date = originalValue instanceof Date ? originalValue : new Date(originalValue);
-        return Number.isNaN(date.getTime()) ? new Date('') : date;
+        const date = new Date(value);
+        return !Number.isNaN(date.getTime());
       })
-      .typeError(t('register.validation.dateOfBirthInvalid'))
       .test(
-        'dob-not-too-old',
+        'dateOfBirth-not-too-old',
         t('register.validation.dateOfBirthTooOld', { years: MAX_AGE_YEARS }),
         (value) => {
-          if (!value) {
+          if (!value || value.trim() === '') {
             return true;
           }
 
-          return value >= oldestAllowed;
+          const asDate = new Date(value);
+          if (Number.isNaN(asDate.getTime())) {
+            return true;
+          }
+
+          return asDate >= oldestAllowed;
         },
       )
-      .test('dob-not-in-future', t('register.validation.dateOfBirthInFuture'), (value) => {
-        if (!value) {
+      .test('dateOfBirth-not-in-future', t('register.validation.dateOfBirthInFuture'), (value) => {
+        if (!value || value.trim() === '') {
           return true;
         }
 
-        return value <= today;
-      }),
+        const asDate = new Date(value);
+        if (Number.isNaN(asDate.getTime())) {
+          return true;
+        }
+
+        return asDate <= today;
+      })
+      .test(
+        'dob-min-age',
+        t('register.validation.dateOfBirthTooYoung', { years: MIN_AGE_YEARS }),
+        (value) => {
+          if (!value || value.trim() === '') {
+            return true;
+          }
+
+          const date = new Date(value);
+          if (Number.isNaN(date.getTime())) {
+            return true;
+          }
+
+          return date <= youngestAllowed;
+        },
+      ),
     socialMediaUrl: Yup.string()
       .nullable()
       .test(
@@ -137,4 +163,3 @@ export const createRegisterSchema = (t: TFunction<'identity'>) =>
         },
       ),
   });
-

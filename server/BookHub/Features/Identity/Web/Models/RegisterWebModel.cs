@@ -41,8 +41,10 @@ public class RegisterWebModel
 
     public IFormFile? Image { get; init; }
 
-    [DateOfBirth(MaxAgeYears)]
-    public string? DateOfBirth { get; init; }
+    [MinAge]
+    [MaxAge]
+    [Required]
+    public DateTime DateOfBirth { get; init; }
 
     [StringLength(
         UrlMaxLength,

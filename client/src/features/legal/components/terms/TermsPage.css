@@ -1,0 +1,90 @@
+.legal-terms-page {
+  font-family: 'Inter', sans-serif;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.legal-terms-card {
+  border-radius: 18px;
+  border: none;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.14);
+}
+
+.legal-terms-body {
+  padding: 2.2rem 2.4rem;
+}
+
+.legal-terms-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1.2rem;
+}
+
+.legal-terms-title {
+  font-size: clamp(1.7rem, 2.3vw + 1rem, 2.4rem);
+  font-weight: 850;
+  color: #182334;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.legal-terms-updated {
+  font-size: 0.92rem;
+  color: #6c757d;
+}
+
+.legal-terms-intro {
+  margin-top: 0.9rem;
+  margin-bottom: 1.2rem;
+  font-size: 1.05rem;
+  line-height: 1.85;
+  color: #2f343c;
+  padding-left: 1rem;
+  border-left: 3px solid rgba(154, 107, 255, 0.45);
+}
+
+.legal-terms-section {
+  margin-top: 1.3rem;
+}
+
+.legal-terms-h2 {
+  font-size: 1.2rem;
+  font-weight: 750;
+  color: #243047;
+  margin-bottom: 0.45rem;
+}
+
+.legal-terms-text {
+  font-size: 1.01rem;
+  line-height: 1.9;
+  color: #2f343c;
+  margin-bottom: 0;
+}
+
+.legal-terms-list {
+  margin: 0.55rem 0 0;
+  padding-left: 1.15rem;
+}
+
+.legal-terms-li {
+  margin-bottom: 0.3rem;
+  color: #2f343c;
+  line-height: 1.75;
+}
+
+.legal-terms-section-last {
+  margin-bottom: 0.4rem;
+}
+
+@media (max-width: 768px) {
+  .legal-terms-body {
+    padding: 1.5rem 1.35rem;
+  }
+
+  .legal-terms-intro {
+    font-size: 1rem;
+  }
+}

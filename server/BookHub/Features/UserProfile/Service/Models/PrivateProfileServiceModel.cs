@@ -2,13 +2,13 @@
 
 public class PrivateProfileServiceModel : IProfileServiceModel
 {
-    public string Id { get; init; } = null!;
+    public string Id { get; init; } = default!;
 
-    public string FirstName { get; init; } = null!;
+    public string FirstName { get; init; } = default!;
 
-    public string LastName { get; init; } = null!;
+    public string LastName { get; init; } = default!;
 
-    public string ImagePath { get; init; } = null!;
+    public string ImagePath { get; init; } = default!;
 
     public bool IsPrivate { get; init; }
 }

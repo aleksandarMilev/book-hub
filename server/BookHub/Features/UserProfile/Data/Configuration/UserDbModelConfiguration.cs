@@ -44,6 +44,10 @@ public sealed class UserProfileConfiguration : IEntityTypeConfiguration<UserProf
             .IsRequired();
 
         builder
+            .Property(p => p.DateOfBirth)
+            .IsRequired();
+
+        builder
             .Property(p => p.IsDeleted)
             .IsRequired()
             .HasDefaultValue(false);

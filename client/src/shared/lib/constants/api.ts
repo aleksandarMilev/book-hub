@@ -3,6 +3,11 @@ export const baseAdminUrl = baseUrl + '/administrator';
 
 export const routes = {
   home: '/',
+  legal: {
+    terms: '/terms',
+    privacy: '/privacy',
+    cookies: '/cookies',
+  },
   articles: '/articles',
   register: '/identity/register',
   login: '/identity/login',

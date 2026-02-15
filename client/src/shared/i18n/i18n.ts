@@ -55,6 +55,10 @@ const bgChats = await import('@/shared/i18n/locales/bg/chats.json', {
   assert: { type: 'json' },
 }).then((mod) => mod.default);
 
+const bgLegal = await import('@/shared/i18n/locales/bg/legal.json', {
+  assert: { type: 'json' },
+}).then((mod) => mod.default);
+
 const enLayout = await import('@/shared/i18n/locales/en/layout.json', {
   assert: { type: 'json' },
 }).then((mod) => mod.default);
@@ -107,6 +111,10 @@ const enChats = await import('@/shared/i18n/locales/en/chats.json', {
   assert: { type: 'json' },
 }).then((mod) => mod.default);
 
+const enLegal = await import('@/shared/i18n/locales/en/legal.json', {
+  assert: { type: 'json' },
+}).then((mod) => mod.default);
+
 const storedLanguage = typeof window !== 'undefined' ? localStorage.getItem('language') : null;
 
 const initialLanguage = storedLanguage || DEFAULT_LOCALE;
@@ -133,6 +141,7 @@ void i18n.use(initReactI18next).init({
       notifications: enNotifications,
       reviews: enReviews,
       chats: enChats,
+      legal: enLegal,
     },
     'bg-BG': {
       layout: bgLayout,
@@ -148,10 +157,9 @@ void i18n.use(initReactI18next).init({
       notifications: bgNotifications,
       reviews: bgReviews,
       chats: bgChats,
+      legal: bgLegal,
     },
   },
 });
 
 export default i18n;
-
-
