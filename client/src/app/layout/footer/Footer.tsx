@@ -80,25 +80,20 @@ const Footer: FC = () => {
               </p>
             </MDBCol>
             <MDBCol md="2" lg="2" className="footer-column mb-4">
-              <h6 className="footer-title">{t('footer.columns.forUsers')}</h6>
+              <h6 className="footer-title">{t('footer.columns.legal')}</h6>
               <p>
-                <Link to={routes.profile} className="footer-link">
-                  {t('footer.links.myProfile')}
+                <Link to={routes.legal.privacy} className="footer-link">
+                  {t('footer.links.legal.privacy')}
                 </Link>
               </p>
               <p>
-                <Link to={routes.profiles} className="footer-link">
-                  {t('footer.links.topUsers')}
+                <Link to={routes.legal.terms} className="footer-link">
+                  {t('footer.links.legal.terms')}
                 </Link>
               </p>
               <p>
-                <Link to={routes.register} className="footer-link">
-                  {t('footer.links.register')}
-                </Link>
-              </p>
-              <p>
-                <Link to={routes.login} className="footer-link">
-                  {t('footer.links.login')}
+                <Link to={routes.legal.cookies} className="footer-link">
+                  {t('footer.links.legal.cookies')}
                 </Link>
               </p>
             </MDBCol>

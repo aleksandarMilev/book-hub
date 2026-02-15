@@ -1,0 +1,170 @@
+{
+  "common": {
+    "lastUpdated": "Last updated: {{date}}"
+  },
+  "terms": {
+    "title": "Terms of Use",
+    "intro": "These Terms of Use (\"Terms\") govern your access to and use of BookHub. By creating an account or using the service, you agree to these Terms.",
+    "sections": {
+      "who": {
+        "title": "1. Who we are",
+        "text": "BookHub is operated by Alexandar Milev (Bulgaria). Contact: {{email}}."
+      },
+      "age": {
+        "title": "2. Eligibility and age",
+        "text": "The service is not intended for children under {{age}}. If you are under {{age}}, do not create an account. If you are a parent/guardian and believe your child used the service, contact us to remove the account."
+      },
+      "accounts": {
+        "title": "3. Accounts and security",
+        "items": [
+          "You must provide accurate registration information.",
+          "You are responsible for maintaining account confidentiality and all activity under your account.",
+          "Authentication uses a JWT token stored in your browser. If you use a shared device, log out when finished."
+        ]
+      },
+      "content": {
+        "title": "4. User content",
+        "text": "You may create content such as profiles, reviews, messages, reading lists, and other contributions (\"User Content\"). You retain ownership of your User Content. By posting User Content, you grant us a limited license to host, store, reproduce, and display it solely to operate and improve the service."
+      },
+      "acceptable": {
+        "title": "5. Acceptable use",
+        "lead": "You agree not to:",
+        "items": [
+          "Use the service for illegal activities.",
+          "Harass, abuse, threaten, or impersonate others.",
+          "Upload malware, attempt to hack, or disrupt the service.",
+          "Scrape, crawl, or copy content in a way that harms the service or violates applicable law.",
+          "Post content that infringes intellectual property or privacy rights."
+        ]
+      },
+      "moderation": {
+        "title": "6. Moderation and enforcement",
+        "text": "We may remove content, restrict features, or suspend/terminate accounts to keep the platform safe and compliant, including for violations of these Terms."
+      },
+      "deletion": {
+        "title": "7. Account deletion",
+        "text": "You can delete your account in-app. Currently deletion is implemented as a soft-delete (account is marked deleted and hidden from normal use). Some content may remain visible if required for integrity of the service, but we aim to remove or anonymize personal identifiers where reasonable."
+      },
+      "disclaimers": {
+        "title": "8. Disclaimers",
+        "text": "The service is provided “as is” and “as available”. We don’t guarantee that the service will always be available, secure, or error-free."
+      },
+      "liability": {
+        "title": "9. Limitation of liability",
+        "text": "To the maximum extent permitted by law, we are not liable for indirect, incidental, special, consequential, or punitive damages, or any loss of data, profits, or goodwill arising from your use of the service."
+      },
+      "changes": {
+        "title": "10. Changes",
+        "text": "We may update these Terms from time to time. We will update the “Last updated” date and, when changes are significant, may provide additional notice."
+      }
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "intro": "This Privacy Policy explains how BookHub collects and uses personal data when you use the service.",
+    "sections": {
+      "controller": {
+        "title": "1. Controller and contact",
+        "text": "Controller: Alexandar Milev (Bulgaria). Contact: {{email}}."
+      },
+      "data": {
+        "title": "2. Personal data we collect",
+        "items": [
+          "Account data: email, username, password (stored as a secure hash), user ID.",
+          "Profile data: first name, last name, profile image, optional date of birth, optional social media URL, optional biography, and a “private profile” setting.",
+          "User content: reviews, votes, reading lists, books/authors created, chats and messages, and other content you submit.",
+          "Security/technical data: logs and security events may include IP address, timestamps, device/browser information, and request metadata."
+        ]
+      },
+      "use": {
+        "title": "3. How we use your data",
+        "items": [
+          "To create and manage accounts and profiles.",
+          "To provide features like reviews, chats, and reading lists.",
+          "To secure the service, prevent abuse, and troubleshoot issues.",
+          "To send transactional emails (e.g., welcome email)."
+        ]
+      },
+      "basis": {
+        "title": "4. Legal bases (GDPR)",
+        "items": [
+          "Contract: processing needed to provide the service you request (account, profile, platform features).",
+          "Legitimate interests: securing the service, preventing fraud/abuse, and maintaining reliability.",
+          "Consent: where required (e.g., if in the future we add non-essential cookies or marketing emails)."
+        ]
+      },
+      "sharing": {
+        "title": "5. Sharing and processors",
+        "lead": "We share personal data only as needed to run the service:",
+        "items": [
+          "Hosting: Microsoft Azure (infrastructure).",
+          "Email delivery/testing: Mailtrap.",
+          "Image storage: application server storage (not cloud)."
+        ],
+        "note": "If we add analytics/ads in the future, we will update this policy and, where required, request your consent."
+      },
+      "retention": {
+        "title": "6. Retention",
+        "items": [
+          "Account/profile data: kept while your account is active. If you delete your account, it is currently soft-deleted.",
+          "JWT token expiry: typically 7 days, or 30 days if you choose “Remember me”.",
+          "Security logs: kept only as long as needed for security and troubleshooting (typically a short period)."
+        ]
+      },
+      "rights": {
+        "title": "7. Your rights",
+        "text": "Depending on your location (including the EU/EEA), you may have rights to access, correct, delete, restrict processing, object, and data portability. To exercise your rights, contact {{email}}."
+      },
+      "profiles": {
+        "title": "8. Public vs private profiles",
+        "text": "If your profile is set to private, we aim to limit visibility to other users according to the feature design. If your profile is public, some profile fields and your public activity may be visible to other users."
+      },
+      "children": {
+        "title": "9. Children",
+        "text": "The service is not intended for children under {{age}}. If we learn that a child has provided personal data, we will take steps to delete it."
+      },
+      "changes": {
+        "title": "10. Changes",
+        "text": "We may update this policy. We’ll update the “Last updated” date and may provide additional notice for significant changes."
+      }
+    }
+  },
+  "cookies": {
+    "title": "Cookie Policy",
+    "intro": "This Cookie Policy explains how BookHub uses cookies and similar technologies.",
+    "sections": {
+      "what": {
+        "title": "1. What are cookies?",
+        "text": "Cookies are small text files placed on your device. Similar technologies include local storage and session storage."
+      },
+      "today": {
+        "title": "2. What we use today",
+        "text": "Right now, we do not use analytics or advertising cookies. We use only “strictly necessary” storage for core functionality.",
+        "items": [
+          "Authentication storage: a JWT token stored in your browser to keep you logged in and to authorize API requests.",
+          "Security/anti-abuse: limited cookies or headers may be used by infrastructure to protect against abuse (e.g., rate limiting)."
+        ]
+      },
+      "manage": {
+        "title": "3. Managing storage",
+        "items": [
+          "You can log out to remove authentication state.",
+          "You can clear your browser’s site data (cookies/local storage) to remove stored tokens and settings."
+        ]
+      },
+      "future": {
+        "title": "4. If we add analytics/marketing later",
+        "text": "If we add non-essential cookies (analytics/ads), we will update this page and, where required, ask for your consent before setting them."
+      },
+      "contact": {
+        "title": "5. Contact",
+        "text": "Questions? Email {{email}}."
+      }
+    }
+  },
+  "notice": {
+    "text": "BookHub uses strictly necessary storage (e.g., a login token) to run the service.",
+    "learnMore": "Learn more",
+    "ok": "OK"
+  }
+}
