@@ -65,10 +65,9 @@ public class SearchService(
             ref pageIndex,
             ref pageSize);
 
-        var books = data
+        var dbModels = data
             .Books
-            .AsNoTracking()
-            .ToSearchSeviceModels();
+            .AsNoTracking();
 
         var term = searchTerm?.Trim();
         if (!string.IsNullOrEmpty(term))
@@ -76,14 +75,16 @@ public class SearchService(
             var safe = term.Replace("\"", "\"\"");
             var fullTextQuery = $"\"{safe}*\"";
 
-            books = books.Where(b =>
+            dbModels = dbModels.Where(b =>
                 EF.Functions.Contains(b.Title, fullTextQuery) ||
                 EF.Functions.Contains(b.ShortDescription, fullTextQuery) ||
-                (b.AuthorName != null && EF.Functions.Contains(b.AuthorName, fullTextQuery)));
+                (b.Author != null && EF.Functions.Contains(b.Author.Name, fullTextQuery)) ||
+                (b.Author != null && b.Author.PenName != null && EF.Functions.Contains(b.Author.PenName, fullTextQuery)));
         }
 
-        books = books
-            .OrderByDescending(b => b.AverageRating);
+        var books = dbModels
+            .OrderByDescending(b => b.AverageRating)
+            .ToSearchSeviceModels();
 
         var total = await books.CountAsync(cancellationToken);
         var items = await books

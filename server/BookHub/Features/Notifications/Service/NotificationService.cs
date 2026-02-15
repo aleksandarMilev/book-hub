@@ -78,6 +78,25 @@ public class NotificationService(
             cancellationToken);
     }
 
+    public async Task<Guid> CreateOnBookEdition(
+       Guid bookId,
+       string bookTitle,
+       string receiverId,
+       CancellationToken cancellationToken = default)
+    {
+        var message = string.Format(
+            Messages.Edited,
+            userService.GetUsername(),
+            bookTitle);
+
+        return await this.CreateNewNotification(
+            bookId,
+            ResourceType.Book,
+            message,
+            receiverId,
+            cancellationToken);
+    }
+
     public async Task<Guid> CreateOnAuthorCreation(
         Guid authorId,
         string authorName,
@@ -86,6 +105,25 @@ public class NotificationService(
     {
         var message = string.Format(
             Messages.Created,
+            userService.GetUsername(),
+            authorName);
+
+        return await this.CreateNewNotification(
+            authorId,
+            ResourceType.Author,
+            message,
+            receiverId,
+            cancellationToken);
+    }
+
+    public async Task<Guid> CreateOnAuthorEdition(
+        Guid authorId,
+        string authorName,
+        string receiverId,
+        CancellationToken cancellationToken = default)
+    {
+        var message = string.Format(
+            Messages.Edited,
             userService.GetUsername(),
             authorName);
 

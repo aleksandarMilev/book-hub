@@ -20,9 +20,13 @@ using Models.Shared.BookGenre.Models;
 using Models.Shared.ChatUser;
 
 public class BookHubDbContext(
-    DbContextOptions<BookHubDbContext> options, 
+    DbContextOptions<BookHubDbContext> options,
     ICurrentUserService userService) : IdentityDbContext<UserDbModel>(options)
 {
+    public string? CurrentUserId { get; } = userService.GetId();
+
+    public bool IsAdmin { get; } = userService.IsAdmin();
+
     public DbSet<BookDbModel> Books { get; init; }
 
     public DbSet<GenreDbModel> Genres { get; init; }
@@ -74,7 +78,7 @@ public class BookHubDbContext(
         modelBuilder.ApplyConfigurationsFromAssembly(
             Assembly.GetExecutingAssembly());
 
-        FilterModels(modelBuilder);
+        this.FilterModels(modelBuilder);
     }
 
     private void ApplyAuditInfo() 
@@ -113,59 +117,100 @@ public class BookHubDbContext(
                 }
             });
 
-    private static void FilterModels(ModelBuilder modelBuilder)
+    private void FilterModels(ModelBuilder modelBuilder)
         => modelBuilder
             .Model
             .GetEntityTypes()
             .ToList()
             .ForEach(entityType =>
             {
-                var entityClrType = entityType.ClrType;
-                var filterExpression = BuildFilterExpression(entityClrType);
+                var clrType = entityType.ClrType;
+                var filter = BuildFilterExpression(clrType);
 
-                if (filterExpression is not null)
+                if (filter is not null)
                 {
-                    modelBuilder
-                    .Entity(entityClrType)
-                    .HasQueryFilter(filterExpression);
+                    modelBuilder.Entity(clrType).HasQueryFilter(filter);
                 }
             });
 
-    private static LambdaExpression? BuildFilterExpression(Type entityType)
+    private LambdaExpression? BuildFilterExpression(Type entityType)
     {
-        var parameter = Expression.Parameter(entityType, "e");
-        Expression? combinedFilter = null;
+        var entityTypeParam = Expression.Parameter(entityType, "e");
+        Expression? combined = null;
 
         if (typeof(IDeletableEntity).IsAssignableFrom(entityType))
         {
-            var isDeletedProperty = Expression.Property(
-                parameter,
+            var isDeleted = Expression.Property(
+                entityTypeParam,
                 nameof(IDeletableEntity.IsDeleted));
 
             var isNotDeleted = Expression.Equal(
-                isDeletedProperty,
+                isDeleted,
                 Expression.Constant(false));
 
-            combinedFilter = isNotDeleted;
+            combined = isNotDeleted;
         }
+
+        var thisContext = Expression.Constant(this);
 
         if (typeof(IApprovableEntity).IsAssignableFrom(entityType))
         {
-            var isApprovedProperty = Expression.Property(
-                parameter,
+            var isApprovedProp = Expression.Property(
+                entityTypeParam,
                 nameof(IApprovableEntity.IsApproved));
 
             var isApproved = Expression.Equal(
-                isApprovedProperty,
+                isApprovedProp,
                 Expression.Constant(true));
 
-            combinedFilter = combinedFilter is null
-                ? isApproved
-                : Expression.AndAlso(combinedFilter, isApproved);
+            var isAdmin = Expression.Property(
+                thisContext,
+                nameof(this.IsAdmin));
+
+            var isAdminTrue = Expression.Equal(
+                isAdmin,
+                Expression.Constant(true));
+
+            Expression creatorOr = Expression.OrElse(
+                isApproved,
+                isAdminTrue);
+
+            var creatorIdProp = entityType.GetProperty("CreatorId");
+            if (creatorIdProp is not null &&
+                creatorIdProp.PropertyType == typeof(string))
+            {
+                var creatorId = Expression.Property(
+                    entityTypeParam,
+                    creatorIdProp);
+
+                var currentUserId = Expression.Property(
+                    thisContext,
+                    nameof(CurrentUserId));
+
+                var currentUserNotNull = Expression.NotEqual(
+                    currentUserId,
+                    Expression.Constant(null, typeof(string)));
+
+                var isCreator = Expression.Equal(
+                    creatorId,
+                    currentUserId);
+
+                var creatorAllowed = Expression.AndAlso(
+                    currentUserNotNull,
+                    isCreator);
+
+                creatorOr = Expression.OrElse(
+                    creatorOr,
+                    creatorAllowed);
+            }
+
+            combined = combined is null
+                ? creatorOr
+                : Expression.AndAlso(combined, creatorOr);
         }
 
-        return combinedFilter is null
+        return combined is null
             ? null
-            : Expression.Lambda(combinedFilter, parameter);
+            : Expression.Lambda(combined, entityTypeParam);
     }
 }

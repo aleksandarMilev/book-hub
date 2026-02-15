@@ -21,7 +21,19 @@ public interface INotificationService : ITransientService
         string receiverId,
         CancellationToken cancellationToken = default);
 
+    Task<Guid> CreateOnBookEdition(
+        Guid bookId,
+        string bookTitle,
+        string receiverId,
+        CancellationToken cancellationToken = default);
+
     Task<Guid> CreateOnAuthorCreation(
+        Guid authorId,
+        string authorName,
+        string receiverId,
+        CancellationToken cancellationToken = default);
+
+    Task<Guid> CreateOnAuthorEdition(
         Guid authorId,
         string authorName,
         string receiverId,

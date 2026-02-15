@@ -112,11 +112,7 @@ export const useBookFormik = ({ bookData = null, isEditMode = false }: Props) =>
               : 'form.messages.createSuccessUser';
 
             showMessage(t(messageKey, { name: nameForMessage }), true);
-
-            navigate(
-              isAdmin ? `${routes.author}/${created.id}/${slugify(payload.title)}` : routes.home,
-              { replace: true },
-            );
+            navigate(`${routes.book}/${created.id}/${slugify(payload.title)}`, { replace: true });
             resetForm();
           }
         }
@@ -139,5 +135,3 @@ export const useBookFormik = ({ bookData = null, isEditMode = false }: Props) =>
     setSelectedGenres,
   };
 };
-
-

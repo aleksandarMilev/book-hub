@@ -162,7 +162,7 @@ const AuthorDetails: FC = () => {
                   )}
                 </MDBCol>
               </MDBRow>
-              {(isCreator || isAdmin) && author.isApproved && (
+              {(isCreator || isAdmin) && (
                 <div className="author-details-actions d-flex gap-2 mt-4">
                   <Link
                     to={`${routes.editAuthor}/${id}`}
@@ -235,5 +235,3 @@ const AuthorDetails: FC = () => {
 };
 
 export default AuthorDetails;
-
-
