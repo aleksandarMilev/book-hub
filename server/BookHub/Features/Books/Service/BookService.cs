@@ -1,10 +1,9 @@
 ﻿namespace BookHub.Features.Books.Service;
 
 using Areas.Admin.Service;
-using BookHub.Common;
 using BookHub.Data;
 using BookHub.Data.Models.Shared.BookGenre.Models;
-using BookHub.Features.Books.Shared;
+using Common;
 using Data.Models;
 using Infrastructure.Extensions;
 using Infrastructure.Services.CurrentUser;
@@ -13,6 +12,7 @@ using Infrastructure.Services.Result;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Notifications.Service;
+using Shared;
 using UserProfile.Service;
 
 using static Common.Constants.ErrorMessages;
