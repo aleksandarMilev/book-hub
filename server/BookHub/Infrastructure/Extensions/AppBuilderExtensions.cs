@@ -85,4 +85,116 @@ public static class AppBuilderExtensions
 
         return app;
     }
+
+    // We need this method to create administrator if we drop the production db for some reason. Do not delete it
+    public static async Task<IApplicationBuilder> UseProductionAdminRole(
+        this IApplicationBuilder app)
+    {
+        using var scope = app.ApplicationServices.CreateScope();
+        var services = scope.ServiceProvider;
+
+        var logger = services
+            .GetRequiredService<ILoggerFactory>()
+            .CreateLogger("BootstrapAdmin");
+
+        var config = services.GetRequiredService<IConfiguration>();
+        var enabled = string.Equals(
+            config["BootstrapAdmin:Enabled"],
+            "true",
+            StringComparison.OrdinalIgnoreCase);
+
+        logger.LogInformation("BootstrapAdmin Enabled = {Enabled}", enabled);
+
+        if (!enabled)
+        {
+            return app;
+        }
+
+        var email = config["BootstrapAdmin:Email"];
+        var password = config["BootstrapAdmin:Password"];
+        var roleName = config["BootstrapAdmin:Role"] ?? "Administrator";
+
+        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+        {
+            throw new InvalidOperationException(
+                "BootstrapAdmin enabled but Email/Password not set.");
+        }
+
+        var userManager = services
+            .GetRequiredService<UserManager<UserDbModel>>();
+
+        var roleManager = services
+            .GetRequiredService<RoleManager<IdentityRole>>();
+
+        if (!await roleManager.RoleExistsAsync(roleName))
+        {
+            var role = new IdentityRole(roleName);
+            var createRoleResult = await roleManager.CreateAsync(role);
+
+            if (!createRoleResult.Succeeded)
+            {
+                var roleResultErrorMessage = createRoleResult
+                    .Errors
+                    .Select(e => e.Description);
+
+                throw new InvalidOperationException(
+                    "Failed to create role: " + string.Join("; ", createRoleResult));
+            }
+
+            logger.LogInformation("Created role {Role}", roleName);
+        }
+        else
+        {
+            logger.LogInformation("Role {Role} already exists", roleName);
+        }
+
+        var user = await userManager.FindByEmailAsync(email);
+        if (user is null)
+        {
+            user = new()
+            { 
+                Email = email,
+                UserName = email 
+            };
+
+            var createUserResult = await userManager.CreateAsync(user, password);
+            if (!createUserResult.Succeeded)
+            {
+                var errorMessage = createUserResult
+                    .Errors
+                    .Select(e => e.Description);
+
+                throw new InvalidOperationException(
+                    "Failed to create admin user: " + string.Join("; ", errorMessage));
+            }
+
+            logger.LogInformation("Created user {Email}", email);
+        }
+        else
+        {
+            logger.LogInformation("User {Email} already exists", email);
+        }
+
+        if (!await userManager.IsInRoleAsync(user, roleName))
+        {
+            var addToRoleResult = await userManager.AddToRoleAsync(user, roleName);
+            if (!addToRoleResult.Succeeded)
+            {
+                var errorMessage = addToRoleResult
+                    .Errors
+                    .Select(e => e.Description);
+
+                throw new InvalidOperationException(
+                    "Failed to add role: " + string.Join("; ", errorMessage));
+            }
+
+            logger.LogInformation("Added user {Email} to role {Role}", email, roleName);
+        }
+        else
+        {
+            logger.LogInformation("User {Email} already in role {Role}", email, roleName);
+        }
+
+        return app;
+    }
 }
