@@ -8,8 +8,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/if-it-bleeds.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2020-04-21T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2020-04-21",
+    "IsApproved": true,
+    "Pages": 448
   },
   {
     "Id": "e2d7f3b1-4a8c-4c7f-9b20-6b3c1a9de472",
@@ -20,8 +21,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/fairy-tale.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2022-09-06T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2022-09-06",
+    "IsApproved": true,
+    "Pages": 608
   },
   {
     "Id": "9ac4c3e1-2f6b-4f0d-9ba9-6c3a8f2b7d45",
@@ -32,8 +34,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/holly.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2023-09-05T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2023-09-05",
+    "IsApproved": true,
+    "Pages": 464
   },
   {
     "Id": "a6e9d3b2-4c7f-4f5a-9b1e-2d8c4f7a9e32",
@@ -44,8 +47,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/you-like-it-darker.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2024-05-21T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2024-05-21",
+    "IsApproved": true,
+    "Pages": 512
   },
   {
     "Id": "7e4a2c51-0dd7-4b9b-9a2c-494b62c2140f",
@@ -56,8 +60,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/never-flinch.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2025-05-27T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2025-05-27",
+    "IsApproved": true,
+    "Pages": 448
   },
   {
     "Id": "2bd3e1bb-4d57-4c0a-9a56-58c6714bb7a9",
@@ -68,8 +73,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-long-walk.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1979-07-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1979-07-01",
+    "IsApproved": true,
+    "Pages": 384
   },
   {
     "Id": "6f9e1c2b-8d44-4b87-94f6-6a32b5fb9184",
@@ -80,8 +86,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-dead-zone.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1979-08-30T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1979-08-30",
+    "IsApproved": true,
+    "Pages": 428
   },
   {
     "Id": "9f9c3b5e-8c4d-4e2f-9b54-4ea3a0c8e3f1",
@@ -92,8 +99,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/cujo.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1981-09-08T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1981-09-08",
+    "IsApproved": true,
+    "Pages": 416
   },
   {
     "Id": "a3a6f5a4-2b0c-4e2c-9a77-3a5f4b2c8e91",
@@ -104,8 +112,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/roadwork.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1981-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1981-01-01",
+    "IsApproved": true,
+    "Pages": 416
   },
   {
     "Id": "8c9e6b1c-8b4e-4f6d-8e5f-7f3d8f6a9b21",
@@ -116,8 +125,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-running-man.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1982-05-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1982-05-01",
+    "IsApproved": true,
+    "Pages": 352
   },
   {
     "Id": "a3c3acf9-4d34-4b19-9a8f-1ae0d1b2f3cd",
@@ -128,8 +138,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/different-seasons.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1982-08-27T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1982-08-27",
+    "IsApproved": true,
+    "Pages": 527
   },
   {
     "Id": "c7a4d6f3-4a1d-4c5a-9f55-9f3f4b7c2b19",
@@ -140,8 +151,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-talisman.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1984-11-08T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1984-11-08",
+    "IsApproved": true,
+    "Pages": 646
   },
   {
     "Id": "d7c1b7fa-7a5c-4a1a-8f6a-8c7d5b0d9a32",
@@ -152,8 +164,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/thinner.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1984-11-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1984-11-01",
+    "IsApproved": true,
+    "Pages": 432
   },
   {
     "Id": "7e4cb2de-5bc9-4e9c-8a0a-9a4d3d2f91b7",
@@ -164,8 +177,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/skeleton-crew.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1985-06-21T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1985-06-21",
+    "IsApproved": true,
+    "Pages": 512
   },
   {
     "Id": "b6a4f4d0-1b7a-4c3b-9d4b-5c6a2b8e9f11",
@@ -176,8 +190,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-eyes-of-the-dragon.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1984-02-02T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1984-02-02",
+    "IsApproved": true,
+    "Pages": 384
   },
   {
     "Id": "9b5d8c6c-6c2c-4a0a-9a6c-2df46a52f78f",
@@ -188,8 +203,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/four-past-midnight.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1990-09-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1990-09-01",
+    "IsApproved": true,
+    "Pages": 763
   },
   {
     "Id": "9c2b0b17-8e9d-4e54-9b7a-2a5e6f4c3d10",
@@ -200,8 +216,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/needful-things.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1991-10-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1991-10-01",
+    "IsApproved": true,
+    "Pages": 690
   },
   {
     "Id": "c3c8c737-8c9d-4c4c-9c7f-1b2a3f4d5e6f",
@@ -212,8 +229,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-tommyknockers.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1987-11-10T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1987-11-10",
+    "IsApproved": true,
+    "Pages": 992
   },
   {
     "Id": "d9f3b8c6-8a4c-4c9d-9c42-5f73baf0e7d2",
@@ -224,8 +242,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/nightmares-and-dreamscapes.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1993-09-29T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1993-09-29",
+    "IsApproved": true,
+    "Pages": 992
   },
   {
     "Id": "c2f4c3f9-0ab1-4b61-86c7-1a0e75f3f9d2",
@@ -236,8 +255,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/insomnia.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1994-09-15T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1994-09-15",
+    "IsApproved": true,
+    "Pages": 912
   },
   {
     "Id": "c2f4b6a1-8d3f-4a71-9f88-3d3f4a21b7e9",
@@ -248,8 +268,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/dolores-claiborne.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1992-11-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1992-11-01",
+    "IsApproved": true,
+    "Pages": 305
   },
   {
     "Id": "c3b7f9e1-981d-4c23-8e0f-5f1f9cbb0b77",
@@ -260,8 +281,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-green-mile.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1996-03-28T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1996-03-28",
+    "IsApproved": true,
+    "Pages": 448
   },
   {
     "Id": "a8b2f6bb-0f3b-4c2c-b4b9-3f2d9a6f12cd",
@@ -272,8 +294,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-regulators.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1996-09-24T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1996-09-24",
+    "IsApproved": true,
+    "Pages": 480
   },
   {
     "Id": "c8b4c9e3-4c1c-4c46-8a0f-3e9e6c7c2a11",
@@ -284,8 +307,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/desperation.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1996-09-24T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1996-09-24",
+    "IsApproved": true,
+    "Pages": 690
   },
   {
     "Id": "e6f4e1b3-9a2c-4f67-91b4-7fd5d1cf3229",
@@ -296,8 +320,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/hearts-in-atlantis.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1999-09-14T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1999-09-14",
+    "IsApproved": true,
+    "Pages": 528
   },
   {
     "Id": "e7b2c8a9-3f4d-4b77-9b65-2c8d4c5a7f13",
@@ -308,8 +333,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/bag-of-bones.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1998-09-22T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1998-09-22",
+    "IsApproved": true,
+    "Pages": 544
   },
   {
     "Id": "f4b937c0-6c71-4e6b-9a2b-9f660a9b8b24",
@@ -320,8 +346,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/everythings-eventual.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2002-03-19T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2002-03-19",
+    "IsApproved": true,
+    "Pages": 464
   },
   {
     "Id": "f4c3c92a-7c1b-45d3-9c2c-9b1e58d5a7e0",
@@ -332,8 +359,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-colorado-kid.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2005-10-04T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2005-10-04",
+    "IsApproved": true,
+    "Pages": 184
   },
   {
     "Id": "8b3a2c8c-9af1-4e5e-9d7b-6d2d9a4c1f21",
@@ -344,8 +372,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/liseys-story.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2006-10-04T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2006-10-04",
+    "IsApproved": true,
+    "Pages": 528
   },
   {
     "Id": "b12c3f9e-4a6d-4b21-91f2-0d7a7e4f3c89",
@@ -356,8 +385,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/cell.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2006-01-24T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2006-01-24",
+    "IsApproved": true,
+    "Pages": 384
   },
   {
     "Id": "0f3f8979-3d5c-4b96-9a2a-2f5f3bd6c412",
@@ -368,8 +398,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/duma-key.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2008-01-22T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2008-01-22",
+    "IsApproved": true,
+    "Pages": 611
   },
   {
     "Id": "5f8a1bde-3f72-4f2a-b9e0-5cd17a90c612",
@@ -380,8 +411,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/just-after-sunset.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2008-11-11T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2008-11-11",
+    "IsApproved": true,
+    "Pages": 384
   },
   {
     "Id": "5b3f1c6e-7d4a-4f0f-9f5a-2a7a1d9e3c42",
@@ -392,8 +424,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/under-the-dome.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2009-11-10T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2009-11-10",
+    "IsApproved": true,
+    "Pages": 1074
   },
   {
     "Id": "3ce93e2b-8e5c-4a8b-bf17-3c5f4b3b76aa",
@@ -404,8 +437,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/full-dark-no-stars.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2010-11-09T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2010-11-09",
+    "IsApproved": true,
+    "Pages": 384
   },
   {
     "Id": "6b2f1c3a-8e44-4fd0-9c6a-1c7b9320f3e9",
@@ -416,8 +450,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/11-22-63.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2011-11-08T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2011-11-08",
+    "IsApproved": true,
+    "Pages": 849
   },
   {
     "Id": "f13d2a8e-0b6d-4f0e-9c2e-7a1d5cbb9382",
@@ -428,8 +463,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/doctor-sleep.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2013-09-24T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2013-09-24",
+    "IsApproved": true,
+    "Pages": 531
   },
   {
     "Id": "d1f8b9c4-4c3b-4070-9c32-42b9f2f6e8ad",
@@ -440,8 +476,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/finders-keepers.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2015-06-02T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2015-06-02",
+    "IsApproved": true,
+    "Pages": 434
   },
   {
     "Id": "e6b8d4a1-2f3c-4f8a-9c23-7b4a1f9c23de",
@@ -452,8 +489,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-bazaar-of-bad-dreams.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2015-11-03T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2015-11-03",
+    "IsApproved": true,
+    "Pages": 495
   },
   {
     "Id": "3e9c7a24-5a31-4a1e-9f5a-4d2b8f6c91e3",
@@ -464,8 +502,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/end-of-watch.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2016-06-07T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2016-06-07",
+    "IsApproved": true,
+    "Pages": 432
   },
   {
     "Id": "bb7c9f4e-4b0c-4c0b-8d1d-2f4a3b9f6e21",
@@ -476,8 +515,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-outsider.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2018-05-22T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2018-05-22",
+    "IsApproved": true,
+    "Pages": 576
   },
   {
     "Id": "b4f2c8e1-3a6d-4a9d-9f12-8e3a7d6c4b21",
@@ -488,8 +528,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/elevation.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2018-10-30T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2018-10-30",
+    "IsApproved": true,
+    "Pages": 146
   },
   {
     "Id": "fa8c9d2b-6e2b-4a8c-9a37-5cba2f0457dd",
@@ -500,8 +541,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-institute.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2019-09-10T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2019-09-10",
+    "IsApproved": true,
+    "Pages": 576
   },
   {
     "Id": "d3a9c4b0-7f52-4c0f-9c41-9b5f2a7de3a1",
@@ -512,8 +554,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/later.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2021-03-02T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2021-03-02",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "f2c9b8d7-3e41-4f5d-92b3-4a7c1c6a9e21",
@@ -524,8 +567,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/billy-summers.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2021-08-03T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2021-08-03",
+    "IsApproved": true,
+    "Pages": 528
   },
   {
     "Id": "7a3f9a9c-5e9c-4b42-8d0a-1b4a2b0c9f31",
@@ -536,8 +580,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/blaze.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2007-06-12T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2007-06-12",
+    "IsApproved": true,
+    "Pages": 304
   },
   {
     "Id": "e8b0d4e9-1c4a-4b9a-9f6c-3f1a2b7c9d45",
@@ -548,8 +593,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/dreamcatcher.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2001-03-20T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2001-03-20",
+    "IsApproved": true,
+    "Pages": 620
   },
   {
     "Id": "8e6d3a1b-6a3b-4f40-8d1d-8a4a3d9e9a52",
@@ -560,8 +606,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-stand.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1978-10-03T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1978-10-03",
+    "IsApproved": true,
+    "Pages": 1152
   },
   {
     "Id": "b3d2c4a1-7e8f-4e9c-9f31-2f0f6f1d7a45",
@@ -572,8 +619,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/salems-lot.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1975-10-17T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1975-10-17",
+    "IsApproved": true,
+    "Pages": 439
   },
   {
     "Id": "5f0e3af3-0d8f-4f3a-9f0e-0b7a8b9c4c21",
@@ -584,8 +632,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/rage.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1977-09-13T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1977-09-13",
+    "IsApproved": true,
+    "Pages": 211
   },
   {
     "Id": "c7a3c8c9-4b5e-4c2c-9c8b-2e4a1f7d9023",
@@ -596,8 +645,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/night-shift.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1978-02-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1978-02-01",
+    "IsApproved": true,
+    "Pages": 336
   },
   {
     "Id": "471ff115-dfca-4852-b4c6-2aa0384c859e",
@@ -608,8 +658,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/pet-sematary.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1983-11-04T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1983-11-04",
+    "IsApproved": true,
+    "Pages": 374
   },
   {
     "Id": "9a1c3f4e-0a9c-4f13-9d96-8685b5c2e0fa",
@@ -620,8 +671,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/christine.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1983-04-29T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1983-04-29",
+    "IsApproved": true,
+    "Pages": 526
   },
   {
     "Id": "0c2f0d67-1f72-4a8d-8d69-1c7183762c84",
@@ -632,8 +684,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/carrie.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1974-04-05T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1974-04-05",
+    "IsApproved": true,
+    "Pages": 199
   },
   {
     "Id": "18432708-6e21-4f29-bfb9-db3d25a7e29f",
@@ -644,8 +697,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/harry-potter-and-the-deathly-hallows.jpg",
     "AuthorId": "b060c2a7-3b92-4b33-a547-59679c9c1d74",
-    "PublishedDate": "2007-07-21T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2007-07-21",
+    "IsApproved": true,
+    "Pages": 784
   },
   {
     "Id": "85e89832-d193-486d-bcbf-d51057dd7cbe",
@@ -656,8 +710,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/lord-of-the-rings.jpg",
     "AuthorId": "bb462072-1c71-44c0-9df3-6739b9ac847e",
-    "PublishedDate": "1954-07-29T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1954-07-29",
+    "IsApproved": true,
+    "Pages": 1216
   },
   {
     "Id": "38709103-bad9-47ab-aead-f77209f67e95",
@@ -668,8 +723,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/1984.jpg",
     "AuthorId": "65f7f75a-3510-4272-9347-fa58699e7ec9",
-    "PublishedDate": "1949-06-08T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1949-06-08",
+    "IsApproved": true,
+    "Pages": 328
   },
   {
     "Id": "7b9d0cf4-1bf4-4811-95de-40a8ad844ddd",
@@ -680,8 +736,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/one-flew-over-the-cuckoos-nest.jpg",
     "AuthorId": "754c7d94-d850-4a85-bcfb-d4757e3c4c9d",
-    "PublishedDate": "1962-02-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1962-02-01",
+    "IsApproved": true,
+    "Pages": 320
   },
   {
     "Id": "2481949f-50e9-4487-9193-c649d91ebf9d",
@@ -692,8 +749,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-shining.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1977-01-28T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1977-01-28",
+    "IsApproved": true,
+    "Pages": 447
   },
   {
     "Id": "3c91d985-f552-44a2-94b3-0be0c4e79020",
@@ -704,8 +762,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/dracula.jpg",
     "AuthorId": "18db3995-414e-4786-8205-cbfd849ac65f",
-    "PublishedDate": "1897-05-26T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1897-05-26",
+    "IsApproved": true,
+    "Pages": 512
   },
   {
     "Id": "c47cc642-0ece-44dd-b698-e755ddffd6bc",
@@ -716,8 +775,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/it.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1986-09-15T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1986-09-15",
+    "IsApproved": true,
+    "Pages": 1138
   },
   {
     "Id": "c5a7ac1f-9ae8-4eb6-a22a-2d5522dfffe7",
@@ -728,8 +788,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/animal-farm.jpg",
     "AuthorId": "65f7f75a-3510-4272-9347-fa58699e7ec9",
-    "PublishedDate": "1945-08-17T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1945-08-17",
+    "IsApproved": true,
+    "Pages": 112
   },
   {
     "Id": "3a941d9d-7580-4f83-8843-00d8be1ea6ed",
@@ -740,8 +801,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/a-clockwork-orange.jpg",
     "AuthorId": "c6e75962-e121-4da4-9116-44fbbbd29291",
-    "PublishedDate": "1962-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1962-01-01",
+    "IsApproved": true,
+    "Pages": 192
   },
   {
     "Id": "c97946eb-86ff-458c-8cd1-b79c763614a9",
@@ -752,8 +814,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/murder-on-the-orient-express.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1934-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1934-01-01",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "e9efab6a-3add-4052-bee7-42bea0df66c8",
@@ -764,8 +827,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-murder-of-roger-ackroyd.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1926-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1926-01-01",
+    "IsApproved": true,
+    "Pages": 312
   },
   {
     "Id": "35a3af59-2008-4d98-81a7-4cd6eb55bb01",
@@ -776,8 +840,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/east-of-eden.jpg",
     "AuthorId": "f0167a81-2161-47fa-84ac-a8332179a226",
-    "PublishedDate": "1952-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1952-01-01",
+    "IsApproved": true,
+    "Pages": 608
   },
   {
     "Id": "30f86a3a-430a-4484-b496-dad6d0b6b145",
@@ -788,8 +853,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/dune.jpg",
     "AuthorId": "3b2ffee2-4200-42c7-9eb3-d30933899eb3",
-    "PublishedDate": "1965-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1965-01-01",
+    "IsApproved": true,
+    "Pages": 412
   },
   {
     "Id": "d7f18fda-ed34-45bb-b860-851fc7651313",
@@ -800,8 +866,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-hitchhikers-guide-to-the-galaxy.jpg",
     "AuthorId": "1ef14d3c-6285-4d97-b238-f7e6bbd3a749",
-    "PublishedDate": "1979-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1979-01-01",
+    "IsApproved": true,
+    "Pages": 158
   },
   {
     "Id": "4e3a7d2b-9e8c-4a1f-9c32-7b5f2a9d3c11",
@@ -812,8 +879,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/firestarter.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1980-09-29T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1980-09-29",
+    "IsApproved": true,
+    "Pages": 426
   },
   {
     "Id": "6a2a9c1e-8f36-4f3d-8c9d-8f2f0af1b7e3",
@@ -824,8 +892,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/cycle-of-the-werewolf.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1983-07-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1983-07-01",
+    "IsApproved": true,
+    "Pages": 127
   },
   {
     "Id": "b0a0bf71-1a65-4c4e-9b76-4b4db4ff9f53",
@@ -836,8 +905,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/misery.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1987-06-08T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1987-06-08",
+    "IsApproved": true,
+    "Pages": 310
   },
   {
     "Id": "8c3a1f0c-1a2b-4e6d-9b7f-2c4d6e8f9a10",
@@ -848,8 +918,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-dark-half.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1989-10-20T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1989-10-20",
+    "IsApproved": true,
+    "Pages": 431
   },
   {
     "Id": "0a5c08f6-2c3b-4b8f-9b46-5a6a8e3c7c91",
@@ -860,8 +931,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/geralds-game.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1992-05-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1992-05-01",
+    "IsApproved": true,
+    "Pages": 332
   },
   {
     "Id": "4e9b9c5d-8af1-4c22-9d6f-3a4b2f8e9c01",
@@ -872,8 +944,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/rose-madder.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1995-07-10T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1995-07-10",
+    "IsApproved": true,
+    "Pages": 420
   },
   {
     "Id": "5a3d7c51-0b5a-4baf-8f3d-5b2b1c6b9f10",
@@ -884,8 +957,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-girl-who-loved-tom-gordon.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1999-04-06T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1999-04-06",
+    "IsApproved": true,
+    "Pages": 224
   },
   {
     "Id": "6f2c8b9b-2d9a-488e-8d2b-7a2d6f5b91c1",
@@ -896,8 +970,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/black-house.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2001-09-15T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2001-09-15",
+    "IsApproved": true,
+    "Pages": 640
   },
   {
     "Id": "8fa5d4c9-5b2f-4c31-96df-4c0e2d5f9a11",
@@ -908,8 +983,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/from-a-buick-8.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2002-09-24T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2002-09-24",
+    "IsApproved": true,
+    "Pages": 368
   },
   {
     "Id": "c0a8f9b2-5a34-4c23-9f10-9e7b2f4d3a21",
@@ -920,8 +996,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/joyland.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2013-06-04T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2013-06-04",
+    "IsApproved": true,
+    "Pages": 288
   },
   {
     "Id": "5d3f8b8c-8e2e-4b0f-9c8c-2f5a7c9d3e21",
@@ -932,8 +1009,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/mr-mercedes.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2014-06-03T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2014-06-03",
+    "IsApproved": true,
+    "Pages": 448
   },
   {
     "Id": "b0c7c1c3-7b3e-4a8c-9a33-0a2e4d9f8b21",
@@ -944,8 +1022,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/revival.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2014-11-11T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2014-11-11",
+    "IsApproved": true,
+    "Pages": 405
   },
   {
     "Id": "7cc6b4a0-1a1f-4f3a-9a53-9f6e2c8b1142",
@@ -956,8 +1035,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/gwendys-button-box.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2017-05-16T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2017-05-16",
+    "IsApproved": true,
+    "Pages": 176
   },
   {
     "Id": "f7a8e3c2-9bf4-4b6a-8f45-6a2b1c4d9e31",
@@ -968,8 +1048,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/sleeping-beauties.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2017-09-26T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2017-09-26",
+    "IsApproved": true,
+    "Pages": 702
   },
   {
     "Id": "f7d1f2f4-8c9a-4a3a-9d0e-3a4c7b9f1a23",
@@ -980,8 +1061,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/gwendys-final-task.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2022-02-15T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2022-02-15",
+    "IsApproved": true,
+    "Pages": 408
   },
   {
     "Id": "7a6f4c1e-9f24-4d8b-8e39-1b8c5a2f9d10",
@@ -992,8 +1074,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-dark-tower-i-the-gunslinger.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1982-06-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1982-06-01",
+    "IsApproved": true,
+    "Pages": 224
   },
   {
     "Id": "9c2d7e54-3c0b-4d6e-9f83-7a1b2c3d4e5f",
@@ -1004,8 +1087,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-dark-tower-ii-the-drawing-of-the-three.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1987-05-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1987-05-01",
+    "IsApproved": true,
+    "Pages": 400
   },
   {
     "Id": "5f3a9b28-6e41-4c7d-9230-2a7b8c9d0e1f",
@@ -1016,8 +1100,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-dark-tower-iii-the-waste-lands.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1991-09-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1991-09-01",
+    "IsApproved": true,
+    "Pages": 512
   },
   {
     "Id": "0a9d3c47-2b68-4e5f-8c91-3d4e5f6a7b8c",
@@ -1028,8 +1113,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-dark-tower-iv-wizard-and-glass.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "1997-11-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1997-11-01",
+    "IsApproved": true,
+    "Pages": 787
   },
   {
     "Id": "d1e2f3a4-b5c6-4789-9d0e-1f2a3b4c5d6e",
@@ -1040,8 +1126,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-dark-tower-v-wolves-of-the-calla.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2003-11-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2003-11-01",
+    "IsApproved": true,
+    "Pages": 714
   },
   {
     "Id": "3b4c5d6e-7f81-49a0-b2c3-d4e5f6a7b8c9",
@@ -1052,8 +1139,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-dark-tower-vi-song-of-susannah.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2004-06-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2004-06-01",
+    "IsApproved": true,
+    "Pages": 432
   },
   {
     "Id": "e8f7d6c5-b4a3-42d1-9e0f-1a2b3c4d5e6f",
@@ -1064,8 +1152,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-dark-tower-vii-the-dark-tower.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2004-09-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2004-09-01",
+    "IsApproved": true,
+    "Pages": 845
   },
   {
     "Id": "12ab34cd-56ef-4789-90ab-cdef12345678",
@@ -1076,8 +1165,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-dark-tower-the-wind-through-the-keyhole.jpg",
     "AuthorId": "3755f1e8-2f8a-476a-9bdb-bd0ab3873904",
-    "PublishedDate": "2012-04-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "2012-04-01",
+    "IsApproved": true,
+    "Pages": 336
   },
   {
     "Id": "0f1e2d3c-4b5a-4678-98c1-2d3e4f5a6b7c",
@@ -1088,8 +1178,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-mysterious-affair-at-styles.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1920-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1920-01-01",
+    "IsApproved": true,
+    "Pages": 296
   },
   {
     "Id": "1a2b3c4d-5e6f-4789-90a1-b2c3d4e5f6a7",
@@ -1100,8 +1191,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-murder-on-the-links.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1923-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1923-01-01",
+    "IsApproved": true,
+    "Pages": 298
   },
   {
     "Id": "2b3c4d5e-6f70-4819-a1b2-c3d4e5f6a7b8",
@@ -1112,8 +1204,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-big-four.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1927-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1927-01-01",
+    "IsApproved": true,
+    "Pages": 282
   },
   {
     "Id": "3c4d5e6f-7081-492a-b2c3-d4e5f6a7b8c9",
@@ -1124,8 +1217,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-mystery-of-the-blue-train.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1928-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1928-01-01",
+    "IsApproved": true,
+    "Pages": 296
   },
   {
     "Id": "8a2a6f6b-92a4-4f31-bf0c-5b0b4e1f8c1e",
@@ -1136,8 +1230,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/peril-at-end-house.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1932-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1932-01-01",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "6e4df4fd-37fb-4c26-9a72-8a5b94d3a902",
@@ -1148,8 +1243,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/lord-edgware-dies.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1933-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1933-01-01",
+    "IsApproved": true,
+    "Pages": 252
   },
   {
     "Id": "ba3a8b02-9e73-4a7e-bf1f-0a9e437421d5",
@@ -1160,8 +1256,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/three-act-tragedy.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1935-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1935-01-01",
+    "IsApproved": true,
+    "Pages": 279
   },
   {
     "Id": "1f6b3f05-6483-4ab0-9b1f-940d470e54c3",
@@ -1172,8 +1269,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/death-in-the-clouds.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1935-03-10T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1935-03-10",
+    "IsApproved": true,
+    "Pages": 304
   },
   {
     "Id": "0f8c4c8b-1b4d-4baf-8b6d-3f0b2e9a1c11",
@@ -1184,8 +1282,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-abc-murders.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1936-01-06T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1936-01-06",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "8a6b1e2d-9c77-4f06-bf0c-6a0c9a7d4e22",
@@ -1196,8 +1295,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/murder-in-mesopotamia.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1936-07-06T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1936-07-06",
+    "IsApproved": true,
+    "Pages": 288
   },
   {
     "Id": "3bd7b9d8-2f3c-4c9f-9a86-1f2e4d5c6b33",
@@ -1208,8 +1308,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/cards-on-the-table.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1936-11-02T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1936-11-02",
+    "IsApproved": true,
+    "Pages": 286
   },
   {
     "Id": "7c1e8d2a-5f44-48b7-9d2f-8e9c0b1a7d44",
@@ -1220,8 +1321,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/dumb-witness.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1937-07-05T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1937-07-05",
+    "IsApproved": true,
+    "Pages": 320
   },
   {
     "Id": "2ea4c9b7-6d31-4f9e-8c2b-9a7d5e1c5f55",
@@ -1232,8 +1334,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/death-on-the-nile.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1937-11-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1937-11-01",
+    "IsApproved": true,
+    "Pages": 288
   },
   {
     "Id": "7e6f1c01-8d5f-4b9b-9e35-5c0270f3b21a",
@@ -1244,8 +1347,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/appointment-with-death.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1938-05-02T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1938-05-02",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "9a3be5c4-2f9d-4e07-8a93-137cfa8659af",
@@ -1256,8 +1360,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/hercule-poirots-christmas.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1938-12-19T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1938-12-19",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "51d8c962-7a2b-4f1e-9a3b-14db0e1c2f45",
@@ -1268,8 +1373,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/sad-cypress.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": null,
-    "IsApproved": true
+    "PublishedDate": "1940-03-01",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "c8b0c6f9-4d71-4e82-b70b-6d4e5cf6a8e0",
@@ -1280,8 +1386,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/one-two-buckle-my-shoe.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": null,
-    "IsApproved": true
+    "PublishedDate": "1940-11-01",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "f21a37e4-9cf3-4a39-90ba-2c3e5c7d8f91",
@@ -1292,8 +1399,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/evil-under-the-sun.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": null,
-    "IsApproved": true
+    "PublishedDate": "1941-06-01",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "4bc4d7cb-3cca-4bcb-8b0d-59b9e7fc6b81",
@@ -1304,8 +1412,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/five-little-pigs.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1942-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1942-01-01",
+    "IsApproved": true,
+    "Pages": 192
   },
   {
     "Id": "a475bea9-3baf-4365-bf1a-0e6e8d533970",
@@ -1316,8 +1425,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-hollow.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1946-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1946-01-01",
+    "IsApproved": true,
+    "Pages": 279
   },
   {
     "Id": "b3fd1fa4-e560-4738-88c6-c4ade3f7af19",
@@ -1328,8 +1438,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/taken-at-the-flood.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1948-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1948-01-01",
+    "IsApproved": true,
+    "Pages": 192
   },
   {
     "Id": "0bb4e360-bb62-4c03-a2bf-597235b64790",
@@ -1340,8 +1451,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/mrs-mcgintys-dead.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1952-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1952-01-01",
+    "IsApproved": true,
+    "Pages": 192
   },
   {
     "Id": "188af1e0-73fa-4afe-bc9b-1547db499ca2",
@@ -1352,8 +1464,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/after-the-funeral.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1953-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1953-01-01",
+    "IsApproved": true,
+    "Pages": 192
   },
   {
     "Id": "b0c8b4f6-5e1d-4d52-9d37-0aa6c1e50f21",
@@ -1364,8 +1477,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/hickory-dickory-dock.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1955-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1955-01-01",
+    "IsApproved": true,
+    "Pages": 192
   },
   {
     "Id": "3e7a9f12-0f4c-4a6a-b74b-9c8b1fd9a233",
@@ -1376,8 +1490,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/dead-mans-folly.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1956-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1956-01-01",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "9b214c70-1f65-4af9-9180-6e1380e3b5f4",
@@ -1388,8 +1503,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/cat-among-the-pigeons.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1959-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1959-01-01",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "d4e3a1b2-6c78-4c2c-9a5f-2b1c7c9de8f0",
@@ -1400,8 +1516,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-clocks.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1963-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1963-01-01",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "f87a3c59-2bd4-4d9f-8b60-7a9e3f124c61",
@@ -1412,8 +1529,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/third-girl.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1966-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1966-01-01",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "e1b9a9d7-7e5f-4ad3-a2b6-9c5e9cd870ac",
@@ -1424,8 +1542,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/halloween-party.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1969-11-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1969-11-01",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "f4a8c3d2-043c-4f43-8ac5-0c5f1e6d9b2a",
@@ -1436,8 +1555,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/elephants-can-remember.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1972-11-20T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1972-11-20",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "0a7f6b24-9f93-4a6f-8bfb-8a2a4b9dcd5c",
@@ -1448,8 +1568,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/curtain-poirots-last-case.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1975-09-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1975-09-01",
+    "IsApproved": true,
+    "Pages": 224
   },
   {
     "Id": "2c5a1f4d-7d3a-4af4-bdec-0a9bd5b1c1f8",
@@ -1460,8 +1581,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-murder-at-the-vicarage.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1930-10-20T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1930-10-20",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "9d0e3b6f-41c8-4b45-96bb-1e2caa7d9f33",
@@ -1472,8 +1594,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-body-in-the-library.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1942-02-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1942-02-01",
+    "IsApproved": true,
+    "Pages": 160
   },
   {
     "Id": "5a7c5a3c-9a8b-4b4e-9b26-8afc5ad3e901",
@@ -1484,8 +1607,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-moving-finger.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1943-06-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1943-06-01",
+    "IsApproved": true,
+    "Pages": 229
   },
   {
     "Id": "f3c6940e-6688-4a17-9cd7-1962d6f4b4f2",
@@ -1496,8 +1620,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/a-murder-is-announced.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1950-06-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1950-06-01",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "79bb19da-6b9d-4a4f-a3cc-8f5baf0e2a8c",
@@ -1508,8 +1633,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/they-do-it-with-mirrors.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1952-11-17T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1952-11-17",
+    "IsApproved": true,
+    "Pages": 192
   },
   {
     "Id": "1e4cbd1d-8a0f-4b88-9fd3-6ff315b74b87",
@@ -1520,8 +1646,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/a-pocket-full-of-rye.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1953-11-09T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1953-11-09",
+    "IsApproved": true,
+    "Pages": 192
   },
   {
     "Id": "c1dd2cfe-4a85-4e4a-8c8f-4c9cb9fa8fd0",
@@ -1532,8 +1659,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/4-50-from-paddington.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1957-11-04T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1957-11-04",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "c51d1a59-8f1c-4d10-9b65-1a8a8a8a614f",
@@ -1544,8 +1672,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-mirror-crackd-from-side-to-side.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1962-11-12T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1962-11-12",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "9f1b3b3e-9e70-4c46-846a-0b898cbf607a",
@@ -1556,8 +1685,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/a-caribbean-mystery.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1964-11-16T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1964-11-16",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "d3f9b62b-6a3b-4f5c-afb6-77e0da82c0cb",
@@ -1568,8 +1698,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/at-bertrams-hotel.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1965-11-15T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1965-11-15",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "4b4d7f13-5a3d-4f91-9e6a-7bfe60a5c9b5",
@@ -1580,8 +1711,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/nemesis.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1971-11-05T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1971-11-05",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "a6c1e30a-8a4e-4c1f-b856-4ec2f8ea4e95",
@@ -1592,8 +1724,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/sleeping-murder.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": null,
-    "IsApproved": true
+    "PublishedDate": "1976-10-01",
+    "IsApproved": true,
+    "Pages": 224
   },
   {
     "Id": "8a63c7cf-1e0d-4d3b-8a3c-5d7b8e1c9f10",
@@ -1604,8 +1737,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-secret-adversary.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1922-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1922-01-01",
+    "IsApproved": true,
+    "Pages": 320
   },
   {
     "Id": "5b2b3fd5-3a9c-4d76-8c6f-0dc0c1c3e72f",
@@ -1616,8 +1750,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/n-or-m.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1941-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1941-01-01",
+    "IsApproved": true,
+    "Pages": 192
   },
   {
     "Id": "f2c1e0d4-1c6a-4c57-ab2b-9a2f4dc6c9b2",
@@ -1628,8 +1763,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/by-the-pricking-of-my-thumbs.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1968-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1968-01-01",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "c7c3d1f2-9f18-4a81-9f2b-3ab71f5f1e0c",
@@ -1640,8 +1776,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/postern-of-fate.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1973-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1973-01-01",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "f3a7c2d1-9b84-4f5d-8a91-2c7e5b3d6a10",
@@ -1652,8 +1789,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-secret-of-chimneys.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1925-06-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1925-06-01",
+    "IsApproved": true,
+    "Pages": 310
   },
   {
     "Id": "a7c4e2b9-3d51-4a29-9f16-8b2e0d6f4c33",
@@ -1664,8 +1802,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-seven-dials-mystery.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1929-01-24T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1929-01-24",
+    "IsApproved": true,
+    "Pages": 282
   },
   {
     "Id": "d5e1a3c9-8f74-4c2b-9d10-7b3f2e6a4c78",
@@ -1676,8 +1815,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/murder-is-easy.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1939-06-05T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1939-06-05",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "e4b9c7a1-2f86-4d3c-8a5b-9c1e7d2f6b40",
@@ -1688,8 +1828,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/towards-zero.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1944-06-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1944-06-01",
+    "IsApproved": true,
+    "Pages": 160
   },
   {
     "Id": "f51b3c3b-8e7c-4f5f-9c0a-41b7b0c1a2d3",
@@ -1700,8 +1841,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-man-in-the-brown-suit.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1924-08-22T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1924-08-22",
+    "IsApproved": true,
+    "Pages": 312
   },
   {
     "Id": "d6df1e47-7e89-4d39-8011-0e4ebf2cdf45",
@@ -1712,8 +1854,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/sparkling-cyanide.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": null,
-    "IsApproved": true
+    "PublishedDate": "1945-01-01",
+    "IsApproved": true,
+    "Pages": 160
   },
   {
     "Id": "9a61a35e-8b1e-4c5d-b2d8-2ba4419d0a10",
@@ -1724,8 +1867,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-sittaford-mystery.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1931-09-07T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1931-09-07",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "b7c2334b-03f1-4ba3-97e7-02979086cd1c",
@@ -1736,8 +1880,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/why-didnt-they-ask-evans.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1934-09-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1934-09-01",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "4fd6cd8b-52f2-4c9d-9540-5f3f8b5d8e4f",
@@ -1748,8 +1893,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/and-then-there-were-none.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1939-11-06T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1939-11-06",
+    "IsApproved": true,
+    "Pages": 272
   },
   {
     "Id": "a7d0e351-640e-4c41-93a1-3c63d51f9d54",
@@ -1760,8 +1906,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/death-comes-as-the-end.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1944-10-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1944-10-01",
+    "IsApproved": true,
+    "Pages": 223
   },
   {
     "Id": "dbe0ac46-6f9c-4b69-b3ed-64b9f9389bee",
@@ -1772,8 +1919,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/crooked-house.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1949-05-23T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1949-05-23",
+    "IsApproved": true,
+    "Pages": 192
   },
   {
     "Id": "0f6c9f5e-9e3f-4e3c-9f98-3b9c2530f7c2",
@@ -1784,8 +1932,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/they-came-to-baghdad.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1951-03-05T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1951-03-05",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "e7c2b1f4-1c9b-4f4c-8d42-8e55c1e21caf",
@@ -1796,8 +1945,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/destination-unknown.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1954-11-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1954-11-01",
+    "IsApproved": true,
+    "Pages": 192
   },
   {
     "Id": "a9e4db2c-3f52-4c1a-ae54-3a7f4be61f31",
@@ -1808,8 +1958,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/ordeal-by-innocence.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1958-11-03T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1958-11-03",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "b3c96456-0f49-4a21-929c-02c42a4e6a0b",
@@ -1820,8 +1971,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-pale-horse.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1961-11-06T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1961-11-06",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "5d8a2fde-4f51-4f8b-93fd-1bfb5c6aa9c7",
@@ -1832,8 +1984,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/endless-night.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1967-10-30T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1967-10-30",
+    "IsApproved": true,
+    "Pages": 224
   },
   {
     "Id": "9e4f7b67-0a1d-4f4b-9d7b-3a8e1e0b21c4",
@@ -1844,8 +1997,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/passenger-to-frankfurt.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1970-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1970-01-01",
+    "IsApproved": true,
+    "Pages": 256
   },
   {
     "Id": "3d2b8f3c-4b0b-4c10-b2f6-1b4f4a9a5f31",
@@ -1856,8 +2010,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/giants-bread.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1930-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1930-01-01",
+    "IsApproved": true,
+    "Pages": 448
   },
   {
     "Id": "c1b47e0f-7e4a-4f4b-8b7a-5f6c3a2d9e11",
@@ -1868,8 +2023,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/unfinished-portrait.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1934-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1934-01-01",
+    "IsApproved": true,
+    "Pages": 320
   },
   {
     "Id": "f6a9e0d2-2d5c-4a87-9c3a-9a0b8f42c7e3",
@@ -1880,8 +2036,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/absent-in-the-spring.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1944-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1944-01-01",
+    "IsApproved": true,
+    "Pages": 160
   },
   {
     "Id": "a2e5b9c8-6fd7-4f63-9c1b-1a7f9d6d3b55",
@@ -1892,8 +2049,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-rose-and-the-yew-tree.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1948-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1948-01-01",
+    "IsApproved": true,
+    "Pages": 224
   },
   {
     "Id": "4b8a0f55-6f0c-4c0f-8aa8-5b2c7d80d4cf",
@@ -1904,8 +2062,9 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/a-daughters-a-daughter.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1952-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1952-01-01",
+    "IsApproved": true,
+    "Pages": 200
   },
   {
     "Id": "df7c3e3e-3bcf-4b8e-9f2f-75ad0a92c3bb",
@@ -1916,7 +2075,8 @@
     "RatingsCount": 0,
     "ImagePath": "/images/books/the-burden.jpg",
     "AuthorId": "3c44f945-8398-4c44-b962-9e2ea929fda4",
-    "PublishedDate": "1956-01-01T00:00:00",
-    "IsApproved": true
+    "PublishedDate": "1956-01-01",
+    "IsApproved": true,
+    "Pages": 236
   }
 ]
