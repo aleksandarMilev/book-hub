@@ -20,12 +20,6 @@ public class ChallengeService(
         int year,
         CancellationToken cancellationToken = default)
     {
-        var userId = userService.GetId();
-        if (userId is null)
-        {
-            return null;
-        }
-
         if (!YearIsValid(year))
         {
             return null;
@@ -34,13 +28,10 @@ public class ChallengeService(
         return await data
             .ReadingChallenges
             .AsNoTracking()
-            .Where(c => c.UserId == userId && c.Year == year)
-            .Select(c => new ReadingChallengeServiceModel
-            {
-                Year = c.Year,
-                GoalType = c.GoalType,
-                GoalValue = c.GoalValue
-            })
+            .Where(c => 
+                c.UserId == userService.GetId() && 
+                c.Year == year)
+            .ToServiceModels()
             .FirstOrDefaultAsync(cancellationToken);
     }
 
@@ -48,12 +39,6 @@ public class ChallengeService(
         UpsertReadingChallengeServiceModel model,
         CancellationToken cancellationToken = default)
     {
-        var userId = userService.GetId();
-        if (userId is null)
-        {
-            return ErrorMessages.Unauthorized;
-        }
-
         if (!YearIsValid(model.Year))
         {
             return ErrorMessages.InvalidYear;
@@ -69,17 +54,18 @@ public class ChallengeService(
             return ErrorMessages.InvalidGoalType;
         }
 
-        var existing = await data
+        var userId = userService.GetId();
+        var dbModel = await data
             .ReadingChallenges
             .FirstOrDefaultAsync(
                 c => c.UserId == userId && c.Year == model.Year,
                 cancellationToken);
 
-        if (existing is null)
+        if (dbModel is null)
         {
             var dbModel = new ReadingChallengeDbModel
             {
-                UserId = userId,
+                UserId = userId!,
                 Year = model.Year,
                 GoalType = model.GoalType,
                 GoalValue = model.GoalValue
@@ -89,8 +75,8 @@ public class ChallengeService(
         }
         else
         {
-            existing.GoalType = model.GoalType;
-            existing.GoalValue = model.GoalValue;
+            dbModel.GoalType = model.GoalType;
+            dbModel.GoalValue = model.GoalValue;
         }
 
         await data.SaveChangesAsync(cancellationToken);
@@ -102,74 +88,59 @@ public class ChallengeService(
         int year,
         CancellationToken cancellationToken = default)
     {
-        var userId = userService.GetId();
-        if (userId is null)
-        {
-            return null;
-        }
-
         if (!YearIsValid(year))
         {
             return null;
         }
 
-        var challenge = await data
+        var userId = userService.GetId();
+        var dbModel = await data
             .ReadingChallenges
             .AsNoTracking()
             .FirstOrDefaultAsync(
                 c => c.UserId == userId && c.Year == year,
                 cancellationToken);
 
-        if (challenge is null)
+        if (dbModel is null)
         {
             return null;
         }
 
-        var readQuery = data
+        var readingListsWithStatusRead = data
             .ReadingLists
             .AsNoTracking()
             .Where(
                 rl => rl.UserId == userId &&
                 rl.Status == ReadingListStatus.Read);
 
-        var currentBooks = await readQuery.CountAsync(cancellationToken);
-        var currentValue = currentBooks;
+        var currentBooksInTheReadingList = await readingListsWithStatusRead
+            .CountAsync(cancellationToken);
 
-        if (challenge.GoalType == ReadingGoalType.Pages)
+        var readingChallengeCurrentValue = currentBooksInTheReadingList;
+        if (dbModel.GoalType == ReadingGoalType.Pages)
         {
-            currentValue = await readQuery
-                .Select(rl => (int?)rl.Book.Pages)
+            readingChallengeCurrentValue = await readingListsWithStatusRead
+                .Select(rl => rl.Book.Pages)
                 .SumAsync(p => p ?? 0, cancellationToken);
         }
 
-        return new()
-        {
-            Year = challenge.Year,
-            GoalType = challenge.GoalType,
-            GoalValue = challenge.GoalValue,
-            CurrentValue = currentValue
-        };
+        return dbModel.ToServiceModel(readingChallengeCurrentValue);
     }
 
     public async Task<Result> CheckInToday(
         CancellationToken cancellationToken = default)
     {
-        var userId = userService.GetId();
-        if (userId is null)
-        {
-            return ErrorMessages.Unauthorized;
-        }
-
+        var userId = userService.GetId()!;
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
 
-        var exists = await data
+        var dbModelExists = await data
             .ReadingCheckIns
             .AsNoTracking()
             .AnyAsync(
                 c => c.UserId == userId && c.Date == today,
                 cancellationToken);
 
-        if (exists)
+        if (dbModelExists)
         {
             return ErrorMessages.CheckInAlreadyExists;
         }
@@ -188,24 +159,11 @@ public class ChallengeService(
     public async Task<ReadingStreakServiceModel> Streak(
         CancellationToken cancellationToken = default)
     {
-        var userId = userService.GetId();
-        if (userId is null)
-        {
-            return new ReadingStreakServiceModel
-            {
-                CurrentStreak = 0,
-                LongestStreak = 0,
-                CheckedInToday = false,
-                Today = DateOnly.FromDateTime(DateTime.UtcNow)
-            };
-        }
-
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
-
         var dates = await data
             .ReadingCheckIns
             .AsNoTracking()
-            .Where(c => c.UserId == userId)
+            .Where(c => c.UserId == userService.GetId())
             .OrderByDescending(c => c.Date)
             .Select(c => c.Date)
             .ToListAsync(cancellationToken);
@@ -215,7 +173,7 @@ public class ChallengeService(
         var currentStreak = ComputeCurrentStreak(dates, today);
         var longestStreak = ComputeLongestStreak(dates);
 
-        return new ReadingStreakServiceModel
+        return new()
         {
             CurrentStreak = currentStreak,
             LongestStreak = longestStreak,
@@ -236,13 +194,15 @@ public class ChallengeService(
             return 0;
         }
 
-        var set = new HashSet<DateOnly>(datesDescending);
-        var start = set.Contains(today) ? today : today.AddDays(-1);
+        var datesAsSet = new HashSet<DateOnly>(datesDescending);
+        var start = datesAsSet.Contains(today)
+            ? today
+            : today.AddDays(-1);
 
         var streak = 0;
         var cursor = start;
 
-        while (set.Contains(cursor))
+        while (datesAsSet.Contains(cursor))
         {
             streak++;
             cursor = cursor.AddDays(-1);
@@ -258,7 +218,10 @@ public class ChallengeService(
             return 0;
         }
 
-        var unique = datesDescending.Distinct().OrderBy(d => d).ToList();
+        var unique = datesDescending
+            .Distinct()
+            .OrderBy(d => d)
+            .ToList();
 
         var best = 1;
         var current = 1;

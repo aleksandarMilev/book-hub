@@ -4,8 +4,6 @@ public static class Constants
 {
     public static class ErrorMessages
     {
-        public const string Unauthorized = "Unauthorized.";
-
         public const string InvalidYear = "Invalid year.";
 
         public const string InvalidGoal = "Invalid goal value.";

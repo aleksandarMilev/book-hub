@@ -2,6 +2,7 @@
 
 using BookHub.Features.Challenges.Web.Models;
 using Data.Models;
+using Org.BouncyCastle.Asn1.Cmp;
 using Service.Models;
 
 public static class ReadingChallengeMapping
@@ -21,6 +22,17 @@ public static class ReadingChallengeMapping
         {
             Date = c.Date
         });
+
+    public static ReadingChallengeProgressServiceModel ToServiceModel(
+        this ReadingChallengeDbModel dbModel,
+        int currentValue)
+        => new()
+        {
+            Year = dbModel.Year,
+            GoalType = dbModel.GoalType,
+            GoalValue = dbModel.GoalValue,
+            CurrentValue = currentValue
+        };
 
     public static UpsertReadingChallengeServiceModel ToServiceModel(
         this UpsertReadingChallengeWebModel webModel)
