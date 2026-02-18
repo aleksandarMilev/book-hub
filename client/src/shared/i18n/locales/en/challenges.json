@@ -1,0 +1,58 @@
+{
+  "page": {
+    "title": "Challenges",
+    "subtitle": "Set a yearly goal, track progress, and keep a daily reading streak."
+  },
+  "goalCard": {
+    "title": "Reading Challenge {{year}}",
+    "subtitle": {
+      "noProgress": "Set your goal for {{year}}",
+      "withProgress": "{{current}} / {{goal}} {{unitLabel}}"
+    },
+    "progress": {
+      "current": "Current",
+      "goal": "Goal"
+    },
+    "form": {
+      "goalTypeLabel": "Goal type",
+      "goalValueLabel": "Goal value",
+      "types": {
+        "books": "Books",
+        "pages": "Pages"
+      },
+      "hint": "Tip: Choose something realistic. You can change it anytime."
+    },
+    "actions": {
+      "save": "Save goal",
+      "saving": "Saving…"
+    }
+  },
+  "streakCard": {
+    "title": "Reading streak",
+    "subtitle": "Tap once per day to keep your streak alive.",
+    "stats": {
+      "current": "Current",
+      "longest": "Longest"
+    },
+    "actions": {
+      "checkIn": "Check in today",
+      "checkingIn": "Checking in…",
+      "checkedIn": "Checked in today"
+    },
+    "status": {
+      "checkedIn": "Nice — you're covered for today."
+    }
+  },
+  "units": {
+    "books": "{{count}} book",
+    "books_other": "{{count}} books",
+    "pages": "{{count}} page",
+    "pages_other": "{{count}} pages"
+  },
+  "messages": {
+    "saveSuccess": "Challenge updated successfully!",
+    "saveError": "Failed to update challenge.",
+    "checkInSuccess": "Checked in for today!",
+    "checkInError": "Failed to check in."
+  }
+}

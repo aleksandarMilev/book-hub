@@ -75,5 +75,11 @@ export const errors = {
       down: 'Something went wrong will processing your downvote',
     },
   },
+  challenges: {
+    get: 'Failed to load challenge.',
+    upsert: 'Failed to update challenge.',
+    progress: 'Failed to load progress.',
+    streak: 'Failed to load streak.',
+    checkIn: 'Failed to check in.',
+  },
 };
-

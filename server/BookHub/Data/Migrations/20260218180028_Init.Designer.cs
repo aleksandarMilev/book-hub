@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookHub.Data.Migrations
 {
     [DbContext(typeof(BookHubDbContext))]
-    [Migration("20260212175617_Init")]
+    [Migration("20260218180028_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -6359,6 +6359,79 @@ namespace BookHub.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("BookHub.Features.Authors.Data.Models.AuthorEditDbModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AuthorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Biography")
+                        .IsRequired()
+                        .HasMaxLength(10000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("BornAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("Nationality")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PenName")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("RequestedById")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId")
+                        .IsUnique();
+
+                    b.ToTable("AuthorEdits");
+                });
+
             modelBuilder.Entity("BookHub.Features.Books.Data.Models.BookDbModel", b =>
                 {
                     b.Property<Guid>("Id")
@@ -6411,6 +6484,9 @@ namespace BookHub.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("Pages")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("PublishedDate")
                         .HasColumnType("datetime2");
 
@@ -6453,6 +6529,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "If It Bleeds is a 2020 collection of four novellas by Stephen King: 'Mr. Harrigan’s Phone', 'The Life of Chuck', 'If It Bleeds', and 'Rat'. The stories move between quiet, personal hauntings and larger supernatural disturbances—from a boy who discovers his deceased employer’s phone still seems to connect to the living world, to a collapsing reality told in reverse, to an investigative reporter (Holly Gibney) tracking an inhuman predator feeding on tragedy, and a blocked writer who strikes a dangerous bargain to finish his book. The collection explores themes of mortality, memory, media sensationalism, creative desperation, and the persistence of both kindness and evil in everyday life.",
+                            Pages = 448,
                             PublishedDate = new DateTime(2020, 4, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Four novellas that explore grief, evil, and the lingering echoes of supernatural events.",
@@ -6468,6 +6545,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Fairy Tale is a 2022 novel by Stephen King that follows Charlie Reade, a seventeen-year-old boy who befriends a reclusive old man named Howard Bowditch and his dog, Radar. After Bowditch’s death, Charlie discovers that the old man was guarding a secret: a locked shed containing a portal to another world called Empis. Drawn into this fantastical realm of ruined cities, cursed royalty, strange magic, and looming darkness, Charlie must confront both external monsters and his own fears as he’s thrust into the role of unlikely hero. Blending classic fantasy with King’s trademark sense of dread, Fairy Tale explores themes of courage, destiny, sacrifice, and the power of stories to shape our lives.",
+                            Pages = 608,
                             PublishedDate = new DateTime(2022, 9, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A teenage boy inherits a portal to another world where a dark kingdom desperately needs a hero.",
@@ -6483,6 +6561,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Holly is a 2023 novel by Stephen King that places private investigator Holly Gibney at the center of a chilling standalone case. When a distraught woman asks Holly to find her missing daughter, the trail leads to an apparently harmless elderly couple—both retired academics—who live in a quiet Midwestern neighborhood. Beneath their courteous, cultured exterior lies a gruesome secret tied to a series of disappearances stretching back years. As Holly pursues the truth, she must navigate her own grief, anxiety, and lingering trauma while confronting a very human form of evil. The novel blends crime fiction and psychological horror, deepening Holly’s character as she steps fully into the role of lead detective in King’s expanding universe.",
+                            Pages = 464,
                             PublishedDate = new DateTime(2023, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Holly Gibney hunts a pair of respectable monsters hiding in plain sight.",
@@ -6498,6 +6577,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "You Like It Darker is a short-story collection by Stephen King that gathers a range of tales blending horror, suspense, and dark fantasy. The stories delve into the unsettling corners of human nature and the supernatural, featuring characters who confront haunted pasts, uncanny events, and moral crossroads. With King’s trademark mix of sharp characterization, creeping dread, and unexpected emotion, the collection showcases his ability to turn everyday situations into nightmarish or profound encounters. From quiet psychological terror to more overtly supernatural threats, You Like It Darker offers a varied but thematically linked set of narratives about what happens when darkness—inner or outer—demands to be faced.",
+                            Pages = 512,
                             PublishedDate = new DateTime(2024, 5, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A collection of chilling and reflective tales that explore fate, obsession, and the shadows lurking at the edges of ordinary life.",
@@ -6513,6 +6593,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Never Flinch is a 2025 crime-thriller novel by Stephen King featuring private investigator Holly Gibney. The story unfolds along two converging tracks: in the Midwestern city of Buckeye, a killer sends a letter to the police announcing a plan to kill thirteen innocents and one guilty person as atonement for a wrongful conviction, while elsewhere a high-profile feminist writer faces escalating threats from a violent extremist. As Holly works alongside local detectives to decipher the killer’s motives and methods, she also takes a job as bodyguard to the embattled activist, forcing her to juggle overlapping dangers, old trauma, and public scrutiny. The novel explores themes of vengeance, abuse, extremism, and moral responsibility, while continuing Holly’s evolution from anxious outsider to determined, if imperfect, hero.",
+                            Pages = 448,
                             PublishedDate = new DateTime(2025, 5, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Holly Gibney hunts a killer promising a \"lottery\" of deaths while protecting a targeted feminist activist.",
@@ -6528,6 +6609,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Long Walk is a dystopian novel by Stephen King, originally published under the pseudonym Richard Bachman in 1979. Set in an alternate, militarized America, it follows one hundred teenage boys who volunteer for an annual endurance contest known as the Long Walk. The rules are simple but merciless: maintain a minimum walking speed, never stop, and if you receive three warnings, you are shot on the spot. As the miles stretch on and exhaustion, pain, and psychological strain mount, friendships form and fracture while the boys confront fear, mortality, and the true cost of victory. Blending psychological horror with social commentary on violence, authoritarianism, and spectacle, The Long Walk is often cited as one of King’s most haunting and emotionally powerful early works.",
+                            Pages = 384,
                             PublishedDate = new DateTime(1979, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "One hundred boys, one brutal contest, and only one allowed to survive the road.",
@@ -6543,6 +6625,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Dead Zone is a 1979 psychological horror and thriller novel by American writer Stephen King. It follows Johnny Smith, a schoolteacher who falls into a years-long coma after a car accident. When he awakens, he discovers he has developed powerful psychic abilities that allow him to glimpse people’s pasts and futures through touch. Struggling to rebuild his life, Johnny becomes increasingly tormented when he foresees catastrophe linked to ambitious politician Greg Stillson. Forced to confront the ethical implications of his visions, Johnny faces an agonizing decision about how far he is willing to go to prevent disaster. Blending supernatural elements with political tension and moral dilemma, The Dead Zone is one of King’s most character-driven and haunting works, and was later adapted into a film and a television series.",
+                            Pages = 428,
                             PublishedDate = new DateTime(1979, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A man awakens from a coma with the power to see the future—and a terrible choice to make.",
@@ -6558,6 +6641,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Cujo is a 1981 horror novel by American writer Stephen King. The story follows a once-friendly Saint Bernard who becomes rabid and transforms into a relentless killer, trapping a mother and her young son in their stalled car during a scorching heatwave. As the town of Castle Rock deals with its own domestic troubles and hidden fears, the novel explores themes of helplessness, random tragedy, and the horrors that can emerge from everyday life. Cujo is often noted for its intense, claustrophobic atmosphere and its focus on psychological as well as physical terror.",
+                            Pages = 416,
                             PublishedDate = new DateTime(1981, 9, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A family is terrorized by a rabid dog trapped with them in a broken-down car.",
@@ -6573,6 +6657,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Roadwork is a 1981 novel by Stephen King, originally published under the pseudonym Richard Bachman. The story follows Barton George Dawes, an ordinary man whose life unravels when a highway expansion project threatens to demolish both his home and his workplace. As he refuses to accept the changes forced upon him, Bart’s quiet resistance escalates into a dangerous and ultimately violent stand against progress. The novel explores themes of grief, denial, the fear of change, and the psychological toll of losing one’s place in the world.",
+                            Pages = 416,
                             PublishedDate = new DateTime(1981, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "How far would one man go to keep the world from paving over his past?",
@@ -6588,6 +6673,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Running Man is a dystopian thriller novel by Stephen King, originally published in 1982 under the pseudonym Richard Bachman. Set in a grim future where the world is plagued by poverty, violence, and oppressive media, the story follows Ben Richards, a desperate man who volunteers for a deadly reality show to earn money for his sick daughter. Hunted across the country by professional killers and watched by millions on television, Richards must use his wits and determination to stay alive. The novel explores themes of media manipulation, economic inequality, and the dehumanizing effects of entertainment. It was later loosely adapted into a 1987 film starring Arnold Schwarzenegger.",
+                            Pages = 352,
                             PublishedDate = new DateTime(1982, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "In a brutal future game show, the ultimate prize is survival.",
@@ -6603,6 +6689,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Different Seasons is a 1982 collection of four novellas by Stephen King, each tied to a different season of the year. The stories include \"Rita Hayworth and Shawshank Redemption\" (spring), \"Apt Pupil\" (summer), \"The Body\" (fall), and \"The Breathing Method\" (winter). Though not strictly horror, the collection explores themes of hope, corruption, lost innocence, obsession, and the quiet terrors of ordinary life. Several of the novellas have been adapted into acclaimed films, most notably The Shawshank Redemption (1994) and Stand by Me (1986), helping cement the book's reputation as one of King's most celebrated works outside his traditional horror fare.",
+                            Pages = 527,
                             PublishedDate = new DateTime(1982, 8, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Four seasons, four journeys into the darker corners of human nature.",
@@ -6618,6 +6705,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Talisman is a 1984 dark fantasy novel by Stephen King and Peter Straub. It follows twelve-year-old Jack Sawyer, who embarks on an epic journey across the United States and its parallel world, \"the Territories,\" to find a mystical talisman that can save his gravely ill mother. As Jack flips between realities, he encounters monsters, guardians, and twisted reflections of people he knows in his own world. Blending horror, fantasy, and adventure, the novel explores themes of courage, sacrifice, and the blurred boundaries between worlds. Widely regarded as a landmark collaboration between two masters of horror and fantasy, The Talisman has earned a lasting place in modern genre fiction.",
+                            Pages = 646,
                             PublishedDate = new DateTime(1984, 11, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A perilous cross-country quest through parallel worlds in search of a mystical talisman that can save a dying mother.",
@@ -6633,6 +6721,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Thinner is a 1984 horror novel by Stephen King, published under the pseudonym Richard Bachman. The story follows Billy Halleck, an obese attorney who accidentally kills a Romani woman in a hit-and-run accident. After escaping legal consequences through his connections, Billy is cursed by the dead woman's father with a single word: 'Thinner.' As Billy rapidly and uncontrollably loses weight, he becomes desperate to find a way to break the curse. The novel explores themes of guilt, justice, prejudice, and the high price of avoiding responsibility for one's actions.",
+                            Pages = 432,
                             PublishedDate = new DateTime(1984, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A cursed man wastes away after a hit-and-run incident.",
@@ -6648,6 +6737,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Skeleton Crew is a 1985 collection of short fiction by Stephen King, featuring a range of horror, suspense, and dark fantasy tales. The book includes some of King’s most memorable short works, such as \"The Mist,\" in which a small town is shrouded in a mysterious fog filled with deadly creatures, and \"The Monkey,\" a cursed toy that brings death wherever it appears. Across the collection, King explores fear, human frailty, the supernatural, and the unknown, delivering stories that are at turns disturbing, poignant, and deeply unsettling. Skeleton Crew further cemented King’s reputation as a master of the horror genre.",
+                            Pages = 512,
                             PublishedDate = new DateTime(1985, 6, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A chilling collection of short stories that showcase Stephen King's mastery of horror.",
@@ -6663,6 +6753,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Eyes of the Dragon is a fantasy novel by Stephen King that departs from his usual horror style and embraces a classic fairy-tale structure. Set in the kingdom of Delain, the story follows Prince Peter, who is falsely accused of murdering his father, King Roland, through the scheming of the dark magician Flagg. Imprisoned in a high tower, Peter must rely on his courage, intelligence, and a daring escape plan to reclaim his rightful throne. Blending political intrigue, coming-of-age themes, and elements of dark magic, the novel explores loyalty, justice, and the struggle between good and evil within both individuals and kingdoms.",
+                            Pages = 384,
                             PublishedDate = new DateTime(1984, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A young prince must fight betrayal and dark magic to save his kingdom.",
@@ -6678,6 +6769,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Four Past Midnight is a 1990 collection of four novellas by Stephen King that delve into supernatural and psychological horror. The stories—\"The Langoliers,\" \"Secret Window, Secret Garden,\" \"The Library Policeman,\" and \"The Sun Dog\"—explore themes of guilt, paranoia, alternate realities, and the lingering shadows of past mistakes. From a terrifying journey on an empty airplane to a writer stalked by his own creation, each novella presents an unsettling, slow-building dread characteristic of King's storytelling. Several tales have been adapted for film and television, further cementing the collection as a memorable entry in King's body of work.",
+                            Pages = 763,
                             PublishedDate = new DateTime(1990, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Four spine-tingling novellas that bend time, reality, and sanity.",
@@ -6693,6 +6785,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Needful Things is a 1991 horror novel by Stephen King set in the town of Castle Rock, Maine. A mysterious new shop called \"Needful Things\" opens, run by the enigmatic Leland Gaunt, who seems to have the perfect item for each resident—something they desire more than anything. The cost, however, is not just money but \"small favors\" that pit neighbor against neighbor and gradually plunge the town into chaos. As tensions escalate into violence, Sheriff Alan Pangborn struggles to uncover Gaunt’s true nature and stop the destruction. The novel serves as both a chilling supernatural thriller and a dark satire of greed, temptation, and the corruptibility of ordinary people.",
+                            Pages = 690,
                             PublishedDate = new DateTime(1991, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A sinister shop opens in a small town, selling dreams at a terrible price.",
@@ -6708,6 +6801,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Tommyknockers is a 1987 science fiction–horror novel by Stephen King. Set in the town of Haven, Maine, the story begins when writer Bobbi Anderson stumbles upon a buried alien spacecraft in the woods behind her home. As she uncovers more of the ship, a strange energy begins to affect the townspeople, enhancing their ingenuity while slowly eroding their humanity and sanity. Jim Gardener, an alcoholic poet and Bobbi's friend, becomes one of the few who can resist the ship’s influence due to a metal plate in his head. The novel explores themes of addiction, power, paranoia, and the corrupting influence of technology, blending cosmic horror with small-town drama.",
+                            Pages = 992,
                             PublishedDate = new DateTime(1987, 11, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A buried alien ship slowly transforms a small town with terrifying consequences.",
@@ -6723,6 +6817,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Nightmares & Dreamscapes is a 1993 short-story collection by Stephen King, featuring a wide range of horror, dark fantasy, suspense, and even a bit of humor. The anthology gathers together twenty short stories, one teleplay, one poem, and one nonfiction essay. Among the notable pieces are \"Dolan's Cadillac,\" a tale of long-plotted revenge; \"The End of the Whole Mess,\" a chilling story about a well-intentioned experiment gone wrong; and \"The Night Flier,\" which follows a tabloid journalist investigating a mysterious killer who travels by private plane. Across the collection, King experiments with different voices and formats while exploring themes of guilt, obsession, violence, and the uncanny lurking beneath ordinary life.",
+                            Pages = 992,
                             PublishedDate = new DateTime(1993, 9, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A diverse collection of horror, fantasy, and suspense stories from Stephen King.",
@@ -6738,6 +6833,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Insomnia is a 1994 novel by Stephen King set in the town of Derry, Maine. The story follows Ralph Roberts, an elderly widower who develops chronic insomnia after the death of his wife. As his sleep deprivation worsens, Ralph begins to see strange auras around people and encounters mysterious, otherworldly beings that seem to influence life and death. Drawn into a larger cosmic struggle, he discovers that his newfound abilities may be the key to preventing a catastrophic act of violence. Blending supernatural horror, dark fantasy, and psychological tension, Insomnia explores themes of aging, grief, fate, and the unseen forces that shape human existence.",
+                            Pages = 912,
                             PublishedDate = new DateTime(1994, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A man who can no longer sleep begins to see terrifying visions of a hidden world beneath reality.",
@@ -6753,6 +6849,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Dolores Claiborne is a 1992 psychological thriller novel by Stephen King, presented almost entirely as a single, unbroken monologue. Set on the isolated Little Tall Island in Maine, the story follows Dolores as she gives a stark, unflinching confession to the police about the death of her wealthy employer, Vera Donovan, and the long-ago disappearance of her abusive husband, Joe. As Dolores recounts her life of hardship, abuse, and sacrifice, the novel explores themes of domestic violence, maternal love, class, and the moral gray areas of justice and survival. With its intense character study and tightly focused narrative, Dolores Claiborne stands out as one of King’s most grounded and emotionally powerful works.",
+                            Pages = 305,
                             PublishedDate = new DateTime(1992, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A housekeeper’s confession on a remote Maine island unearths decades of buried secrets and rage.",
@@ -6768,6 +6865,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Green Mile is a 1996 serial novel by Stephen King, originally published in six monthly installments. Set during the 1930s in the death row block of Cold Mountain Penitentiary—nicknamed \"The Green Mile\" for the color of its linoleum floor—the story is narrated by head guard Paul Edgecombe. His world is upended by the arrival of John Coffey, a gentle giant convicted of a horrific crime but possessing an extraordinary, seemingly supernatural gift. As strange miracles and chilling events unfold, Paul begins to question Coffey’s guilt and the morality of the executions he oversees. Blending supernatural elements with deep emotional and moral themes, The Green Mile is a powerful exploration of compassion, injustice, and the burden of carrying out the law.",
+                            Pages = 448,
                             PublishedDate = new DateTime(1996, 3, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "On death row, a condemned man with mysterious powers challenges everything the guards believe about justice, mercy, and miracles.",
@@ -6783,6 +6881,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Regulators is a 1996 horror novel by Stephen King, published under the pseudonym Richard Bachman. Set in the seemingly ordinary suburban neighborhood of Poplar Street in Wentworth, Ohio, the story begins when the street is suddenly besieged by supernatural forces shaped like characters and imagery from a violent children's TV Western. As reality itself bends and morphs, the residents are trapped in a deadly game orchestrated by an ancient, malevolent entity known as Tak, which has possessed an autistic boy named Seth Garin. The novel explores themes of invasion, loss of control, the corruption of innocence, and the fragile line between fantasy and reality, serving as a dark mirror to King’s companion novel, Desperation.",
+                            Pages = 480,
                             PublishedDate = new DateTime(1996, 9, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A quiet suburban street is twisted into a brutal, reality-warping battleground.",
@@ -6798,6 +6897,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Desperation is a 1996 horror novel by Stephen King. Set in the desolate Nevada desert, the story begins when several travelers are pulled over on a lonely highway by an unsettling small-town sheriff in the nearly abandoned mining town of Desperation. As the captives soon discover, the town has been overtaken by an ancient, malevolent force tied to an old mine and something buried deep beneath it. Blending supernatural horror with themes of faith, sacrifice, and the nature of evil, Desperation follows its characters as they struggle against both external monsters and their own inner demons in a desperate fight to survive.",
+                            Pages = 690,
                             PublishedDate = new DateTime(1996, 9, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A small desert town hides an ancient evil that turns a routine arrest into a nightmare of survival.",
@@ -6813,6 +6913,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Hearts in Atlantis is a 1999 collection of interconnected novellas and short stories by Stephen King. The book is structured in five parts—\"Low Men in Yellow Coats,\" \"Hearts in Atlantis,\" \"Blind Willie,\" \"Why We're in Vietnam,\" and \"Heavenly Shades of Night Are Falling\"—that follow a cast of recurring characters from childhood into late adulthood. Set largely during and after the 1960s, the collection explores themes of friendship, memory, moral responsibility, and the lasting impact of the Vietnam War on a generation. While several stories contain subtle connections to King’s broader Dark Tower mythos, the focus remains on deeply human dramas shaped by time, trauma, and the choices made along the way.",
+                            Pages = 528,
                             PublishedDate = new DateTime(1999, 9, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Linked tales of childhood, loss, and the long shadow of the Vietnam era.",
@@ -6828,6 +6929,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Bag of Bones is a 1998 supernatural thriller novel by Stephen King. It tells the story of Mike Noonan, a bestselling author suffering from writer’s block and grief after the sudden death of his wife, Jo. Seeking solace, he retreats to their summer home, Sara Laughs, located on the shores of Dark Score Lake. There, he becomes entangled in a chilling mystery involving the ghost of a murdered woman, a custody battle, and a curse that has haunted the town for decades. As supernatural forces close in, Mike must uncover the truth behind Jo’s hidden secrets and the lake’s tragic history. Blending ghost story, romance, and psychological suspense, Bag of Bones explores themes of love, loss, creativity, and redemption.",
+                            Pages = 544,
                             PublishedDate = new DateTime(1998, 9, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A grieving novelist returns to his lake house and uncovers dark secrets haunting its shores.",
@@ -6843,6 +6945,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Everything's Eventual is a 2002 short-story collection by Stephen King, containing 14 stories that span horror, suspense, dark fantasy, and psychological drama. The collection includes notable tales such as '1408', about a relentlessly haunted hotel room; 'Riding the Bullet', in which a young man hitchhikes and encounters a terrifying passenger; and 'Everything's Eventual', following a young man with a strange gift and deadly purpose. Other stories explore themes of mortality, guilt, chance, and the unpredictable forces that shape human lives. Together, these stories showcase King's range and his talent for uncovering dread and wonder in both the ordinary and the supernatural.",
+                            Pages = 464,
                             PublishedDate = new DateTime(2002, 3, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A collection of 14 tales exploring horror, fate, and the unseen corners of reality.",
@@ -6858,6 +6961,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Colorado Kid is a 2005 mystery novel by Stephen King, published by the Hard Case Crime imprint. Set on a small island off the coast of Maine, the story follows two veteran newspapermen and their young intern as they discuss an unsolved case known locally as the \"Colorado Kid\"—a man who was found dead under baffling circumstances with no clear cause, motive, or identity. Rather than providing a neat resolution, the novel focuses on the nature of mysteries themselves, the limits of investigation, and the idea that some questions in life remain unanswered. It’s a moody, character-driven tale that blends elements of crime fiction with King’s trademark sense of atmosphere.",
+                            Pages = 184,
                             PublishedDate = new DateTime(2005, 10, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A mysterious corpse on a Maine island raises more questions than answers in this unconventional crime story.",
@@ -6873,6 +6977,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Lisey's Story is a 2006 novel by Stephen King that blends psychological horror, dark fantasy, and an intimate portrait of marriage. After the death of her famous novelist husband, Scott Landon, Lisey is forced to confront both her grief and the hidden corners of Scott's past when a dangerous admirer threatens her. As she works through Scott's cryptic clues, Lisey revisits the private language, memories, and otherworldly place—Boo’ya Moon—that defined their relationship. The novel explores themes of trauma, love, creativity, and the ways in which shared stories can both wound and heal. Often cited by King as one of his personal favorites, Lisey's Story is a deeply emotional and haunting examination of what remains after great loss.",
+                            Pages = 528,
                             PublishedDate = new DateTime(2006, 10, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A widow unravels her late husband's secret world and confronts the monsters that live there—and in herself.",
@@ -6888,6 +6993,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Cell is a 2006 horror novel by Stephen King. The story begins when a mysterious signal, known as 'the Pulse', is broadcast across cell phone networks worldwide. Anyone using a mobile phone at that moment is transformed into a savage, zombie-like creature driven by primal violence. The novel follows Clayton Riddell, a graphic artist in Boston, as he struggles to survive the immediate chaos and sets out on a perilous journey to find his young son. As the 'phone-crazies' begin to evolve and form a terrifying collective consciousness, Clay and his small band of survivors must confront the question of whether humanity can endure in a world forever changed by technology turned deadly.",
+                            Pages = 384,
                             PublishedDate = new DateTime(2006, 1, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A mysterious signal turns cell phone users into violent, mindless killers.",
@@ -6903,6 +7009,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Duma Key is a 2008 novel by Stephen King that follows Edgar Freemantle, a successful contractor who relocates to a remote island off the coast of Florida after a devastating construction accident leaves him physically and emotionally shattered. On Duma Key, Edgar discovers an unexpected talent for painting, but his art soon takes on an eerie, supernatural power that begins to affect reality itself. As he befriends other island residents and uncovers the island’s tragic history, Edgar realizes that his gift is tied to an ancient, malevolent presence. The novel explores themes of trauma, recovery, creativity, and the dangerous forces that can lurk beneath both memory and imagination.",
+                            Pages = 611,
                             PublishedDate = new DateTime(2008, 1, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "On a haunted Florida island, a wounded man’s newfound artistic gift begins to unleash something dark and deadly.",
@@ -6918,6 +7025,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Just After Sunset is a 2008 short-story collection by Stephen King, featuring thirteen tales that range from quiet psychological unease to full-on supernatural horror. The stories, including \"Willa,\" \"The Gingerbread Girl,\" \"Harvey's Dream,\" \"N.\", and \"A Very Tight Place,\" showcase King’s fascination with the fragile line between normalcy and nightmare. Many of the pieces explore themes of mortality, grief, obsession, and the hidden darkness in seemingly mundane settings, from suburban homes to lonely highways. The collection highlights King's versatility as a storyteller, delivering both intimate character studies and chilling, otherworldly encounters in tightly crafted short form.",
+                            Pages = 384,
                             PublishedDate = new DateTime(2008, 11, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Thirteen tales that explore the uncanny moments lurking at the edges of ordinary life.",
@@ -6933,6 +7041,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Under the Dome is a 2009 novel by Stephen King that chronicles the sudden isolation of the small town of Chester's Mill, Maine, when an invisible, impenetrable barrier descends from the sky and seals it off from the rest of the world. As resources dwindle and tempers flare, the town’s residents are forced to confront not only the mystery of the dome itself, but also the darkest aspects of human nature. Power-hungry politician Big Jim Rennie seizes the opportunity to tighten his control, while a small group of resisters, including former Army officer Dale \"Barbie\" Barbara and newspaper editor Julia Shumway, struggle to expose his corruption and find a way to bring the dome down. Combining science fiction, horror, and social commentary, Under the Dome is a sprawling, suspenseful exploration of community, power, and moral choice under extreme pressure.",
+                            Pages = 1074,
                             PublishedDate = new DateTime(2009, 11, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A small town is suddenly sealed off from the world by an invisible dome, igniting chaos, corruption, and a desperate fight for survival.",
@@ -6948,6 +7057,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Full Dark, No Stars is a 2010 collection of four novellas by Stephen King, each delving into the darkest corners of human nature. The stories—'1922', 'Big Driver', 'Fair Extension', and 'A Good Marriage'—follow seemingly ordinary people who find themselves in situations of murder, betrayal, supernatural bargains, and horrific secrets. Set against both rural and suburban American backdrops, the collection explores themes of guilt, retribution, hidden evil, and the terrible choices people make when cornered. Uncompromising and often brutal, Full Dark, No Stars showcases King's talent for psychological horror grounded in real human fears and moral dilemmas.",
+                            Pages = 384,
                             PublishedDate = new DateTime(2010, 11, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Four novellas of ordinary people pushed to terrifying extremes of violence, guilt, and revenge.",
@@ -6963,6 +7073,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "11/22/63 is a 2011 novel by Stephen King that follows Jake Epping, a high school teacher who discovers a portal to the late 1950s in the back of a diner. Persuaded by the diner’s owner, Jake takes on a mission: go back in time, build a new life in the past, and ultimately prevent the assassination of President John F. Kennedy on November 22, 1963. As Jake becomes deeply involved with the people and world of the past, he realizes that history is stubborn and resists being changed—and that every alteration has unpredictable, often devastating consequences. Blending historical fiction, romance, suspense, and elements of the supernatural, the novel explores themes of fate, moral responsibility, and the personal cost of trying to rewrite history.",
+                            Pages = 849,
                             PublishedDate = new DateTime(2011, 11, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A time traveler attempts to stop the assassination of President John F. Kennedy, but changing the past comes at a terrible price.",
@@ -6978,6 +7089,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Doctor Sleep is a 2013 novel by Stephen King and the sequel to his 1977 classic, The Shining. The story follows a now-adult Dan (Danny) Torrance, still scarred by the trauma of the Overlook Hotel and struggling with alcoholism and anger, much like his father before him. After hitting bottom, Dan finds a measure of peace working at a hospice, where his lingering psychic abilities—his 'shining'—help ease patients into death, earning him the nickname 'Doctor Sleep.' His fragile stability shatters when he forms a powerful psychic connection with a young girl named Abra Stone, whose shine is even stronger than his own. Together, they become the targets of the True Knot, a roaming group of quasi-immortal predators who feed on the psychic 'steam' of tortured children. Blending horror, character study, and redemption arc, the novel explores trauma, addiction, legacy, and the possibility of reclaiming one’s life from the ghosts of the past.",
+                            Pages = 531,
                             PublishedDate = new DateTime(2013, 9, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "An adult Dan Torrance battles his demons—and a psychic cult that preys on gifted children.",
@@ -6993,6 +7105,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Finders Keepers is a 2015 crime thriller novel by Stephen King and the second book in the Bill Hodges Trilogy. The story begins in 1978, when reclusive author John Rothstein is murdered by obsessed fan Morris Bellamy, who steals a cache of money and unpublished notebooks before hiding them away. Decades later, teenager Pete Saubers discovers the buried trunk and secretly uses the money to help his struggling family, becoming captivated by Rothstein’s lost work. When Morris is released from prison and learns his treasure is gone, his violent quest to reclaim it intersects with Pete’s efforts to protect his discovery. Drawn into the case, retired detective Bill Hodges, along with Holly Gibney and Jerome Robinson, must stop Bellamy before the past destroys more lives. Blending literary obsession, suspense, and moral ambiguity, Finders Keepers explores the dangerous power stories can hold over readers and the line between fandom and fanaticism.",
+                            Pages = 434,
                             PublishedDate = new DateTime(2015, 6, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A murdered author’s hidden notebooks resurface decades later, pulling a young fan and retired detective Bill Hodges into a deadly obsession.",
@@ -7008,6 +7121,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Bazaar of Bad Dreams is a 2015 short-story collection by Stephen King, featuring a mix of previously published and new works that showcase his range in horror, dark fantasy, and psychological suspense. The collection contains stories such as 'Mile 81', about a predatory car at an abandoned rest stop; 'Ur', which explores a sinister, alternate-reality e-reader; and 'Bad Little Kid', a tale of a seemingly ageless child who brings tragedy wherever he appears. Each story is preceded by an introduction from King, offering personal insights into his inspiration, writing process, and themes. Together, these pieces examine mortality, regret, obsession, and the eerie forces lurking beneath ordinary life.",
+                            Pages = 495,
                             PublishedDate = new DateTime(2015, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A collection of unsettling tales, each introduced with King’s own reflections on their origins.",
@@ -7023,6 +7137,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "End of Watch is a 2016 novel by Stephen King and the concluding volume of the Bill Hodges Trilogy. The story reunites retired detective Bill Hodges with his old partner Holly Gibney as they confront Brady Hartsfield, the notorious \"Mercedes Killer\" from Mr. Mercedes. Though Hartsfield lies in a hospital in a seemingly vegetative state, a series of strange suicides suggests he has developed terrifying new psychic abilities that allow him to influence vulnerable minds from afar. As Hodges races against time while battling his own failing health, he and his allies must find a way to stop Brady’s growing supernatural reach. Blending crime thriller, supernatural horror, and emotional drama, End of Watch brings the trilogy to a tense and haunting conclusion.",
+                            Pages = 432,
                             PublishedDate = new DateTime(2016, 6, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A deadly mind control power pulls retired detective Bill Hodges back into his final and most personal case.",
@@ -7038,6 +7153,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Outsider is a 2018 novel by Stephen King that blends crime fiction with supernatural horror and introduces a key thread in the Holly Gibney series. The story begins with the arrest of beloved small-town teacher and coach Terry Maitland, accused of the gruesome murder of a young boy. The evidence against him—DNA, fingerprints, eyewitnesses—is overwhelming, yet Maitland has an ironclad alibi proving he was miles away when the crime occurred. As detective Ralph Anderson, defense lawyers, and later private investigator Holly Gibney dig deeper, they uncover a malevolent entity capable of mimicking others and feeding on grief. The novel explores themes of justice, doubt, mob mentality, and the unsettling idea that evil can look exactly like someone you trust. It also further develops Holly Gibney as a central figure in King’s interconnected universe.",
+                            Pages = 576,
                             PublishedDate = new DateTime(2018, 5, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A brutal crime, impossible evidence, and a darkness that wears a familiar face.",
@@ -7053,6 +7169,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Elevation is a 2018 novella by Stephen King set in the familiar town of Castle Rock, Maine. The story follows Scott Carey, a middle-aged man who is baffled to discover that he is steadily losing weight on the scale while his body shows no outward sign of change. As his inexplicable condition progresses, Scott becomes increasingly determined to use whatever time he has left to make life better for the people around him, including his feuding neighbors who face prejudice from the town. More reflective and uplifting than King’s typical horror fare, Elevation explores themes of empathy, community, and the quiet heroism of everyday kindness in the face of mortality.",
+                            Pages = 146,
                             PublishedDate = new DateTime(2018, 10, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A man in a small Maine town begins to mysteriously lose weight without changing in appearance, finding unexpected grace as his condition worsens.",
@@ -7068,6 +7185,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Institute is a 2019 horror-thriller novel by Stephen King. The story follows Luke Ellis, a highly gifted twelve-year-old who is kidnapped from his home and taken to a sinister facility known as the Institute. There, children with telepathic and telekinetic abilities are subjected to brutal tests and experiments by staff who insist their suffering serves a greater good. As friendships form and hope fades, Luke begins to plan a daring escape—one that may be the only chance to expose the truth behind the Institute’s operations. The novel explores themes of exploitation, institutional evil, resilience, and the moral cost of sacrificing the few for the many.",
+                            Pages = 576,
                             PublishedDate = new DateTime(2019, 9, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Children with special abilities are imprisoned in a secret facility where escape seems impossible.",
@@ -7083,6 +7201,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Later is a 2021 crime-horror novella by Stephen King, published by Hard Case Crime. Told from the perspective of Jamie Conklin, a boy who can see and speak to the dead, the story follows his coming of age as he is drawn into increasingly dangerous situations by adults who want to exploit his ability. What begins as a strange, unsettling gift becomes a curse when Jamie is coerced into using his power to confront a vengeful spirit that doesn’t follow the usual rules of the dead. Mixing supernatural chills with noir-inflected crime elements, the novella explores themes of innocence, exploitation, addiction, and the blurred line between truth and the stories we tell ourselves to survive.",
+                            Pages = 256,
                             PublishedDate = new DateTime(2021, 3, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A boy who can see the dead learns that some secrets refuse to stay buried.",
@@ -7098,6 +7217,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Billy Summers is a 2021 crime novel by Stephen King that follows the story of Billy, a highly skilled sniper and contract killer who only accepts assignments on targets he believes are truly bad. Ready to retire, Billy agrees to one final job: assassinate a man about to go on trial, then disappear. Posing as an aspiring writer in a small town while he waits for the hit, Billy begins to reflect on his violent past and the traumas of his time as a soldier in Iraq. When the job goes sideways and he realizes he has been double-crossed, Billy sets out to track down those who betrayed him. Blending slow-burn suspense, character study, and bursts of brutal action, Billy Summers is a tense, emotionally layered exploration of guilt, redemption, and the possibility of starting over.",
+                            Pages = 528,
                             PublishedDate = new DateTime(2021, 8, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A hitman with a strict moral code takes one last job, only to find himself trapped in a deadly conspiracy.",
@@ -7113,6 +7233,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Blaze is a crime novel by Stephen King, published under his pseudonym Richard Bachman in 2007, though it was originally written decades earlier. The story centers on Clayton \"Blaze\" Blaisdell Jr., a physically imposing yet mentally impaired drifter whose life has been shaped by abuse, exploitation, and tragedy. Persuaded by the lingering voice of his deceased partner-in-crime, George, Blaze attempts one last big score: kidnapping the infant son of a wealthy family for ransom. As the botched scheme unfolds, Blaze’s rough exterior clashes with an unexpected affection for the child, forcing him to confront his past, his choices, and the possibility of redemption. Mixing noir sensibilities with King’s trademark emotional depth, Blaze is a bleak, poignant portrait of a criminal shaped by circumstance and loss.",
+                            Pages = 304,
                             PublishedDate = new DateTime(2007, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A small-time con with a damaged mind kidnaps a baby for ransom, only to find himself torn between crime and a strange, growing tenderness.",
@@ -7128,6 +7249,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Dreamcatcher is a 2001 horror novel by Stephen King that blends psychological terror, alien invasion, and the enduring power of friendship. The story follows four lifelong friends—Beaver, Henry, Jonesy, and Pete—who share a telepathic bond after rescuing a bullied boy named Duddits in their youth. Years later, during their annual hunting trip in the remote Maine woods, they encounter a bizarre storm, a stranded hunter infected with an otherworldly parasite, and a terrifying alien presence. As events spiral out of control, the friends must confront both an external alien threat and the inner scars of their shared past. Dark, brutal, and emotionally charged, Dreamcatcher explores themes of memory, trauma, loyalty, and sacrifice against the backdrop of cosmic horror.",
+                            Pages = 620,
                             PublishedDate = new DateTime(2001, 3, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Four friends bound by a childhood act of bravery face an alien horror in the snowy woods of Maine.",
@@ -7143,6 +7265,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Stand is a 1978 post-apocalyptic dark fantasy novel by American writer Stephen King. The story begins with a weaponized influenza strain, nicknamed Captain Trips, that escapes from a military facility and wipes out most of the world's population. The scattered survivors are drawn toward two opposing leaders: the benevolent Mother Abagail in Boulder, Colorado, and the malevolent Randall Flagg in Las Vegas, Nevada. As society collapses, the remaining men and women must choose sides in a climactic struggle between good and evil. Blending horror, fantasy, and social commentary, The Stand is widely regarded as one of King's most ambitious and influential works, later expanded in an uncut edition and adapted into multiple miniseries.",
+                            Pages = 1152,
                             PublishedDate = new DateTime(1978, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A deadly plague, a shattered world, and the final battle between good and evil.",
@@ -7158,6 +7281,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "’Salem’s Lot is a 1975 horror novel by American writer Stephen King. The story follows Ben Mears, a novelist who returns to the small town of Jerusalem’s Lot, Maine, only to discover that a mysterious antique dealer has taken up residence in the old Marsten House on the hill. As townspeople begin to disappear or show disturbing changes, Ben and a small group of allies uncover a vampiric presence consuming the town from within. The novel blends classic vampire mythology with small-town Americana, exploring themes of corruption, faith, community, and the insidious nature of evil. ’Salem’s Lot has been adapted into television miniseries and remains one of King’s most celebrated early works.",
+                            Pages = 439,
                             PublishedDate = new DateTime(1975, 10, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "An old town, an ancient evil, and a writer who returns home to face the darkness.",
@@ -7173,6 +7297,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Rage is a psychological horror novel by Stephen King, originally published under the pseudonym Richard Bachman in 1977. The story centers on Charlie Decker, a disturbed high school student who takes his algebra class hostage after a violent outburst. As the standoff unfolds, Charlie’s classmates begin revealing dark secrets and buried resentments, blurring the lines between victim and accomplice. The novel delves into themes of alienation, adolescent anger, and the hidden tensions within the American school system. Due to concerns about its subject matter and its association with real-life school violence, Rage was later allowed to go out of print at King’s request and is no longer published.",
+                            Pages = 211,
                             PublishedDate = new DateTime(1977, 9, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A troubled teenager, a classroom under siege, and a descent into violent confession.",
@@ -7188,6 +7313,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Night Shift is a 1978 short story collection by American writer Stephen King, gathering some of his most unsettling early works. The collection includes twenty stories, many of which first appeared in magazines, showcasing a wide range of horror scenarios: from monstrous creatures lurking in the dark and eerie small towns to sinister everyday objects and psychological terrors. Among its most notable stories are “Jerusalem’s Lot,” a gothic prequel to ’Salem’s Lot, “Children of the Corn,” about a murderous cult of rural children, and “The Lawnmower Man,” a bizarre tale of suburban horror. Several stories from Night Shift have been adapted for film and television, helping to establish King’s reputation as a master of short-form horror.",
+                            Pages = 336,
                             PublishedDate = new DateTime(1978, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A chilling collection of Stephen King’s early short horror fiction.",
@@ -7203,6 +7329,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Pet Sematary is a 1983 horror novel by American writer Stephen King. The story revolves around the Creed family who move into a rural home near a pet cemetery that has the power to resurrect the dead. However, the resurrected creatures return with sinister changes. The novel explores themes of grief, mortality, and the consequences of tampering with nature. It was nominated for a World Fantasy Award for Best Novel in 1984. The book was adapted into two films: one in 1989 directed by Mary Lambert and another in 2019 directed by Kevin K�lsch and Dennis Widmyer. In November 2013, PS Publishing released Pet Sematary in a limited 30th-anniversary edition, further solidifying its status as a classic in horror literature.",
+                            Pages = 374,
                             PublishedDate = new DateTime(1983, 11, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Sometimes dead is better.",
@@ -7218,6 +7345,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Christine is a 1983 horror novel by American writer Stephen King. The story follows teenage misfit Arnie Cunningham, who becomes obsessed with a battered 1958 Plymouth Fury he names Christine. As Arnie restores the car, his personality begins to change, and those who come between him and Christine meet violent, mysterious fates. The novel blends supernatural horror with themes of obsession, adolescence, loyalty, and the corrupting influence of power. Christine was adapted into a feature film directed by John Carpenter, released the same year as the novel, and has since become a staple of both automotive and horror pop culture.",
+                            Pages = 526,
                             PublishedDate = new DateTime(1983, 4, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Hell hath no fury like a 1958 Plymouth Fury.",
@@ -7233,6 +7361,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Carrie is a 1974 horror novel by American writer Stephen King, his first published novel. It tells the story of Carrie White, a shy, abused high school girl who discovers she possesses telekinetic powers. Tormented by her fanatically religious mother and relentlessly bullied by her peers, Carrie's rage builds to a catastrophic climax on the night of the senior prom. The novel explores themes of isolation, cruelty, coming of age, and the destructive potential of suppressed anger. Carrie was adapted into a critically acclaimed 1976 film directed by Brian De Palma, as well as several later film and stage adaptations, and remains one of King’s most iconic works.",
+                            Pages = 199,
                             PublishedDate = new DateTime(1974, 4, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A bullied girl, a terrible power, and a night no one will forget.",
@@ -7248,6 +7377,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Harry Potter and the Deathly Hallows is a fantasy novel written by British author J.K. Rowling. It is the seventh and final book in the Harry Potter series and concludes the epic tale of Harry's battle against Lord Voldemort. The story begins with Harry, Hermione, and Ron embarking on a dangerous quest to locate and destroy Voldemort's Horcruxes, which are key to his immortality. Along the way, they uncover secrets about the Deathly Hallows�three powerful magical objects that could aid them in their fight. The book builds to an intense and emotional climax at the Battle of Hogwarts, where Harry confronts Voldemort for the last time. Released on 21 July 2007, the book became a cultural phenomenon, breaking sales records and receiving critical acclaim for its complex characters, intricate plotting, and resonant themes of sacrifice, friendship, and love.",
+                            Pages = 784,
                             PublishedDate = new DateTime(2007, 7, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "The last book from the Harry Potter series.",
@@ -7263,6 +7393,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Lord of the Rings is a high-fantasy novel written by J.R.R. Tolkien and set in the fictional world of Middle-earth. The story follows the journey of Frodo Baggins, a humble hobbit who inherits the One Ring�a powerful artifact created by the Dark Lord Sauron to control Middle-earth. Along with a fellowship of companions, Frodo sets out on a perilous mission to destroy the ring in the fires of Mount Doom, the only place where it can be unmade. The narrative interweaves themes of friendship, courage, sacrifice, and the corrupting influence of power. Written in stages between 1937 and 1949, the novel is widely regarded as one of the greatest works of fantasy literature, influencing countless authors and spawning adaptations, including Peter Jackson's acclaimed film trilogy. With over 150 million copies sold, it remains one of the best-selling books of all time, praised for its richly detailed world-building, complex characters, and timeless appeal.",
+                            Pages = 1216,
                             PublishedDate = new DateTime(1954, 7, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "The Lord of the Rings is an epic fantasy novel by the English author J. R. R. Tolkien.",
@@ -7278,6 +7409,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "1984, written by George Orwell, is a dystopian novel set in a totalitarian society under the omnipresent surveillance of Big Brother. Published in 1949, the story follows Winston Smith, a low-ranking member of the Party, as he secretly rebels against the oppressive regime. Through his illicit love affair with Julia and his pursuit of forbidden knowledge, Winston challenges the Party's control over truth, history, and individuality. The novel introduces concepts such as 'doublethink,' 'Newspeak,' and 'thoughtcrime,' which have since become part of modern political discourse. Widely regarded as a classic of English literature, 1984 is a chilling exploration of propaganda, censorship, and the erosion of personal freedoms, serving as a cautionary tale for future generations.",
+                            Pages = 328,
                             PublishedDate = new DateTime(1949, 6, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A dystopian novel exploring the dangers of totalitarianism.",
@@ -7293,6 +7425,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "One Flew Over the Cuckoo's Nest, a novel by Ken Kesey, takes place in a mental institution and explores themes of individuality, freedom, and rebellion against oppressive systems. The protagonist, Randle P. McMurphy, a charismatic convict, fakes insanity to serve his sentence in a psychiatric hospital instead of prison. He clashes with Nurse Ratched, the authoritarian head nurse, and inspires the other patients to assert their independence. The story, narrated by Chief Bromden, a silent observer and fellow patient, examines the dynamics of power and the human spirit's resilience. Published in 1962, the book was adapted into a 1975 film that won five Academy Awards. It remains a poignant critique of institutional control and a celebration of nonconformity.",
+                            Pages = 320,
                             PublishedDate = new DateTime(1962, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A story about individuality and institutional control.",
@@ -7308,6 +7441,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Shining, written by Stephen King, is a psychological horror novel set in the remote Overlook Hotel. Jack Torrance, an aspiring writer and recovering alcoholic, takes a job as the hotel's winter caretaker, bringing his wife Wendy and young son Danny with him. Danny possesses 'the shining,' a psychic ability that allows him to see the hotel's horrific past. As winter sets in, the isolation and supernatural forces within the hotel drive Jack into a murderous frenzy, threatening his family. Published in 1977, The Shining explores themes of addiction, domestic violence, and the fragility of sanity. The novel was adapted into a 1980 film by Stanley Kubrick, though it diverged from King's vision. A sequel, Doctor Sleep, was published in 2013, continuing Danny's story.",
+                            Pages = 447,
                             PublishedDate = new DateTime(1977, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A chilling tale of isolation and madness.",
@@ -7323,6 +7457,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Dracula, written by Bram Stoker, is a classic Gothic horror novel that tells the story of Count Dracula's attempt to move from Transylvania to England in order to spread the undead curse, and his subsequent battle with a group of people led by the determined Professor Abraham Van Helsing. The novel is written in epistolary form, with the story told through letters, diary entries, newspaper clippings, and a ship's log. At the heart of Dracula is the struggle between good and evil, as the characters fight to destroy the vampire lord who threatens to spread his dark influence. Themes of fear, desire, sexuality, and superstition permeate the novel, along with reflections on Victorian society's attitudes toward these topics. Published in 1897, Dracula has had a profound impact on the vampire genre, inspiring numerous adaptations in film, television, and popular culture. The novel explores the dangers of unchecked power, the mystery of the unknown, and the terror of the supernatural, cementing Count Dracula as one of literature's most famous and enduring villains.",
+                            Pages = 512,
                             PublishedDate = new DateTime(1897, 5, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A gothic horror novel about the legendary vampire Count Dracula.",
@@ -7338,6 +7473,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Published in 1986, It is one of Stephen King's most iconic novels, a gripping horror story about the terror that haunts the small town of Derry, Maine. The novel follows a group of childhood friends who come together as adults to confront an ancient evil that takes the form of Pennywise, a shape-shifting entity that primarily appears as a killer clown. The novel explores the power of fear, the strength of friendship, and the eternal battle between good and evil. As the friends, who call themselves 'The Losers,' face off against Pennywise, they must confront their own childhood traumas and deepest fears. It is a chilling exploration of memory, courage, and the horrors of both childhood and adulthood. With its mix of supernatural terror and profound human emotion, It has become a cultural touchstone, inspiring a miniseries, films, and countless discussions about its themes of fear, friendship, and the horrors that lie beneath the surface of everyday life. King�s masterful storytelling and vivid portrayal of childhood and fear make It one of the most enduring works of horror fiction in the genre.",
+                            Pages = 1138,
                             PublishedDate = new DateTime(1986, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A terrifying tale of childhood fears, and the evil that lurks beneath the surface of a small town.",
@@ -7353,6 +7489,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "First published in 1945, Animal Farm by George Orwell is a powerful political allegory that critiques totalitarian regimes and explores the dangers of power and corruption. The novella is set on a farm where the animals overthrow their human oppressors and establish a new government, only to find that the new leadership, led by the pigs, becomes just as corrupt as the humans they replaced. The story, told through the animals' perspective, mirrors the events leading up to the Russian Revolution and the rise of Stalinism. Orwell's use of anthropomorphic animals to represent different political figures and ideologies makes Animal Farm both accessible and deeply poignant. Its themes of betrayal, exploitation, and the corruption of ideals are timeless, making Animal Farm a critical commentary on power, leadership, and the manipulation of the masses. The novella has had a significant impact on literature and political thought, remaining a key work in the discussion of totalitarianism and social justice.",
+                            Pages = 112,
                             PublishedDate = new DateTime(1945, 8, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A satirical allegory of totalitarianism, exploring the rise of power and corruption.",
@@ -7368,6 +7505,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "First published in 1962, A Clockwork Orange by Anthony Burgess is a controversial and thought-provoking dystopian novel that examines the nature of free will, violence, and the conflict between individuality and societal control. The story is set in a near-future society and follows Alex, a teenage delinquent who leads a gang of criminals. Alex's journey is told in a unique style, using a fictional slang called 'Nadsat.' The novel explores the psychological and moral implications of the state-sponsored efforts to 'reform' Alex, subjecting him to a form of aversion therapy that strips him of his ability to choose between good and evil. Through this exploration, Burgess raises important questions about free will, the ethics of punishment, and the role of the state in shaping individual behavior. A Clockwork Orange is both a disturbing and insightful critique of modern society and its institutions. The novel has become a cultural touchstone, adapted into a film by Stanley Kubrick and continuing to inspire discussions on the nature of freedom, control, and human nature.",
+                            Pages = 192,
                             PublishedDate = new DateTime(1962, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A dystopian novel that explores free will, violence, and the consequences of societal control.",
@@ -7383,6 +7521,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Murder on the Orient Express, first published in 1934, is one of Agatha Christie's most famous works, featuring her legendary Belgian detective Hercule Poirot. The story takes place aboard the luxurious train, the Orient Express, where a wealthy American passenger, Samuel Ratchett, is found murdered in his compartment. Poirot, who happens to be traveling on the train, is asked to investigate the crime. As he delves deeper into the case, Poirot uncovers a complex web of lies and hidden motives. The passengers, all seemingly innocent, each have something to hide, and the detective must use his sharp mind to piece together the truth. Christie�s masterful plot, full of twists and red herrings, keeps readers guessing until the very end. The novel explores themes of justice, revenge, and the moral ambiguity of crime, making it a timeless and captivating mystery that has been adapted into numerous films and television series.",
+                            Pages = 256,
                             PublishedDate = new DateTime(1934, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A classic Hercule Poirot mystery aboard the luxurious Orient Express, filled with twists and a brilliant solution to a baffling crime.",
@@ -7398,6 +7537,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Murder of Roger Ackroyd, first published in 1926, is one of Agatha Christie's most groundbreaking works, featuring her famous detective Hercule Poirot. The story is set in the quiet village of King's Abbot, where the wealthy Roger Ackroyd is found murdered in his study. The case takes on new complexity when Poirot, who is retired in the village, is drawn into the investigation by Ackroyd's fianc�e, Mrs. Ferrars, who has died under mysterious circumstances just days before. As Poirot begins to unravel the case, he discovers that nearly everyone in the village is hiding something, and he must use his unparalleled skills of deduction to piece together the truth. Christie�s brilliant twist ending revolutionized the genre and is still one of the most celebrated and discussed endings in detective fiction. The novel touches on themes of deceit, betrayal, and the nature of truth, making it a timeless classic in the mystery genre.",
+                            Pages = 312,
                             PublishedDate = new DateTime(1926, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A groundbreaking Hercule Poirot mystery that reshaped the detective genre with its iconic twist ending.",
@@ -7413,6 +7553,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "East of Eden, published in 1952, is one of John Steinbeck�s most ambitious and famous works. The novel explores the complex relationships between two families, the Trasks and the Hamiltons, in California's Salinas Valley during the early 20th century. Central to the narrative are the themes of good versus evil, inherited sin, and the choices that define our lives. Steinbeck uses the biblical story of Cain and Abel as a backdrop, drawing parallels between the characters' struggles and moral dilemmas. The novel is a sweeping exploration of human nature, as well as the destructive impact of jealousy, desire, and guilt. With its vivid descriptions of the California landscape and rich characterizations, East of Eden is considered one of Steinbeck's greatest works, illustrating his deep understanding of the human condition.",
+                            Pages = 608,
                             PublishedDate = new DateTime(1952, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A sprawling, multigenerational story of good and evil, focusing on two families in California's Salinas Valley.",
@@ -7428,6 +7569,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Dune, first published in 1965, is Frank Herbert's most iconic and influential novel, often regarded as one of the greatest works of science fiction. The novel is set on the desert planet of Arrakis, also known as Dune, the only source of the most valuable substance in the universe, spice melange. The story follows Paul Atreides, the young heir to House Atreides, as he navigates political intrigue, power struggles, and the harsh desert environment. The novel touches on themes of power, ecology, religion, and the future of humanity. Herbert creates a detailed world filled with complex social, political, and ecological systems that interweave throughout the narrative. Dune is renowned for its intricate plotting, philosophical depth, and exploration of human potential. Its impact on both science fiction and modern literature is immeasurable, and it remains a defining work of the genre.",
+                            Pages = 412,
                             PublishedDate = new DateTime(1965, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A sweeping science fiction epic set on the desert planet Arrakis, exploring politics, religion, and ecology.",
@@ -7443,6 +7585,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Hitchhiker's Guide to the Galaxy, first published in 1979, is Douglas Adams' most famous and influential work, blending science fiction, humor, and satire. The story begins with Arthur Dent, an ordinary man, who is suddenly whisked away from Earth just before it is destroyed to make way for an intergalactic freeway. Arthur joins Ford Prefect, an alien researcher for the titular Guide, on a wild journey through space, encountering strange planets, peculiar beings, and the galaxy's most incompetent bureaucracy. The novel explores themes of the absurdity of life, the meaning of existence, and the randomness of the universe, all wrapped in Adams' signature wit and absurdity. Known for its irreverence and humor, The Hitchhiker's Guide to the Galaxy has become a cult classic, inspiring numerous adaptations in radio, television, and film. Its influence on science fiction and comedy continues to resonate with readers and fans worldwide.",
+                            Pages = 158,
                             PublishedDate = new DateTime(1979, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A comedic science fiction adventure that follows Arthur Dent's absurd journey through space after Earth is destroyed.",
@@ -7458,6 +7601,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Published in 1980, Firestarter is a tense, character-driven thriller by Stephen King that blends government conspiracy with the terrifying force of psychic power. The story follows Andy McGee and his daughter Charlie, who both gained supernatural abilities after Andy and his wife participated in a secret government experiment run by an organization known as The Shop. While Andy develops the power of mind control through a force he calls 'the push,' Charlie is born with an even more dangerous gift: pyrokinesis, the ability to create and control fire with her mind.\n\nAs Charlie grows, The Shop becomes obsessed with exploiting her abilities as a potential weapon, pursuing her and her father across the country. The novel explores themes of parental love, the abuse of power, and the fear of what happens when extraordinary abilities collide with ruthless institutions. Charlie's struggle to understand and control her power, along with Andy’s desperate attempts to protect her, form the emotional core of the story. Firestarter combines emotional depth, suspense, and explosive set pieces into a gripping narrative about freedom, control, and the cost of turning human beings into experiments.",
+                            Pages = 426,
                             PublishedDate = new DateTime(1980, 9, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A young girl with terrifying pyrokinesis becomes the target of a ruthless government agency determined to control her power.",
@@ -7473,6 +7617,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Published in 1983, Cycle of the Werewolf is a horror novella by Stephen King that tells the story of a small town, Tarker's Mills, terrorized by a mysterious creature. Structured around the calendar year, each chapter corresponds to a different month and a new full moon, as unexplained deaths begin to plague the town. As fear and paranoia grow, a young boy named Marty Coslaw starts to suspect that the killer is not human, but a werewolf hiding in plain sight among the townsfolk. The novella blends atmospheric horror with a creeping sense of dread as the town’s secrets and the beast’s identity are slowly revealed. Originally conceived as a collaboration between King and artist Bernie Wrightson, the story is richly visual, combining visceral horror with a classic monster narrative that explores themes of isolation, suspicion, and courage in the face of unimaginable evil.",
+                            Pages = 127,
                             PublishedDate = new DateTime(1983, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A chilling tale of a small town stalked by a werewolf, with each full moon bringing new terror.",
@@ -7488,6 +7633,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Originally published in 1987, Misery is one of Stephen King's most harrowing psychological horror novels. The story follows Paul Sheldon, a bestselling author known for his Misery Chastain romance series, who is severely injured in a car accident during a snowstorm. He is rescued by Annie Wilkes, a former nurse and self-proclaimed 'number one fan.' Instead of taking him to a hospital, Annie brings Paul to her remote home, where she tends to his injuries but soon reveals a dangerous and violent obsession with his work. When Annie discovers that Paul has killed off her beloved character in his latest manuscript, she forces him to write a new novel bringing Misery back to life, subjecting him to escalating physical and psychological torture. Set almost entirely within the claustrophobic confines of Annie’s house, Misery explores themes of fandom, control, addiction, and the sometimes toxic relationship between creators and their audience. With its intense atmosphere, razor-sharp suspense, and unforgettable villain, Misery remains one of King’s most acclaimed and chilling works.",
+                            Pages = 310,
                             PublishedDate = new DateTime(1987, 6, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A bestselling author is held captive by his 'number one fan' in a tense, psychological nightmare of obsession and survival.",
@@ -7503,6 +7649,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Published in 1989, The Dark Half is one of Stephen King's most unsettling psychological horror novels, delving deep into questions of identity, creativity, and the darkness that can live within. The story follows Thad Beaumont, a novelist who writes serious literary fiction under his real name but secretly pens violent, bestselling crime novels under the pseudonym George Stark. When Thad decides to \"kill off\" his pseudonym as a publicity stunt, the symbolic burial awakens something far more sinister. George Stark appears to come to life as a separate, murderous entity, determined to continue his existence by any means necessary. As bodies begin to pile up, Thad is forced to confront the terrifying possibility that Stark is not just a name on a page, but a dark manifestation of his own psyche. Blending supernatural horror with psychological tension, The Dark Half examines the nature of the creative mind, the masks people wear, and the dangerous power of suppressed impulses. It is a gripping, atmospheric tale that showcases King’s talent for turning internal conflict into visceral terror.",
+                            Pages = 431,
                             PublishedDate = new DateTime(1989, 10, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A chilling exploration of dual identity, where a writer's pseudonym refuses to stay buried.",
@@ -7518,6 +7665,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Published in 1992, Gerald's Game is one of Stephen King's most unsettling psychological horror novels, set almost entirely within a single room. The story follows Jessie Burlingame, who travels with her husband Gerald to a remote lakeside cabin in western Maine for a romantic getaway. During a bondage game gone wrong, Gerald suddenly dies of a heart attack, leaving Jessie handcuffed to the bed with no immediate hope of escape. What begins as a physical fight for survival soon becomes a harrowing mental ordeal. Dehydrated, weak, and trapped, Jessie is forced to confront the voices in her head, the unresolved traumas of her childhood, and the deep-rooted fears she has tried to suppress for years. As day fades into night, the horror intensifies with the appearance of a mysterious figure in the dark, blurring the line between hallucination and reality. Gerald's Game is less about monsters and more about the terror of being utterly powerless and alone, exploring themes of abuse, memory, resilience, and the long shadows cast by buried secrets. With its claustrophobic setting and intense psychological focus, the novel showcases King's ability to create horror not only from the supernatural, but from the darkest corners of the human mind.",
+                            Pages = 332,
                             PublishedDate = new DateTime(1992, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A disturbing psychological horror story about a woman trapped, alone and handcuffed, forced to confront both a terrifying intruder and the buried traumas of her past.",
@@ -7533,6 +7681,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Published in 1995, Rose Madder follows Rosie Daniels, a woman who finally escapes her violently abusive husband, Norman, after years of terror. Starting a new life in a distant city, she struggles to rebuild her sense of self and safety. In a pawnshop, Rosie discovers a disturbing yet captivating painting of a woman in a rose-colored gown, and brings it home. The painting begins to change and reveal impossible details, drawing Rosie into a strange, mythic realm that mirrors her own trauma and rage. As Norman hunts her down with increasing brutality, the supernatural power tied to the painting becomes both a threat and a potential means of salvation. Blending psychological horror, themes of domestic violence, and elements of dark fantasy, Rose Madder explores survival, vengeance, and the cost of reclaiming one’s life from a nightmare.",
+                            Pages = 420,
                             PublishedDate = new DateTime(1995, 7, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A dark, supernatural story about a woman who flees an abusive marriage and discovers a mysterious painting that leads to another world.",
@@ -7548,6 +7697,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "First published in 1999, The Girl Who Loved Tom Gordon is a psychological horror novel by Stephen King that tells the story of nine-year-old Trisha McFarland. After becoming separated from her mother and brother during a family hike on the Appalachian Trail, Trisha soon realizes she is lost in the vast, unforgiving woods. Armed with only a small pack, limited food, and her portable radio, she clings to broadcasts of Boston Red Sox games and draws strength from her admiration for her favorite player, relief pitcher Tom Gordon. As days pass and exhaustion, hunger, and illness set in, Trisha’s grip on reality begins to blur. She imagines Tom Gordon walking beside her, offering calm guidance as she battles fear and despair. At the same time, she becomes convinced that something sinister is stalking her in the forest—an unseen presence she calls \"The God of the Lost.\" The novel is an intimate, harrowing examination of survival, faith, and the resilience of a child’s mind under extreme pressure. Combining wilderness survival with creeping supernatural dread, The Girl Who Loved Tom Gordon is a tense, emotionally charged exploration of courage and the thin line between hope and terror.",
+                            Pages = 224,
                             PublishedDate = new DateTime(1999, 4, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A lost young girl relies on her wits, courage, and the imagined presence of her baseball hero to survive in the wilderness.",
@@ -7563,6 +7713,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Published in 2001, Black House is a horror novel by Stephen King and Peter Straub and the sequel to their earlier collaboration, The Talisman. The story follows Jack Sawyer, now a retired Los Angeles homicide detective living in the quiet town of French Landing, Wisconsin. Jack has tried to leave his past behind, including his memories of crossing into the otherworldly realm known as the Territories. When a series of brutal child murders shakes French Landing, Jack is reluctantly drawn back into investigative work, soon realizing that the crimes are connected not only to his own buried past but also to a greater cosmic evil. As the mysterious killer known as \"The Fisherman\" continues to terrorize the town, Jack must once again face the dangerous boundaries between worlds. Black House weaves together a police procedural, supernatural horror, and epic fantasy, further expanding the mythos surrounding the Dark Tower and exploring themes of memory, sacrifice, and the battle against an ancient darkness.",
+                            Pages = 640,
                             PublishedDate = new DateTime(2001, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A dark and unsettling sequel to The Talisman, where retired detective Jack Sawyer confronts a child-killer tied to forces from another world.",
@@ -7578,6 +7729,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Published in 2002, From a Buick 8 is a haunting, slow-burn horror novel that centers on a mysterious car impounded by the Pennsylvania State Police. The Buick, which has sat for years in Shed B, isn’t really a car at all—its controls don’t work, its engine is a façade, and it occasionally emits bizarre lights and produces grotesque creatures and unnatural phenomena. The story is told largely through the memories of the troopers of Barracks D, who have guarded the Buick for decades and struggled to understand its origin, its purpose, or the rules that govern it.\n\nWhen a young man named Ned Wilcox, whose father served at the barracks before dying in a tragic accident, begins spending time with the troopers, they decide it’s finally time to tell him the truth about the Buick. Through their stories, Ned learns how deeply the car has affected their lives, from inexplicable disappearances to terrifying manifestations that defy the laws of nature. The novel explores grief, duty, and the human urge to seek meaning in the unknowable.\n\nRather than offering clear answers, From a Buick 8 leans into cosmic horror and the unsettling idea that some mysteries are beyond human comprehension. King uses the barracks camaraderie, small-town rhythms, and the oral storytelling structure to create a grounded, emotionally resonant atmosphere. The result is a chilling reflection on loss, fate, and the frightening vastness of the universe that lies just beyond what we can see.",
+                            Pages = 368,
                             PublishedDate = new DateTime(2002, 9, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A strange car locked in a Pennsylvania shed becomes a gateway to something otherworldly and terrifying.",
@@ -7593,6 +7745,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Published in 2013, Joyland is a crime novel with supernatural undertones by Stephen King, set in a small North Carolina amusement park in the 1970s. The story follows Devin Jones, a college student who takes a summer job at Joyland after a painful breakup. As he learns the ropes of carny life and becomes close to his co-workers, Devin becomes fascinated by the park’s dark history, particularly the unsolved murder of a young woman whose ghost is rumored to haunt one of the rides. Over the course of the summer and beyond, Devin is drawn into a mystery that intertwines the murder, a sick young boy with possible second sight, and his own journey through grief, loneliness, and the search for purpose. Joyland combines elements of crime fiction, ghost story, and poignant coming-of-age drama, showcasing King’s talent for blending suspense with deep emotional resonance in a vividly realized setting.",
+                            Pages = 288,
                             PublishedDate = new DateTime(2013, 6, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A coming-of-age mystery set in a small-town amusement park, where a college student confronts love, loss, and a lingering ghost story.",
@@ -7608,6 +7761,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Published in 2014, Mr. Mercedes is the first book in Stephen King's Bill Hodges trilogy, a tense crime thriller that trades supernatural horror for psychological suspense. The story follows Bill Hodges, a retired detective in Midwestern America, who is haunted by an unsolved case involving a mass murder committed with a stolen Mercedes. As Hodges sinks into depression and isolation, he receives a taunting letter from the perpetrator, Brady Hartsfield, a deeply disturbed man who is planning an even deadlier attack. Spurred back into action, Hodges teams up with unlikely allies, including a clever teenager and a woman with fragile mental health, to track down the killer before he strikes again. Mr. Mercedes is a gripping exploration of obsession, loneliness, and the thin line between order and chaos, showcasing King's talent for character-driven suspense and chillingly plausible evil.",
+                            Pages = 448,
                             PublishedDate = new DateTime(2014, 6, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A retired detective is pulled out of his despair when a sadistic killer who once escaped him begins a deadly new game.",
@@ -7623,6 +7777,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Published in 2014, Revival is a dark and unsettling novel by Stephen King that explores themes of faith, addiction, obsession, and the dangers of probing into forces beyond human understanding. The story follows Jamie Morton, who first meets Reverend Charles Jacobs as a young boy in a small New England town. Jacobs, a charismatic minister with a deep fascination for electricity, experiences a devastating personal tragedy that shatters his faith and transforms his life’s purpose.\n\nOver the decades, Jamie and Jacobs cross paths at different stages of their lives. Jamie, struggling with addiction and inner demons, is drawn back into Jacobs’s orbit when the former preacher has reinvented himself as a healer who uses strange electrical experiments to perform seemingly miraculous cures. As Jacobs’s obsession with unlocking the ultimate secrets of the universe intensifies, his experiments grow more dangerous and morally ambiguous.\n\nWhat begins as a story of lost faith and second chances slowly morphs into cosmic horror, as Jamie uncovers the true nature of Jacobs’s ambitions and the terrifying consequences of his final experiment. Blending emotional depth, creeping dread, and a shocking climax, Revival is a chilling meditation on the afterlife, human desperation, and the horrifying possibilities that may lie beyond the veil.",
+                            Pages = 405,
                             PublishedDate = new DateTime(2014, 11, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A haunting story of faith, obsession, and the terrible price of tampering with the unknown.",
@@ -7638,6 +7793,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Gwendy’s Button Box, co-written by Stephen King and Richard Chizmar and first published in 2017, is a dark, unsettling novella set in the familiar town of Castle Rock, Maine. The story follows Gwendy Peterson, a young girl who encounters a peculiar man in a black suit and hat on the town’s Suicide Stairs. He entrusts her with a small, ornate box covered in buttons and levers, each with the potential for incredible reward or catastrophic destruction. As Gwendy grows up, the box remains a constant presence in her life, offering her wealth and success but demanding heavy moral responsibility in return. The tale examines themes of temptation, guilt, power, and the burden of choice, all wrapped in King’s trademark blend of small-town atmosphere and creeping dread. Compact yet emotionally resonant, Gwendy’s Button Box serves as both a coming-of-age story and a chilling meditation on what we do when unimaginable power is placed in our hands.",
+                            Pages = 176,
                             PublishedDate = new DateTime(2017, 5, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A mysterious stranger gives young Gwendy Peterson a strange box with dangerous powers and impossible choices.",
@@ -7653,6 +7809,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Sleeping Beauties, co-written by Stephen King and his son Owen King and published in 2017, is a blend of horror, fantasy, and social commentary set in the small town of Dooling, West Virginia. A strange phenomenon known as 'Aurora' begins to spread across the globe: when women fall asleep, they become shrouded in a cocoon-like gauze. If the gauze is disturbed or removed, the sleeping women turn feral and violently attack. As more and more women succumb to the mysterious sleep, the world rapidly destabilizes, leaving men to confront not only the collapsing social order but also their own fears, prejudices, and capacity for violence.\n\nAt the center of the story is a mysterious woman named Evie, who appears to be connected to the Aurora phenomenon and may hold the key to understanding whether this new reality is a curse, a test, or an opportunity. The novel alternates between perspectives in Dooling and the strange alternate realm where the sleeping women find themselves, examining how gender, power, and morality play out when the rules of the world are suddenly rewritten. With its large cast of characters and wide scope, Sleeping Beauties offers an unsettling, thought-provoking exploration of what happens when the balance between men and women is violently disrupted, and whether humanity can learn from such a reckoning.",
+                            Pages = 702,
                             PublishedDate = new DateTime(2017, 9, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "In a world where women fall into a mysterious sleep and men are left to face their darkest impulses, a small Appalachian town becomes the battleground for the future of humanity.",
@@ -7668,6 +7825,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Published in 2022, Gwendy’s Final Task is the third and concluding novel in the Gwendy trilogy, co-written by Stephen King and Richard Chizmar. The story follows Gwendy Peterson, now a U.S. senator, who is once again entrusted with the mysterious and dangerous button box that has shaped her life since childhood. This time, the stakes are even higher, as she is sent on a mission that reaches far beyond Castle Rock and into the depths of space, where the fate of the world may depend on her choices. As Gwendy struggles with her responsibilities, aging, and the moral cost of wielding such immense power, the novel explores themes of sacrifice, temptation, and the burden of doing what is right when the consequences are unimaginable. Blending horror, suspense, and emotional drama, Gwendy’s Final Task provides a powerful and haunting end to Gwendy’s journey, tying together elements from earlier books and the broader King universe while examining how one person’s decisions can alter the course of many lives.",
+                            Pages = 408,
                             PublishedDate = new DateTime(2022, 2, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "The conclusion to Gwendy’s story, where she must face the box one last time and confront the fate of the world.",
@@ -7683,6 +7841,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Dark Tower I: The Gunslinger introduces Roland Deschain, the last of the gunslingers, as he pursues the enigmatic Man in Black across a desolate, decaying world that has \"moved on.\" Blending elements of fantasy, western, horror, and dark science fiction, the novel follows Roland’s relentless journey through barren deserts, haunted way stations, and forgotten towns. Along the way, he encounters allies and sacrifices, including the boy Jake, whose fate forces Roland to choose between his humanity and his obsessive quest for the Dark Tower. This opening volume sets the tone for the epic saga that follows, establishing Roland’s grim determination, the strange rules of his world, and the looming mystery of the Tower itself.",
+                            Pages = 224,
                             PublishedDate = new DateTime(1982, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Roland Deschain, the last gunslinger, pursues the mysterious Man in Black across a dying world that has \"moved on.\"",
@@ -7698,6 +7857,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "In The Dark Tower II: The Drawing of the Three, Roland finds himself stranded on a strange beach, beset by monstrous lobstrosities and on the edge of death. Guided by prophetic tarot-like cards, he passes through a series of mysterious doors that open onto New York City at different times. Through these doors, he \"draws\" three critical companions: Eddie Dean, a troubled heroin smuggler; Odetta Holmes/Detta Walker, a woman with a fragmented, violent psyche; and Jack Mort, a dangerous man whose fate is deeply entwined with Roland’s own past. As Roland struggles to bind this unlikely ka-tet together, the group must confront their inner demons and begin to understand the larger stakes of the journey to the Dark Tower.",
+                            Pages = 400,
                             PublishedDate = new DateTime(1987, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Roland crosses a dangerous shore and \"draws\" three pivotal companions from our world to aid his quest for the Dark Tower.",
@@ -7713,6 +7873,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Dark Tower III: The Waste Lands continues Roland’s quest with his growing ka-tet—Eddie, Susannah, and a restored Jake—now bound together by fate and memory. The group travels deeper into Mid-World’s blasted landscapes, entering the ruined city of Lud, where ancient technology and tribal warfare coexist in a chaotic, dying environment. Pursued by fanatics and haunted by the remnants of a once-great civilization, they eventually face Blaine the Mono, a deranged, sentient monorail who loves riddles and threatens to kill them if they cannot outwit him. This volume deepens the mythology of the Dark Tower universe, exploring themes of decay, destiny, and the fragile hope that holds the ka-tet together.",
+                            Pages = 512,
                             PublishedDate = new DateTime(1991, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Roland and his ka-tet journey into the decaying city of Lud, racing a mad monorail and confronting a world poisoned by time.",
@@ -7728,6 +7889,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Dark Tower IV: Wizard and Glass acts as both continuation and origin story, as Roland and his ka-tet survive Blaine the Mono and then pause along the Path of the Beam to hear Roland’s tale of his youth. The story shifts to the barony of Mejis, where young Roland and his fellow apprentice gunslingers, Cuthbert and Alain, uncover a dangerous conspiracy involving corrupt officials and the agents of the Crimson King. At the heart of this memory is Roland’s doomed love for Susan Delgado, a relationship that will end in betrayal, fire, and irreversible loss. This novel dives deeply into Roland’s past, revealing how love, obsession, and tragedy forged the relentless gunslinger who now leads the ka-tet toward the Dark Tower.",
+                            Pages = 787,
                             PublishedDate = new DateTime(1997, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Roland recounts his tragic first love and the events in Mejis that shaped him into the hardened gunslinger he has become.",
@@ -7743,6 +7905,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "In The Dark Tower V: Wolves of the Calla, Roland and his ka-tet arrive in the farming village of Calla Bryn Sturgis, where they learn of a recurring horror: armored \"wolves\" who periodically ride in from Thunderclap to abduct one child from each set of twins, returning them broken and diminished. The ka-tet agrees to help defend the Calla, uncovering strange ties between Mid-World, the Dark Tower, and storylines familiar from King’s other work, including Father Callahan from ’Salem’s Lot. Combining western-style standoffs, moral dilemmas, and deepening multiverse connections, this volume explores courage, sacrifice, and the growing realization that the fate of the Tower is bound to many worlds, including our own.",
+                            Pages = 714,
                             PublishedDate = new DateTime(2003, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Roland’s ka-tet defends a small farming community against mysterious \"wolves\" that steal their children away.",
@@ -7758,6 +7921,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Dark Tower VI: Song of Susannah follows the ka-tet as it fractures under the pressures of prophecy and possession. Susannah Dean, hosting the personality of Mia and carrying a mysterious child, is transported to New York City in 1999, where sinister forces converge around her. Meanwhile, Roland and Eddie find themselves in Maine in 1977, confronting both the Crimson King’s agents and a crucial figure: a version of Stephen King himself, whose writing is intertwined with the very existence of the Tower. With multiple timelines colliding and the stakes rising, this penultimate installment grapples with identity, free will, and the terrifying possibility that the story itself could be cut short.",
+                            Pages = 432,
                             PublishedDate = new DateTime(2004, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Susannah is possessed and carried into another world, while the ka-tet is split across time in a race to save both her and the Tower.",
@@ -7773,6 +7937,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Dark Tower VII: The Dark Tower concludes Roland’s epic journey. As the ka-tet moves closer to the Dark Tower, they confront deadly traps, the full might of the Crimson King’s forces, and heartbreaking sacrifices that test their bond and resolve. The path leads through ruined cities, haunted landscapes, and across realities, pulling together threads from the entire series and many of King’s other works. Roland must finally face the consequences of his choices, the nature of ka (fate), and the mystery at the heart of the Tower itself. The finale is both grand and deeply personal, offering an ending that is controversial, haunting, and thematically consistent with the series’ exploration of obsession, storytelling, and eternal return.",
+                            Pages = 845,
                             PublishedDate = new DateTime(2004, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Roland’s long quest reaches its endgame as the ka-tet races toward the Dark Tower, facing devastating losses and the ultimate revelation.",
@@ -7788,6 +7953,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Dark Tower: The Wind Through the Keyhole is a mid-series novel set between the events of The Waste Lands and Wizard and Glass. Caught in a deadly starkblast storm, Roland and his ka-tet take shelter, and Roland passes the time by telling a story from his youth. That story contains yet another tale within it, creating a layered narrative about a young Roland hunting a dangerous skin-man and a boy named Tim Ross who ventures into an enchanted wilderness. The book enriches the mythology of Mid-World, highlighting Roland’s growth, the folklore of his world, and the enduring power of stories within stories that echo the larger Dark Tower saga.",
+                            Pages = 336,
                             PublishedDate = new DateTime(2012, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A mid-series tale in which Roland tells a nested story from his youth, revealing another haunting encounter from his early days as a gunslinger.",
@@ -7803,6 +7969,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "First published in 1920, The Mysterious Affair at Styles introduces Hercule Poirot, Agatha Christie's iconic Belgian detective, along with his friend and narrator, Captain Hastings. Set in the country estate of Styles Court, the story centers on the sudden and suspicious poisoning of Emily Inglethorp, the wealthy matriarch of the household. Almost everyone under her roof has something to hide: financial motives, strained relationships, and hidden pasts. Poirot methodically examines alibis, timelines, and physical clues, overturning assumptions as he goes. With its intricate plotting, red herrings, and logical deduction, the novel not only launches Poirot as a major detective figure, but also helps define the classic country-house mystery that would become a hallmark of Golden Age detective fiction.",
+                            Pages = 296,
                             PublishedDate = new DateTime(1920, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Hercule Poirot’s first case, involving a wealthy woman’s poisoning in an English country house full of secrets.",
@@ -7818,6 +7985,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Published in 1923, The Murder on the Links sends Hercule Poirot and Captain Hastings to northern France after Poirot receives an urgent plea for help from the wealthy Paul Renauld. When they arrive, Renauld has already been found dead, buried in a shallow grave near a new golf course. The investigation reveals a tangle of identities, long-buried secrets, and romantic entanglements, while local police, led by the proud Inspector Giraud, clash with Poirot’s more subtle methods. Hastings becomes personally involved after meeting a mysterious young woman he nicknames 'Cinderella.' Combining a classic whodunit framework with emotional stakes and misdirection, the novel shows Poirot balancing logic and psychology as he uncovers the truth behind the carefully staged crime.",
+                            Pages = 298,
                             PublishedDate = new DateTime(1923, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Poirot travels to France to investigate the brutal murder of a wealthy man found near a half-built golf course.",
@@ -7833,6 +8001,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Published in 1927, The Big Four places Hercule Poirot in a more global, espionage-tinged adventure as he confronts a powerful criminal syndicate. Known as the Big Four, this secretive group consists of four elusive masterminds working behind the scenes to manipulate events around the world. Poirot, aided by Captain Hastings, is drawn into a series of seemingly disconnected incidents—murder, disappearances, and strange accidents—that all trace back to this organization. The novel unfolds in a sequence of linked episodes, with Poirot repeatedly crossing paths with the enigmatic Number Four. Blending detective work with spy-thriller elements, The Big Four showcases Poirot’s ingenuity on an international stage and expands the scope of Christie’s usual village and country-house settings.",
+                            Pages = 282,
                             PublishedDate = new DateTime(1927, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Poirot battles a shadowy international criminal organization known only as the Big Four.",
@@ -7848,6 +8017,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Published in 1928, The Mystery of the Blue Train sees Hercule Poirot embroiled in a glamorous yet deadly case aboard the famed Blue Train traveling from Paris to the French Riviera. The victim is Ruth Kettering, a wealthy American heiress found murdered in her compartment, her priceless ruby—the 'Heart of Fire'—missing. Behind the glitter of high society lies a web of greed, failing marriages, and secret identities. Poirot must disentangle false alibis and conflicting testimonies from fellow passengers, including a young woman unexpectedly thrust into the drama, to uncover who killed Ruth and why. Combining the allure of continental travel with a classic locked-compartment feel, the novel delivers a sophisticated puzzle of motives, opportunity, and deception.",
+                            Pages = 296,
                             PublishedDate = new DateTime(1928, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Poirot investigates the murder of an American heiress on a luxury train bound for the French Riviera.",
@@ -7863,6 +8033,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Peril at End House, first published as a novel in 1932, finds Hercule Poirot and Captain Hastings attempting to enjoy a quiet holiday at a seaside resort in Cornwall. Their peace is shattered when they meet Nick Buckley, the seemingly carefree owner of the crumbling End House, who has survived several uncanny ‘accidents.’ Poirot quickly becomes convinced that someone is determined to kill her. As he investigates the house’s history and its inhabitants, he uncovers hidden relationships, financial motives, and a sinister plan that hinges on mistaken identity. With its atmospheric coastal setting and a twist that forces readers to rethink everything they have been told, Peril at End House is a classic early Poirot puzzle about deception, inheritance, and the masks people wear.",
+                            Pages = 256,
                             PublishedDate = new DateTime(1932, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Poirot holidays in Cornwall only to uncover a deadly plot against the young mistress of End House.",
@@ -7878,6 +8049,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Lord Edgware Dies (published in 1933 and also known in the US as Thirteen at Dinner) opens when the dazzling actress Jane Wilkinson asks Hercule Poirot to help her obtain a divorce from her aristocratic husband, Lord Edgware. Soon afterward, Edgware is found stabbed to death in his London home. Multiple witnesses swear that Jane was at a dinner party at the time of the murder, yet she had publicly declared she wished her husband ‘dead.’ As Poirot digs deeper, he finds a tangle of impersonations, stagecraft, and carefully constructed alibis worthy of the theatre world Jane inhabits. The novel explores themes of ambition, vanity, and the roles people play in public and in private, culminating in one of Poirot’s most theatrical dénouements.",
+                            Pages = 252,
                             PublishedDate = new DateTime(1933, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A glamorous actress’s wish for freedom from her husband becomes chilling reality when Lord Edgware is found murdered.",
@@ -7893,6 +8065,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Three Act Tragedy, first published in the mid-1930s (US title Murder in Three Acts and UK book edition in 1935), is structured like a theatrical performance. At a dinner party hosted by the charismatic actor Sir Charles Cartwright, a kindly clergyman suddenly dies after drinking a cocktail, apparently from natural causes. When a second, eerily similar death occurs later, suspicion grows that both were murders. Hercule Poirot, along with observer Mr Satterthwaite, begins to see the crimes as a drama carefully staged in three acts, complete with misdirection, rehearsed roles, and a shocking final reveal. The story explores obsession, performance, and the lengths to which people will go to protect their desires, all wrapped in a tightly plotted, character-driven mystery.",
+                            Pages = 279,
                             PublishedDate = new DateTime(1935, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A series of ‘accidental’ deaths unfold like a play in three acts, with Poirot watching from the wings.",
@@ -7908,6 +8081,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Death in the Clouds, first published in 1935 (US title Death in the Air), is a classic ‘impossible’ crime featuring Hercule Poirot aboard a flight from Paris to London. During the journey, a notorious French moneylender, Madame Giselle, is found dead in her seat, apparently killed by a poisoned dart while the other passengers sat only a few feet away. With a limited set of suspects and the crime committed in a confined space, Poirot must reconstruct every moment of the flight, examining motives ranging from blackmail to hidden identities. The novel combines Christie’s love of modern travel with a meticulously fair puzzle, as Poirot disentangles alibis and psychological clues to uncover a killer who used the anonymity of air travel as their greatest weapon.",
+                            Pages = 304,
                             PublishedDate = new DateTime(1935, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A woman is murdered mid-flight, leaving Poirot to solve a ‘closed circle’ mystery in the skies.",
@@ -7923,6 +8097,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The A.B.C. Murders, first published in 1936, is one of Agatha Christie's most inventive Hercule Poirot novels. Poirot begins receiving taunting letters signed by someone calling themselves A.B.C., each warning of a murder to come. The killer appears to choose both victims and locations according to the alphabet, leaving an A.B.C. railway guide at every crime scene. As panic spreads and the body count rises, Poirot must look beyond the pattern everyone else accepts as fact and uncover the personal motive hidden beneath the apparent randomness. Blending a serial killer premise with a classic puzzle mystery, the novel explores themes of identity, obsession, and the dangers of making assumptions.",
+                            Pages = 256,
                             PublishedDate = new DateTime(1936, 1, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Hercule Poirot hunts a methodical killer who strikes in alphabetical order across England.",
@@ -7938,6 +8113,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Murder in Mesopotamia, published in 1936, transports Hercule Poirot to an archaeological excavation in Iraq. When the nervous and much-disliked wife of the expedition leader is found bludgeoned in her bedroom, suspicion falls on the small, isolated group of archaeologists, staff, and visitors living at the remote dig house. The story is narrated by Nurse Amy Leatheran, hired to care for the victim before her death, giving the mystery an intimate, observational tone. As Poirot reconstructs the crime amid desert heat, professional rivalries, and buried secrets, he must determine how a killer could strike in a closely watched compound and then seemingly vanish. The novel combines classic whodunit plotting with rich archaeological atmosphere and explores jealousy, professional ambition, and psychological fragility.",
+                            Pages = 288,
                             PublishedDate = new DateTime(1936, 7, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Poirot investigates a murder inside a tense archaeological dig in the Iraqi desert.",
@@ -7953,6 +8129,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Cards on the Table, first published in 1936, presents one of Agatha Christie's boldest premises. The enigmatic collector Mr Shaitana invites four people he privately believes to have committed undetected murders to a dinner party, then seats them opposite four sleuths: Hercule Poirot, Colonel Race, Superintendent Battle, and mystery writer Ariadne Oliver. During an evening of bridge, Shaitana is killed in plain sight, with only his four suspected 'collectors' as possible murderers. There are no alibis in the usual sense; instead, the key lies in the bridge scores, personalities, and pasts of the players. The novel becomes an intricate character study as Poirot delves into earlier crimes to solve the present one, exploring themes of guilt, vanity, and the many faces people present to the world.",
+                            Pages = 286,
                             PublishedDate = new DateTime(1936, 11, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A flamboyant host is murdered during a bridge party where all four guests are known killers.",
@@ -7968,6 +8145,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Dumb Witness, published in 1937 and known in the United States as Poirot Loses a Client, follows Hercule Poirot and Captain Hastings as they investigate the belated cry for help of Miss Emily Arundell. The wealthy spinster suffers a fall on the stairs supposedly caused by her fox terrier's ball, then later writes to Poirot fearing someone is trying to kill her. By the time the letter reaches him, she is already dead and the death has been accepted as natural. Poirot and Hastings arrive in a house simmering with resentment, inheritance disputes, and clashing personalities, with only fragmentary clues and the behavior of the loyal dog to guide them. The novel mixes family drama with classic clue-based detection and examines greed, loyalty, and the subtle signs of malice that others overlook.",
+                            Pages = 320,
                             PublishedDate = new DateTime(1937, 7, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Poirot reopens the suspicious 'accidental' death of an elderly woman after a delayed plea for help arrives.",
@@ -7983,6 +8161,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Death on the Nile, first published in 1937, is one of Agatha Christie's most celebrated Poirot novels. The story follows beautiful heiress Linnet Ridgeway, whose luxurious honeymoon cruise along the Nile is overshadowed by jealousies, old grudges, and the ominous presence of her husband's jilted former fiancée. When Linnet is found murdered in her cabin, Poirot, who is also aboard, must navigate a ship full of suspects, each with secrets and motives of their own. The confined riverboat setting heightens the tension as he reconstructs movements, tests alibis, and probes the emotional undercurrents driving the crime. Combining travel mystery, intricate plotting, and a poignant exploration of love, obsession, and betrayal, the novel remains a cornerstone of classic detective fiction.",
+                            Pages = 288,
                             PublishedDate = new DateTime(1937, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A honeymoon cruise on the Nile turns deadly when a wealthy heiress is shot and Poirot must unravel a tangle of passions and alibis.",
@@ -7998,6 +8177,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "First published in 1938, Appointment with Death sees Hercule Poirot travelling in the Middle East when he encounters the sinister Boynton family, ruled by a cruel and sadistic stepmother. During an excursion to Petra, Mrs Boynton is discovered dead, apparently from natural causes. Poirot, however, is not convinced. With only twenty-four hours to investigate and every family member bearing a motive rooted in years of psychological abuse, he must probe a closed circle of suspects whose lives have been twisted by fear and domination. Drawing on Christie’s own experiences in the region, the novel blends archaeological atmosphere with a classic puzzle mystery, exploring themes of control, trauma and the price of freedom.",
+                            Pages = 256,
                             PublishedDate = new DateTime(1938, 5, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "On a tour of the Middle East, Hercule Poirot must untangle a family’s dark secrets when their tyrannical matriarch is found dead beneath the desert sun.",
@@ -8013,6 +8193,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Hercule Poirot’s Christmas, first published in 1938 (also known in the US as Murder for Christmas and later A Holiday for Murder), is a classic country-house mystery with an unusually violent crime at its centre. The tyrannical Simeon Lee summons his estranged family home for Christmas, promising surprises and stirring up old resentments. When he is found savagely murdered in a locked room on Christmas Eve, every member of the household appears to have both motive and opportunity. Called in to assist the local police, Poirot must navigate a tangle of family grudges, illegitimate relationships and long-buried secrets. Christie offsets the cosy holiday setting with one of her most chilling portrayals of domestic hatred and retribution.",
+                            Pages = 256,
                             PublishedDate = new DateTime(1938, 12, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A brutal murder shatters a wealthy patriarch’s festive family gathering, forcing Poirot to uncover cruelty and greed behind the holiday cheer.",
@@ -8028,6 +8209,8 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Published in 1940, Sad Cypress is one of Agatha Christie’s more emotionally intense Hercule Poirot novels, blending courtroom drama with traditional detection. Elinor Carlisle, a reserved young woman, appears to have every reason to kill her rival, the gentle Mary Gerrard, who has captured the affection of Elinor’s fiancé and the favour of her wealthy aunt. When Mary dies after eating a poisoned meal, Elinor is charged with murder and her conviction seems almost certain. Doctor Peter Lord, convinced of her innocence, turns to Poirot for help. As he reconstructs the events leading to Mary’s death and the earlier death of Elinor’s aunt, Poirot uncovers a web of inheritance, resentment and misplaced devotion. The novel explores love, class, and the corrosive power of suspicion, all leading to a quietly devastating resolution.",
+                            Pages = 256,
+                            PublishedDate = new DateTime(1940, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A young woman stands accused of poisoning her rival in love, and Poirot must distinguish jealousy from justice in a case shadowed by tragedy.",
                             Title = "Sad Cypress"
@@ -8042,6 +8225,8 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "One, Two, Buckle My Shoe, first published in 1940 and known in the US as The Patriotic Murders and later An Overdose of Death, opens with Poirot paying a routine visit to his dentist, Henry Morley. When Morley is later discovered shot dead in his surgery in what appears to be suicide, Poirot is unconvinced. Other patients from that same morning – including a powerful banker and a mysterious woman – become central to a case that escalates from an apparently personal tragedy into a conspiracy touching on international politics and extremist ideology. Christie deftly uses the counting-rhyme structure to frame the novel’s chapters while examining themes of social responsibility, political fanaticism and the moral cost of ‘necessary’ violence.",
+                            Pages = 256,
+                            PublishedDate = new DateTime(1940, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "After his dentist is found dead, Poirot suspects that a tidy ‘suicide’ masks a far more sinister plot involving politics, high finance and assassination.",
                             Title = "One, Two, Buckle My Shoe"
@@ -8056,6 +8241,8 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Evil Under the Sun, first published in 1941, finds Hercule Poirot attempting to rest at an exclusive seaside hotel on a small Devon island. Among the guests is Arlena Stuart Marshall, a beautiful former actress whose open flirtation with another man enrages her husband and scandalises the resort. When Arlena is discovered strangled on a secluded beach, the apparently idyllic holiday setting becomes the scene of a meticulously planned crime. With a limited cast of suspects and alibis anchored to tides, sunbathing and scenic walks, Poirot must disentangle jealousy, staged appearances and a previous, eerily similar murder to reveal a ruthlessly calculated scheme. The novel revisits motifs from Christie’s earlier short fiction while offering one of her most atmospheric ‘closed-circle’ puzzles.",
+                            Pages = 256,
+                            PublishedDate = new DateTime(1941, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "On a sun-drenched holiday island, the murder of a glamorous but disliked actress challenges Poirot to see past appearances and romantic entanglements.",
                             Title = "Evil Under the Sun"
@@ -8070,6 +8257,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Five Little Pigs, first published in 1942 and known in the United States as Murder in Retrospect, is one of Agatha Christie's most intricate Hercule Poirot novels. Sixteen years after the painter Amyas Crale was poisoned, his daughter Carla approaches Poirot, convinced that her mother, convicted of the crime, was innocent. With all physical evidence long gone, Poirot must solve the case entirely through memory and testimony.\n\nHe tracks down the five people who were present on the day of the murder—each a 'little pig' in the nursery rhyme that frames the story—and asks them to write their own account of what happened. By comparing their written narratives with their current recollections, Poirot slowly reconstructs the truth hidden beneath old resentments, romantic entanglements, and self-deception. The novel is celebrated for its unusual structure, psychological depth, and the way it explores the unreliability of memory over time.",
+                            Pages = 192,
                             PublishedDate = new DateTime(1942, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Poirot re-investigates a 16-year-old murder by questioning five key witnesses, each with their own version of the past.",
@@ -8085,6 +8273,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Hollow, first published in 1946 (also issued in the U.S. as Murder After Hours), brings Hercule Poirot into a tense country-house gathering at the Angkatell estate. What begins as a seemingly ordinary weekend party—filled with flirtations, marital strain, and simmering rivalries—erupts into tragedy when Dr. John Christow is found shot by the swimming pool, surrounded by guests whose reactions seem oddly theatrical.\n\nPoirot, arriving just moments after the discovery of the body, is immediately struck by the unnatural arrangement of the crime scene. As he delves into the lives of the Angkatell family and their guests, he uncovers a web of romantic entanglements, long-standing grievances, and emotional conflicts that complicate the search for the killer. The novel is often praised for its strong character work and for blending classic whodunit plotting with a more introspective look at love, obsession, and emotional damage.",
+                            Pages = 279,
                             PublishedDate = new DateTime(1946, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A country-house weekend turns deadly when a staged scene around a swimming pool turns out to be horrifyingly real.",
@@ -8100,6 +8289,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Taken at the Flood, first published in 1948 and originally released in the U.S. under the title There Is a Tide…, is set in the uncertain years following World War II. The Cloade family, long accustomed to relying on the generosity of wealthy patriarch Gordon Cloade, are thrown into turmoil when he marries a young widow, Rosaleen, and then dies in an air raid shortly afterward. With no new will, Rosaleen becomes heir to his entire fortune, leaving the rest of the family financially stranded.\n\nRumours soon surface that Rosaleen’s first husband may still be alive, threatening the legitimacy of her marriage and inheritance. When a mysterious stranger arrives in the village and is later found dead, Hercule Poirot is drawn into a case involving greed, shifting identities, and the lingering scars of war. The novel combines classic Christie misdirection with a strong sense of post-war social change and the desperate measures people will take to secure their future.",
+                            Pages = 192,
                             PublishedDate = new DateTime(1948, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "In a shattered post-war England, a sudden inheritance and a dubious widow draw Poirot into a deadly family conflict.",
@@ -8115,6 +8305,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Mrs McGinty's Dead, first published in 1952 and later issued in some editions under the alternative title Blood Will Tell, sees Hercule Poirot summoned to the small village of Broadhinny. A charwoman, Mrs. McGinty, has been brutally killed, and her lodger, James Bentley, has already been tried and convicted. Superintendent Spence, however, is troubled by the case and asks Poirot to re-examine the evidence before Bentley is executed.\n\nPosing as a boarder and aided—sometimes chaotically—by crime novelist Ariadne Oliver, Poirot uncovers how Mrs. McGinty may have stumbled upon a dangerous secret involving one of the villagers and an old scandal. The investigation leads him through a gallery of suspicious locals, petty jealousies, and hidden histories. The novel is notable for its blend of village atmosphere, dark humour, and Christie's recurring theme of how ordinary lives can conceal shocking pasts.",
+                            Pages = 192,
                             PublishedDate = new DateTime(1952, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Poirot reopens a seemingly simple village murder when he begins to suspect that the condemned man is innocent.",
@@ -8130,6 +8321,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "After the Funeral, first published in 1953 and originally released in the United States as Funerals Are Fatal, begins with the death of wealthy Richard Abernethie and the gathering of his relatives at Enderby Hall for the reading of his will. The meeting is shattered when his eccentric sister, Cora Lansquenet, blurts out that Richard was murdered. The uneasy family dismisses the remark—until Cora herself is violently killed the next day.\n\nConcerned by the coincidence, family solicitor Mr. Entwhistle turns to Hercule Poirot for help. As Poirot probes the Abernethie clan, he uncovers financial motives, buried resentments, and a clever manipulation of appearances designed to conceal the true nature of both deaths. Combining a classic inheritance plot with a brooding post-war setting, the novel explores the corrosive effects of greed and the ways families can deceive both others and themselves.",
+                            Pages = 192,
                             PublishedDate = new DateTime(1953, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A careless remark at a will reading sparks suspicion of murder—and leads to another death.",
@@ -8145,6 +8337,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "First published in 1955, Hickory Dickory Dock (also published as Hickory Dickory Death in the United States) centers on a London student hostel where a string of odd petty thefts and acts of vandalism disturb the residents. When one of the young women living there is found dead, Hercule Poirot is called in to untangle the web of lies, secrets, and international connections that lurk behind the seemingly harmless pranks. Blending classic clue-driven detection with a diverse cast of characters, the novel explores themes of identity, post-war tension, and the dangers of underestimating small, inexplicable crimes.",
+                            Pages = 192,
                             PublishedDate = new DateTime(1955, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Hercule Poirot investigates a series of peculiar thefts at a student hostel that soon escalate into murder.",
@@ -8160,6 +8353,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Dead Man's Folly, first published in 1956, sees Hercule Poirot invited to Nasse House, a country estate where crime writer Ariadne Oliver has devised a \"Murder Hunt\" game for a summer fête. Oliver becomes uneasy, suspecting that someone is manipulating her make-believe plot for sinister purposes. When the young girl playing the victim in the game is actually found murdered, Poirot must sort through family tensions, hidden motives, and the strange layout of the estate's folly and grounds to reveal a meticulously planned crime. The novel combines country house atmosphere with meta-commentary on detective fiction through Ariadne Oliver’s presence.",
+                            Pages = 256,
                             PublishedDate = new DateTime(1956, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A staged murder game at a country house turns deadly, and Poirot must uncover a very real killer.",
@@ -8175,6 +8369,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Cat Among the Pigeons, first published in 1959, begins with political upheaval and smuggled jewels in the fictional Middle Eastern kingdom of Ramat. The action soon shifts to Meadowbank, an exclusive English girls' school, where a series of strange events culminate in murder. As teachers and students are drawn into a mystery involving hidden treasure and espionage, Hercule Poirot is eventually called upon to uncover how the international plot has infiltrated the seemingly safe world of the school. The novel blends school-story atmosphere with spy-thriller elements and classic Christie misdirection.",
+                            Pages = 256,
                             PublishedDate = new DateTime(1959, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A murder at an elite girls' school uncovers secrets involving stolen jewels, espionage, and international intrigue.",
@@ -8190,6 +8385,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Clocks, first published in 1963, opens when a young typist, Sheila Webb, is sent to a house in the town of Crowdean, only to find a dead man on the living room floor surrounded by clocks all stopped at the same time. None of the neighbors will admit to knowing the victim, and the circumstances appear deliberately theatrical. Hercule Poirot, intrigued by the puzzle from a distance, uses his famed \"armchair detection\" to piece together the truth. Meanwhile, a young intelligence officer investigates the case on the ground, uncovering connections to espionage and hidden identities. The novel combines a classic whodunit with elements of spy fiction and Christie’s fondness for elaborate, misleading stage-setting.",
+                            Pages = 256,
                             PublishedDate = new DateTime(1963, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A typist stumbles upon a corpse in a house filled with stopped clocks, and Poirot must solve a murder full of staged clues.",
@@ -8205,6 +8401,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Third Girl, first published in 1966, begins when a young woman named Norma Restarick visits Hercule Poirot and abruptly declares that she may have committed a murder—only to decide he is \"too old\" to help and leave without giving her name. Poirot, assisted by his friend Ariadne Oliver, tracks Norma to the London flat she shares with two other young women, where he discovers a tangle of psychological distress, family secrets, and possible gaslighting. As deaths and accidents accumulate around Norma, Poirot must determine whether she is a victim, a killer, or something in between. The novel brings Poirot into the swinging 1960s, contrasting generational attitudes while maintaining Christie’s focus on motive, manipulation, and carefully planted clues.",
+                            Pages = 256,
                             PublishedDate = new DateTime(1966, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A troubled young woman tells Poirot she might have committed a murder, then vanishes before revealing any details.",
@@ -8220,6 +8417,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Hallowe'en Party, first published in 1969, brings Hercule Poirot and mystery novelist Ariadne Oliver to the quiet English village of Woodleigh Common. During a children's Hallowe'en party at the home of Rowena Drake, a boastful young girl, Joyce Reynolds, declares that she once saw a murder. Hours later, she is discovered dead, drowned in a tub used for bobbing for apples. Called in by Mrs Oliver, who fears that her offhand remarks may have triggered the crime, Poirot must untangle village secrets, hidden relationships, and long-buried scandals to learn whether Joyce really did witness a killing in the past. The novel explores the unreliability of memory, the dangers of gossip, and violence lurking beneath a seemingly festive occasion. It has since been closely associated with, and reissued under titles tied to, modern adaptations such as 'A Haunting in Venice'.",
+                            Pages = 256,
                             PublishedDate = new DateTime(1969, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "At a Hallowe'en party, a girl claims she once witnessed a murder—then is found drowned in an apple-bobbing tub, drawing Poirot into a chilling investigation.",
@@ -8235,6 +8433,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Elephants Can Remember, first published in 1972, is a late Hercule Poirot novel that centers on memory and the long shadow of past crimes. When Ariadne Oliver is asked an awkward question about the parents of the young woman her goddaughter intends to marry, she learns of a decades-old tragedy: General and Margaret Ravenscroft, believed to have died in a murder–suicide on a cliff top. Disturbed by the unanswered questions, she enlists Poirot to investigate. Because most of the principals are now dead, they must rely on 'elephants'—people whose memories stretch back to the time of the event—to reconstruct what really happened. As they piece together contradictory recollections, Poirot exposes hidden identities, family secrets, and a carefully disguised crime. The novel reflects on the fallibility and resilience of human memory and the lingering consequences of unresolved guilt.",
+                            Pages = 256,
                             PublishedDate = new DateTime(1972, 11, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Poirot and Ariadne Oliver revisit an old double-death mystery, relying on the 'elephants' of memory to uncover whether it was suicide or murder.",
@@ -8250,6 +8449,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Curtain: Poirot's Last Case, written in the 1940s but published in 1975, serves as the elegiac farewell to Hercule Poirot. Arthur Hastings returns to Styles Court, the country house where he and Poirot first solved a murder decades earlier, now converted into a guesthouse. There he finds Poirot physically frail but mentally as sharp as ever, secretly investigating an unknown manipulator—identified only as 'X'—who has never killed directly, but has incited others to commit murder. As a series of suspicious deaths unfolds among the guests, Poirot confides his theory to Hastings but withholds his full plan. The novel interrogates themes of justice, moral responsibility, and the limits of the detective’s role, culminating in Poirot’s most controversial and sacrificial decision. It closes the Poirot saga in a dark, deeply reflective tone that has made it one of Christie's most discussed works.",
+                            Pages = 224,
                             PublishedDate = new DateTime(1975, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "An aged Poirot and Hastings return to Styles, where a subtle killer drives others to murder—forcing Poirot to make a final, devastating choice.",
@@ -8265,6 +8465,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Murder at the Vicarage, first published in 1930, is the first full-length novel to feature Miss Jane Marple and the village of St Mary Mead. Narrated by the local vicar, Leonard Clement, the story begins with nearly everyone agreeing that life would be easier without the tyrannical churchwarden Colonel Protheroe. When Protheroe is discovered shot dead in the vicar’s study, multiple suspects immediately present themselves—and more than one person appears ready to confess. As gossip swirls and alibis tangle, Miss Marple quietly observes the small details of human behavior, drawing on her deep knowledge of village types to see through the lies. The novel establishes the classic cozy English-village setting and introduces Marple’s central method: reading human nature rather than relying solely on physical clues.",
+                            Pages = 256,
                             PublishedDate = new DateTime(1930, 10, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "When the much-disliked Colonel Protheroe is found shot in the vicar’s study, Miss Marple uses her keen eye for village life to uncover the killer.",
@@ -8280,6 +8481,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Body in the Library, first published in 1942, is one of Miss Marple’s most iconic cases. Colonel and Mrs Bantry awake in their country house in St Mary Mead to shocking news: the body of a young, heavily made-up blonde girl has been found on the rug in their library. With the Bantrys’ reputation at stake, Mrs Bantry turns to Miss Marple for help. The investigation leads from the village to a nearby seaside resort and a smart hotel frequented by wealthy guests, where identities, alibis, and motives become increasingly tangled. Miss Marple draws parallels between the suspects and the personalities she knows from village life, unraveling a plot involving greed, impersonation, and calculated cruelty. The novel plays with the classic trope of the 'mysterious corpse' while contrasting the apparent gentility of the countryside with darker undercurrents.",
+                            Pages = 160,
                             PublishedDate = new DateTime(1942, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A stranger’s corpse appears in the Bantrys’ library, and Miss Marple must trace the dead girl’s connections from a quiet village to a seaside hotel.",
@@ -8295,6 +8497,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Moving Finger is a classic Miss Marple mystery set in the seemingly peaceful village of Lymstock. Siblings Jerry and Joanna Burton arrive there so Jerry can recover from a plane crash, only to find themselves at the center of a scandal when they receive an anonymous letter accusing them of an immoral relationship. Soon it becomes clear that they are not the only targets of a vicious poison-pen campaign. When a prominent local woman dies in what appears to be suicide after receiving such a letter, whispers of murder begin to circulate. As fear and suspicion spread through the community, Miss Marple is eventually called in to untangle the web of malice, secrets, and misdirection. First published in the US in 1942 and in the UK in 1943, the novel blends small-village atmosphere with psychological insight, exploring how gossip and hidden guilt can be weaponised in a close-knit community.",
+                            Pages = 229,
                             PublishedDate = new DateTime(1943, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Anonymous poison-pen letters spread through a quiet village, culminating in murder that only Miss Marple can truly understand.",
@@ -8310,6 +8513,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "A Murder Is Announced opens with an extraordinary notice in the local Chipping Cleghorn newspaper: a murder will take place at Little Paddocks at 6:30 that evening. The villagers assume it must be a parlour game or an eccentric joke, but they gather anyway, curious and amused. At the appointed time, the lights go out, a gun is fired, and suddenly the game turns deadly real. The resulting investigation uncovers layers of deception, mistaken identity, and long-buried history, as those in the house and the wider village prove to be far from what they seem. Miss Marple, staying nearby, applies her shrewd understanding of human nature to decipher what the announcement truly meant and who stood to gain from the chaos. First published in June 1950, the novel is often regarded as one of Christie’s finest village mysteries, combining a clever central gimmick with poignant character work and social observation.",
+                            Pages = 256,
                             PublishedDate = new DateTime(1950, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A village newspaper advert coolly announces a murder before it happens, drawing Miss Marple into one of her most ingenious cases.",
@@ -8325,6 +8529,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "They Do It with Mirrors, also published in the US as Murder with Mirrors, finds Miss Marple visiting an old friend, Carrie Louise, at Stonygates—an estate that doubles as a rehabilitation center for delinquent boys. The atmosphere is tense: financial worries, ideological clashes, and simmering resentments swirl among family members and staff. During a dramatic confrontation in Carrie Louise’s office, a gun is fired elsewhere in the house, and a man is found dead. The apparent sequence of events seems impossible, as though everyone’s attention has been deliberately misdirected. Miss Marple, attuned to human frailties rather than grand theatrics, realises that the crime depends on carefully staged illusions—“tricks” done not with stage props, but with assumptions, timing, and perception. First published in 1952 (UK edition 17 November 1952), the novel combines country-house tension with themes of loyalty, idealism, and the deceptive comfort of familiar roles.",
+                            Pages = 192,
                             PublishedDate = new DateTime(1952, 11, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "At a charitable mansion for troubled boys, a staged shooting hides a more sinister crime that Miss Marple must see through the ‘smoke and mirrors’.",
@@ -8340,6 +8545,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "A Pocket Full of Rye begins when financier Rex Fortescue collapses and dies in his office, later found to have traces of taxine—a poison extracted from yew berries—in his system. The oddest detail: a handful of rye grains in his pocket. When further deaths occur at the Fortescue family home, each echoing lines from the nursery rhyme \"Sing a Song of Sixpence\", it becomes clear that the killer is staging a grotesque pattern. Miss Marple enters the case through the murdered parlourmaid, Gladys Martin, whom she once trained and feels honour-bound to avenge. As she observes the dysfunctional Fortescue household—riven by greed, resentment, and old grievances—she pieces together how the rhyme has been twisted into a blueprint for murder. First published on 9 November 1953, the novel showcases Christie’s fascination with nursery rhymes as sinister frameworks and highlights Miss Marple’s blend of compassion and ruthless clarity.",
+                            Pages = 192,
                             PublishedDate = new DateTime(1953, 11, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A wealthy businessman dies with rye in his pocket, and a trail of nursery-rhyme murders brings Miss Marple into a poisoned family circle.",
@@ -8355,6 +8561,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "In 4.50 from Paddington (published in the US as What Mrs. McGillicuddy Saw!), Mrs Elspeth McGillicuddy is dozing on a train when another train overtakes hers. As the carriages run side by side, she sees, through a briefly unobscured window, a man strangling a woman. Shocked and disbelieved by the authorities when no body is discovered, she turns to her friend Miss Marple. Convinced that the murder was real, Miss Marple calculates where the body must have been thrown from the train and enlists the capable young housekeeper Lucy Eyelesbarrow to go undercover at the nearby country estate, Rutherford Hall. Among its inhabitants lies both the corpse’s resting place and a complex network of motives. First published on 4 November 1957, the novel blends railway mystery, country-house intrigue, and Christmas-season atmosphere as Miss Marple orchestrates an investigation from the sidelines, proving that age and frailty are no barrier to sharp deduction.",
+                            Pages = 256,
                             PublishedDate = new DateTime(1957, 11, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A woman witnesses a murder on a passing train, but with no body to be found, Miss Marple must uncover where—and why—the victim disappeared.",
@@ -8370,6 +8577,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "First published in 1962, The Mirror Crack'd from Side to Side finds Miss Marple confronting change in the once-quiet village of St Mary Mead, now transformed by modern housing and new residents. Among them is Marina Gregg, a famous film actress who has bought the local estate. During a fête at her home, a fan who has just spoken to Marina suddenly collapses and dies after drinking a poisoned cocktail, leading everyone to assume that the actress was the real target. As the police investigate, Miss Marple quietly pieces together eyewitness accounts, old gossip and a half-overheard quotation to reveal how a long-buried tragedy and a chance encounter years earlier created the motive for murder. The novel blends classic village mystery elements with a poignant exploration of guilt, trauma and the destructive side of celebrity. :contentReference[oaicite:0]{index=0}",
+                            Pages = 256,
                             PublishedDate = new DateTime(1962, 11, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "When a glamorous film star moves to St Mary Mead and a fan is murdered at her party, Miss Marple must uncover a tragic secret hidden behind a perfect face.",
@@ -8385,6 +8593,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "A Caribbean Mystery, first published in 1964, takes Miss Marple away from St Mary Mead to a luxurious Caribbean resort, sent there by her nephew to recover her strength. The seemingly idyllic setting is peopled by a mix of wealthy tourists and long-term residents, including Major Palgrave, an elderly bore who claims to have once known a man who got away with murder. Before he can show Miss Marple a vital photograph, he is found dead and the picture has vanished. When another suspicious death follows, Miss Marple realises that the story of the unpunished killer is directly connected to the hotel’s guests. Using her sharp understanding of human nature, she cuts through flirtations, gossip and false identities to expose a modern murderer hiding behind a carefully constructed persona. :contentReference[oaicite:1]{index=1}",
+                            Pages = 256,
                             PublishedDate = new DateTime(1964, 11, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "On holiday in the Caribbean, Miss Marple is drawn into a web of lies and hidden pasts after a retired major who hints at a murderer in their midst turns up dead.",
@@ -8400,6 +8609,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "At Bertram’s Hotel, first published in 1965, follows Miss Marple to a perfectly preserved London hotel that seems untouched by time. Bertram’s offers the kind of pre-war comfort, manners and food that she remembers from her youth, yet there is something oddly stage-managed about its perfection. As she observes the comings and goings of clergy, aristocrats, wealthy Americans and a notorious adventuress, a series of incidents—including an attempted murder, an apparent disappearance and a string of daring robberies—suggest that the hotel is the hub of a sophisticated criminal operation. Miss Marple’s quiet observations of staff routines, guest behaviour and tiny anachronisms ultimately reveal how the façade of old-world respectability is being used to conceal a modern, highly organised scheme that leads to murder. :contentReference[oaicite:2]{index=2}",
+                            Pages = 256,
                             PublishedDate = new DateTime(1965, 11, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Miss Marple’s nostalgic stay at an old-fashioned London hotel turns sinister as genteel charm masks theft, deception, and a deadly crime.",
@@ -8415,6 +8625,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Nemesis, first published in 1971, finds Miss Marple named in the will of Jason Rafiel, a wealthy businessman she met on a previous case. From beyond the grave, Rafiel charges her with investigating an unspecified injustice, giving only the cryptic keyword ‘Nemesis’ and arranging for her to join a peculiar coach tour of English gardens and historic houses. With no clear crime, victim or suspect, Miss Marple must work out what Rafiel wants her to uncover, gradually connecting the tour to the unsolved murder of a young woman and the ruin of a local family years earlier. As she probes old scandals and contrasting sisters, she comes to understand Rafiel’s final wish: that she bring retribution to the true culprit and justice to the dead. The novel is one of Christie’s most reflective late works, meditating on ageing, responsibility and the idea of fate as Miss Marple’s reputation as ‘Nemesis’ is fully realised. :contentReference[oaicite:3]{index=3}",
+                            Pages = 256,
                             PublishedDate = new DateTime(1971, 11, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "After the death of an old acquaintance, Miss Marple is tasked from beyond the grave with solving a mysterious crime she knows nothing about.",
@@ -8430,6 +8641,8 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Sleeping Murder: Miss Marple’s Last Case was written during the 1940s but held back and first published in 1976, the final Miss Marple novel to appear in print. The story follows Gwenda Reed, a young woman who moves to England to find a house for herself and her husband. She impulsively buys a seaside villa that she feels she somehow recognises, and soon experiences unsettling flashes of déjà vu and a vivid memory of seeing a woman at the foot of the stairs, strangled. With Miss Marple’s guidance, Gwenda and her husband trace her fragmented childhood recollections back to a real crime hidden behind a façade of respectability. As they reopen an old scandal involving jealousy, infidelity and manipulation, they discover that the murderer is still alive and desperate to keep the past buried. Blending psychological unease with a classic cold-case puzzle, the novel serves as a fitting final showcase for Miss Marple’s insight into family secrets and the persistence of evil. :contentReference[oaicite:4]{index=4}",
+                            Pages = 224,
+                            PublishedDate = new DateTime(1976, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Newly married Gwenda Reed begins to suspect she once witnessed a murder as a child, and Miss Marple helps her uncover a terrifying past that refuses to stay buried.",
                             Title = "Sleeping Murder"
@@ -8444,6 +8657,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Secret Adversary, first published in 1922, introduces Agatha Christie's spirited duo Tommy Beresford and Tuppence Cowley. Set in the aftermath of World War I, the story begins when the pair, short on money and long on audacity, decide to start a business as 'young adventurers for hire.' They soon find themselves drawn into a dangerous web of espionage and conspiracy when they are hired to find a missing woman, Jane Finn, who vanished with highly sensitive government papers aboard the doomed Lusitania.\n\nAs Tommy and Tuppence follow a trail of clues through London high society and the criminal underworld, they pursue the identity of the mysterious 'Mr. Brown,' a ruthless mastermind manipulating events from the shadows. The novel blends classic Christie plotting with a more lighthearted, action-driven tone, showcasing the duo's charm, nerve, and ingenuity as they race to prevent a political catastrophe.",
+                            Pages = 320,
                             PublishedDate = new DateTime(1922, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Tommy and Tuppence embark on their first adventure, hunting a shadowy master criminal tied to post-war political intrigue.",
@@ -8459,6 +8673,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "N or M?, first published in 1941, is a World War II-era espionage mystery featuring the married detective team Tommy and Tuppence Beresford. Feeling sidelined by the war effort due to their age, the couple is secretly recruited by British intelligence to track down two dangerous enemy agents operating in England, known only by the code names 'N' and 'M.'\n\nTheir mission takes them undercover to the sleepy seaside resort of Leahampton, where they pose as ordinary guests at the boardinghouse Sans Souci. Beneath the cosy surface, however, lies a nest of suspicion, secrets, and potential traitors. Unsure whom to trust among the seemingly harmless residents, Tommy and Tuppence must use their wits and courage to identify the infiltrators before they can sabotage the war effort. Blending spy thriller tension with domestic setting and Christie-style misdirection, the novel explores themes of patriotism, trust, and the hidden dangers of ordinary life in wartime.",
+                            Pages = 192,
                             PublishedDate = new DateTime(1941, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "During World War II, Tommy and Tuppence are sent to a quiet seaside guesthouse to unmask a deadly enemy spy known only as N or M.",
@@ -8474,6 +8689,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "By the Pricking of My Thumbs, first published in 1968, reunites an older Tommy and Tuppence Beresford in a darker, more unsettling mystery. While visiting Tommy's elderly Aunt Ada in a nursing home, Tuppence meets a confused resident, Mrs. Lancaster, who asks, 'Was it your poor child?' in a chilling, inexplicable way. After Aunt Ada dies and Mrs. Lancaster mysteriously disappears, Tuppence becomes obsessed with uncovering the meaning behind the woman's strange words.\n\nHer search leads the couple to a village and a house Tuppence recognizes from a painting, drawing them into a sinister story involving missing children, buried secrets, and an old crime that has never truly been laid to rest. The novel blends domestic detail with a creeping sense of menace, showing Christie in a more Gothic and psychological mode, while still retaining the warmth and banter of the Beresfords' long marriage.",
+                            Pages = 256,
                             PublishedDate = new DateTime(1968, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A disturbing remark in a nursing home and a vanished old woman lead Tommy and Tuppence into a decades-old child murder case.",
@@ -8489,6 +8705,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Postern of Fate, first published in 1973, is the last novel featuring Tommy and Tuppence Beresford and the final full-length detective novel Agatha Christie wrote. Now retired, the couple move into a rambling old house in a quiet English village. While unpacking, Tuppence stumbles across an old children's book that contains a cryptic message: a child claims to have witnessed a murder many years earlier.\n\nIntrigued, Tommy and Tuppence begin to investigate the house's past and the village's long-buried secrets. Their inquiries link the message to a wartime crime and possible enemy activity, suggesting that a seemingly innocent event in the past may have had deadly consequences. As they dig deeper into half-forgotten scandals and local gossip, the Beresfords confront the way history lingers in places and people. The novel is a nostalgic farewell to the duo, blending mystery, memory, and the passage of time.",
+                            Pages = 256,
                             PublishedDate = new DateTime(1973, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "In their final case, Tommy and Tuppence uncover a buried wartime secret after finding a cryptic message in an old children's book.",
@@ -8504,6 +8721,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "First published in 1925, The Secret of Chimneys is a lively mix of mystery, political intrigue, and light-hearted adventure. When a set of compromising political memoirs and a murder become entangled at the grand country estate of Chimneys, amateur adventurer Anthony Cade finds himself drawn into a web of international conspiracy. Secret identities, hidden pasts, and royal claims all intersect, as Scotland Yard and various shadowy figures converge on the house. Combining witty dialogue, eccentric characters, and a twisting plot, the novel showcases Christie’s playful side while still delivering a satisfying whodunit.",
+                            Pages = 310,
                             PublishedDate = new DateTime(1925, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A country house gathering turns deadly as political intrigue, stolen letters, and murder collide at Chimneys.",
@@ -8519,6 +8737,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Published in 1929, The Seven Dials Mystery returns readers to the world of Chimneys and follows the energetic Lady Eileen \"Bundle\" Brent as she stumbles into a new and deadly puzzle. What begins as a harmless prank involving alarm clocks soon turns sinister when one of the house guests is found dead, a mysterious group called the Seven Dials is mentioned, and shadowy figures appear to be pulling strings behind the scenes. With conspiracies, secret meetings, and hidden motives, the novel blends light-hearted country house humor with a high-stakes mystery, featuring Bundle as an unusually bold and modern heroine for her time.",
+                            Pages = 282,
                             PublishedDate = new DateTime(1929, 1, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A practical joke gone wrong leads to murder and a secret society known as the Seven Dials.",
@@ -8534,6 +8753,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Published in 1939, Murder Is Easy (also known as Easy to Kill in the US) is a standalone crime novel that begins when Luke Fitzwilliam meets an elderly woman on a train who insists that a series of recent deaths in her village are murders, not accidents. When Luke later learns she herself has been killed, he travels to the village to investigate. Beneath the surface of a seemingly peaceful community, he finds secrets, grudges, and a terrifyingly ruthless killer who hides behind a façade of normalcy. The novel is a blend of village mystery, psychological tension, and slow-burning romance, showcasing Christie’s talent for revealing the darkness that can lurk under a charming exterior.",
+                            Pages = 256,
                             PublishedDate = new DateTime(1939, 6, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A string of \"accidental\" deaths in a quiet village leads to the chilling hunt for a cunning serial killer.",
@@ -8549,6 +8769,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Towards Zero, first published in 1944, is a carefully structured mystery that explores the idea that a murder begins long before the fatal act. When several people with complicated past ties gather at the seaside home of Lady Tressilian, tensions rise among ex-spouses, new partners, and old friends. What appears to be a domestic tangle escalates into murder, and Superintendent Battle is called in to investigate. Christie plays with time, motive, and perspective, gradually revealing how events long in the past lead inexorably toward the \"zero hour.\" The novel combines psychological insight with classic clue-based detection, making it one of her more thematically ambitious works.",
+                            Pages = 160,
                             PublishedDate = new DateTime(1944, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A gathering at a seaside house builds inexorably toward murder as past grievances and hidden motives converge.",
@@ -8564,6 +8785,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Man in the Brown Suit, first published in the UK on 22 August 1924, is an early thriller by Agatha Christie that blends crime, espionage, and high adventure. The story follows Anne Beddingfeld, a spirited young woman eager for excitement after her father’s death. When she sees a man fall to his death in the London Underground and discovers a cryptic note nearby, she impulsively decides to investigate. Her search leads her onto a ship bound for South Africa, where she encounters a cast of suspicious fellow passengers, smuggling, diamond theft, and a shadowy mastermind known only as ‘The Colonel.’ The novel introduces the recurring character Colonel Race and showcases Christie’s flair for romantic adventure alongside mystery, with exotic settings, kidnappings, and disguises playing a central role in the plot.",
+                            Pages = 312,
                             PublishedDate = new DateTime(1924, 8, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "An adventurous young woman witnesses a mysterious death and follows a dangerous trail from London to South Africa.",
@@ -8579,6 +8801,8 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Sparkling Cyanide, first published in 1945 (initially in the US under the title Remembered Death), is a Colonel Race novel built around memory, guilt, and the lingering effects of a past crime. Rosemary Barton, a beautiful and wealthy socialite, collapses and dies at a restaurant dinner, apparently from suicide after a bout of depression. A year later, her husband George, troubled by anonymous hints that Rosemary may have been murdered, recreates the fateful dinner at the same restaurant with the same guests, hoping to flush out the killer. Instead, another death occurs, plunging the group into suspicion and fear. Colonel Race and others must reexamine the earlier tragedy, the guests’ motives, and the subtle psychological pressures at play. The novel revisits and expands on Christie’s earlier short story ‘Yellow Iris,’ turning it into a full-length mystery about love, money, and calculated revenge.",
+                            Pages = 160,
+                            PublishedDate = new DateTime(1945, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A year after a woman’s death at a glittering dinner, her husband restages the party to prove it was murder—only for tragedy to strike again.",
                             Title = "Sparkling Cyanide"
@@ -8593,6 +8817,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Sittaford Mystery is a standalone detective novel set on the bleak, snow-covered heights of Dartmoor. During an evening of table-turning in the remote settlement of Sittaford, the ‘spirits’ announce that local landowner Captain Trevelyan has been murdered. Shocked but sceptical, Major Burnaby treks through the storm to the nearby village—only to find that Trevelyan really is dead. With roads blocked and suspects scattered between Sittaford and the village, the investigation soon becomes a tangle of alibis, secrets, and red herrings. It falls to the sharp-witted Emily Trefusis, Trevelyan’s nephew’s fiancée, to pry into motives ranging from financial desperation to hidden identities. Blending a wintry, slightly eerie atmosphere with classic clue-based detection, the novel showcases Christie experimenting with a touch of the supernatural while still delivering a fair-play puzzle.",
+                            Pages = 256,
                             PublishedDate = new DateTime(1931, 9, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A snowbound Dartmoor village, a séance that predicts a death, and a determined young woman who refuses to accept the obvious solution.",
@@ -8608,6 +8833,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Why Didn’t They Ask Evans? is a light, adventurous mystery featuring two spirited amateurs rather than Christie’s regular detectives. When Bobby Jones, a vicar’s son and casual golfer, finds a man dying at the foot of a Welsh cliff, the stranger’s last words—“Why didn’t they ask Evans?”—stick in his mind. Shortly afterwards, a photograph of a glamorous woman connected to the dead man is mysteriously swapped out, convincing Bobby that something is very wrong. Teaming up with his quick-witted childhood friend Lady Frances ‘Frankie’ Derwent, he plunges into a trail of bogus identities, attempted murders, and country-house intrigues. The novel combines humour and romance with a twisty plot, as Bobby and Frankie bluff, disguise themselves, and narrowly dodge danger while trying to understand who Evans is—and why asking them would have changed everything.",
+                            Pages = 256,
                             PublishedDate = new DateTime(1934, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A dying man’s cryptic question sends two amateur sleuths racing through country houses and conspiracies to uncover a buried truth.",
@@ -8623,6 +8849,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "And Then There Were None is one of Agatha Christie’s most iconic and unsettling novels. Ten people, each with a concealed crime in their past, are invited to a secluded island off the Devon coast by a mysterious host known only as U. N. Owen. On their first evening, a gramophone recording accuses each guest of murder, and soon afterwards, people begin to die in ways that echo a sinister nursery rhyme displayed in each bedroom. Cut off from the mainland, with no apparent way for a killer to be hiding on the island, the survivors turn on one another as paranoia and guilt mount. There is no detective to step in; instead, the narrative becomes a relentless countdown as the guests try and fail to save themselves. Blending classic whodunit structure with psychological suspense and a bleak sense of justice, the novel remains one of the best-selling mysteries of all time and a cornerstone of crime fiction.",
+                            Pages = 272,
                             PublishedDate = new DateTime(1939, 11, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Ten strangers lured to a remote island are accused of past crimes and killed one by one in Christie’s most famous and chilling puzzle.",
@@ -8638,6 +8865,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Death Comes as the End is Christie’s only full-length novel set in the distant past, a historical mystery unfolding in Egypt around 2000 BC. Young widow Renisenb returns to her father Imhotep’s household, hoping for stability, only to see the family thrown into turmoil when Imhotep brings home a beautiful and manipulative concubine, Nofret. Nofret quickly makes enemies of Imhotep’s sons and their wives, while the seemingly devoted servant Henet seethes with secret resentments. When Nofret is found dead at the foot of a cliff, supposedly by accident, and further deaths follow, it becomes clear that someone within the family has turned their simmering hatreds into murder. Without any modern forensics or investigators, the mystery hinges entirely on character, motive, and the patterns of fear and jealousy in a closed household. The novel blends the rhythms of domestic drama with a classic whodunit structure, using its ancient setting to explore timeless themes of power, inheritance, and emotional corruption.",
+                            Pages = 223,
                             PublishedDate = new DateTime(1944, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "In ancient Thebes, a new concubine disrupts a priest’s household, and a series of deaths turns family tensions into a deadly mystery.",
@@ -8653,6 +8881,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Crooked House is a dark, psychologically rich family mystery that Christie counted among her own favourites. Aristide Leonides, a wealthy, self-made patriarch living in a rambling, literally and figuratively ‘crooked’ house on the outskirts of London, dies of what appears to be natural causes—until it is discovered that his eye medicine was laced with eserine. Suspicion falls heavily on his much younger second wife, but almost everyone in the sprawling Leonides clan has both opportunity and motive. The story is narrated by Charles Hayward, a diplomat and former intelligence officer in love with Aristide’s granddaughter Sophia, who insists she cannot marry him until the murderer is found. As Charles moves into the household, he confronts warped loyalties, buried resentments, and unsettling hints about the younger generation. The novel builds to one of Christie’s most shocking solutions, using the ‘crooked’ motif to explore how love, upbringing, and moral blindness can twist a person’s sense of right and wrong.",
+                            Pages = 192,
                             PublishedDate = new DateTime(1949, 5, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "In a wealthy but ‘crooked’ family, the poisoning of its patriarch forces a painful hunt for a killer who must be one of their own.",
@@ -8668,6 +8897,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "They Came to Baghdad, first published in 1951, is one of Agatha Christie’s few pure adventure and spy novels. The story follows Victoria Jones, a spontaneous and resourceful young woman who decides on a whim to travel to Baghdad after meeting a charming stranger in London. Once there, she finds herself entangled in a secret international conference, shadowy intelligence operations and a plot that could threaten world peace. As Victoria adopts false identities, hides in archaeological digs and navigates a city full of double-crossing agents, she must work out whom she can trust before it is too late. Drawing on Christie’s own travels in the Middle East, the novel blends light romance, espionage and political thriller elements against a vividly drawn Baghdad backdrop.",
+                            Pages = 256,
                             PublishedDate = new DateTime(1951, 3, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A young woman’s impulsive trip to Baghdad plunges her into an international conspiracy where political intrigue and danger lurk behind every charming stranger.",
@@ -8683,6 +8913,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Destination Unknown, first published in 1954 (US title: So Many Steps to Death), is a Cold War–era spy novel that departs from Christie’s usual whodunits. After a disastrous marriage, Hilary Craven travels to Morocco intending to end her life. Instead, she is approached by British intelligence and offered a different kind of escape: to assume the identity of the estranged wife of a vanished nuclear scientist and follow the trail of several missing geniuses. Hilary’s mission leads her across borders to a secret research commune where idealism, coercion and terror coexist. As she uncovers the truth about the disappearances and the real aims of those in charge, Hilary must decide what she is willing to risk to stop a threat that could alter the balance of power in the world. The novel mixes personal rebirth with a tense, conspiracy-driven plot framed by mid-century fears about scientific progress and political extremism.",
+                            Pages = 192,
                             PublishedDate = new DateTime(1954, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "On the brink of suicide, a woman is recruited to impersonate a missing scientist’s wife and infiltrate a mysterious organisation that makes brilliant minds vanish.",
@@ -8698,6 +8929,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Ordeal by Innocence, first published in 1958, is one of Christie’s darker, more character-driven crime novels. The wealthy philanthropist Rachel Argyle has been bludgeoned to death, and her adopted son Jacko is convicted of the murder and dies in prison protesting his innocence. Two years later, Dr Arthur Calgary arrives at the Argyle home with a devastating revelation: he can prove Jacko’s alibi. Instead of bringing relief, his news tears open old wounds and transforms every member of the household into a potential suspect. Is someone lying to protect themselves—or someone they love? As Calgary pushes on, he uncovers simmering resentments, rivalries and secrets within the family, and the question of who killed Rachel becomes inseparable from the question of who can bear to know the truth. The novel focuses less on clue-puzzle detection and more on the psychological impact of doubt, guilt and the destructive power of a wrongful conviction.",
+                            Pages = 256,
                             PublishedDate = new DateTime(1958, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Years after a man dies in prison for murdering his adoptive mother, a new witness comes forward—forcing a family to relive the past and face the possibility that the real killer is still among them.",
@@ -8713,6 +8945,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Pale Horse, first published in 1961, is a standalone crime novel that flirts with the supernatural while offering a rational, shocking explanation. The story begins when a priest, shortly after hearing a mysterious deathbed confession, is murdered in the street. Among his belongings is a list of names, several of whom soon die in apparently natural circumstances. Writer Mark Easterbrook traces the trail to a former inn called The Pale Horse, now home to three eccentric women whispered to be modern witches who can arrange deaths from a distance. As Mark and his friends investigate, they encounter séances, village gossip and an unsettling blend of folklore and pseudo-science. Beneath the talk of curses lies a very real, very modern murder mechanism, and Christie uses the case to explore how fear, suggestion and scientific ignorance can be weaponised. The novel is notable for its eerie atmosphere and its use of an unusual poisoning method at the heart of the solution.",
+                            Pages = 256,
                             PublishedDate = new DateTime(1961, 11, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A dying woman’s confession and a list of names lead to a country pub called The Pale Horse, where rumours of witchcraft may conceal a far more chilling method of murder.",
@@ -8728,6 +8961,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Endless Night, first published in 1967, is a psychological crime novel narrated in the first person by Michael Rogers, a drifter dissatisfied with his prospects. Michael becomes obsessed with Gipsy’s Acre, a piece of land said to be cursed, and with Ellie Guteman, a shy American heiress. Defying her disapproving family and ominous warnings from a local gypsy, the couple marry and commission a modernist dream home on the site. What begins as a romantic escape gradually turns sinister as tensions with Ellie’s entourage grow and a series of accidents and deaths shake their new life. Christie slowly peels back Michael’s version of events to reveal a far darker truth about his motives and the forces driving the tragedy. With its modern setting, intimate viewpoint and devastating twist, the novel stands out in Christie’s late work as a bleak, tightly wound study of obsession, class aspiration and the consequences of manipulating fate.",
+                            Pages = 224,
                             PublishedDate = new DateTime(1967, 10, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A restless young man marries a rich heiress and builds his dream house on cursed land—only to find that envy, deception and desire can be more deadly than any legend.",
@@ -8743,6 +8977,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Passenger to Frankfurt, first published in 1970, is one of Agatha Christie's late-career political and espionage thrillers. The story follows Sir Stafford Nye, a British diplomat returning home via Frankfurt Airport, where a frightened young woman approaches him begging to borrow his passport and identity, claiming her life is in danger. On an impulse, Nye agrees, setting in motion a chain of events that plunges him into a dangerous international intrigue.\n\nHe soon discovers that he has stumbled into a vast, loosely organized conspiracy seeking to destabilize governments and exploit youth unrest and neo-fascist currents across Europe. As Nye is drawn deeper into this world of secret meetings, coded messages, and elusive leaders, he must navigate both political manipulation and personal risk to uncover the truth. The novel mixes Christie’s familiar mystery elements with Cold War anxieties, youth radicalization, and the fear of history repeating itself.",
+                            Pages = 256,
                             PublishedDate = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A weary diplomat’s chance encounter at an airport draws him into a shadowy global conspiracy of political extremism and unrest.",
@@ -8758,6 +8993,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Giant's Bread, first published in 1930 under Agatha Christie's pseudonym Mary Westmacott, is a deeply emotional novel about music, love, and the cost of genius. It centres on Vernon Deyre, a sensitive boy who discovers an extraordinary gift for music. As he grows, Vernon grapples with family expectations, financial insecurity, and the tension between personal happiness and artistic destiny.\n\nAgainst a backdrop of social change and the looming threat of war, Vernon’s relationships—with his childhood friend Joe, his first love Nell, and the glamorous but demanding Jane—shape and complicate his choices. A catastrophic event in his adult life leads to a dramatic reinvention and a haunting question of identity. Blending romance, psychological insight, and the world of high art, the novel explores what it means to devote oneself completely to a creative calling, and the emotional wreckage such devotion can leave behind.",
+                            Pages = 448,
                             PublishedDate = new DateTime(1930, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A gifted composer’s rise, fall, and search for identity unfold in a sweeping tale of love, art, and sacrifice.",
@@ -8773,6 +9009,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Unfinished Portrait, first published in 1934 under the name Mary Westmacott, is a largely character-driven, semi-autobiographical novel. It follows Celia, a woman in deep emotional crisis, who is contemplating suicide after the collapse of her marriage and the disintegration of her sense of self. On a holiday island, she meets Larraby, a famous painter, and over the course of one long night she tells him the story of her life.\n\nThrough Celia’s recollections—from her sheltered childhood and early romantic idealism to marriage, motherhood, betrayal, and heartbreak—the reader sees the gradual erosion and rebuilding of her identity. Larraby listens, probes, and interprets, effectively ‘painting’ her in words. The novel offers a penetrating exploration of emotional vulnerability, the expectations placed on women, and the quiet desperation that can lurk beneath outwardly ordinary lives.",
+                            Pages = 320,
                             PublishedDate = new DateTime(1934, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A woman on the brink of suicide recounts her life to a stranger, revealing a nuanced portrait of love, loss, and self-discovery.",
@@ -8788,6 +9025,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "Absent in the Spring, first published in 1944 as a Mary Westmacott novel, is an introspective, non-crime story about self-knowledge and denial. Joan Scudamore, a capable, confident middle-class woman, becomes stranded at a small rest house in the desert on her way back to England from visiting her daughter in Iraq. With nothing to do and no one familiar to distract her, Joan is left alone with her thoughts for the first time in years.\n\nIn this enforced isolation, she begins to re-examine her past—her marriage, her relationships with her children, and her own actions—with an increasingly unflinching eye. The image of herself as a devoted wife and mother gradually crumbles as she recognizes the subtle cruelty, selfishness, and lack of empathy that have shaped her family’s lives. The novel is a stark, psychologically acute portrait of a woman confronted with the truth about who she really is, and what it may already be too late to repair.",
+                            Pages = 160,
                             PublishedDate = new DateTime(1944, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "Stranded between journeys, a self-assured woman is forced into a painful, honest reckoning with the reality of her life and relationships.",
@@ -8803,6 +9041,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Rose and the Yew Tree, first published in 1948 under the Mary Westmacott pen name, is a sombre, character-focused novel set in the aftermath of World War II. The story is narrated by Hugh Norreys, a disabled man confined by illness and circumstance, who watches the world—and the people he cares about—from a distance. His quiet existence is disrupted by the rise of John Gabriel, a dynamic local politician, and the arrival of Isabella, a strangely aloof young woman with whom Gabriel becomes involved.\n\nAs Hugh observes their turbulent relationship, he becomes increasingly aware of the emotional and moral costs of ambition, charisma, and idealization. The novel weaves themes of sacrifice, disillusionment, and the clash between romantic ideals and harsh reality. It is less a conventional romance than a meditation on the ways people use one another, and how a single intense relationship can alter the trajectories of several lives.",
+                            Pages = 224,
                             PublishedDate = new DateTime(1948, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A reserved observer becomes entangled in the lives of a charismatic politician and the enigmatic woman who may destroy him.",
@@ -8818,6 +9057,7 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "A Daughter's a Daughter, written earlier but first published as a novel in 1952 under the Mary Westmacott name, examines the fraught relationship between a mother and her daughter. Ann Prentice, a widow devoted to her grown daughter Sarah, unexpectedly falls in love and plans to remarry. What she imagines will be a new beginning is met instead with fierce resistance and jealousy from Sarah, who feels displaced and betrayed.\n\nThe story follows the escalating emotional warfare between mother and daughter as resentment, manipulation, and wounded pride lead them toward choices that may irreparably damage their relationship. Christie explores the darker side of familial love—the possessiveness, the unspoken expectations, and the difficulty of allowing loved ones to change. The novel is an unflinching study of generational conflict and the painful price of emotional immaturity on both sides.",
+                            Pages = 200,
                             PublishedDate = new DateTime(1952, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "The bond between a widowed mother and her only daughter shatters when love, jealousy, and the desire for independence collide.",
@@ -8833,11 +9073,181 @@ namespace BookHub.Data.Migrations
                             IsApproved = true,
                             IsDeleted = false,
                             LongDescription = "The Burden, first published in 1956 as a Mary Westmacott novel, tells the story of an intense, complicated bond between two sisters. When Laura Franklin, a shy and overlooked child, believes that she has saved the life of her baby sister Shirley, she feels an overwhelming sense of responsibility and love that borders on obsession. As they grow up, Laura dedicates herself to Shirley’s happiness, often at the cost of her own opportunities and desires.\n\nShirley, beautiful and charismatic, comes to rely on this devotion without fully understanding its depth or its possessive edge. When Shirley’s choices in love and life clash with Laura’s fierce protective instincts, the relationship twists into jealousy, sacrifice, and emotional manipulation. The novel charts decades of entanglement, asking how love can become a burden—both to the one who gives it and the one who receives it—and whether it is ever possible to break free from roles adopted in childhood.",
+                            Pages = 236,
                             PublishedDate = new DateTime(1956, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RatingsCount = 0,
                             ShortDescription = "A woman’s consuming devotion to her younger sister becomes a lifelong burden that distorts love into something dangerous.",
                             Title = "The Burden"
                         });
+                });
+
+            modelBuilder.Entity("BookHub.Features.Books.Data.Models.BookEditDbModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AuthorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BookId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("GenresJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LongDescription")
+                        .IsRequired()
+                        .HasMaxLength(10000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Pages")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("PublishedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RequestedById")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ShortDescription")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId")
+                        .IsUnique();
+
+                    b.ToTable("BookEdits");
+                });
+
+            modelBuilder.Entity("BookHub.Features.Challenges.Data.Models.ReadingChallengeDbModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("GoalType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GoalValue")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId", "Year")
+                        .IsUnique();
+
+                    b.ToTable("ReadingChallenges");
+                });
+
+            modelBuilder.Entity("BookHub.Features.Challenges.Data.Models.ReadingCheckInDbModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId", "Date")
+                        .IsUnique();
+
+                    b.ToTable("ReadingCheckIns");
                 });
 
             modelBuilder.Entity("BookHub.Features.Chat.Data.Models.ChatDbModel", b =>
@@ -9435,8 +9845,8 @@ namespace BookHub.Data.Migrations
                     b.Property<Guid>("BookId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<DateTime?>("CompletedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -9459,9 +9869,14 @@ namespace BookHub.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("UserId", "BookId", "Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "BookId");
 
                     b.HasIndex("BookId");
+
+                    b.HasIndex("UserId", "Status", "CompletedOn");
 
                     b.ToTable("ReadingLists");
                 });
@@ -9606,7 +10021,7 @@ namespace BookHub.Data.Migrations
                     b.Property<int>("CurrentlyReadingBooksCount")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("DateOfBirth")
+                    b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
@@ -9842,6 +10257,17 @@ namespace BookHub.Data.Migrations
                     b.Navigation("Creator");
                 });
 
+            modelBuilder.Entity("BookHub.Features.Authors.Data.Models.AuthorEditDbModel", b =>
+                {
+                    b.HasOne("BookHub.Features.Authors.Data.Models.AuthorDbModel", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+                });
+
             modelBuilder.Entity("BookHub.Features.Books.Data.Models.BookDbModel", b =>
                 {
                     b.HasOne("BookHub.Features.Authors.Data.Models.AuthorDbModel", null)
@@ -9865,6 +10291,39 @@ namespace BookHub.Data.Migrations
                     b.Navigation("Author");
 
                     b.Navigation("Creator");
+                });
+
+            modelBuilder.Entity("BookHub.Features.Books.Data.Models.BookEditDbModel", b =>
+                {
+                    b.HasOne("BookHub.Features.Books.Data.Models.BookDbModel", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+                });
+
+            modelBuilder.Entity("BookHub.Features.Challenges.Data.Models.ReadingChallengeDbModel", b =>
+                {
+                    b.HasOne("BookHub.Features.Identity.Data.Models.UserDbModel", "User")
+                        .WithMany("ReadingChallenges")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BookHub.Features.Challenges.Data.Models.ReadingCheckInDbModel", b =>
+                {
+                    b.HasOne("BookHub.Features.Identity.Data.Models.UserDbModel", "User")
+                        .WithMany("ReadingCheckIns")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BookHub.Features.Chat.Data.Models.ChatDbModel", b =>
@@ -10064,6 +10523,10 @@ namespace BookHub.Data.Migrations
                     b.Navigation("ChatsUsers");
 
                     b.Navigation("Profile");
+
+                    b.Navigation("ReadingChallenges");
+
+                    b.Navigation("ReadingCheckIns");
 
                     b.Navigation("ReadingLists");
 

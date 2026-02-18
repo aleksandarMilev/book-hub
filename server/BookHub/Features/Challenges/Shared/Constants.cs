@@ -4,8 +4,6 @@ public static class Constants
 {
     public static class ErrorMessages
     {
-        public const string Unauthorized = "Unauthorized.";
-
         public const string InvalidYear = "Invalid year.";
 
         public const string InvalidGoal = "Invalid goal value.";
@@ -24,5 +22,7 @@ public static class Constants
         public const int MaxYear = 2_100;
 
         public const int MinGoalValue = 1;
+
+        public const int MaxGoalValue = int.MaxValue;
     }
 }

@@ -160,6 +160,30 @@ const BookForm: FC<Props> = ({ bookData = null, isEditMode = false }) => {
 
                     <MDBRow>
                       <MDBCol md="12">
+                        {formik.touched.pages && formik.errors.pages && (
+                          <div className="text-danger mb-2">{formik.errors.pages as string}</div>
+                        )}
+                        <label htmlFor="pages" className="form-label book-form-image-label">
+                          {t('form.labels.pages', { defaultValue: 'Pages' })}
+                        </label>
+                        <MDBInput
+                          wrapperClass="mb-4"
+                          label=""
+                          size="lg"
+                          id="pages"
+                          type="number"
+                          min={1}
+                          step={1}
+                          {...formik.getFieldProps('pages')}
+                          className={
+                            formik.touched.pages && formik.errors.pages ? 'is-invalid' : ''
+                          }
+                        />
+                      </MDBCol>
+                    </MDBRow>
+
+                    <MDBRow>
+                      <MDBCol md="12">
                         {formik.touched.shortDescription && formik.errors.shortDescription && (
                           <div className="text-danger mb-2">{formik.errors.shortDescription}</div>
                         )}
@@ -242,5 +266,3 @@ const BookForm: FC<Props> = ({ bookData = null, isEditMode = false }) => {
 };
 
 export default BookForm;
-
-

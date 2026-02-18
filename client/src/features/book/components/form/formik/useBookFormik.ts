@@ -59,6 +59,7 @@ export const useBookFormik = ({ bookData = null, isEditMode = false }: Props) =>
       shortDescription: bookData?.shortDescription ?? '',
       longDescription: bookData?.longDescription ?? '',
       genres: bookData?.genres?.map((g) => g.id) ?? [],
+      pages: bookData?.pages ?? null,
     }),
     [bookData],
   );
@@ -92,6 +93,7 @@ export const useBookFormik = ({ bookData = null, isEditMode = false }: Props) =>
         longDescription: values.longDescription,
         publishedDate: normalizeDate(values.publishedDate),
         genres: values.genres,
+        pages: values.pages ?? null,
       };
 
       try {

@@ -1,0 +1,58 @@
+{
+  "page": {
+    "title": "Предизвикателства",
+    "subtitle": "Постави годишна цел, следи прогреса и поддържай ежедневна серия от четене."
+  },
+  "goalCard": {
+    "title": "Читателско предизвикателство {{year}}",
+    "subtitle": {
+      "noProgress": "Задай цел за {{year}}",
+      "withProgress": "{{current}} / {{goal}} {{unitLabel}}"
+    },
+    "progress": {
+      "current": "Текущо",
+      "goal": "Цел"
+    },
+    "form": {
+      "goalTypeLabel": "Тип цел",
+      "goalValueLabel": "Стойност на целта",
+      "types": {
+        "books": "Книги",
+        "pages": "Страници"
+      },
+      "hint": "Съвет: Избери реалистична цел. Можеш да я промениш по всяко време."
+    },
+    "actions": {
+      "save": "Запази целта",
+      "saving": "Запазване…"
+    }
+  },
+  "streakCard": {
+    "title": "Серия от четене",
+    "subtitle": "Отбелязвай веднъж дневно, за да запазиш серията.",
+    "stats": {
+      "current": "Текуща",
+      "longest": "Най-дълга"
+    },
+    "actions": {
+      "checkIn": "Отбележи за днес",
+      "checkingIn": "Отбелязване…",
+      "checkedIn": "Отбелязано за днес"
+    },
+    "status": {
+      "checkedIn": "Супер — за днес си готов/а."
+    }
+  },
+  "units": {
+    "books": "{{count}} книга",
+    "books_other": "{{count}} книги",
+    "pages": "{{count}} страница",
+    "pages_other": "{{count}} страници"
+  },
+  "messages": {
+    "saveSuccess": "Предизвикателството е обновено успешно!",
+    "saveError": "Неуспешно обновяване на предизвикателството.",
+    "checkInSuccess": "Отбелязано за днес!",
+    "checkInError": "Неуспешно отбелязване."
+  }
+}

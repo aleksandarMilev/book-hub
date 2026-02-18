@@ -4,6 +4,7 @@
     "nav": {
       "home": "Home",
       "books": "Books",
+      "challenges": "Challenges",
       "genres": "Genres",
       "authors": "Authors",
       "articles": "Articles",

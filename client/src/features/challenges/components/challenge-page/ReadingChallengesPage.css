@@ -1,0 +1,87 @@
+.challenge-page {
+  font-family: 'Inter', sans-serif;
+}
+
+.challenge-page__container {
+  padding-left: 12px;
+  padding-right: 12px;
+  max-width: 1100px;
+}
+
+.challenge-page__header {
+  margin-bottom: 18px;
+}
+
+.challenge-page__title {
+  font-size: 2.05rem;
+  font-weight: 900;
+  line-height: 1.1;
+  margin: 0;
+  background: linear-gradient(90deg, #6ea8fe, #9a6bff, #ff6ec7);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  word-break: break-word;
+}
+
+.challenge-page__subtitle {
+  margin-top: 10px;
+  margin-bottom: 0;
+  color: #5a6476;
+  max-width: 720px;
+  font-size: 1.02rem;
+  line-height: 1.65;
+}
+
+@media (max-width: 360px) {
+  .challenge-page__container {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .challenge-page__header {
+    margin-bottom: 14px;
+  }
+
+  .challenge-page__title {
+    font-size: 1.6rem;
+    line-height: 1.15;
+  }
+
+  .challenge-page__subtitle {
+    font-size: 0.95rem;
+    line-height: 1.55;
+    margin-top: 8px;
+  }
+}
+
+@media (min-width: 361px) and (max-width: 575.98px) {
+  .challenge-page__title {
+    font-size: 1.8rem;
+  }
+
+  .challenge-page__subtitle {
+    font-size: 0.98rem;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 991.98px) {
+  .challenge-page__container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .challenge-page__title {
+    font-size: 2rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .challenge-page__title {
+    font-size: 2.25rem;
+  }
+}
+
+.challenge-page__spinner {
+  margin-top: 28px;
+}

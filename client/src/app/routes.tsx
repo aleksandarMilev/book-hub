@@ -59,6 +59,10 @@ const EditChat = lazy(() => import('@/features/chat/components/edit/EditChat.jsx
 const ChatList = lazy(() => import('@/features/chat/components/list/ChatList.jsx'));
 const ChatDetails = lazy(() => import('@/features/chat/components/details/ChatDetails.jsx'));
 
+const ReadingChallengesPage = lazy(
+  () => import('@/features/challenges/components/challenge-page/ReadingChallengesPage'),
+);
+
 const BadRequest = lazy(() => import('@/shared/components/errors/bad-request/BadRequest.jsx'));
 const NotFound = lazy(() => import('@/shared/components/errors/not-found/NotFound.jsx'));
 const AccessDenied = lazy(
@@ -194,6 +198,11 @@ export const router = createBrowserRouter([
       {
         path: `${routes.chat}/:id`,
         element: withSuspense(<ChatRoute element={<ChatDetails />} />),
+      },
+
+      {
+        path: routes.readingChallenges.base,
+        element: withSuspense(<AuthenticatedRoute element={<ReadingChallengesPage />} />),
       },
 
       { path: routes.badRequest, element: withSuspense(<BadRequest />) },
