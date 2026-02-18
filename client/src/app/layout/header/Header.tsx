@@ -52,6 +52,9 @@ const Header: FC = () => {
               <Nav.Link as={Link} to={routes.book} onClick={closeMenu}>
                 {t('header.nav.books')}
               </Nav.Link>
+              <Nav.Link as={Link} to={routes.readingChallenges.base} onClick={closeMenu}>
+                {t('header.nav.challenges')}
+              </Nav.Link>
               <Nav.Link as={Link} to={routes.genres} onClick={closeMenu}>
                 {t('header.nav.genres')}
               </Nav.Link>

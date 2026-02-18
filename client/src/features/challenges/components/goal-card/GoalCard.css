@@ -1,0 +1,219 @@
+.challenge-goal-card {
+  border-radius: 18px;
+  border: none;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
+  overflow: hidden;
+}
+
+.challenge-goal-card__body {
+  padding: 22px 22px;
+  font-family: 'Inter', sans-serif;
+}
+
+.challenge-goal-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.challenge-goal-card__title {
+  font-size: 1.55rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 6px;
+  color: #1b1f2a;
+  word-break: break-word;
+}
+
+.challenge-goal-card__subtitle {
+  margin: 0;
+  color: #5a6476;
+  font-size: 0.95rem;
+  word-break: break-word;
+}
+
+.challenge-goal-card__badge {
+  background: linear-gradient(90deg, #6ea8fe, #9a6bff, #ff6ec7);
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  padding: 8px 12px;
+  border-radius: 999px;
+  box-shadow: 0 8px 16px rgba(154, 107, 255, 0.35);
+  flex-shrink: 0;
+}
+
+.challenge-goal-card__progress {
+  margin-top: 18px;
+}
+
+.challenge-goal-card__progress-bar {
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.challenge-goal-card__progress-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+  color: #5a6476;
+  font-size: 0.92rem;
+  flex-wrap: wrap;
+}
+
+.challenge-goal-card__form {
+  margin-top: 18px;
+  display: grid;
+  gap: 14px;
+}
+
+.challenge-goal-card__row {
+  display: grid;
+  gap: 8px;
+}
+
+.challenge-goal-card__label {
+  font-weight: 700;
+  color: #2b3242;
+  font-size: 0.92rem;
+}
+
+.challenge-goal-card__select {
+  border-radius: 14px;
+  padding: 12px 14px;
+  border: 1px solid #e6e8ef;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 6px 16px rgba(17, 24, 39, 0.06);
+}
+
+.challenge-goal-card__input .form-control,
+.challenge-goal-card__input input {
+  border-radius: 14px !important;
+}
+
+.challenge-goal-card__hint {
+  font-size: 0.86rem;
+  color: #6b7280;
+}
+
+.challenge-goal-card__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.challenge-goal-card__save-btn {
+  border: none;
+  border-radius: 14px;
+  padding: 10px 18px;
+  font-weight: 800;
+  background: linear-gradient(90deg, #6ea8fe, #9a6bff);
+  box-shadow: 0 10px 20px rgba(154, 107, 255, 0.28);
+  color: #fff;
+  line-height: 1.2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    filter 0.18s ease,
+    opacity 0.18s ease;
+}
+
+.challenge-goal-card__save-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(154, 107, 255, 0.36);
+  filter: brightness(1.02);
+}
+
+.challenge-goal-card__save-btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 8px 16px rgba(154, 107, 255, 0.3);
+}
+
+.challenge-goal-card__save-btn:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+  filter: none;
+}
+
+.challenge-goal-card__save-btn:focus {
+  outline: none;
+}
+
+.challenge-goal-card__save-btn:focus-visible {
+  outline: 3px solid rgba(110, 168, 254, 0.35);
+  outline-offset: 3px;
+}
+
+@media (max-width: 360px) {
+  .challenge-goal-card__body {
+    padding: 16px 14px;
+  }
+
+  .challenge-goal-card__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .challenge-goal-card__title {
+    font-size: 1.25rem;
+  }
+
+  .challenge-goal-card__subtitle {
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+
+  .challenge-goal-card__badge {
+    padding: 7px 10px;
+    font-size: 0.85rem;
+  }
+
+  .challenge-goal-card__progress-meta {
+    font-size: 0.9rem;
+  }
+
+  .challenge-goal-card__save-btn {
+    width: 100%;
+  }
+}
+
+@media (min-width: 361px) and (max-width: 575.98px) {
+  .challenge-goal-card__body {
+    padding: 18px 16px;
+  }
+
+  .challenge-goal-card__header {
+    flex-wrap: wrap;
+  }
+
+  .challenge-goal-card__title {
+    font-size: 1.35rem;
+  }
+
+  .challenge-goal-card__save-btn {
+    width: 100%;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 991.98px) {
+  .challenge-goal-card__body {
+    padding: 20px 20px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .challenge-goal-card__body {
+    padding: 24px 24px;
+  }
+}

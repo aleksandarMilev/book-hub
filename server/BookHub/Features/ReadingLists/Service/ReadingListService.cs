@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Models;
 using Shared;
 using UserProfile.Service;
+
 using static Common.Utils;
 using static Shared.Constants.ErrorMessages;
 
@@ -69,8 +70,10 @@ public class ReadingListService(
         => await data
             .ReadingLists
             .AsNoTracking()
-            .Where(rl => rl.UserId == userId)
-            .OrderByDescending(rl => rl.CreatedOn)
+            .Where(rl => 
+                rl.UserId == userId && 
+                rl.Status == ReadingListStatus.CurrentlyReading)
+            .OrderByDescending(rl => rl.ModifiedOn ?? rl.CreatedOn)
             .ToBookServiceModels()
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -82,20 +85,11 @@ public class ReadingListService(
         var bookId = serviceModel.BookId;
         var readingStatus = serviceModel.Status;
 
-        var exists = await data
-           .ReadingLists
-           .AsNoTracking()
-           .AnyAsync(
-               rl =>
-                   rl.UserId == userId &&
-                   rl.BookId == bookId &&
-                   rl.Status == readingStatus,
-               cancellationToken);
-
-        if (exists)
-        {
-            return BookAlreadyInTheList;
-        }
+        var existing = await data
+            .ReadingLists
+            .FirstOrDefaultAsync(
+                rl => rl.UserId == userId && rl.BookId == bookId,
+                cancellationToken);
 
         var bookIsNotValid = !await this.BookIsValid(bookId, cancellationToken);
         if (bookIsNotValid)
@@ -103,38 +97,57 @@ public class ReadingListService(
             return "Invalid Book Id!";
         }
 
-        var mapEntity = new ReadingListDbModel
+        if (existing is null)
         {
-            UserId = userId,
-            BookId = bookId,
-            Status = readingStatus,
-        };
+            var mapEntity = new ReadingListDbModel
+            {
+                UserId = userId,
+                BookId = bookId,
+                Status = readingStatus,
+                CompletedOn = readingStatus == ReadingListStatus.Read
+                    ? DateTime.UtcNow
+                    : null,
+            };
 
-        data.Add(mapEntity);
+            data.Add(mapEntity);
+            await data.SaveChangesAsync(cancellationToken);
+
+            await IncrementProfileCounter(
+                userId,
+                readingStatus,
+                cancellationToken);
+
+            return true;
+        }
+
+        if (existing.Status == readingStatus)
+        {
+            return BookAlreadyInTheList;
+        }
+
+        var oldStatus = existing.Status;
+        existing.Status = readingStatus;
+
+        if (readingStatus == ReadingListStatus.Read)
+        {
+            existing.CompletedOn ??= DateTime.UtcNow;
+        }
+        else
+        {
+            existing.CompletedOn = null;
+        }
+
         await data.SaveChangesAsync(cancellationToken);
 
-        switch (readingStatus)
-        {
-            case ReadingListStatus.Read:
-                await profileService.IncrementReadBooksCount(
-                    userId,
-                    cancellationToken);
+        await this.DecrementProfileCounter(
+            userId,
+            oldStatus,
+            cancellationToken);
 
-                break;
-            case ReadingListStatus.ToRead:
-                await profileService.IncrementToReadBooksCount(
-                    userId,
-                    cancellationToken);
-                break;
-            case ReadingListStatus.CurrentlyReading:
-                await profileService.IncrementCurrentlyReadingBooksCount(
-                    userId,
-                    cancellationToken);
-
-                break;
-            default:
-                break;
-        }
+        await this.IncrementProfileCounter(
+            userId,
+            readingStatus,
+            cancellationToken);
 
         return true;
     }
@@ -145,48 +158,27 @@ public class ReadingListService(
     {
         var userId = userService.GetId()!;
         var bookId = serviceModel.BookId;
-        var readingStatus = serviceModel.Status;
 
         var mapEntity = await data
             .ReadingLists
-            .AsNoTracking()
             .FirstOrDefaultAsync(
-                rl =>
-                    rl.UserId == userId &&
-                    rl.BookId == bookId &&
-                    rl.Status == readingStatus,
+                rl => rl.UserId == userId && rl.BookId == bookId,
                 cancellationToken);
 
-        if (mapEntity is null) 
+        if (mapEntity is null)
         {
             return BookNotInTheList;
         }
 
+        var oldStatus = mapEntity.Status;
+
         data.Remove(mapEntity);
         await data.SaveChangesAsync(cancellationToken);
 
-        switch (readingStatus)
-        {
-            case ReadingListStatus.Read:
-                await profileService.DecrementReadBooksCount(
-                    userId,
-                    cancellationToken);
-
-                break;
-            case ReadingListStatus.ToRead:
-                await profileService.DecrementToReadBooksCount(
-                    userId,
-                    cancellationToken);
-                break;
-            case ReadingListStatus.CurrentlyReading:
-                await profileService.DecrementCurrentlyReadingBooksCount(
-                    userId,
-                    cancellationToken);
-
-                break;
-            default:
-                break;
-        }
+        await this.DecrementProfileCounter(
+            userId,
+            oldStatus,
+            cancellationToken);
 
         return true;
     }
@@ -200,4 +192,40 @@ public class ReadingListService(
             .AnyAsync(
                 b => b.Id == bookId,
                 cancellationToken);
+
+    private Task IncrementProfileCounter(
+        string userId,
+        ReadingListStatus status,
+        CancellationToken cancellationToken)
+        => status switch
+        {
+            ReadingListStatus.Read => profileService.IncrementReadBooksCount(
+                userId,
+                cancellationToken),
+            ReadingListStatus.ToRead => profileService.IncrementToReadBooksCount(
+                userId,
+                cancellationToken),
+            ReadingListStatus.CurrentlyReading => profileService.IncrementCurrentlyReadingBooksCount(
+                userId,
+                cancellationToken),
+            _ => Task.CompletedTask
+        };
+
+    private Task DecrementProfileCounter(
+        string userId,
+        ReadingListStatus status,
+        CancellationToken cancellationToken)
+        => status switch
+        {
+            ReadingListStatus.Read => profileService.DecrementReadBooksCount(
+                userId,
+                cancellationToken),
+            ReadingListStatus.ToRead => profileService.DecrementToReadBooksCount(
+                userId,
+                cancellationToken),
+            ReadingListStatus.CurrentlyReading => profileService.DecrementCurrentlyReadingBooksCount(
+                userId,
+                cancellationToken),
+            _ => Task.CompletedTask
+        };
 }

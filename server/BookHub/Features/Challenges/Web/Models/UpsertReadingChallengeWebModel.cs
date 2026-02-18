@@ -3,14 +3,20 @@
 using System.ComponentModel.DataAnnotations;
 using Shared;
 
+using static Shared.Constants;
+
 public class UpsertReadingChallengeWebModel : IValidatableObject
 {
-    [Range(2_000, 2_100)]
+    [Range(
+        DefaultValues.MinYear,
+        DefaultValues.MaxYear)]
     public int Year { get; init; }
 
     public ReadingGoalType GoalType { get; init; }
 
-    [Range(1, int.MaxValue)]
+    [Range(
+        DefaultValues.MinGoalValue,
+        DefaultValues.MaxGoalValue)]
     public int GoalValue { get; init; }
 
     public IEnumerable<ValidationResult> Validate(

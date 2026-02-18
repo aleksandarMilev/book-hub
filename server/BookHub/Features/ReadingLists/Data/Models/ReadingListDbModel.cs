@@ -9,8 +9,11 @@ using Shared;
 
 [PrimaryKey(
     nameof(UserId),
-    nameof(BookId),
-    nameof(Status))]
+    nameof(BookId))]
+[Index(
+    nameof(UserId),
+    nameof(Status),
+    nameof(CompletedOn))]
 public class ReadingListDbModel : IDeletableEntity
 {
     [ForeignKey(nameof(User))]
@@ -24,6 +27,8 @@ public class ReadingListDbModel : IDeletableEntity
     public BookDbModel Book { get; set; } = null!;
 
     public ReadingListStatus Status { get; set; }
+
+    public DateTime? CompletedOn { get; set; }
 
     public DateTime CreatedOn { get; set; }
 

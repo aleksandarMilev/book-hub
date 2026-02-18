@@ -22,5 +22,7 @@ public static class Constants
         public const int MaxYear = 2_100;
 
         public const int MinGoalValue = 1;
+
+        public const int MaxGoalValue = int.MaxValue;
     }
 }

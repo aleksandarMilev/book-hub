@@ -20,6 +20,7 @@ const FIELD_KEYS = {
   publishedDate: 'books:validation.fields.publishedDate',
   image: 'books:validation.fields.image',
   genres: 'books:validation.fields.genres',
+  pages: 'books:validation.fields.pages',
 } as const;
 
 const isIsoDate = (value: string) => isValid(parseISO(value));
@@ -142,8 +143,33 @@ export const bookSchema = Yup.object({
         }) as string,
       (value) => !value || isIsoDate(value),
     ),
+  pages: Yup.number()
+    .transform((_, originalValue) => {
+      if (originalValue === '' || originalValue === null || originalValue === undefined) {
+        return null;
+      }
+
+      const asNumber = Number(originalValue);
+      return Number.isFinite(asNumber) ? asNumber : null;
+    })
+    .nullable()
+    .integer(
+      () =>
+        i18n.t('books:validation.pages.integer', {
+          defaultValue: 'Pages must be a whole number.',
+        }) as string,
+    )
+    .min(
+      1,
+      () =>
+        i18n.t('books:validation.pages.min', {
+          defaultValue: 'Pages must be at least 1.',
+        }) as string,
+    )
+    .max(
+      20000,
+      () => i18n.t('books:validation.pages.max', { defaultValue: 'Pages is too large.' }) as string,
+    ),
 });
 
 export type BookFormValues = Yup.InferType<typeof bookSchema>;
-
-

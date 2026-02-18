@@ -108,9 +108,21 @@ const BookFullInfo: FC<Props> = ({
                 {showFullDescription ? t('details.showLess') : t('details.showMore')}
               </button>
             )}
-            <p className="book-published-date text-muted mt-3">
-              {t('details.publishedLabel')} {formattedDate}
-            </p>
+            <div className="book-meta mt-3">
+              <span className="book-meta-item">
+                <span className="book-meta-label">{t('details.publishedLabel')}</span>
+                <span className="book-meta-value">{formattedDate}</span>
+              </span>
+
+              {book.pages != null && (
+                <span className="book-meta-item">
+                  <span className="book-meta-label">
+                    {t('details.pagesLabel', { defaultValue: 'Pages:' })}
+                  </span>
+                  <span className="book-meta-value">{book.pages}</span>
+                </span>
+              )}
+            </div>
             <div className="read-buttons-section mt-4">
               {isAdmin ? (
                 <ApproveRejectButtons

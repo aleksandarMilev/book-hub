@@ -1,12 +1,16 @@
-﻿namespace BookHub.Data.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-using Microsoft.EntityFrameworkCore.Migrations;
+#nullable disable
 
-public partial class FullTextSearch : Migration
+namespace BookHub.Data.Migrations
 {
-    protected override void Up(MigrationBuilder migrationBuilder)
+    /// <inheritdoc />
+    public partial class FullTextSearch : Migration
     {
-        migrationBuilder.Sql(@"
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.Sql(@"
 IF FULLTEXTSERVICEPROPERTY('IsFullTextInstalled') <> 1
     RETURN;
 
@@ -199,11 +203,12 @@ BEGIN
     EXEC sp_executesql @ChatsSql;
 END;
 ", suppressTransaction: true);
-    }
+        }
 
-    protected override void Down(MigrationBuilder migrationBuilder)
-    {
-        migrationBuilder.Sql(@"
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.Sql(@"
 IF FULLTEXTSERVICEPROPERTY('IsFullTextInstalled') <> 1
     RETURN;
 
@@ -278,5 +283,6 @@ BEGIN
     DROP FULLTEXT CATALOG [BookHubFT];
 END;
 ", suppressTransaction: true);
+        }
     }
 }

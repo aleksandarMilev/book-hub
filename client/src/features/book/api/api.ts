@@ -151,6 +151,10 @@ const writeFormData = (formData: FormData, book: CreateBook) => {
     formData.append('authorId', String(book.authorId));
   }
 
+  if (book.pages != null) {
+    formData.append('pages', String(book.pages));
+  }
+
   if (book.publishedDate) {
     formData.append('publishedDate', book.publishedDate);
   }
@@ -163,5 +167,3 @@ const writeFormData = (formData: FormData, book: CreateBook) => {
     book.genres.forEach((g) => formData.append('genres', String(g)));
   }
 };
-
-

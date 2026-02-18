@@ -149,6 +149,7 @@ export const useDetails = (id?: string) => {
               .status(HttpStatusCode.NotFound)
               .create(),
           );
+
           return;
         }
 
@@ -253,5 +254,3 @@ export const useRemove = (id?: string, name?: string) => {
 
   return { showModal, toggleModal, deleteHandler };
 };
-
-

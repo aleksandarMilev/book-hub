@@ -9,10 +9,10 @@ using Microsoft.EntityFrameworkCore;
 using Models;
 using Shared;
 
-using static Shared.Constants.DefaultValues;
 using static Shared.Constants;
+using static Shared.Constants.DefaultValues;
 
-public class ChallengeService(
+public class ReadingChallengeService(
     BookHubDbContext data,
     ICurrentUserService userService) : IReadingChallengeService
 {
@@ -25,7 +25,7 @@ public class ChallengeService(
             return null;
         }
 
-        return await data
+        var dbModel = await data
             .ReadingChallenges
             .AsNoTracking()
             .Where(c => 
@@ -33,6 +33,18 @@ public class ChallengeService(
                 c.Year == year)
             .ToServiceModels()
             .FirstOrDefaultAsync(cancellationToken);
+
+        if (dbModel is null)
+        {
+            return new()
+            {
+                Year = year,
+                GoalType = ReadingGoalType.Books,
+                GoalValue = 0,
+            };
+        }
+
+        return dbModel;
     }
 
     public async Task<Result> Upsert(
@@ -55,13 +67,13 @@ public class ChallengeService(
         }
 
         var userId = userService.GetId();
-        var dbModel = await data
+        var existingChallenge = await data
             .ReadingChallenges
             .FirstOrDefaultAsync(
                 c => c.UserId == userId && c.Year == model.Year,
                 cancellationToken);
 
-        if (dbModel is null)
+        if (existingChallenge is null)
         {
             var dbModel = new ReadingChallengeDbModel
             {
@@ -75,8 +87,8 @@ public class ChallengeService(
         }
         else
         {
-            dbModel.GoalType = model.GoalType;
-            dbModel.GoalValue = model.GoalValue;
+            existingChallenge.GoalType = model.GoalType;
+            existingChallenge.GoalValue = model.GoalValue;
         }
 
         await data.SaveChangesAsync(cancellationToken);
@@ -103,23 +115,35 @@ public class ChallengeService(
 
         if (dbModel is null)
         {
-            return null;
+            return new()
+            {
+                Year = year,
+                GoalType = ReadingGoalType.Books,
+                GoalValue = 0,
+                CurrentValue = 0
+            };
         }
 
-        var readingListsWithStatusRead = data
+        var startUtc = new DateTime(year, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        var endUtc = startUtc.AddYears(1);
+
+        var readThisYear = data
             .ReadingLists
             .AsNoTracking()
-            .Where(
-                rl => rl.UserId == userId &&
-                rl.Status == ReadingListStatus.Read);
+            .Where(rl =>
+                rl.UserId == userId &&
+                rl.Status == ReadingListStatus.Read &&
+                rl.CompletedOn != null &&
+                rl.CompletedOn >= startUtc &&
+                rl.CompletedOn < endUtc);
 
-        var currentBooksInTheReadingList = await readingListsWithStatusRead
+        var booksReadThisYear = await readThisYear
             .CountAsync(cancellationToken);
 
-        var readingChallengeCurrentValue = currentBooksInTheReadingList;
+        var readingChallengeCurrentValue = booksReadThisYear;
         if (dbModel.GoalType == ReadingGoalType.Pages)
         {
-            readingChallengeCurrentValue = await readingListsWithStatusRead
+            readingChallengeCurrentValue = await readThisYear
                 .Select(rl => rl.Book.Pages)
                 .SumAsync(p => p ?? 0, cancellationToken);
         }

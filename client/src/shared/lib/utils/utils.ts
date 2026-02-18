@@ -3,6 +3,14 @@ import { format } from 'date-fns';
 
 import { baseUrl } from '@/shared/lib/constants/api';
 
+export const clampInt = (int: number) => {
+  if (Number.isNaN(int) || !Number.isFinite(int)) {
+    return 0;
+  }
+
+  return Math.max(0, Math.floor(int));
+};
+
 export const slugify = (value: string): string =>
   value
     .toLowerCase()
@@ -69,5 +77,3 @@ export const IsDomAbortError = (error: unknown): error is DOMException => {
 export const isNotFoundError = (error: unknown): error is Error => {
   return isAxiosError(error) && error.response?.status === HttpStatusCode.NotFound;
 };
-
-

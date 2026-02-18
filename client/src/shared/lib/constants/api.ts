@@ -8,6 +8,12 @@ export const routes = {
     privacy: '/privacy',
     cookies: '/cookies',
   },
+  readingChallenges: {
+    base: '/readingChallenges',
+    streak: '/readingChallenges/streak',
+    checkIn: '/readingChallenges/check-in',
+    progress: (year: number) => `/readingChallenges/${year}/progress`,
+  },
   articles: '/articles',
   register: '/identity/register',
   login: '/identity/login',

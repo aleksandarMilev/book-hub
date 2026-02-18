@@ -21,6 +21,7 @@ export interface CreateBook {
   longDescription: string;
   publishedDate?: string | null | undefined;
   genres: string[];
+  pages?: number | null;
 }
 
 export interface BookDetails extends Book {
@@ -33,6 +34,5 @@ export interface BookDetails extends Book {
   readingStatus?: ReadingStatusAPI | null;
   author?: Author | null;
   reviews: Review[];
+  pages?: number | null;
 }
-
-
