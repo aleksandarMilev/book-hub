@@ -1,5 +1,4 @@
 using BookHub.Infrastructure.Extensions;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 var builder = WebApplication.CreateBuilder(args);
 
