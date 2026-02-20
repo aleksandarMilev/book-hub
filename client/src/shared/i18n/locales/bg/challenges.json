@@ -44,10 +44,10 @@
     }
   },
   "units": {
-    "books": "{{count}} книга",
-    "books_other": "{{count}} книги",
-    "pages": "{{count}} страница",
-    "pages_other": "{{count}} страници"
+    "books_one": "книга",
+    "books_other": "книги",
+    "pages_one": "страница",
+    "pages_other": "страници"
   },
   "messages": {
     "saveSuccess": "Предизвикателството е обновено успешно!",

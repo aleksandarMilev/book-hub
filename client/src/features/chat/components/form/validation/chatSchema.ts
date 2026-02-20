@@ -1,5 +1,5 @@
-﻿import * as Yup from 'yup';
-import type { TFunction } from 'i18next';
+﻿import type { TFunction } from 'i18next';
+import * as Yup from 'yup';
 
 const constraints = {
   name: { min: 2, max: 200 },

@@ -19,6 +19,7 @@ import SendForm from '@/features/chat/components/details/send-form/SendForm';
 import { useChatDetails } from '@/features/chat/hooks/useCrud';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
 import { getImageUrl } from '@/shared/lib/utils/utils';
+
 import Message from './message/Message';
 
 const ChatDetails: FC = () => {

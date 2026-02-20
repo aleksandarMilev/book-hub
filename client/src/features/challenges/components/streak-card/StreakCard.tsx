@@ -3,7 +3,7 @@ import './StreakCard.css';
 import { MDBCard, MDBCardBody, MDBCardText, MDBCardTitle } from 'mdb-react-ui-kit';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaFire, FaCheckCircle } from 'react-icons/fa';
+import { FaCheckCircle,FaFire } from 'react-icons/fa';
 
 import type { ReadingStreak } from '@/features/challenges/types/challenge';
 

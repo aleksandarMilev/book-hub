@@ -1,8 +1,8 @@
 ﻿import './ChatList.css';
 
 import { type ChangeEvent, type FC, useEffect, useState } from 'react';
-import { FaSearch } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
+import { FaSearch } from 'react-icons/fa';
 
 import image from '@/features/chat/components/form/assets/chat.avif';
 import ChatListItem from '@/features/chat/components/list-item/ChatListItem';

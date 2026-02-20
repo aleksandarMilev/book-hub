@@ -2,17 +2,17 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
-  ReadingGoalType,
-  type ReadingChallengeProgress,
-  type ReadingStreak,
-} from '@/features/challenges/types/challenge';
-import {
   useCheckInToday,
   useGetProgress,
   useGetStreak,
   useUpsertChallenge,
 } from '@/features/challenges/hooks/useCrud';
-import { IsCanceledError, IsError } from '@/shared/lib/utils/utils';
+import {
+  type ReadingChallengeProgress,
+  ReadingGoalType,
+  type ReadingStreak,
+} from '@/features/challenges/types/challenge';
+import { clampInt, IsCanceledError, IsError } from '@/shared/lib/utils/utils';
 import { useMessage } from '@/shared/stores/message/message';
 
 export const useChallengePage = () => {
@@ -26,7 +26,7 @@ export const useChallengePage = () => {
 
   const year = useMemo(() => new Date().getFullYear(), []);
   const [goalType, setGoalType] = useState<ReadingGoalType>(ReadingGoalType.Books);
-  const [goalValue, setGoalValue] = useState<number>(24);
+  const [goalValue, setGoalValue] = useState<string>('24');
 
   const [progress, setProgress] = useState<ReadingChallengeProgress | null>(null);
   const [streak, setStreak] = useState<ReadingStreak | null>(null);
@@ -53,7 +53,7 @@ export const useChallengePage = () => {
 
       if (progress) {
         setGoalType(progress.goalType);
-        setGoalValue(progress.goalValue);
+        setGoalValue(String(progress.goalValue));
       }
     } catch (error) {
       if (IsCanceledError(error)) {
@@ -81,7 +81,7 @@ export const useChallengePage = () => {
         {
           year,
           goalType,
-          goalValue: Number(goalValue),
+          goalValue: clampInt(Number(goalValue)),
         },
         controller.signal,
       );

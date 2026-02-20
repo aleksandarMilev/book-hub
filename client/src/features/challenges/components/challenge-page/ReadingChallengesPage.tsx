@@ -7,9 +7,10 @@ import { useTranslation } from 'react-i18next';
 import { useChallengePage } from '@/features/challenges/hooks/useChallengePage';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
 import { ErrorRedirect } from '@/shared/components/errors/redirect/ErrorsRedirect';
+import type { HttpError } from '@/shared/types/errors/httpError';
+
 import GoalCard from '../goal-card/GoalCard';
 import StreakCard from '../streak-card/StreakCard';
-import type { HttpError } from '@/shared/types/errors/httpError';
 
 const ReadingChallengesPage: FC = () => {
   const { t } = useTranslation('challenges');

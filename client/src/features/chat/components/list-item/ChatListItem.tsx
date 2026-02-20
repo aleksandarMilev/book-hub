@@ -7,8 +7,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDeleteChat } from '@/features/chat/hooks/useCrud';
 import DeleteModal from '@/shared/components/delete-modal/DeleteModal';
 import { routes } from '@/shared/lib/constants/api';
-import { useAuth } from '@/shared/stores/auth/auth';
 import { getImageUrl } from '@/shared/lib/utils/utils';
+import { useAuth } from '@/shared/stores/auth/auth';
 
 type Props = {
   id: string;

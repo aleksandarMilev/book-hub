@@ -1,6 +1,7 @@
 ﻿import { useFormik } from 'formik';
 import type React from 'react';
-import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import * as api from '@/features/chat/api/api';
@@ -19,7 +20,6 @@ import { useAuth } from '@/shared/stores/auth/auth';
 import { useMessage } from '@/shared/stores/message/message';
 
 import { chatMessageSchema } from '../components/details/send-form/validation/chatMessageSchema.js';
-import { useTranslation } from 'react-i18next';
 
 export const useChatDetails = () => {
   const navigate = useNavigate();

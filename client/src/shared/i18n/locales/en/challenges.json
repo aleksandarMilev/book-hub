@@ -44,10 +44,10 @@
     }
   },
   "units": {
-    "books": "{{count}} book",
-    "books_other": "{{count}} books",
-    "pages": "{{count}} page",
-    "pages_other": "{{count}} pages"
+    "books": "book",
+    "books_other": "books",
+    "pages": "page",
+    "pages_other": "pages"
   },
   "messages": {
     "saveSuccess": "Challenge updated successfully!",
