@@ -73,7 +73,7 @@ const Login: FC = () => {
                 {t('login.buttons.submit')}
               </button>
               <p className="auth-secondary-text">
-                <Link to="/forgot-password" className="auth-secondary-link">
+                <Link to={routes.forgotPassword} className="auth-secondary-link">
                   {t('login.links.forgotPassword') ?? 'Forgot password?'}
                 </Link>
               </p>
