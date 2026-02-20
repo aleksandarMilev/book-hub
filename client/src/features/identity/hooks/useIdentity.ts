@@ -8,7 +8,7 @@ import type {
   LoginResponse,
   RegisterFormValues,
 } from '@/features/identity/types/identity';
-import { IsCanceledError } from '@/shared/lib/utils/utils';
+import { IsCanceledError, IsError } from '@/shared/lib/utils/utils';
 import { useAuth } from '@/shared/stores/auth/auth';
 import type { User } from '@/shared/stores/auth/types/user';
 import { useMessage } from '@/shared/stores/message/message';
@@ -32,8 +32,10 @@ export const useLogin = () => {
           return;
         }
 
-        const message = t('messages.loginFailed');
-        throw new Error(message);
+        const errorMessage =
+          IsError(error) && error.message ? error.message : t('messages.loginFailed');
+
+        throw new Error(errorMessage);
       }
     },
     [changeAuthenticationState, showMessage, t],
@@ -81,5 +83,3 @@ const userFromDecodedToken = (decoded: DecodedToken, token: string): User => ({
   isAdmin: Boolean(decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']),
   token,
 });
-
-

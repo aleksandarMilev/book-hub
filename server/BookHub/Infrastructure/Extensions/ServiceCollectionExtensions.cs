@@ -107,6 +107,8 @@ public static class ServiceCollectionExtensions
             .AddIdentityCore<UserDbModel>(options =>
             {
                 options.User.RequireUniqueEmail = true;
+
+                options.Lockout.AllowedForNewUsers = true;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(AccountLockoutTimeSpan);
                 options.Lockout.MaxFailedAccessAttempts = MaxFailedLoginAttempts;
 

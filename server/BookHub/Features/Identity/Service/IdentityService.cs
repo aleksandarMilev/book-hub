@@ -63,7 +63,8 @@ public class IdentityService(
         var user = new UserDbModel
         {
             Email = serviceModel.Email,
-            UserName = serviceModel.Username
+            UserName = serviceModel.Username,
+            LockoutEnabled = true
         };
 
         var identityResult = await userManager.CreateAsync(
