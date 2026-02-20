@@ -20,6 +20,12 @@ const CookiesPage = lazy(() => import('@/features/legal/components/cookies/Cooki
 const Login = lazy(() => import('@/features/identity/components/login/Login.jsx'));
 const Register = lazy(() => import('@/features/identity/components/register/Register.jsx'));
 const Logout = lazy(() => import('@/features/identity/components/logout/Logout.jsx'));
+const ResetPassword = lazy(
+  () => import('@/features/identity/components/reset-password/ResetPassword.jsx'),
+);
+const ForgotPassword = lazy(
+  () => import('@/features/identity/components/forgot-password/ForgotPassword.jsx'),
+);
 
 const ProfileList = lazy(() => import('@/features/profile/components/list/ProfileList.jsx'));
 const ProfileDetails = lazy(
@@ -87,6 +93,8 @@ export const router = createBrowserRouter([
       { path: routes.login, element: withSuspense(<Login />) },
       { path: routes.register, element: withSuspense(<Register />) },
       { path: routes.logout, element: withSuspense(<Logout />) },
+      { path: routes.resetPassword, element: withSuspense(<ResetPassword />) },
+      { path: routes.forgotPassword, element: withSuspense(<ForgotPassword />) },
 
       {
         path: routes.profiles,

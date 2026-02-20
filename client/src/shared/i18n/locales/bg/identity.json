@@ -65,6 +65,49 @@
       "imageInvalidType": "Невалиден формат на изображение. Позволени: {{types}}"
     }
   },
+  "forgotPassword": {
+    "title": "Забравена парола",
+    "hint": "Въведи имейла си и ще ти изпратим линк за смяна на паролата.",
+    "labels": {
+      "email": "Имейл"
+    },
+    "placeholders": {
+      "email": "name@example.com"
+    },
+    "buttons": {
+      "submit": "Изпрати линк за смяна",
+      "sending": "Изпращане..."
+    },
+    "validation": {
+      "emailRequired": "Имейлът е задължителен",
+      "emailInvalid": "Невалиден формат на имейла"
+    },
+    "messages": {
+      "emailSent": "Ако има профил с този имейл, изпратихме линк за смяна на паролата."
+    }
+  },
+  "resetPassword": {
+    "title": "Смяна на парола",
+    "hint": "Избери нова парола за профила си.",
+    "labels": {
+      "email": "Имейл",
+      "newPassword": "Нова парола",
+      "confirm": "Потвърди паролата"
+    },
+    "buttons": {
+      "submit": "Запази новата парола",
+      "submitting": "Запазване..."
+    },
+    "validation": {
+      "missingToken": "Липсва токен за смяна на парола.",
+      "passwordRequired": "Новата парола е задължителна",
+      "confirmRequired": "Моля, потвърди паролата",
+      "passwordsMustMatch": "Паролите трябва да съвпадат."
+    },
+    "messages": {
+      "success": "Паролата ти беше обновена."
+    }
+  },
   "messages": {
     "welcome": "Добре дошъл, {{username}}!",
     "goodbye": "Довиждане, {{username}}.",

@@ -1,5 +1,5 @@
-﻿import * as Yup from 'yup';
-import type { TFunction } from 'i18next';
+﻿import type { TFunction } from 'i18next';
+import * as Yup from 'yup';
 
 const lengths = {
   minMessage: 1,

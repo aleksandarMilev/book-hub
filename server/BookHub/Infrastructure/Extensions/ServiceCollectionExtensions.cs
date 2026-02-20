@@ -107,6 +107,8 @@ public static class ServiceCollectionExtensions
             .AddIdentityCore<UserDbModel>(options =>
             {
                 options.User.RequireUniqueEmail = true;
+
+                options.Lockout.AllowedForNewUsers = true;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(AccountLockoutTimeSpan);
                 options.Lockout.MaxFailedAccessAttempts = MaxFailedLoginAttempts;
 
@@ -134,6 +136,13 @@ public static class ServiceCollectionExtensions
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<BookHubDbContext>()
             .AddDefaultTokenProviders();
+
+        services
+            .Configure<DataProtectionTokenProviderOptions>(options =>
+            {
+                const int LifeSpan = 2;
+                options.TokenLifespan = TimeSpan.FromHours(LifeSpan);
+            });
 
         return services;
     }

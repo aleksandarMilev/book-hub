@@ -14,18 +14,17 @@ import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
-  ReadingGoalType,
   type ReadingChallengeProgress,
+  ReadingGoalType,
 } from '@/features/challenges/types/challenge';
-import { clampInt } from '@/shared/lib/utils/utils';
 
 type Props = {
   year: number;
   progress: ReadingChallengeProgress | null;
   goalType: ReadingGoalType;
   setGoalType: (goalType: ReadingGoalType) => void;
-  goalValue: number;
-  setGoalValue: (goalValue: number) => void;
+  goalValue: string;
+  setGoalValue: (goalValue: string) => void;
   unitLabel: string;
   isFetching: boolean;
   isSaving: boolean;
@@ -59,7 +58,8 @@ const GoalCard: FC<Props> = ({
       })
     : t('goalCard.subtitle.noProgress', { year });
 
-  const isDisabled = isFetching || isSaving || goalValue < 1;
+  const numericGoalValue = Number(goalValue);
+  const isDisabled = isFetching || isSaving || numericGoalValue < 1;
 
   return (
     <MDBCard className="challenge-goal-card">
@@ -121,7 +121,7 @@ const GoalCard: FC<Props> = ({
               step={1}
               className="challenge-goal-card__input"
               value={goalValue}
-              onChange={(event) => setGoalValue(clampInt(Number(event.target.value)))}
+              onChange={(event) => setGoalValue(event.target.value)}
               disabled={isFetching || isSaving}
             />
             <div className="challenge-goal-card__hint">{t('goalCard.form.hint')}</div>

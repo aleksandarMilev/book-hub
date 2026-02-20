@@ -64,6 +64,49 @@
       "dateOfBirthInFuture": "Date of birth cannot be in the future"
     }
   },
+  "forgotPassword": {
+    "title": "Forgot password",
+    "hint": "Enter your email and we’ll send you a link to set a new password.",
+    "labels": {
+      "email": "Email"
+    },
+    "placeholders": {
+      "email": "name@example.com"
+    },
+    "buttons": {
+      "submit": "Send reset link",
+      "sending": "Sending..."
+    },
+    "validation": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Invalid email format"
+    },
+    "messages": {
+      "emailSent": "If an account exists for that email, we sent a reset link."
+    }
+  },
+  "resetPassword": {
+    "title": "Reset password",
+    "hint": "Choose a new password for your account.",
+    "labels": {
+      "email": "Email",
+      "newPassword": "New password",
+      "confirm": "Confirm password"
+    },
+    "buttons": {
+      "submit": "Set new password",
+      "submitting": "Saving..."
+    },
+    "validation": {
+      "missingToken": "Missing reset token.",
+      "passwordRequired": "New password is required",
+      "confirmRequired": "Please confirm your password",
+      "passwordsMustMatch": "Passwords must match."
+    },
+    "messages": {
+      "success": "Your password has been updated."
+    }
+  },
   "messages": {
     "welcome": "Welcome, {{username}}!",
     "goodbye": "Goodbye, {{username}}.",

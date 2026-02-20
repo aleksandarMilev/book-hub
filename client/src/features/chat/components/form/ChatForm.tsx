@@ -4,9 +4,9 @@ import type { FC } from 'react';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import image from './assets/chat.avif';
 import type { Chat } from '@/features/chat/types/chat';
 
+import image from './assets/chat.avif';
 import { useChatFormik } from './formik/useChatFormik.js';
 
 type Props = { chatData?: Chat; isEditMode?: boolean };

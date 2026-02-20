@@ -1,7 +1,10 @@
 ﻿import type {
+  ForgotPasswordRequest,
   LoginRequest,
   LoginResponse,
+  MessageResponse,
   RegisterRequest,
+  ResetPasswordRequest,
 } from '@/features/identity/types/identity';
 import { http, processError } from '@/shared/api/http';
 import { routes } from '@/shared/lib/constants/api';
@@ -59,11 +62,37 @@ export const login = async (
   }
 };
 
+export const forgotPassword = async (request: ForgotPasswordRequest, signal?: AbortSignal) => {
+  try {
+    const { data } = await http.post<MessageResponse>(
+      routes.forgotPassword,
+      request,
+      getConfig(signal),
+    );
+
+    return data;
+  } catch (error) {
+    processError(error, errors.identity.passwordReset);
+  }
+};
+
+export const resetPassword = async (request: ResetPasswordRequest, signal?: AbortSignal) => {
+  try {
+    const { data } = await http.post<MessageResponse>(
+      routes.resetPassword,
+      request,
+      getConfig(signal),
+    );
+
+    return data;
+  } catch (error) {
+    processError(error, errors.identity.passwordReset);
+  }
+};
+
 const getConfig = (signal?: AbortSignal) => {
   return {
     headers: { 'Content-Type': 'application/json' },
     ...(signal ? { signal } : {}),
   };
 };
-
-

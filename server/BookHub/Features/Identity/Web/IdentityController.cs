@@ -41,4 +41,34 @@ public class IdentityController(IIdentityService service) : ApiController
             result,
             token => new JwtTokenServiceModel(token));
     }
+
+    [HttpPost(ForgotPasswordRoute)]
+    public async Task<ActionResult<MessageServiceModel>> ForgotPassword(
+       ForgotPasswordWebModel webModel,
+       CancellationToken cancellationToken = default)
+    {
+        var serviceModel = webModel.ToForgotPasswordServiceModel();
+        var result = await service.ForgotPassword(
+            serviceModel,
+            cancellationToken);
+
+        return this.OkOrBadRequest(
+            result,
+            message => new MessageServiceModel(message));
+    }
+
+    [HttpPost(ResetPasswordRoute)]
+    public async Task<ActionResult<MessageServiceModel>> ResetPassword(
+        ResetPasswordWebModel webModel,
+        CancellationToken cancellationToken = default)
+    {
+        var serviceModel = webModel.ToResetPasswordServiceModel();
+        var result = await service.ResetPassword(
+            serviceModel,
+            cancellationToken);
+
+        return this.OkOrBadRequest(
+            result,
+            message => new MessageServiceModel(message));
+    }
 }

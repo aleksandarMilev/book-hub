@@ -5,10 +5,12 @@ import { useTranslation } from 'react-i18next';
 import * as identityApi from '@/features/identity/api/api';
 import type {
   DecodedToken,
+  ForgotPasswordRequest,
   LoginResponse,
   RegisterFormValues,
+  ResetPasswordRequest,
 } from '@/features/identity/types/identity';
-import { IsCanceledError } from '@/shared/lib/utils/utils';
+import { IsCanceledError, IsError } from '@/shared/lib/utils/utils';
 import { useAuth } from '@/shared/stores/auth/auth';
 import type { User } from '@/shared/stores/auth/types/user';
 import { useMessage } from '@/shared/stores/message/message';
@@ -32,8 +34,10 @@ export const useLogin = () => {
           return;
         }
 
-        const message = t('messages.loginFailed');
-        throw new Error(message);
+        const errorMessage =
+          IsError(error) && error.message ? error.message : t('messages.loginFailed');
+
+        throw new Error(errorMessage);
       }
     },
     [changeAuthenticationState, showMessage, t],
@@ -74,6 +78,46 @@ export const useRegister = () => {
   return onRegister;
 };
 
+export const useForgotPassword = () => {
+  const { showMessage } = useMessage();
+  const { t } = useTranslation('identity');
+
+  return useCallback(
+    async (email: string) => {
+      try {
+        const result = await identityApi.forgotPassword({ email } satisfies ForgotPasswordRequest);
+        showMessage(result.message ?? t('forgotPassword.messages.emailSent'), true);
+      } catch (error) {
+        const errorMessage =
+          IsError(error) && error.message ? error.message : t('messages.unknownError');
+
+        throw new Error(errorMessage);
+      }
+    },
+    [showMessage, t],
+  );
+};
+
+export const useResetPassword = () => {
+  const { showMessage } = useMessage();
+  const { t } = useTranslation('identity');
+
+  return useCallback(
+    async (request: ResetPasswordRequest) => {
+      try {
+        const result = await identityApi.resetPassword(request);
+        showMessage(result.message ?? t('resetPassword.messages.success'), true);
+      } catch (error) {
+        const errorMessage =
+          IsError(error) && error.message ? error.message : t('messages.unknownError');
+
+        throw new Error(errorMessage);
+      }
+    },
+    [showMessage, t],
+  );
+};
+
 const userFromDecodedToken = (decoded: DecodedToken, token: string): User => ({
   userId: decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'],
   username: decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'],
@@ -81,5 +125,3 @@ const userFromDecodedToken = (decoded: DecodedToken, token: string): User => ({
   isAdmin: Boolean(decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']),
   token,
 });
-
-

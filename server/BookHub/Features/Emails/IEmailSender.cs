@@ -8,4 +8,9 @@ public interface IEmailSender : ITransientService
         string userId,
         string email,
         string username);
+
+    Task SendPasswordReset(
+        string userId,
+        string email,
+        string resetUrl);
 }

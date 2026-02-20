@@ -78,6 +78,12 @@ const Login: FC = () => {
                   {t('login.links.register')}
                 </Link>
               </p>
+              <p className="auth-secondary-text">
+                {t('login.links.noAccount')}{' '}
+                <Link to={routes.register} className="auth-secondary-link">
+                  {t('login.links.register')}
+                </Link>
+              </p>
             </form>
           </div>
         </MDBCol>
@@ -87,5 +93,3 @@ const Login: FC = () => {
 };
 
 export default Login;
-
-

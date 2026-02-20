@@ -40,6 +40,33 @@ public class EmailSender(
         }
     }
 
+    public async Task SendPasswordReset(
+        string userId,
+        string email,
+        string resetUrl)
+    {
+        try
+        {
+            var body = PasswordResetEmailTemplate.Build(resetUrl);
+
+            await this.Send(
+                email,
+                "Reset your BookHub password",
+                body);
+
+            logger.LogInformation(
+                "Password reset email sent. UserId={UserId}",
+                userId);
+        }
+        catch (Exception exception)
+        {
+            logger.LogError(
+                exception,
+                "Failed to send password reset email. UserId={UserId}",
+                userId);
+        }
+    }
+
     private async Task Send(
         string to,
         string subject,
