@@ -2,7 +2,8 @@ using BookHub.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services
+builder
+    .Services
     .AddHttpContextAccessor()
     .AddAppSettings(builder.Configuration)
     .AddIdentity(builder.Environment)
@@ -60,17 +61,10 @@ app
 if (envIsDev)
 {
     app.UseSwaggerUI();
+
     await app.UseMigrations();
     await app.UseDevAdminRole();
+    await app.UseBuiltInUser();
 }
-
-var logger = app.Logger;
-var url = Environment.GetEnvironmentVariable("DOTNET_URLS")
-    ?? Environment.GetEnvironmentVariable("ASPNETCORE_URLS");
-
-logger.LogInformation(
-    "Server is listening on: {Url}. Environment: {env}",
-    url,
-    app.Environment.ToString());
 
 await app.RunAsync();

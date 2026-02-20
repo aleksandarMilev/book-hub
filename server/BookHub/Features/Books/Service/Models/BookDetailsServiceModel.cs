@@ -19,9 +19,10 @@ public class BookDetailsServiceModel : BookServiceModel
 
     public bool IsApproved { get; init; }
 
-    public string? ReadingStatus { get; init; }
+    public int? ReadingStatus { get; init; }
 
     public AuthorServiceModel? Author { get; init; }
 
-    public ICollection<ReviewServiceModel> Reviews { get; init; } = new HashSet<ReviewServiceModel>();
+    public ICollection<ReviewServiceModel> Reviews { get; init; }
+        = new HashSet<ReviewServiceModel>();
 }

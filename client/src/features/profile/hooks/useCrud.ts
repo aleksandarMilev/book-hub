@@ -89,12 +89,12 @@ export const useDetails = () => {
   );
 
   const onNavigateCurrentlyReading = useCallback(
-    () => navigate(routes.readingList, getNavigateState('currentlyReading')),
+    () => navigate(routes.readingList, getNavigateState('currently reading')),
     [navigate, getNavigateState],
   );
 
   const onNavigateToRead = useCallback(
-    () => navigate(routes.readingList, getNavigateState('toRead')),
+    () => navigate(routes.readingList, getNavigateState('to read')),
     [navigate, getNavigateState],
   );
 
@@ -306,5 +306,3 @@ export const useRemove = (id?: string) => {
 
   return { showModal, toggleModal, deleteHandler };
 };
-
-
