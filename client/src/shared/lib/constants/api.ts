@@ -18,6 +18,8 @@ export const routes = {
   register: '/identity/register',
   login: '/identity/login',
   logout: '/identity/logout',
+  resetPassword: `/identity/reset-password`,
+  forgotPassword: `/identity/forgot-password`,
   statistics: '/statistics',
   profile: '/profile',
   mineProfile: '/profile/mine',

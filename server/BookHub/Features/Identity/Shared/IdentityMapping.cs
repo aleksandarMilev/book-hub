@@ -43,4 +43,20 @@ public static class IdentityMapping
            IsPrivate = serviceModel.IsPrivate,
            Biography = serviceModel.Biography,
        };
+
+    public static ForgotPasswordServiceModel ToForgotPasswordServiceModel(
+       this ForgotPasswordWebModel webModel)
+       => new()
+       {
+           Email = webModel.Email
+       };
+
+    public static ResetPasswordServiceModel ToResetPasswordServiceModel(
+        this ResetPasswordWebModel webModel)
+        => new()
+        {
+            Email = webModel.Email,
+            Token = webModel.Token,
+            NewPassword = webModel.NewPassword
+        };
 }

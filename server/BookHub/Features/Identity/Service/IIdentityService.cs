@@ -13,4 +13,12 @@ public interface IIdentityService : ITransientService
     Task<ResultWith<string>> Login(
         LoginServiceModel model,
         CancellationToken cancellationToken = default);
+
+    Task<ResultWith<string>> ForgotPassword(
+        ForgotPasswordServiceModel model,
+        CancellationToken cancellationToken = default);
+
+    Task<ResultWith<string>> ResetPassword(
+        ResetPasswordServiceModel model,
+        CancellationToken cancellationToken = default);
 }

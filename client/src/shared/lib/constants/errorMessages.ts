@@ -23,6 +23,7 @@ export const errors = {
   article: createEntityErrors('article'),
   identity: {
     login: 'Something went wrong while logging in. Please check your credentials and try again.',
+    passwordReset: 'Something went wrong. Please check your credentials and try again.',
     register: 'Something went wrong while registering. Please try again later.',
   },
 

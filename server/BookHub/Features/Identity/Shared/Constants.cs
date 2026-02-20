@@ -11,6 +11,8 @@ public static class Constants
         public const string AccountWasLocked = "Account locked due to multiple failed attempts.";
 
         public const string AccountIsLocked = "Account is locked. Try again later.";
+
+        public const string InvalidPasswordResetAttempt = "Invalid password reset attempt!";
     }
 
     public static class Validation

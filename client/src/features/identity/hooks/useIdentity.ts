@@ -5,8 +5,10 @@ import { useTranslation } from 'react-i18next';
 import * as identityApi from '@/features/identity/api/api';
 import type {
   DecodedToken,
+  ForgotPasswordRequest,
   LoginResponse,
   RegisterFormValues,
+  ResetPasswordRequest,
 } from '@/features/identity/types/identity';
 import { IsCanceledError, IsError } from '@/shared/lib/utils/utils';
 import { useAuth } from '@/shared/stores/auth/auth';
@@ -74,6 +76,46 @@ export const useRegister = () => {
   );
 
   return onRegister;
+};
+
+export const useForgotPassword = () => {
+  const { showMessage } = useMessage();
+  const { t } = useTranslation('identity');
+
+  return useCallback(
+    async (email: string) => {
+      try {
+        const result = await identityApi.forgotPassword({ email } satisfies ForgotPasswordRequest);
+        showMessage(result.message ?? t('forgotPassword.messages.emailSent'), true);
+      } catch (error) {
+        const errorMessage =
+          IsError(error) && error.message ? error.message : t('messages.unknownError');
+
+        throw new Error(errorMessage);
+      }
+    },
+    [showMessage, t],
+  );
+};
+
+export const useResetPassword = () => {
+  const { showMessage } = useMessage();
+  const { t } = useTranslation('identity');
+
+  return useCallback(
+    async (request: ResetPasswordRequest) => {
+      try {
+        const result = await identityApi.resetPassword(request);
+        showMessage(result.message ?? t('resetPassword.messages.success'), true);
+      } catch (error) {
+        const errorMessage =
+          IsError(error) && error.message ? error.message : t('messages.unknownError');
+
+        throw new Error(errorMessage);
+      }
+    },
+    [showMessage, t],
+  );
 };
 
 const userFromDecodedToken = (decoded: DecodedToken, token: string): User => ({

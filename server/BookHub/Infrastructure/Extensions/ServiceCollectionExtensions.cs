@@ -137,6 +137,13 @@ public static class ServiceCollectionExtensions
             .AddEntityFrameworkStores<BookHubDbContext>()
             .AddDefaultTokenProviders();
 
+        services
+            .Configure<DataProtectionTokenProviderOptions>(options =>
+            {
+                const int LifeSpan = 2;
+                options.TokenLifespan = TimeSpan.FromHours(LifeSpan);
+            });
+
         return services;
     }
 

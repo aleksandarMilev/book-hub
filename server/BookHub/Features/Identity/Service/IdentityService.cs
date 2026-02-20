@@ -1,20 +1,21 @@
 ﻿namespace BookHub.Features.Identity.Service;
 
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using Data.Models;
 using Emails;
 using Features.UserProfile.Service;
 using Infrastructure.Services.Result;
 using Infrastructure.Settings;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Models;
 using Shared;
-
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using System.Text.Encodings.Web;
 using static Common.Constants.Names;
 using static Shared.Constants.ErrorMessages;
 using static Shared.Constants.TokenExpiration;
@@ -168,6 +169,84 @@ public class IdentityService(
         }
 
         return ResultWith<string>.Failure(InvalidLoginAttempt);
+    }
+
+    public async Task<ResultWith<string>> ForgotPassword(
+        ForgotPasswordServiceModel serviceModel,
+        CancellationToken cancellationToken = default)
+    {
+        const string GenericMessage =
+            "If an account exists for that email, a password reset link has been sent.";
+
+        var user = await userManager.FindByEmailAsync(serviceModel.Email);
+
+        if (user is null || user.IsDeleted)
+        {
+            return ResultWith<string>.Success(GenericMessage);
+        }
+
+        try
+        {
+            var token = await userManager.GeneratePasswordResetTokenAsync(user);
+            var encodedToken = WebEncoders.Base64UrlEncode(
+                Encoding.UTF8.GetBytes(token));
+
+            var resetUrl =
+                $"https://www.book-hub.net/reset-password?email={UrlEncoder.Default.Encode(user.Email!)}&token={encodedToken}";
+
+            await emailSender.SendPasswordReset(
+                user.Id,
+                user.Email!,
+                resetUrl);
+
+            return ResultWith<string>.Success(GenericMessage);
+        }
+        catch (Exception exception)
+        {
+            logger.LogError(
+                exception,
+                "Failed generating/sending password reset email. UserId={UserId}",
+                user.Id);
+
+            return ResultWith<string>.Success(GenericMessage);
+        }
+    }
+
+    public async Task<ResultWith<string>> ResetPassword(
+        ResetPasswordServiceModel serviceModel,
+        CancellationToken cancellationToken = default)
+    {
+        var user = await userManager.FindByEmailAsync(serviceModel.Email);
+
+        if (user is null || user.IsDeleted)
+        {
+            return ResultWith<string>.Failure(InvalidPasswordResetAttempt);
+        }
+
+        string token;
+
+        try
+        {
+            var tokenBytes = WebEncoders.Base64UrlDecode(serviceModel.Token);
+            token = Encoding.UTF8.GetString(tokenBytes);
+        }
+        catch
+        {
+            return ResultWith<string>.Failure(InvalidPasswordResetAttempt);
+        }
+
+        var result = await userManager.ResetPasswordAsync(
+            user,
+            token,
+            serviceModel.NewPassword);
+
+        if (!result.Succeeded)
+        {
+            var errorMessage = string.Join("; ", result.Errors.Select(e => e.Description));
+            return ResultWith<string>.Failure(errorMessage ?? InvalidPasswordResetAttempt);
+        }
+
+        return ResultWith<string>.Success("Password successfully reset.");
     }
 
     private string GenerateJwtToken(

@@ -31,3 +31,17 @@ export type DecodedToken = {
 export interface RegisterFormValues extends RegisterRequest {
   confirmPassword: string;
 }
+
+export interface MessageResponse {
+  message: string;
+}
+
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ResetPasswordRequest {
+  email: string;
+  token: string;
+  newPassword: string;
+}
