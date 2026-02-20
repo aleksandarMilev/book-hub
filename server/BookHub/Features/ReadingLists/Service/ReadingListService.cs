@@ -85,17 +85,21 @@ public class ReadingListService(
         var bookId = serviceModel.BookId;
         var readingStatus = serviceModel.Status;
 
-        var existing = await data
-            .ReadingLists
-            .FirstOrDefaultAsync(
-                rl => rl.UserId == userId && rl.BookId == bookId,
-                cancellationToken);
+        var bookIsNotValid = !await this.BookIsValid(
+            bookId,
+            cancellationToken);
 
-        var bookIsNotValid = !await this.BookIsValid(bookId, cancellationToken);
         if (bookIsNotValid)
         {
             return "Invalid Book Id!";
         }
+
+        var existing = await data
+            .ReadingLists
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(
+                rl => rl.UserId == userId && rl.BookId == bookId,
+                cancellationToken);
 
         if (existing is null)
         {
@@ -110,6 +114,26 @@ public class ReadingListService(
             };
 
             data.Add(mapEntity);
+            await data.SaveChangesAsync(cancellationToken);
+
+            await IncrementProfileCounter(
+                userId,
+                readingStatus,
+                cancellationToken);
+
+            return true;
+        }
+        else if (existing.IsDeleted)
+        {
+            existing.IsDeleted = false;
+            existing.DeletedOn = null;
+            existing.DeletedBy = null;
+
+            existing.Status = readingStatus;
+            existing.CompletedOn = readingStatus == ReadingListStatus.Read
+                ? (existing.CompletedOn ?? DateTime.UtcNow)
+                : null;
+
             await data.SaveChangesAsync(cancellationToken);
 
             await IncrementProfileCounter(

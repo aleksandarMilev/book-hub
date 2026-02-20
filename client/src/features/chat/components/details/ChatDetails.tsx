@@ -18,8 +18,8 @@ import ParticipantListItem from '@/features/chat/components/details/participant-
 import SendForm from '@/features/chat/components/details/send-form/SendForm';
 import { useChatDetails } from '@/features/chat/hooks/useCrud';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
-import Message from '@/shared/components/message/Message';
 import { getImageUrl } from '@/shared/lib/utils/utils';
+import Message from './message/Message';
 
 const ChatDetails: FC = () => {
   const { t } = useTranslation('chats');
@@ -136,5 +136,3 @@ const ChatDetails: FC = () => {
 };
 
 export default ChatDetails;
-
-

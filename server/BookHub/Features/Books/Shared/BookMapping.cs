@@ -70,10 +70,10 @@ public static class BookMapping
                        .Take(5)
                        .ToHashSet(),
                    MoreThanFiveReviews = b.Reviews.Count > 5,
-                   ReadingStatus = b
+                    ReadingStatus = b
                         .ReadingLists
-                        .Where(rl => rl.BookId == b.Id && rl.UserId == userId)
-                        .Select(rl => Convert.ToString(rl.Status))
+                        .Where(rl => rl.UserId == userId)
+                        .Select(rl => (int?)rl.Status)
                         .FirstOrDefault()
                });
 
@@ -135,8 +135,8 @@ public static class BookMapping
                MoreThanFiveReviews = dbModel.Reviews.Count > 5,
                ReadingStatus = dbModel
                     .ReadingLists
-                    .Where(rl => rl.BookId == dbModel.Id && rl.UserId == userId)
-                    .Select(rl => Convert.ToString(rl.Status))
+                    .Where(rl => rl.UserId == userId)
+                    .Select(rl => (int?)rl.Status)
                     .FirstOrDefault()
            };
 

@@ -2,11 +2,13 @@
 
 using Data;
 using Features.Identity.Data.Models;
+using Features.Identity.Service;
+using Features.Identity.Service.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-using static Common.Constants.Names;
 using static Common.Constants.Cors;
+using static Common.Constants.Names;
 
 public static class AppBuilderExtensions
 {
@@ -50,14 +52,47 @@ public static class AppBuilderExtensions
         this IApplicationBuilder app)
         => app.UseCors(CorsPolicyName);
 
+    public static async Task<IApplicationBuilder> UseBuiltInUser(
+        this IApplicationBuilder app)
+    {
+        using var serviceScope = app
+            .ApplicationServices
+            .CreateScope();
+
+        var identityService = serviceScope
+            .ServiceProvider
+            .GetRequiredService<IIdentityService>();
+
+        var serviceModel = new RegisterServiceModel()
+        {
+            Username = "mileww.sasho",
+            Email = "aleksandarmilev23@gmail.com",
+            Password = "123456",
+            FirstName = "Alexandar",
+            LastName = "Milev",
+            Image = null,
+            DateOfBirth = new DateTime(2001, 2, 8),
+            SocialMediaUrl = "https://github.com/aleksandarMilev/",
+            Biography = "My bio is here and is long enough.",
+            IsPrivate = false,
+        };
+
+        await identityService.Register(serviceModel);
+
+        return app;
+    }
+
     public static async Task<IApplicationBuilder> UseDevAdminRole(
         this IApplicationBuilder app)
     {
         using var serviceScope = app.ApplicationServices.CreateScope();
         var services = serviceScope.ServiceProvider;
 
-        var userManager = services.GetRequiredService<UserManager<UserDbModel>>();
-        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+        var userManager = services
+            .GetRequiredService<UserManager<UserDbModel>>();
+
+        var roleManager = services
+            .GetRequiredService<RoleManager<IdentityRole>>();
 
         if (await roleManager.RoleExistsAsync(AdminRoleName))
         {
@@ -65,8 +100,8 @@ public static class AppBuilderExtensions
         }
 
         var role = new IdentityRole
-        {   
-            Name = AdminRoleName 
+        {
+            Name = AdminRoleName
         };
 
         await roleManager.CreateAsync(role);
@@ -86,11 +121,15 @@ public static class AppBuilderExtensions
         return app;
     }
 
-    // We need this method to create administrator if we drop the production db for some reason. Do not delete it
+    // We need this method to create administrator if we drop the production db for some reason.
+    // Do not delete it!
     public static async Task<IApplicationBuilder> UseProductionAdminRole(
         this IApplicationBuilder app)
     {
-        using var scope = app.ApplicationServices.CreateScope();
+        using var scope = app
+            .ApplicationServices
+            .CreateScope();
+
         var services = scope.ServiceProvider;
 
         var logger = services
