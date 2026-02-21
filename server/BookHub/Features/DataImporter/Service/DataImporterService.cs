@@ -254,24 +254,31 @@ public sealed class DataImporterService(
     public async Task<DataImportResult> ImportAll(
         CancellationToken cancellationToken = default)
     {
-        await using var transaction = await data
+        var strategy = data
+            .Database
+            .CreateExecutionStrategy();
+
+        return await strategy.ExecuteAsync(async () =>
+        {
+            await using var transaction = await data
             .Database
             .BeginTransactionAsync(cancellationToken);
 
-        var authorsPart = await this.ImportAuthors(cancellationToken);
-        var genresPart = await this.ImportGenres(cancellationToken);
-        var booksPart = await this.ImportBooks(cancellationToken);
-        var booksGenresPart = await this.ImportBooksGenres(cancellationToken);
-        var articlesPart = await this.ImportArticles(cancellationToken);
+            var authorsPart = await ImportAuthors(cancellationToken);
+            var genresPart = await ImportGenres(cancellationToken);
+            var booksPart = await ImportBooks(cancellationToken);
+            var booksGenresPart = await ImportBooksGenres(cancellationToken);
+            var articlesPart = await ImportArticles(cancellationToken);
 
-        await transaction.CommitAsync(cancellationToken);
+            await transaction.CommitAsync(cancellationToken);
 
-        return new(
-            Authors: authorsPart,
-            Genres: genresPart,
-            Books: booksPart,
-            BooksGenres: booksGenresPart,
-            Articles: articlesPart);
+            return new DataImportResult(
+                Authors: authorsPart,
+                Genres: genresPart,
+                Books: booksPart,
+                BooksGenres: booksGenresPart,
+                Articles: articlesPart);
+        });
     }
 
     private string GetDataRoot()
