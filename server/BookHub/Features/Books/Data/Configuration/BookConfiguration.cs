@@ -1,6 +1,5 @@
 ﻿namespace BookHub.Features.Books.Data.Configuration;
 
-using BookHub.Data.Seeder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Models;
@@ -64,15 +63,5 @@ public sealed class BookConfiguration : IEntityTypeConfiguration<BookDbModel>
             .WithOne(rl => rl.Book)
             .HasForeignKey(rl => rl.BookId)
             .OnDelete(DeleteBehavior.Cascade);
-
-        var path = Path.Combine(
-            AppContext.BaseDirectory,
-            "Features",
-            "Books",
-            "Data",
-            "Seed",
-            "books_seed.json");
-
-        Seeder.SeedFromJson(builder, path);
     }
 }
