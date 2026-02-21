@@ -1,10 +1,10 @@
 ﻿namespace BookHub.Infrastructure.Services.ImageWriter;
 
+using ImageValidator;
 using Models;
 
-using static Common.Utils;
-
 public class ImageWriter(
+    IImageValidator imageValidator,
     ILogger<ImageWriter> logger,
     IWebHostEnvironment env) : IImageWriter
 {
@@ -19,7 +19,7 @@ public class ImageWriter(
     {
         if (serviceModel.Image is not null)
         {
-            var validationResult = ValidateImageFile(serviceModel.Image);
+            var validationResult = imageValidator.ValidateImageFile(serviceModel.Image);
             if (!validationResult.Succeeded)
             {
                 logger.LogWarning(

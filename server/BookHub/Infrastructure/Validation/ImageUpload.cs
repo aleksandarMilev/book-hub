@@ -1,8 +1,7 @@
 ﻿namespace BookHub.Infrastructure.Validation;
 
 using System.ComponentModel.DataAnnotations;
-
-using static Common.Utils;
+using Services.ImageValidator;
 
 public sealed class ImageUploadAttribute : ValidationAttribute
 {
@@ -20,7 +19,15 @@ public sealed class ImageUploadAttribute : ValidationAttribute
              return new ValidationResult("Invalid file.");
         }
 
-        var validationReuslt = ValidateImageFile(image);
+        var imageValidator = (IImageValidator)validationContext
+            .GetService(typeof(IImageValidator))!;
+
+        if (imageValidator is null) 
+        {
+            return new ValidationResult("Image validator not configured.");
+        }
+
+        var validationReuslt = imageValidator.ValidateImageFile(image);
         if (!validationReuslt.Succeeded)
         {
             return new ValidationResult(validationReuslt.ErrorMessage);

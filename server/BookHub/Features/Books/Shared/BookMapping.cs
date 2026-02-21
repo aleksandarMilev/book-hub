@@ -1,11 +1,11 @@
 ﻿namespace BookHub.Features.Books.Shared;
 
+using System.Text.Json;
 using Authors.Service.Models;
 using Data.Models;
 using Genres.Service.Models;
 using Reviews.Service.Models;
 using Service.Models;
-using System.Text.Json;
 using Web.User.Models;
 
 using static BookHub.Common.Utils;
@@ -33,7 +33,7 @@ public static class BookMapping
                            Name = bg.Genre.Name
                        })
                        .ToHashSet(),
-                   PublishedDate = DateTimeToString(b.PublishedDate),
+                   PublishedDate = b.PublishedDate.ToIso8601String(),
                    RatingsCount = b.RatingsCount,
                    LongDescription = b.LongDescription,
                    Pages = b.Pages,
@@ -65,7 +65,7 @@ public static class BookMapping
                            CreatedOn = r.CreatedOn.ToString(),
                            Upvotes = r.Votes.Where(v => v.IsUpvote).Count(),
                            Downvotes = r.Votes.Where(v => !v.IsUpvote).Count(),
-                           ModifiedOn = DateTimeToString(r.ModifiedOn)
+                           ModifiedOn = r.ModifiedOn.ToIso8601String()
                        })
                        .Take(5)
                        .ToHashSet(),
@@ -96,7 +96,7 @@ public static class BookMapping
                         Name = bg.Genre.Name
                     })
                     .ToHashSet(),
-               PublishedDate = DateTimeToString(dbModel.PublishedDate),
+               PublishedDate = dbModel.PublishedDate.ToIso8601String(),
                RatingsCount = dbModel.RatingsCount,
                LongDescription = dbModel.LongDescription,
                Pages = dbModel.Pages,
@@ -128,7 +128,7 @@ public static class BookMapping
                         CreatedOn = r.CreatedOn.ToString(),
                         Upvotes = r.Votes.Where(v => v.IsUpvote).Count(),
                         Downvotes = r.Votes.Where(v => !v.IsUpvote).Count(),
-                        ModifiedOn = DateTimeToString(r.ModifiedOn)
+                        ModifiedOn = r.ModifiedOn.ToIso8601String()
                     })
                     .Take(5)
                     .ToHashSet(),

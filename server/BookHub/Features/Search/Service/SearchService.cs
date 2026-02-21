@@ -1,17 +1,17 @@
 ﻿namespace BookHub.Features.Search.Service;
 
-using BookHub.Common;
+using Common;
 using Data;
 using Infrastructure.Services.CurrentUser;
+using Infrastructure.Services.PageClamper;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Shared;
 
-using static Common.Utils;
-
 public class SearchService(
     BookHubDbContext data,
-    ICurrentUserService userService) : ISearchService
+    ICurrentUserService userService,
+    IPageClamper pageClamper) : ISearchService
 {
     public async Task<PaginatedModel<SearchGenreServiceModel>> Genres(
         string? searchTerm,
@@ -19,7 +19,7 @@ public class SearchService(
         int pageSize,
         CancellationToken cancellationToken = default)
     {
-        ClampPageSizeAndIndex(
+        pageClamper.ClampPageSizeAndIndex(
             ref pageIndex,
             ref pageSize);
 
@@ -61,7 +61,7 @@ public class SearchService(
         int pageSize,
         CancellationToken cancellationToken = default)
     {
-        ClampPageSizeAndIndex(
+        pageClamper.ClampPageSizeAndIndex(
             ref pageIndex,
             ref pageSize);
 
@@ -103,7 +103,7 @@ public class SearchService(
         int pageSize,
         CancellationToken cancellationToken = default)
     {
-        ClampPageSizeAndIndex(
+        pageClamper.ClampPageSizeAndIndex(
             ref pageIndex,
             ref pageSize);
 
@@ -146,7 +146,7 @@ public class SearchService(
         int pageSize,
         CancellationToken cancellationToken = default)
     {
-        ClampPageSizeAndIndex(
+        pageClamper.ClampPageSizeAndIndex(
             ref pageIndex,
             ref pageSize);
 
@@ -189,7 +189,7 @@ public class SearchService(
         int pageSize,
         CancellationToken cancellationToken = default)
     {
-        ClampPageSizeAndIndex(
+        pageClamper.ClampPageSizeAndIndex(
             ref pageIndex,
             ref pageSize);
 
@@ -231,7 +231,7 @@ public class SearchService(
         int pageSize,
         CancellationToken cancellationToken = default)
     {
-        ClampPageSizeAndIndex(
+        pageClamper.ClampPageSizeAndIndex(
             ref pageIndex,
             ref pageSize);
 

@@ -8,6 +8,7 @@ using Data.Models;
 using Infrastructure.Extensions;
 using Infrastructure.Services.CurrentUser;
 using Infrastructure.Services.ImageWriter;
+using Infrastructure.Services.PageClamper;
 using Infrastructure.Services.Result;
 using Microsoft.EntityFrameworkCore;
 using Models;
@@ -22,12 +23,13 @@ using static Shared.Constants.Paths;
 
 public class BookService(
     BookHubDbContext data,
-    ICurrentUserService userService,
-    IAdminService adminService,
-    INotificationService notificationService,
     IImageWriter imageWriter,
-    ILogger<BookService> logger,
-    IProfileService profileService) : IBookService
+    IAdminService adminService,
+    ICurrentUserService userService,
+    INotificationService notificationService,
+    IProfileService profileService,
+    IPageClamper pageClamper,
+    ILogger<BookService> logger) : IBookService
 {
     public async Task<IEnumerable<BookServiceModel>> TopThree(
         CancellationToken cancellationToken)
@@ -45,7 +47,7 @@ public class BookService(
         int pageSize,
         CancellationToken cancellationToken = default)
     {
-        ClampPageSizeAndIndex(
+        pageClamper.ClampPageSizeAndIndex(
             ref pageIndex,
             ref pageSize);
 
@@ -76,7 +78,7 @@ public class BookService(
         int pageSize,
         CancellationToken cancellationToken = default)
     {
-        ClampPageSizeAndIndex(
+        pageClamper.ClampPageSizeAndIndex(
             ref pageIndex,
             ref pageSize);
 
@@ -650,7 +652,7 @@ public class BookService(
             ShortDescription = pending.ShortDescription,
             LongDescription = pending.LongDescription,
             Pages = pending.Pages,
-            PublishedDate = DateTimeToString(pending.PublishedDate),
+            PublishedDate = pending.PublishedDate.ToIso8601String(),
             ImagePath = pending.ImagePath,
             AuthorName = baseModel.AuthorName,
             Genres = baseModel.Genres,

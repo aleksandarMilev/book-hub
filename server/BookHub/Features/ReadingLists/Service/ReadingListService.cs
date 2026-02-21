@@ -1,23 +1,24 @@
 ﻿namespace BookHub.Features.ReadingLists.Service;
 
-using BookHub.Common;
 using BookHub.Data;
 using Books.Service.Models;
+using Common;
 using Data.Models;
 using Infrastructure.Services.CurrentUser;
+using Infrastructure.Services.PageClamper;
 using Infrastructure.Services.Result;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Shared;
 using UserProfile.Service;
 
-using static Common.Utils;
 using static Shared.Constants.ErrorMessages;
 
 public class ReadingListService(
     BookHubDbContext data,
     ICurrentUserService userService,
     IProfileService profileService,
+    IPageClamper pageClamper,
     ILogger<ReadingListService> logger) : IReadingListService
 {
     public async Task<ResultWith<PaginatedModel<BookServiceModel>>> All(
@@ -27,7 +28,7 @@ public class ReadingListService(
         int pageSize,
         CancellationToken cancellationToken = default)
     {
-        ClampPageSizeAndIndex(
+        pageClamper.ClampPageSizeAndIndex(
             ref pageIndex,
             ref pageSize);
 
