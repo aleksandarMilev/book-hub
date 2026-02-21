@@ -2,6 +2,8 @@ using BookHub.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var builderEnvIsNotTesting = !builder.Environment.IsEnvironment("Testing");
+
 builder
     .Services
     .AddHttpContextAccessor()
@@ -17,7 +19,7 @@ builder
     .AddMemoryCache()
     .AddRateLimiting(builder.Environment);
 
-if (!builder.Environment.IsEnvironment("Testing"))
+if (builderEnvIsNotTesting)
 {
     builder
         .Services
@@ -32,7 +34,9 @@ if (!builder.Environment.IsEnvironment("Testing"))
 
 
 var app = builder.Build();
+
 var envIsDev = app.Environment.IsDevelopment();
+var envIsNotTesting = !app.Environment.IsEnvironment("Testing");
 
 if (envIsDev)
 {
@@ -43,22 +47,15 @@ else
     app
         .UseHsts()
         .UseHttpsRedirection();
+
+    await app.UseCustomForwardedHeaders();
 }
 
 app
     .UseRouting()
-    .UseStaticFiles()
-    .Use(async (ctx, next) =>
-    {
-        var rip = ctx.Connection.RemoteIpAddress?.ToString() ?? "null";
-        var xff = ctx.Request.Headers["X-Forwarded-For"].ToString();
-        var xfp = ctx.Request.Headers["X-Forwarded-Proto"].ToString();
+    .UseStaticFiles();
 
-        app.Logger.LogInformation("IP check: RemoteIp={RemoteIp} XFF={XFF} XFP={XFP}", rip, xff, xfp);
-        await next();
-    });
-
-if (!app.Environment.IsEnvironment("Testing"))
+if (envIsNotTesting)
 {
     app.UseAllowedCors();
 }
@@ -74,8 +71,8 @@ if (envIsDev)
     app.UseSwaggerUI();
 
     await app.UseMigrations();
-    await app.UseDevAdminRole();
     await app.UseBuiltInUser();
+    await app.UseDevAdminRole();
 }
 
 await app.RunAsync();

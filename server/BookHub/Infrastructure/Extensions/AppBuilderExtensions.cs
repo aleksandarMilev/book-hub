@@ -4,6 +4,7 @@ using Data;
 using Features.Identity.Data.Models;
 using Features.Identity.Service;
 using Features.Identity.Service.Models;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +13,24 @@ using static Common.Constants.Names;
 
 public static class AppBuilderExtensions
 {
+    public static async Task<IApplicationBuilder> UseCustomForwardedHeaders(
+        this IApplicationBuilder app)
+    {
+        var forwardedHeadersOptions = new ForwardedHeadersOptions
+        {
+            ForwardedHeaders =
+                ForwardedHeaders.XForwardedFor |
+                ForwardedHeaders.XForwardedProto,
+            ForwardLimit = 1,
+        };
+
+        forwardedHeadersOptions.KnownProxies.Clear();
+
+        app.UseForwardedHeaders(forwardedHeadersOptions);
+
+        return app;
+    }
+
     public static async Task<IApplicationBuilder> UseMigrations(
         this IApplicationBuilder app)
     {
