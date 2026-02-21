@@ -14,7 +14,8 @@ builder
     .AddServices()
     .AddSwagger()
     .AddHealthcheck()
-    .AddMemoryCache();
+    .AddMemoryCache()
+    .AddRateLimiting(builder.Environment);
 
 if (!builder.Environment.IsEnvironment("Testing"))
 {
@@ -46,7 +47,16 @@ else
 
 app
     .UseRouting()
-    .UseStaticFiles();
+    .UseStaticFiles()
+    .Use(async (ctx, next) =>
+    {
+        var rip = ctx.Connection.RemoteIpAddress?.ToString() ?? "null";
+        var xff = ctx.Request.Headers["X-Forwarded-For"].ToString();
+        var xfp = ctx.Request.Headers["X-Forwarded-Proto"].ToString();
+
+        app.Logger.LogInformation("IP check: RemoteIp={RemoteIp} XFF={XFF} XFP={XFP}", rip, xff, xfp);
+        await next();
+    });
 
 if (!app.Environment.IsEnvironment("Testing"))
 {
@@ -55,6 +65,7 @@ if (!app.Environment.IsEnvironment("Testing"))
 
 app
     .UseAuthentication()
+    .UseRateLimiter()
     .UseAuthorization()
     .UseAppEndpoints();
 
