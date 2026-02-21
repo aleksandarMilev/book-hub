@@ -11,7 +11,8 @@
     },
     "links": {
       "noAccount": "Don't have an account?",
-      "register": "Register"
+      "register": "Register",
+      "forgotPassword": "Forgot Password"
     },
     "validation": {
       "credentialsRequired": "Username or Email is required",

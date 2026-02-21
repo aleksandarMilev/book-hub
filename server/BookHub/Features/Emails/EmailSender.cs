@@ -8,64 +8,31 @@ using Microsoft.Extensions.Options;
 using MimeKit;
 
 public class EmailSender(
-    IOptions<EmailSettings> options,
+    IOptions<EmailSettings> emailSettings,
     ILogger<EmailSender> logger) : IEmailSender
 {
-    private readonly EmailSettings settings = options.Value;
-
     public async Task SendWelcome(
-        string userId,
         string email,
-        string username)
-    {
-        try
-        {
-            var body = WelcomeEmailTemplate.Build(username);
-
-            await this.Send(
-               email,
-               "Welcome to BookHub 📚",
-               body);
-
-            logger.LogInformation(
-                "Welcome email sent after registration. UserId={UserId}",
-                userId);
-        }
-        catch (Exception exception)
-        {
-            logger.LogError(
-                exception,
-                "Failed to send welcome email after registration. UserId={UserId}",
-                userId);
-        }
-    }
+        string username,
+        string baseUrl,
+        CancellationToken cancellationToken = default)
+        => await this.Send(
+            email,
+            "Welcome to BookHub 📚",
+            WelcomeEmailTemplate.Build(
+                username,
+                baseUrl),
+            cancellationToken);
 
     public async Task SendPasswordReset(
-        string userId,
         string email,
-        string resetUrl)
-    {
-        try
-        {
-            var body = PasswordResetEmailTemplate.Build(resetUrl);
-
-            await this.Send(
-                email,
-                "Reset your BookHub password",
-                body);
-
-            logger.LogInformation(
-                "Password reset email sent. UserId={UserId}",
-                userId);
-        }
-        catch (Exception exception)
-        {
-            logger.LogError(
-                exception,
-                "Failed to send password reset email. UserId={UserId}",
-                userId);
-        }
-    }
+        string resetUrl,
+        CancellationToken cancellationToken = default)
+        => await this.Send(
+            email,
+            "Reset your BookHub password",
+            PasswordResetEmailTemplate.Build(resetUrl),
+            cancellationToken);
 
     private async Task Send(
         string to,
@@ -75,7 +42,7 @@ public class EmailSender(
     {
         var message = new MimeMessage();
 
-        message.From.Add(MailboxAddress.Parse(settings.From));
+        message.From.Add(MailboxAddress.Parse(emailSettings.Value.From));
         message.To.Add(MailboxAddress.Parse(to));
         message.Subject = subject;
         message.Body = new TextPart("html")
@@ -87,21 +54,23 @@ public class EmailSender(
 
         try
         {
-            var secureOption = settings.UseSsl
-                ? SecureSocketOptions.StartTls
-                : SecureSocketOptions.Auto;
+            var secureOption = emailSettings
+                .Value
+                .UseSsl
+                    ? SecureSocketOptions.StartTls
+                    : SecureSocketOptions.Auto;
 
             await client.ConnectAsync(
-                settings.Host,
-                settings.Port,
+                emailSettings.Value.Host,
+                emailSettings.Value.Port,
                 secureOption,
                 cancellationToken);
 
-            if (!string.IsNullOrWhiteSpace(settings.Username))
+            if (!string.IsNullOrWhiteSpace(emailSettings.Value.Username))
             {
                 await client.AuthenticateAsync(
-                    settings.Username,
-                    settings.Password,
+                    emailSettings.Value.Username,
+                    emailSettings.Value.Password,
                     cancellationToken);
             }
 

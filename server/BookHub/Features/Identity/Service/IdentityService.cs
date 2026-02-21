@@ -13,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using Models;
 using Shared;
 using System.IdentityModel.Tokens.Jwt;
+using System.Runtime;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -25,10 +26,9 @@ public class IdentityService(
     IEmailSender emailSender,
     IProfileService profileService,
     ILogger<IdentityService> logger,
-    IOptions<JwtSettings> settings) : IIdentityService
+    IOptions<JwtSettings> jwtSettings,
+    IOptions<AppUrlsSettings> appUrlsSettings) : IIdentityService
 {
-    private readonly JwtSettings settings = settings.Value;
-
     public async Task<ResultWith<string>> Register(
         RegisterServiceModel serviceModel,
         CancellationToken cancellationToken = default)
@@ -77,7 +77,7 @@ public class IdentityService(
             try
             {
                 var jwt = this.GenerateJwtToken(
-                    this.settings.Secret,
+                    jwtSettings.Value.Secret,
                     user.Id,
                     serviceModel.Username,
                     serviceModel.Email);
@@ -89,10 +89,17 @@ public class IdentityService(
                     user.Id,
                     cancellationToken);
 
+                var baseUrl = appUrlsSettings
+                    .Value
+                    .ClientBaseUrl?
+                    .TrimEnd('/')
+                    ?? throw new InvalidOperationException("AppUrlsSettings:ClientBaseUrl is not configured.");
+
                 await emailSender.SendWelcome(
-                    user.Id,
                     serviceModel.Email,
-                    serviceModel.Username);
+                    serviceModel.Username,
+                    baseUrl,
+                    cancellationToken);
 
                 return ResultWith<string>.Success(jwt);
             }
@@ -151,7 +158,7 @@ public class IdentityService(
 
             var isAdmin = await userManager.IsInRoleAsync(user, AdminRoleName);
             var jwt = this.GenerateJwtToken(
-                this.settings.Secret,
+                jwtSettings.Value.Secret,
                 user.Id,
                 user.UserName!,
                 user.Email!,
@@ -191,13 +198,25 @@ public class IdentityService(
             var encodedToken = WebEncoders.Base64UrlEncode(
                 Encoding.UTF8.GetBytes(token));
 
-            var resetUrl =
-                $"https://www.book-hub.net/reset-password?email={UrlEncoder.Default.Encode(user.Email!)}&token={encodedToken}";
+            var baseUrl = appUrlsSettings
+                .Value
+                .ClientBaseUrl?
+                .TrimEnd('/')
+                ?? throw new InvalidOperationException("AppUrlsSettings:ClientBaseUrl is not configured!");
+
+            var resetPath = $"{baseUrl}/identity/reset-password";
+            var resetUrl = QueryHelpers.AddQueryString(
+                resetPath,
+                new Dictionary<string, string?>
+                {
+                    ["email"] = user.Email,
+                    ["token"] = encodedToken
+                });
 
             await emailSender.SendPasswordReset(
-                user.Id,
                 user.Email!,
-                resetUrl);
+                resetUrl,
+                cancellationToken);
 
             return ResultWith<string>.Success(GenericMessage);
         }
@@ -280,8 +299,8 @@ public class IdentityService(
             Expires = rememberMe
                 ? DateTime.UtcNow.AddDays(ExtendedTokenExpirationTime)
                 : DateTime.UtcNow.AddDays(DefaultTokenExpirationTime),
-            Issuer = this.settings.Issuer,
-            Audience = this.settings.Audience,
+            Issuer = jwtSettings.Value.Issuer,
+            Audience = jwtSettings.Value.Audience,
             SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(key),
                 SecurityAlgorithms.HmacSha256Signature)

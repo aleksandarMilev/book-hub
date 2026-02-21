@@ -11,7 +11,8 @@
     },
     "links": {
       "noAccount": "Нямаш профил?",
-      "register": "Регистрация"
+      "register": "Регистрация",
+      "forgotPassword": "Забравена Парола"
     },
     "validation": {
       "credentialsRequired": "Потребителско име или имейл е задължително",
