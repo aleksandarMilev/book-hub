@@ -1,12 +1,15 @@
 ﻿namespace BookHub.Infrastructure.Extensions;
 
+using System.Globalization;
 using System.Reflection;
 using System.Text;
+using System.Threading.RateLimiting;
 using Data;
 using Features.Identity.Data.Models;
 using Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -19,6 +22,58 @@ using static Features.Identity.Shared.Constants.Lockout;
 
 public static class ServiceCollectionExtensions
 {
+    public static IServiceCollection AddRateLimiting(this IServiceCollection services, IWebHostEnvironment env)
+    {
+        services.AddRateLimiter(options =>
+        {
+            options.OnRejected = async (context, token) =>
+            {
+                context
+                    .HttpContext
+                    .Response
+                    .StatusCode = StatusCodes.Status429TooManyRequests;
+
+                if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
+                {
+                    context
+                        .HttpContext
+                        .Response
+                        .Headers
+                        .RetryAfter =
+                        ((int)retryAfter.TotalSeconds).ToString(CultureInfo.InvariantCulture);
+                }
+
+                await context
+                    .HttpContext
+                    .Response
+                    .WriteAsync("Too many requests.", token);
+            };
+
+            options.GlobalLimiter = PartitionedRateLimiter
+                .Create<HttpContext, string>(httpContext =>
+                {
+                    var ip = httpContext
+                        .Connection
+                        .RemoteIpAddress?
+                        .ToString()
+                        ?? "unknown";
+
+                    return RateLimitPartition
+                        .GetFixedWindowLimiter(ip, _ => new()
+                        {
+                            PermitLimit = env.IsDevelopment()
+                                ? 480
+                                : 240,
+                            Window = TimeSpan.FromMinutes(1),
+                            QueueLimit = 0,
+                            AutoReplenishment = true
+                        });
+                });
+        });
+
+        return services;
+    }
+
     public static IServiceCollection AddCorsPolicy(
         this IServiceCollection services,
         IConfiguration configuration,

@@ -1,6 +1,6 @@
 # BookHub
 
-BookHub is a full-stack book community platform for discovering and sharing books, authors, reviews, and articles. It includes user profiles, reading lists, chats, notifications, and admin moderation.
+BookHub is a full-stack book community platform for discovering and sharing books, authors, reviews, and articles. It includes user profiles, reading lists, chats, notifications, and admin moderation. The application is still in development and is not finished yet. Some features may not work as expected. You can check it on [https://www.book-hub.net](https://www.book-hub.net)
 
 ## Highlights
 
