@@ -13,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using Models;
 using Shared;
 using System.IdentityModel.Tokens.Jwt;
+using System.Runtime;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -25,10 +26,9 @@ public class IdentityService(
     IEmailSender emailSender,
     IProfileService profileService,
     ILogger<IdentityService> logger,
-    IOptions<JwtSettings> settings) : IIdentityService
+    IOptions<JwtSettings> jwtSettings,
+    IOptions<AppUrlsSettings> appUrlsSettings) : IIdentityService
 {
-    private readonly JwtSettings settings = settings.Value;
-
     public async Task<ResultWith<string>> Register(
         RegisterServiceModel serviceModel,
         CancellationToken cancellationToken = default)
@@ -77,7 +77,7 @@ public class IdentityService(
             try
             {
                 var jwt = this.GenerateJwtToken(
-                    this.settings.Secret,
+                    jwtSettings.Value.Secret,
                     user.Id,
                     serviceModel.Username,
                     serviceModel.Email);
@@ -151,7 +151,7 @@ public class IdentityService(
 
             var isAdmin = await userManager.IsInRoleAsync(user, AdminRoleName);
             var jwt = this.GenerateJwtToken(
-                this.settings.Secret,
+                jwtSettings.Value.Secret,
                 user.Id,
                 user.UserName!,
                 user.Email!,
@@ -191,8 +191,14 @@ public class IdentityService(
             var encodedToken = WebEncoders.Base64UrlEncode(
                 Encoding.UTF8.GetBytes(token));
 
+            var baseUrl = appUrlsSettings
+                .Value
+                .ClientBaseUrl?
+                .TrimEnd('/')
+                ?? throw new InvalidOperationException("AppUrlsSettings:ClientBaseUrl is not configured!");
+
             var resetUrl =
-                $"https://www.book-hub.net/reset-password?email={UrlEncoder.Default.Encode(user.Email!)}&token={encodedToken}";
+                $"{baseUrl}/reset-password?email={UrlEncoder.Default.Encode(user.Email!)}&token={encodedToken}";
 
             await emailSender.SendPasswordReset(
                 user.Id,
@@ -280,8 +286,8 @@ public class IdentityService(
             Expires = rememberMe
                 ? DateTime.UtcNow.AddDays(ExtendedTokenExpirationTime)
                 : DateTime.UtcNow.AddDays(DefaultTokenExpirationTime),
-            Issuer = this.settings.Issuer,
-            Audience = this.settings.Audience,
+            Issuer = jwtSettings.Value.Issuer,
+            Audience = jwtSettings.Value.Audience,
             SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(key),
                 SecurityAlgorithms.HmacSha256Signature)

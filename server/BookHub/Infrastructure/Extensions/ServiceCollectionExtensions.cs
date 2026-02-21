@@ -70,6 +70,7 @@ public static class ServiceCollectionExtensions
     {
         AddJwtSettings(services, configuration);
         AddEmailSettings(services, configuration);
+        AddAppUrlsSettings(services, configuration);
 
         return services;
     }
@@ -297,4 +298,10 @@ public static class ServiceCollectionExtensions
         IConfiguration configuration)
         => services.Configure<EmailSettings>(
             configuration.GetSection(nameof(EmailSettings)));
+
+    private static IServiceCollection AddAppUrlsSettings(
+        this IServiceCollection services,
+        IConfiguration configuration)
+        => services.Configure<AppUrlsSettings>(
+            configuration.GetSection(nameof(AppUrlsSettings)));
 }

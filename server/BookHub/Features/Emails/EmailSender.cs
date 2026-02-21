@@ -8,11 +8,10 @@ using Microsoft.Extensions.Options;
 using MimeKit;
 
 public class EmailSender(
-    IOptions<EmailSettings> options,
+    IOptions<EmailSettings> emailSettings,
+    IOptions<AppUrlsSettings> appUrlsSettings,
     ILogger<EmailSender> logger) : IEmailSender
 {
-    private readonly EmailSettings settings = options.Value;
-
     public async Task SendWelcome(
         string userId,
         string email,
@@ -20,7 +19,15 @@ public class EmailSender(
     {
         try
         {
-            var body = WelcomeEmailTemplate.Build(username);
+            var baseUrl = appUrlsSettings
+                .Value
+                .ClientBaseUrl?
+                .TrimEnd('/')
+                ?? throw new InvalidOperationException("AppUrlsSettings:ClientBaseUrl is not configured.");
+
+            var body = WelcomeEmailTemplate.Build(
+                username,
+                baseUrl);
 
             await this.Send(
                email,
@@ -75,7 +82,7 @@ public class EmailSender(
     {
         var message = new MimeMessage();
 
-        message.From.Add(MailboxAddress.Parse(settings.From));
+        message.From.Add(MailboxAddress.Parse(emailSettings.Value.From));
         message.To.Add(MailboxAddress.Parse(to));
         message.Subject = subject;
         message.Body = new TextPart("html")
@@ -87,21 +94,23 @@ public class EmailSender(
 
         try
         {
-            var secureOption = settings.UseSsl
-                ? SecureSocketOptions.StartTls
-                : SecureSocketOptions.Auto;
+            var secureOption = emailSettings
+                .Value
+                .UseSsl
+                    ? SecureSocketOptions.StartTls
+                    : SecureSocketOptions.Auto;
 
             await client.ConnectAsync(
-                settings.Host,
-                settings.Port,
+                emailSettings.Value.Host,
+                emailSettings.Value.Port,
                 secureOption,
                 cancellationToken);
 
-            if (!string.IsNullOrWhiteSpace(settings.Username))
+            if (!string.IsNullOrWhiteSpace(emailSettings.Value.Username))
             {
                 await client.AuthenticateAsync(
-                    settings.Username,
-                    settings.Password,
+                    emailSettings.Value.Username,
+                    emailSettings.Value.Password,
                     cancellationToken);
             }
 
