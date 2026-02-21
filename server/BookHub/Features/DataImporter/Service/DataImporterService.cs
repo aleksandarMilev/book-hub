@@ -253,33 +253,30 @@ public sealed class DataImporterService(
 
     public async Task<DataImportResult> ImportAll(
         CancellationToken cancellationToken = default)
-    {
-        var strategy = data
+        => await data
             .Database
-            .CreateExecutionStrategy();
+            .CreateExecutionStrategy()
+            .ExecuteAsync(async () =>
+            {
+                await using var transaction = await data
+                    .Database
+                    .BeginTransactionAsync(cancellationToken);
 
-        return await strategy.ExecuteAsync(async () =>
-        {
-            await using var transaction = await data
-            .Database
-            .BeginTransactionAsync(cancellationToken);
+                var authors = await this.ImportAuthors(cancellationToken);
+                var genres = await this.ImportGenres(cancellationToken);
+                var books = await this.ImportBooks(cancellationToken);
+                var booksGenres = await this.ImportBooksGenres(cancellationToken);
+                var articles = await this.ImportArticles(cancellationToken);
 
-            var authorsPart = await ImportAuthors(cancellationToken);
-            var genresPart = await ImportGenres(cancellationToken);
-            var booksPart = await ImportBooks(cancellationToken);
-            var booksGenresPart = await ImportBooksGenres(cancellationToken);
-            var articlesPart = await ImportArticles(cancellationToken);
+                await transaction.CommitAsync(cancellationToken);
 
-            await transaction.CommitAsync(cancellationToken);
-
-            return new DataImportResult(
-                Authors: authorsPart,
-                Genres: genresPart,
-                Books: booksPart,
-                BooksGenres: booksGenresPart,
-                Articles: articlesPart);
-        });
-    }
+                return new DataImportResult(
+                    Authors: authors,
+                    Genres: genres,
+                    Books: books,
+                    BooksGenres: booksGenres,
+                    Articles: articles);
+            });
 
     private string GetDataRoot()
         => Path.Combine(
