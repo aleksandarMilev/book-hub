@@ -1,6 +1,7 @@
 ﻿import { jwtDecode } from 'jwt-decode';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import * as identityApi from '@/features/identity/api/api';
 import type {
@@ -10,6 +11,7 @@ import type {
   RegisterFormValues,
   ResetPasswordRequest,
 } from '@/features/identity/types/identity';
+import { routes } from '@/shared/lib/constants/api';
 import { IsCanceledError, IsError } from '@/shared/lib/utils/utils';
 import { useAuth } from '@/shared/stores/auth/auth';
 import type { User } from '@/shared/stores/auth/types/user';
@@ -79,14 +81,17 @@ export const useRegister = () => {
 };
 
 export const useForgotPassword = () => {
+  const navigate = useNavigate();
   const { showMessage } = useMessage();
   const { t } = useTranslation('identity');
 
   return useCallback(
     async (email: string) => {
       try {
-        const result = await identityApi.forgotPassword({ email } satisfies ForgotPasswordRequest);
-        showMessage(result.message ?? t('forgotPassword.messages.emailSent'), true);
+        await identityApi.forgotPassword({ email } satisfies ForgotPasswordRequest);
+
+        showMessage(t('forgotPassword.messages.emailSent'), true);
+        navigate(routes.home);
       } catch (error) {
         const errorMessage =
           IsError(error) && error.message ? error.message : t('messages.unknownError');
@@ -94,19 +99,22 @@ export const useForgotPassword = () => {
         throw new Error(errorMessage);
       }
     },
-    [showMessage, t],
+    [showMessage, t, navigate],
   );
 };
 
 export const useResetPassword = () => {
+  const navigate = useNavigate();
   const { showMessage } = useMessage();
   const { t } = useTranslation('identity');
 
   return useCallback(
     async (request: ResetPasswordRequest) => {
       try {
-        const result = await identityApi.resetPassword(request);
-        showMessage(result.message ?? t('resetPassword.messages.success'), true);
+        await identityApi.resetPassword(request);
+
+        showMessage(t('resetPassword.messages.success'), true);
+        navigate(routes.home);
       } catch (error) {
         const errorMessage =
           IsError(error) && error.message ? error.message : t('messages.unknownError');
@@ -114,7 +122,7 @@ export const useResetPassword = () => {
         throw new Error(errorMessage);
       }
     },
-    [showMessage, t],
+    [showMessage, t, navigate],
   );
 };
 
