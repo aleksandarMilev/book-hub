@@ -89,10 +89,17 @@ public class IdentityService(
                     user.Id,
                     cancellationToken);
 
+                var baseUrl = appUrlsSettings
+                    .Value
+                    .ClientBaseUrl?
+                    .TrimEnd('/')
+                    ?? throw new InvalidOperationException("AppUrlsSettings:ClientBaseUrl is not configured.");
+
                 await emailSender.SendWelcome(
-                    user.Id,
                     serviceModel.Email,
-                    serviceModel.Username);
+                    serviceModel.Username,
+                    baseUrl,
+                    cancellationToken);
 
                 return ResultWith<string>.Success(jwt);
             }
@@ -197,13 +204,19 @@ public class IdentityService(
                 .TrimEnd('/')
                 ?? throw new InvalidOperationException("AppUrlsSettings:ClientBaseUrl is not configured!");
 
-            var resetUrl =
-                $"{baseUrl}/reset-password?email={UrlEncoder.Default.Encode(user.Email!)}&token={encodedToken}";
+            var resetPath = $"{baseUrl}/identity/reset-password";
+            var resetUrl = QueryHelpers.AddQueryString(
+                resetPath,
+                new Dictionary<string, string?>
+                {
+                    ["email"] = user.Email,
+                    ["token"] = encodedToken
+                });
 
             await emailSender.SendPasswordReset(
-                user.Id,
                 user.Email!,
-                resetUrl);
+                resetUrl,
+                cancellationToken);
 
             return ResultWith<string>.Success(GenericMessage);
         }

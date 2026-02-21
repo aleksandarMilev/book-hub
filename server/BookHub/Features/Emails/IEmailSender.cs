@@ -5,12 +5,13 @@ using Infrastructure.Services.ServiceLifetimes;
 public interface IEmailSender : ITransientService
 {
     Task SendWelcome(
-        string userId,
         string email,
-        string username);
+        string username,
+        string baseUrl,
+        CancellationToken cancellationToken = default);
 
     Task SendPasswordReset(
-        string userId,
         string email,
-        string resetUrl);
+        string resetUrl,
+        CancellationToken cancellationToken = default);
 }
