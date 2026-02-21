@@ -1,24 +1,23 @@
 ﻿namespace BookHub.Features.Reviews.Service;
 
-using BookHub.Common;
 using BookHub.Data;
+using Common;
 using Data.Models;
 using Infrastructure.Services.CurrentUser;
+using Infrastructure.Services.PageClamper;
 using Infrastructure.Services.Result;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Shared;
-using System.Net;
-using System.Threading;
 using UserProfile.Service;
 
 using static Common.Constants.ErrorMessages;
-using static Common.Utils;
 
 public class ReviewService(
     BookHubDbContext data,
     ICurrentUserService userService,
     IProfileService profileService,
+    IPageClamper pageClamper,
     ILogger<ReviewService> logger) : IReviewService
 {
     public async Task<PaginatedModel<ReviewServiceModel>> AllForBook(
@@ -27,7 +26,7 @@ public class ReviewService(
         int pageSize,
         CancellationToken cancellationToken = default)
     {
-        ClampPageSizeAndIndex(
+        pageClamper.ClampPageSizeAndIndex(
             ref pageIndex,
             ref pageSize);
 

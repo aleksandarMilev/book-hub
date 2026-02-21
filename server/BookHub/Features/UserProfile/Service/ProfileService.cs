@@ -1,18 +1,18 @@
 ﻿namespace BookHub.Features.UserProfile.Service;
 
 using BookHub.Data;
-using BookHub.Features.Identity.Data.Models;
 using Data.Models;
+using Identity.Data.Models;
 using Infrastructure.Services.CurrentUser;
 using Infrastructure.Services.ImageWriter;
 using Infrastructure.Services.Result;
+using Infrastructure.Services.StringSanitizer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Shared;
 
 using static Common.Constants.ErrorMessages;
-using static Common.Utils;
 using static Shared.Constants.Paths;
 
 public class ProfileService(
@@ -20,6 +20,7 @@ public class ProfileService(
     UserManager<UserDbModel> userManager,
     ICurrentUserService userService,
     IImageWriter imageWriter,
+    IStringSanitizerService stringSanitizer,
     ILogger<ProfileService> logger) : IProfileService
 {
     public async Task<IEnumerable<ProfileServiceModel>> TopThree(
@@ -463,7 +464,7 @@ public class ProfileService(
 
     private string LogAndReturnNotFoundMessage(string id)
     {
-        var sanitizedId = id.SanitizeStringForLog();
+        var sanitizedId = stringSanitizer.SanitizeStringForLog(id);
 
         logger.LogWarning(
             DbEntityNotFoundTemplate,
@@ -480,8 +481,8 @@ public class ProfileService(
         string currentUserId,
         string resourceUserId)
     {
-        var sanitizedCurrentUserId = currentUserId.SanitizeStringForLog();
-        var sanitizedResourceUserId = resourceUserId.SanitizeStringForLog();
+        var sanitizedCurrentUserId = stringSanitizer.SanitizeStringForLog(currentUserId);
+        var sanitizedResourceUserId = stringSanitizer.SanitizeStringForLog(resourceUserId);
 
         logger.LogWarning(
             UnauthorizedMessageTemplate,

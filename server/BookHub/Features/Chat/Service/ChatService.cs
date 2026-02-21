@@ -1,12 +1,12 @@
 ﻿namespace BookHub.Features.Chat.Service;
 
-using BookHub.Common;
 using BookHub.Data;
 using BookHub.Data.Models.Shared.ChatUser;
 using Data.Models;
 using Infrastructure.Services.CurrentUser;
 using Infrastructure.Services.ImageWriter;
 using Infrastructure.Services.Result;
+using Infrastructure.Services.StringSanitizer;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Notifications.Service;
@@ -22,6 +22,7 @@ public class ChatService(
     ICurrentUserService userService,
     INotificationService notificationService,
     IImageWriter imageWriter,
+    IStringSanitizerService stringSanitizer,
     ILogger<ChatService> logger) : IChatService
 {
     public async Task<ChatDetailsServiceModel?> Details(
@@ -377,7 +378,7 @@ public class ChatService(
 
         logger.LogInformation(
             "User with Id: {userToInviteId} was invited to join in chat with Id: {chatId}",
-            userToInviteId.SanitizeStringForLog(),
+            stringSanitizer.SanitizeStringForLog(userToInviteId),
             chatId);
 
         await notificationService.CreateOnChatInvitation(
@@ -430,7 +431,7 @@ public class ChatService(
 
         logger.LogInformation(
             "User with Id: {userToRemoveId} was removed from chat with Id: {chatId}",
-            userToRemoveId.SanitizeStringForLog(),
+            stringSanitizer.SanitizeStringForLog(userToRemoveId),
             chatId);
 
         return true;
@@ -488,7 +489,7 @@ public class ChatService(
         TId id)
     {
         var sanitizedId = id is string str
-            ? str.SanitizeStringForLog()
+            ? stringSanitizer.SanitizeStringForLog(str)
             : (object?)id;
 
         logger.LogWarning(
@@ -507,9 +508,9 @@ public class ChatService(
         string resourceName,
         TId resourceId)
     {
-        var sanitizedUserId = userId.SanitizeStringForLog();
+        var sanitizedUserId = stringSanitizer.SanitizeStringForLog(userId);
         var sanitizedResourceId = resourceId is string str
-            ? str.SanitizeStringForLog()
+            ? stringSanitizer.SanitizeStringForLog(str)
             : (object?)resourceId;
 
         logger.LogWarning(

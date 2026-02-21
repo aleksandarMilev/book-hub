@@ -69,8 +69,8 @@ public static class AuthorMapping
             AverageRating = dbModel.AverageRating,
             Nationality = dbModel.Nationality,
             Gender = dbModel.Gender,
-            BornAt = DateTimeToString(dbModel.BornAt),
-            DiedAt = DateTimeToString(dbModel.DiedAt),
+            BornAt = dbModel.BornAt.ToIso8601String(),
+            DiedAt = dbModel.DiedAt.ToIso8601String(),
             CreatorId = dbModel.CreatorId,
             IsApproved = dbModel.IsApproved,
             TopBooks = [.. dbModel
@@ -108,8 +108,8 @@ public static class AuthorMapping
             AverageRating = a.AverageRating,
             Nationality = a.Nationality,
             Gender = a.Gender,
-            BornAt = DateTimeToString(a.BornAt),
-            DiedAt = DateTimeToString(a.DiedAt),
+            BornAt = a.BornAt.ToIso8601String(),
+            DiedAt = a.DiedAt.ToIso8601String(),
             CreatorId = a.CreatorId,
             IsApproved = a.IsApproved,
             TopBooks = a

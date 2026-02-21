@@ -1,21 +1,22 @@
 ﻿namespace BookHub.Features.Notifications.Service;
 
-using BookHub.Common;
 using BookHub.Data;
+using Common;
 using Data.Models;
 using Infrastructure.Services.CurrentUser;
+using Infrastructure.Services.PageClamper;
 using Infrastructure.Services.Result;
 using Microsoft.EntityFrameworkCore;
 using Service.Models;
 using Shared;
 
 using static Common.Constants.ErrorMessages;
-using static Common.Utils;
 using static Shared.Constants;
 
 public class NotificationService(
     BookHubDbContext data,
     ICurrentUserService userService,
+    IPageClamper pageClamper,
     ILogger<NotificationService> logger) : INotificationService
 {
     public async Task<IEnumerable<NotificationServiceModel>> LastThree(
@@ -34,7 +35,7 @@ public class NotificationService(
         int pageSize,
         CancellationToken cancellationToken = default)
     {
-        ClampPageSizeAndIndex(
+        pageClamper.ClampPageSizeAndIndex(
             ref pageIndex,
             ref pageSize);
 

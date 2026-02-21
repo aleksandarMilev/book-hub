@@ -518,8 +518,8 @@ public class AuthorService(
             PenName = pendingDbModel.PenName,
             Nationality = pendingDbModel.Nationality,
             Gender = pendingDbModel.Gender,
-            BornAt = DateTimeToString(pendingDbModel.BornAt),
-            DiedAt = DateTimeToString(pendingDbModel.DiedAt),
+            BornAt = pendingDbModel.BornAt.ToIso8601String(),
+            DiedAt = pendingDbModel.DiedAt.ToIso8601String(),
             CreatorId = serviceModel.CreatorId,
             IsApproved = serviceModel.IsApproved
         };
