@@ -268,9 +268,6 @@ namespace BookHub.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AuthorDbModelId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("AuthorId")
                         .HasColumnType("uniqueidentifier");
 
@@ -337,8 +334,6 @@ namespace BookHub.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AuthorDbModelId");
 
                     b.HasIndex("AuthorId");
 
@@ -1239,12 +1234,8 @@ namespace BookHub.Data.Migrations
 
             modelBuilder.Entity("BookHub.Features.Books.Data.Models.BookDbModel", b =>
                 {
-                    b.HasOne("BookHub.Features.Authors.Data.Models.AuthorDbModel", null)
-                        .WithMany("Books")
-                        .HasForeignKey("AuthorDbModelId");
-
                     b.HasOne("BookHub.Features.Authors.Data.Models.AuthorDbModel", "Author")
-                        .WithMany()
+                        .WithMany("Books")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.SetNull);
 

@@ -38,5 +38,11 @@ public class AuthorConfiguration : IEntityTypeConfiguration<AuthorDbModel>
             .WithMany(u => u.Authors)
             .HasForeignKey(a => a.CreatorId)
             .OnDelete(DeleteBehavior.SetNull);
+
+        builder
+            .HasMany(a => a.Books)
+            .WithOne(b => b.Author)
+            .HasForeignKey(b => b.AuthorId)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }

@@ -104,7 +104,10 @@ public static class AppBuilderExtensions
     public static async Task<IApplicationBuilder> UseDevAdminRole(
         this IApplicationBuilder app)
     {
-        using var serviceScope = app.ApplicationServices.CreateScope();
+        using var serviceScope = app
+            .ApplicationServices
+            .CreateScope();
+
         var services = serviceScope.ServiceProvider;
 
         var userManager = services
@@ -141,7 +144,7 @@ public static class AppBuilderExtensions
     }
 
     // We need this method to create administrator if we drop the production db for some reason.
-    // Do not delete it!
+    // Don't delete it!
     public static async Task<IApplicationBuilder> UseProductionAdminRole(
         this IApplicationBuilder app)
     {
