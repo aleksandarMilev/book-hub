@@ -312,13 +312,13 @@ public sealed class DataImporterService(
             .ChangeTracker
             .AutoDetectChangesEnabled = false;
 
-        const int batchSize = 1_000;
+        const int BatchSize = 1_000;
 
-        for (var i = 0; i < items.Count; i += batchSize)
+        for (var i = 0; i < items.Count; i += BatchSize)
         {
             var batch = items
                 .Skip(i)
-                .Take(batchSize);
+                .Take(BatchSize);
 
             dbSet.AddRange(batch);
 

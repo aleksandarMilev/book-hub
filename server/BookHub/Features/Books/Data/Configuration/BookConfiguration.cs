@@ -35,12 +35,6 @@ public sealed class BookConfiguration : IEntityTypeConfiguration<BookDbModel>
             .HasMaxLength(ImagePathMaxLength);
 
         builder
-            .HasOne(b => b.Author)
-            .WithMany()
-            .HasForeignKey(b => b.AuthorId)
-            .OnDelete(DeleteBehavior.SetNull);
-
-        builder
             .HasOne(b => b.Creator)
             .WithMany()
             .HasForeignKey(b => b.CreatorId)
@@ -59,9 +53,9 @@ public sealed class BookConfiguration : IEntityTypeConfiguration<BookDbModel>
             .OnDelete(DeleteBehavior.Cascade);
 
         builder
-            .HasMany(b => b.ReadingLists)
-            .WithOne(rl => rl.Book)
-            .HasForeignKey(rl => rl.BookId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .HasOne(b => b.Author)
+            .WithMany(a => a.Books)
+            .HasForeignKey(b => b.AuthorId)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }
