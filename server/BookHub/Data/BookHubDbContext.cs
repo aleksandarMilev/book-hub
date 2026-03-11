@@ -2,11 +2,11 @@
 
 using System.Linq.Expressions;
 using System.Reflection;
-using BookHub.Features.Challenges.Data.Models;
 using Features.Articles.Data.Models;
 using Features.Authors.Data.Models;
 using Features.Books.Data.Models;
 using Features.Chat.Data.Models;
+using Features.Challenges.Data.Models;
 using Features.Genres.Data.Models;
 using Features.Identity.Data.Models;
 using Features.Notifications.Data.Models;
@@ -194,7 +194,7 @@ public class BookHubDbContext(
 
                 var currentUserId = Expression.Property(
                     thisContext,
-                    nameof(CurrentUserId));
+                    nameof(this.CurrentUserId));
 
                 var currentUserNotNull = Expression.NotEqual(
                     currentUserId,

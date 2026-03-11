@@ -7,7 +7,7 @@
   CreateChatMessage,
 } from '@/features/chat/types/chat';
 import type { PrivateProfile } from '@/features/profile/types/profile';
-import { getAuthConfig, getAuthConfigForFile, http, processError } from '@/shared/api/http';
+import { getAuthConfig, http, processError } from '@/shared/api/http';
 import { routes } from '@/shared/lib/constants/api';
 import { baseErrors, errors } from '@/shared/lib/constants/errorMessages';
 
@@ -28,7 +28,7 @@ export const details = async (chatId: string, token: string, signal?: AbortSigna
     const { data } = await http.get<ChatDetails>(url, getAuthConfig(token, signal));
     return data;
   } catch (error) {
-    processError(error, errors.chat.byId);
+    return processError(error, errors.chat.byId);
   }
 };
 
@@ -55,7 +55,7 @@ export const messages = async (
     const { data } = await http.get<ChatMessage[]>(url, getAuthConfig(token, signal));
     return data;
   } catch (error) {
-    processError(error, errors.chat.byId);
+    return processError(error, errors.chat.byId);
   }
 };
 
@@ -66,7 +66,7 @@ export const chatsNotJoined = async (userId: string, token: string, signal?: Abo
 
     return data;
   } catch (error) {
-    processError(error, errors.chat.all);
+    return processError(error, errors.chat.all);
   }
 };
 
@@ -82,7 +82,7 @@ export const hasAccess = async (
 
     return data;
   } catch (error) {
-    processError(error, errors.chat.byId);
+    return processError(error, errors.chat.byId);
   }
 };
 
@@ -98,7 +98,7 @@ export const userIsInvited = async (
 
     return data;
   } catch (error) {
-    processError(error, errors.chat.byId);
+    return processError(error, errors.chat.byId);
   }
 };
 
@@ -107,15 +107,11 @@ export const create = async (chat: CreateChat, token: string, signal?: AbortSign
     const url = `${routes.chat}`;
     const formData = buildFormData(chat);
 
-    const { data } = await http.post<ChatDetails>(
-      url,
-      formData,
-      getAuthConfigForFile(token, signal),
-    );
+    const { data } = await http.post<ChatDetails>(url, formData, getAuthConfig(token, signal));
 
     return data;
   } catch (error) {
-    processError(error, errors.chat.create);
+    return processError(error, errors.chat.create);
   }
 };
 
@@ -129,11 +125,11 @@ export const edit = async (
     const url = `${routes.chat}/${chatId}`;
     const formData = buildFormData(chat);
 
-    await http.put(url, formData, getAuthConfigForFile(token, signal));
+    await http.put(url, formData, getAuthConfig(token, signal));
 
     return true;
   } catch (error) {
-    processError(error, errors.chat.edit);
+    return processError(error, errors.chat.edit);
   }
 };
 
@@ -144,7 +140,7 @@ export const remove = async (chatId: string, token: string, signal?: AbortSignal
 
     return true;
   } catch (error) {
-    processError(error, errors.chat.delete);
+    return processError(error, errors.chat.delete);
   }
 };
 
@@ -160,7 +156,7 @@ export const inviteUserToChat = async (
     await http.post(url, { userId, chatName }, getAuthConfig(token, signal));
     return true;
   } catch (error) {
-    processError(error, baseErrors.general);
+    return processError(error, baseErrors.general);
   }
 };
 
@@ -177,7 +173,7 @@ export const reject = async (
 
     return true;
   } catch (error) {
-    processError(error, baseErrors.general);
+    return processError(error, baseErrors.general);
   }
 };
 
@@ -198,7 +194,7 @@ export const accept = async (
 
     return data;
   } catch (error) {
-    processError(error, baseErrors.general);
+    return processError(error, baseErrors.general);
   }
 };
 
@@ -217,7 +213,7 @@ export const removeUser = async (
 
     return true;
   } catch (error) {
-    processError(error, errors.chat.removeUser);
+    return processError(error, errors.chat.removeUser);
   }
 };
 
@@ -232,7 +228,7 @@ export const createMessage = async (
 
     return data;
   } catch (error) {
-    processError(error, errors.chatMessage.create);
+    return processError(error, errors.chatMessage.create);
   }
 };
 
@@ -248,7 +244,7 @@ export const editMessage = async (
 
     return data;
   } catch (error) {
-    processError(error, errors.chatMessage.edit);
+    return processError(error, errors.chatMessage.edit);
   }
 };
 
@@ -259,8 +255,6 @@ export const removeMessage = async (id: number, token: string, signal?: AbortSig
 
     return true;
   } catch (error) {
-    processError(error, errors.chatMessage.delete);
+    return processError(error, errors.chatMessage.delete);
   }
 };
-
-

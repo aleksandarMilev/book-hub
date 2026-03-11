@@ -1,12 +1,5 @@
 ﻿import type { ArticleDetails, CreateArticle } from '@/features/article/types/article';
-import {
-  getAuthConfig,
-  getAuthConfigForFile,
-  getPublicConfig,
-  http,
-  httpAdmin,
-  processError,
-} from '@/shared/api/http';
+import { getAuthConfig, getPublicConfig, http, httpAdmin, processError } from '@/shared/api/http';
 import { routes } from '@/shared/lib/constants/api';
 import { errors } from '@/shared/lib/constants/errorMessages';
 
@@ -17,7 +10,7 @@ export const details = async (id: string, signal?: AbortSignal) => {
 
     return data;
   } catch (error) {
-    processError(error, errors.article.byId);
+    return processError(error, errors.article.byId);
   }
 };
 
@@ -28,7 +21,7 @@ export const detailsForEdit = async (id: string, token: string, signal?: AbortSi
 
     return data;
   } catch (error) {
-    processError(error, errors.article.byId);
+    return processError(error, errors.article.byId);
   }
 };
 
@@ -42,12 +35,12 @@ export const create = async (article: CreateArticle, token: string, signal?: Abo
     const { data } = await httpAdmin.post<{ id: string }>(
       url,
       formData,
-      getAuthConfigForFile(token, signal),
+      getAuthConfig(token, signal),
     );
 
     return data.id;
   } catch (error) {
-    processError(error, errors.article.create);
+    return processError(error, errors.article.create);
   }
 };
 
@@ -63,11 +56,11 @@ export const edit = async (
 
     writeFormData(formData, article);
 
-    await httpAdmin.put(url, formData, getAuthConfigForFile(token, signal));
+    await httpAdmin.put(url, formData, getAuthConfig(token, signal));
 
     return true;
   } catch (error) {
-    processError(error, errors.article.edit);
+    return processError(error, errors.article.edit);
   }
 };
 
@@ -78,7 +71,7 @@ export const remove = async (id: string, token: string, signal?: AbortSignal) =>
 
     return true;
   } catch (error) {
-    processError(error, errors.article.delete);
+    return processError(error, errors.article.delete);
   }
 };
 
@@ -91,5 +84,3 @@ const writeFormData = (formData: FormData, article: CreateArticle) => {
     formData.append('image', article.image);
   }
 };
-
-

@@ -1,11 +1,4 @@
-﻿import {
-  getAuthConfig,
-  getAuthConfigForFile,
-  getPublicConfig,
-  http,
-  httpAdmin,
-  processError,
-} from '@/shared/api/http';
+﻿import { getAuthConfig, getPublicConfig, http, httpAdmin, processError } from '@/shared/api/http';
 import { routes } from '@/shared/lib/constants/api';
 import { pagination } from '@/shared/lib/constants/defaultValues';
 import { baseErrors, errors } from '@/shared/lib/constants/errorMessages';
@@ -20,7 +13,7 @@ export const topThree = async (signal?: AbortSignal) => {
 
     return data;
   } catch (error) {
-    processError(error, errors.book.topThree);
+    return processError(error, errors.book.topThree);
   }
 };
 
@@ -37,7 +30,7 @@ export const byGenre = async (
 
     return response.data;
   } catch (error) {
-    processError(error, errors.book.all);
+    return processError(error, errors.book.all);
   }
 };
 
@@ -54,7 +47,7 @@ export const byAuthor = async (
 
     return response.data;
   } catch (error) {
-    processError(error, errors.book.all);
+    return processError(error, errors.book.all);
   }
 };
 
@@ -71,7 +64,7 @@ export const details = async (
 
     return response.data;
   } catch (error) {
-    processError(error, errors.book.byId);
+    return processError(error, errors.book.byId);
   }
 };
 
@@ -82,15 +75,11 @@ export const create = async (book: CreateBook, token: string, signal?: AbortSign
 
     writeFormData(formData, book);
 
-    const { data } = await http.post<BookDetails>(
-      url,
-      formData,
-      getAuthConfigForFile(token, signal),
-    );
+    const { data } = await http.post<BookDetails>(url, formData, getAuthConfig(token, signal));
 
     return data;
   } catch (error) {
-    processError(error, errors.book.create);
+    return processError(error, errors.book.create);
   }
 };
 
@@ -101,11 +90,11 @@ export const edit = async (id: string, book: CreateBook, token: string, signal?:
 
     writeFormData(formData, book);
 
-    await http.put(url, formData, getAuthConfigForFile(token, signal));
+    await http.put(url, formData, getAuthConfig(token, signal));
 
     return true;
   } catch (error) {
-    processError(error, errors.book.edit);
+    return processError(error, errors.book.edit);
   }
 };
 
@@ -116,7 +105,7 @@ export const remove = async (id: string, token: string, signal?: AbortSignal) =>
 
     return true;
   } catch (error) {
-    processError(error, errors.book.delete);
+    return processError(error, errors.book.delete);
   }
 };
 
@@ -127,7 +116,7 @@ export const approve = async (id: string, token: string, signal?: AbortSignal) =
 
     return true;
   } catch (error) {
-    processError(error, baseErrors.general);
+    return processError(error, baseErrors.general);
   }
 };
 
@@ -138,7 +127,7 @@ export const reject = async (id: string, token: string, signal?: AbortSignal) =>
 
     return true;
   } catch (error) {
-    processError(error, baseErrors.general);
+    return processError(error, baseErrors.general);
   }
 };
 

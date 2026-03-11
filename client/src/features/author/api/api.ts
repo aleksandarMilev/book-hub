@@ -6,14 +6,7 @@
   CreateAuthor,
 } from '@/features/author/types/author';
 import { genderFromServer, GenderToServer } from '@/features/author/types/author';
-import {
-  getAuthConfig,
-  getAuthConfigForFile,
-  getPublicConfig,
-  http,
-  httpAdmin,
-  processError,
-} from '@/shared/api/http';
+import { getAuthConfig, getPublicConfig, http, httpAdmin, processError } from '@/shared/api/http';
 import { routes } from '@/shared/lib/constants/api';
 import { baseErrors, errors } from '@/shared/lib/constants/errorMessages';
 
@@ -24,7 +17,7 @@ export const names = async (token: string, signal?: AbortSignal) => {
 
     return data;
   } catch (error) {
-    processError(error, errors.author.all);
+    return processError(error, errors.author.all);
   }
 };
 
@@ -35,7 +28,7 @@ export const topThree = async (signal?: AbortSignal) => {
 
     return data;
   } catch (error) {
-    processError(error, errors.author.topThree);
+    return processError(error, errors.author.topThree);
   }
 };
 
@@ -52,7 +45,7 @@ export const details = async (
 
     return mapAuthorDetailsDto(data);
   } catch (error) {
-    processError(error, errors.author.byId);
+    return processError(error, errors.author.byId);
   }
 };
 
@@ -62,15 +55,11 @@ export const create = async (author: CreateAuthor, token: string, signal?: Abort
     const formData = new FormData();
     writeFormData(formData, author);
 
-    const { data } = await http.post<AuthorDetails>(
-      url,
-      formData,
-      getAuthConfigForFile(token, signal),
-    );
+    const { data } = await http.post<AuthorDetails>(url, formData, getAuthConfig(token, signal));
 
     return mapAuthorDetailsDto(data as unknown as AuthorDetailsDto);
   } catch (error) {
-    processError(error, errors.author.create);
+    return processError(error, errors.author.create);
   }
 };
 
@@ -85,11 +74,11 @@ export const edit = async (
     const formData = new FormData();
 
     writeFormData(formData, author);
-    await http.put(url, formData, getAuthConfigForFile(token, signal));
+    await http.put(url, formData, getAuthConfig(token, signal));
 
     return true;
   } catch (error) {
-    processError(error, errors.author.edit);
+    return processError(error, errors.author.edit);
   }
 };
 
@@ -100,7 +89,7 @@ export const remove = async (id: string, token: string, signal?: AbortSignal) =>
 
     return true;
   } catch (error) {
-    processError(error, errors.author.delete);
+    return processError(error, errors.author.delete);
   }
 };
 
@@ -111,7 +100,7 @@ export const approve = async (id: string, token: string, signal?: AbortSignal) =
 
     return true;
   } catch (error) {
-    processError(error, baseErrors.general);
+    return processError(error, baseErrors.general);
   }
 };
 
@@ -122,7 +111,7 @@ export const reject = async (id: string, token: string, signal?: AbortSignal) =>
 
     return true;
   } catch (error) {
-    processError(error, baseErrors.general);
+    return processError(error, baseErrors.general);
   }
 };
 
@@ -159,5 +148,3 @@ const writeFormData = (formData: FormData, author: CreateAuthor) => {
     formData.append('diedAt', author.diedAt);
   }
 };
-
-
