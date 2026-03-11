@@ -6,7 +6,7 @@ import { IsCanceledError } from '@/shared/lib/utils/utils';
 export const http = axios.create({ baseURL: baseUrl });
 export const httpAdmin = axios.create({ baseURL: baseAdminUrl });
 
-export function getAuthConfig(token: string, signal?: AbortSignal): AxiosRequestConfig {
+export const getAuthConfig = (token: string, signal?: AbortSignal): AxiosRequestConfig => {
   const config: AxiosRequestConfig = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -19,22 +19,9 @@ export function getAuthConfig(token: string, signal?: AbortSignal): AxiosRequest
   }
 
   return config;
-}
-
-export const getAuthConfigForFile = (token: string, signal?: AbortSignal) => {
-  const config = getAuthConfig(token, signal);
-  const fileConfig = {
-    ...config,
-    headers: {
-      ...(config.headers ?? {}),
-      'Content-Type': 'multipart/form-data',
-    },
-  };
-
-  return fileConfig;
 };
 
-export function getPublicConfig(signal?: AbortSignal): AxiosRequestConfig {
+export const getPublicConfig = (signal?: AbortSignal): AxiosRequestConfig => {
   const config: AxiosRequestConfig = {
     headers: {
       'Content-Type': 'application/json',
@@ -46,9 +33,9 @@ export function getPublicConfig(signal?: AbortSignal): AxiosRequestConfig {
   }
 
   return config;
-}
+};
 
-export function processError(error: unknown, fallbackMessage: string): never {
+export const processError = (error: unknown, fallbackMessage: string): never => {
   const isRequestCanceled = axios.isCancel?.(error) || IsCanceledError(error);
 
   if (isRequestCanceled) {
@@ -65,6 +52,4 @@ export function processError(error: unknown, fallbackMessage: string): never {
   }
 
   throw new Error(fallbackMessage);
-}
-
-
+};

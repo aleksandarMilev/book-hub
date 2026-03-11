@@ -175,7 +175,11 @@ public static class AppBuilderExtensions
         var password = config["BootstrapAdmin:Password"];
         var roleName = config["BootstrapAdmin:Role"] ?? "Administrator";
 
-        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+        var emailOrPasswordIsNotProvided =
+            string.IsNullOrWhiteSpace(email) ||
+            string.IsNullOrWhiteSpace(password);
+
+        if (emailOrPasswordIsNotProvided)
         {
             throw new InvalidOperationException(
                 "BootstrapAdmin enabled but Email/Password not set.");
@@ -199,7 +203,7 @@ public static class AppBuilderExtensions
                     .Select(e => e.Description);
 
                 throw new InvalidOperationException(
-                    "Failed to create role: " + string.Join("; ", createRoleResult));
+                    "Failed to create role: " + string.Join("; ", roleResultErrorMessage));
             }
 
             logger.LogInformation("Created role {Role}", roleName);
@@ -209,7 +213,7 @@ public static class AppBuilderExtensions
             logger.LogInformation("Role {Role} already exists", roleName);
         }
 
-        var user = await userManager.FindByEmailAsync(email);
+        var user = await userManager.FindByEmailAsync(email!);
         if (user is null)
         {
             user = new()
@@ -218,7 +222,7 @@ public static class AppBuilderExtensions
                 UserName = email 
             };
 
-            var createUserResult = await userManager.CreateAsync(user, password);
+            var createUserResult = await userManager.CreateAsync(user, password!);
             if (!createUserResult.Succeeded)
             {
                 var errorMessage = createUserResult
