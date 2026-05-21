@@ -1,6 +1,6 @@
 # BookHub
 
-BookHub is a full-stack book community platform for discovering and sharing books, authors, reviews, and articles. It includes user profiles, reading lists, chats, notifications, and admin moderation. The application is still in development and is not finished yet. Some features may not work as expected. You can check it on [https://www.book-hub.net](https://www.book-hub.net)
+BookHub is a full-stack book community platform for discovering and sharing books, authors, reviews, and articles. It includes user profiles, reading lists, chats, notifications, and admin moderation.
 
 ## Highlights
 
@@ -156,9 +156,3 @@ Server scripts:
 - `CORS_ALLOWED_ORIGINS` must be set in Production or startup will fail.
 - Uploaded files are stored under `server/BookHub/wwwroot` in dev and in the `server_uploads` Docker volume in production.
 - The production stack does not auto-apply migrations. Apply migrations as part of your deployment process.
-
-## Troubleshooting
-
-- Registration fails: welcome emails are required and SMTP must be configured correctly.
-- CORS errors in Production: ensure `CORS_ALLOWED_ORIGINS` is set and uses `;` separators.
-- Search not working: ensure SQL Server Full-Text Search is installed and enabled.
