@@ -9,7 +9,6 @@ using Features.Identity.Data.Models;
 using Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -22,11 +21,13 @@ using static Features.Identity.Shared.Constants.Lockout;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddRateLimiting(this IServiceCollection services, IWebHostEnvironment env)
+    public static IServiceCollection AddRateLimiting(
+        this IServiceCollection services,
+        IWebHostEnvironment env)
     {
         services.AddRateLimiter(options =>
         {
-            options.OnRejected = async (context, token) =>
+            options.OnRejected = static async (context, token) =>
             {
                 context
                     .HttpContext
@@ -217,7 +218,7 @@ public static class ServiceCollectionExtensions
         var key = Encoding.ASCII.GetBytes(settings.Secret);
 
         services
-            .AddAuthentication(options =>
+            .AddAuthentication(static options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -265,7 +266,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddSwagger(
         this IServiceCollection services)
     {
-        const string Title = "My BookHub API";
+        const string Title = "BookHub API";
         const string Version = "v1";
 
         var apiInfo = new OpenApiInfo
@@ -281,37 +282,33 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddServices(
         this IServiceCollection services)
     {
-        var singletonInterfaceType = typeof(ISingletonService);
-        var scopedInterfaceType = typeof(IScopedService);
-        var transientInterfaceType = typeof(ITransientService);
-
         Assembly
             .GetExecutingAssembly()
             .GetExportedTypes()
-            .Where(t => t.IsClass && !t.IsAbstract)
-            .Select(t => new
+            .Where(static type => type.IsClass && !type.IsAbstract)
+            .Select(static type => new
             {
-                Service = t.GetInterface($"I{t.Name}"),
-                Implementation = t
+                Service = type.GetInterface($"I{type.Name}"),
+                Implementation = type
 
             })
-            .Where(t => t.Service is not null)
+            .Where(static type => type.Service is not null)
             .ToList()
-            .ForEach(t =>
+            .ForEach(type =>
             {
-                if (singletonInterfaceType.IsAssignableFrom(t.Service))
+                if (typeof(ISingletonService).IsAssignableFrom(type.Service))
                 {
-                    services.AddSingleton(t.Service, t.Implementation);
+                    services.AddSingleton(type.Service, type.Implementation);
                 }
 
-                if (scopedInterfaceType.IsAssignableFrom(t.Service))
+                if (typeof(IScopedService).IsAssignableFrom(type.Service))
                 {
-                    services.AddScoped(t.Service, t.Implementation);
+                    services.AddScoped(type.Service, type.Implementation);
                 }
 
-                if (transientInterfaceType.IsAssignableFrom(t.Service))
+                if (typeof(ITransientService).IsAssignableFrom(type.Service))
                 {
-                    services.AddTransient(t.Service, t.Implementation);
+                    services.AddTransient(type.Service, type.Implementation);
                 }
             });
 
@@ -322,7 +319,7 @@ public static class ServiceCollectionExtensions
         this IServiceCollection services)
     {
         services
-            .AddControllers(options =>
+            .AddControllers(static options =>
             {
                 options.Filters.Add<ModelOrNotFoundActionFilter>();
             });

@@ -511,7 +511,7 @@ public sealed class ArticlesIntegration : IAsyncLifetime
             Views = views
         };
 
-        data.Articles.Add(articleDbModel);
+        data.Add(articleDbModel);
         await data.SaveChangesAsync();
 
         return articleDbModel.Id;

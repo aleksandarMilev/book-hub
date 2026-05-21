@@ -2,7 +2,9 @@ using BookHub.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var builderEnvIsNotTesting = !builder.Environment.IsEnvironment("Testing");
+var builderEnvIsNotTesting = !builder
+    .Environment
+    .IsEnvironment("Testing");
 
 builder
     .Services
@@ -34,11 +36,14 @@ if (builderEnvIsNotTesting)
 
 
 var app = builder.Build();
+var canceltationToken = app.Lifetime.ApplicationStopping;
 
-var envIsDev = app.Environment.IsDevelopment();
-var envIsNotTesting = !app.Environment.IsEnvironment("Testing");
+var appEnvIsDev = app.Environment.IsDevelopment();
+var appEnvIsNotTesting = !app
+    .Environment
+    .IsEnvironment("Testing");
 
-if (envIsDev)
+if (appEnvIsDev)
 {
     app.UseDeveloperExceptionPage();
 }
@@ -46,16 +51,15 @@ else
 {
     app
         .UseHsts()
-        .UseHttpsRedirection();
-
-    await app.UseCustomForwardedHeaders();
+        .UseHttpsRedirection()
+        .UseCustomForwardedHeaders();
 }
 
 app
     .UseRouting()
     .UseStaticFiles();
 
-if (envIsNotTesting)
+if (appEnvIsNotTesting)
 {
     app.UseAllowedCors();
 }
@@ -66,13 +70,13 @@ app
     .UseAuthorization()
     .UseAppEndpoints();
 
-if (envIsDev)
+if (appEnvIsDev)
 {
     app.UseSwaggerUI();
 
-    await app.UseMigrations();
-    await app.UseBuiltInUser();
+    await app.UseMigrations(canceltationToken);
+    await app.UseBuiltInUser(canceltationToken);
     await app.UseDevAdminRole();
 }
 
-await app.RunAsync();
+await app.RunAsync(canceltationToken);

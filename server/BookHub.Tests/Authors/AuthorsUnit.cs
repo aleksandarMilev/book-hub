@@ -451,6 +451,13 @@ public sealed class AuthorsUnit
         data.Authors.Add(author);
         await data.SaveChangesAsync();
 
+        var dummyFile = new FormFile(
+            baseStream: new MemoryStream([1, 2, 3]),
+            baseStreamOffset: 0,
+            length: 3,
+            name: "Image",
+            fileName: "test.jpg");
+
         var serviceModel = new CreateAuthorServiceModel
         {
             Name = "Updated name",
@@ -460,7 +467,7 @@ public sealed class AuthorsUnit
             Gender = Gender.Male,
             BornAt = null,
             DiedAt = null,
-            Image = null
+            Image = dummyFile
         };
 
         var result = await service.Edit(
@@ -472,7 +479,7 @@ public sealed class AuthorsUnit
         await imageWriter
             .Received(1)
             .Write(
-                resourceName: ImagePathPrefix,
+                resourceName: PendingImagePathPrefix,
                 dbModel: Arg.Any<IImageDdModel>(),
                 serviceModel: Arg.Any<IImageServiceModel>(),
                 defaultImagePath: null,
@@ -616,21 +623,20 @@ public sealed class AuthorsUnit
 
         result.Succeeded.Should().BeTrue();
 
-        var dbModel = await data
-            .Authors
+        var pending = await data
+            .AuthorEdits
             .IgnoreQueryFilters()
-            .SingleAsync(a => a.Id == author.Id);
+            .SingleAsync(a => a.AuthorId == author.Id);
 
-        dbModel.Name.Should().Be(serviceModel.Name);
-        dbModel.ImagePath.Should().Be("/images/authors/new.jpg");
-        dbModel.ModifiedOn.Should().NotBeNull();
+        pending.Name.Should().Be(serviceModel.Name);
+        pending.ImagePath.Should().Be("/images/authors/new.jpg");
 
         imageWriter
-            .Received(1)
+            .DidNotReceive()
             .Delete(
-                nameof(AuthorDbModel),
-                "/images/authors/old.jpg",
-                DefaultImagePath);
+                resourceName: Arg.Any<string>(),
+                imagePath: Arg.Any<string?>(),
+                defaultImagePath: Arg.Any<string?>());
     }
 
     [Fact]

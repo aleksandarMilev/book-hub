@@ -236,14 +236,13 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             .ServiceProvider
             .GetRequiredService<BookHubDbContext>();
 
-        var dbModel = await data
-            .Authors
+        var pending = await data
+            .AuthorEdits
             .IgnoreQueryFilters()
-            .SingleAsync(a => a.Id == authorId);
+            .SingleAsync(a => a.AuthorId == authorId);
 
-        dbModel.Name.Should().Be("Edited author name");
-        dbModel.ImagePath.Should().Be("/images/authors/seed.jpg");
-        dbModel.ModifiedOn.Should().NotBeNull();
+        pending.Name.Should().Be("Edited author name");
+        pending.ImagePath.Should().Be("/images/authors/seed.jpg");
     }
 
     [Fact]
@@ -338,10 +337,9 @@ public sealed class AuthorsIntegration : IAsyncLifetime
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         imageWriterMock.WriteCalls.Should().Be(1);
-        imageWriterMock.DeleteCalls.Should().Be(1);
-        imageWriterMock.LastDeletedPath.Should().Be("/images/authors/old.jpg");
+        imageWriterMock.DeleteCalls.Should().Be(0);
         imageWriterMock.LastWrittenPath.Should().NotBeNull();
-        imageWriterMock.LastWrittenPath!.Should().StartWith("/images/authors/test-");
+        imageWriterMock.LastWrittenPath!.Should().StartWith("/images/authors/pending/test-");
 
         using var scope = this
             .httpClientFactory
@@ -352,14 +350,13 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             .ServiceProvider
             .GetRequiredService<BookHubDbContext>();
 
-        var dbModel = await data
-            .Authors
+        var pending = await data
+            .AuthorEdits
             .IgnoreQueryFilters()
-            .SingleAsync(a => a.Id == authorId);
+            .SingleAsync(a => a.AuthorId == authorId);
 
-        dbModel.ImagePath.Should().NotBe("/images/authors/old.jpg");
-        dbModel.ImagePath.Should().StartWith("/images/authors/test-");
-        dbModel.ModifiedOn.Should().NotBeNull();
+        pending.ImagePath.Should().NotBe("/images/authors/old.jpg");
+        pending.ImagePath.Should().StartWith("/images/authors/pending/test-");
     }
 
     [Fact]

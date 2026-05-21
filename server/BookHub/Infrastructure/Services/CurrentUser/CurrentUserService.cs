@@ -5,7 +5,8 @@ using Extensions;
 
 using static Common.Constants.Names;
 
-public class CurrentUserService(IHttpContextAccessor httpContextAccessor) : ICurrentUserService
+public class CurrentUserService(
+    IHttpContextAccessor httpContextAccessor) : ICurrentUserService
 {
     private ClaimsPrincipal? User
         => httpContextAccessor.HttpContext?.User;

@@ -4,8 +4,10 @@ using Data.Models.Base;
 
 public static class DbQueryExtensions
 {
-    public static IQueryable<T> ApplyIsDeletedFilter<T>(
-        this IQueryable<T> query) 
+    extension<T>(IQueryable<T> query)
         where T : class, IDeletableEntity
-        => query.Where(e => !e.IsDeleted);
+    {
+        public IQueryable<T> ApplyIsDeletedFilter()
+            => query.Where(e => !e.IsDeleted);
+    }
 }

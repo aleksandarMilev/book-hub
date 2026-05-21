@@ -379,10 +379,9 @@ public sealed class BooksIntegration : IAsyncLifetime
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         imageWriterMock.WriteCalls.Should().Be(1);
-        imageWriterMock.DeleteCalls.Should().Be(1);
-        imageWriterMock.LastDeletedPath.Should().Be("/images/books/old.jpg");
+        imageWriterMock.DeleteCalls.Should().Be(0);
         imageWriterMock.LastWrittenPath.Should().NotBeNull();
-        imageWriterMock.LastWrittenPath!.Should().StartWith("/images/books/test-");
+        imageWriterMock.LastWrittenPath!.Should().StartWith("/images/books/pending/test-");
 
         using var scope = this
             .httpClientFactory
@@ -393,14 +392,13 @@ public sealed class BooksIntegration : IAsyncLifetime
             .ServiceProvider
             .GetRequiredService<BookHubDbContext>();
 
-        var dbModel = await data
-            .Books
+        var pending = await data
+            .BookEdits
             .IgnoreQueryFilters()
-            .SingleAsync(b => b.Id == bookId);
+            .SingleAsync(b => b.BookId == bookId);
 
-        dbModel.ImagePath.Should().NotBe("/images/books/old.jpg");
-        dbModel.ImagePath.Should().StartWith("/images/books/test-");
-        dbModel.ModifiedOn.Should().NotBeNull();
+        pending.ImagePath.Should().NotBe("/images/books/old.jpg");
+        pending.ImagePath.Should().StartWith("/images/books/pending/test-");
     }
 
     [Fact]
@@ -436,14 +434,13 @@ public sealed class BooksIntegration : IAsyncLifetime
             .ServiceProvider
             .GetRequiredService<BookHubDbContext>();
 
-        var dbModel = await data
-            .Books
+        var pending = await data
+            .BookEdits
             .IgnoreQueryFilters()
-            .SingleAsync(b => b.Id == bookId);
+            .SingleAsync(b => b.BookId == bookId);
 
-        dbModel.Title.Should().Be("Edited valid title long enough");
-        dbModel.ImagePath.Should().Be("/images/books/seed.jpg");
-        dbModel.ModifiedOn.Should().NotBeNull();
+        pending.Title.Should().Be("Edited valid title long enough");
+        pending.ImagePath.Should().Be("/images/books/seed.jpg");
     }
 
     [Fact]
