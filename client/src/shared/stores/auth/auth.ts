@@ -37,3 +37,7 @@ export const useAuth = (): AuthView =>
     resetAuth: state.resetAuth,
   }));
 
+// Non-hook access for code outside React (app start-up, axios interceptors).
+export const getAuthToken = (): string | null => useAuthStore.getState().user?.token ?? null;
+
+export const resetAuth = (): void => useAuthStore.getState().resetAuth();

@@ -10,8 +10,6 @@ export const all = async () => {
 
     return data;
   } catch (error) {
-    processError(error, errors.statistics.all);
+    return processError(error, errors.statistics.all);
   }
 };
-
-

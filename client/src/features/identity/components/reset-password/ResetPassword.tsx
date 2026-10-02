@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 
 import { useResetPassword } from '@/features/identity/hooks/useIdentity';
+import { createPasswordSchema } from '@/features/identity/validation/passwordSchema';
 import { IsError } from '@/shared/lib/utils/utils';
 
 const ResetPassword: FC = () => {
@@ -30,8 +31,12 @@ const ResetPassword: FC = () => {
       setError(t('resetPassword.validation.missingToken'));
       return;
     }
-    if (!newPassword.trim()) {
-      setError(t('resetPassword.validation.passwordRequired'));
+    try {
+      createPasswordSchema(t, t('resetPassword.validation.passwordRequired')).validateSync(
+        newPassword,
+      );
+    } catch (validationError) {
+      setError(IsError(validationError) ? validationError.message : t('messages.unknownError'));
       return;
     }
     if (!confirm.trim()) {

@@ -12,7 +12,7 @@ export const lastThree = async (token: string, signal?: AbortSignal) => {
 
     return data;
   } catch (error) {
-    processError(error, errors.notification.lastThree);
+    return processError(error, errors.notification.lastThree);
   }
 };
 
@@ -31,7 +31,7 @@ export const all = async (
 
     return data;
   } catch (error) {
-    processError(error, errors.notification.all);
+    return processError(error, errors.notification.all);
   }
 };
 
@@ -42,7 +42,7 @@ export const markAsRead = async (id: string, token: string, signal?: AbortSignal
 
     return true;
   } catch (error) {
-    processError(error, errors.notification.markAsRead);
+    return processError(error, errors.notification.markAsRead);
   }
 };
 
@@ -60,5 +60,3 @@ export const remove = async (id: string, token: string, signal?: AbortSignal) =>
     return false;
   }
 };
-
-

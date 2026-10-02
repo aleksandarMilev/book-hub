@@ -17,7 +17,7 @@ export async function all(
 
     return data;
   } catch (error) {
-    processError(error, errors.review.all);
+    return processError(error, errors.review.all);
   }
 }
 
@@ -28,7 +28,7 @@ export async function create(review: CreateReview, token: string, signal?: Abort
 
     return data;
   } catch (error) {
-    processError(error, errors.review.create);
+    return processError(error, errors.review.create);
   }
 }
 
@@ -39,7 +39,7 @@ export async function edit(id: string, review: CreateReview, token: string, sign
 
     return true;
   } catch (error) {
-    processError(error, errors.review.edit);
+    return processError(error, errors.review.edit);
   }
 }
 
@@ -50,7 +50,7 @@ export async function remove(id: string, token: string, signal?: AbortSignal) {
 
     return true;
   } catch (error) {
-    processError(error, errors.review.delete);
+    return processError(error, errors.review.delete);
   }
 }
 
@@ -62,7 +62,7 @@ export async function upvote(id: string, token: string, signal?: AbortSignal) {
 
     return true;
   } catch (error) {
-    processError(error, errors.review.vote.up);
+    return processError(error, errors.review.vote.up);
   }
 }
 
@@ -74,8 +74,6 @@ export async function downvote(id: string, token: string, signal?: AbortSignal) 
 
     return true;
   } catch (error) {
-    processError(error, errors.review.vote.down);
+    return processError(error, errors.review.vote.down);
   }
 }
-
-

@@ -41,7 +41,7 @@ export const register = async (request: RegisterRequest, signal?: AbortSignal) =
 
     return data;
   } catch (error) {
-    processError(error, errors.identity.register);
+    return processError(error, errors.identity.register);
   }
 };
 
@@ -58,7 +58,7 @@ export const login = async (
 
     return data;
   } catch (error) {
-    processError(error, errors.identity.login);
+    return processError(error, errors.identity.login);
   }
 };
 
@@ -72,7 +72,7 @@ export const forgotPassword = async (request: ForgotPasswordRequest, signal?: Ab
 
     return data;
   } catch (error) {
-    processError(error, errors.identity.passwordReset);
+    return processError(error, errors.identity.passwordReset);
   }
 };
 
@@ -86,7 +86,7 @@ export const resetPassword = async (request: ResetPasswordRequest, signal?: Abor
 
     return data;
   } catch (error) {
-    processError(error, errors.identity.passwordReset);
+    return processError(error, errors.identity.passwordReset);
   }
 };
 

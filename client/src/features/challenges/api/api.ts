@@ -15,7 +15,7 @@ export const get = async (year: number, token: string, signal?: AbortSignal) => 
 
     return data;
   } catch (error) {
-    processError(error, errors.challenges.get);
+    return processError(error, errors.challenges.get);
   }
 };
 
@@ -30,7 +30,7 @@ export const upsert = async (
 
     return true;
   } catch (error) {
-    processError(error, errors.challenges.upsert);
+    return processError(error, errors.challenges.upsert);
   }
 };
 
@@ -44,7 +44,7 @@ export const progress = async (year: number, token: string, signal?: AbortSignal
 
     return data;
   } catch (error) {
-    processError(error, errors.challenges.progress);
+    return processError(error, errors.challenges.progress);
   }
 };
 
@@ -55,7 +55,7 @@ export const streak = async (token: string, signal?: AbortSignal) => {
 
     return data;
   } catch (error) {
-    processError(error, errors.challenges.streak);
+    return processError(error, errors.challenges.streak);
   }
 };
 
@@ -66,6 +66,6 @@ export const checkInToday = async (token: string, signal?: AbortSignal) => {
 
     return true;
   } catch (error) {
-    processError(error, errors.challenges.checkIn);
+    return processError(error, errors.challenges.checkIn);
   }
 };

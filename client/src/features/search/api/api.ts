@@ -33,7 +33,7 @@ async function search<T>(
 
     return response.data;
   } catch (error) {
-    processError(error, errors.search.all);
+    return processError(error, errors.search.all);
   }
 }
 
@@ -107,5 +107,3 @@ export async function searchArticles(
     signal,
   );
 }
-
-

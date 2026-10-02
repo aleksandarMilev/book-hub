@@ -114,5 +114,14 @@
     "loginFailed": "Login failed!",
     "registrationFailed": "Registration failed!",
     "unknownError": "An error occurred!"
+  },
+  "password": {
+    "validation": {
+      "minLength": "Password must be at least {{min}} characters long",
+      "maxLength": "Password must be at most {{max}} characters long",
+      "digit": "Password must contain at least one digit",
+      "lowercase": "Password must contain at least one lowercase letter",
+      "uppercase": "Password must contain at least one uppercase letter"
+    }
   }
 }

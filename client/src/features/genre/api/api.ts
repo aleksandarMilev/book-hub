@@ -10,7 +10,7 @@ export const all = async (token: string, signal?: AbortSignal) => {
 
     return data;
   } catch (error) {
-    processError(error, errors.genre.all);
+    return processError(error, errors.genre.all);
   }
 };
 
@@ -21,8 +21,6 @@ export const details = async (id: string, token: string, signal?: AbortSignal) =
 
     return data;
   } catch (error) {
-    processError(error, errors.genre.byId);
+    return processError(error, errors.genre.byId);
   }
 };
-
-

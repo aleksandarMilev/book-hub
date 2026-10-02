@@ -21,7 +21,7 @@ export const getLastCurrentlyReading = async (
 
     return data;
   } catch (error) {
-    processError(error, errors.readingList.lastCurrentlyReading);
+    return processError(error, errors.readingList.lastCurrentlyReading);
   }
 };
 
@@ -51,7 +51,7 @@ export const getList = async (
 
     return response.data;
   } catch (error) {
-    processError(error, errors.readingList.all);
+    return processError(error, errors.readingList.all);
   }
 };
 
@@ -67,7 +67,7 @@ export const add = async (
 
     return true;
   } catch (error) {
-    processError(error, errors.readingList.add);
+    return processError(error, errors.readingList.add);
   }
 };
 
@@ -83,8 +83,6 @@ export const remove = async (
 
     return true;
   } catch (error) {
-    processError(error, errors.readingList.remove);
+    return processError(error, errors.readingList.remove);
   }
 };
-
-

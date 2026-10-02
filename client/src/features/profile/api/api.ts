@@ -12,7 +12,7 @@ export const topThree = async (signal?: AbortSignal) => {
 
     return data;
   } catch (error) {
-    processError(error, errors.profile.topThree);
+    return processError(error, errors.profile.topThree);
   }
 };
 
@@ -27,7 +27,7 @@ export const mine = async (token: string, signal?: AbortSignal) => {
       return null;
     }
 
-    processError(error, errors.profile.byId);
+    return processError(error, errors.profile.byId);
   }
 };
 
@@ -38,7 +38,7 @@ export const other = async (id: string, token: string, signal?: AbortSignal) => 
 
     return data;
   } catch (error) {
-    processError(error, errors.profile.byId);
+    return processError(error, errors.profile.byId);
   }
 };
 
@@ -83,7 +83,7 @@ export const edit = async (profile: CreateProfile, token: string, signal?: Abort
 
     return true;
   } catch (error) {
-    processError(error, errors.profile.edit);
+    return processError(error, errors.profile.edit);
   }
 };
 
@@ -94,7 +94,7 @@ export const remove = async (token: string, signal?: AbortSignal) => {
 
     return true;
   } catch (error) {
-    processError(error, errors.profile.delete);
+    return processError(error, errors.profile.delete);
   }
 };
 
@@ -105,8 +105,6 @@ export const removeAsAdmin = async (id: string, token: string, signal?: AbortSig
 
     return true;
   } catch (error) {
-    processError(error, errors.profile.delete);
+    return processError(error, errors.profile.delete);
   }
 };
-
-
