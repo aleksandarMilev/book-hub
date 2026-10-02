@@ -39,6 +39,10 @@ public sealed class BookEditConfiguration : IEntityTypeConfiguration<BookEditDbM
             .HasMaxLength(ImagePathMaxLength);
 
         builder
+            .Property(e => e.PublishedDate)
+            .HasColumnType("date");
+
+        builder
             .Property(e => e.RequestedById)
             .IsRequired();
 

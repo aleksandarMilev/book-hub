@@ -19,21 +19,20 @@ BookHub is a full-stack book community platform for discovering and sharing book
 
 - `client/` React 18 + Vite SPA
 - `server/` ASP.NET Core Web API (.NET 10) with EF Core and Identity
-- `sqlserver/` SQL Server 2022 image with Full-Text Search enabled
+- PostgreSQL 18 (official `postgres:18-alpine` image) with built-in full-text search
 - Docker Compose for dev and prod stacks
 
 ## Tech Stack
 
 - Frontend: React 18, Vite, TypeScript, React Router, Zustand, Formik/Yup, Bootstrap + MDB, i18next, Axios, Vitest
 - Backend: ASP.NET Core 10, EF Core, Identity, JWT auth, Swagger, MailKit, health checks
-- Database: SQL Server 2022 + Full-Text Search
+- Database: PostgreSQL 18 (EF Core via Npgsql), full-text search with `tsvector` + GIN
 - Tooling: ESLint, Prettier, Husky, Docker
 
 ## Project Structure
 
 - `client/` frontend app
 - `server/` API and tests
-- `sqlserver/` SQL Server Docker image with FTS
 - `docker-compose.dev.yml` local dev stack
 - `docker-compose.prod.yml` production stack
 - `.env.example` environment template
@@ -60,7 +59,7 @@ Services:
 
 ## Local Development (no Docker)
 
-1. Start SQL Server locally. Full-Text Search is required for the search endpoints.
+1. Start PostgreSQL 18 locally. The simplest way is the Compose service alone: `docker compose -f docker-compose.dev.yml --env-file .env up -d postgres` (published on `127.0.0.1:5432`). `appsettings.Development.json` already points at it with the `.env.example` credentials.
 2. Configure the API connection string and app settings. You can set `ConnectionStrings__DefaultConnection` as an environment variable or edit `server/BookHub/appsettings.Development.json`.
 3. Start the API.
 
@@ -85,8 +84,9 @@ These are the primary env vars used by the Docker stacks. For local runs you can
 
 | Variable               | Purpose                                                       |
 | ---------------------- | ------------------------------------------------------------- |
-| `SA_PASSWORD`          | SQL Server `sa` password for the Docker image                 |
-| `DB_NAME`              | Database name used in the connection string                   |
+| `POSTGRES_DB`          | Database name (created on first start of the `postgres` container) |
+| `POSTGRES_USER`        | Database user. The API connects as this user for now; a least-privilege role is planned (S-09) |
+| `POSTGRES_PASSWORD`    | Password for `POSTGRES_USER`                                  |
 | `APP_SECRET`           | JWT signing key (at least 32 bytes; startup fails otherwise) |
 | `ISSUER`               | JWT issuer                                                    |
 | `AUDIENCE`             | JWT audience                                                  |
@@ -113,7 +113,7 @@ Optional, mainly for local runs:
 - Client dev server: `5173`
 - API: `8080` (HTTP)
 - API: `8081` (HTTPS)
-- SQL Server: `1433`
+- PostgreSQL: `5432` (dev only, bound to `127.0.0.1`; not published in production)
 
 ## API Notes
 
@@ -124,8 +124,10 @@ Optional, mainly for local runs:
 ## Database, Migrations, and Seeding
 
 - Migrations are applied automatically on startup in Development only.
-- Seed data is loaded from JSON files in `server/BookHub/Features/*/Data/Seed/*.json`.
-- The Docker SQL Server image includes Full-Text Search for the search feature.
+- The initial migration seeds the "Other" genre, which books created without genres fall back to.
+- Demo data is imported on demand by the admin endpoints `POST /Administrator/DataImporter/{all|books|authors|genres|articles|books-genres}/`, which read `server/BookHub/Features/DataImporter/Data/*.json`. Rows that already exist are skipped.
+- Search uses PostgreSQL full-text search: a generated `tsvector` column (`simple` config, no stemming, because content is mixed English/Bulgarian) with a GIN index on books, authors, articles, genres and profiles. Each search word is matched as a prefix, and all words must match.
+- The database is initialized with the ICU root collation (`POSTGRES_INITDB_ARGS`), which gives linguistic ordering and correct Cyrillic case folding. It only applies when the data volume is first created.
 
 ## Default Admin (Development Only)
 
@@ -152,7 +154,7 @@ Client scripts (run from `client/`):
 Server scripts:
 
 - `dotnet run --project server/BookHub/BookHub.csproj`
-- `dotnet test server/BookHub.sln`
+- `dotnet test server/BookHub.sln` (Docker must be running: the tests start a PostgreSQL container through Testcontainers)
 
 ## Production Notes
 

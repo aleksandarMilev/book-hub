@@ -40,8 +40,9 @@ public static class Constants
 
     public static class Genres
     {
-        // The "Other" genre from DataImporter's genres.json. It isn't seeded by a migration,
-        // so it's only attached when it exists in the database.
+        // The "Other" genre, seeded by the initial migration (GenreConfiguration.HasData) and also
+        // present in DataImporter's genres.json. It's still only attached when it exists, because
+        // an admin can soft-delete it.
         public static readonly Guid OtherGenreId = new("52e607d4-c347-440a-8d55-cf2e01d88a6c");
     }
 

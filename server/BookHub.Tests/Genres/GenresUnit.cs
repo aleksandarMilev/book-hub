@@ -9,13 +9,16 @@ using FluentAssertions;
 using Infrastructure.Services.CurrentUser;
 using Microsoft.EntityFrameworkCore;
 using NSubstitute;
+using Shared.Database;
+using Shared.Seed;
 
 public sealed class GenresUnit
 {
     [Fact]
     public async Task Names_ShouldReturnAllGenresAsNamesServiceModels_AndAlso_ShouldNotReturnDeleted()
     {
-        var data = CreateInMemoryDb();
+        var (data, database) = await CreateTestDb();
+        await using var _ = database;
 
         var genre1 = NewGenre(name: "Fantasy");
         var genre2 = NewGenre(name: "Sci-Fi");
@@ -40,7 +43,8 @@ public sealed class GenresUnit
     [Fact]
     public async Task Details_ShouldReturnNull_WhenGenreWithSuchIdNotInTheDb()
     {
-        var data = CreateInMemoryDb();
+        var (data, database) = await CreateTestDb();
+        await using var _ = database;
 
         var service = new GenreService(data);
 
@@ -51,7 +55,8 @@ public sealed class GenresUnit
     [Fact]
     public async Task Details_ShouldReturnNull_WhenGenreIsDeleted()
     {
-        var data = CreateInMemoryDb();
+        var (data, database) = await CreateTestDb();
+        await using var _ = database;
 
         var deletedGenre = NewGenre(name: "Deleted");
         deletedGenre.IsDeleted = true;
@@ -69,7 +74,8 @@ public sealed class GenresUnit
     [Fact]
     public async Task Details_ShouldReturnGenreDetails_AndAlso_ShouldReturnTopThreeBooksOrderedByAverageRatingDesc()
     {
-        var data = CreateInMemoryDb();
+        var (data, database) = await CreateTestDb();
+        await using var _ = database;
 
         var genre = NewGenre(
             name: "Mystery",
@@ -133,14 +139,19 @@ public sealed class GenresUnit
             .Contain(genre.Id);
     }
 
-    private static BookHubDbContext CreateInMemoryDb()
+    private static async Task<(
+        BookHubDbContext Data,
+        TestDatabase Database)>
+    CreateTestDb()
     {
-        var options = new DbContextOptionsBuilder<BookHubDbContext>()
-            .UseInMemoryDatabase($"BookHubTests_Authors_{Guid.NewGuid():N}")
-            .Options;
-
+        var database = await PostgresServer.CreateDatabase();
         var currentUserService = Substitute.For<ICurrentUserService>();
-        return new(options, currentUserService);
+        var data = database.CreateContext(currentUserService);
+
+        // NewBook sets CreatorId = "user-1", and PostgreSQL enforces the foreign key.
+        await data.SeedUser("user-1", "user-1");
+
+        return (data, database);
     }
 
     private static GenreDbModel NewGenre(

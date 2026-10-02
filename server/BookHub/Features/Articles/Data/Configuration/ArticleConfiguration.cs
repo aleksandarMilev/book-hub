@@ -1,5 +1,6 @@
 ﻿namespace BookHub.Features.Articles.Data.Configuration;
 
+using Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Models;
@@ -37,5 +38,9 @@ public class ArticleConfiguration : IEntityTypeConfiguration<ArticleDbModel>
         builder
             .Property(a => a.Views)
             .HasDefaultValue(0);
+
+        builder.HasSearchVector(
+            nameof(ArticleDbModel.Title),
+            nameof(ArticleDbModel.Introduction));
     }
 }

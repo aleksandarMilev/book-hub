@@ -2,6 +2,7 @@
 
 using Common;
 using Data;
+using Infrastructure.Extensions;
 using Infrastructure.Services.PageClamper;
 using Microsoft.EntityFrameworkCore;
 using Models;
@@ -24,20 +25,8 @@ public class SearchService(
         var genres = data
             .Genres
             .AsNoTracking()
-            .ToSearchSeviceModels();
-
-        var term = searchTerm?.Trim();
-
-        if (!string.IsNullOrEmpty(term))
-        {
-            var safe = term.Replace("\"", "\"\"");
-            var fullTextQuery = $"\"{safe}*\"";
-
-            genres = genres
-                .Where(g => EF.Functions.Contains(g.Name, fullTextQuery));
-        }
-
-        genres = genres
+            .ApplyFullTextSearch(searchTerm)
+            .ToSearchSeviceModels()
             .OrderByDescending(b => b.Name);
 
         var total = await genres.CountAsync(cancellationToken);
@@ -63,22 +52,10 @@ public class SearchService(
             ref pageIndex,
             ref pageSize);
 
-        var dbModels = data
+        var books = data
             .Books
-            .AsNoTracking();
-
-        var term = searchTerm?.Trim();
-        if (!string.IsNullOrEmpty(term))
-        {
-            var safe = term.Replace("\"", "\"\"");
-            var fullTextQuery = $"\"{safe}*\"";
-
-            dbModels = dbModels.Where(b =>
-                EF.Functions.Contains(b.Title, fullTextQuery) ||
-                EF.Functions.Contains(b.ShortDescription, fullTextQuery));
-        }
-
-        var books = dbModels
+            .AsNoTracking()
+            .ApplyFullTextSearch(searchTerm)
             .OrderByDescending(b => b.AverageRating)
             .ToSearchSeviceModels();
 
@@ -108,20 +85,8 @@ public class SearchService(
         var articles = data
             .Articles
             .AsNoTracking()
-            .ToSearchSeviceModels();
-
-        var term = searchTerm?.Trim();
-        if (!string.IsNullOrEmpty(term))
-        {
-            var safe = term.Replace("\"", "\"\"");
-            var fullTextQuery = $"\"{safe}*\"";
-
-            articles = articles.Where(a =>
-                EF.Functions.Contains(a.Title, fullTextQuery) ||
-                EF.Functions.Contains(a.Introduction, fullTextQuery));
-        }
-
-        articles = articles
+            .ApplyFullTextSearch(searchTerm)
+            .ToSearchSeviceModels()
             .OrderByDescending(a => a.Views)
             .ThenByDescending(b => b.CreatedOn);
 
@@ -151,21 +116,8 @@ public class SearchService(
         var authors = data
             .Authors
             .AsNoTracking()
-            .ToSearchSeviceModels();
-
-        var term = searchTerm?.Trim();
-
-        if (!string.IsNullOrEmpty(term))
-        {
-            var safe = term.Replace("\"", "\"\"");
-            var fullTextQuery = $"\"{safe}*\"";
-
-            authors = authors.Where(a =>
-                EF.Functions.Contains(a.Name, fullTextQuery) ||
-                (a.PenName != null && EF.Functions.Contains(a.PenName, fullTextQuery)));
-        }
-
-        authors = authors
+            .ApplyFullTextSearch(searchTerm)
+            .ToSearchSeviceModels()
             .OrderByDescending(b => b.AverageRating);
 
         var total = await authors.CountAsync(cancellationToken);
@@ -191,21 +143,10 @@ public class SearchService(
             ref pageIndex,
             ref pageSize);
 
-        var profiles = data.Profiles.ToSearchSeviceModels();
-        var term = searchTerm?.Trim();
-
-        if (!string.IsNullOrEmpty(term))
-        {
-            var safe = term.Replace("\"", "\"\"");
-            var fullTextQuery = $"\"{safe}*\"";
-
-            profiles = profiles
-                .Where(p =>
-                    EF.Functions.Contains(p.FirstName, fullTextQuery) ||
-                    EF.Functions.Contains(p.LastName, fullTextQuery));
-        }
-
-        profiles = profiles
+        var profiles = data
+            .Profiles
+            .ApplyFullTextSearch(searchTerm)
+            .ToSearchSeviceModels()
             .OrderBy(p => p.LastName)
             .ThenBy(p => p.FirstName)
             .ThenBy(p => p.Id);

@@ -22,7 +22,6 @@ updates:
       npm-minor-patch:
         update-types: [minor, patch]
 
-  # sqlserver/ is left out on purpose: SQL Server is replaced by PostgreSQL in Phase 1.5.
   - package-ecosystem: docker
     directories:
       - /client
@@ -31,6 +30,16 @@ updates:
       interval: weekly
     groups:
       docker-minor-patch:
+        update-types: [minor, patch]
+
+  # The postgres image is referenced directly in the Compose files. Keep the test
+  # container (server/BookHub.Tests/Shared/Database/PostgresServer.cs) on the same major.
+  - package-ecosystem: docker-compose
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      docker-compose-minor-patch:
         update-types: [minor, patch]
 
   - package-ecosystem: github-actions

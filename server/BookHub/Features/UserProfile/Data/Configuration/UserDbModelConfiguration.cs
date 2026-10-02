@@ -1,5 +1,6 @@
 ﻿namespace BookHub.Features.UserProfile.Data.Configuration;
 
+using Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Models;
@@ -45,11 +46,16 @@ public sealed class UserProfileConfiguration : IEntityTypeConfiguration<UserProf
 
         builder
             .Property(p => p.DateOfBirth)
+            .HasColumnType("date")
             .IsRequired();
 
         builder
             .Property(p => p.IsDeleted)
             .IsRequired()
             .HasDefaultValue(false);
+
+        builder.HasSearchVector(
+            nameof(UserProfile.FirstName),
+            nameof(UserProfile.LastName));
     }
 }

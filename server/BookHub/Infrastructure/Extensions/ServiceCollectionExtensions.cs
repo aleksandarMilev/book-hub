@@ -147,12 +147,12 @@ public static class ServiceCollectionExtensions
             .AddDbContext<BookHubDbContext>(options =>
             {
                 options
-                 .UseSqlServer(connectionString, sqlOptions =>
+                 .UseNpgsql(connectionString, npgsqlOptions =>
                  {
-                     sqlOptions.MigrationsAssembly(
+                     npgsqlOptions.MigrationsAssembly(
                          typeof(BookHubDbContext).Assembly.FullName);
 
-                     sqlOptions.EnableRetryOnFailure();
+                     npgsqlOptions.EnableRetryOnFailure();
                  });
             });
     }

@@ -457,3 +457,32 @@ No tracked file was modified.
   - **Still deferred:**
     - Client majors go to Phase 4 (F-15).
     - FluentAssertions 8.8.0 → 8.11.0 and the other client minors were out of this phase's scope, so Dependabot will pick them up.
+- **2026-10-02 (Phase 1.5, SQL Server → PostgreSQL):**
+  - **Database:** PostgreSQL 18 (`postgres:18-alpine`) through `Npgsql.EntityFrameworkCore.PostgreSQL` 10.0.3, with `EnableRetryOnFailure`.
+    - The SQL Server migrations, including `RemoveChat`, are replaced by one `InitialPostgres` migration. No data was migrated.
+    - The database is initialized with the ICU root collation (`--locale-provider=icu --icu-locale=und`), for linguistic ordering and Cyrillic case folding.
+    - Timestamps are `timestamptz` (UTC). Date-only values (`DateOfBirth`, `PublishedDate`, `BornAt`, `DiedAt`) are `date` and stay `DateTime` in C#.
+    - **API note:** JSON timestamps now end in `Z` (they were unspecified-kind before, which the client read as local time). Date-only values serialize exactly as before.
+  - **D-11, D-15:** obsolete. The custom SQL Server FTS image (`sqlserver/`) and the Express-edition question are gone.
+  - **D-10:** the RAM concern is largely resolved: PostgreSQL idles at tens of MB instead of SQL Server's 2 GB minimum. Backups and log retention are still open (Phase 3).
+  - **B-06:** fixed. The "Other" genre is seeded by the migration (`HasData`, same ID), so books created without genres get it on a fresh database (verified end to end). Importing `genres.json` skips it as an existing row.
+  - **B-08:** fixed. Statistics is one LINQ query with explicit `!IsDeleted` / `IsApproved` filters instead of raw SQL. It ignores the global filters, because the 30 s cache is shared by every caller and an admin's filters include unapproved rows.
+  - **B-15:** the search part is fixed. One helper (`Infrastructure/Extensions/FullTextSearchExtensions`) replaces the 5 copies of the query-building code. It covers the tsvector column configuration, a safe prefix tsquery (`term:* & term:*`, splitting on any non-letter/digit, always sent as a parameter), and the blank/operator-only rules. The wrong `ActionResult<T>` types are still open.
+  - **Search behavior change:** SQL Server matched a *phrase* prefix with language word breakers and stopwords. PostgreSQL ANDs every prefix term across all of a table's indexed columns ('simple' config, no stemming or stopwords). For example, "stephen king" now matches FirstName + LastName. Blank input still returns everything. Input with no letters or digits returns an empty page (it was a SQL error risk before).
+  - **B-11:** the audit half is fixed. Created/Modified fields are set for every `IEntity`, so `Votes.CreatedOn` is no longer `0001-01-01`. `VotesController` still ignores the result and returns 200.
+  - **D-07 / D-13 / D-08:** partly fixed.
+    - D-07: the database has a `pg_isready` healthcheck, and the API waits for it (`condition: service_healthy`) in both stacks.
+    - D-13: dev publishes 5432 on `127.0.0.1` only. The bind-mounted `bin`/`obj` and `host.docker.internal` issues remain.
+    - D-08: `.env.example` has working placeholder credentials. The `${VAR:?}` guards and the API's `curl` healthcheck in prod are still open.
+  - **T-05:** the SQLite and InMemory test packages are removed. Tests run on PostgreSQL through Testcontainers 4.15 (one container per run, a database per test cloned from a migrated template). Docker must be running for `dotnet test`. Two ported tests needed setup changes, with unchanged assertions:
+    - `GenresUnit` seeds the user its books reference, because PostgreSQL enforces the foreign key.
+    - `BooksUnit…AndOtherGenreDoesNotExist` deletes the migration-seeded "Other" genre first.
+  - **New tests:** 42 (131 → 173, all passing; full run about 50 s, against about 22 s on SQLite):
+    - `SearchIntegration`: English and Bulgarian prefixes, case-insensitivity, multiple terms, every endpoint, pagination, operator-only and blank input, SQL/tsquery syntax as plain text;
+    - `StatisticsIntegration`: soft-deleted and unapproved rows excluded, including when an admin asks first;
+    - `DataImporterIntegration`: import all, the "Other" skip, and Bulgarian author search;
+    - `FullTextSearchUnit`: the tsquery builder.
+  - **DOC-01:** fixed (the README's seeding section).
+  - **S-09:** still open (Phase 3). The API connects as `POSTGRES_USER`; a least-privilege role and a migration-only role come with D-04.
+  - **B-18 (new, Low):** the DataImporter's `CreatedOn` values (articles.json) are overwritten by `ApplyAuditInfo` on insert, so every imported article shows the import time. This predates the migration (verified on the dev stack).
+  - **B-19 (new, Low):** the Profiles search isn't `AsNoTracking`, and it returns private profiles (flagged with `IsPrivate`, which the client has to honour). This is unchanged by this phase.

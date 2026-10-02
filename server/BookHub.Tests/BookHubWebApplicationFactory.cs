@@ -1,6 +1,5 @@
-﻿namespace BookHub.Tests;
+namespace BookHub.Tests;
 
-using System.Data.Common;
 using System.Net.Http.Headers;
 using Areas.Admin.Service;
 using BookHub.Infrastructure.Services.ImageWriter;
@@ -8,16 +7,18 @@ using Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Shared.Database;
 using Shared.Identity;
 using Shared.Mocks;
 
+// Runs Program in the "Testing" environment against a real PostgreSQL database
+// (see PostgresServer). Call ResetDatabase() before the first request or scope.
 public class BookHubWebApplicationFactory : WebApplicationFactory<Program>
 {
-    private DbConnection? connection;
+    private TestDatabase? database;
 
     public HttpClient CreateUserClient(
         string userId = "test-user",
@@ -47,15 +48,36 @@ public class BookHubWebApplicationFactory : WebApplicationFactory<Program>
         return client;
     }
 
+    public HttpClient CreateAnonymousClient()
+        => this.CreateClient();
+
+    // Replaces the current database with a fresh clone of the migrated template.
     public async Task ResetDatabase()
+    {
+        await this.DropDatabase();
+        this.database = await PostgresServer.CreateDatabase();
+    }
+
+    // Runs work against the database through a scoped DbContext from the app's container
+    // (the same DI registration the requests use). Intended for seeding and assertions.
+    public async Task WithData(Func<BookHubDbContext, Task> work)
     {
         using var scope = this.Services.CreateScope();
         var data = scope
             .ServiceProvider
             .GetRequiredService<BookHubDbContext>();
 
-        await data.Database.EnsureDeletedAsync();
-        await data.Database.EnsureCreatedAsync();
+        await work(data);
+    }
+
+    public async Task<T> WithData<T>(Func<BookHubDbContext, Task<T>> work)
+    {
+        using var scope = this.Services.CreateScope();
+        var data = scope
+            .ServiceProvider
+            .GetRequiredService<BookHubDbContext>();
+
+        return await work(data);
     }
 
     public ImageWriterMock GetImageWriterMock()
@@ -78,13 +100,13 @@ public class BookHubWebApplicationFactory : WebApplicationFactory<Program>
             .UseEnvironment("Testing")
             .ConfigureServices(services =>
             {
-                this.connection = new SqliteConnection("DataSource=:memory:");
-                this.connection.Open();
-
                 services
-                    .AddSingleton(this.connection)
-                    .AddDbContext<BookHubDbContext>(
-                        options => options.UseSqlite(this.connection))
+                    // The options are built per scope, so they always point at the
+                    // database from the latest ResetDatabase().
+                    .AddDbContext<BookHubDbContext>(options => options.UseNpgsql(
+                        this.database?.ConnectionString
+                            ?? throw new InvalidOperationException(
+                                $"Call {nameof(ResetDatabase)}() before using the database.")))
                     .AddHttpContextAccessor()
                     .RemoveAll<IImageWriter>()
                     .AddSingleton<IImageWriter, ImageWriterMock>()
@@ -100,14 +122,30 @@ public class BookHubWebApplicationFactory : WebApplicationFactory<Program>
                         IdentityHandler.SchemeName, _ => { });
             });
 
+    public override async ValueTask DisposeAsync()
+    {
+        await base.DisposeAsync();
+        await this.DropDatabase();
+    }
+
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
 
         if (disposing)
         {
-            this.connection?.Dispose();
-            this.connection = null;
+            this.DropDatabase().GetAwaiter().GetResult();
+        }
+    }
+
+    private async Task DropDatabase()
+    {
+        var current = this.database;
+        this.database = null;
+
+        if (current is not null)
+        {
+            await current.DisposeAsync();
         }
     }
 }

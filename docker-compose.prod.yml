@@ -1,19 +1,27 @@
 services:
-  sqlserver:
-    build:
-      context: .
-      dockerfile: sqlserver/Dockerfile
-    image: bookhub-sqlserver-fts:2022
-    container_name: sqlserver
+  postgres:
+    image: postgres:18-alpine
+    container_name: postgres
     restart: always
     environment:
-      ACCEPT_EULA: "y"
-      MSSQL_SA_PASSWORD: ${SA_PASSWORD}
-      MSSQL_PID: "Express"
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      # ICU root collation: linguistic ordering and Unicode (Cyrillic) case folding for
+      # full-text search. Only applied when the volume is first initialized.
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale-provider=icu --icu-locale=und"
+    # No published port: only the API reaches the database, over the backend network.
     volumes:
-      - sql_data:/var/opt/mssql
+      # postgres 18+ keeps its data under /var/lib/postgresql/<major>/docker.
+      - pg_data:/var/lib/postgresql
     networks:
       - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
 
   server:
     build:
@@ -21,13 +29,16 @@ services:
       dockerfile: server/BookHub/Dockerfile.prod
     container_name: server
     depends_on:
-      - sqlserver
+      postgres:
+        condition: service_healthy
     ports:
       - "8080:8080"
       - "8081:8081"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=${DB_NAME};User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True;
+      # The app connects as POSTGRES_USER for now; a least-privilege role is Phase 3 (S-09).
+      # Production doesn't apply migrations yet (D-04, Phase 3).
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
       - JwtSettings__Secret=${APP_SECRET}
       - JwtSettings__Issuer=${ISSUER}
       - JwtSettings__Audience=${AUDIENCE}
@@ -73,5 +84,5 @@ networks:
     driver: bridge
 
 volumes:
-  sql_data:
+  pg_data:
   server_uploads:

@@ -38,6 +38,14 @@ public class AuthorEditConfiguration : IEntityTypeConfiguration<AuthorEditDbMode
             .HasMaxLength(PenNameMaxLength);
 
         builder
+            .Property(e => e.BornAt)
+            .HasColumnType("date");
+
+        builder
+            .Property(e => e.DiedAt)
+            .HasColumnType("date");
+
+        builder
             .Property(e => e.RequestedById)
             .IsRequired();
 

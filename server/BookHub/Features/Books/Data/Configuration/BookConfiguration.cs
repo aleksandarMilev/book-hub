@@ -1,5 +1,6 @@
 ﻿namespace BookHub.Features.Books.Data.Configuration;
 
+using Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Models;
@@ -33,6 +34,14 @@ public sealed class BookConfiguration : IEntityTypeConfiguration<BookDbModel>
             .Property(b => b.ImagePath)
             .IsRequired()
             .HasMaxLength(ImagePathMaxLength);
+
+        builder
+            .Property(b => b.PublishedDate)
+            .HasColumnType("date");
+
+        builder.HasSearchVector(
+            nameof(BookDbModel.Title),
+            nameof(BookDbModel.ShortDescription));
 
         builder
             .HasOne(b => b.Creator)

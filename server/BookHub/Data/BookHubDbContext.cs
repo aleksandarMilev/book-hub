@@ -103,7 +103,7 @@ public class BookHubDbContext(
                     return;
                 }
 
-                if (entry.Entity is IDeletableEntity entity)
+                if (entry.Entity is IEntity entity)
                 {
                     if (entry.State == EntityState.Added)
                     {

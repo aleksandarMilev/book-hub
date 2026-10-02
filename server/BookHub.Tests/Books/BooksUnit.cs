@@ -17,10 +17,10 @@ using Infrastructure.Services.ImageWriter;
 using Infrastructure.Services.ImageWriter.Models;
 using Infrastructure.Services.PageClamper;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
+using Shared.Database;
 using Shared.Mocks;
 using static Features.Books.Shared.Constants.Paths;
 
@@ -31,8 +31,8 @@ public sealed class BooksUnit
     [Fact]
     public async Task TopThree_ShouldReturnThreeBooksOrderedByAverageRatingDesc()
     {
-        var (data, currentUserService, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, currentUserService, database) = await CreateTestDb();
+        await using var _ = database;
 
         await SeedGenre(data, OtherGenreId, "Other");
 
@@ -73,8 +73,8 @@ public sealed class BooksUnit
     [Fact]
     public async Task ByGenre_ShouldReturnPaginatedBooks()
     {
-        var (data, currentUserService, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, currentUserService, database) = await CreateTestDb();
+        await using var _ = database;
 
         var fantasyId = Guid.NewGuid();
         await SeedGenre(data, OtherGenreId, "Other");
@@ -123,8 +123,8 @@ public sealed class BooksUnit
     [Fact]
     public async Task ByAuthor_ShouldReturnPaginatedBooks()
     {
-        var (data, currentUserService, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, currentUserService, database) = await CreateTestDb();
+        await using var _ = database;
 
         await SeedGenre(data, OtherGenreId, "Other");
 
@@ -171,8 +171,8 @@ public sealed class BooksUnit
     [Fact]
     public async Task Details_ShouldReturnNull_WhenBookWithSuchIdNotInTheDb()
     {
-        var (data, currentUserService, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, currentUserService, database) = await CreateTestDb();
+        await using var _ = database;
 
         var service = NewBooksService(data, currentUserService);
 
@@ -183,8 +183,8 @@ public sealed class BooksUnit
     [Fact]
     public async Task Create_ShouldSetDefaultImagePath_AndAlso_ShouldPersistBookInDb_AndAlso_ShouldSetCreatorId_AndAlso_ShouldNotApprove_WhenNonAdmin_AndAlso_ShouldMapGenres_AndAlso_ShouldFallbackToOtherGenre_WhenNoGenresProvided()
     {
-        var (data, currentUserService, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, currentUserService, database) = await CreateTestDb();
+        await using var _ = database;
 
         await SeedUser(data, "user-1", "shano"); 
         await SeedGenre(data, OtherGenreId, "Other");
@@ -275,8 +275,8 @@ public sealed class BooksUnit
     [Fact]
     public async Task Create_ShouldSetAuthorIdNull_WhenAuthorDoesNotExist()
     {
-        var (data, currentUserService, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, currentUserService, database) = await CreateTestDb();
+        await using var _ = database;
 
         await SeedGenre(data, OtherGenreId, "Other");
 
@@ -336,8 +336,8 @@ public sealed class BooksUnit
     [Fact]
     public async Task Create_ShouldSetNonDefaultImagePath_WhenImageProvided()
     {
-        var (data, currentUserService, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, currentUserService, database) = await CreateTestDb();
+        await using var _ = database;
 
         await SeedGenre(data, OtherGenreId, "Other");
 
@@ -406,12 +406,12 @@ public sealed class BooksUnit
     [Fact]
     public async Task Create_ShouldApprove_WhenAdmin()
     {
-        var (data, currentUserService, connection) = await CreateSqliteDb(
+        var (data, currentUserService, database) = await CreateTestDb(
             userId: "admin-1",
             username: "admin",
             isAdmin: true);
 
-        await using var _ = connection;
+        await using var _ = database;
 
         await SeedUser(data, "admin-1", "admin");
         await SeedGenre(data, OtherGenreId, "Other");
@@ -476,8 +476,8 @@ public sealed class BooksUnit
     [Fact]
     public async Task Edit_ShouldSetPendingAuthorId_AndAlso_ShouldNotChangeBook_WhenNonAdminAndAuthorExists()
     {
-        var (data, currentUserService, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, currentUserService, database) = await CreateTestDb();
+        await using var _ = database;
 
         await SeedGenre(data, OtherGenreId, "Other");
 
@@ -530,8 +530,8 @@ public sealed class BooksUnit
     [Fact]
     public async Task Edit_ShouldReturnNotFoundResult_WhenBookWithSuchIdNotInTheDb()
     {
-        var (data, currentUserService, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, currentUserService, database) = await CreateTestDb();
+        await using var _ = database;
 
         await SeedGenre(data, OtherGenreId, "Other");
 
@@ -561,8 +561,8 @@ public sealed class BooksUnit
     [Fact]
     public async Task Edit_ShouldReturnUnauthorizedResult_WhenNotCreator()
     {
-        var (data, currentUserService, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, currentUserService, database) = await CreateTestDb();
+        await using var _ = database;
 
         currentUserService.GetId().Returns("user-2");
 
@@ -600,8 +600,8 @@ public sealed class BooksUnit
     [Fact]
     public async Task Edit_ShouldCreatePendingEditWithNewImage_AndAlso_ShouldNotChangeBook_AndAlso_ShouldNotifyAdmins_WhenNonAdmin()
     {
-        var (data, currentUserService, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, currentUserService, database) = await CreateTestDb();
+        await using var _ = database;
 
         await SeedUser(data, "user-1", "shano");
         await SeedGenre(data, OtherGenreId, "Other");
@@ -725,8 +725,8 @@ public sealed class BooksUnit
     [Fact]
     public async Task Edit_ShouldCallImageWriterWithPendingPrefixAndNullDefaultImagePath_WhenNonAdmin()
     {
-        var (data, currentUserService, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, currentUserService, database) = await CreateTestDb();
+        await using var _ = database;
 
         await SeedGenre(data, OtherGenreId, "Other");
 
@@ -786,8 +786,8 @@ public sealed class BooksUnit
     [Fact]
     public async Task Edit_ShouldNotDeleteOldImage_WhenNewImageProvided_ButImagePathDoesNotChange()
     {
-        var (data, currentUserService, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, currentUserService, database) = await CreateTestDb();
+        await using var _ = database;
 
         await SeedGenre(data, OtherGenreId, "Other");
 
@@ -858,8 +858,8 @@ public sealed class BooksUnit
     [Fact]
     public async Task Delete_ShouldSoftDeleteBook_AndAlso_ShouldFilterItOut()
     {
-        var (data, currentUserService, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, currentUserService, database) = await CreateTestDb();
+        await using var _ = database;
 
         currentUserService.GetId().Returns("admin-1");
         currentUserService.IsAdmin().Returns(true);
@@ -893,8 +893,8 @@ public sealed class BooksUnit
     [Fact]
     public async Task Approve_ShouldReturnUnauthorizedResult_WhenNotAdmin()
     {
-        var (data, currentUserService, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, currentUserService, database) = await CreateTestDb();
+        await using var _ = database;
 
         await SeedGenre(data, OtherGenreId, "Other");
 
@@ -913,8 +913,8 @@ public sealed class BooksUnit
     [Fact]
     public async Task Approve_ShouldSetIsApprovedTrue_AndAlso_ShouldNotifyCreator_AndAlso_ShouldIncrementCreatedBooksCount()
     {
-        var (data, currentUserService, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, currentUserService, database) = await CreateTestDb();
+        await using var _ = database;
 
         currentUserService.GetId().Returns("admin-1");
         currentUserService.IsAdmin().Returns(true);
@@ -970,8 +970,8 @@ public sealed class BooksUnit
     [Fact]
     public async Task Reject_ShouldSoftDeleteBook_AndAlso_ShouldNotifyCreator()
     {
-        var (data, currentUserService, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, currentUserService, database) = await CreateTestDb();
+        await using var _ = database;
 
         currentUserService.GetId().Returns("admin-1");
         currentUserService.IsAdmin().Returns(true);
@@ -1025,8 +1025,8 @@ public sealed class BooksUnit
     [InlineData(2)]
     public async Task Create_ShouldPersistBook_AndAlso_ShouldNotifyEveryAdmin_WhenNonAdmin(int adminCount)
     {
-        var (data, currentUserService, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, currentUserService, database) = await CreateTestDb();
+        await using var _ = database;
 
         await SeedGenre(data, OtherGenreId, "Other");
 
@@ -1070,8 +1070,8 @@ public sealed class BooksUnit
     [Fact]
     public async Task Create_ShouldNotPersistBook_WhenAdminNotificationCannotBeSaved()
     {
-        var (data, currentUserService, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, currentUserService, database) = await CreateTestDb();
+        await using var _ = database;
 
         await SeedGenre(data, OtherGenreId, "Other");
 
@@ -1101,8 +1101,8 @@ public sealed class BooksUnit
     [Fact]
     public async Task Create_ShouldReturnError_AndAlso_ShouldNotPersistBook_AndAlso_ShouldNotWriteImage_WhenGenreDoesNotExist()
     {
-        var (data, currentUserService, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, currentUserService, database) = await CreateTestDb();
+        await using var _ = database;
 
         await SeedGenre(data, OtherGenreId, "Other");
 
@@ -1133,8 +1133,8 @@ public sealed class BooksUnit
     [Fact]
     public async Task Create_ShouldMapOtherGenre_AndAlso_ShouldNotMutateCallersGenres_WhenNoGenresProvided()
     {
-        var (data, currentUserService, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, currentUserService, database) = await CreateTestDb();
+        await using var _ = database;
 
         await SeedGenre(data, OtherGenreId, "Other");
 
@@ -1162,8 +1162,15 @@ public sealed class BooksUnit
     [Fact]
     public async Task Create_ShouldPersistBookWithoutGenres_WhenNoGenresProvided_AndOtherGenreDoesNotExist()
     {
-        var (data, currentUserService, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, currentUserService, database) = await CreateTestDb();
+        await using var _ = database;
+
+        // The initial migration seeds "Other", so remove it to set up this case.
+        await data
+            .Genres
+            .IgnoreQueryFilters()
+            .Where(g => g.Id == OtherGenreId)
+            .ExecuteDeleteAsync();
 
         var service = NewBooksService(
             data,
@@ -1191,8 +1198,8 @@ public sealed class BooksUnit
     [Fact]
     public async Task Edit_ShouldReturnError_AndAlso_ShouldNotCreatePendingEdit_WhenGenreDoesNotExist()
     {
-        var (data, currentUserService, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, currentUserService, database) = await CreateTestDb();
+        await using var _ = database;
 
         var book = NewBookDbModel(
             creatorId: "user-1",
@@ -1221,12 +1228,12 @@ public sealed class BooksUnit
     [Fact]
     public async Task Edit_ShouldApplyChangesDirectly_AndAlso_ShouldRemapGenres_AndAlso_ShouldDeleteOldImage_AndAlso_ShouldNotCreatePendingEdit_WhenAdmin()
     {
-        var (data, currentUserService, connection) = await CreateSqliteDb(
+        var (data, currentUserService, database) = await CreateTestDb(
             userId: "admin-1",
             username: "admin",
             isAdmin: true);
 
-        await using var _ = connection;
+        await using var _ = database;
 
         await SeedUser(data, "user-1", "shano");
         await SeedGenre(data, OtherGenreId, "Other");
@@ -1342,12 +1349,12 @@ public sealed class BooksUnit
     [Fact]
     public async Task Approve_ShouldDropGenresThatNoLongerExist_AndAlso_ShouldFallBackToOtherGenre()
     {
-        var (data, currentUserService, connection) = await CreateSqliteDb(
+        var (data, currentUserService, database) = await CreateTestDb(
             userId: "admin-1",
             username: "admin",
             isAdmin: true);
 
-        await using var _ = connection;
+        await using var _ = database;
 
         await SeedUser(data, "user-1", "shano");
         await SeedGenre(data, OtherGenreId, "Other");
@@ -1410,30 +1417,24 @@ public sealed class BooksUnit
     private static async Task<(
         BookHubDbContext Data,
         ICurrentUserService CurrentUserService,
-        SqliteConnection SqliteConnection)>
-    CreateSqliteDb(
+        TestDatabase Database)>
+    CreateTestDb(
         string userId = "user-1",
         string username = "shano",
         bool isAdmin = false)
     {
-        var connection = new SqliteConnection("DataSource=:memory:");
-        await connection.OpenAsync();
-
-        var options = new DbContextOptionsBuilder<BookHubDbContext>()
-            .UseSqlite(connection)
-            .Options;
+        var database = await PostgresServer.CreateDatabase();
 
         var currentUserService = Substitute.For<ICurrentUserService>();
         currentUserService.GetId().Returns(userId);
         currentUserService.GetUsername().Returns(username);
         currentUserService.IsAdmin().Returns(isAdmin);
 
-        var data = new BookHubDbContext(options, currentUserService);
-        await data.Database.EnsureCreatedAsync();
+        var data = database.CreateContext(currentUserService);
 
         await SeedUser(data, userId, username);
 
-        return (data, currentUserService, connection);
+        return (data, currentUserService, database);
     }
 
     private static BookService NewBooksService(

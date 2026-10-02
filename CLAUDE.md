@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-BookHub is a book community platform: a React 18 + Vite + TypeScript SPA in `client/`, an ASP.NET Core (.NET 10) Web API with EF Core + Identity in `server/`, and a SQL Server 2022 image with Full-Text Search in `sqlserver/`.
+BookHub is a book community platform: a React 18 + Vite + TypeScript SPA in `client/`, an ASP.NET Core (.NET 10) Web API with EF Core (Npgsql) + Identity in `server/`, and PostgreSQL 18 (the official `postgres:18-alpine` image, no custom build).
 
 ## Commands
 
@@ -33,7 +33,9 @@ Migrations live in `server/BookHub/Data/Migrations` (needs the `dotnet-ef` tool)
 dotnet ef migrations add <Name> --project server/BookHub --output-dir Data/Migrations
 ```
 
-Migrations are applied automatically on startup only in Development. Production doesn't apply them.
+Migrations are applied automatically on startup only in Development. Production doesn't apply them. The history starts at `InitialPostgres` (the SQL Server migrations were deleted, with no data migration).
+
+For local `dotnet run`, start only the database with `docker compose -f docker-compose.dev.yml --env-file .env up -d postgres`. `appsettings.Development.json` points at `localhost:5432` with the `.env.example` credentials.
 
 ### Client (from `client/`)
 
@@ -70,19 +72,30 @@ The request flow is: WebModel → `.ToCreateServiceModel()` → service → DbMo
 
 **`BookHubDbContext` behaviour** (it depends on `ICurrentUserService`, so it is per-request):
 
-- **Soft delete:** removing an `IDeletableEntity` is rewritten to `IsDeleted = true`. Created/Modified/Deleted audit fields are filled in `SaveChanges`.
+- **Soft delete:** removing an `IDeletableEntity` is rewritten to `IsDeleted = true`. Created/Modified audit fields are filled in `SaveChanges` for every `IEntity`, and Deleted fields for `IDeletableEntity`.
+
+**PostgreSQL conventions:**
+
+- **Timestamps** (`CreatedOn`, `ModifiedOn`, `DeletedOn`, `CompletedOn`, …) are `timestamptz`. Npgsql only accepts `DateTimeKind.Utc` for them, so always write `DateTime.UtcNow` (or a `DateTimeKind.Utc` literal, e.g. in `HasData`). They're read back as UTC and serialize with a `Z`.
+- **Date-only values** (`DateOfBirth`, `PublishedDate`, `BornAt`, `DiedAt`) stay `DateTime` in C# but are mapped with `.HasColumnType("date")` in their configurations. Do the same for any new date-only property. They read back as `Kind=Unspecified`, so the JSON has no `Z`, and the client's `new Date()` doesn't shift the day.
+- **Case sensitivity:** string equality is case-sensitive in PostgreSQL. Identity lookups use the `Normalized*` columns. For a new case-insensitive filter use `EF.Functions.ILike`, and compare explicitly for uniqueness checks. Don't use nondeterministic collations. The database is initialized with the ICU root collation (`POSTGRES_INITDB_ARGS` in Compose and in the test container) for linguistic ordering and Unicode case folding.
+- Never build SQL by string concatenation with user input. The only raw SQL in the app is the constant anchor in `StatisticsQuery`.
 - **Global query filters**, built by reflection: `IDeletableEntity` hides deleted rows. `IApprovableEntity` (Books, Authors) hides unapproved rows unless the current user is an admin or matches the entity's `CreatorId`. Admin/approval code uses `.IgnoreQueryFilters().ApplyIsDeletedFilter()` to see unapproved rows while still excluding deleted ones.
 
-**Approval workflow (Books, Authors).** A non-admin's create produces an unapproved entity and a notification to the admin (`IAdminService.GetId()`). An admin's create is auto-approved. An **edit doesn't modify the entity**: it upserts a pending row in `BookEdits`/`AuthorEdits` (pending images go under a separate pending image path). `Details` shows the pending edit on top of the entity only to the creator and admins. Everyone else sees the approved version. Admin `Approve` copies the pending edit onto the entity and deletes it, and `Reject` discards it. Changes to these entities usually need to touch both the main and `*Edit` models/mappings.
+**Approval workflow (Books, Authors).** A non-admin's create produces an unapproved entity and a notification to every admin (`IAdminService.GetIds()`). An admin's create is auto-approved. An **edit doesn't modify the entity**: it upserts a pending row in `BookEdits`/`AuthorEdits` (pending images go under a separate pending image path). `Details` shows the pending edit on top of the entity only to the creator and admins. Everyone else sees the approved version. Admin `Approve` copies the pending edit onto the entity and deletes it, and `Reject` discards it. Changes to these entities usually need to touch both the main and `*Edit` models/mappings.
 
 **Other cross-cutting pieces:**
 
 - `IImageWriter` / `IImageValidator`: images go to `wwwroot`. Entities and service models implement `IImageDdModel` / `IImageServiceModel`.
 - `IPageClamper` and `PaginatedModel<T>` handle pagination.
 - A global per-IP fixed-window rate limiter.
-- Search (`Features/Search`) uses `EF.Functions.Contains`, which requires SQL Server Full-Text Search. The FTS catalog is created by the `FullTextSearch` migration.
-- Seed/demo data: the admin endpoints `POST /Administrator/DataImporter/{all|books|authors|genres|articles|books-genres}/` import `Features/DataImporter/Data/*.json`. The README's `Features/*/Data/Seed` path is out of date.
-- Development startup creates the admin `admin@mail.com` / `admin1234` and a built-in user. `UseProductionAdminRole` (driven by `BootstrapAdmin:*` config) is intentionally unused, but it's kept for disaster recovery: don't delete it.
+- **Search** (`Features/Search`) uses PostgreSQL full-text search. Books, Authors, Articles, Genres and Profiles have a shadow `SearchVector` property: a generated, stored `tsvector` column (`simple` config: lowercased, no stemming or stopwords, because content mixes English and Bulgarian) with a GIN index. Everything goes through `Infrastructure/Extensions/FullTextSearchExtensions`:
+  - `HasSearchVector(...)` is used in the entity configurations;
+  - `ApplyFullTextSearch(searchTerm)` is applied to the DbModel query *before* projection;
+  - `ToPrefixTsQuery` turns input into `term:* & term:*`, splitting on any non-letter/digit so tsquery operators can't get through. The tsquery is always a parameter.
+  - Blank input means no filter. Input with no letters or digits returns an empty page.
+- **Seed/demo data:** the initial migration seeds the "Other" genre (`HasData`, ID `52e607d4-…`). The admin endpoints `POST /Administrator/DataImporter/{all|books|authors|genres|articles|books-genres}/` import `Features/DataImporter/Data/*.json` and skip IDs that already exist.
+- Development startup creates the admin `admin@mail.com` / `admin1234` and a built-in user. Outside Development, `UseProductionAdminRole` creates the admin only when `BootstrapAdmin:Enabled` is true.
 
 **Environment-specific behaviour:**
 
@@ -92,12 +105,27 @@ The request flow is: WebModel → `.ToCreateServiceModel()` → service → DbMo
 
 ## Server tests (`server/BookHub.Tests`)
 
-xUnit + FluentAssertions + NSubstitute. Test parallelization is disabled assembly-wide. Each feature has `<Feature>Unit.cs` and `<Feature>Integration.cs`:
+xUnit v2 + FluentAssertions + NSubstitute + Testcontainers. Test parallelization is disabled assembly-wide. Test classes are named `<Feature>Unit.cs` / `<Feature>Integration.cs` (not every feature has both yet).
 
-- **Unit tests** build the service directly against an in-memory **SQLite** `BookHubDbContext` with substituted dependencies.
-- **Integration tests** use `BookHubWebApplicationFactory`. It runs `Program` in the `"Testing"` environment, where `Program.cs` skips CORS and SQL Server registration. The factory swaps in SQLite in-memory, `ImageWriterMock` and `AdminServiceMock("test-admin-id")`, and replaces JWT with a test auth scheme. Use `CreateUserClient(userId, username)` / `CreateAdminClient(...)`. They send `Authorization: <scheme> user|admin:<id>:<username>`. Call `ResetDatabase()` in `InitializeAsync`, and seed matching `UserDbModel` rows.
-- Genres uses its own `GenresWebApplicationFactory` (EF InMemory).
-- Full-text search can't run on SQLite, so search isn't covered.
+**Docker must be running for `dotnet test`.** Every test uses a real PostgreSQL database:
+
+- `Shared/Database/PostgresServer` starts **one** `postgres:18-alpine` container per test run (a lazy static; Testcontainers' Ryuk removes it at exit). It uses the same ICU initdb arguments as Compose. Keep its image on the same major as the Compose files. On first use it applies the **real migrations** (`MigrateAsync`) to a `bookhub_template` database.
+- Each test gets its own database cloned from that template (`CREATE DATABASE … TEMPLATE`, roughly 0.1 s), so every test starts from the migrated schema plus the HasData seed ("Other" genre). Disposing the `TestDatabase` drops it.
+- **Integration tests** use `BookHubWebApplicationFactory`:
+  - It runs `Program` in the `"Testing"` environment, where `Program.cs` skips CORS and the database registration. The factory registers Npgsql against its own cloned database, swaps in `ImageWriterMock` and `AdminServiceMock("test-admin-id")`, and replaces JWT with a test auth scheme.
+  - Call `ResetDatabase()` in `InitializeAsync` (it clones a fresh database) and dispose the factory in `DisposeAsync`.
+  - Clients: `CreateUserClient(userId, username)`, `CreateAdminClient(...)` and `CreateAnonymousClient()`. The authenticated ones send `Authorization: <scheme> user|admin:<id>:<username>`.
+  - Seed and assert through `factory.WithData(data => …)` with the `Shared/Seed/TestSeeder` extensions (`SeedUser`, `SeedProfile`, `SeedGenre`, `SeedAuthor`, `SeedBook`). Seed a `UserDbModel` for any user ID the request uses, because PostgreSQL enforces the foreign keys.
+- **Older unit tests** (`ArticlesUnit`, `AuthorsUnit`, `BooksUnit`, `GenresUnit`) build the service directly on a `TestDatabase` context (`CreateTestDb()`) with substituted dependencies. They were ported as-is and are due for restructuring in Phase 2. Don't copy that pattern for new tests (see below).
+
+## Testing approach
+
+These rules apply to all new and changed server tests:
+
+- **Prefer integration tests over unit tests:** real PostgreSQL through Testcontainers, real HTTP through `WebApplicationFactory`, real DI. Each test validates a **workflow** and its observable outcome (HTTP status, response body, database state), not that a mock was called.
+- **Unit tests are only for pure logic with no I/O** (for example `FullTextSearchExtensions.ToPrefixTsQuery`, validators, mapping helpers).
+- **Mock only true external boundaries:** email sending (`IEmailSender`), and the file system (`IImageWriter`) where writing real files is impractical. Never mock our own services or the DbContext.
+- Make new integration tests cheap to write by extending `TestSeeder` and the factory's client helpers rather than adding per-class copies.
 
 ## Client architecture
 

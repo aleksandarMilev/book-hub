@@ -50,9 +50,9 @@ The welcome email is sent in the background through an in-memory, bounded queue 
 
 ## Seed the "Other" genre (Postgres migration)
 
-**Status:** open, from Phase 1a (B-06).
+**Status:** done in Phase 1.5 (2026-10).
 
-Books created without genres get the "Other" genre (`52e607d4-c347-440a-8d55-cf2e01d88a6c`) only if it exists. Today it only exists after an admin runs the DataImporter, so on a fresh database such books end up with no genres. Seed "Other" in the initial Postgres migration (`HasData`) with the same ID.
+Books created without genres get the "Other" genre (`52e607d4-c347-440a-8d55-cf2e01d88a6c`) only if it exists. Before Phase 1.5 it only existed after an admin ran the DataImporter. The `InitialPostgres` migration now seeds it (`GenreConfiguration.HasData`, same ID and values as `genres.json`), and importing `genres.json` skips it as an existing row.
 
 ## Phase 2: test framework upgrades
 

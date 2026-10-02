@@ -9,10 +9,10 @@ using Infrastructure.Services.CurrentUser;
 using Infrastructure.Services.ImageWriter;
 using Infrastructure.Services.ImageWriter.Models;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
+using Shared.Database;
 
 using static Features.Articles.Shared.Constants.Paths;
 
@@ -21,8 +21,8 @@ public sealed class ArticlesUnit
     [Fact]
     public async Task Details_ShouldIncrementViews_AndAlso_ShouldReturnServiceModel_WhenNotEditMode()
     {
-        var (data, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, database) = await CreateTestDb();
+        await using var _ = database;
 
         var imageWriter = Substitute.For<IImageWriter>();
         var logger = Substitute.For<ILogger<ArticleService>>();
@@ -58,8 +58,8 @@ public sealed class ArticlesUnit
     [Fact]
     public async Task Details_ShouldNotIncrementViews_WhenEditMode()
     {
-        var (data, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, database) = await CreateTestDb();
+        await using var _ = database;
 
         var imageWriter = Substitute.For<IImageWriter>();
         var logger = Substitute.For<ILogger<ArticleService>>();
@@ -92,8 +92,8 @@ public sealed class ArticlesUnit
     [Fact]
     public async Task Details_ShouldReturnNull_WhenArtcileWithSuchIdNotInTheDb()
     {
-        var (data, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, database) = await CreateTestDb();
+        await using var _ = database;
 
         var imageWriter = Substitute.For<IImageWriter>();
         var logger = Substitute.For<ILogger<ArticleService>>();
@@ -113,8 +113,8 @@ public sealed class ArticlesUnit
     [Fact]
     public async Task Create_ShouldSetNonDefaultImagePath_WhenImageProvided()
     {
-        var (data, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, database) = await CreateTestDb();
+        await using var _ = database;
 
         var imageWriter = Substitute.For<IImageWriter>();
         imageWriter
@@ -169,8 +169,8 @@ public sealed class ArticlesUnit
     [Fact]
     public async Task Create_ShouldSetDefaultImagePath_AndAlso_ShouldPersistArticleInDb_AndAlso_ShouldReturnServiceModel_WhenImageNotProvided()
     {
-        var (data, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, database) = await CreateTestDb();
+        await using var _ = database;
 
         var imageWriter = Substitute.For<IImageWriter>();
 
@@ -230,8 +230,8 @@ public sealed class ArticlesUnit
     [Fact]
     public async Task Edit_ShouldNotDeleteOldImage_WhenNewImageProvided_ButImagePathDoesNotChange()
     {
-        var (data, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, database) = await CreateTestDb();
+        await using var _ = database;
 
         var imageWriter = Substitute.For<IImageWriter>();
         imageWriter
@@ -289,8 +289,8 @@ public sealed class ArticlesUnit
     [Fact]
     public async Task Edit_ShouldCallImageWriterWithNullDefaultImagePath()
     {
-        var (data, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, database) = await CreateTestDb();
+        await using var _ = database;
 
         var imageWriter = Substitute.For<IImageWriter>();
         var logger = Substitute.For<ILogger<ArticleService>>();
@@ -331,8 +331,8 @@ public sealed class ArticlesUnit
     [Fact]
     public async Task Edit_ShouldReturnNotFoundResult_AndAlso_ShouldNotWriteImage_WhenArtcileWithSuchIdNotInTheDb()
     {
-        var (data, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, database) = await CreateTestDb();
+        await using var _ = database;
 
         var imageWriter = Substitute.For<IImageWriter>();
         var logger = Substitute.For<ILogger<ArticleService>>();
@@ -374,8 +374,8 @@ public sealed class ArticlesUnit
     [Fact]
     public async Task Edit_ShouldChangeImagePath_AndAlso_ShouldDeletesOldImage_WhenNewImageProvided()
     {
-        var (data, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, database) = await CreateTestDb();
+        await using var _ = database;
 
         var imageWriter = Substitute.For<IImageWriter>();
         imageWriter
@@ -450,8 +450,8 @@ public sealed class ArticlesUnit
     [Fact]
     public async Task Edit_ShouldNotDeleteOldImage_WhenNoNewImageProvided()
     {
-        var (data, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, database) = await CreateTestDb();
+        await using var _ = database;
 
         var imageWriter = Substitute.For<IImageWriter>();
         var logger = Substitute.For<ILogger<ArticleService>>();
@@ -490,8 +490,8 @@ public sealed class ArticlesUnit
     [Fact]
     public async Task Delete_ShouldSoftDeleteArticle_AndAlso_ShouldFilterItOut()
     {
-        var (data, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, database) = await CreateTestDb();
+        await using var _ = database;
 
         var imageWriter = Substitute.For<IImageWriter>();
         var logger = Substitute.For<ILogger<ArticleService>>();
@@ -527,8 +527,8 @@ public sealed class ArticlesUnit
     [Fact]
     public async Task Delete_ShouldReturnNotFoundResult_WhenArtcileWithSuchIdNotInTheDb()
     {
-        var (data, connection) = await CreateSqliteDb();
-        await using var _ = connection;
+        var (data, database) = await CreateTestDb();
+        await using var _ = database;
 
         var imageWriter = Substitute.For<IImageWriter>();
         var logger = Substitute.For<ILogger<ArticleService>>();
@@ -549,26 +549,20 @@ public sealed class ArticlesUnit
 
     private static async Task<(
         BookHubDbContext Data,
-        SqliteConnection SqliteConnection)> 
-    CreateSqliteDb(
+        TestDatabase Database)>
+    CreateTestDb(
         string username = "shano")
     {
-        var connection = new SqliteConnection("DataSource=:memory:");
-        await connection.OpenAsync();
-
-        var options = new DbContextOptionsBuilder<BookHubDbContext>()
-            .UseSqlite(connection)
-            .Options;
+        var database = await PostgresServer.CreateDatabase();
 
         var currentUserService = Substitute.For<ICurrentUserService>();
         currentUserService
             .GetUsername()
             .Returns(username);
 
-        var data = new BookHubDbContext(options, currentUserService);
-        await data.Database.EnsureCreatedAsync();
+        var data = database.CreateContext(currentUserService);
 
-        return (data, connection);
+        return (data, database);
     }
 
     private static ArticleDbModel NewArticle(

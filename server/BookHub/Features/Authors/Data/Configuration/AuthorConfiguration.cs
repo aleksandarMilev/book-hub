@@ -1,5 +1,6 @@
 ﻿namespace BookHub.Features.Authors.Data.Configuration;
 
+using Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Models;
@@ -32,6 +33,18 @@ public class AuthorConfiguration : IEntityTypeConfiguration<AuthorDbModel>
         builder
             .Property(a => a.PenName)
             .HasMaxLength(PenNameMaxLength);
+
+        builder
+            .Property(a => a.BornAt)
+            .HasColumnType("date");
+
+        builder
+            .Property(a => a.DiedAt)
+            .HasColumnType("date");
+
+        builder.HasSearchVector(
+            nameof(AuthorDbModel.Name),
+            nameof(AuthorDbModel.PenName));
 
         builder
             .HasOne(a => a.Creator)

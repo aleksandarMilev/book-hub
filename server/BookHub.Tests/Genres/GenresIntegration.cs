@@ -14,7 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 public sealed class GenresIntegration : IAsyncLifetime
 {
-    private readonly GenresWebApplicationFactory httpClientFactory = new();
+    private readonly BookHubWebApplicationFactory httpClientFactory = new();
 
     public async Task InitializeAsync()
     {
