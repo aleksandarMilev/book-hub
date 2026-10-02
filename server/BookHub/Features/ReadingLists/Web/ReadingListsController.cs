@@ -30,6 +30,11 @@ public class ReadingListsController(IReadingListService service) : ApiController
             pageSize,
             token);
 
+        if (result is null)
+        {
+            return this.NotFound();
+        }
+
         if (result.Succeeded)
         {
             return this.Ok(result.Data);

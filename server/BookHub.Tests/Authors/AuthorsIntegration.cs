@@ -204,7 +204,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     }
 
     [Fact]
-    public async Task Edit_ShouldReturnsNoContent_AndAlso_ShouldUpdateFields_WhenAuthorExists()
+    public async Task Edit_ShouldReturnNoContent_AndAlso_ShouldCreatePendingEdit_AndAlso_ShouldNotifyAdmin_WhenNonAdmin()
     {
         var authorId = await this.SeedAuthor(
             isApproved: true,
@@ -241,9 +241,79 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             .IgnoreQueryFilters()
             .SingleAsync(a => a.Id == authorId);
 
+        dbModel.Name.Should().NotBe("Edited author name");
+        dbModel.ImagePath.Should().Be("/images/authors/seed.jpg");
+
+        var pending = await data
+            .AuthorEdits
+            .SingleAsync(e => e.AuthorId == authorId);
+
+        pending.Name.Should().Be("Edited author name");
+        pending.ImagePath.Should().Be("/images/authors/seed.jpg");
+        pending.RequestedById.Should().Be("test-user");
+
+        var notificationReceivers = await data
+            .Notifications
+            .Where(n => n.ResourceId == authorId)
+            .Select(n => n.ReceiverId)
+            .ToListAsync();
+
+        notificationReceivers.Should().Equal("test-admin-id");
+    }
+
+    [Fact]
+    public async Task Edit_ShouldReturnNoContent_AndAlso_ShouldUpdateFieldsDirectly_WhenAdmin()
+    {
+        var authorId = await this.SeedAuthor(
+            isApproved: true,
+            imagePath: "/images/authors/seed.jpg");
+
+        var httpClient = this.httpClientFactory.CreateAdminClient();
+
+        var formData = BuildAuthorForm(
+            authorName: "Edited author name",
+            biography: new string('x', 200),
+            penName: "Edited pen name",
+            nationality: Nationality.France,
+            gender: Gender.Other,
+            bornAt: new DateTime(1940, 2, 2),
+            diedAt: new DateTime(2020, 3, 3));
+
+        var response = await httpClient.PutAsync(
+            $"/Authors/{authorId}/",
+            formData);
+
+        response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+
+        using var scope = this
+            .httpClientFactory
+            .Services
+            .CreateScope();
+
+        var data = scope
+            .ServiceProvider
+            .GetRequiredService<BookHubDbContext>();
+
+        var dbModel = await data
+            .Authors
+            .IgnoreQueryFilters()
+            .SingleAsync(a => a.Id == authorId);
+
         dbModel.Name.Should().Be("Edited author name");
         dbModel.ImagePath.Should().Be("/images/authors/seed.jpg");
         dbModel.ModifiedOn.Should().NotBeNull();
+
+        var hasPendingEdit = await data
+            .AuthorEdits
+            .AnyAsync(e => e.AuthorId == authorId);
+
+        hasPendingEdit.Should().BeFalse();
+
+        var hasNotifications = await data
+            .Notifications
+            .AnyAsync(n => n.ResourceId == authorId);
+
+        hasNotifications.Should().BeFalse();
     }
 
     [Fact]
@@ -313,13 +383,65 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     }
 
     [Fact]
-    public async Task Edit_ShouldUpdateImage_AndAlso_ShouldDeleteOldImage_WhenNewImageProvided()
+    public async Task Edit_ShouldWritePendingImage_AndAlso_ShouldKeepAuthorImage_WhenNonAdminProvidesNewImage()
     {
         var authorId = await this.SeedAuthor(
             isApproved: true,
             imagePath: "/images/authors/old.jpg");
 
         var httpClient = this.httpClientFactory.CreateUserClient();
+        var imageWriterMock = this.httpClientFactory.GetImageWriterMock();
+
+        var formData = BuildAuthorFormWithImage(
+            authorName: "Edited author name",
+            biography: new string('x', 200),
+            penName: "Edited pen name",
+            nationality: Nationality.France,
+            gender: Gender.Other,
+            bornAt: new DateTime(1940, 2, 2),
+            diedAt: new DateTime(2020, 3, 3));
+
+        var response = await httpClient.PutAsync(
+            $"/Authors/{authorId}/",
+            formData);
+
+        response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+
+        imageWriterMock.WriteCalls.Should().Be(1);
+        imageWriterMock.DeleteCalls.Should().Be(0);
+        imageWriterMock.LastWrittenPath.Should().StartWith($"/images/{PendingImagePathPrefix}/test-");
+
+        using var scope = this
+            .httpClientFactory
+            .Services
+            .CreateScope();
+
+        var data = scope
+            .ServiceProvider
+            .GetRequiredService<BookHubDbContext>();
+
+        var dbModel = await data
+            .Authors
+            .IgnoreQueryFilters()
+            .SingleAsync(a => a.Id == authorId);
+
+        dbModel.ImagePath.Should().Be("/images/authors/old.jpg");
+
+        var pending = await data
+            .AuthorEdits
+            .SingleAsync(e => e.AuthorId == authorId);
+
+        pending.ImagePath.Should().Be(imageWriterMock.LastWrittenPath);
+    }
+
+    [Fact]
+    public async Task Edit_ShouldUpdateImage_AndAlso_ShouldDeleteOldImage_WhenAdminProvidesNewImage()
+    {
+        var authorId = await this.SeedAuthor(
+            isApproved: true,
+            imagePath: "/images/authors/old.jpg");
+
+        var httpClient = this.httpClientFactory.CreateAdminClient();
         var imageWriterMock = this.httpClientFactory.GetImageWriterMock();
 
         var formData = BuildAuthorFormWithImage(

@@ -15,29 +15,32 @@ public interface INotificationService : ITransientService
         int pageSize,
         CancellationToken cancellationToken = default);
 
-    Task<Guid> CreateOnBookCreation(
+    /// <summary>
+    /// Adds one notification per receiver to the change tracker without saving.
+    /// The caller's SaveChangesAsync persists them together with its own changes.
+    /// </summary>
+    void AddOnBookCreation(
         Guid bookId,
         string bookTitle,
-        string receiverId,
-        CancellationToken cancellationToken = default);
+        IEnumerable<string> receiverIds);
 
-    Task<Guid> CreateOnBookEdition(
+    /// <inheritdoc cref="AddOnBookCreation"/>
+    void AddOnBookEdition(
         Guid bookId,
         string bookTitle,
-        string receiverId,
-        CancellationToken cancellationToken = default);
+        IEnumerable<string> receiverIds);
 
-    Task<Guid> CreateOnAuthorCreation(
+    /// <inheritdoc cref="AddOnBookCreation"/>
+    void AddOnAuthorCreation(
         Guid authorId,
         string authorName,
-        string receiverId,
-        CancellationToken cancellationToken = default);
+        IEnumerable<string> receiverIds);
 
-    Task<Guid> CreateOnAuthorEdition(
+    /// <inheritdoc cref="AddOnBookCreation"/>
+    void AddOnAuthorEdition(
         Guid authorId,
         string authorName,
-        string receiverId,
-        CancellationToken cancellationToken = default);
+        IEnumerable<string> receiverIds);
 
     Task<Guid> CreateOnBookApproved(
         Guid bookId,

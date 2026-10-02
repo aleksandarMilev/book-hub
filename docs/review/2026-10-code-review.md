@@ -406,3 +406,16 @@ No tracked file was modified.
 ## Status updates
 
 - **2026-10-02:** S-01, S-02, S-03, S-05, F-10 and F-13 are resolved by removing the Chat feature (Phase 0). The old code is preserved under the git tag `chat-before-removal`, and a rebuild is tracked in `docs/backlog.md`. Chat is no longer part of F-01 (the affected uploads are now books, authors and articles) or F-14 (the remaining god hook is `features/profile/hooks/useCrud.ts`). The chat references in B-07, B-12, F-09 and T-03 no longer apply either, but those findings stay open for their non-chat parts.
+- **2026-10-02 (Phase 1a, backend correctness):**
+  - **T-01:** fixed. `BooksUnit` builds `BookService` through one shared `NewBooksService` helper with the current constructor. Baseline after the fix: 105 tests, 96 passed, 9 failed (all `Edit_*`).
+  - **T-02:** fixed for the `Edit_*` tests. The 9 failing tests are rewritten: non-admin callers assert the pending `BookEdits`/`AuthorEdits` row, and admin callers assert direct edits. Broader Approve/Reject coverage stays in Phase 2.
+  - **B-01:** fixed. `UseProductionAdminRole` runs on startup outside Development when `BootstrapAdmin:Enabled` is true, with `BootstrapAdminSettings` validated on start. `IAdminService.GetIds()` returns every admin (a warning is logged and notifications are skipped when there are none). Admin notifications for book/author create and non-admin edit are staged before the single `SaveChangesAsync`, so the entity and its notifications commit together.
+  - **B-02:** fixed. Registration no longer rolls back on an email failure. The welcome email goes through a bounded in-memory channel and `WelcomeEmailBackgroundService`, which logs failures with the user ID only. Restart durability (outbox) is in `docs/backlog.md`.
+  - **B-03:** fixed. `AppUrlsSettings.ClientBaseUrl` is `[Required, Url]` and validated on start. `AppUrlsSettings__ClientBaseUrl` (from `CLIENT_BASE_URL`) is in both Compose files, `.env.example` and the README.
+  - **B-05:** fixed. The route is now `GET /ReadingLists/last-currently-reading`, matching the client.
+  - **B-06:** validation part fixed. Unknown genre IDs return a 400 `{ errorMessage }`. "Other" is attached only when it exists, and the caller's list is no longer mutated. Seeding "Other" is deferred to the Postgres migration (`docs/backlog.md`).
+  - **S-04:** fixed. Other users' reading lists return 404 when the profile is private or missing, unless the caller is an admin.
+  - **S-07:** fixed. `JwtSettings:Secret` must be at least 32 UTF-8 bytes (validated on start), keys are derived with UTF-8, and the committed dev secret is a 32+ byte placeholder. Moving it to user-secrets is still S-13.
+  - **DOC-02, DOC-05:** fixed. The README says "32+ bytes" and lists `CLIENT_BASE_URL` and the `BOOTSTRAP_ADMIN_*` variables.
+  - **B-17 (new, Low):** fixed. `NotificationService.CreateOnAuthorRejected` used `ResourceType.Book` and now uses `ResourceType.Author`.
+  - **Open question 8:** resolved. Admin edits to books and authors apply directly, and only non-admin edits go to the pending queue.

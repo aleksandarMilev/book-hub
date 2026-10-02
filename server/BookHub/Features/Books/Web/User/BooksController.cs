@@ -1,7 +1,6 @@
 ﻿namespace BookHub.Features.Books.Web.User;
 
 using Common;
-using Features.Authors.Service.Models;
 using Features.Authors.Shared;
 using Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authorization;
@@ -55,19 +54,24 @@ public class BooksController(IBookService service) : ApiController
         => this.Ok(await service.Details(id, cancellationToken));
 
     [HttpPost]
-    public async Task<ActionResult<AuthorDetailsServiceModel>> Create(
+    public async Task<ActionResult<BookDetailsServiceModel>> Create(
         CreateBookWebModel webModel,
         CancellationToken cancellationToken = default)
     {
         var serviceModel = webModel.ToCreateServiceModel();
-        var createdBook = await service.Create(
+        var result = await service.Create(
             serviceModel,
             cancellationToken);
 
+        if (!result.Succeeded)
+        {
+            return this.BadRequest(new { errorMessage = result.ErrorMessage });
+        }
+
         return this.CreatedAtRoute(
             routeName: DetailsRouteName,
-            routeValues: new { id = createdBook.Id },
-            value: createdBook);
+            routeValues: new { id = result.Data!.Id },
+            value: result.Data);
     }
 
     [HttpPut(Id)]

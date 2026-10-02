@@ -41,3 +41,15 @@ Git tag `chat-before-removal`. The `RemoveChat` migration dropped the `Chats`, `
   - **invitee** (pending): only the preview and accept/reject;
   - **outsider:** 403/404, with no information about whether the chat exists.
 - Every controller and the hub require authentication explicitly.
+
+## Welcome email outbox (post-Postgres)
+
+**Status:** open, from Phase 1a (B-02).
+
+The welcome email is sent in the background through an in-memory, bounded queue (`Features/Emails/WelcomeEmailQueue`). The in-memory email queue loses pending emails on restart. Consider an outbox table after the Postgres migration, so queued emails survive restarts and failed sends can be retried.
+
+## Seed the "Other" genre (Postgres migration)
+
+**Status:** open, from Phase 1a (B-06).
+
+Books created without genres get the "Other" genre (`52e607d4-c347-440a-8d55-cf2e01d88a6c`) only if it exists. Today it only exists after an admin runs the DataImporter, so on a fresh database such books end up with no genres. Seed "Other" in the initial Postgres migration (`HasData`) with the same ID.

@@ -1,4 +1,5 @@
 using BookHub.Infrastructure.Extensions;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +18,8 @@ builder
     .AddSwagger()
     .AddHealthcheck()
     .AddMemoryCache()
-    .AddRateLimiting(builder.Environment);
+    .AddRateLimiting(builder.Environment)
+    .AddBackgroundServices();
 
 if (builderEnvIsNotTesting)
 {
@@ -34,6 +36,13 @@ if (builderEnvIsNotTesting)
 
 
 var app = builder.Build();
+
+// Fail fast on invalid settings before anything touches the database.
+// ValidateOnStart alone would only run in RunAsync, after the startup tasks below.
+app
+    .Services
+    .GetRequiredService<IStartupValidator>()
+    .Validate();
 
 var envIsDev = app.Environment.IsDevelopment();
 var envIsNotTesting = !app.Environment.IsEnvironment("Testing");
@@ -73,6 +82,11 @@ if (envIsDev)
     await app.UseMigrations();
     await app.UseBuiltInUser();
     await app.UseDevAdminRole();
+}
+else if (envIsNotTesting)
+{
+    // No-op unless BootstrapAdmin:Enabled is true.
+    await app.UseProductionAdminRole();
 }
 
 await app.RunAsync();

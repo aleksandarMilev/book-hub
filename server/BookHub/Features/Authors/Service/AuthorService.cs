@@ -154,20 +154,21 @@ public class AuthorService(
             cancellationToken);
 
         data.Add(dbModel);
+
+        if (!isAdmin)
+        {
+            notificationService.AddOnAuthorCreation(
+                dbModel.Id,
+                dbModel.Name,
+                await adminService.GetIds(cancellationToken));
+        }
+
+        // One SaveChanges: the author and the admin notifications commit together.
         await data.SaveChangesAsync(cancellationToken);
 
         logger.LogInformation(
             "New author with Id: {id} was created.",
             dbModel.Id);
-
-        if (!isAdmin)
-        {
-            await notificationService.CreateOnAuthorCreation(
-                dbModel.Id,
-                dbModel.Name,
-                await adminService.GetId(),
-                cancellationToken);
-        }
 
         var result = dbModel.ToDetailsServiceModel();
         return ResultWith<AuthorDetailsServiceModel>.Success(result);
@@ -198,11 +199,19 @@ public class AuthorService(
 
         var userId = userService.GetId()!;
         var isNotCreator = author.CreatorId != userId;
-        var isNotAdmin = !userService.IsAdmin();
+        var isAdmin = userService.IsAdmin();
 
-        if (isNotCreator && isNotAdmin)
+        if (isNotCreator && !isAdmin)
         {
             return LogAndReturnUnauthorizedMessage(authorId, userId);
+        }
+
+        if (isAdmin)
+        {
+            return await this.EditDirectly(
+                author,
+                serviceModel,
+                cancellationToken);
         }
 
         var pending = await data
@@ -268,16 +277,13 @@ public class AuthorService(
             pending.ImagePath = author.ImagePath;
         }
 
-        await data.SaveChangesAsync(cancellationToken);
+        notificationService.AddOnAuthorEdition(
+            author.Id,
+            author.Name,
+            await adminService.GetIds(cancellationToken));
 
-        if (!userService.IsAdmin())
-        {
-            await notificationService.CreateOnAuthorEdition(
-                author.Id,
-                author.Name,
-                receiverId: await adminService.GetId(),
-                cancellationToken);
-        }
+        // One SaveChanges: the pending edit and the admin notifications commit together.
+        await data.SaveChangesAsync(cancellationToken);
 
         logger.LogInformation(
             "Author edit request created/updated for AuthorId: {id}. Pending edit id: {pendingId}",
@@ -523,6 +529,51 @@ public class AuthorService(
             CreatorId = serviceModel.CreatorId,
             IsApproved = serviceModel.IsApproved
         };
+
+    // Admins' edits apply directly to the author. Only non-admin edits go to the pending queue.
+    private async Task<Result> EditDirectly(
+        AuthorDbModel dbModel,
+        CreateAuthorServiceModel serviceModel,
+        CancellationToken cancellationToken = default)
+    {
+        var oldImagePath = dbModel.ImagePath;
+
+        serviceModel.UpdateDbModel(dbModel);
+
+        // A no-op when no image was uploaded (null default path keeps the current image).
+        await imageWriter.Write(
+            resourceName: ImagePathPrefix,
+            dbModel,
+            serviceModel,
+            defaultImagePath: null,
+            cancellationToken);
+
+        await data.SaveChangesAsync(cancellationToken);
+
+        var shouldDeleteOldImage =
+            !string.Equals(
+                oldImagePath,
+                dbModel.ImagePath,
+                StringComparison.OrdinalIgnoreCase) &&
+            !string.Equals(
+                oldImagePath,
+                DefaultImagePath,
+                StringComparison.OrdinalIgnoreCase);
+
+        if (shouldDeleteOldImage)
+        {
+            imageWriter.Delete(
+                resourceName: ImagePathPrefix,
+                imagePath: oldImagePath,
+                defaultImagePath: DefaultImagePath);
+        }
+
+        logger.LogInformation(
+            "Author with Id: {id} was edited directly by an admin.",
+            dbModel.Id);
+
+        return true;
+    }
 
     private async Task<AuthorDbModel?> GetDbModel(
         Guid authorId,

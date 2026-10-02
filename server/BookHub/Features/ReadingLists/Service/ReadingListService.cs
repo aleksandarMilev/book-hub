@@ -21,13 +21,18 @@ public class ReadingListService(
     IPageClamper pageClamper,
     ILogger<ReadingListService> logger) : IReadingListService
 {
-    public async Task<ResultWith<PaginatedModel<BookServiceModel>>> All(
+    public async Task<ResultWith<PaginatedModel<BookServiceModel>>?> All(
         string userId,
         ReadingListStatus status,
         int pageIndex,
         int pageSize,
         CancellationToken cancellationToken = default)
     {
+        if (!await this.CanViewListsOf(userId, cancellationToken))
+        {
+            return null;
+        }
+
         pageClamper.ClampPageSizeAndIndex(
             ref pageIndex,
             ref pageSize);
@@ -68,15 +73,22 @@ public class ReadingListService(
     public async Task<BookServiceModel?> LastCurrentlyReading(
         string userId,
         CancellationToken cancellationToken = default)
-        => await data
+    {
+        if (!await this.CanViewListsOf(userId, cancellationToken))
+        {
+            return null;
+        }
+
+        return await data
             .ReadingLists
             .AsNoTracking()
-            .Where(rl => 
-                rl.UserId == userId && 
+            .Where(rl =>
+                rl.UserId == userId &&
                 rl.Status == ReadingListStatus.CurrentlyReading)
             .OrderByDescending(rl => rl.ModifiedOn ?? rl.CreatedOn)
             .ToBookServiceModels()
             .FirstOrDefaultAsync(cancellationToken);
+    }
 
     public async Task<Result> Add(
         ReadingListServiceModel serviceModel,
@@ -206,6 +218,26 @@ public class ReadingListService(
             cancellationToken);
 
         return true;
+    }
+
+    // Mirrors ProfileService.OtherUser: other users' lists are hidden when the profile is private.
+    // A missing profile is treated the same, so a 404 doesn't reveal whether a private profile exists.
+    private async Task<bool> CanViewListsOf(
+        string userId,
+        CancellationToken cancellationToken = default)
+    {
+        var isOwner = userId == userService.GetId();
+        if (isOwner || userService.IsAdmin())
+        {
+            return true;
+        }
+
+        return await data
+            .Profiles
+            .AsNoTracking()
+            .AnyAsync(
+                p => p.UserId == userId && !p.IsPrivate,
+                cancellationToken);
     }
 
     private async Task<bool> BookIsValid(

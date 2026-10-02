@@ -60,80 +60,72 @@ public class NotificationService(
             pageSize);
     }
 
-    public async Task<Guid> CreateOnBookCreation(
+    public void AddOnBookCreation(
         Guid bookId,
         string bookTitle,
-        string receiverId,
-        CancellationToken cancellationToken = default)
+        IEnumerable<string> receiverIds)
     {
         var message = string.Format(
             Messages.Created,
             userService.GetUsername(),
             bookTitle);
 
-        return await this.CreateNewNotification(
+        this.AddNotifications(
             bookId,
             ResourceType.Book,
             message,
-            receiverId,
-            cancellationToken);
+            receiverIds);
     }
 
-    public async Task<Guid> CreateOnBookEdition(
-       Guid bookId,
-       string bookTitle,
-       string receiverId,
-       CancellationToken cancellationToken = default)
+    public void AddOnBookEdition(
+        Guid bookId,
+        string bookTitle,
+        IEnumerable<string> receiverIds)
     {
         var message = string.Format(
             Messages.Edited,
             userService.GetUsername(),
             bookTitle);
 
-        return await this.CreateNewNotification(
+        this.AddNotifications(
             bookId,
             ResourceType.Book,
             message,
-            receiverId,
-            cancellationToken);
+            receiverIds);
     }
 
-    public async Task<Guid> CreateOnAuthorCreation(
+    public void AddOnAuthorCreation(
         Guid authorId,
         string authorName,
-        string receiverId,
-        CancellationToken cancellationToken = default)
+        IEnumerable<string> receiverIds)
     {
         var message = string.Format(
             Messages.Created,
             userService.GetUsername(),
             authorName);
 
-        return await this.CreateNewNotification(
+        this.AddNotifications(
             authorId,
             ResourceType.Author,
             message,
-            receiverId,
-            cancellationToken);
+            receiverIds);
     }
 
-    public async Task<Guid> CreateOnAuthorEdition(
+    public void AddOnAuthorEdition(
         Guid authorId,
         string authorName,
-        string receiverId,
-        CancellationToken cancellationToken = default)
+        IEnumerable<string> receiverIds)
     {
         var message = string.Format(
             Messages.Edited,
             userService.GetUsername(),
             authorName);
 
-        return await this.CreateNewNotification(
+        this.AddNotifications(
             authorId,
             ResourceType.Author,
             message,
-            receiverId,
-            cancellationToken);
+            receiverIds);
     }
 
     public async Task<Guid> CreateOnBookApproved(
@@ -202,7 +194,7 @@ public class NotificationService(
 
         return await this.CreateNewNotification(
             authorId,
-            ResourceType.Book,
+            ResourceType.Author,
             message,
             receiverId,
             cancellationToken);
@@ -280,6 +272,25 @@ public class NotificationService(
         await data.SaveChangesAsync(cancellationToken);
 
         return notification.Id;
+    }
+
+    private void AddNotifications(
+        Guid resourceId,
+        ResourceType resourceType,
+        string message,
+        IEnumerable<string> receiverIds)
+    {
+        var notifications = receiverIds
+            .Distinct()
+            .Select(receiverId => new NotificationDbModel
+            {
+                ResourceId = resourceId,
+                ResourceType = resourceType,
+                Message = message,
+                ReceiverId = receiverId
+            });
+
+        data.AddRange(notifications);
     }
 
     private string LogAndReturnNotFoundMessage(Guid notificationId)

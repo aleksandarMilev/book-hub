@@ -13,11 +13,13 @@ using FluentAssertions;
 using Infrastructure.Services.CurrentUser;
 using Infrastructure.Services.ImageWriter;
 using Infrastructure.Services.ImageWriter.Models;
+using Infrastructure.Services.PageClamper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
+using Shared.Mocks;
 
 using static Features.Authors.Shared.Constants.Paths;
 
@@ -145,8 +147,7 @@ public sealed class AuthorsUnit
         var (data, currentUserService, connection) = await CreateSqliteDb();
         await using var _ = connection;
 
-        var adminService = Substitute.For<IAdminService>();
-        adminService.GetId().Returns("admin-1");
+        var adminService = new AdminServiceMock("admin-1");
 
         var profileService = Substitute.For<IProfileService>();
         var notificationService = Substitute.For<INotificationService>();
@@ -205,13 +206,12 @@ public sealed class AuthorsUnit
         dbModel.IsApproved.Should().BeFalse();
         dbModel.CreatedOn.Should().NotBe(default);
 
-        await notificationService
+        notificationService
             .Received(1)
-            .CreateOnAuthorCreation(
+            .AddOnAuthorCreation(
                 dbModel.Id,
                 dbModel.Name,
-                "admin-1",
-                Arg.Any<CancellationToken>());
+                Arg.Is<IEnumerable<string>>(ids => ids.SequenceEqual(new[] { "admin-1" })));
 
         await imageWriter
             .Received(1)
@@ -229,8 +229,7 @@ public sealed class AuthorsUnit
         var (data, currentUserService, connection) = await CreateSqliteDb();
         await using var _ = connection;
 
-        var adminService = Substitute.For<IAdminService>();
-        adminService.GetId().Returns("admin-1");
+        var adminService = new AdminServiceMock("admin-1");
 
         var profileService = Substitute.For<IProfileService>();
         var notificationService = Substitute.For<INotificationService>();
@@ -628,9 +627,15 @@ public sealed class AuthorsUnit
         imageWriter
             .Received(1)
             .Delete(
-                nameof(AuthorDbModel),
+                ImagePathPrefix,
                 "/images/authors/old.jpg",
                 DefaultImagePath);
+
+        var hasPendingEdit = await data
+            .AuthorEdits
+            .AnyAsync(e => e.AuthorId == author.Id);
+
+        hasPendingEdit.Should().BeFalse();
     }
 
     [Fact]
@@ -838,6 +843,131 @@ public sealed class AuthorsUnit
                 "user-1",
                 Arg.Any<CancellationToken>());
     }
+
+    [Fact]
+    public async Task Create_ShouldPersistAuthor_AndAlso_ShouldNotifyEveryAdmin_WhenNonAdmin()
+    {
+        var (data, currentUserService, connection) = await CreateSqliteDb();
+        await using var _ = connection;
+
+        await SeedUser(data, "admin-1", "admin1");
+        await SeedUser(data, "admin-2", "admin2");
+
+        var notificationService = new NotificationService(
+            data,
+            currentUserService,
+            new PageClamper(),
+            Substitute.For<ILogger<NotificationService>>());
+
+        var service = new AuthorService(
+            data,
+            currentUserService,
+            new AdminServiceMock("admin-1", "admin-2"),
+            Substitute.For<IProfileService>(),
+            notificationService,
+            new ImageWriterMock(),
+            Substitute.For<ILogger<AuthorService>>());
+
+        var result = await service.Create(NewCreateAuthorServiceModel());
+
+        result.Succeeded.Should().BeTrue();
+
+        var authorExists = await data
+            .Authors
+            .IgnoreQueryFilters()
+            .AnyAsync(a => a.Id == result.Data!.Id);
+
+        authorExists.Should().BeTrue();
+
+        var receivers = await data
+            .Notifications
+            .Where(n => n.ResourceId == result.Data!.Id)
+            .Select(n => n.ReceiverId)
+            .ToListAsync();
+
+        receivers.Should().BeEquivalentTo(["admin-1", "admin-2"]);
+    }
+
+    [Fact]
+    public async Task Edit_ShouldCreatePendingEdit_AndAlso_ShouldNotChangeAuthor_AndAlso_ShouldNotifyAdmins_WhenNonAdmin()
+    {
+        var (data, currentUserService, connection) = await CreateSqliteDb();
+        await using var _ = connection;
+
+        var author = NewAuthor(
+            creatorId: "user-1",
+            imagePath: "/images/authors/old.jpg",
+            isApproved: true);
+
+        data.Authors.Add(author);
+        await data.SaveChangesAsync();
+
+        var notificationService = Substitute.For<INotificationService>();
+        var imageWriter = Substitute.For<IImageWriter>();
+
+        var service = new AuthorService(
+            data,
+            currentUserService,
+            new AdminServiceMock("admin-1"),
+            Substitute.For<IProfileService>(),
+            notificationService,
+            imageWriter,
+            Substitute.For<ILogger<AuthorService>>());
+
+        var serviceModel = NewCreateAuthorServiceModel(name: "Edited author name");
+
+        var result = await service.Edit(author.Id, serviceModel);
+
+        result.Succeeded.Should().BeTrue();
+
+        var dbModel = await data
+            .Authors
+            .IgnoreQueryFilters()
+            .AsNoTracking()
+            .SingleAsync(a => a.Id == author.Id);
+
+        dbModel.Name.Should().Be(author.Name);
+        dbModel.ImagePath.Should().Be("/images/authors/old.jpg");
+
+        var pending = await data
+            .AuthorEdits
+            .AsNoTracking()
+            .SingleAsync(e => e.AuthorId == author.Id);
+
+        pending.Name.Should().Be("Edited author name");
+        pending.ImagePath.Should().Be("/images/authors/old.jpg");
+        pending.RequestedById.Should().Be("user-1");
+
+        await imageWriter
+            .DidNotReceiveWithAnyArgs()
+            .Write(
+                resourceName: default!,
+                dbModel: default!,
+                serviceModel: default!,
+                defaultImagePath: default,
+                cancellationToken: default);
+
+        notificationService
+            .Received(1)
+            .AddOnAuthorEdition(
+                author.Id,
+                author.Name,
+                Arg.Is<IEnumerable<string>>(ids => ids.SequenceEqual(new[] { "admin-1" })));
+    }
+
+    private static CreateAuthorServiceModel NewCreateAuthorServiceModel(
+        string name = "Valid author name")
+        => new()
+        {
+            Name = name,
+            Biography = new string('b', 120),
+            PenName = "Pen",
+            Nationality = Nationality.Bulgaria,
+            Gender = Gender.Male,
+            BornAt = null,
+            DiedAt = null,
+            Image = null
+        };
 
     private static async Task<(
         BookHubDbContext Data,

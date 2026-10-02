@@ -7,6 +7,8 @@ using Features.Identity.Service.Models;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Settings;
 
 using static Common.Constants.Cors;
 using static Common.Constants.Names;
@@ -158,32 +160,21 @@ public static class AppBuilderExtensions
             .GetRequiredService<ILoggerFactory>()
             .CreateLogger("BootstrapAdmin");
 
-        var config = services.GetRequiredService<IConfiguration>();
-        var enabled = string.Equals(
-            config["BootstrapAdmin:Enabled"],
-            "true",
-            StringComparison.OrdinalIgnoreCase);
+        // Email, Password and Role are validated on startup when Enabled is true (BootstrapAdminSettings).
+        var settings = services
+            .GetRequiredService<IOptions<BootstrapAdminSettings>>()
+            .Value;
 
-        logger.LogInformation("BootstrapAdmin Enabled = {Enabled}", enabled);
+        logger.LogInformation("BootstrapAdmin Enabled = {Enabled}", settings.Enabled);
 
-        if (!enabled)
+        if (!settings.Enabled)
         {
             return app;
         }
 
-        var email = config["BootstrapAdmin:Email"];
-        var password = config["BootstrapAdmin:Password"];
-        var roleName = config["BootstrapAdmin:Role"] ?? "Administrator";
-
-        var emailOrPasswordIsNotProvided =
-            string.IsNullOrWhiteSpace(email) ||
-            string.IsNullOrWhiteSpace(password);
-
-        if (emailOrPasswordIsNotProvided)
-        {
-            throw new InvalidOperationException(
-                "BootstrapAdmin enabled but Email/Password not set.");
-        }
+        var email = settings.Email!;
+        var password = settings.Password!;
+        var roleName = settings.Role!;
 
         var userManager = services
             .GetRequiredService<UserManager<UserDbModel>>();

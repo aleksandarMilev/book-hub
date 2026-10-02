@@ -39,6 +39,7 @@ services:
       - EmailSettings__From=${SMTP_FROM}
       - EmailSettings__UseSsl=${SMTP_USE_SSL}
       - Cors__AllowedOrigins=${CORS_ALLOWED_ORIGINS}
+      - AppUrlsSettings__ClientBaseUrl=${CLIENT_BASE_URL:-http://localhost:5173}
     volumes:
       - ./server:/src/server
       - ./server/BookHub/wwwroot:/src/server/BookHub/wwwroot

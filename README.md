@@ -87,7 +87,7 @@ These are the primary env vars used by the Docker stacks. For local runs you can
 | ---------------------- | ------------------------------------------------------------- |
 | `SA_PASSWORD`          | SQL Server `sa` password for the Docker image                 |
 | `DB_NAME`              | Database name used in the connection string                   |
-| `APP_SECRET`           | JWT signing key (16+ characters recommended)                  |
+| `APP_SECRET`           | JWT signing key (at least 32 bytes; startup fails otherwise) |
 | `ISSUER`               | JWT issuer                                                    |
 | `AUDIENCE`             | JWT audience                                                  |
 | `SMTP_HOST`            | SMTP host used for welcome emails                             |
@@ -97,6 +97,11 @@ These are the primary env vars used by the Docker stacks. For local runs you can
 | `SMTP_FROM`            | From address for emails                                       |
 | `SMTP_USE_SSL`         | `true` or `false`                                             |
 | `CORS_ALLOWED_ORIGINS` | Semicolon-separated list of allowed origins (Production only) |
+| `CLIENT_BASE_URL`          | Public client URL used in email links (`AppUrlsSettings__ClientBaseUrl`); required, absolute URL |
+| `BOOTSTRAP_ADMIN_ENABLED`  | `true` creates the admin on startup outside Development (idempotent); default `false` |
+| `BOOTSTRAP_ADMIN_EMAIL`    | Bootstrap admin email (required when enabled)                 |
+| `BOOTSTRAP_ADMIN_PASSWORD` | Bootstrap admin password (required when enabled; must meet the Identity password rules) |
+| `BOOTSTRAP_ADMIN_ROLE`     | Bootstrap admin role (required when enabled; must be `Administrator`) |
 
 Optional, mainly for local runs:
 

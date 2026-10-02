@@ -354,7 +354,52 @@ public sealed class BooksIntegration : IAsyncLifetime
     }
 
     [Fact]
-    public async Task Edit_ShouldUpdateImage_AndAlso_ShouldDeleteOldImage_WhenNewImageProvided()
+    public async Task Create_ShouldReturnBadRequestWithErrorMessage_AndAlso_ShouldNotPersistBook_WhenGenreDoesNotExist()
+    {
+        var httpClient = this.httpClientFactory.CreateUserClient();
+        var unknownGenreId = Guid.NewGuid();
+
+        var formData = BuildBookForm(
+            title: "Book with unknown genre",
+            shortDescription: "A valid short description",
+            longDescription: new string('z', 250),
+            authorId: null,
+            publishedDate: null,
+            genreIds: [unknownGenreId]);
+
+        var response = await httpClient.PostAsync("/Books", formData);
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+        var json = await response.Content.ReadAsStringAsync();
+        using var jsonDocument = JsonDocument.Parse(json);
+
+        jsonDocument
+            .RootElement
+            .GetProperty("errorMessage")
+            .GetString()
+            .Should()
+            .Be($"Genres with Id(s): {unknownGenreId} were not found!");
+
+        using var scope = this
+            .httpClientFactory
+            .Services
+            .CreateScope();
+
+        var data = scope
+            .ServiceProvider
+            .GetRequiredService<BookHubDbContext>();
+
+        var bookExists = await data
+            .Books
+            .IgnoreQueryFilters()
+            .AnyAsync(b => b.Title == "Book with unknown genre");
+
+        bookExists.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task Edit_ShouldWritePendingImage_AndAlso_ShouldKeepBookImage_WhenNonAdminProvidesNewImage()
     {
         var bookId = await this.SeedBook(
             imagePath: "/images/books/old.jpg",
@@ -362,6 +407,58 @@ public sealed class BooksIntegration : IAsyncLifetime
             isApproved: true);
 
         var httpClient = this.httpClientFactory.CreateUserClient();
+        var imageWriterMock = this.httpClientFactory.GetImageWriterMock();
+
+        var formData = BuildBookFormWithImage(
+            title: "Edited valid title long enough",
+            shortDescription: "Edited valid short description",
+            longDescription: new string('z', 250),
+            authorId: Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
+            publishedDate: new DateTime(2010, 2, 2),
+            genreIds: [Guid.Parse("11111111-1111-1111-1111-111111111111")]);
+
+        var response = await httpClient.PutAsync(
+            $"/Books/{bookId}/",
+            formData);
+
+        response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+
+        imageWriterMock.WriteCalls.Should().Be(1);
+        imageWriterMock.DeleteCalls.Should().Be(0);
+        imageWriterMock.LastWrittenPath.Should().StartWith($"/images/{PendingImagePathPrefix}/test-");
+
+        using var scope = this
+            .httpClientFactory
+            .Services
+            .CreateScope();
+
+        var data = scope
+            .ServiceProvider
+            .GetRequiredService<BookHubDbContext>();
+
+        var dbModel = await data
+            .Books
+            .IgnoreQueryFilters()
+            .SingleAsync(b => b.Id == bookId);
+
+        dbModel.ImagePath.Should().Be("/images/books/old.jpg");
+
+        var pending = await data
+            .BookEdits
+            .SingleAsync(e => e.BookId == bookId);
+
+        pending.ImagePath.Should().Be(imageWriterMock.LastWrittenPath);
+    }
+
+    [Fact]
+    public async Task Edit_ShouldUpdateImage_AndAlso_ShouldDeleteOldImage_WhenAdminProvidesNewImage()
+    {
+        var bookId = await this.SeedBook(
+            imagePath: "/images/books/old.jpg",
+            creatorId: "test-user",
+            isApproved: true);
+
+        var httpClient = this.httpClientFactory.CreateAdminClient();
         var imageWriterMock = this.httpClientFactory.GetImageWriterMock();
 
         var formData = BuildBookFormWithImage(
@@ -404,7 +501,7 @@ public sealed class BooksIntegration : IAsyncLifetime
     }
 
     [Fact]
-    public async Task Edit_ShouldReturnsNoContent_AndAlso_ShouldUpdateFields_WhenBookExists()
+    public async Task Edit_ShouldReturnNoContent_AndAlso_ShouldCreatePendingEdit_AndAlso_ShouldNotifyAdmin_WhenNonAdmin()
     {
         var bookId = await this.SeedBook(
             imagePath: "/images/books/seed.jpg",
@@ -441,9 +538,86 @@ public sealed class BooksIntegration : IAsyncLifetime
             .IgnoreQueryFilters()
             .SingleAsync(b => b.Id == bookId);
 
+        dbModel.Title.Should().NotBe("Edited valid title long enough");
+
+        var pending = await data
+            .BookEdits
+            .SingleAsync(e => e.BookId == bookId);
+
+        pending.Title.Should().Be("Edited valid title long enough");
+        pending.ImagePath.Should().Be("/images/books/seed.jpg");
+        pending.RequestedById.Should().Be("test-user");
+
+        var notificationReceivers = await data
+            .Notifications
+            .Where(n => n.ResourceId == bookId)
+            .Select(n => n.ReceiverId)
+            .ToListAsync();
+
+        notificationReceivers.Should().Equal("test-admin-id");
+    }
+
+    [Fact]
+    public async Task Edit_ShouldReturnNoContent_AndAlso_ShouldUpdateFieldsAndGenresDirectly_WhenAdmin()
+    {
+        var bookId = await this.SeedBook(
+            imagePath: "/images/books/seed.jpg",
+            creatorId: "test-user",
+            isApproved: true);
+
+        var httpClient = this.httpClientFactory.CreateAdminClient();
+
+        var formData = BuildBookForm(
+            title: "Edited valid title long enough",
+            shortDescription: "Edited valid short description",
+            longDescription: new string('z', 250),
+            authorId: Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
+            publishedDate: new DateTime(2010, 2, 2),
+            genreIds: [Guid.Parse("11111111-1111-1111-1111-111111111111")]);
+
+        var response = await httpClient.PutAsync(
+            $"/Books/{bookId}/",
+            formData);
+
+        response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+
+        using var scope = this
+            .httpClientFactory
+            .Services
+            .CreateScope();
+
+        var data = scope
+            .ServiceProvider
+            .GetRequiredService<BookHubDbContext>();
+
+        var dbModel = await data
+            .Books
+            .IgnoreQueryFilters()
+            .SingleAsync(b => b.Id == bookId);
+
         dbModel.Title.Should().Be("Edited valid title long enough");
         dbModel.ImagePath.Should().Be("/images/books/seed.jpg");
         dbModel.ModifiedOn.Should().NotBeNull();
+
+        var genreIds = await data
+            .BooksGenres
+            .Where(bg => bg.BookId == bookId)
+            .Select(bg => bg.GenreId)
+            .ToListAsync();
+
+        genreIds.Should().Equal(Guid.Parse("11111111-1111-1111-1111-111111111111"));
+
+        var hasPendingEdit = await data
+            .BookEdits
+            .AnyAsync(e => e.BookId == bookId);
+
+        hasPendingEdit.Should().BeFalse();
+
+        var hasNotifications = await data
+            .Notifications
+            .AnyAsync(n => n.ResourceId == bookId);
+
+        hasNotifications.Should().BeFalse();
     }
 
     [Fact]

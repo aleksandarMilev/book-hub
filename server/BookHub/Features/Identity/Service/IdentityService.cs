@@ -24,6 +24,7 @@ using static Shared.Constants.TokenExpiration;
 public class IdentityService(
     UserManager<UserDbModel> userManager,
     IEmailSender emailSender,
+    IWelcomeEmailQueue welcomeEmailQueue,
     IProfileService profileService,
     ILogger<IdentityService> logger,
     IOptions<JwtSettings> jwtSettings,
@@ -74,34 +75,20 @@ public class IdentityService(
 
         if (identityResult.Succeeded)
         {
+            string jwt;
+
             try
             {
-                var jwt = this.GenerateJwtToken(
+                jwt = this.GenerateJwtToken(
                     jwtSettings.Value.Secret,
                     user.Id,
                     serviceModel.Username,
                     serviceModel.Email);
 
-                logger.LogInformation("User successfully registered. UserId={UserId}", user.Id);
-
                 await profileService.Create(
                     serviceModel.ToCreateProfileServiceModel(),
                     user.Id,
                     cancellationToken);
-
-                var baseUrl = appUrlsSettings
-                    .Value
-                    .ClientBaseUrl?
-                    .TrimEnd('/')
-                    ?? throw new InvalidOperationException("AppUrlsSettings:ClientBaseUrl is not configured.");
-
-                await emailSender.SendWelcome(
-                    serviceModel.Email,
-                    serviceModel.Username,
-                    baseUrl,
-                    cancellationToken);
-
-                return ResultWith<string>.Success(jwt);
             }
             catch (Exception exception)
             {
@@ -113,6 +100,24 @@ public class IdentityService(
 
                 return ResultWith<string>.Failure(InvalidRegisterAttempt);
             }
+
+            logger.LogInformation("User successfully registered. UserId={UserId}", user.Id);
+
+            // The welcome email is sent in the background and must never block or fail registration.
+            var welcomeEmail = new WelcomeEmailMessage(
+                user.Id,
+                serviceModel.Email,
+                serviceModel.Username,
+                this.ClientBaseUrl);
+
+            if (!welcomeEmailQueue.TryEnqueue(welcomeEmail))
+            {
+                logger.LogWarning(
+                    "Welcome email queue is full; the email was not sent. UserId={UserId}",
+                    user.Id);
+            }
+
+            return ResultWith<string>.Success(jwt);
         }
 
         var errorMessage = string.Join("; ", identityResult.Errors.Select(e => e.Description));
@@ -198,13 +203,7 @@ public class IdentityService(
             var encodedToken = WebEncoders.Base64UrlEncode(
                 Encoding.UTF8.GetBytes(token));
 
-            var baseUrl = appUrlsSettings
-                .Value
-                .ClientBaseUrl?
-                .TrimEnd('/')
-                ?? throw new InvalidOperationException("AppUrlsSettings:ClientBaseUrl is not configured!");
-
-            var resetPath = $"{baseUrl}/identity/reset-password";
+            var resetPath = $"{this.ClientBaseUrl}/identity/reset-password";
             var resetUrl = QueryHelpers.AddQueryString(
                 resetPath,
                 new Dictionary<string, string?>
@@ -268,6 +267,13 @@ public class IdentityService(
         return ResultWith<string>.Success("Password successfully reset.");
     }
 
+    // Required and validated as a URL on startup. Trimmed so "http://x/" doesn't produce "//identity/...".
+    private string ClientBaseUrl
+        => appUrlsSettings
+            .Value
+            .ClientBaseUrl
+            .TrimEnd('/');
+
     private string GenerateJwtToken(
         string appSettingsSecret,
         string userId,
@@ -279,7 +285,7 @@ public class IdentityService(
         var tokenHandler = new JwtSecurityTokenHandler();
         tokenHandler.OutboundClaimTypeMap.Clear();
 
-        var key = Encoding.ASCII.GetBytes(appSettingsSecret);
+        var key = Encoding.UTF8.GetBytes(appSettingsSecret);
 
         var claimList = new List<Claim>
         {

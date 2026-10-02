@@ -30,7 +30,7 @@
             int pageSize,
             CancellationToken token = default);
 
-        Task<BookDetailsServiceModel> Create(
+        Task<ResultWith<BookDetailsServiceModel>> Create(
             CreateBookServiceModel model,
             CancellationToken cancellationToken = default);
 

@@ -17,7 +17,7 @@ public sealed class GenresWebApplicationFactory : BookHubWebApplicationFactory
     private readonly InMemoryDatabaseRoot dbRoot = new();
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
-        => builder
+        => ConfigureTestSettings(builder)
             .UseEnvironment("Testing")
             .ConfigureServices(services =>
             {

@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.RateLimiting;
 using Data;
+using Features.Emails;
 using Features.Identity.Data.Models;
 using Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -126,6 +127,7 @@ public static class ServiceCollectionExtensions
         AddJwtSettings(services, configuration);
         AddEmailSettings(services, configuration);
         AddAppUrlsSettings(services, configuration);
+        AddBootstrapAdminSettings(services, configuration);
 
         return services;
     }
@@ -209,12 +211,13 @@ public static class ServiceCollectionExtensions
         IConfiguration configuration,
         IWebHostEnvironment env)
     {
+        // The secret's presence and length are validated on startup (JwtSettings + ValidateOnStart).
         var settings = configuration
             .GetSection(nameof(JwtSettings))
             .Get<JwtSettings>()
-            ?? throw new InvalidOperationException("JwtSettings section is missing!");
+            ?? new JwtSettings { Secret = string.Empty };
 
-        var key = Encoding.ASCII.GetBytes(settings.Secret);
+        var key = Encoding.UTF8.GetBytes(settings.Secret ?? string.Empty);
 
         services
             .AddAuthentication(options =>
@@ -330,6 +333,11 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
+    public static IServiceCollection AddBackgroundServices(
+        this IServiceCollection services)
+        // Hosted services can't follow the I{ClassName} convention used by AddServices.
+        => services.AddHostedService<WelcomeEmailBackgroundService>();
+
     public static IServiceCollection AddHealthcheck(
         this IServiceCollection services)
     {
@@ -345,8 +353,7 @@ public static class ServiceCollectionExtensions
     private static IServiceCollection AddJwtSettings(
         this IServiceCollection services,
         IConfiguration configuration)
-        => services.Configure<JwtSettings>(
-            configuration.GetSection(nameof(JwtSettings)));
+        => services.AddValidatedSettings<JwtSettings>(configuration);
 
     private static IServiceCollection AddEmailSettings(
         this IServiceCollection services,
@@ -357,6 +364,27 @@ public static class ServiceCollectionExtensions
     private static IServiceCollection AddAppUrlsSettings(
         this IServiceCollection services,
         IConfiguration configuration)
-        => services.Configure<AppUrlsSettings>(
-            configuration.GetSection(nameof(AppUrlsSettings)));
+        => services.AddValidatedSettings<AppUrlsSettings>(configuration);
+
+    private static IServiceCollection AddBootstrapAdminSettings(
+        this IServiceCollection services,
+        IConfiguration configuration)
+        => services.AddValidatedSettings<BootstrapAdminSettings>(
+            configuration,
+            sectionName: "BootstrapAdmin");
+
+    private static IServiceCollection AddValidatedSettings<TSettings>(
+        this IServiceCollection services,
+        IConfiguration configuration,
+        string? sectionName = null)
+        where TSettings : class
+    {
+        services
+            .AddOptions<TSettings>()
+            .Bind(configuration.GetSection(sectionName ?? typeof(TSettings).Name))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
+        return services;
+    }
 }

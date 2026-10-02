@@ -67,8 +67,14 @@ public class BookHubWebApplicationFactory : WebApplicationFactory<Program>
             .GetRequiredService<IImageWriter>();
     }
 
-    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    // Settings validated on startup (ValidateOnStart) must be valid in the Testing environment too.
+    internal static IWebHostBuilder ConfigureTestSettings(IWebHostBuilder builder)
         => builder
+            .UseSetting("JwtSettings:Secret", "test-only-jwt-secret-that-is-at-least-32-bytes")
+            .UseSetting("AppUrlsSettings:ClientBaseUrl", "http://localhost:5173");
+
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
+        => ConfigureTestSettings(builder)
             .UseEnvironment("Testing")
             .ConfigureServices(services =>
             {

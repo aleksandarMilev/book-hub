@@ -37,4 +37,16 @@ public static class Constants
     {
         public const string DetailsRouteName = "BookDetails";
     }
+
+    public static class Genres
+    {
+        // The "Other" genre from DataImporter's genres.json. It isn't seeded by a migration,
+        // so it's only attached when it exists in the database.
+        public static readonly Guid OtherGenreId = new("52e607d4-c347-440a-8d55-cf2e01d88a6c");
+    }
+
+    public static class ErrorMessages
+    {
+        public const string GenresNotFound = "Genres with Id(s): {0} were not found!";
+    }
 }
