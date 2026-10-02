@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dotnet build *)",
+      "Bash(dotnet test *)",
+      "Bash(dotnet list package *)",
+      "Bash(npm run lint)",
+      "Bash(npm run typecheck)",
+      "Bash(npm run test)",
+      "Bash(npm run build)",
+      "Bash(npm outdated)",
+      "Bash(npm audit)",
+      "Bash(docker compose -f docker-compose.dev.yml config)",
+      "Bash(docker compose -f docker-compose.prod.yml config)"
+    ],
+    "deny": ["Bash(npm audit fix *)", "Bash(git commit *)", "Bash(git push *)"]
+  },
+  "enabledPlugins": {
+    "code-review@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
+    "csharp-lsp@claude-plugins-official": true,
+    "security-guidance@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "playwright@claude-plugins-official": true,
+    "commit-commands@claude-plugins-official": true
+  }
+}
