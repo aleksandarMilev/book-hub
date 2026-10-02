@@ -46,7 +46,7 @@ npm run format:check  # npm run format to write
 npx vitest run [path] # single run; `npm run test` is `vitest` (watch mode in a TTY)
 ```
 
-Husky hooks run from `client/`: **pre-commit** runs lint-staged (eslint --fix + prettier), and **pre-push** runs `typecheck` and `test`. CI (`.github/workflows/build-and-deploy.yml`) only builds the API and the client on pushes to `develop`/`master`; it doesn't run tests or lint. There are currently no client test files.
+Husky hooks run from `client/`: **pre-commit** runs lint-staged (eslint --fix + prettier), and **pre-push** runs `typecheck` and `test`. CI (`.github/workflows/build-and-deploy.yml`) only builds the API and the client on pushes to `develop`/`master`; it doesn't run tests or lint. Client tests (Vitest) live next to the code they cover; run them with `npx vitest run`.
 
 ## Server architecture
 

@@ -53,3 +53,16 @@ The welcome email is sent in the background through an in-memory, bounded queue 
 **Status:** open, from Phase 1a (B-06).
 
 Books created without genres get the "Other" genre (`52e607d4-c347-440a-8d55-cf2e01d88a6c`) only if it exists. Today it only exists after an admin runs the DataImporter, so on a fresh database such books end up with no genres. Seed "Other" in the initial Postgres migration (`HasData`) with the same ID.
+
+## Phase 2: test framework upgrades
+
+**Status:** open, deferred from Phase 1c (T-05).
+
+Phase 1c only took patch and minor updates. These major upgrades in `server/BookHub.Tests/BookHub.Tests.csproj` wait for Phase 2, which rebuilds the test setup (Testcontainers):
+
+- `xunit` 2.9.3 → `xunit.v3`. 2.9.3 is deprecated ("Legacy"). This is a package swap, not a version bump.
+- `xunit.runner.visualstudio` 3.1.5 → 4.x
+- `NSubstitute` 5.3.0 → 6.x
+- `coverlet.collector` 6.0.4 → 10.x
+
+None of them has an open advisory.

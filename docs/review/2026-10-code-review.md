@@ -429,3 +429,31 @@ No tracked file was modified.
   - **F-16 (new, Low):** `features/search/api/api.ts` calls the global `axios.get` with an absolute URL instead of `http`, so authenticated search requests bypass the 401 interceptor.
   - **F-17 (new, Low):** `features/genre/hooks/useCrud.ts:81` still has `setGenre(data ?? [])`, which would put an array into `GenreDetails | null` state. It's unreachable now that the API function can't return `undefined`. Fix it in the Phase 4 rewrite.
   - **F-18 (new, Low):** `features/notification/api/api.ts` `remove` swallows every non-cancel error and returns `false` instead of using `processError`, so the caller can't show the server's message.
+- **2026-10-02 (Phase 1c, dependency and image updates):** patch and minor updates only. Phase 1's exit criterion holds: `dotnet list package --vulnerable` and `npm audit --omit=dev` show no High or Critical advisories.
+  - **B-16:** fixed.
+    - Every `Microsoft.*` 10.0.x package in `BookHub.csproj` went from 10.0.1 to 10.0.12.
+    - Swashbuckle went from 10.1.0 to 10.2.3. It now resolves Microsoft.OpenApi 2.7.5, the patched version for GHSA-v5pm-xwqc-g5wc, so no pin was needed.
+    - MailKit went from 4.16.0 to 4.18.1, and Containers.Tools.Targets from 1.22.1 to 1.23.0.
+    - `has-pending-model-changes` still reports no changes.
+  - **T-05:** advisories fixed.
+    - Mvc.Testing, EF InMemory and EF Sqlite went from 10.0.2 to 10.0.12, and Test.Sdk from 18.0.1 to 18.10.1.
+    - SQLitePCLRaw.lib.e_sqlite3 now resolves 2.1.12.
+    - System.Security.Cryptography.Xml 9.0.0 came from BookHub's EF Tools → EF Design 10.0.1 → Microsoft.Build.Tasks.Core. It is no longer in the graph, because EF Design 10.0.12 uses Roslyn Workspaces.MSBuild 5.0.0. No direct pin was needed.
+    - The xunit.v3 move and the other test-framework majors are deferred to Phase 2 (`docs/backlog.md`).
+  - **NuGet advisories:** 11 High rows (OpenApi ×2, SQLitePCLRaw ×1, Crypto.Xml ×8) → 0. `dotnet build server/BookHub.sln` warnings: 22 NU1903 → 0. Tests: 131/131 before and after.
+  - **F-07:** High and Critical advisories fixed.
+    - axios went from 1.15.2 to 1.20.0, vite from 7.3.2 to 7.3.6, vitest from 4.0.18 to 4.1.11, and react-router-dom from 6.30.3 to 6.30.6.
+    - `npm audit fix` (without `--force`) then updated the transitive packages.
+    - `npm audit`: 19 (1 critical, 9 high, 8 moderate, 1 low) → 2 moderate.
+    - `npm audit --omit=dev`: 5 (2 high, 3 moderate) → 2 moderate.
+  - **F-07 still open (Moderate):** react-router `>=6.0.0 <7.18.0` has two advisories that no 6.x release fixes: the backslash open redirect in `<Link>`/`useNavigate` (GHSA-wrjc-x8rr-h8h6), and SSR `deserializeErrors` (GHSA-337j-9hxr-rhxg), which doesn't apply to this SPA. The fix is React Router 7.18+, in the Phase 4 rewrite.
+  - **D-09:** fixed for the client. Both client Dockerfiles use `node:22-alpine`, the production image uses `nginx:1.30-alpine` (current stable line, 1.30.5), and `package.json` `engines.node` is `>=22`. Not verified with `docker build`, because the Docker daemon wasn't running. The `mssql/server:2022-latest` pin is superseded by the PostgreSQL migration (Phase 1.5).
+  - **Dependabot** is configured in `.github/dependabot.yml`:
+    - nuget, npm, docker (`client/`, `server/BookHub/`) and github-actions;
+    - weekly, with minor and patch updates grouped per ecosystem;
+    - `sqlserver/` is excluded.
+
+    Its PRs must not be merged until the Phase 2 CI gate (D-05) runs tests on pull requests.
+  - **Still deferred:**
+    - Client majors go to Phase 4 (F-15).
+    - FluentAssertions 8.8.0 → 8.11.0 and the other client minors were out of this phase's scope, so Dependabot will pick them up.
