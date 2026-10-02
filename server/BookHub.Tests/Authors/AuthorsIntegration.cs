@@ -20,7 +20,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
 {
     private readonly BookHubWebApplicationFactory httpClientFactory = new();
 
-    public async Task InitializeAsync()
+    public async ValueTask InitializeAsync()
     {
         await this
             .httpClientFactory
@@ -30,10 +30,10 @@ public sealed class AuthorsIntegration : IAsyncLifetime
         await this.SeedUser("test-admin-id", "admin");
     }
 
-    public Task DisposeAsync()
+    public ValueTask DisposeAsync()
     {
         this.httpClientFactory.Dispose();
-        return Task.CompletedTask;
+        return ValueTask.CompletedTask;
     }
 
     [Fact]

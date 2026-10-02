@@ -1,6 +1,8 @@
-# Dependabot PRs must NOT be merged until the Phase 2 CI gate (D-05 in
-# docs/review/2026-10-code-review.md) runs tests on pull requests. Until then,
-# CI only builds on pushes to develop/master, so nothing checks these PRs.
+# Dependabot PRs may be merged once both CI checks ("server" and "client" in
+# .github/workflows/ci.yml) are green. CI builds and tests the server and lints,
+# typechecks, tests and builds the client on every pull request (D-05 in
+# docs/review/2026-10-code-review.md). CI doesn't build the Docker images yet
+# (Phase 3), so docker and docker-compose PRs need a local `docker compose build`.
 #
 # Minor and patch updates are grouped into one PR per ecosystem; major updates
 # open as separate PRs.

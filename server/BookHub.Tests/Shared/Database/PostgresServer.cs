@@ -7,10 +7,12 @@ using Npgsql;
 using NSubstitute;
 using Testcontainers.PostgreSql;
 
-// One PostgreSQL container for the whole test run (xunit v2 has no assembly fixture, so it's a
-// lazily started static). The real migrations are applied once to a template database, and each
-// test gets its own database cloned from that template: same isolation as a fresh database per
-// test, without re-running the migrations. Testcontainers' Ryuk removes the container at exit.
+// One PostgreSQL container for the whole test run, as a lazily started static. (An xunit.v3
+// assembly fixture would have to be injected into every test class and passed to the static
+// CreateTestDb helpers, for no gain.) The real migrations are applied once to a template database,
+// and each test gets its own database cloned from that template: same isolation as a fresh
+// database per test, without re-running the migrations. Testcontainers' Ryuk removes the
+// container at exit.
 internal static class PostgresServer
 {
     // Keep the image and the initdb arguments in sync with docker-compose.*.yml.

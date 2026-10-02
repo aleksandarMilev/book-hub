@@ -1,0 +1,93 @@
+# The job names ("server", "client") are the required status checks in branch protection.
+# Renaming a job means updating branch protection too.
+name: CI
+
+on:
+  pull_request:
+    branches: [master, develop]
+  push:
+    branches: [master, develop]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  server:
+    name: server
+    runs-on: ubuntu-latest
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      # setup-dotnet's built-in cache needs NuGet lock files, which the projects don't use.
+      - uses: actions/cache@v6
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('global.json', 'server/**/*.csproj') }}
+          restore-keys: nuget-${{ runner.os }}-
+
+      - name: Restore
+        run: dotnet restore server/BookHub.sln
+
+      - name: Build
+        run: dotnet build server/BookHub.sln --no-restore -c Release -warnaserror
+
+      # Testcontainers starts PostgreSQL in Docker, which ubuntu-latest provides.
+      - name: Test
+        run: >-
+          dotnet test server/BookHub.sln --no-build -c Release
+          --logger "trx;LogFileName=server-tests.trx"
+          --results-directory TestResults
+
+      - name: Upload test results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: server-test-results
+          path: TestResults/
+          if-no-files-found: warn
+
+  client:
+    name: client
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client
+    env:
+      # `npm ci` runs the `prepare` script (husky). Git hooks aren't needed in CI.
+      HUSKY: 0
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: client/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      # No `npm run format:check` yet: 158 files fail it (F-12 in
+      # docs/review/2026-10-code-review.md). It's fixed in the Phase 4 client rewrite.
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npx vitest run
+
+      - name: Build
+        run: npm run build

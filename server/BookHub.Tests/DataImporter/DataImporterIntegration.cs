@@ -13,13 +13,13 @@ public sealed class DataImporterIntegration : IAsyncLifetime
 {
     private readonly BookHubWebApplicationFactory factory = new();
 
-    public async Task InitializeAsync()
+    public async ValueTask InitializeAsync()
     {
         await this.factory.ResetDatabase();
         await this.factory.WithData(data => data.SeedUser("test-admin-id", "admin"));
     }
 
-    public async Task DisposeAsync()
+    public async ValueTask DisposeAsync()
         => await this.factory.DisposeAsync();
 
     [Fact]

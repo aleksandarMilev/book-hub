@@ -5,17 +5,25 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
+    <!-- xunit.v3 test projects are executables. -->
+    <OutputType>Exe</OutputType>
+    <!-- xUnit1051 (new in xunit.v3): pass TestContext.Current.CancellationToken to every call that
+         takes a token. Adopting it touches ~300 call sites, so it is left for the Phase 2 test work. -->
+    <NoWarn>$(NoWarn);xUnit1051</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="coverlet.collector" Version="6.0.4" />
-    <PackageReference Include="FluentAssertions" Version="8.8.0" />
+    <PackageReference Include="coverlet.collector" Version="10.1.0" />
+    <PackageReference Include="FluentAssertions" Version="8.11.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.12" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
-    <PackageReference Include="NSubstitute" Version="5.3.0" />
+    <PackageReference Include="NSubstitute" Version="6.2.0" />
     <PackageReference Include="Testcontainers.PostgreSql" Version="4.15.0" />
-    <PackageReference Include="xunit" Version="2.9.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
+    <!-- mtp-off: tests run through VSTest (xunit.runner.visualstudio). The default xunit.v3 package
+         enables Microsoft Testing Platform v2, which fails `dotnet test` in VSTest mode on the
+         .NET 10 SDK. Switching to MTP needs a "test" runner entry in global.json instead. -->
+    <PackageReference Include="xunit.v3.mtp-off" Version="4.0.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="4.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

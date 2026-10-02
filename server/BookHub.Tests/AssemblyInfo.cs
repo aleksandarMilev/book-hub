@@ -1,3 +1,5 @@
-﻿using Xunit;
+﻿using Xunit.Sdk;
+using Xunit.v3;
 
-[assembly: CollectionBehavior(DisableTestParallelization = true)]
+// xunit.v3 4.x replaced CollectionBehavior(DisableTestParallelization = true) with this.
+[assembly: Parallelization(Mode = ParallelMode.None)]

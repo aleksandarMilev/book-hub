@@ -21,7 +21,7 @@ public sealed class ReadingListsIntegration : IAsyncLifetime
 
     private Guid bookId;
 
-    public async Task InitializeAsync()
+    public async ValueTask InitializeAsync()
     {
         await this.httpClientFactory.ResetDatabase();
 
@@ -32,10 +32,10 @@ public sealed class ReadingListsIntegration : IAsyncLifetime
         this.bookId = await this.SeedCurrentlyReadingBook(OwnerId);
     }
 
-    public Task DisposeAsync()
+    public ValueTask DisposeAsync()
     {
         this.httpClientFactory.Dispose();
-        return Task.CompletedTask;
+        return ValueTask.CompletedTask;
     }
 
     [Fact]

@@ -56,13 +56,16 @@ Books created without genres get the "Other" genre (`52e607d4-c347-440a-8d55-cf2
 
 ## Phase 2: test framework upgrades
 
-**Status:** open, deferred from Phase 1c (T-05).
+**Status:** done in Phase 2a (2026-10). Deferred from Phase 1c (T-05).
 
-Phase 1c only took patch and minor updates. These major upgrades in `server/BookHub.Tests/BookHub.Tests.csproj` wait for Phase 2, which rebuilds the test setup (Testcontainers):
+The major upgrades in `server/BookHub.Tests/BookHub.Tests.csproj`:
 
-- `xunit` 2.9.3 → `xunit.v3`. 2.9.3 is deprecated ("Legacy"). This is a package swap, not a version bump.
-- `xunit.runner.visualstudio` 3.1.5 → 4.x
-- `NSubstitute` 5.3.0 → 6.x
-- `coverlet.collector` 6.0.4 → 10.x
+- `xunit` 2.9.3 → `xunit.v3.mtp-off` 4.0.1. This is the `xunit.v3` package with Microsoft Testing Platform turned off. The default `xunit.v3` 4.x enables MTP v2, which fails `dotnet test` in VSTest mode on the .NET 10 SDK, so it would need a `"test": { "runner": "Microsoft.Testing.Platform" }` entry in `global.json`. Moving to MTP is a separate decision.
+- `xunit.runner.visualstudio` 3.1.5 → 4.0.0 (co-released with xunit.v3 4.0)
+- `NSubstitute` 5.3.0 → 6.2.0
+- `coverlet.collector` 6.0.4 → 10.1.0 (still the VSTest data collector)
+- `FluentAssertions` 8.8.0 → 8.11.0
 
 None of them has an open advisory.
+
+**Follow-up:** the new analyzer rule xUnit1051 ("pass `TestContext.Current.CancellationToken`") has about 300 hits and is suppressed in the csproj. Adopt it while the tests are restructured in Phase 2b/2c, then remove the `NoWarn`.

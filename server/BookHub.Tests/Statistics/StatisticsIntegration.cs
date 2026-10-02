@@ -14,10 +14,10 @@ public sealed class StatisticsIntegration : IAsyncLifetime
 {
     private readonly BookHubWebApplicationFactory factory = new();
 
-    public async Task InitializeAsync()
+    public async ValueTask InitializeAsync()
         => await this.factory.ResetDatabase();
 
-    public async Task DisposeAsync()
+    public async ValueTask DisposeAsync()
         => await this.factory.DisposeAsync();
 
     [Fact]

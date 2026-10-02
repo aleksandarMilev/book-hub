@@ -16,13 +16,13 @@ public sealed class IdentityIntegration : IAsyncLifetime
 {
     private readonly ThrowingEmailSenderFactory httpClientFactory = new();
 
-    public async Task InitializeAsync()
+    public async ValueTask InitializeAsync()
         => await this.httpClientFactory.ResetDatabase();
 
-    public Task DisposeAsync()
+    public ValueTask DisposeAsync()
     {
         this.httpClientFactory.Dispose();
-        return Task.CompletedTask;
+        return ValueTask.CompletedTask;
     }
 
     [Fact]

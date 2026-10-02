@@ -21,7 +21,7 @@ Client: `http://localhost:5173`. API + Swagger UI (Development only, served at t
 
 ```bash
 dotnet run --project server/BookHub/BookHub.csproj
-dotnet build server/BookHub/BookHub.csproj -c Release      # what CI runs
+dotnet build server/BookHub.sln -c Release -warnaserror    # what CI runs (keep 0 warnings)
 dotnet test server/BookHub.sln
 dotnet test server/BookHub.sln --filter "FullyQualifiedName~BooksIntegration"            # one class
 dotnet test server/BookHub.sln --filter "FullyQualifiedName~BooksUnit.TopThree_Should"   # one test
@@ -48,7 +48,7 @@ npm run format:check  # npm run format to write
 npx vitest run [path] # single run; `npm run test` is `vitest` (watch mode in a TTY)
 ```
 
-Husky hooks run from `client/`: **pre-commit** runs lint-staged (eslint --fix + prettier), and **pre-push** runs `typecheck` and `test`. CI (`.github/workflows/build-and-deploy.yml`) only builds the API and the client on pushes to `develop`/`master`; it doesn't run tests or lint. Client tests (Vitest) live next to the code they cover; run them with `npx vitest run`.
+Husky hooks run from `client/`: **pre-commit** runs lint-staged (eslint --fix + prettier), and **pre-push** runs `typecheck` and `test`. CI (`.github/workflows/ci.yml`) runs on pull requests to and pushes to `master`/`develop`, as two jobs that are the required status checks: **server** (restore, Release build with `-warnaserror`, `dotnet test` with a TRX artifact) and **client** (`npm ci`, lint, typecheck, `npx vitest run`, build). `format:check` isn't in CI yet (F-12). `global.json` pins the .NET SDK (10.0.4xx band, `latestFeature`), and CI installs the SDK from it. Client tests (Vitest) live next to the code they cover; run them with `npx vitest run`.
 
 ## Server architecture
 
@@ -105,7 +105,7 @@ The request flow is: WebModel → `.ToCreateServiceModel()` → service → DbMo
 
 ## Server tests (`server/BookHub.Tests`)
 
-xUnit v2 + FluentAssertions + NSubstitute + Testcontainers. Test parallelization is disabled assembly-wide. Test classes are named `<Feature>Unit.cs` / `<Feature>Integration.cs` (not every feature has both yet).
+xUnit v3 + FluentAssertions + NSubstitute + Testcontainers. The project references `xunit.v3.mtp-off` and runs through VSTest (`xunit.runner.visualstudio` + `Microsoft.NET.Test.Sdk`), so plain `dotnet test` works. Don't switch to the default `xunit.v3` package without also opting into Microsoft Testing Platform in `global.json`: MTP v2 fails `dotnet test` in VSTest mode on the .NET 10 SDK. The test project is an executable (`OutputType Exe`). `IAsyncLifetime` members return `ValueTask`. Test parallelization is disabled assembly-wide (`[assembly: Parallelization(Mode = ParallelMode.None)]` in `AssemblyInfo.cs`). The analyzer rule xUnit1051 (pass `TestContext.Current.CancellationToken`) is suppressed in the csproj for now. Test classes are named `<Feature>Unit.cs` / `<Feature>Integration.cs` (not every feature has both yet).
 
 **Docker must be running for `dotnet test`.** Every test uses a real PostgreSQL database:
 

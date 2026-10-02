@@ -1,5 +1,7 @@
 # BookHub
 
+[![CI](https://github.com/aleksandarMilev/book-hub/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/aleksandarMilev/book-hub/actions/workflows/ci.yml)
+
 BookHub is a full-stack book community platform for discovering and sharing books, authors, reviews, and articles. It includes user profiles, reading lists, notifications, and admin moderation.
 
 ## Highlights
@@ -155,6 +157,13 @@ Server scripts:
 
 - `dotnet run --project server/BookHub/BookHub.csproj`
 - `dotnet test server/BookHub.sln` (Docker must be running: the tests start a PostgreSQL container through Testcontainers)
+
+## Running Tests
+
+- **Server:** start Docker first (the tests run against a real PostgreSQL container through Testcontainers), then run `dotnet test server/BookHub.sln` from the repo root.
+- **Client:** run `npx vitest run` from `client/`.
+
+CI (`.github/workflows/ci.yml`) runs both on every pull request to `master`/`develop` and on pushes to them: the server build (warnings are errors) and tests, and the client's lint, typecheck, tests and build.
 
 ## Production Notes
 

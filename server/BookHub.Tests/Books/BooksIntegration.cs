@@ -26,7 +26,7 @@ public sealed class BooksIntegration : IAsyncLifetime
 
     private static readonly Guid OtherGenreId = new("52e607d4-c347-440a-8d55-cf2e01d88a6c");
 
-    public async Task InitializeAsync()
+    public async ValueTask InitializeAsync()
     {
         await this.httpClientFactory.ResetDatabase();
 
@@ -41,10 +41,10 @@ public sealed class BooksIntegration : IAsyncLifetime
             Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), "Seed author");
     }
 
-    public Task DisposeAsync()
+    public ValueTask DisposeAsync()
     {
         this.httpClientFactory.Dispose();
-        return Task.CompletedTask;
+        return ValueTask.CompletedTask;
     }
 
     [Fact]

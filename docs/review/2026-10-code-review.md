@@ -486,3 +486,24 @@ No tracked file was modified.
   - **S-09:** still open (Phase 3). The API connects as `POSTGRES_USER`; a least-privilege role and a migration-only role come with D-04.
   - **B-18 (new, Low):** the DataImporter's `CreatedOn` values (articles.json) are overwritten by `ApplyAuditInfo` on insert, so every imported article shows the import time. This predates the migration (verified on the dev stack).
   - **B-19 (new, Low):** the Profiles search isn't `AsNoTracking`, and it returns private profiles (flagged with `IsPrivate`, which the client has to honour). This is unchanged by this phase.
+- **2026-10-02 (Phase 2a, test framework upgrades and the CI gate):** no production code changed. Tests: 173/173 before and after (about 45 s either way).
+  - **D-05:** fixed, except the image build and push (Phase 3). `.github/workflows/ci.yml` replaces `build-and-deploy.yml`.
+    - **Triggers:** pull requests to `master`/`develop`, and pushes to them. Runs are cancelled when a newer one starts on the same ref. Permissions: `contents: read`.
+    - **server job:** checkout, `setup-dotnet` from `global.json`, a NuGet package cache, `dotnet restore`, `dotnet build --no-restore -c Release -warnaserror`, then `dotnet test --no-build -c Release` against Testcontainers PostgreSQL, using the runner's Docker. It uploads a TRX artifact (`server-test-results`) on success and on failure.
+    - **client job:** Node 22 with an npm cache keyed on `client/package-lock.json`, `npm ci`, lint, typecheck, `npx vitest run`, build. `format:check` is left out until F-12 is fixed (Phase 4).
+    - **`global.json`:** pins the SDK to the 10.0.4xx band (`10.0.400`, `rollForward: latestFeature`), so the D-05 question about which SDK `ubuntu-latest` ships no longer matters.
+    - **Side effect of `-warnaserror`:** a newly published NuGet advisory is reported as a build warning (NU190x), so it turns CI red even without a code change. That's intended: it is the gate.
+    - **Still to do:** branch protection on `master` (and `develop`) requiring the `server` and `client` checks. This is a GitHub setting, and it's part of Phase 2's exit criteria.
+  - **T-05:** fully resolved.
+    - `xunit` 2.9.3 → `xunit.v3.mtp-off` 4.0.1, `xunit.runner.visualstudio` 3.1.5 → 4.0.0, `NSubstitute` 5.3.0 → 6.2.0, `coverlet.collector` 6.0.4 → 10.1.0 and `FluentAssertions` 8.8.0 → 8.11.0.
+    - `dotnet list package --vulnerable --include-transitive` and `--deprecated` both report nothing.
+    - Tests still run through VSTest, so `dotnet test` is unchanged. The plain `xunit.v3` 4.x package enables Microsoft Testing Platform v2, and its MSBuild targets fail `dotnet test` in VSTest mode on the .NET 10 SDK ("Testing with VSTest target is no longer supported…"). The `mtp-off` variant is the same framework with MTP turned off. Moving to MTP (a `test.runner` entry in `global.json`) is a separate decision.
+    - **Migration changes:**
+      - the test project is `OutputType Exe`;
+      - `IAsyncLifetime` members return `ValueTask` (10 integration classes);
+      - `CollectionBehavior(DisableTestParallelization = true)` is un-callable in xunit.v3 4.x, so it became `[assembly: Parallelization(Mode = ParallelMode.None)]`. The runner confirms "parallel mode = none".
+      - No assertions changed.
+    - **No assembly fixture:** xunit.v3 assembly fixtures would mean injecting the fixture into every class and threading it into the static `CreateTestDb` helpers, so the lazy static `PostgresServer` stays.
+  - **T-06 (new, Low):** xunit.v3's analyzer rule xUnit1051 (pass `TestContext.Current.CancellationToken` to calls that take a token) has about 300 hits. It's suppressed in `BookHub.Tests.csproj` so the build stays at 0 warnings. Adopt it during the Phase 2b/2c test work and remove the `NoWarn` (`docs/backlog.md`).
+  - **T-07 (new, Low):** the `AdminServiceIntegration` header comment still says the factory's Identity stack is SQLite. It's PostgreSQL since Phase 1.5.
+  - **Docs:** README has a CI badge and a "Running Tests" section. CLAUDE.md describes the new CI and xunit.v3 setup. The Dependabot header now allows merging once both checks are green; docker and docker-compose PRs still need a local `docker compose build`, because CI doesn't build images.

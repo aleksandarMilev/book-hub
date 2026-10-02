@@ -18,7 +18,7 @@ public sealed class SearchIntegration : IAsyncLifetime
 
     private HttpClient client = null!;
 
-    public async Task InitializeAsync()
+    public async ValueTask InitializeAsync()
     {
         await this.factory.ResetDatabase();
         await this.factory.WithData(data => data.SeedUser(UserId, "searcher"));
@@ -26,7 +26,7 @@ public sealed class SearchIntegration : IAsyncLifetime
         this.client = this.factory.CreateUserClient(UserId, "searcher");
     }
 
-    public async Task DisposeAsync()
+    public async ValueTask DisposeAsync()
         => await this.factory.DisposeAsync();
 
     [Theory]
