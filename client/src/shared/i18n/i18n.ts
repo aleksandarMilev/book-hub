@@ -51,10 +51,6 @@ const bgReviews = await import('@/shared/i18n/locales/bg/reviews.json', {
   assert: { type: 'json' },
 }).then((mod) => mod.default);
 
-const bgChats = await import('@/shared/i18n/locales/bg/chats.json', {
-  assert: { type: 'json' },
-}).then((mod) => mod.default);
-
 const bgLegal = await import('@/shared/i18n/locales/bg/legal.json', {
   assert: { type: 'json' },
 }).then((mod) => mod.default);
@@ -111,10 +107,6 @@ const enReviews = await import('@/shared/i18n/locales/en/reviews.json', {
   assert: { type: 'json' },
 }).then((mod) => mod.default);
 
-const enChats = await import('@/shared/i18n/locales/en/chats.json', {
-  assert: { type: 'json' },
-}).then((mod) => mod.default);
-
 const enLegal = await import('@/shared/i18n/locales/en/legal.json', {
   assert: { type: 'json' },
 }).then((mod) => mod.default);
@@ -148,7 +140,6 @@ void i18n.use(initReactI18next).init({
       readingList: enReadingList,
       notifications: enNotifications,
       reviews: enReviews,
-      chats: enChats,
       legal: enLegal,
       challenges: enChallenges,
     },
@@ -165,7 +156,6 @@ void i18n.use(initReactI18next).init({
       readingList: bgReadingList,
       notifications: bgNotifications,
       reviews: bgReviews,
-      chats: bgChats,
       legal: bgLegal,
       challenges: bgChallenges,
     },

@@ -64,9 +64,6 @@ const Header: FC = () => {
               <Nav.Link as={Link} to={routes.articles} onClick={closeMenu}>
                 {t('header.nav.articles')}
               </Nav.Link>
-              <Nav.Link as={Link} to={routes.chat} onClick={closeMenu}>
-                {t('header.nav.chats')}
-              </Nav.Link>
               <Nav.Link as={Link} to={routes.profiles} onClick={closeMenu}>
                 {t('header.nav.users')}
               </Nav.Link>
@@ -76,11 +73,6 @@ const Header: FC = () => {
               <Nav.Link as={Link} to={routes.createAuthor} onClick={closeMenu}>
                 {t('header.nav.createAuthor')}
               </Nav.Link>
-              {!isAdmin && (
-                <Nav.Link as={Link} to={routes.createChat} onClick={closeMenu}>
-                  {t('header.nav.createChat')}
-                </Nav.Link>
-              )}
               {isAdmin && (
                 <Nav.Link as={Link} to={routes.admin.createArticle} onClick={closeMenu}>
                   {t('header.nav.createArticle')}

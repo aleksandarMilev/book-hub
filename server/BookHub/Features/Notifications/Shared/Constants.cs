@@ -17,11 +17,5 @@ public static class Constants
         public const string Approved = "'{0}' has been approved";
 
         public const string Rejected = "'{0}' has been rejected";
-
-        public const string ChatInvitation = "{0} has invited you to join in '{1}'";
-
-        public const string ChatInvitationAccepted = "{0} accepted to join in '{1}'";
-
-        public const string ChatInvitationRejected = "{0} rejected to join in '{1}'";
     }
 }

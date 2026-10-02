@@ -31,7 +31,6 @@
   },
   "resourceType": {
     "Book": "Книга",
-    "Author": "Автор",
-    "Chat": "Чат"
+    "Author": "Автор"
   }
 }

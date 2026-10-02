@@ -26,9 +26,6 @@
       "wantToRead": "Иска да прочете:",
       "read": "Прочетени:"
     },
-    "chat": {
-      "title": "Добави този потребител към чат:"
-    },
     "currentlyReading": {
       "ownTitle": "В момента четеш:",
       "otherTitle": "{{firstName}} в момента чете:",

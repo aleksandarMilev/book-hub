@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import { type FC } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
-import { FaBook, FaComments, FaTrashAlt, FaUser } from 'react-icons/fa';
+import { FaBook, FaTrashAlt, FaUser } from 'react-icons/fa';
 
 import { useClickHandler } from '@/features/notification/hooks/useClickHandler';
 import { useRemove } from '@/features/notification/hooks/useCrud';
@@ -19,8 +19,6 @@ const getTypeIcon = (resourceType: string) => {
       return <FaBook />;
     case 'Author':
       return <FaUser />;
-    case 'Chat':
-      return <FaComments />;
     default:
       return <FaUser />;
   }

@@ -4,7 +4,6 @@ import type {
   ArticlesSearchResult,
   AuthorsSearchResult,
   BooksSearchResult,
-  ChatsSearchResult,
   GenresSearchResult,
   ProfilesSearchResult,
 } from '@/features/search/types/search';
@@ -56,16 +55,6 @@ export async function searchBooks(
   signal?: AbortSignal,
 ) {
   return search<BooksSearchResult>(routes.searchBooks, searchTerm, page, pageSize, token, signal);
-}
-
-export async function searchChats(
-  searchTerm: string,
-  page: number = pagination.defaultPageIndex,
-  pageSize: number = pagination.defaultPageSize,
-  token?: string,
-  signal?: AbortSignal,
-) {
-  return search<ChatsSearchResult>(routes.searchChats, searchTerm, page, pageSize, token, signal);
 }
 
 export async function searchAuthors(

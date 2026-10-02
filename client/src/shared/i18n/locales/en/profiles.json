@@ -26,9 +26,6 @@
       "wantToRead": "Want to Read:",
       "read": "Read:"
     },
-    "chat": {
-      "title": "Add this user to a chat:"
-    },
     "currentlyReading": {
       "ownTitle": "You're currently reading:",
       "otherTitle": "{{firstName}} is currently reading:",

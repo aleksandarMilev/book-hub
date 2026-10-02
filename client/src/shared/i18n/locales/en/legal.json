@@ -72,7 +72,7 @@
         "items": [
           "Account data: email, username, password (stored as a secure hash), user ID.",
           "Profile data: first name, last name, profile image, optional date of birth, optional social media URL, optional biography, and a “private profile” setting.",
-          "User content: reviews, votes, reading lists, books/authors created, chats and messages, and other content you submit.",
+          "User content: reviews, votes, reading lists, books/authors created, and other content you submit.",
           "Security/technical data: logs and security events may include IP address, timestamps, device/browser information, and request metadata."
         ]
       },
@@ -80,7 +80,7 @@
         "title": "3. How we use your data",
         "items": [
           "To create and manage accounts and profiles.",
-          "To provide features like reviews, chats, and reading lists.",
+          "To provide features like reviews and reading lists.",
           "To secure the service, prevent abuse, and troubleshoot issues.",
           "To send transactional emails (e.g., welcome email)."
         ]

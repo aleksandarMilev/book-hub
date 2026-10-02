@@ -8,11 +8,9 @@
       "genres": "Жанрове",
       "authors": "Автори",
       "articles": "Статии",
-      "chats": "Чатове",
       "users": "Потребители",
       "createBook": "Създай книга",
       "createAuthor": "Създай автор",
-      "createChat": "Създай чат",
       "createArticle": "Създай статия"
     },
     "auth": {
@@ -47,7 +45,6 @@
       "books": "Книги",
       "authors": "Автори",
       "articles": "Статии",
-      "chats": "Чатове",
       "myProfile": "Моят профил",
       "topUsers": "Топ потребители",
       "register": "Регистрация",

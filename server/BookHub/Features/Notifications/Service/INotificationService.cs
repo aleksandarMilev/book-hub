@@ -63,24 +63,6 @@ public interface INotificationService : ITransientService
         string receiverId,
         CancellationToken cancellationToken = default);
 
-    Task<Guid> CreateOnChatInvitation(
-        Guid chatId,
-        string chatName,
-        string receiverId,
-        CancellationToken cancellationToken = default);
-
-    Task<Guid> CreateOnChatInvitationAccepted(
-        Guid chatId,
-        string chatName,
-        string receiverId,
-        CancellationToken cancellationToken = default);
-
-    Task<Guid> CreateOnChatInvitationRejected(
-        Guid chatId,
-        string chatName,
-        string receiverId,
-        CancellationToken cancellationToken = default);
-
     Task<Result> Delete(
         Guid notificationId,
         CancellationToken cancellationToken = default);

@@ -402,3 +402,7 @@ The rewrite costs roughly 1.5–2× the refactor, but only the rewrite produces 
 - the patched test run and the JWT key-size check ran in a scratch directory outside the repo.
 
 No tracked file was modified.
+
+## Status updates
+
+- **2026-10-02:** S-01, S-02, S-03, S-05, F-10 and F-13 are resolved by removing the Chat feature (Phase 0). The old code is preserved under the git tag `chat-before-removal`, and a rebuild is tracked in `docs/backlog.md`. Chat is no longer part of F-01 (the affected uploads are now books, authors and articles) or F-14 (the remaining god hook is `features/profile/hooks/useCrud.ts`). The chat references in B-07, B-12, F-09 and T-03 no longer apply either, but those findings stay open for their non-chat parts.

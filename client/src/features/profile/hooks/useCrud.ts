@@ -2,7 +2,6 @@
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { useChatsNotJoined } from '@/features/chat/hooks/useCrud';
 import * as api from '@/features/profile/api/api';
 import type { CreateProfile, PrivateProfile, Profile } from '@/features/profile/types/profile';
 import { useLastCurrentlyReading } from '@/features/reading-list/hooks/useCrud';
@@ -63,12 +62,6 @@ export const useDetails = () => {
   const otherId = (location.state as { id?: string } | null)?.id;
   const { profile, isFetching: profileLoading } = useProfile(otherId);
   const { showModal, toggleModal, deleteHandler } = useRemove(profile?.id);
-  const {
-    chatNames: chatButtons,
-    isFetching: chatLoading,
-    error: chatError,
-    refetch: refetchChats,
-  } = useChatsNotJoined(otherId ?? undefined);
 
   const { book, isFetching: readingLoading } = useLastCurrentlyReading(
     profile?.isPrivate,
@@ -116,10 +109,6 @@ export const useDetails = () => {
       showModal,
       toggleModal,
       deleteHandler,
-      chatButtons,
-      chatLoading,
-      chatError,
-      refetchChats,
       onNavigateCurrentlyReading,
       onNavigateRead,
       onNavigateToRead,
@@ -136,10 +125,6 @@ export const useDetails = () => {
       showModal,
       toggleModal,
       deleteHandler,
-      chatButtons,
-      chatLoading,
-      chatError,
-      refetchChats,
       onNavigateCurrentlyReading,
       onNavigateRead,
       onNavigateToRead,

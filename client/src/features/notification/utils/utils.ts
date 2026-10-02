@@ -4,8 +4,6 @@
       return 'Book';
     case 1:
       return 'Author';
-    case 2:
-      return 'Chat';
     default:
       return 'Unknown resource type';
   }

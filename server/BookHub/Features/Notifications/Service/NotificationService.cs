@@ -208,64 +208,6 @@ public class NotificationService(
             cancellationToken);
     }
 
-    public async Task<Guid> CreateOnChatInvitation(
-        Guid chatId,
-        string chatName,
-        string receiverId,
-        CancellationToken cancellationToken = default)
-    {
-        var username = userService.GetUsername()!;
-        var message = string.Format(
-            Messages.ChatInvitation,
-            username,
-            chatName);
-
-        return await this.CreateNewNotification(
-            chatId,
-            ResourceType.Chat,
-            message,
-            receiverId,
-            cancellationToken);
-    }
-
-    public async Task<Guid> CreateOnChatInvitationAccepted(
-        Guid chatId,
-        string chatName,
-        string receiverId,
-        CancellationToken cancellationToken = default)
-    {
-        var message = string.Format(
-            Messages.ChatInvitationAccepted,
-            userService.GetUsername(),
-            chatName);
-
-        return await this.CreateNewNotification(
-           chatId,
-           ResourceType.Chat,
-           message,
-           receiverId,
-           cancellationToken);
-    }
-
-    public async Task<Guid> CreateOnChatInvitationRejected(
-        Guid chatId,
-        string chatName,
-        string receiverId,
-        CancellationToken cancellationToken = default)
-    {
-        var message = string.Format(
-            Messages.ChatInvitationRejected,
-            userService.GetUsername(),
-            chatName);
-
-        return await this.CreateNewNotification(
-           chatId,
-           ResourceType.Chat,
-           message,
-           receiverId,
-           cancellationToken);
-    }
-
     public async Task<Result> Delete(
         Guid notificationId,
         CancellationToken cancellationToken = default)

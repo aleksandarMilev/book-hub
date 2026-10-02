@@ -5,7 +5,6 @@ using System.Reflection;
 using Features.Articles.Data.Models;
 using Features.Authors.Data.Models;
 using Features.Books.Data.Models;
-using Features.Chat.Data.Models;
 using Features.Challenges.Data.Models;
 using Features.Genres.Data.Models;
 using Features.Identity.Data.Models;
@@ -18,7 +17,6 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Models.Base;
 using Models.Shared.BookGenre.Models;
-using Models.Shared.ChatUser;
 
 public class BookHubDbContext(
     DbContextOptions<BookHubDbContext> options,
@@ -51,12 +49,6 @@ public class BookHubDbContext(
     public DbSet<ArticleDbModel> Articles { get; init; }
 
     public DbSet<NotificationDbModel> Notifications { get; init; }
-
-    public DbSet<ChatMessageDbModel> ChatMessages { get; init; }
-
-    public DbSet<ChatDbModel> Chats { get; init; }
-
-    public DbSet<ChatUser> ChatsUsers { get; init; }
 
     public DbSet<ReadingChallengeDbModel> ReadingChallenges { get; init; }
 

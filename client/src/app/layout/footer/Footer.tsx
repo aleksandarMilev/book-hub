@@ -73,11 +73,6 @@ const Footer: FC = () => {
                   {t('footer.links.articles')}
                 </Link>
               </p>
-              <p>
-                <Link to={routes.chat} className="footer-link">
-                  {t('footer.links.chats')}
-                </Link>
-              </p>
             </MDBCol>
             <MDBCol md="2" lg="2" className="footer-column mb-4">
               <h6 className="footer-title">{t('footer.columns.legal')}</h6>

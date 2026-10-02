@@ -31,7 +31,6 @@
   },
   "resourceType": {
     "Book": "Book",
-    "Author": "Author",
-    "Chat": "Chat"
+    "Author": "Author"
   }
 }

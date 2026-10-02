@@ -3,6 +3,5 @@
 public enum ResourceType
 {
     Book = 0,
-    Author = 1,
-    Chat = 2
+    Author = 1
 }

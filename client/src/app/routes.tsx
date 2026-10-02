@@ -6,7 +6,6 @@ import App from '@/app/App';
 import Loading from '@/app/layout/loading/Loading';
 import AdminRoute from '@/app/routes/guards/admin/AdminRoute';
 import AuthenticatedRoute from '@/app/routes/guards/authenticated/AuthenticatedRoute';
-import ChatRoute from '@/app/routes/guards/chat/ChatRoute';
 import { routes } from '@/shared/lib/constants/api';
 
 const Fallback = () => <Loading />;
@@ -59,11 +58,6 @@ const EditArticle = lazy(() => import('@/features/article/components/edit/EditAr
 const NotificationList = lazy(
   () => import('@/features/notification/components/list/NotificationList.jsx'),
 );
-
-const CreateChat = lazy(() => import('@/features/chat/components/create/CreateChat.jsx'));
-const EditChat = lazy(() => import('@/features/chat/components/edit/EditChat.jsx'));
-const ChatList = lazy(() => import('@/features/chat/components/list/ChatList.jsx'));
-const ChatDetails = lazy(() => import('@/features/chat/components/details/ChatDetails.jsx'));
 
 const ReadingChallengesPage = lazy(
   () => import('@/features/challenges/components/challenge-page/ReadingChallengesPage'),
@@ -189,23 +183,6 @@ export const router = createBrowserRouter([
       {
         path: routes.notification,
         element: withSuspense(<AuthenticatedRoute element={<NotificationList />} />),
-      },
-
-      {
-        path: routes.createChat,
-        element: withSuspense(<AuthenticatedRoute element={<CreateChat />} />),
-      },
-      {
-        path: `${routes.editChat}/:id`,
-        element: withSuspense(<AuthenticatedRoute element={<EditChat />} />),
-      },
-      {
-        path: routes.chat,
-        element: withSuspense(<AuthenticatedRoute element={<ChatList />} />),
-      },
-      {
-        path: `${routes.chat}/:id`,
-        element: withSuspense(<ChatRoute element={<ChatDetails />} />),
       },
 
       {

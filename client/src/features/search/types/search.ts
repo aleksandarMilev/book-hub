@@ -32,13 +32,6 @@ export type BooksSearchResult = {
   genres: GenreName[];
 };
 
-export type ChatsSearchResult = {
-  id: string;
-  name: string;
-  imagePath: string;
-  creatorId: string;
-};
-
 export type ProfilesSearchResult = {
   id: string;
   firstName: string;

@@ -35,10 +35,4 @@ public interface ISearchService : ITransientService
         int pageIndex,
         int pageSize,
         CancellationToken cancellationToken = default);
-
-    Task<PaginatedModel<SearchChatServiceModel>> Chats(
-        string? searchTerm,
-        int pageIndex,
-        int pageSize,
-        CancellationToken cancellationToken = default);
 }

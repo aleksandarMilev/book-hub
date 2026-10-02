@@ -3,7 +3,6 @@
 using Articles.Data.Models;
 using Authors.Data.Models;
 using Books.Data.Models;
-using Chat.Data.Models;
 using Genres.Data.Models;
 using Genres.Service.Models;
 using Service.Models;
@@ -72,15 +71,5 @@ public static class SearchMapping
             LastName = p.LastName,
             ImagePath = p.ImagePath,
             IsPrivate = p.IsPrivate,
-        });
-
-    public static IQueryable<SearchChatServiceModel> ToSearchSeviceModels(
-        this IQueryable<ChatDbModel> profiles)
-        => profiles.Select(p => new SearchChatServiceModel
-        {
-            Id = p.Id,
-            Name = p.Name,
-            ImagePath = p.ImagePath,
-            CreatorId = p.CreatorId,
         });
 }

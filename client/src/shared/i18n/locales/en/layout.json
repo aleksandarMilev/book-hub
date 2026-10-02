@@ -8,11 +8,9 @@
       "genres": "Genres",
       "authors": "Authors",
       "articles": "Articles",
-      "chats": "Chats",
       "users": "Users",
       "createBook": "Create Book",
       "createAuthor": "Create Author",
-      "createChat": "Create Chat",
       "createArticle": "Create Article"
     },
     "auth": {
@@ -47,7 +45,6 @@
       "books": "Books",
       "authors": "Authors",
       "articles": "Articles",
-      "chats": "Chats",
       "myProfile": "My Profile",
       "topUsers": "Top Users",
       "register": "Register",

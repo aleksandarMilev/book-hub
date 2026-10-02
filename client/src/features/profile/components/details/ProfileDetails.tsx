@@ -17,7 +17,6 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import BookListItem from '@/features/book/components/list-item/BookListItem';
-import { useInviteToChat } from '@/features/chat/hooks/useCrud';
 import { useDetails } from '@/features/profile/hooks/useCrud';
 import type { PrivateProfile, Profile } from '@/features/profile/types/profile';
 import DefaultSpinner from '@/shared/components/default-spinner/DefaultSpinner';
@@ -40,18 +39,13 @@ const ProfileDetails = () => {
     deleteHandler,
     book,
     readingLoading,
-    chatButtons,
-    chatLoading,
-    chatError,
     onNavigateRead,
     onNavigateToRead,
     onNavigateCurrentlyReading,
     profileLoading,
-    refetchChats,
   } = useDetails();
 
   const { showMessage } = useMessage();
-  const inviteToChat = useInviteToChat(refetchChats);
   const { t } = useTranslation('profiles');
 
   if (profileLoading) {
@@ -209,29 +203,6 @@ const ProfileDetails = () => {
                     </div>
                     <hr className="my-4" />
                     <div className="d-flex justify-content-around mt-3">
-                      {profile && userId !== profile.id && !profile.isPrivate && (
-                        <section className="chat-section">
-                          <h3 className="chat-section-heading">{t('details.chat.title')}</h3>
-                          <div className="chat-buttons-container">
-                            {chatError ? (
-                              <p className="chat-buttons-error">{chatError}</p>
-                            ) : (
-                              !chatLoading &&
-                              chatButtons?.map((c) => (
-                                <button
-                                  key={c.id}
-                                  className="chat-button"
-                                  onClick={() =>
-                                    inviteToChat(c.id, profile.id, profile.firstName, c.name)
-                                  }
-                                >
-                                  {c.name}
-                                </button>
-                              ))
-                            )}
-                          </div>
-                        </section>
-                      )}
                       {profile && userId === profile.id && (
                         <>
                           <Link to={routes.editProfile} className="btn btn-outline-primary">

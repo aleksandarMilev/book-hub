@@ -2,7 +2,6 @@
 
 using Common;
 using Data;
-using Infrastructure.Services.CurrentUser;
 using Infrastructure.Services.PageClamper;
 using Microsoft.EntityFrameworkCore;
 using Models;
@@ -10,7 +9,6 @@ using Shared;
 
 public class SearchService(
     BookHubDbContext data,
-    ICurrentUserService userService,
     IPageClamper pageClamper) : ISearchService
 {
     public async Task<PaginatedModel<SearchGenreServiceModel>> Genres(
@@ -219,57 +217,6 @@ public class SearchService(
             .ToListAsync(cancellationToken);
 
         return new PaginatedModel<SearchProfileServiceModel>(
-            items,
-            total,
-            pageIndex,
-            pageSize);
-    }
-
-    public async Task<PaginatedModel<SearchChatServiceModel>> Chats(
-        string? searchTerm,
-        int pageIndex,
-        int pageSize,
-        CancellationToken cancellationToken = default)
-    {
-        pageClamper.ClampPageSizeAndIndex(
-            ref pageIndex,
-            ref pageSize);
-
-        var chats = data
-             .Chats
-             .AsNoTracking();
-
-        if (!userService.IsAdmin())
-        {
-            chats = chats
-                .Where(c => c
-                    .ChatsUsers
-                    .Any(cu =>
-                        cu.UserId == userService.GetId() &&
-                        cu.HasAccepted));
-        }
-
-        var chatModels = chats.ToSearchSeviceModels();
-        var term = searchTerm?.Trim();
-
-        if (!string.IsNullOrEmpty(term))
-        {
-            var safe = term.Replace("\"", "\"\"");
-            var fullTextQuery = $"\"{safe}*\"";
-
-            chatModels = chatModels
-                .Where(c => EF.Functions.Contains(c.Name, fullTextQuery));
-        }
-
-        chatModels = chatModels.OrderBy(c => c.Name);
-
-        var total = await chatModels.CountAsync(cancellationToken);
-        var items = await chatModels
-            .Skip((pageIndex - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync(cancellationToken);
-
-        return new PaginatedModel<SearchChatServiceModel>(
             items,
             total,
             pageIndex,

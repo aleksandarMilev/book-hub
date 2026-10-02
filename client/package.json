@@ -31,7 +31,6 @@
     "@fortawesome/free-regular-svg-icons": "^6.5.0",
     "@fortawesome/free-solid-svg-icons": "^6.5.0",
     "@fortawesome/react-fontawesome": "^3.1.1",
-    "@microsoft/signalr": "^8.0.7",
     "axios": "^1.15.2",
     "bootstrap": "^5.3.3",
     "date-fns": "^4.1.0",

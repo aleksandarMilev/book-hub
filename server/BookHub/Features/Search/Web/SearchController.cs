@@ -71,16 +71,4 @@ public class SearchController(ISearchService service) : ApiController
            page,
            pageSize,
            cancellationToken));
-
-    [HttpGet(ApiRoutes.Chats)]
-    public async Task<ActionResult<PaginatedModel<SearchChatServiceModel>>> Chats(
-        string? searchTerm,
-        int page = DefaultPageIndex,
-        int pageSize = DefaultPageSize,
-        CancellationToken cancellationToken = default)
-        => this.Ok(await service.Chats(
-            searchTerm,
-            page,
-            pageSize,
-            cancellationToken));
 }

@@ -101,7 +101,7 @@ xUnit + FluentAssertions + NSubstitute. Test parallelization is disabled assembl
 
 ## Client architecture
 
-- **Feature folders** in `client/src/features/<feature>/` hold `api/api.ts`, `hooks/`, `components/` and `types/`. Shared code is in `src/shared/`, and the app shell, router and route guards (`AuthenticatedRoute`, `AdminRoute`, `ChatRoute`) are in `src/app/`.
+- **Feature folders** in `client/src/features/<feature>/` hold `api/api.ts`, `hooks/`, `components/` and `types/`. Shared code is in `src/shared/`, and the app shell, router and route guards (`AuthenticatedRoute`, `AdminRoute`) are in `src/app/`.
 - **Imports:** always use the `@/` alias (it maps to `src/`), never relative paths across features. Imports are auto-sorted by `simple-import-sort`. Type-only imports must use `import type` (`verbatimModuleSyntax`).
 - **API layer** (`shared/api/http.ts`): the axios instances are `http` (base `VITE_REACT_APP_SERVER_URL`, default `http://localhost:8080`) and `httpAdmin` (`/administrator`). Every API function:
   - takes the JWT `token` and an optional `AbortSignal` explicitly, and builds its config with `getAuthConfig(token, signal)` / `getPublicConfig(signal)`
