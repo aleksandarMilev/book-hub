@@ -33,6 +33,8 @@ public class BookService(
     IPageClamper pageClamper,
     ILogger<BookService> logger) : IBookService
 {
+    private const string ResourceName = "book";
+
     public async Task<IEnumerable<BookServiceModel>> TopThree(
         CancellationToken cancellationToken)
         => await data
@@ -265,7 +267,7 @@ public class BookService(
         var dbModel = await this.GetDbModel(id, cancellationToken);
         if (dbModel is null)
         {
-            return this.LogAndReturnNotFoundMessage(id);
+            return this.LogAndReturnNotFound(id);
         }
 
         var userId = userService.GetId()!;
@@ -274,7 +276,7 @@ public class BookService(
 
         if (isNotCreator && !isAdmin)
         {
-            return LogAndReturnUnauthorizedMessage(id, userId);
+            return LogAndReturnForbidden(id, userId);
         }
 
         var genresResult = await this.ResolveGenres(
@@ -388,7 +390,7 @@ public class BookService(
 
         if (dbModel is null)
         {
-            return LogAndReturnNotFoundMessage(bookId);
+            return LogAndReturnNotFound(bookId);
         }
 
         var userId = userService.GetId()!;
@@ -397,7 +399,7 @@ public class BookService(
 
         if (isNotCreator && isNotAdmin)
         {
-            return LogAndReturnUnauthorizedMessage(bookId, userId);
+            return LogAndReturnForbidden(bookId, userId);
         }
 
         data.Remove(dbModel);
@@ -424,12 +426,12 @@ public class BookService(
 
         if (dbModel is null)
         {
-            return LogAndReturnNotFoundMessage(bookId);
+            return LogAndReturnNotFound(bookId);
         }
 
         if (!userService.IsAdmin())
         {
-            return LogAndReturnUnauthorizedMessage(
+            return LogAndReturnForbidden(
                 bookId,
                 userService.GetId()!);
         }
@@ -536,12 +538,12 @@ public class BookService(
 
         if (dbModel is null)
         {
-            return LogAndReturnNotFoundMessage(bookId);
+            return LogAndReturnNotFound(bookId);
         }
 
         if (!userService.IsAdmin())
         {
-            return LogAndReturnUnauthorizedMessage(
+            return LogAndReturnForbidden(
                 bookId,
                 userService.GetId()!);
         }
@@ -837,20 +839,19 @@ public class BookService(
             Author = baseModel.Author
         };
 
-    private string LogAndReturnNotFoundMessage(Guid bookId)
+    private Result LogAndReturnNotFound(Guid bookId)
     {
         logger.LogWarning(
             DbEntityNotFoundTemplate,
             nameof(BookDbModel),
             bookId);
 
-        return string.Format(
-            DbEntityNotFound,
-            nameof(BookDbModel),
-            bookId);
+        return Result.NotFound(string.Format(
+            ResourceNotFound,
+            ResourceName));
     }
 
-    private string LogAndReturnUnauthorizedMessage(
+    private Result LogAndReturnForbidden(
         Guid bookId,
         string userId)
     {
@@ -860,11 +861,9 @@ public class BookService(
             nameof(BookDbModel),
             bookId);
 
-        return string.Format(
-            UnauthorizedMessage,
-            userId,
-            nameof(BookDbModel),
-            bookId);
+        return Result.Forbidden(string.Format(
+            ResourceForbidden,
+            ResourceName));
     }
 
     private async Task<BookDbModel?> GetDbModel(

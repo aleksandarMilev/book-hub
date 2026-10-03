@@ -63,15 +63,10 @@ public class BooksController(IBookService service) : ApiController
             serviceModel,
             cancellationToken);
 
-        if (!result.Succeeded)
-        {
-            return this.BadRequest(new { errorMessage = result.ErrorMessage });
-        }
-
-        return this.CreatedAtRoute(
-            routeName: DetailsRouteName,
-            routeValues: new { id = result.Data!.Id },
-            value: result.Data);
+        return this.CreatedAtRouteOrProblem(
+            result,
+            DetailsRouteName,
+            book => new { id = book.Id });
     }
 
     [HttpPut(Id)]
@@ -86,7 +81,7 @@ public class BooksController(IBookService service) : ApiController
             serviceModel,
             cancellationToken);
 
-        return this.NoContentOrBadRequest(result);
+        return this.NoContentOrProblem(result);
     }
 
     [HttpDelete(Id)]
@@ -98,6 +93,6 @@ public class BooksController(IBookService service) : ApiController
             id,
             cancellationToken);
 
-        return this.NoContentOrBadRequest(result);
+        return this.NoContentOrProblem(result);
     }
 }

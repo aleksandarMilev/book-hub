@@ -34,7 +34,7 @@ public class NotificationsController(INotificationService service) : ApiControll
             id,
             cancellationToken);
 
-        return this.NoContentOrBadRequest(result);
+        return this.NoContentOrProblem(result);
     }
 
     [HttpPatch(Id + ApiRoutes.Read)]
@@ -46,6 +46,6 @@ public class NotificationsController(INotificationService service) : ApiControll
             id,
             cancellationToken);
 
-        return this.NoContentOrBadRequest(result);
+        return this.NoContentOrProblem(result);
     }
 }

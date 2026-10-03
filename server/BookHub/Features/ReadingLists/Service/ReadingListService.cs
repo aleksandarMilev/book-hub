@@ -21,7 +21,7 @@ public class ReadingListService(
     IPageClamper pageClamper,
     ILogger<ReadingListService> logger) : IReadingListService
 {
-    public async Task<ResultWith<PaginatedModel<BookServiceModel>>?> All(
+    public async Task<ResultWith<PaginatedModel<BookServiceModel>>> All(
         string userId,
         ReadingListStatus status,
         int pageIndex,
@@ -30,7 +30,7 @@ public class ReadingListService(
     {
         if (!await this.CanViewListsOf(userId, cancellationToken))
         {
-            return null;
+            return ResultWith<PaginatedModel<BookServiceModel>>.NotFound(ReadingListNotFound);
         }
 
         pageClamper.ClampPageSizeAndIndex(
@@ -44,7 +44,7 @@ public class ReadingListService(
                 "Invalid reading status passed to All(). Status: {Status}",
                 status);
 
-            return $"Invalid reading status passed to All(). Status: {status}";
+            return InvalidStatus;
         }
 
         var books = data
@@ -104,7 +104,7 @@ public class ReadingListService(
 
         if (bookIsNotValid)
         {
-            return "Invalid Book Id!";
+            return BookDoesNotExist;
         }
 
         var existing = await data
@@ -159,7 +159,7 @@ public class ReadingListService(
 
         if (existing.Status == readingStatus)
         {
-            return BookAlreadyInTheList;
+            return Result.Conflict(BookAlreadyInTheList);
         }
 
         var oldStatus = existing.Status;
@@ -204,7 +204,7 @@ public class ReadingListService(
 
         if (mapEntity is null)
         {
-            return BookNotInTheList;
+            return Result.NotFound(BookNotInTheList);
         }
 
         var oldStatus = mapEntity.Status;

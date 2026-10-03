@@ -1,10 +1,12 @@
 ﻿namespace BookHub.Infrastructure.Extensions;
 
+using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using System.Text;
 using System.Threading.RateLimiting;
 using Data;
+using ExceptionHandling;
 using Features.Emails;
 using Features.Identity.Data.Models;
 using Filters;
@@ -23,6 +25,27 @@ using static Features.Identity.Shared.Constants.Lockout;
 
 public static class ServiceCollectionExtensions
 {
+    // Every error response is a ProblemDetails (RFC 9457) with a traceId: controller
+    // failures (ControllerExtensions), unhandled exceptions (GlobalExceptionHandler) and
+    // empty-body status codes such as 401/403 (UseStatusCodePages).
+    public static IServiceCollection AddErrorHandling(
+        this IServiceCollection services)
+    {
+        services.AddProblemDetails(options =>
+            options.CustomizeProblemDetails = context =>
+                context
+                    .ProblemDetails
+                    .Extensions
+                    .TryAdd(
+                        "traceId",
+                        Activity.Current?.Id ?? context.HttpContext.TraceIdentifier));
+
+        // IExceptionHandler can't follow the I{ClassName} convention used by AddServices.
+        services.AddExceptionHandler<GlobalExceptionHandler>();
+
+        return services;
+    }
+
     public static IServiceCollection AddRateLimiting(this IServiceCollection services, IWebHostEnvironment env)
     {
         services.AddRateLimiter(options =>
@@ -46,8 +69,18 @@ public static class ServiceCollectionExtensions
 
                 await context
                     .HttpContext
-                    .Response
-                    .WriteAsync("Too many requests.", token);
+                    .RequestServices
+                    .GetRequiredService<IProblemDetailsService>()
+                    .WriteAsync(new()
+                    {
+                        HttpContext = context.HttpContext,
+                        ProblemDetails = new()
+                        {
+                            Status = StatusCodes.Status429TooManyRequests,
+                            Title = "Too Many Requests",
+                            Detail = "Too many requests. Try again later.",
+                        },
+                    });
             };
 
             options.GlobalLimiter = PartitionedRateLimiter

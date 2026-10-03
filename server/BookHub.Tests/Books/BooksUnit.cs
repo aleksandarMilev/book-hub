@@ -16,6 +16,7 @@ using Infrastructure.Services.CurrentUser;
 using Infrastructure.Services.ImageWriter;
 using Infrastructure.Services.ImageWriter.Models;
 using Infrastructure.Services.PageClamper;
+using Infrastructure.Services.Result;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -555,7 +556,9 @@ public sealed class BooksUnit
         result
             .ErrorMessage
             .Should()
-            .Be($"BookDbModel with Id: {nonExistingId} was not found!");
+            .Be("The book was not found.");
+
+        result.ErrorKind.Should().Be(ErrorKind.NotFound);
     }
 
     [Fact]
@@ -594,7 +597,9 @@ public sealed class BooksUnit
         result
             .ErrorMessage
             .Should()
-            .Be($"User with Id: user-2 can not modify BookDbModel with Id: {book.Id}!");
+            .Be("You are not allowed to modify this book.");
+
+        result.ErrorKind.Should().Be(ErrorKind.Forbidden);
     }
 
     [Fact]
@@ -907,7 +912,9 @@ public sealed class BooksUnit
         result
             .ErrorMessage
             .Should()
-            .Be($"BookDbModel with Id: {bookId} was not found!");
+            .Be("The book was not found.");
+
+        result.ErrorKind.Should().Be(ErrorKind.NotFound);
     }
 
     [Fact]

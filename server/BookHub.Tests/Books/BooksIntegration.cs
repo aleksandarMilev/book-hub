@@ -16,6 +16,8 @@ using Features.Identity.Data.Models;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Shared.Seed;
+using Shared.Utils;
 
 using static Features.Books.Shared.Constants.Paths;
 using static Shared.Utils.Constants;
@@ -354,7 +356,7 @@ public sealed class BooksIntegration : IAsyncLifetime
     }
 
     [Fact]
-    public async Task Create_ShouldReturnBadRequestWithErrorMessage_AndAlso_ShouldNotPersistBook_WhenGenreDoesNotExist()
+    public async Task Create_ShouldReturnBadRequestProblem_AndAlso_ShouldNotPersistBook_WhenGenreDoesNotExist()
     {
         var httpClient = this.httpClientFactory.CreateUserClient();
         var unknownGenreId = Guid.NewGuid();
@@ -369,17 +371,9 @@ public sealed class BooksIntegration : IAsyncLifetime
 
         var response = await httpClient.PostAsync("/Books", formData);
 
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-
-        var json = await response.Content.ReadAsStringAsync();
-        using var jsonDocument = JsonDocument.Parse(json);
-
-        jsonDocument
-            .RootElement
-            .GetProperty("errorMessage")
-            .GetString()
-            .Should()
-            .Be($"Genres with Id(s): {unknownGenreId} were not found!");
+        await response.ShouldBeProblem(
+            HttpStatusCode.BadRequest,
+            $"Genres with Id(s): {unknownGenreId} were not found!");
 
         using var scope = this
             .httpClientFactory
@@ -621,7 +615,7 @@ public sealed class BooksIntegration : IAsyncLifetime
     }
 
     [Fact]
-    public async Task Edit_ShouldReturnBadRequestWithErrorMessage_WhenBookDoesNotExist()
+    public async Task Edit_ShouldReturnNotFoundProblem_WhenBookDoesNotExist()
     {
         var nonExistingId = Guid.NewGuid();
         var httpClient = this.httpClientFactory.CreateUserClient();
@@ -638,21 +632,9 @@ public sealed class BooksIntegration : IAsyncLifetime
             $"/Books/{nonExistingId}/",
             formData);
 
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-
-        var json = await response.Content.ReadAsStringAsync();
-        using var jsonDocument = JsonDocument.Parse(json);
-
-        jsonDocument
-            .RootElement
-            .TryGetProperty("errorMessage", out var message)
-            .Should()
-            .BeTrue();
-
-        message
-            .GetString()
-            .Should()
-            .Be($"BookDbModel with Id: {nonExistingId} was not found!");
+        await response.ShouldBeProblem(
+            HttpStatusCode.NotFound,
+            "The book was not found.");
     }
 
     [Fact]
@@ -691,7 +673,7 @@ public sealed class BooksIntegration : IAsyncLifetime
     }
 
     [Fact]
-    public async Task Delete_ShouldReturnBadRequestWithErrorMessage_WhenBookDoesNotExist()
+    public async Task Delete_ShouldReturnNotFoundProblem_WhenBookDoesNotExist()
     {
         var httpClient = this.httpClientFactory.CreateUserClient();
         var nonExistingId = Guid.NewGuid();
@@ -699,21 +681,85 @@ public sealed class BooksIntegration : IAsyncLifetime
         var response = await httpClient.DeleteAsync(
             $"/Books/{nonExistingId}/");
 
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        await response.ShouldBeProblem(
+            HttpStatusCode.NotFound,
+            "The book was not found.");
+    }
 
-        var json = await response.Content.ReadAsStringAsync();
-        using var jsonDocument = JsonDocument.Parse(json);
+    [Fact]
+    public async Task Edit_And_Delete_ShouldReturnForbiddenProblem_AndAlso_ShouldNotChangeTheBook_WhenTheCallerIsNotTheCreator()
+    {
+        var bookId = await this.SeedBook(
+            creatorId: "test-admin-id",
+            isApproved: true);
 
-        jsonDocument
-            .RootElement
-            .TryGetProperty("errorMessage", out var message)
-            .Should()
-            .BeTrue();
+        var httpClient = this.httpClientFactory.CreateUserClient();
 
-        message
-            .GetString()
-            .Should()
-            .Be($"BookDbModel with Id: {nonExistingId} was not found!");
+        var formData = BuildBookForm(
+            title: "Hijacked title long enough",
+            shortDescription: "Hijacked short description",
+            longDescription: new string('z', 250),
+            authorId: null,
+            publishedDate: null,
+            genreIds: []);
+
+        var editResponse = await httpClient.PutAsync($"/Books/{bookId}/", formData);
+        var deleteResponse = await httpClient.DeleteAsync($"/Books/{bookId}/");
+
+        var editProblem = await editResponse.ShouldBeProblem(
+            HttpStatusCode.Forbidden,
+            "You are not allowed to modify this book.");
+
+        await deleteResponse.ShouldBeProblem(
+            HttpStatusCode.Forbidden,
+            "You are not allowed to modify this book.");
+
+        // S-11: neither the caller's ID nor the book ID nor a type name is returned.
+        editProblem.Detail.Should().NotContain("test-user");
+        editProblem.Detail.Should().NotContain(bookId.ToString());
+        editProblem.Detail.Should().NotContain("DbModel");
+
+        var (title, isDeleted, hasPendingEdit) = await this.httpClientFactory.WithData(async data =>
+        {
+            var book = await data
+                .Books
+                .IgnoreQueryFilters()
+                .SingleAsync(b => b.Id == bookId);
+
+            var pending = await data.BookEdits.AnyAsync(e => e.BookId == bookId);
+
+            return (book.Title, book.IsDeleted, pending);
+        });
+
+        title.Should().NotBe("Hijacked title long enough");
+        isDeleted.Should().BeFalse();
+        hasPendingEdit.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task Edit_ShouldReturnNotFoundProblem_WhenTheBookIsSomeoneElsesAndUnapproved()
+    {
+        // An unapproved book is visible only to its creator and admins, so for anyone else
+        // it doesn't exist (404), and a 403 would reveal it.
+        var bookId = await this.SeedBook(
+            creatorId: "test-admin-id",
+            isApproved: false);
+
+        var httpClient = this.httpClientFactory.CreateUserClient();
+
+        var formData = BuildBookForm(
+            title: "Hijacked title long enough",
+            shortDescription: "Hijacked short description",
+            longDescription: new string('z', 250),
+            authorId: null,
+            publishedDate: null,
+            genreIds: []);
+
+        var response = await httpClient.PutAsync($"/Books/{bookId}/", formData);
+
+        await response.ShouldBeProblem(
+            HttpStatusCode.NotFound,
+            "The book was not found.");
     }
 
     [Fact]
@@ -749,7 +795,7 @@ public sealed class BooksIntegration : IAsyncLifetime
     }
 
     [Fact]
-    public async Task Approve_ShouldReturnBadRequestWithErrorMessage_WhenBookDoesNotExist()
+    public async Task Approve_ShouldReturnNotFoundProblem_WhenBookDoesNotExist()
     {
         var httpClient = this.httpClientFactory.CreateAdminClient();
         var nonExistingId = Guid.NewGuid();
@@ -758,21 +804,9 @@ public sealed class BooksIntegration : IAsyncLifetime
             $"/Administrator/Books/{nonExistingId}/approve/",
             content: null);
 
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-
-        var json = await response.Content.ReadAsStringAsync();
-        using var jsonDocument = JsonDocument.Parse(json);
-
-        jsonDocument
-            .RootElement
-            .TryGetProperty("errorMessage", out var message)
-            .Should()
-            .BeTrue();
-
-        message
-            .GetString()
-            .Should()
-            .Be($"BookDbModel with Id: {nonExistingId} was not found!");
+        await response.ShouldBeProblem(
+            HttpStatusCode.NotFound,
+            "The book was not found.");
     }
 
     [Fact]
@@ -828,7 +862,7 @@ public sealed class BooksIntegration : IAsyncLifetime
     }
 
     [Fact]
-    public async Task Reject_ShouldReturnBadRequestWithErrorMessage_WhenBookDoesNotExist()
+    public async Task Reject_ShouldReturnNotFoundProblem_WhenBookDoesNotExist()
     {
         var httpClient = this.httpClientFactory.CreateAdminClient();
         var nonExistingId = Guid.NewGuid();
@@ -837,21 +871,9 @@ public sealed class BooksIntegration : IAsyncLifetime
             $"/Administrator/Books/{nonExistingId}/reject/",
             content: null);
 
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-
-        var json = await response.Content.ReadAsStringAsync();
-        using var jsonDocument = JsonDocument.Parse(json);
-
-        jsonDocument
-            .RootElement
-            .TryGetProperty("errorMessage", out var message)
-            .Should()
-            .BeTrue();
-
-        message
-            .GetString()
-            .Should()
-            .Be($"BookDbModel with Id: {nonExistingId} was not found!");
+        await response.ShouldBeProblem(
+            HttpStatusCode.NotFound,
+            "The book was not found.");
     }
 
     [Fact]

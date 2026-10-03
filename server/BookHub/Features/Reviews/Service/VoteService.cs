@@ -3,13 +3,18 @@
 using BookHub.Data;
 using Data.Models;
 using Infrastructure.Services.CurrentUser;
+using Infrastructure.Services.Result;
 using Microsoft.EntityFrameworkCore;
+
+using static Common.Constants.ErrorMessages;
 
 public class VoteService(
     BookHubDbContext data,
     ICurrentUserService userService) : IVoteService
 {
-    public async Task<int?> Create(
+    private const string ResourceName = "review";
+
+    public async Task<ResultWith<Guid>> Create(
         Guid reviewId,
         bool isUpvote,
         CancellationToken cancellationToken = default)
@@ -23,7 +28,9 @@ public class VoteService(
 
         if (!reviewExists)
         {
-            return null;
+            return ResultWith<Guid>.NotFound(string.Format(
+                ResourceNotFound,
+                ResourceName));
         }
 
         var userId = userService.GetId()!;
@@ -40,17 +47,15 @@ public class VoteService(
             if (existingVote.IsUpvote == isUpvote)
             {
                 data.Remove(existingVote);
-
-                await data.SaveChangesAsync(cancellationToken);
-
-                return null;
             }
-
-            existingVote.IsUpvote = isUpvote;
+            else
+            {
+                existingVote.IsUpvote = isUpvote;
+            }
 
             await data.SaveChangesAsync(cancellationToken);
 
-            return existingVote.Id;
+            return ResultWith<Guid>.Success(reviewId);
         }
 
         var vote = new VoteDbModel
@@ -64,6 +69,6 @@ public class VoteService(
 
         await data.SaveChangesAsync(cancellationToken);
 
-        return vote.Id;
+        return ResultWith<Guid>.Success(reviewId);
     }
 }

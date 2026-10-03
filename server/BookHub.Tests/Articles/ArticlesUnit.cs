@@ -8,6 +8,7 @@ using FluentAssertions;
 using Infrastructure.Services.CurrentUser;
 using Infrastructure.Services.ImageWriter;
 using Infrastructure.Services.ImageWriter.Models;
+using Infrastructure.Services.Result;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -359,7 +360,9 @@ public sealed class ArticlesUnit
         result
             .ErrorMessage
             .Should()
-            .Be($"ArticleDbModel with Id: {nonExistingId} was not found!");
+            .Be("The article was not found.");
+
+        result.ErrorKind.Should().Be(ErrorKind.NotFound);
 
         await imageWriter
             .DidNotReceiveWithAnyArgs()
@@ -544,7 +547,9 @@ public sealed class ArticlesUnit
         result
             .ErrorMessage
             .Should()
-            .Be($"ArticleDbModel with Id: {nonExistingId} was not found!");
+            .Be("The article was not found.");
+
+        result.ErrorKind.Should().Be(ErrorKind.NotFound);
     }
 
     private static async Task<(

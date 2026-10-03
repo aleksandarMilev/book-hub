@@ -39,7 +39,7 @@ public class ProfileController(IProfileService service) : ApiController
             serviceModel,
             cancellationToken);
 
-        return this.NoContentOrBadRequest(result);
+        return this.NoContentOrProblem(result);
     }
 
     [HttpDelete]
@@ -49,6 +49,6 @@ public class ProfileController(IProfileService service) : ApiController
         var result = await service.Delete(
             cancellationToken: cancellationToken);
 
-        return this.NoContentOrBadRequest(result);
+        return this.NoContentOrProblem(result);
     }
 }

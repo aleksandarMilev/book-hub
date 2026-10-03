@@ -42,15 +42,10 @@ public class AuthorsController(IAuthorService service) : ApiController
             serviceModel,
             cancellationToken);
 
-        if (result.Succeeded)
-        {
-            return this.CreatedAtRoute(
-                routeName: DetailsRouteName,
-                routeValues: new { id = result.Data!.Id },
-                value: result.Data);
-        }
-
-        return this.BadRequest(result.ErrorMessage);
+        return this.CreatedAtRouteOrProblem(
+            result,
+            DetailsRouteName,
+            author => new { id = author.Id });
     }
 
     [HttpPut(Id)]
@@ -65,7 +60,7 @@ public class AuthorsController(IAuthorService service) : ApiController
             serviceModel,
             cancellationToken);
 
-        return this.NoContentOrBadRequest(result);
+        return this.NoContentOrProblem(result);
     }
 
     [HttpDelete(Id)]
@@ -77,6 +72,6 @@ public class AuthorsController(IAuthorService service) : ApiController
             id,
             cancellationToken);
 
-        return this.NoContentOrBadRequest(result);
+        return this.NoContentOrProblem(result);
     }
 }

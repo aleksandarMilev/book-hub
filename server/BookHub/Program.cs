@@ -8,6 +8,7 @@ var builderEnvIsNotTesting = !builder.Environment.IsEnvironment("Testing");
 builder
     .Services
     .AddHttpContextAccessor()
+    .AddErrorHandling()
     .AddAppSettings(builder.Configuration)
     .AddIdentity(builder.Environment)
     .AddJwtAuthentication(
@@ -47,17 +48,30 @@ app
 var envIsDev = app.Environment.IsDevelopment();
 var envIsNotTesting = !app.Environment.IsEnvironment("Testing");
 
-if (envIsDev)
-{
-    app.UseDeveloperExceptionPage();
-}
-else 
+// In every environment: exceptions become ProblemDetails (GlobalExceptionHandler, which logs
+// them itself, so the middleware's own error log is suppressed), and empty-body error
+// responses such as 401/403 get a ProblemDetails body.
+app
+    .UseExceptionHandler(new ExceptionHandlerOptions
+    {
+        SuppressDiagnosticsCallback = _ => true,
+    })
+    .UseStatusCodePages();
+
+if (!envIsDev)
 {
     app
         .UseHsts()
         .UseHttpsRedirection();
 
     await app.UseCustomForwardedHeaders();
+}
+
+// Before authentication/authorization, so the Swagger UI and document stay reachable
+// without a token.
+if (envIsDev)
+{
+    app.UseSwaggerUI();
 }
 
 app
@@ -77,8 +91,6 @@ app
 
 if (envIsDev)
 {
-    app.UseSwaggerUI();
-
     await app.UseMigrations();
     await app.UseBuiltInUser();
     await app.UseDevAdminRole();

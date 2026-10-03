@@ -22,4 +22,9 @@ public static class Constants
 
         public const string ProfilesImagePathPrefix = "profiles";
     }
+
+    public static class ErrorMessages
+    {
+        public const string AccountNotDeleted = "The account could not be deleted.";
+    }
 }

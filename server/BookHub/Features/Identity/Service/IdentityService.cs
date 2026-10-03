@@ -47,7 +47,7 @@ public class IdentityService(
 
         if (usernameTaken)
         {
-            return ResultWith<string>.Failure(
+            return ResultWith<string>.Conflict(
                 $"Username '{serviceModel.Username}' is already taken.");
         }
 
@@ -58,7 +58,7 @@ public class IdentityService(
 
         if (emailTaken)
         {
-            return ResultWith<string>.Failure(
+            return ResultWith<string>.Conflict(
                 $"Email '{serviceModel.Email}' is already taken.");
         }
 

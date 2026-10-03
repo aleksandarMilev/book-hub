@@ -13,6 +13,7 @@ using Models;
 using Shared;
 
 using static Common.Constants.ErrorMessages;
+using static Shared.Constants.ErrorMessages;
 using static Shared.Constants.Paths;
 
 public class ProfileService(
@@ -23,6 +24,8 @@ public class ProfileService(
     IStringSanitizerService stringSanitizer,
     ILogger<ProfileService> logger) : IProfileService
 {
+    private const string ResourceName = "profile";
+
     public async Task<IEnumerable<ProfileServiceModel>> TopThree(
         CancellationToken cancellationToken = default)
         => await data
@@ -105,14 +108,10 @@ public class ProfileService(
             userId,
             cancellationToken);
 
+        // Looked up by the caller's own ID, so the profile is always the caller's.
         if (dbModel is null)
         {
-            return this.LogAndReturnNotFoundMessage(userId);
-        }
-
-        if (dbModel.UserId != userId)
-        {
-            return this.LogAndReturnUnauthorizedMessage(userId, dbModel.UserId);
+            return this.LogAndReturnNotFound(userId);
         }
 
         var oldImagePath = dbModel.ImagePath;
@@ -191,7 +190,7 @@ public class ProfileService(
 
         if (profile is null)
         {
-            return this.LogAndReturnNotFoundMessage(userToDeleteId);
+            return this.LogAndReturnNotFound(userToDeleteId);
         }
 
         var isNotCurrentUserProfile = profile.UserId != currentUserId;
@@ -199,7 +198,7 @@ public class ProfileService(
 
         if (isNotCurrentUserProfile && userIsNotAdmin)
         {
-            return this.LogAndReturnUnauthorizedMessage(
+            return this.LogAndReturnForbidden(
                 currentUserId,
                 profile.UserId);
         }
@@ -209,13 +208,18 @@ public class ProfileService(
         var user = await userManager.FindByIdAsync(profile.UserId);
         if (user is null)
         {
-            return false;
+            return this.LogAndReturnNotFound(profile.UserId);
         }
 
         var identityResult = await userManager.DeleteAsync(user);
         if (!identityResult.Succeeded)
         {
-            return string.Join("; ", identityResult.Errors.Select(e => e.Description));
+            logger.LogError(
+                "Failed to delete user. UserId={UserId}, Errors={Errors}",
+                stringSanitizer.SanitizeStringForLog(profile.UserId),
+                string.Join("; ", identityResult.Errors.Select(e => e.Description)));
+
+            return AccountNotDeleted;
         }
 
         return true;
@@ -230,7 +234,7 @@ public class ProfileService(
 
         if (isNotCurrentUser)
         {
-            return LogAndReturnUnauthorizedMessage(
+            return LogAndReturnForbidden(
                 currentUserId,
                 userId);
         }
@@ -256,7 +260,7 @@ public class ProfileService(
 
         if (isNotCurrentUser)
         {
-            return LogAndReturnUnauthorizedMessage(
+            return LogAndReturnForbidden(
                 currentUserId,
                 userId);
         }
@@ -282,7 +286,7 @@ public class ProfileService(
 
         if (isNotCurrentUser)
         {
-            return LogAndReturnUnauthorizedMessage(
+            return LogAndReturnForbidden(
                 currentUserId,
                 userId);
         }
@@ -308,7 +312,7 @@ public class ProfileService(
 
         if (isNotCurrentUser)
         {
-            return LogAndReturnUnauthorizedMessage(
+            return LogAndReturnForbidden(
                 currentUserId,
                 userId);
         }
@@ -334,7 +338,7 @@ public class ProfileService(
 
         if (isNotCurrentUser)
         {
-            return LogAndReturnUnauthorizedMessage(
+            return LogAndReturnForbidden(
                 currentUserId,
                 userId);
         }
@@ -360,7 +364,7 @@ public class ProfileService(
 
         if (isNotCurrentUser)
         {
-            return LogAndReturnUnauthorizedMessage(
+            return LogAndReturnForbidden(
                 currentUserId,
                 userId);
         }
@@ -386,7 +390,7 @@ public class ProfileService(
 
         if (isNotCurrentUser)
         {
-            return LogAndReturnUnauthorizedMessage(
+            return LogAndReturnForbidden(
                 currentUserId,
                 userId);
         }
@@ -412,7 +416,7 @@ public class ProfileService(
 
         if (isNotCurrentUser)
         {
-            return LogAndReturnUnauthorizedMessage(
+            return LogAndReturnForbidden(
                 currentUserId,
                 userId);
         }
@@ -438,7 +442,7 @@ public class ProfileService(
 
         if (isNotCurrentUser)
         {
-            return LogAndReturnUnauthorizedMessage(
+            return LogAndReturnForbidden(
                 currentUserId,
                 userId);
         }
@@ -462,7 +466,7 @@ public class ProfileService(
             .Profiles
             .FindAsync([id], cancellationToken);
 
-    private string LogAndReturnNotFoundMessage(string id)
+    private Result LogAndReturnNotFound(string id)
     {
         var sanitizedId = stringSanitizer.SanitizeStringForLog(id);
 
@@ -471,13 +475,12 @@ public class ProfileService(
             nameof(UserProfile),
             sanitizedId);
 
-        return string.Format(
-            DbEntityNotFound,
-            nameof(UserProfile),
-            sanitizedId);
+        return Result.NotFound(string.Format(
+            ResourceNotFound,
+            ResourceName));
     }
 
-    private string LogAndReturnUnauthorizedMessage(
+    private Result LogAndReturnForbidden(
         string currentUserId,
         string resourceUserId)
     {
@@ -490,10 +493,8 @@ public class ProfileService(
             nameof(UserProfile),
             sanitizedResourceUserId);
 
-        return string.Format(
-            UnauthorizedMessage,
-            sanitizedCurrentUserId,
-            nameof(UserProfile),
-            sanitizedResourceUserId);
+        return Result.Forbidden(string.Format(
+            ResourceForbidden,
+            ResourceName));
     }
 }

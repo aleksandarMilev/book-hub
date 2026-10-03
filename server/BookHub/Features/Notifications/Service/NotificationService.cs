@@ -19,6 +19,8 @@ public class NotificationService(
     IPageClamper pageClamper,
     ILogger<NotificationService> logger) : INotificationService
 {
+    private const string ResourceName = "notification";
+
     public async Task<IEnumerable<NotificationServiceModel>> LastThree(
         CancellationToken cancellationToken = default)
         => await data
@@ -213,12 +215,14 @@ public class NotificationService(
 
         if (notification is null)
         {
-            return this.LogAndReturnNotFoundMessage(notificationId);
+            return this.LogAndReturnNotFound(notificationId);
         }
 
+        // Notifications are private, so someone else's is reported as not found:
+        // a 403 would reveal that the notification exists.
         if (notification.ReceiverId != userId)
         {
-            return this.LogAndReturnUnauthorizedMessage(
+            return this.LogAndReturnNotFoundForOtherUser(
                 notificationId,
                 userId);
         }
@@ -247,7 +251,7 @@ public class NotificationService(
 
         if (rowsAffected == 0)
         {
-            return this.LogAndReturnNotFoundMessage(notificationId);
+            return this.LogAndReturnNotFound(notificationId);
         }
 
         return true;
@@ -293,20 +297,17 @@ public class NotificationService(
         data.AddRange(notifications);
     }
 
-    private string LogAndReturnNotFoundMessage(Guid notificationId)
+    private Result LogAndReturnNotFound(Guid notificationId)
     {
         logger.LogWarning(
             DbEntityNotFoundTemplate,
             nameof(NotificationDbModel),
             notificationId);
 
-        return string.Format(
-            DbEntityNotFound,
-            nameof(NotificationDbModel),
-            notificationId);
+        return NotFound();
     }
 
-    private string LogAndReturnUnauthorizedMessage(
+    private Result LogAndReturnNotFoundForOtherUser(
         Guid notificationId,
         string userId)
     {
@@ -316,10 +317,11 @@ public class NotificationService(
             nameof(NotificationDbModel),
             notificationId);
 
-        return string.Format(
-            UnauthorizedMessage,
-            userId,
-            nameof(NotificationDbModel),
-            notificationId);
+        return NotFound();
     }
+
+    private static Result NotFound()
+        => Result.NotFound(string.Format(
+            ResourceNotFound,
+            ResourceName));
 }

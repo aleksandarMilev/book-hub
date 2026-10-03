@@ -27,7 +27,7 @@ public class AuthorsController(IAuthorService service) : AdminApiController
             id,
             cancellationToken);
 
-        return this.NoContentOrBadRequest(result);
+        return this.NoContentOrProblem(result);
     }
 
     [HttpPatch((Id + ApiRoutes.Reject))]
@@ -39,6 +39,6 @@ public class AuthorsController(IAuthorService service) : AdminApiController
             id,
             cancellationToken);
 
-        return this.NoContentOrBadRequest(result);
+        return this.NoContentOrProblem(result);
     }
 }

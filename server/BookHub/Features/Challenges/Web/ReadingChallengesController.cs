@@ -16,10 +16,12 @@ using static Common.Constants.ApiRoutes;
 public class ReadingChallengesController(IReadingChallengeService service) : ApiController
 {
     [HttpGet(Id)]
-    public async Task<ActionResult<ReadingChallengeServiceModel?>> Get(
+    public async Task<ActionResult<ReadingChallengeServiceModel>> Get(
         int id,
         CancellationToken cancellationToken = default)
-        => this.Ok(await service.Get(id, cancellationToken));
+        => this.OkOrProblem(
+            await service.Get(id, cancellationToken),
+            challenge => challenge);
 
     [HttpPut]
     public async Task<ActionResult> Upsert(
@@ -31,21 +33,23 @@ public class ReadingChallengesController(IReadingChallengeService service) : Api
             serviceModel,
             cancellationToken);
 
-        return this.NoContentOrBadRequest(result);
+        return this.NoContentOrProblem(result);
     }
 
     [HttpGet(Id + ProgressRoute)]
-    public async Task<ActionResult<ReadingChallengeProgressServiceModel?>> Progress(
+    public async Task<ActionResult<ReadingChallengeProgressServiceModel>> Progress(
         int id,
         CancellationToken cancellationToken = default)
-        => this.Ok(await service.Progress(id, cancellationToken));
+        => this.OkOrProblem(
+            await service.Progress(id, cancellationToken),
+            progress => progress);
 
     [HttpPost(CheckInRoute)]
     public async Task<ActionResult> CheckInToday(
         CancellationToken cancellationToken = default)
     {
         var result = await service.CheckInToday(cancellationToken);
-        return this.NoContentOrBadRequest(result);
+        return this.NoContentOrProblem(result);
     }
 
     [HttpGet(StreakRoute)]

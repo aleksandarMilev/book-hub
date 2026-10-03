@@ -47,7 +47,7 @@ public class ArticlesController(IArticleService service) : AdminApiController
             serviceModel,
             cancellationToken);
 
-        return this.NoContentOrBadRequest(result);
+        return this.NoContentOrProblem(result);
     }
 
     [HttpDelete(Id)]
@@ -59,6 +59,6 @@ public class ArticlesController(IArticleService service) : AdminApiController
             id,
             cancellationToken);
 
-        return this.NoContentOrBadRequest(result);
+        return this.NoContentOrProblem(result);
     }
 }

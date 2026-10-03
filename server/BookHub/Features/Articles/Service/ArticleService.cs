@@ -17,6 +17,8 @@ public class ArticleService(
     IImageWriter imageWriter,
     ILogger<ArticleService> logger) : IArticleService
 {
+    private const string ResourceName = "article";
+
     public async Task<ArticleDetailsServiceModel?> Details(
         Guid articleId,
         bool isEditMode = false,
@@ -81,7 +83,7 @@ public class ArticleService(
 
         if (dbModel is null)
         {
-            return LogAndReturnNotFoundMessage(articleId);
+            return LogAndReturnNotFound(articleId);
         }
 
         var oldImagePath = dbModel.ImagePath;
@@ -130,7 +132,7 @@ public class ArticleService(
 
         if (dbModel is null)
         {
-            return LogAndReturnNotFoundMessage(articleId);
+            return LogAndReturnNotFound(articleId);
         }
 
         data.Remove(dbModel);
@@ -150,16 +152,15 @@ public class ArticleService(
             .Articles
             .FindAsync([articleId], cancellationToken);
 
-    private string LogAndReturnNotFoundMessage(Guid articleId)
+    private Result LogAndReturnNotFound(Guid articleId)
     {
         logger.LogWarning(
             DbEntityNotFoundTemplate,
             nameof(ArticleDbModel),
             articleId);
 
-        return string.Format(
-            DbEntityNotFound,
-            nameof(ArticleDbModel),
-            articleId);
+        return Result.NotFound(string.Format(
+            ResourceNotFound,
+            ResourceName));
     }
 }

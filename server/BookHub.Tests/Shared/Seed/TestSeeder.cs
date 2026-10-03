@@ -7,6 +7,9 @@ using Features.Authors.Shared;
 using Features.Books.Data.Models;
 using Features.Genres.Data.Models;
 using Features.Identity.Data.Models;
+using Features.Notifications.Data.Models;
+using Features.Notifications.Shared;
+using Features.Reviews.Data.Models;
 using Features.UserProfile.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -161,5 +164,51 @@ public static class TestSeeder
         await data.SaveChangesAsync();
 
         return book;
+    }
+
+    // Seeds the review row only: the book's and author's rating counters are left as they are.
+    public static async Task<ReviewDbModel> SeedReview(
+        this BookHubDbContext data,
+        Guid bookId,
+        string creatorId,
+        int rating = 4)
+    {
+        await data.SeedUser(creatorId, $"user-{creatorId}");
+
+        var review = new ReviewDbModel
+        {
+            Id = Guid.NewGuid(),
+            Content = "A seeded review",
+            Rating = rating,
+            BookId = bookId,
+            CreatorId = creatorId,
+        };
+
+        data.Reviews.Add(review);
+        await data.SaveChangesAsync();
+
+        return review;
+    }
+
+    public static async Task<NotificationDbModel> SeedNotification(
+        this BookHubDbContext data,
+        string receiverId,
+        string message = "A seeded notification")
+    {
+        await data.SeedUser(receiverId, $"user-{receiverId}");
+
+        var notification = new NotificationDbModel
+        {
+            Id = Guid.NewGuid(),
+            Message = message,
+            ReceiverId = receiverId,
+            ResourceId = Guid.NewGuid(),
+            ResourceType = ResourceType.Book,
+        };
+
+        data.Notifications.Add(notification);
+        await data.SaveChangesAsync();
+
+        return notification;
     }
 }

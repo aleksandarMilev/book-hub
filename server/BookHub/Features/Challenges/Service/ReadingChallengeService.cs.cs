@@ -16,35 +16,35 @@ public class ReadingChallengeService(
     BookHubDbContext data,
     ICurrentUserService userService) : IReadingChallengeService
 {
-    public async Task<ReadingChallengeServiceModel?> Get(
+    public async Task<ResultWith<ReadingChallengeServiceModel>> Get(
         int year,
         CancellationToken cancellationToken = default)
     {
         if (!YearIsValid(year))
         {
-            return null;
+            return ErrorMessages.InvalidYear;
         }
 
         var dbModel = await data
             .ReadingChallenges
             .AsNoTracking()
-            .Where(c => 
-                c.UserId == userService.GetId() && 
+            .Where(c =>
+                c.UserId == userService.GetId() &&
                 c.Year == year)
             .ToServiceModels()
             .FirstOrDefaultAsync(cancellationToken);
 
         if (dbModel is null)
         {
-            return new()
+            return ResultWith<ReadingChallengeServiceModel>.Success(new()
             {
                 Year = year,
                 GoalType = ReadingGoalType.Books,
                 GoalValue = 0,
-            };
+            });
         }
 
-        return dbModel;
+        return ResultWith<ReadingChallengeServiceModel>.Success(dbModel);
     }
 
     public async Task<Result> Upsert(
@@ -96,13 +96,13 @@ public class ReadingChallengeService(
         return true;
     }
 
-    public async Task<ReadingChallengeProgressServiceModel?> Progress(
+    public async Task<ResultWith<ReadingChallengeProgressServiceModel>> Progress(
         int year,
         CancellationToken cancellationToken = default)
     {
         if (!YearIsValid(year))
         {
-            return null;
+            return ErrorMessages.InvalidYear;
         }
 
         var userId = userService.GetId();
@@ -115,13 +115,13 @@ public class ReadingChallengeService(
 
         if (dbModel is null)
         {
-            return new()
+            return ResultWith<ReadingChallengeProgressServiceModel>.Success(new()
             {
                 Year = year,
                 GoalType = ReadingGoalType.Books,
                 GoalValue = 0,
                 CurrentValue = 0
-            };
+            });
         }
 
         var startUtc = new DateTime(year, 1, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -148,7 +148,8 @@ public class ReadingChallengeService(
                 .SumAsync(p => p ?? 0, cancellationToken);
         }
 
-        return dbModel.ToServiceModel(readingChallengeCurrentValue);
+        return ResultWith<ReadingChallengeProgressServiceModel>.Success(
+            dbModel.ToServiceModel(readingChallengeCurrentValue));
     }
 
     public async Task<Result> CheckInToday(
@@ -166,7 +167,7 @@ public class ReadingChallengeService(
 
         if (dbModelExists)
         {
-            return ErrorMessages.CheckInAlreadyExists;
+            return Result.Conflict(ErrorMessages.CheckInAlreadyExists);
         }
 
         data.ReadingCheckIns.Add(new()

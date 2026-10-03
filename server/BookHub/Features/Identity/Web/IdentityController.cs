@@ -22,7 +22,7 @@ public class IdentityController(IIdentityService service) : ApiController
             serviceModel,
             cancellationToken);
 
-        return this.OkOrBadRequest(
+        return this.OkOrProblem(
             result,
             token => new JwtTokenServiceModel(token));
     }
@@ -37,7 +37,7 @@ public class IdentityController(IIdentityService service) : ApiController
             serviceModel,
             cancellationToken);
 
-        return this.OkOrBadRequest(
+        return this.OkOrProblem(
             result,
             token => new JwtTokenServiceModel(token));
     }
@@ -52,7 +52,7 @@ public class IdentityController(IIdentityService service) : ApiController
             serviceModel,
             cancellationToken);
 
-        return this.OkOrBadRequest(
+        return this.OkOrProblem(
             result,
             message => new MessageServiceModel(message));
     }
@@ -67,7 +67,7 @@ public class IdentityController(IIdentityService service) : ApiController
             serviceModel,
             cancellationToken);
 
-        return this.OkOrBadRequest(
+        return this.OkOrProblem(
             result,
             message => new MessageServiceModel(message));
     }

@@ -1,6 +1,7 @@
 ﻿namespace BookHub.Features.Reviews.Web;
 
 using BookHub.Common;
+using Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
@@ -14,11 +15,11 @@ public class VotesController(IVoteService service) : ApiController
         VoteRequestModel model,
         CancellationToken token = default) 
     {
-        await service.Create(
+        var result = await service.Create(
             model.ReviewId,
             model.IsUpvote,
             token);
 
-        return this.Ok(model.ReviewId);
+        return this.OkOrProblem(result, reviewId => reviewId);
     }
 }

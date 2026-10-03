@@ -12,6 +12,8 @@ using Features.Identity.Data.Models;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Shared.Seed;
+using Shared.Utils;
 
 using static Features.Authors.Shared.Constants.Paths;
 using static Shared.Utils.Constants;
@@ -317,7 +319,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     }
 
     [Fact]
-    public async Task Edit_ShouldReturnBadRequestWithErrorMessage_WhenAuthorDoesNotExist()
+    public async Task Edit_ShouldReturnNotFoundProblem_WhenAuthorDoesNotExist()
     {
         var httpClient = this.httpClientFactory.CreateUserClient();
         var nonExistingId = Guid.NewGuid();
@@ -335,21 +337,9 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             $"/Authors/{nonExistingId}/",
             formData);
 
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-
-        var json = await response.Content.ReadAsStringAsync();
-        using var jsonDocument = JsonDocument.Parse(json);
-
-        jsonDocument
-            .RootElement
-            .TryGetProperty("errorMessage", out var message)
-            .Should()
-            .BeTrue();
-
-        message
-            .GetString()
-            .Should()
-            .Be($"AuthorDbModel with Id: {nonExistingId} was not found!");
+        await response.ShouldBeProblem(
+            HttpStatusCode.NotFound,
+            "The author was not found.");
     }
 
     [Fact]
@@ -522,7 +512,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     }
 
     [Fact]
-    public async Task Delete_ShouldReturnBadRequestWithErrorMessage_WhenAuthorDoesNotExist()
+    public async Task Delete_ShouldReturnNotFoundProblem_WhenAuthorDoesNotExist()
     {
         var httpClient = this.httpClientFactory.CreateUserClient();
         var nonExistingId = Guid.NewGuid();
@@ -530,21 +520,77 @@ public sealed class AuthorsIntegration : IAsyncLifetime
         var response = await httpClient.DeleteAsync(
             $"/Authors/{nonExistingId}/");
 
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        await response.ShouldBeProblem(
+            HttpStatusCode.NotFound,
+            "The author was not found.");
+    }
 
-        var json = await response.Content.ReadAsStringAsync();
-        using var jsonDocument = JsonDocument.Parse(json);
+    [Fact]
+    public async Task Edit_And_Delete_ShouldReturnForbiddenProblem_AndAlso_ShouldNotChangeTheAuthor_WhenTheCallerIsNotTheCreator()
+    {
+        var author = await this.httpClientFactory.WithData(data => data.SeedAuthor(
+            "Someone else's author",
+            creatorId: "test-admin-id"));
 
-        jsonDocument
-            .RootElement
-            .TryGetProperty("errorMessage", out var message)
-            .Should()
-            .BeTrue();
+        var httpClient = this.httpClientFactory.CreateUserClient();
 
-        message
-            .GetString()
-            .Should()
-            .Be($"AuthorDbModel with Id: {nonExistingId} was not found!");
+        var formData = BuildAuthorForm(
+            authorName: "Hijacked author name",
+            biography: new string('x', 200),
+            penName: "Hijacked pen name",
+            nationality: Nationality.France,
+            gender: Gender.Other,
+            bornAt: null,
+            diedAt: null);
+
+        var editResponse = await httpClient.PutAsync($"/Authors/{author.Id}/", formData);
+        var deleteResponse = await httpClient.DeleteAsync($"/Authors/{author.Id}/");
+
+        await editResponse.ShouldBeProblem(
+            HttpStatusCode.Forbidden,
+            "You are not allowed to modify this author.");
+
+        await deleteResponse.ShouldBeProblem(
+            HttpStatusCode.Forbidden,
+            "You are not allowed to modify this author.");
+
+        var (name, isDeleted, hasPendingEdit) = await this.httpClientFactory.WithData(async data =>
+        {
+            var stored = await data
+                .Authors
+                .IgnoreQueryFilters()
+                .SingleAsync(a => a.Id == author.Id);
+
+            var pending = await data.AuthorEdits.AnyAsync(e => e.AuthorId == author.Id);
+
+            return (stored.Name, stored.IsDeleted, pending);
+        });
+
+        name.Should().Be("Someone else's author");
+        isDeleted.Should().BeFalse();
+        hasPendingEdit.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task Create_ShouldReturnValidationProblem_WhenTheGenderIsInvalid()
+    {
+        var httpClient = this.httpClientFactory.CreateUserClient();
+
+        var formData = BuildAuthorForm(
+            authorName: "Author with a bad gender",
+            biography: new string('x', 200),
+            penName: "Pen name",
+            nationality: Nationality.France,
+            gender: (Gender)999,
+            bornAt: null,
+            diedAt: null);
+
+        var response = await httpClient.PostAsync("/Authors", formData);
+
+        // Model binding rejects undefined enum values before the service runs.
+        await response.ShouldBeProblem(HttpStatusCode.BadRequest);
+
+        (await response.Content.ReadAsStringAsync()).Should().Contain("Gender");
     }
 
     [Fact]
@@ -593,7 +639,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     }
 
     [Fact]
-    public async Task Approve_ShouldReturnBadRequestWithErrorMessage_WhenAuthorDoesNotExist()
+    public async Task Approve_ShouldReturnNotFoundProblem_WhenAuthorDoesNotExist()
     {
         var httpClient = this.httpClientFactory.CreateAdminClient();
         var nonExistingId = Guid.NewGuid();
@@ -602,21 +648,9 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             $"/Administrator/Authors/{nonExistingId}/approve/",
             content: null);
 
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-
-        var json = await response.Content.ReadAsStringAsync();
-        using var jsonDocument = JsonDocument.Parse(json);
-
-        jsonDocument
-            .RootElement
-            .TryGetProperty("errorMessage", out var message)
-            .Should()
-            .BeTrue();
-
-        message
-            .GetString()
-            .Should()
-            .Be($"AuthorDbModel with Id: {nonExistingId} was not found!");
+        await response.ShouldBeProblem(
+            HttpStatusCode.NotFound,
+            "The author was not found.");
     }
 
     [Fact]
@@ -672,7 +706,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     }
 
     [Fact]
-    public async Task Reject_ShouldReturnBadRequestWithErrorMessage_WhenAuthorDoesNotExist()
+    public async Task Reject_ShouldReturnNotFoundProblem_WhenAuthorDoesNotExist()
     {
         var httpClient = this.httpClientFactory.CreateAdminClient();
         var nonExistingId = Guid.NewGuid();
@@ -681,21 +715,9 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             $"/Administrator/Authors/{nonExistingId}/reject/",
             content: null);
 
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-
-        var json = await response.Content.ReadAsStringAsync();
-        using var jsonDocument = JsonDocument.Parse(json);
-
-        jsonDocument
-            .RootElement
-            .TryGetProperty("errorMessage", out var message)
-            .Should()
-            .BeTrue();
-
-        message
-            .GetString()
-            .Should()
-            .Be($"AuthorDbModel with Id: {nonExistingId} was not found!");
+        await response.ShouldBeProblem(
+            HttpStatusCode.NotFound,
+            "The author was not found.");
     }
 
     private static MultipartFormDataContent BuildAuthorForm(

@@ -10,6 +10,7 @@ using Features.Articles.Service.Models;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Shared.Utils;
 
 using static Features.Articles.Shared.Constants.Paths;
 using static Shared.Utils.Constants;
@@ -292,7 +293,7 @@ public sealed class ArticlesIntegration : IAsyncLifetime
     }
 
     [Fact]
-    public async Task Edit_ShouldReturnBadRequestWithErrorMessage_WhenArticleDoesNotExist()
+    public async Task Edit_ShouldReturnNotFoundProblem_WhenArticleDoesNotExist()
     {
         var httpClient = this.httpClientFactory.CreateAdminClient();
         var nonExistingId = Guid.NewGuid();
@@ -306,21 +307,9 @@ public sealed class ArticlesIntegration : IAsyncLifetime
             $"/Administrator/Articles/{nonExistingId}/",
             formData);
 
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-
-        var json = await response.Content.ReadAsStringAsync();
-        using var jsonDocument = JsonDocument.Parse(json);
-
-        jsonDocument
-            .RootElement
-            .TryGetProperty("errorMessage", out var message)
-            .Should()
-            .BeTrue();
-
-        message
-           .GetString()
-           .Should()
-           .Be($"ArticleDbModel with Id: {nonExistingId} was not found!");
+        await response.ShouldBeProblem(
+            HttpStatusCode.NotFound,
+            "The article was not found.");
     }
 
     [Fact]
@@ -428,7 +417,7 @@ public sealed class ArticlesIntegration : IAsyncLifetime
     }
 
     [Fact]
-    public async Task Delete_ShouldReturnBadRequestWithErrorMessage_WhenArticleDoesNotExist()
+    public async Task Delete_ShouldReturnNotFoundProblem_WhenArticleDoesNotExist()
     {
         var httpClient = this.httpClientFactory.CreateAdminClient();
         var nonExistingId = Guid.NewGuid();
@@ -436,21 +425,9 @@ public sealed class ArticlesIntegration : IAsyncLifetime
         var response = await httpClient.DeleteAsync(
             $"/Administrator/Articles/{nonExistingId}/");
 
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-
-        var json = await response.Content.ReadAsStringAsync();
-        using var jsonDocument = JsonDocument.Parse(json);
-
-        jsonDocument
-            .RootElement
-            .TryGetProperty("errorMessage", out var message)
-            .Should()
-            .BeTrue();
-
-        message
-            .GetString()
-            .Should()
-            .Be($"ArticleDbModel with Id: {nonExistingId} was not found!");
+        await response.ShouldBeProblem(
+            HttpStatusCode.NotFound,
+            "The article was not found.");
     }
 
     private static MultipartFormDataContent BuildArticleForm(

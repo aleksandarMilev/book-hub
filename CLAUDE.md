@@ -67,8 +67,23 @@ The request flow is: WebModel → `.ToCreateServiceModel()` → service → DbMo
 
 - User endpoints inherit `Common/ApiController` (route `[controller]`).
 - Admin endpoints inherit `Areas/Admin/Web/AdminApiController`: route `Administrator/[controller]`, `[Authorize(Roles = "Administrator")]`. Features with both kinds split them into `Web/User/` and `Web/Admin/`, which can share a controller name (for example, two `BooksController`s).
-- Mutating service methods return `Infrastructure/Services/Result` (`Result` / `ResultWith<T>`, implicitly convertible from `bool` or an error-message `string`, so services just `return true;` or `return errorMessage;`). Controllers map those with `this.NoContentOrBadRequest(result)` / `this.OkOrBadRequest(...)`, and the bad-request body is `{ errorMessage }`.
+- Mutating service methods return `Infrastructure/Services/Result` (`Result` / `ResultWith<T>`, implicitly convertible from `bool` or an error-message `string`, so services just `return true;` or `return errorMessage;`). A failure carries an `ErrorKind`: a plain string is `BadRequest` (400), and `Result.NotFound(msg)` / `Result.Forbidden(msg)` / `Result.Conflict(msg)` (also on `ResultWith<T>`) give 404 / 403 / 409. Controllers map them with `this.NoContentOrProblem(result)`, `this.OkOrProblem(result, selector)` or `this.CreatedAtRouteOrProblem(result, routeName, routeValues)` (`Infrastructure/Extensions/ControllerExtensions`).
 - The global `ModelOrNotFoundActionFilter` turns any `ObjectResult` with a `null` value into 404, so `return this.Ok(await service.Details(id))` is the idiom for nullable lookups.
+
+**Error responses** are always RFC 9457 ProblemDetails (`application/problem+json`) with a `traceId`. The human-readable message is in `detail`, and validation errors are a ValidationProblemDetails with per-field `errors`.
+
+- **Status codes:**
+  - 400: validation errors and invalid input;
+  - 401: not authenticated;
+  - 403: authenticated, but modifying a public resource you don't own (or a role-gated endpoint);
+  - 404: not found, **or private content whose existence must not leak** (someone else's notification, a private profile's reading lists, someone else's unapproved book/author);
+  - 409: duplicates and conflicts.
+- **Messages returned to clients** never contain internal type names (`…DbModel`) or IDs (S-11). Use `Common.Constants.ErrorMessages.ResourceNotFound` / `ResourceForbidden` with a friendly resource name ("book", "review"), and keep the type name and IDs in the log template.
+- **Exceptions** go through `Infrastructure/ExceptionHandling/GlobalExceptionHandler` (`UseExceptionHandler()` in every environment):
+  - `ExpectedFailures` maps a `DbUpdateException` by Postgres `SqlState`: a unique violation → 409; a foreign key violation → 400, or 409 when deleting;
+  - `ImageValidationException` → 400;
+  - anything else → 500 with a generic `detail`, plus the exception only in Development.
+- `UseStatusCodePages()` gives empty-body 401/403/404 responses a ProblemDetails body. The rate limiter's 429 is a ProblemDetails too.
 
 **`BookHubDbContext` behaviour** (it depends on `ICurrentUserService`, so it is per-request):
 
@@ -115,7 +130,8 @@ xUnit v3 + FluentAssertions + NSubstitute + Testcontainers. The project referenc
   - It runs `Program` in the `"Testing"` environment, where `Program.cs` skips CORS and the database registration. The factory registers Npgsql against its own cloned database, swaps in `ImageWriterMock` and `AdminServiceMock("test-admin-id")`, and replaces JWT with a test auth scheme.
   - Call `ResetDatabase()` in `InitializeAsync` (it clones a fresh database) and dispose the factory in `DisposeAsync`.
   - Clients: `CreateUserClient(userId, username)`, `CreateAdminClient(...)` and `CreateAnonymousClient()`. The authenticated ones send `Authorization: <scheme> user|admin:<id>:<username>`.
-  - Seed and assert through `factory.WithData(data => …)` with the `Shared/Seed/TestSeeder` extensions (`SeedUser`, `SeedProfile`, `SeedGenre`, `SeedAuthor`, `SeedBook`). Seed a `UserDbModel` for any user ID the request uses, because PostgreSQL enforces the foreign keys.
+  - Seed and assert through `factory.WithData(data => …)` with the `Shared/Seed/TestSeeder` extensions (`SeedUser`, `SeedProfile`, `SeedGenre`, `SeedAuthor`, `SeedBook`, `SeedReview`, `SeedNotification`). Seed a `UserDbModel` for any user ID the request uses, because PostgreSQL enforces the foreign keys.
+  - Assert error responses with `await response.ShouldBeProblem(HttpStatusCode.X, "detail")` (`Shared/Utils/ProblemDetailsAssertions`). It checks the status, the `application/problem+json` content type, the `traceId` and, optionally, `detail`.
 - **Older unit tests** (`ArticlesUnit`, `AuthorsUnit`, `BooksUnit`, `GenresUnit`) build the service directly on a `TestDatabase` context (`CreateTestDb()`) with substituted dependencies. They were ported as-is and are due for restructuring in Phase 2. Don't copy that pattern for new tests (see below).
 
 ## Testing approach
@@ -133,7 +149,7 @@ These rules apply to all new and changed server tests:
 - **Imports:** always use the `@/` alias (it maps to `src/`), never relative paths across features. Imports are auto-sorted by `simple-import-sort`. Type-only imports must use `import type` (`verbatimModuleSyntax`).
 - **API layer** (`shared/api/http.ts`): the axios instances are `http` (base `VITE_REACT_APP_SERVER_URL`, default `http://localhost:8080`) and `httpAdmin` (`/administrator`). Every API function:
   - takes the JWT `token` and an optional `AbortSignal` explicitly, and builds its config with `getAuthConfig(token, signal)` / `getPublicConfig(signal)`
-  - wraps its call in `try { … } catch (e) { return processError(e, fallbackMessage) }`. `processError` rethrows cancellations, and otherwise throws an `Error` carrying the server's `errorMessage`.
+  - wraps its call in `try { … } catch (e) { return processError(e, fallbackMessage) }`. `processError` rethrows cancellations. For a 4xx it otherwise throws an `Error` carrying the ProblemDetails `detail`, or the first validation message from `errors`. In every other case (a 5xx, a generic title only, a network error) the `Error` carries the fallback message.
 - **Paths:** all API paths are in `shared/lib/constants/api.ts` (`routes`), and fallback error strings are in `shared/lib/constants/errorMessages.ts`.
 - **Auth state:** a Zustand store persisted to `localStorage` (`shared/stores/auth`), read through `useAuth()` for `token`, `userId`, `isAdmin` and `isAuthenticated`.
 - **Pages** are lazy-loaded in `src/app/routes.tsx`.
