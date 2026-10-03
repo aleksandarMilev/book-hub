@@ -30,17 +30,7 @@ public class ReadingListsController(IReadingListService service) : ApiController
             pageSize,
             token);
 
-        if (result is null)
-        {
-            return this.NotFound();
-        }
-
-        if (result.Succeeded)
-        {
-            return this.Ok(result.Data);
-        }
-
-        return this.BadRequest(result.ErrorMessage);
+        return this.OkOrProblem(result, books => books);
     }
 
     [HttpGet(LastCurrentlyReadingRoute)]
@@ -59,7 +49,7 @@ public class ReadingListsController(IReadingListService service) : ApiController
             serviceModel,
             cancelationToken);
 
-        return this.NoContentOrBadRequest(result);
+        return this.NoContentOrProblem(result);
     }
 
     [HttpDelete]
@@ -72,6 +62,6 @@ public class ReadingListsController(IReadingListService service) : ApiController
             serviceModel,
             cancelationToken);
 
-        return this.NoContentOrBadRequest(result);
+        return this.NoContentOrProblem(result);
     }
 }

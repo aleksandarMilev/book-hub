@@ -1,6 +1,7 @@
 namespace BookHub.Tests.ReadingLists;
 
 using System.Net;
+using System.Net.Http.Json;
 using System.Text.Json;
 using Data;
 using Features.Books.Data.Models;
@@ -10,6 +11,7 @@ using Features.ReadingLists.Shared;
 using Features.UserProfile.Data.Models;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using Shared.Utils;
 
 public sealed class ReadingListsIntegration : IAsyncLifetime
 {
@@ -92,6 +94,82 @@ public sealed class ReadingListsIntegration : IAsyncLifetime
         var httpClient = this.httpClientFactory.CreateUserClient(OtherUserId, "user");
 
         await this.AssertListsAreVisible(httpClient);
+    }
+
+    [Fact]
+    public async Task All_ShouldReturnNotFoundProblem_WithAGenericDetail_WhenProfileIsPrivate_AndCallerIsAnotherUser()
+    {
+        await this.SeedProfile(OwnerId, isPrivate: true);
+
+        var httpClient = this.httpClientFactory.CreateUserClient(OtherUserId, "user");
+
+        var response = await httpClient.GetAsync(AllUrl(OwnerId));
+
+        await response.ShouldBeProblem(
+            HttpStatusCode.NotFound,
+            "The reading list was not found.");
+    }
+
+    [Fact]
+    public async Task All_ShouldReturnValidationProblem_WhenTheStatusIsInvalid()
+    {
+        var httpClient = this.httpClientFactory.CreateUserClient(OwnerId, "owner");
+
+        var response = await httpClient.GetAsync($"/ReadingLists?userId={OwnerId}&status=99");
+
+        // Model binding rejects undefined enum values before the service runs.
+        await response.ShouldBeProblem(HttpStatusCode.BadRequest);
+
+        (await response.Content.ReadAsStringAsync()).Should().Contain("status");
+    }
+
+    [Fact]
+    public async Task Add_ShouldReturnConflictProblem_WhenTheBookIsAlreadyInTheListWithTheSameStatus()
+    {
+        var httpClient = this.httpClientFactory.CreateUserClient(OwnerId, "owner");
+
+        var response = await httpClient.PostAsJsonAsync(
+            "/ReadingLists",
+            new { bookId = this.bookId, status = ReadingListStatus.CurrentlyReading });
+
+        await response.ShouldBeProblem(
+            HttpStatusCode.Conflict,
+            "This book is already in the list with this status.");
+    }
+
+    [Fact]
+    public async Task Add_ShouldReturnBadRequestProblem_WhenTheBookDoesNotExist()
+    {
+        var httpClient = this.httpClientFactory.CreateUserClient(OwnerId, "owner");
+
+        var response = await httpClient.PostAsJsonAsync(
+            "/ReadingLists",
+            new { bookId = Guid.NewGuid(), status = ReadingListStatus.ToRead });
+
+        await response.ShouldBeProblem(
+            HttpStatusCode.BadRequest,
+            "The book does not exist.");
+    }
+
+    [Fact]
+    public async Task Delete_ShouldReturnNotFoundProblem_WhenTheBookIsNotInTheCallersList()
+    {
+        var httpClient = this.httpClientFactory.CreateUserClient(OtherUserId, "user");
+
+        using var request = new HttpRequestMessage(HttpMethod.Delete, "/ReadingLists")
+        {
+            Content = JsonContent.Create(new
+            {
+                bookId = this.bookId,
+                status = ReadingListStatus.CurrentlyReading,
+            }),
+        };
+
+        var response = await httpClient.SendAsync(request);
+
+        await response.ShouldBeProblem(
+            HttpStatusCode.NotFound,
+            "The book is not in your reading list.");
     }
 
     private static string AllUrl(string userId)

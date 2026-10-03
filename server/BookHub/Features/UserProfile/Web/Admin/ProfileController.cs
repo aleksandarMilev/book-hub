@@ -16,6 +16,6 @@ public class ProfileController(IProfileService service) : AdminApiController
     {
         var result = await service.Delete(id, token);
 
-        return this.NoContentOrBadRequest(result);
+        return this.NoContentOrProblem(result);
     }
 }

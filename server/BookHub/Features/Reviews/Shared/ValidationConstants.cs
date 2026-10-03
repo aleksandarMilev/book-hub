@@ -15,4 +15,13 @@ public static class Constants
     {
         public const string DetailsRouteName = "ReviewDetails";
     }
+
+    public static class ErrorMessages
+    {
+        public const string BookDoesNotExist = "The book does not exist.";
+
+        public const string AlreadyReviewed = "You have already reviewed this book.";
+
+        public const string BookIdCannotChange = "The book of a review cannot be changed.";
+    }
 }

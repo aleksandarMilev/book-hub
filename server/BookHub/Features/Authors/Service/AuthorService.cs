@@ -16,6 +16,7 @@ using UserProfile.Service;
 using static Common.Constants.ErrorMessages;
 using static Common.Utils;
 using static Shared.AuthorMapping;
+using static Shared.Constants.ErrorMessages;
 using static Shared.Constants.Paths;
 
 public class AuthorService(
@@ -27,6 +28,8 @@ public class AuthorService(
     IImageWriter imageWriter,
     ILogger<AuthorService> logger) : IAuthorService
 {
+    private const string ResourceName = "author";
+
     public async Task<IEnumerable<AuthorNamesServiceModel>> Names(
         CancellationToken cancellationToken = default)
         => await data
@@ -128,13 +131,13 @@ public class AuthorService(
         var genderIsInvalid = !GenderIsValidEnum(serviceModel.Gender);
         if (genderIsInvalid)
         {
-            return $"{serviceModel.Gender} is not valid Gender enumeartion!";
+            return InvalidGender;
         }
 
         var nationalityIsInvalid = !NationalityIsValidEnum(serviceModel.Nationality);
         if (nationalityIsInvalid)
         {
-            return $"{serviceModel.Nationality} is not valid Nationality enumeartion!";
+            return InvalidNationality;
         }
 
         var dbModel = serviceModel.ToDbModel();
@@ -182,19 +185,19 @@ public class AuthorService(
         var genderIsInvalid = !GenderIsValidEnum(serviceModel.Gender);
         if (genderIsInvalid)
         {
-            return $"{serviceModel.Gender} is not valid Gender enumeartion!";
+            return InvalidGender;
         }
 
         var nationalityIsInvalid = !NationalityIsValidEnum(serviceModel.Nationality);
         if (nationalityIsInvalid)
         {
-            return $"{serviceModel.Nationality} is not valid Nationality enumeartion!";
+            return InvalidNationality;
         }
 
         var author = await this.GetDbModel(authorId, cancellationToken);
         if (author is null)
         {
-            return this.LogAndReturnNotFoundMessage(authorId);
+            return this.LogAndReturnNotFound(authorId);
         }
 
         var userId = userService.GetId()!;
@@ -203,7 +206,7 @@ public class AuthorService(
 
         if (isNotCreator && !isAdmin)
         {
-            return LogAndReturnUnauthorizedMessage(authorId, userId);
+            return LogAndReturnForbidden(authorId, userId);
         }
 
         if (isAdmin)
@@ -303,7 +306,7 @@ public class AuthorService(
 
         if (dbModel is null)
         {
-            return LogAndReturnNotFoundMessage(authorId);
+            return LogAndReturnNotFound(authorId);
         }
 
         var userId = userService.GetId()!;
@@ -312,7 +315,7 @@ public class AuthorService(
 
         if (isNotCreator && isNotAdmin)
         {
-            return LogAndReturnUnauthorizedMessage(authorId, userId);
+            return LogAndReturnForbidden(authorId, userId);
         }
 
         data.Remove(dbModel);
@@ -331,7 +334,7 @@ public class AuthorService(
     {
         if (!userService.IsAdmin())
         {
-            return LogAndReturnUnauthorizedMessage(
+            return LogAndReturnForbidden(
                 authorId,
                 userService.GetId()!);
         }
@@ -344,7 +347,7 @@ public class AuthorService(
 
         if (dbModel is null)
         {
-            return LogAndReturnNotFoundMessage(authorId);
+            return LogAndReturnNotFound(authorId);
         }
 
         var pendingDbModel = await data
@@ -429,7 +432,7 @@ public class AuthorService(
     {
         if (!userService.IsAdmin())
         {
-            return LogAndReturnUnauthorizedMessage(
+            return LogAndReturnForbidden(
                 authorId,
                 userService.GetId()!);
         }
@@ -444,7 +447,7 @@ public class AuthorService(
 
         if (dbModel is null)
         {
-            return LogAndReturnNotFoundMessage(authorId);
+            return LogAndReturnNotFound(authorId);
         }
 
         var pendingDbModel = await data
@@ -582,20 +585,19 @@ public class AuthorService(
             .Authors
             .FindAsync([authorId], cancellationToken);
 
-    private string LogAndReturnNotFoundMessage(Guid authorId)
+    private Result LogAndReturnNotFound(Guid authorId)
     {
         logger.LogWarning(
             DbEntityNotFoundTemplate,
             nameof(AuthorDbModel),
             authorId);
 
-        return string.Format(
-            DbEntityNotFound,
-            nameof(AuthorDbModel),
-            authorId);
+        return Result.NotFound(string.Format(
+            ResourceNotFound,
+            ResourceName));
     }
 
-    private string LogAndReturnUnauthorizedMessage(
+    private Result LogAndReturnForbidden(
         Guid authorId,
         string userId)
     {
@@ -605,11 +607,9 @@ public class AuthorService(
             nameof(AuthorDbModel),
             authorId);
 
-        return string.Format(
-            UnauthorizedMessage,
-            userId,
-            nameof(AuthorDbModel),
-            authorId);
+        return Result.Forbidden(string.Format(
+            ResourceForbidden,
+            ResourceName));
     }
 
     private static bool GenderIsValidEnum(

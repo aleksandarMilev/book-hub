@@ -825,7 +825,9 @@ namespace BookHub.Data.Migrations
 
                     b.HasIndex("BookId");
 
-                    b.HasIndex("CreatorId");
+                    b.HasIndex("CreatorId", "BookId")
+                        .IsUnique()
+                        .HasFilter("NOT \"IsDeleted\"");
 
                     b.ToTable("Reviews");
                 });

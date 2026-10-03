@@ -507,3 +507,85 @@ No tracked file was modified.
   - **T-06 (new, Low):** xunit.v3's analyzer rule xUnit1051 (pass `TestContext.Current.CancellationToken` to calls that take a token) has about 300 hits. It's suppressed in `BookHub.Tests.csproj` so the build stays at 0 warnings. Adopt it during the Phase 2b/2c test work and remove the `NoWarn` (`docs/backlog.md`).
   - **T-07 (new, Low):** the `AdminServiceIntegration` header comment still says the factory's Identity stack is SQLite. It's PostgreSQL since Phase 1.5.
   - **Docs:** README has a CI badge and a "Running Tests" section. CLAUDE.md describes the new CI and xunit.v3 setup. The Dependabot header now allows merging once both checks are green; docker and docker-compose PRs still need a local `docker compose build`, because CI doesn't build images.
+- **2026-10-02 (Phase 2b, step 2: consistent error handling):** every error response is an RFC 9457 ProblemDetails (`application/problem+json`) with a `traceId`. Tests: 173 → 218, all passing.
+  - **B-04:** fixed.
+    - `AddProblemDetails()`, `UseExceptionHandler()` and `UseStatusCodePages()` now run in every environment, including Testing. `UseDeveloperExceptionPage` is gone.
+    - `Infrastructure/ExceptionHandling/GlobalExceptionHandler` turns unhandled exceptions into a 500 with a generic `detail` and the `traceId`. It logs them at Error with the trace ID. The exception text is added only in Development.
+    - `ExpectedFailures` maps `DbUpdateException` by the inner `PostgresException.SqlState`, never by the message:
+      - `23505` (unique violation) → 409;
+      - `23503` (foreign key violation) → 400 when inserting or updating (the request references a missing row), 409 when deleting (the row is still referenced).
+    - `ImageWriter` throws `ImageValidationException`, mapped to 400 with the validator's message, instead of `InvalidOperationException` (500). Register and profile edit now validate images at binding with `[ImageUpload]`, like books, authors and articles already did.
+    - A client abort is logged at Information as a 499, not an error.
+    - The rate limiter's 429 is a ProblemDetails, and `Retry-After` is kept.
+  - **B-07:** fixed. `ControllerExtensions` has `NoContentOrProblem`, `OkOrProblem` and `CreatedAtRouteOrProblem`. No controller returns `BadRequest(string)` or `{ errorMessage }` any more.
+  - **Result kinds:** `Result`/`ResultWith<T>` carry an `ErrorKind` (`BadRequest` by default; `NotFound`, `Forbidden`, `Conflict`). Status changes:
+    - not found → **404** (was 400) for articles, authors, books, reviews, notifications, profiles, reading-list entries, and votes on a missing review (was 200, the rest of B-11);
+    - modifying someone else's book, author or review → **403** (was 400);
+    - someone else's notification → **404**, not 403, because it is private;
+    - duplicate review, same reading-list status twice, second check-in of the day, and a taken username/email at registration → **409** (was 400);
+    - an invalid year on `GET /ReadingChallenges/{year}` and `/progress` → **400** (was 404).
+
+    Login failures stay 400.
+  - **S-11:** fixed. Client-facing messages use a friendly resource name ("The book was not found.", "You are not allowed to modify this review.") with no `…DbModel` type names or IDs. The log templates keep both. Other replaced texts:
+    - the review duplicate and invalid-book messages (they contained the user ID);
+    - the reading-list status message (it named `All()`);
+    - the author gender/nationality messages;
+    - the profile-deletion Identity errors (now logged only).
+  - **Client:** `processError` reads ProblemDetails. For a 4xx it shows `detail`, else the first validation message from `errors`. Otherwise it uses the caller's fallback: for a 5xx, whose detail is generic, and when there is only a generic `title`. 13 new Vitest cases. `isSessionExpiredError`, `isNotFoundError` and `ErrorsRedirect` are unaffected: no client code branches on 400 vs 403/404/409.
+  - **New tests:**
+    - `ErrorHandlingIntegration`, through test-only endpoints on the real pipeline and database: a 500 has no internals, a real unique violation → 409, a real FK violation → 400, an image exception → 400, plus 401/403/404/validation ProblemDetails;
+    - `ExpectedFailuresUnit`;
+    - new `ReviewsIntegration`, `NotificationsIntegration`, `ReadingChallengesIntegration` and `ProfileIntegration` classes;
+    - 403 and hidden-unapproved-404 cases in Books and Authors;
+    - 409/400 cases in Identity and ReadingLists.
+
+    `TestSeeder` gained `SeedReview` and `SeedNotification`. `ShouldBeProblem(...)` asserts the ProblemDetails shape.
+  - **T-07:** fixed (the `AdminServiceIntegration` comment says PostgreSQL).
+  - **Verified on a Development server** (dev Postgres + `dotnet run`):
+    - the Swagger UI and `swagger.json` load;
+    - `/health` is 200;
+    - an anonymous call gives a 401 ProblemDetails;
+    - a missing book `PUT` gives a 404 with `detail`;
+    - bad credentials give a 400 with `detail`;
+    - an empty form gives a ValidationProblemDetails;
+    - an unknown route gives a 404 ProblemDetails.
+  - **B-20 (new, Low):** `Reviews` has no unique index on (`CreatorId`, `BookId`). The duplicate-review check is read-then-write, so two concurrent creates can both succeed, and the new 409 mapping can't catch it without the index. Add a filtered unique index (`WHERE NOT "IsDeleted"`) in a migration.
+  - **Note:** the service-level checks for undefined enum values (author gender/nationality, reading-list status) can't be reached over HTTP, because model binding already rejects undefined enum values with a ValidationProblemDetails. They're kept as a second line.
+  - **Still open in Phase 2b:** the fallback authorization policy, explicit `[AllowAnonymous]` on Identity and `/health`, rejecting tokens of deleted users (S-06 minimum) and the authorization matrix (step 3). The Swagger UI already runs before authentication, so the fallback policy won't hide it.
+- **2026-10-03 (Phase 2b, steps 3–6: authorization hardening and the authorization matrix):**
+  - Tests: 218 → 379, all passing, in about 1 m 30 s. The new tests are 155 matrix cases, 4 real-JWT tests and 2 B-20 tests. Both CI jobs pass on a clean copy of the working tree with the same steps and flags as `ci.yml`.
+  - **Fallback policy:** every endpoint requires an authenticated user unless it opts out. The anonymous set is unchanged from before the phase, per the approved table:
+    - `Books/top`, `Authors/top`, `Profile/top` and `Statistics`;
+    - `Articles/{id}` and `Search/articles`;
+    - the four `Identity` endpoints, now with an explicit `[AllowAnonymous]` (before, they relied on having no attribute);
+    - `/health`, now with `.AllowAnonymous()`.
+
+    Uploaded images stay public: `UseStaticFiles` short-circuits before `UseAuthorization`, and a test GETs `/images/books/1984.jpg` anonymously. The Swagger UI runs before authentication. An anonymous request to an unknown URL now gets a 401 ProblemDetails instead of a 404, which is expected with a fallback policy.
+  - **S-06 (partial, the minimum):** fixed. `OnTokenValidated` rejects the token with a 401 when its user no longer exists or is soft-deleted. It's one `AnyAsync` on the ID and `!IsDeleted`. The client's 401 interceptor then logs the user out.
+    - **How it's tested:** `DeletedUserTokenIntegration` runs the real JwtBearer pipeline. The factory has `UseTestAuthentication => false`, and the tokens are signed by `/Identity/register`. The tests cover self-deletion through `DELETE /Profile`, a soft delete elsewhere (as the admin delete does), a still-valid user and a malformed token.
+    - **Mutation-checked:** with the hook disabled, both deleted-user tests fail.
+    - Refresh tokens, short-lived access tokens and role re-validation remain Phase 4.
+  - **Authorization matrix (the Phase 2 exit criterion for section 3.2):** `server/BookHub.Tests/Authorization/AuthorizationMatrix.cs` lists all 67 controller actions plus `/health`. 57 are protected, each with `User`, `Owner` (with the wrong-user status) or `Admin` access, and 11 are public. `AuthorizationMatrixIntegration` tests:
+    - anonymous → 401 ProblemDetails (57);
+    - a non-admin on admin endpoints → 403 (17);
+    - the wrong user on owner endpoints → 403 for books, authors and reviews; 404 for notifications and a private profile's reading lists (10);
+    - the allowed caller is not rejected (57);
+    - every public endpoint works anonymously (11).
+
+    A completeness guard enumerates `EndpointDataSource` at runtime. It fails when a routed endpoint is in neither list, when a listed endpoint no longer exists, or when the `[AllowAnonymous]` endpoints and the public list disagree. It's mutation-checked: removing one matrix row and removing the fallback policy each fail it. The class shares one app host (`AuthorizationMatrixFixture`) and resets the database per test.
+  - **F-16:** fixed. Search uses the shared `http` instance instead of the global `axios`, so it goes through the 401 interceptor and the base URL. There's a Vitest regression test.
+  - **Client calls vs. the table:** no client code calls a protected endpoint anonymously. The anonymous calls are home tops, statistics, article details and article search, and identity. Books/authors/genres/profiles search and the details pages run only behind `AuthenticatedRoute`, and header notifications load only when authenticated.
+  - **B-20:** fixed. A new migration, `AddReviewUniqueIndex`, adds `IX_Reviews_CreatorId_BookId` as a unique index with `WHERE NOT "IsDeleted"`, so a user can review again after deleting their review.
+    - EF also drops `IX_Reviews_CreatorId`, because the new index's leading column covers the FK. Every review query goes through the soft-delete filter, so the partial index covers them.
+    - The `Up` would fail on a database that already holds duplicate live reviews. There are none in production, which is a fresh database.
+    - Tests: a duplicate insert that bypasses the service check → 409 with one row kept; re-reviewing after a delete → 201.
+    - `StatisticsIntegration` seeded two live reviews by one user for one book, which the index now rejects. Its seed now soft-deletes the first review before writing the second, and its assertions are unchanged.
+    - `has-pending-model-changes` reports no changes.
+  - **Small items:** the stale "Returns null…" comment on `IReadingListService.All` is removed. Account enumeration through registration's 409 is in `docs/backlog.md` (open, decision needed; behavior unchanged).
+  - **Verified on the dev stack** (`docker compose … --env-file .env.example`, demo data from the DataImporter):
+    - anonymous: home tops, statistics, an article, article search, a cover image and `/health` all return 200; book details and books search return 401; an unknown URL returns a 401 ProblemDetails;
+    - a newly registered user: book details, search, profile, review create (201, then 409 on a repeat), reading-list add (204); someone else's book edit returns 403; an admin endpoint returns 403;
+    - the admin: admin book details and notifications return 200;
+    - after a self-delete, the same token gets a 401.
+  - **B-21 (new, Low):** `appsettings.json` has empty `JwtSettings:Issuer`/`Audience`, and outside Development both are validated. With `ISSUER`/`AUDIENCE` unset in the environment, tokens carry no issuer or audience, and every authenticated request would get a 401. Compose and `.env.example` set them, and the test factory now does too. Fix by making both `[Required]` in `JwtSettings`, so startup fails fast.
+  - **Still open from Phase 2:** T-06 (xUnit1051 is still suppressed), and branch protection requiring the `server` and `client` checks (a GitHub setting).

@@ -6,7 +6,7 @@ using Models;
 
 public interface IReadingChallengeService : ITransientService
 {
-    Task<ReadingChallengeServiceModel?> Get(
+    Task<ResultWith<ReadingChallengeServiceModel>> Get(
         int year,
         CancellationToken cancellationToken = default);
 
@@ -14,7 +14,7 @@ public interface IReadingChallengeService : ITransientService
         UpsertReadingChallengeServiceModel serviceModel,
         CancellationToken cancellationToken = default);
 
-    Task<ReadingChallengeProgressServiceModel?> Progress(
+    Task<ResultWith<ReadingChallengeProgressServiceModel>> Progress(
         int year,
         CancellationToken cancellationToken = default);
 

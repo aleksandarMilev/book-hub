@@ -76,6 +76,36 @@ export const getPublicConfig = (signal?: AbortSignal): AxiosRequestConfig => {
   return config;
 };
 
+const isNonBlankString = (value: unknown): value is string =>
+  typeof value === 'string' && value.trim() !== '';
+
+// Server errors are RFC 9457 ProblemDetails. `detail` holds the human-readable message, and a
+// validation error (ValidationProblemDetails) holds per-field messages in `errors`. The generic
+// `title` ("Bad Request", "Not Found") is never shown: the caller's fallback is more useful.
+export const getProblemMessage = (data: unknown): string | null => {
+  if (typeof data !== 'object' || data === null) {
+    return null;
+  }
+
+  const { detail, errors } = data as { detail?: unknown; errors?: unknown };
+
+  if (isNonBlankString(detail)) {
+    return detail;
+  }
+
+  if (typeof errors === 'object' && errors !== null) {
+    for (const messages of Object.values(errors)) {
+      const first: unknown = Array.isArray(messages) ? messages.find(isNonBlankString) : undefined;
+
+      if (isNonBlankString(first)) {
+        return first;
+      }
+    }
+  }
+
+  return null;
+};
+
 export const processError = (error: unknown, fallbackMessage: string): never => {
   const isRequestCanceled = axios.isCancel?.(error) || IsCanceledError(error);
 
@@ -83,11 +113,12 @@ export const processError = (error: unknown, fallbackMessage: string): never => 
     throw error;
   }
 
-  if (axios.isAxiosError(error) && error.response?.data) {
-    const data = error.response.data;
-    const serverMessage = data.errorMessage || data.message || data.title;
+  // A 5xx detail is generic ("An unexpected error occurred."), so the caller's message is better.
+  const status = axios.isAxiosError(error) ? error.response?.status : undefined;
+  if (axios.isAxiosError(error) && status !== undefined && status < 500) {
+    const serverMessage = getProblemMessage(error.response?.data);
 
-    if (serverMessage && typeof serverMessage === 'string') {
+    if (serverMessage !== null) {
       throw new Error(serverMessage);
     }
   }

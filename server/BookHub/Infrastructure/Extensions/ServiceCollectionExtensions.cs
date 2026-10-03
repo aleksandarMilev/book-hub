@@ -1,14 +1,17 @@
 ﻿namespace BookHub.Infrastructure.Extensions;
 
+using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using System.Text;
 using System.Threading.RateLimiting;
 using Data;
+using ExceptionHandling;
 using Features.Emails;
 using Features.Identity.Data.Models;
 using Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +26,27 @@ using static Features.Identity.Shared.Constants.Lockout;
 
 public static class ServiceCollectionExtensions
 {
+    // Every error response is a ProblemDetails (RFC 9457) with a traceId: controller
+    // failures (ControllerExtensions), unhandled exceptions (GlobalExceptionHandler) and
+    // empty-body status codes such as 401/403 (UseStatusCodePages).
+    public static IServiceCollection AddErrorHandling(
+        this IServiceCollection services)
+    {
+        services.AddProblemDetails(options =>
+            options.CustomizeProblemDetails = context =>
+                context
+                    .ProblemDetails
+                    .Extensions
+                    .TryAdd(
+                        "traceId",
+                        Activity.Current?.Id ?? context.HttpContext.TraceIdentifier));
+
+        // IExceptionHandler can't follow the I{ClassName} convention used by AddServices.
+        services.AddExceptionHandler<GlobalExceptionHandler>();
+
+        return services;
+    }
+
     public static IServiceCollection AddRateLimiting(this IServiceCollection services, IWebHostEnvironment env)
     {
         services.AddRateLimiter(options =>
@@ -46,8 +70,18 @@ public static class ServiceCollectionExtensions
 
                 await context
                     .HttpContext
-                    .Response
-                    .WriteAsync("Too many requests.", token);
+                    .RequestServices
+                    .GetRequiredService<IProblemDetailsService>()
+                    .WriteAsync(new()
+                    {
+                        HttpContext = context.HttpContext,
+                        ProblemDetails = new()
+                        {
+                            Status = StatusCodes.Status429TooManyRequests,
+                            Title = "Too Many Requests",
+                            Detail = "Too many requests. Try again later.",
+                        },
+                    });
             };
 
             options.GlobalLimiter = PartitionedRateLimiter
@@ -260,9 +294,46 @@ public static class ServiceCollectionExtensions
                         ClockSkew = TimeSpan.FromMinutes(ClockSkewMinutes)
                     };
                 }
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = RejectTokensOfDeletedUsers,
+                };
             });
 
+        // Every endpoint requires an authenticated user unless it is explicitly marked
+        // [AllowAnonymous] (or .AllowAnonymous() for minimal endpoints such as /health).
+        services
+            .AddAuthorizationBuilder()
+            .SetFallbackPolicy(new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build());
+
         return services;
+    }
+
+    // A signed, unexpired token stays valid after its user is deleted (S-06), so check that the
+    // user still exists and isn't soft-deleted: one primary-key lookup per authenticated request.
+    // A failed check is a 401, which makes the client log out.
+    private static async Task RejectTokensOfDeletedUsers(TokenValidatedContext context)
+    {
+        var userId = context.Principal?.GetId();
+
+        var userIsActive = userId is not null && await context
+            .HttpContext
+            .RequestServices
+            .GetRequiredService<BookHubDbContext>()
+            .Users
+            .IgnoreQueryFilters()
+            .AsNoTracking()
+            .AnyAsync(
+                u => u.Id == userId && !u.IsDeleted,
+                context.HttpContext.RequestAborted);
+
+        if (!userIsActive)
+        {
+            context.Fail("The user no longer exists.");
+        }
     }
 
     public static IServiceCollection AddSwagger(

@@ -9,10 +9,7 @@ using Shared;
 
 public interface IReadingListService : ITransientService
 {
-    /// <summary>
-    /// Returns null when the caller may not see the user's lists (private or missing profile).
-    /// </summary>
-    Task<ResultWith<PaginatedModel<BookServiceModel>>?> All(
+    Task<ResultWith<PaginatedModel<BookServiceModel>>> All(
        string userId,
        ReadingListStatus status,
        int pageIndex,

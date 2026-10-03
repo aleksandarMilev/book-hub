@@ -32,4 +32,11 @@ public static class Constants
     {
         public const string DetailsRouteName = "AuthorDetails";
     }
+
+    public static class ErrorMessages
+    {
+        public const string InvalidGender = "Invalid gender.";
+
+        public const string InvalidNationality = "Invalid nationality.";
+    }
 }

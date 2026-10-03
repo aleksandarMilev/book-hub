@@ -2,6 +2,7 @@ namespace BookHub.Tests.Identity;
 
 using System.Globalization;
 using System.Net;
+using System.Net.Http.Json;
 using System.Text.Json;
 using Data;
 using Features.Emails;
@@ -11,6 +12,8 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Shared.Seed;
+using Shared.Utils;
 
 public sealed class IdentityIntegration : IAsyncLifetime
 {
@@ -73,6 +76,52 @@ public sealed class IdentityIntegration : IAsyncLifetime
 
         profileExists.Should().BeTrue();
     }
+
+    [Fact]
+    public async Task Register_ShouldReturnConflictProblem_WhenTheUsernameIsTaken()
+    {
+        await this.httpClientFactory.WithData(data => data.SeedUser("existing-id", "takenname"));
+
+        var httpClient = this.httpClientFactory.CreateClient();
+
+        var response = await httpClient.PostAsync(
+            "/Identity/register/",
+            RegisterForm("takenname", "someone-new@test.local"));
+
+        await response.ShouldBeProblem(
+            HttpStatusCode.Conflict,
+            "Username 'takenname' is already taken.");
+    }
+
+    [Fact]
+    public async Task Login_ShouldReturnBadRequestProblem_WhenTheCredentialsAreWrong()
+    {
+        await this.httpClientFactory.WithData(data => data.SeedUser("existing-id", "reader"));
+
+        var httpClient = this.httpClientFactory.CreateClient();
+
+        var response = await httpClient.PostAsJsonAsync(
+            "/Identity/login/",
+            new { credentials = "reader", password = "WrongPassw0rd", rememberMe = false });
+
+        await response.ShouldBeProblem(
+            HttpStatusCode.BadRequest,
+            "Invalid log in attempt!");
+    }
+
+    private static MultipartFormDataContent RegisterForm(
+        string username,
+        string email)
+        => new()
+        {
+            { new StringContent(username), "Username" },
+            { new StringContent(email), "Email" },
+            { new StringContent("Passw0rd123"), "Password" },
+            { new StringContent("New"), "FirstName" },
+            { new StringContent("Reader"), "LastName" },
+            { new StringContent(new DateTime(1995, 1, 1).ToString("O", CultureInfo.InvariantCulture)), "DateOfBirth" },
+            { new StringContent("false"), "IsPrivate" }
+        };
 
     private sealed class ThrowingEmailSenderFactory : BookHubWebApplicationFactory
     {

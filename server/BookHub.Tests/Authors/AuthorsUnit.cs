@@ -14,6 +14,7 @@ using Infrastructure.Services.CurrentUser;
 using Infrastructure.Services.ImageWriter;
 using Infrastructure.Services.ImageWriter.Models;
 using Infrastructure.Services.PageClamper;
+using Infrastructure.Services.Result;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -335,7 +336,7 @@ public sealed class AuthorsUnit
         result
             .ErrorMessage
             .Should()
-            .Be($"{serviceModel.Gender} is not valid Gender enumeartion!");
+            .Be("Invalid gender.");
     }
 
     [Fact]
@@ -525,7 +526,9 @@ public sealed class AuthorsUnit
         result
             .ErrorMessage
             .Should()
-            .Be($"AuthorDbModel with Id: {nonExistingId} was not found!");
+            .Be("The author was not found.");
+
+        result.ErrorKind.Should().Be(ErrorKind.NotFound);
 
         await imageWriter
             .DidNotReceiveWithAnyArgs()
@@ -719,7 +722,9 @@ public sealed class AuthorsUnit
         result
             .ErrorMessage
             .Should()
-            .Be($"User with Id: user-1 can not modify AuthorDbModel with Id: {authorId}!");
+            .Be("You are not allowed to modify this author.");
+
+        result.ErrorKind.Should().Be(ErrorKind.Forbidden);
     }
 
     [Fact]

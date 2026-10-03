@@ -46,15 +46,10 @@ public class ReviewsController(IReviewService service) : ApiController
             serviceModel,
             cancellationToken);
 
-        if (result.Succeeded)
-        {
-            return this.CreatedAtRoute(
-                routeName: DetailsRouteName,
-                routeValues: new { id = result.Data!.Id },
-                value: result.Data);
-        }
-
-        return this.BadRequest(result.ErrorMessage);
+        return this.CreatedAtRouteOrProblem(
+            result,
+            DetailsRouteName,
+            review => new { id = review.Id });
     }
 
     [HttpPut(Id)]
@@ -69,7 +64,7 @@ public class ReviewsController(IReviewService service) : ApiController
             serviceModel,
             cancellationToken);
 
-        return this.NoContentOrBadRequest(result);
+        return this.NoContentOrProblem(result);
     }
 
     [HttpDelete(Id)]
@@ -81,6 +76,6 @@ public class ReviewsController(IReviewService service) : ApiController
             id,
             cancellationToken);
 
-        return this.NoContentOrBadRequest(result);
+        return this.NoContentOrProblem(result);
     }
 }

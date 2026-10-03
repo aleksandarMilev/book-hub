@@ -27,7 +27,8 @@ public class ImageWriter(
                     resourceName,
                     validationResult.ErrorMessage);
 
-                throw new InvalidOperationException(validationResult.ErrorMessage);
+                throw new ImageValidationException(
+                    validationResult.ErrorMessage ?? "Invalid image.");
             }
 
             await this.SaveImageFile(

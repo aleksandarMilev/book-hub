@@ -12,6 +12,7 @@ using Shared;
 using UserProfile.Service;
 
 using static Common.Constants.ErrorMessages;
+using static Shared.Constants.ErrorMessages;
 
 public class ReviewService(
     BookHubDbContext data,
@@ -20,6 +21,8 @@ public class ReviewService(
     IPageClamper pageClamper,
     ILogger<ReviewService> logger) : IReviewService
 {
+    private const string ResourceName = "review";
+
     public async Task<PaginatedModel<ReviewServiceModel>> AllForBook(
         Guid bookId,
         int pageIndex,
@@ -74,7 +77,7 @@ public class ReviewService(
 
         if (bookIdIsInvalid)
         {
-            return this.LogAndReturnInvalidBookIdMessage(bookId, userId);
+            return this.LogAndReturnInvalidBookId(bookId, userId);
         }
 
         var reviewIsDuplicated = await this.UserAlreadyReviewedTheBook(
@@ -84,7 +87,7 @@ public class ReviewService(
 
         if (reviewIsDuplicated)
         {
-            return this.LogAndReturnDuplicationMessage(bookId, userId);
+            return this.LogAndReturnDuplication(bookId, userId);
         }
 
         var dbModel = serviceModel.ToDbModel();
@@ -126,7 +129,7 @@ public class ReviewService(
 
         if (dbModel is null)
         {
-            return this.LogAndReturnNotFoundMessage(reviewId);
+            return this.LogAndReturnNotFound(reviewId);
         }
 
         var userId = userService.GetId()!;
@@ -134,7 +137,7 @@ public class ReviewService(
 
         if (isNotCreator)
         {
-            return LogAndReturnUnauthorizedMessage(reviewId, userId);
+            return LogAndReturnForbidden(reviewId, userId);
         }
 
         var oldRating = dbModel.Rating;
@@ -148,7 +151,7 @@ public class ReviewService(
                 serviceModel.BookId,
                 reviewId);
 
-            return "BookId cannot be changed when editing a review.";
+            return BookIdCannotChange;
         }
 
         serviceModel.UpdateDbModel(dbModel);
@@ -180,7 +183,7 @@ public class ReviewService(
 
         if (dbModel is null)
         {
-            return LogAndReturnNotFoundMessage(reviewId);
+            return LogAndReturnNotFound(reviewId);
         }
 
         var userId = userService.GetId()!;
@@ -189,7 +192,7 @@ public class ReviewService(
 
         if (isNotCreator && isNotAdmin)
         {
-            return LogAndReturnUnauthorizedMessage(reviewId, userId);
+            return LogAndReturnForbidden(reviewId, userId);
         }
 
         var oldRating = dbModel.Rating;
@@ -222,20 +225,19 @@ public class ReviewService(
             .Reviews
             .FindAsync([reviewId], cancellationToken);
 
-    private string LogAndReturnNotFoundMessage(Guid reviewId)
+    private Result LogAndReturnNotFound(Guid reviewId)
     {
         logger.LogWarning(
             DbEntityNotFoundTemplate,
             nameof(ReviewDbModel),
             reviewId);
 
-        return string.Format(
-            DbEntityNotFound,
-            nameof(ReviewDbModel),
-            reviewId);
+        return Result.NotFound(string.Format(
+            ResourceNotFound,
+            ResourceName));
     }
 
-    private string LogAndReturnUnauthorizedMessage(
+    private Result LogAndReturnForbidden(
         Guid reviewId,
         string userId)
     {
@@ -245,14 +247,12 @@ public class ReviewService(
             nameof(ReviewDbModel),
             reviewId);
 
-        return string.Format(
-            UnauthorizedMessage,
-            userId,
-            nameof(ReviewDbModel),
-            reviewId);
+        return Result.Forbidden(string.Format(
+            ResourceForbidden,
+            ResourceName));
     }
 
-    private string LogAndReturnDuplicationMessage(
+    private ResultWith<ReviewServiceModel> LogAndReturnDuplication(
         Guid bookId,
         string userId)
     {
@@ -261,13 +261,10 @@ public class ReviewService(
             userId,
             bookId);
 
-        return string.Format(
-            "User with Id: {0} already wrote review for book with Id: {1}",
-            userId,
-            bookId);
+        return ResultWith<ReviewServiceModel>.Conflict(AlreadyReviewed);
     }
 
-    private string LogAndReturnInvalidBookIdMessage(
+    private ResultWith<ReviewServiceModel> LogAndReturnInvalidBookId(
         Guid bookId,
         string userId)
     {
@@ -276,10 +273,7 @@ public class ReviewService(
             userId,
             bookId);
 
-        return string.Format(
-            "User with Id: {0} attempted to create review for invalid book Id: {1}",
-            userId,
-            bookId);
+        return BookDoesNotExist;
     }
 
     private async Task<bool> BookIdIsInvalid(

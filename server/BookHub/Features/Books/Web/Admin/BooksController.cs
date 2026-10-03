@@ -27,7 +27,7 @@ public class BooksController(IBookService service) : AdminApiController
             id,
             cancellationToken);
 
-        return this.NoContentOrBadRequest(result);
+        return this.NoContentOrProblem(result);
     }
 
     [HttpPatch(Id + ApiRoutes.Reject)]
@@ -39,6 +39,6 @@ public class BooksController(IBookService service) : AdminApiController
             id,
             cancellationToken);
 
-        return this.NoContentOrBadRequest(result);
+        return this.NoContentOrProblem(result);
     }
 }

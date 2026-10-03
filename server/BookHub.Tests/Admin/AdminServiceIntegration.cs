@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using static Common.Constants.Names;
 
 // The factory replaces IAdminService with a mock, so these tests build the real AdminService
-// on top of the factory's Identity stack (SQLite).
+// on top of the factory's Identity stack (PostgreSQL).
 public sealed class AdminServiceIntegration : IAsyncLifetime
 {
     private readonly BookHubWebApplicationFactory httpClientFactory = new();

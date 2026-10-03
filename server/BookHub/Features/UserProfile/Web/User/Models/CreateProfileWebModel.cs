@@ -19,6 +19,7 @@ public class CreateProfileWebModel
         MinimumLength = NameMinLength)]
     public string LastName { get; init; } = default!;
 
+    [ImageUpload]
     public IFormFile? Image { get; init; }
 
     [MinAge]

@@ -69,3 +69,9 @@ The major upgrades in `server/BookHub.Tests/BookHub.Tests.csproj`:
 None of them has an open advisory.
 
 **Follow-up:** the new analyzer rule xUnit1051 ("pass `TestContext.Current.CancellationToken`") has about 300 hits and is suppressed in the csproj. Adopt it while the tests are restructured in Phase 2b/2c, then remove the `NoWarn`.
+
+## Account enumeration through registration
+
+**Status:** open, decision needed. Found in Phase 2b (2026-10).
+
+Registration reveals whether a username or email is taken: `POST /Identity/register` returns a 409 whose `detail` names the taken value ("Username '…' is already taken."). Forgot-password deliberately doesn't reveal it (it always answers with the same message). Decide whether account enumeration matters for this app. If it does, registration needs a non-revealing response, for example "check your email" with the conflict reported to the address owner. The behavior is unchanged until then.

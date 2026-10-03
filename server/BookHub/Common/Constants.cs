@@ -16,13 +16,16 @@ public static class Constants
 
     public static class ErrorMessages
     {
-        public const string DbEntityNotFound = "{0} with Id: {1} was not found!";
-
+        // Log templates: they keep the internal type name and the IDs, and never reach clients.
         public const string DbEntityNotFoundTemplate = $"{{Entity}} with Id: {{Id}} was not found!";
 
-        public const string UnauthorizedMessage = "User with Id: {0} can not modify {1} with Id: {2}!";
-
         public const string UnauthorizedMessageTemplate = $"User with Id: {{UserId}} can not modify {{ResourceName}} with Id: {{ResourceId}}!";
+
+        // Returned to clients (ProblemDetails.detail): a friendly resource name only,
+        // never a type name or an ID (S-11). {0} is e.g. "book" or "review".
+        public const string ResourceNotFound = "The {0} was not found.";
+
+        public const string ResourceForbidden = "You are not allowed to modify this {0}.";
     }
 
     public static class Names 

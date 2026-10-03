@@ -82,13 +82,21 @@ public sealed class StatisticsIntegration : IAsyncLifetime
         await data.SeedGenre("Visible genre");
         var deletedGenre = await data.SeedGenre("Deleted genre");
 
-        var review = NewReview(book.Id, ReviewerId);
+        // Only one live review per user and book is allowed (B-20), so the reviewer's
+        // earlier review is soft-deleted before the visible one is written.
         var deletedReview = NewReview(book.Id, ReviewerId);
+        data.Add(deletedReview);
+        await data.SaveChangesAsync();
+
+        data.Remove(deletedReview);
+        await data.SaveChangesAsync();
+
+        var review = NewReview(book.Id, ReviewerId);
 
         var article = NewArticle("Visible article");
         var deletedArticle = NewArticle("Deleted article");
 
-        data.AddRange(review, deletedReview, article, deletedArticle);
+        data.AddRange(review, article, deletedArticle);
         await data.SaveChangesAsync();
 
         // Soft deletes (BookHubDbContext turns Remove into IsDeleted = true).
@@ -97,7 +105,6 @@ public sealed class StatisticsIntegration : IAsyncLifetime
             deletedBook,
             deletedAuthor,
             deletedGenre,
-            deletedReview,
             deletedArticle);
 
         await data.SaveChangesAsync();
