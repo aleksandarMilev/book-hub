@@ -120,7 +120,27 @@ Optional, mainly for local runs:
 ## API Notes
 
 - Swagger UI is enabled only in Development and is hosted at the API root (`http://localhost:8080`).
+- **Endpoints require authentication by default** (a JWT bearer token from `/Identity/login` or `/Identity/register`). Only these are public:
+  - the home page data: `Books/top`, `Authors/top`, `Profile/top` and `Statistics`;
+  - `Articles/{id}` and `Search/articles`;
+  - the `Identity` endpoints (register, login, forgot/reset password);
+  - `/health`;
+  - uploaded images under `/images`.
+
+  An anonymous request to anything else, including an unknown URL, gets a 401.
 - Admin endpoints are under `Administrator/*` and require the `Administrator` role.
+- A token stops working (401) as soon as its user is deleted, even before it expires.
+- **Errors** are always [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) ProblemDetails (`application/problem+json`) with a `traceId` to quote when reporting a problem. The message is in `detail`, and validation errors list per-field messages in `errors`.
+
+  | Status | Meaning |
+  |---|---|
+  | 400 | validation error or invalid input |
+  | 401 | not authenticated, or the token's user no longer exists |
+  | 403 | authenticated, but not allowed (someone else's book/author/review, or an admin endpoint) |
+  | 404 | not found, or private content (someone else's notification, a private profile's reading lists) |
+  | 409 | duplicate or conflict (e.g. a second review of the same book) |
+  | 429 | rate limited (see `Retry-After`) |
+  | 500 | unexpected error: a generic message only, details are in the server log under the `traceId` |
 - Health check endpoint is `/health`.
 
 ## Database, Migrations, and Seeding

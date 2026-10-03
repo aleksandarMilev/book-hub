@@ -167,6 +167,26 @@ public sealed class ReviewsIntegration : IAsyncLifetime
         (await response.Content.ReadFromJsonAsync<Guid>()).Should().Be(review.Id);
     }
 
+    [Fact]
+    public async Task Create_ShouldSucceed_AfterTheUserDeletedTheirPreviousReviewOfTheBook()
+    {
+        // The unique index on (CreatorId, BookId) ignores soft-deleted reviews (B-20).
+        var httpClient = this.httpClientFactory.CreateUserClient(OtherUserId);
+
+        var first = await httpClient.PostAsJsonAsync("/Reviews", ReviewRequest(this.bookId));
+        first.StatusCode.Should().Be(HttpStatusCode.Created);
+
+        var firstId = (await first.Content.ReadFromJsonAsync<CreatedReview>())!.Id;
+
+        var delete = await httpClient.DeleteAsync($"/Reviews/{firstId}/");
+        delete.StatusCode.Should().Be(HttpStatusCode.NoContent);
+
+        var second = await httpClient.PostAsJsonAsync("/Reviews", ReviewRequest(this.bookId));
+        second.StatusCode.Should().Be(HttpStatusCode.Created);
+    }
+
+    private sealed record CreatedReview(Guid Id);
+
     private static object ReviewRequest(
         Guid bookId,
         string content = "A perfectly fine review")

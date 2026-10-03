@@ -552,3 +552,40 @@ No tracked file was modified.
   - **B-20 (new, Low):** `Reviews` has no unique index on (`CreatorId`, `BookId`). The duplicate-review check is read-then-write, so two concurrent creates can both succeed, and the new 409 mapping can't catch it without the index. Add a filtered unique index (`WHERE NOT "IsDeleted"`) in a migration.
   - **Note:** the service-level checks for undefined enum values (author gender/nationality, reading-list status) can't be reached over HTTP, because model binding already rejects undefined enum values with a ValidationProblemDetails. They're kept as a second line.
   - **Still open in Phase 2b:** the fallback authorization policy, explicit `[AllowAnonymous]` on Identity and `/health`, rejecting tokens of deleted users (S-06 minimum) and the authorization matrix (step 3). The Swagger UI already runs before authentication, so the fallback policy won't hide it.
+- **2026-10-03 (Phase 2b, steps 3–6: authorization hardening and the authorization matrix):**
+  - Tests: 218 → 379, all passing, in about 1 m 30 s. The new tests are 155 matrix cases, 4 real-JWT tests and 2 B-20 tests. Both CI jobs pass on a clean copy of the working tree with the same steps and flags as `ci.yml`.
+  - **Fallback policy:** every endpoint requires an authenticated user unless it opts out. The anonymous set is unchanged from before the phase, per the approved table:
+    - `Books/top`, `Authors/top`, `Profile/top` and `Statistics`;
+    - `Articles/{id}` and `Search/articles`;
+    - the four `Identity` endpoints, now with an explicit `[AllowAnonymous]` (before, they relied on having no attribute);
+    - `/health`, now with `.AllowAnonymous()`.
+
+    Uploaded images stay public: `UseStaticFiles` short-circuits before `UseAuthorization`, and a test GETs `/images/books/1984.jpg` anonymously. The Swagger UI runs before authentication. An anonymous request to an unknown URL now gets a 401 ProblemDetails instead of a 404, which is expected with a fallback policy.
+  - **S-06 (partial, the minimum):** fixed. `OnTokenValidated` rejects the token with a 401 when its user no longer exists or is soft-deleted. It's one `AnyAsync` on the ID and `!IsDeleted`. The client's 401 interceptor then logs the user out.
+    - **How it's tested:** `DeletedUserTokenIntegration` runs the real JwtBearer pipeline. The factory has `UseTestAuthentication => false`, and the tokens are signed by `/Identity/register`. The tests cover self-deletion through `DELETE /Profile`, a soft delete elsewhere (as the admin delete does), a still-valid user and a malformed token.
+    - **Mutation-checked:** with the hook disabled, both deleted-user tests fail.
+    - Refresh tokens, short-lived access tokens and role re-validation remain Phase 4.
+  - **Authorization matrix (the Phase 2 exit criterion for section 3.2):** `server/BookHub.Tests/Authorization/AuthorizationMatrix.cs` lists all 67 controller actions plus `/health`. 57 are protected, each with `User`, `Owner` (with the wrong-user status) or `Admin` access, and 11 are public. `AuthorizationMatrixIntegration` tests:
+    - anonymous → 401 ProblemDetails (57);
+    - a non-admin on admin endpoints → 403 (17);
+    - the wrong user on owner endpoints → 403 for books, authors and reviews; 404 for notifications and a private profile's reading lists (10);
+    - the allowed caller is not rejected (57);
+    - every public endpoint works anonymously (11).
+
+    A completeness guard enumerates `EndpointDataSource` at runtime. It fails when a routed endpoint is in neither list, when a listed endpoint no longer exists, or when the `[AllowAnonymous]` endpoints and the public list disagree. It's mutation-checked: removing one matrix row and removing the fallback policy each fail it. The class shares one app host (`AuthorizationMatrixFixture`) and resets the database per test.
+  - **F-16:** fixed. Search uses the shared `http` instance instead of the global `axios`, so it goes through the 401 interceptor and the base URL. There's a Vitest regression test.
+  - **Client calls vs. the table:** no client code calls a protected endpoint anonymously. The anonymous calls are home tops, statistics, article details and article search, and identity. Books/authors/genres/profiles search and the details pages run only behind `AuthenticatedRoute`, and header notifications load only when authenticated.
+  - **B-20:** fixed. A new migration, `AddReviewUniqueIndex`, adds `IX_Reviews_CreatorId_BookId` as a unique index with `WHERE NOT "IsDeleted"`, so a user can review again after deleting their review.
+    - EF also drops `IX_Reviews_CreatorId`, because the new index's leading column covers the FK. Every review query goes through the soft-delete filter, so the partial index covers them.
+    - The `Up` would fail on a database that already holds duplicate live reviews. There are none in production, which is a fresh database.
+    - Tests: a duplicate insert that bypasses the service check → 409 with one row kept; re-reviewing after a delete → 201.
+    - `StatisticsIntegration` seeded two live reviews by one user for one book, which the index now rejects. Its seed now soft-deletes the first review before writing the second, and its assertions are unchanged.
+    - `has-pending-model-changes` reports no changes.
+  - **Small items:** the stale "Returns null…" comment on `IReadingListService.All` is removed. Account enumeration through registration's 409 is in `docs/backlog.md` (open, decision needed; behavior unchanged).
+  - **Verified on the dev stack** (`docker compose … --env-file .env.example`, demo data from the DataImporter):
+    - anonymous: home tops, statistics, an article, article search, a cover image and `/health` all return 200; book details and books search return 401; an unknown URL returns a 401 ProblemDetails;
+    - a newly registered user: book details, search, profile, review create (201, then 409 on a repeat), reading-list add (204); someone else's book edit returns 403; an admin endpoint returns 403;
+    - the admin: admin book details and notifications return 200;
+    - after a self-delete, the same token gets a 401.
+  - **B-21 (new, Low):** `appsettings.json` has empty `JwtSettings:Issuer`/`Audience`, and outside Development both are validated. With `ISSUER`/`AUDIENCE` unset in the environment, tokens carry no issuer or audience, and every authenticated request would get a 401. Compose and `.env.example` set them, and the test factory now does too. Fix by making both `[Required]` in `JwtSettings`, so startup fails fast.
+  - **Still open from Phase 2:** T-06 (xUnit1051 is still suppressed), and branch protection requiring the `server` and `client` checks (a GitHub setting).

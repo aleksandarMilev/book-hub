@@ -70,20 +70,7 @@ The request flow is: WebModel → `.ToCreateServiceModel()` → service → DbMo
 - Mutating service methods return `Infrastructure/Services/Result` (`Result` / `ResultWith<T>`, implicitly convertible from `bool` or an error-message `string`, so services just `return true;` or `return errorMessage;`). A failure carries an `ErrorKind`: a plain string is `BadRequest` (400), and `Result.NotFound(msg)` / `Result.Forbidden(msg)` / `Result.Conflict(msg)` (also on `ResultWith<T>`) give 404 / 403 / 409. Controllers map them with `this.NoContentOrProblem(result)`, `this.OkOrProblem(result, selector)` or `this.CreatedAtRouteOrProblem(result, routeName, routeValues)` (`Infrastructure/Extensions/ControllerExtensions`).
 - The global `ModelOrNotFoundActionFilter` turns any `ObjectResult` with a `null` value into 404, so `return this.Ok(await service.Details(id))` is the idiom for nullable lookups.
 
-**Error responses** are always RFC 9457 ProblemDetails (`application/problem+json`) with a `traceId`. The human-readable message is in `detail`, and validation errors are a ValidationProblemDetails with per-field `errors`.
-
-- **Status codes:**
-  - 400: validation errors and invalid input;
-  - 401: not authenticated;
-  - 403: authenticated, but modifying a public resource you don't own (or a role-gated endpoint);
-  - 404: not found, **or private content whose existence must not leak** (someone else's notification, a private profile's reading lists, someone else's unapproved book/author);
-  - 409: duplicates and conflicts.
-- **Messages returned to clients** never contain internal type names (`…DbModel`) or IDs (S-11). Use `Common.Constants.ErrorMessages.ResourceNotFound` / `ResourceForbidden` with a friendly resource name ("book", "review"), and keep the type name and IDs in the log template.
-- **Exceptions** go through `Infrastructure/ExceptionHandling/GlobalExceptionHandler` (`UseExceptionHandler()` in every environment):
-  - `ExpectedFailures` maps a `DbUpdateException` by Postgres `SqlState`: a unique violation → 409; a foreign key violation → 400, or 409 when deleting;
-  - `ImageValidationException` → 400;
-  - anything else → 500 with a generic `detail`, plus the exception only in Development.
-- `UseStatusCodePages()` gives empty-body 401/403/404 responses a ProblemDetails body. The rate limiter's 429 is a ProblemDetails too.
+Authorization and error responses follow the rules in **API conventions** below.
 
 **`BookHubDbContext` behaviour** (it depends on `ICurrentUserService`, so it is per-request):
 
@@ -118,6 +105,36 @@ The request flow is: WebModel → `.ToCreateServiceModel()` → service → DbMo
 - Non-Development: `Cors:AllowedOrigins` (semicolon-separated) is required or startup throws.
 - Config comes from `appsettings*.json` or env vars (`JwtSettings__*`, `EmailSettings__*`, `ConnectionStrings__DefaultConnection`). See the README for the full env var table.
 
+## API conventions
+
+### Authorization
+
+- **Every endpoint requires an authenticated user by default.** The fallback authorization policy (`RequireAuthenticatedUser`, in `ServiceCollectionExtensions.AddJwtAuthentication`) applies to any endpoint without its own `[Authorize]`/`[AllowAnonymous]`, and to requests that match no endpoint: an anonymous request to an unknown URL gets a 401, not a 404.
+- **Public endpoints opt out explicitly:** `[AllowAnonymous]` on the action or controller, or `.AllowAnonymous()` on a minimal endpoint (as `/health` does). The public set is the catalog tops (`Books/top`, `Authors/top`, `Profile/top`), `Statistics`, `Articles/{id}`, `Search/articles`, the four `Identity` endpoints and `/health`. Everything else, including book/author/genre details and the other searches, needs a user.
+- **Static files** (`wwwroot/images`: covers, author photos, avatars) are public: `UseStaticFiles` short-circuits before `UseAuthorization`. Keep it before authentication in `Program.cs`. The Swagger UI (Development) also runs before authentication.
+- **Owner checks** live in the services (`CreatorId == caller || admin`) and return `Result.Forbidden` (403) for public resources or `Result.NotFound` (404) for private content. Always take the acting user from the claims (`ICurrentUserService`), never from the route or body.
+- **Deleted users:** `OnTokenValidated` rejects the token (401) when the user no longer exists or is soft-deleted. It's one primary-key query per authenticated request. There is no role re-validation or refresh token yet (the rest of S-06 is Phase 4).
+- **Every new endpoint must be added to `server/BookHub.Tests/Authorization/AuthorizationMatrix.cs`**, either to `Protected` (with its access: `User`, `Owner` with the wrong-user status, or `Admin`) or to `Public`. `AuthorizationMatrixIntegration.EveryEndpoint_ShouldBeInTheMatrixOrThePublicList` enumerates the routed endpoints at runtime and fails otherwise. It also fails if the `[AllowAnonymous]` endpoints and the `Public` list disagree.
+
+### Error responses
+
+Error responses are always RFC 9457 ProblemDetails (`application/problem+json`) with a `traceId`. The human-readable message is in `detail`, and validation errors are a ValidationProblemDetails with per-field `errors`.
+
+- **Status codes:**
+  - 400: validation errors and invalid input;
+  - 401: not authenticated (or a deleted user's token);
+  - 403: authenticated, but modifying a public resource you don't own (or a role-gated endpoint);
+  - 404: not found, **or private content whose existence must not leak** (someone else's notification, a private profile's reading lists, someone else's unapproved book/author);
+  - 409: duplicates and conflicts.
+- **Messages returned to clients** never contain internal type names (`…DbModel`) or IDs (S-11). Use `Common.Constants.ErrorMessages.ResourceNotFound` / `ResourceForbidden` with a friendly resource name ("book", "review"), and keep the type name and IDs in the log template.
+- **Exceptions** go through `Infrastructure/ExceptionHandling/GlobalExceptionHandler` (`UseExceptionHandler()` in every environment):
+  - `ExpectedFailures` maps a `DbUpdateException` by Postgres `SqlState`: a unique violation → 409; a foreign key violation → 400, or 409 when deleting;
+  - `ImageValidationException` → 400;
+  - anything else → 500 with a generic `detail`, plus the exception only in Development.
+
+  Back "one per X" rules with a unique index (as `Reviews (CreatorId, BookId)` is): the service's read-then-write check alone loses races.
+- `UseStatusCodePages()` gives empty-body 401/403/404 responses a ProblemDetails body. The rate limiter's 429 is a ProblemDetails too.
+
 ## Server tests (`server/BookHub.Tests`)
 
 xUnit v3 + FluentAssertions + NSubstitute + Testcontainers. The project references `xunit.v3.mtp-off` and runs through VSTest (`xunit.runner.visualstudio` + `Microsoft.NET.Test.Sdk`), so plain `dotnet test` works. Don't switch to the default `xunit.v3` package without also opting into Microsoft Testing Platform in `global.json`: MTP v2 fails `dotnet test` in VSTest mode on the .NET 10 SDK. The test project is an executable (`OutputType Exe`). `IAsyncLifetime` members return `ValueTask`. Test parallelization is disabled assembly-wide (`[assembly: Parallelization(Mode = ParallelMode.None)]` in `AssemblyInfo.cs`). The analyzer rule xUnit1051 (pass `TestContext.Current.CancellationToken`) is suppressed in the csproj for now. Test classes are named `<Feature>Unit.cs` / `<Feature>Integration.cs` (not every feature has both yet).
@@ -127,10 +144,11 @@ xUnit v3 + FluentAssertions + NSubstitute + Testcontainers. The project referenc
 - `Shared/Database/PostgresServer` starts **one** `postgres:18-alpine` container per test run (a lazy static; Testcontainers' Ryuk removes it at exit). It uses the same ICU initdb arguments as Compose. Keep its image on the same major as the Compose files. On first use it applies the **real migrations** (`MigrateAsync`) to a `bookhub_template` database.
 - Each test gets its own database cloned from that template (`CREATE DATABASE … TEMPLATE`, roughly 0.1 s), so every test starts from the migrated schema plus the HasData seed ("Other" genre). Disposing the `TestDatabase` drops it.
 - **Integration tests** use `BookHubWebApplicationFactory`:
-  - It runs `Program` in the `"Testing"` environment, where `Program.cs` skips CORS and the database registration. The factory registers Npgsql against its own cloned database, swaps in `ImageWriterMock` and `AdminServiceMock("test-admin-id")`, and replaces JWT with a test auth scheme.
+  - It runs `Program` in the `"Testing"` environment, where `Program.cs` skips CORS and the database registration. The factory registers Npgsql against its own cloned database, swaps in `ImageWriterMock` and `AdminServiceMock("test-admin-id")`, and replaces JWT with a test auth scheme. A subclass that overrides `UseTestAuthentication => false` keeps the real JwtBearer scheme with signed tokens from `/Identity/login|register` (see `Identity/DeletedUserTokenIntegration`). The `Create*Client` helpers need the test scheme.
   - Call `ResetDatabase()` in `InitializeAsync` (it clones a fresh database) and dispose the factory in `DisposeAsync`.
   - Clients: `CreateUserClient(userId, username)`, `CreateAdminClient(...)` and `CreateAnonymousClient()`. The authenticated ones send `Authorization: <scheme> user|admin:<id>:<username>`.
-  - Seed and assert through `factory.WithData(data => …)` with the `Shared/Seed/TestSeeder` extensions (`SeedUser`, `SeedProfile`, `SeedGenre`, `SeedAuthor`, `SeedBook`, `SeedReview`, `SeedNotification`). Seed a `UserDbModel` for any user ID the request uses, because PostgreSQL enforces the foreign keys.
+  - Authorization coverage lives in `Authorization/AuthorizationMatrixIntegration` (table-driven over `AuthorizationMatrix`, one shared host per class through `AuthorizationMatrixFixture`, a fresh database per test). Add every new endpoint there.
+  - Seed and assert through `factory.WithData(data => …)` with the `Shared/Seed/TestSeeder` extensions (`SeedUser`, `SeedProfile`, `SeedGenre`, `SeedAuthor`, `SeedBook`, `SeedArticle`, `SeedReview`, `SeedNotification`). Seed a `UserDbModel` for any user ID the request uses, because PostgreSQL enforces the foreign keys.
   - Assert error responses with `await response.ShouldBeProblem(HttpStatusCode.X, "detail")` (`Shared/Utils/ProblemDetailsAssertions`). It checks the status, the `application/problem+json` content type, the `traceId` and, optionally, `detail`.
 - **Older unit tests** (`ArticlesUnit`, `AuthorsUnit`, `BooksUnit`, `GenresUnit`) build the service directly on a `TestDatabase` context (`CreateTestDb()`) with substituted dependencies. They were ported as-is and are due for restructuring in Phase 2. Don't copy that pattern for new tests (see below).
 

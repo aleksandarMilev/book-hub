@@ -3,6 +3,7 @@ using System;
 using BookHub.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -12,9 +13,11 @@ using NpgsqlTypes;
 namespace BookHub.Data.Migrations
 {
     [DbContext(typeof(BookHubDbContext))]
-    partial class BookHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20261003110806_AddReviewUniqueIndex")]
+    partial class AddReviewUniqueIndex
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

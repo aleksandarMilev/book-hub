@@ -3,6 +3,7 @@
 using Common;
 using Identity.Shared;
 using Infrastructure.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Service;
@@ -10,6 +11,8 @@ using Service.Models;
 
 using static ApiRoutes;
 
+// Public by design: registration, login and password reset happen before there is a token.
+[AllowAnonymous]
 public class IdentityController(IIdentityService service) : ApiController
 {
     [HttpPost(RegisterRoute)]

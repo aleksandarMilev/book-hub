@@ -11,6 +11,7 @@ using Features.Emails;
 using Features.Identity.Data.Models;
 using Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
@@ -293,9 +294,46 @@ public static class ServiceCollectionExtensions
                         ClockSkew = TimeSpan.FromMinutes(ClockSkewMinutes)
                     };
                 }
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = RejectTokensOfDeletedUsers,
+                };
             });
 
+        // Every endpoint requires an authenticated user unless it is explicitly marked
+        // [AllowAnonymous] (or .AllowAnonymous() for minimal endpoints such as /health).
+        services
+            .AddAuthorizationBuilder()
+            .SetFallbackPolicy(new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build());
+
         return services;
+    }
+
+    // A signed, unexpired token stays valid after its user is deleted (S-06), so check that the
+    // user still exists and isn't soft-deleted: one primary-key lookup per authenticated request.
+    // A failed check is a 401, which makes the client log out.
+    private static async Task RejectTokensOfDeletedUsers(TokenValidatedContext context)
+    {
+        var userId = context.Principal?.GetId();
+
+        var userIsActive = userId is not null && await context
+            .HttpContext
+            .RequestServices
+            .GetRequiredService<BookHubDbContext>()
+            .Users
+            .IgnoreQueryFilters()
+            .AsNoTracking()
+            .AnyAsync(
+                u => u.Id == userId && !u.IsDeleted,
+                context.HttpContext.RequestAborted);
+
+        if (!userIsActive)
+        {
+            context.Fail("The user no longer exists.");
+        }
     }
 
     public static IServiceCollection AddSwagger(

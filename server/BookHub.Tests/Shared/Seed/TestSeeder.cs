@@ -2,6 +2,7 @@ namespace BookHub.Tests.Shared.Seed;
 
 using BookHub.Data;
 using BookHub.Data.Models.Shared.BookGenre.Models;
+using Features.Articles.Data.Models;
 using Features.Authors.Data.Models;
 using Features.Authors.Shared;
 using Features.Books.Data.Models;
@@ -188,6 +189,25 @@ public static class TestSeeder
         await data.SaveChangesAsync();
 
         return review;
+    }
+
+    public static async Task<ArticleDbModel> SeedArticle(
+        this BookHubDbContext data,
+        string title = "A seeded article title")
+    {
+        var article = new ArticleDbModel
+        {
+            Id = Guid.NewGuid(),
+            Title = title,
+            Introduction = "A seeded article introduction",
+            Content = new string('c', 200),
+            ImagePath = "/images/articles/test.jpg",
+        };
+
+        data.Articles.Add(article);
+        await data.SaveChangesAsync();
+
+        return article;
     }
 
     public static async Task<NotificationDbModel> SeedNotification(

@@ -1,14 +1,12 @@
-﻿import axios from 'axios';
-
-import type {
+﻿import type {
   ArticlesSearchResult,
   AuthorsSearchResult,
   BooksSearchResult,
   GenresSearchResult,
   ProfilesSearchResult,
 } from '@/features/search/types/search';
-import { getAuthConfig, getPublicConfig, processError } from '@/shared/api/http';
-import { baseUrl, routes } from '@/shared/lib/constants/api';
+import { getAuthConfig, getPublicConfig, http, processError } from '@/shared/api/http';
+import { routes } from '@/shared/lib/constants/api';
 import { pagination } from '@/shared/lib/constants/defaultValues';
 import { errors } from '@/shared/lib/constants/errorMessages';
 import type { PaginatedResult } from '@/shared/types/paginatedResult';
@@ -22,14 +20,14 @@ async function search<T>(
   signal?: AbortSignal,
 ): Promise<PaginatedResult<T>> {
   try {
-    const url = `${baseUrl}${route}`;
+    // Through `http`, so the 401 interceptor and the shared base URL apply (F-16).
     const params = { searchTerm, page, pageSize };
     const options = {
       ...(token ? getAuthConfig(token, signal) : getPublicConfig(signal)),
       params,
     };
 
-    const response = await axios.get<PaginatedResult<T>>(url, options);
+    const response = await http.get<PaginatedResult<T>>(route, options);
 
     return response.data;
   } catch (error) {

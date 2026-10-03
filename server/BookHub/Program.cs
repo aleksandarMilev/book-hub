@@ -74,6 +74,8 @@ if (envIsDev)
     app.UseSwaggerUI();
 }
 
+// UseStaticFiles serves wwwroot (book covers, author photos, avatars) and short-circuits
+// before UseAuthorization, so uploaded images stay public under the fallback policy.
 app
     .UseRouting()
     .UseStaticFiles();

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Shared.Seed;
 using Shared.Utils;
@@ -66,6 +67,27 @@ public sealed class ErrorHandlingIntegration : IAsyncLifetime
         await response.ShouldBeProblem(
             HttpStatusCode.Conflict,
             ExpectedFailures.UniqueViolationDetail);
+    }
+
+    [Fact]
+    public async Task DuplicateReview_InsertedPastTheServiceCheck_ShouldReturnConflictProblem_AndAlso_ShouldKeepOneReview()
+    {
+        var book = await this.httpClientFactory.WithData(data => data.SeedBook("Raced book"));
+        var httpClient = this.httpClientFactory.CreateUserClient(UserId);
+
+        var response = await httpClient.PostAsync(
+            $"{ErrorEndpointsStartupFilter.DuplicateReview}?bookId={book.Id}",
+            content: null);
+
+        await response.ShouldBeProblem(
+            HttpStatusCode.Conflict,
+            ExpectedFailures.UniqueViolationDetail);
+
+        var reviews = await this.httpClientFactory.WithData(data => data
+            .Reviews
+            .CountAsync(r => r.BookId == book.Id && r.CreatorId == UserId));
+
+        reviews.Should().Be(1);
     }
 
     [Fact]
@@ -155,6 +177,7 @@ public sealed class ErrorHandlingIntegration : IAsyncLifetime
         public const string Unhandled = "/test-errors/unhandled";
         public const string DuplicateCheckIn = "/test-errors/duplicate-check-in";
         public const string MissingReference = "/test-errors/missing-reference";
+        public const string DuplicateReview = "/test-errors/duplicate-review";
         public const string InvalidImage = "/test-errors/invalid-image";
 
         public const string SecretMessage = "secret-internal-detail";
@@ -184,6 +207,29 @@ public sealed class ErrorHandlingIntegration : IAsyncLifetime
 
                     data.ReadingCheckIns.Add(new ReadingCheckInDbModel { UserId = UserId, Date = today });
                     await data.SaveChangesAsync();
+                }));
+
+                // B-20: two live reviews by one user for one book, inserted directly so the
+                // service's duplicate check is bypassed (as in a race). The filtered unique
+                // index on Reviews (CreatorId, BookId) rejects the second one.
+                app.Map(DuplicateReview, branch => branch.Run(async context =>
+                {
+                    var data = context.RequestServices.GetRequiredService<BookHubDbContext>();
+                    var bookId = Guid.Parse(context.Request.Query["bookId"]!);
+
+                    for (var i = 0; i < 2; i++)
+                    {
+                        data.Reviews.Add(new ReviewDbModel
+                        {
+                            Content = "A racing review",
+                            Rating = 4,
+                            BookId = bookId,
+                            CreatorId = UserId,
+                        });
+
+                        await data.SaveChangesAsync();
+                        data.ChangeTracker.Clear();
+                    }
                 }));
 
                 // A real foreign key violation (23503): a review for a book that doesn't exist.

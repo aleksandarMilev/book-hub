@@ -93,7 +93,14 @@ public class BookHubWebApplicationFactory : WebApplicationFactory<Program>
     internal static IWebHostBuilder ConfigureTestSettings(IWebHostBuilder builder)
         => builder
             .UseSetting("JwtSettings:Secret", "test-only-jwt-secret-that-is-at-least-32-bytes")
+            .UseSetting("JwtSettings:Issuer", "BookHub.Tests")
+            .UseSetting("JwtSettings:Audience", "BookHub.Tests")
             .UseSetting("AppUrlsSettings:ClientBaseUrl", "http://localhost:5173");
+
+    // False keeps the app's real JwtBearer scheme (signed tokens from /Identity/login, including
+    // the deleted-user check in OnTokenValidated) instead of the test scheme. The Create*Client
+    // helpers only work with the test scheme.
+    protected virtual bool UseTestAuthentication => true;
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
         => ConfigureTestSettings(builder)
@@ -111,7 +118,14 @@ public class BookHubWebApplicationFactory : WebApplicationFactory<Program>
                     .RemoveAll<IImageWriter>()
                     .AddSingleton<IImageWriter, ImageWriterMock>()
                     .RemoveAll<IAdminService>()
-                    .AddScoped<IAdminService>(_ => new AdminServiceMock("test-admin-id"))
+                    .AddScoped<IAdminService>(_ => new AdminServiceMock("test-admin-id"));
+
+                if (!this.UseTestAuthentication)
+                {
+                    return;
+                }
+
+                services
                     .AddAuthentication(options =>
                     {
                         options.DefaultAuthenticateScheme = IdentityHandler.SchemeName;
