@@ -45,7 +45,7 @@ public sealed class ReadingListsIntegration : IAsyncLifetime
     {
         await this.SeedProfile(OwnerId, isPrivate: true);
 
-        var httpClient = this.httpClientFactory.CreateUserClient(OtherUserId, "user");
+        var httpClient = await this.httpClientFactory.CreateUserClient(OtherUserId, "user");
 
         var allResponse = await httpClient.GetAsync(AllUrl(OwnerId), TestContext.Current.CancellationToken);
         var lastResponse = await httpClient.GetAsync(LastCurrentlyReadingUrl(OwnerId), TestContext.Current.CancellationToken);
@@ -57,7 +57,7 @@ public sealed class ReadingListsIntegration : IAsyncLifetime
     [Fact]
     public async Task All_And_LastCurrentlyReading_ShouldReturnNotFound_WhenProfileDoesNotExist_AndCallerIsAnotherUser()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient(OtherUserId, "user");
+        var httpClient = await this.httpClientFactory.CreateUserClient(OtherUserId, "user");
 
         var allResponse = await httpClient.GetAsync(AllUrl(OwnerId), TestContext.Current.CancellationToken);
         var lastResponse = await httpClient.GetAsync(LastCurrentlyReadingUrl(OwnerId), TestContext.Current.CancellationToken);
@@ -71,7 +71,7 @@ public sealed class ReadingListsIntegration : IAsyncLifetime
     {
         await this.SeedProfile(OwnerId, isPrivate: true);
 
-        var httpClient = this.httpClientFactory.CreateUserClient(OwnerId, "owner");
+        var httpClient = await this.httpClientFactory.CreateUserClient(OwnerId, "owner");
 
         await this.AssertListsAreVisible(httpClient);
     }
@@ -81,7 +81,7 @@ public sealed class ReadingListsIntegration : IAsyncLifetime
     {
         await this.SeedProfile(OwnerId, isPrivate: true);
 
-        var httpClient = this.httpClientFactory.CreateAdminClient(AdminId, "admin");
+        var httpClient = await this.httpClientFactory.CreateAdminClient(AdminId, "admin");
 
         await this.AssertListsAreVisible(httpClient);
     }
@@ -91,7 +91,7 @@ public sealed class ReadingListsIntegration : IAsyncLifetime
     {
         await this.SeedProfile(OwnerId, isPrivate: false);
 
-        var httpClient = this.httpClientFactory.CreateUserClient(OtherUserId, "user");
+        var httpClient = await this.httpClientFactory.CreateUserClient(OtherUserId, "user");
 
         await this.AssertListsAreVisible(httpClient);
     }
@@ -101,7 +101,7 @@ public sealed class ReadingListsIntegration : IAsyncLifetime
     {
         await this.SeedProfile(OwnerId, isPrivate: true);
 
-        var httpClient = this.httpClientFactory.CreateUserClient(OtherUserId, "user");
+        var httpClient = await this.httpClientFactory.CreateUserClient(OtherUserId, "user");
 
         var response = await httpClient.GetAsync(AllUrl(OwnerId), TestContext.Current.CancellationToken);
 
@@ -113,7 +113,7 @@ public sealed class ReadingListsIntegration : IAsyncLifetime
     [Fact]
     public async Task All_ShouldReturnValidationProblem_WhenTheStatusIsInvalid()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient(OwnerId, "owner");
+        var httpClient = await this.httpClientFactory.CreateUserClient(OwnerId, "owner");
 
         var response = await httpClient.GetAsync($"/ReadingLists?userId={OwnerId}&status=99", TestContext.Current.CancellationToken);
 
@@ -126,7 +126,7 @@ public sealed class ReadingListsIntegration : IAsyncLifetime
     [Fact]
     public async Task Add_ShouldReturnConflictProblem_WhenTheBookIsAlreadyInTheListWithTheSameStatus()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient(OwnerId, "owner");
+        var httpClient = await this.httpClientFactory.CreateUserClient(OwnerId, "owner");
 
         var response = await httpClient.PostAsJsonAsync("/ReadingLists", new { bookId = this.bookId, status = ReadingListStatus.CurrentlyReading }, cancellationToken: TestContext.Current.CancellationToken);
 
@@ -138,7 +138,7 @@ public sealed class ReadingListsIntegration : IAsyncLifetime
     [Fact]
     public async Task Add_ShouldReturnBadRequestProblem_WhenTheBookDoesNotExist()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient(OwnerId, "owner");
+        var httpClient = await this.httpClientFactory.CreateUserClient(OwnerId, "owner");
 
         var response = await httpClient.PostAsJsonAsync("/ReadingLists", new { bookId = Guid.NewGuid(), status = ReadingListStatus.ToRead }, cancellationToken: TestContext.Current.CancellationToken);
 
@@ -150,7 +150,7 @@ public sealed class ReadingListsIntegration : IAsyncLifetime
     [Fact]
     public async Task Delete_ShouldReturnNotFoundProblem_WhenTheBookIsNotInTheCallersList()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient(OtherUserId, "user");
+        var httpClient = await this.httpClientFactory.CreateUserClient(OtherUserId, "user");
 
         using var request = new HttpRequestMessage(HttpMethod.Delete, "/ReadingLists")
         {

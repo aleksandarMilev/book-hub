@@ -22,7 +22,7 @@ public sealed class BookApprovalWorkflowIntegration : IAsyncLifetime
 
     private static readonly string[] AdminIds = ["admin-1", "admin-2"];
 
-    private readonly WorkflowFactory factory = new();
+    private readonly BookHubWebApplicationFactory factory = new();
 
     private Guid genreId;
     private Guid authorId;
@@ -58,7 +58,7 @@ public sealed class BookApprovalWorkflowIntegration : IAsyncLifetime
     {
         const string Title = "Approvalworkflow Chronicles";
 
-        var creator = this.factory.CreateUserClient(CreatorId, CreatorName);
+        var creator = await this.factory.CreateUserClient(CreatorId, CreatorName);
         var anonymous = this.factory.CreateAnonymousClient();
 
         // 1. A non-admin creates a book: it is saved unapproved.
@@ -74,7 +74,7 @@ public sealed class BookApprovalWorkflowIntegration : IAsyncLifetime
         // 2. Every admin gets a notification.
         foreach (var adminId in AdminIds)
         {
-            var notifications = await this.NotificationsOf(this.factory.CreateAdminClient(adminId, adminId));
+            var notifications = await this.NotificationsOf(await this.factory.CreateAdminClient(adminId, adminId));
 
             notifications.Should().ContainSingle(n => n.ResourceId == bookId);
             notifications.Single(n => n.ResourceId == bookId).Should().BeEquivalentTo(new
@@ -89,7 +89,7 @@ public sealed class BookApprovalWorkflowIntegration : IAsyncLifetime
         await (await anonymous.GetAsync($"/Books/{bookId}/", TestContext.Current.CancellationToken))
             .ShouldBeProblem(HttpStatusCode.NotFound);
 
-        await (await this.factory.CreateUserClient(OtherUserId, "other").GetAsync($"/Books/{bookId}/", TestContext.Current.CancellationToken))
+        await (await (await this.factory.CreateUserClient(OtherUserId, "other")).GetAsync($"/Books/{bookId}/", TestContext.Current.CancellationToken))
             .ShouldBeProblem(HttpStatusCode.NotFound);
 
         (await this.PublicListingIds(anonymous, "Approvalworkflow")).Should().NotContain(bookId);
@@ -100,7 +100,7 @@ public sealed class BookApprovalWorkflowIntegration : IAsyncLifetime
         creatorView.Title.Should().Be(Title);
 
         // 4. An admin approves it.
-        var admin = this.factory.CreateAdminClient(AdminIds[0], AdminIds[0]);
+        var admin = await this.factory.CreateAdminClient(AdminIds[0], AdminIds[0]);
 
         await (await admin.PatchAsync($"/Administrator/Books/{bookId}/approve/", null, TestContext.Current.CancellationToken))
             .ShouldHaveStatus(HttpStatusCode.NoContent);
@@ -134,8 +134,8 @@ public sealed class BookApprovalWorkflowIntegration : IAsyncLifetime
     {
         const string Title = "Rejectionworkflow Notes";
 
-        var creator = this.factory.CreateUserClient(CreatorId, CreatorName);
-        var admin = this.factory.CreateAdminClient(AdminIds[1], AdminIds[1]);
+        var creator = await this.factory.CreateUserClient(CreatorId, CreatorName);
+        var admin = await this.factory.CreateAdminClient(AdminIds[1], AdminIds[1]);
         var anonymous = this.factory.CreateAnonymousClient();
 
         var created = await (await creator.PostAsync(
@@ -158,7 +158,7 @@ public sealed class BookApprovalWorkflowIntegration : IAsyncLifetime
         [
             creator,
             anonymous,
-            this.factory.CreateUserClient(OtherUserId, "other"),
+            await this.factory.CreateUserClient(OtherUserId, "other"),
         ];
 
         foreach (var client in everyone)
@@ -194,7 +194,7 @@ public sealed class BookApprovalWorkflowIntegration : IAsyncLifetime
             .UserRoles
             .ExecuteDeleteAsync(TestContext.Current.CancellationToken));
 
-        var creator = this.factory.CreateUserClient(CreatorId, CreatorName);
+        var creator = await this.factory.CreateUserClient(CreatorId, CreatorName);
 
         var created = await (await creator.PostAsync(
                 "/Books",

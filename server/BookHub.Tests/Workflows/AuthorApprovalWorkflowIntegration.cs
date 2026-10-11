@@ -20,7 +20,7 @@ public sealed class AuthorApprovalWorkflowIntegration : IAsyncLifetime
 
     private static readonly string[] AdminIds = ["admin-1", "admin-2"];
 
-    private readonly WorkflowFactory factory = new();
+    private readonly BookHubWebApplicationFactory factory = new();
 
     public async ValueTask InitializeAsync()
     {
@@ -49,7 +49,7 @@ public sealed class AuthorApprovalWorkflowIntegration : IAsyncLifetime
     {
         const string Name = "Authorworkflow Writer";
 
-        var creator = this.factory.CreateUserClient(CreatorId, CreatorName);
+        var creator = await this.factory.CreateUserClient(CreatorId, CreatorName);
         var anonymous = this.factory.CreateAnonymousClient();
 
         var created = await (await creator.PostAsync("/Authors", Forms.Author(Name), TestContext.Current.CancellationToken))
@@ -60,7 +60,7 @@ public sealed class AuthorApprovalWorkflowIntegration : IAsyncLifetime
 
         foreach (var adminId in AdminIds)
         {
-            (await this.NotificationsOf(this.factory.CreateAdminClient(adminId, adminId)))
+            (await this.NotificationsOf(await this.factory.CreateAdminClient(adminId, adminId)))
                 .Should()
                 .ContainSingle(n =>
                     n.ResourceId == authorId &&
@@ -73,7 +73,7 @@ public sealed class AuthorApprovalWorkflowIntegration : IAsyncLifetime
 
         (await this.SearchIds(anonymous, "Authorworkflow")).Should().NotContain(authorId);
 
-        await (await this.factory.CreateAdminClient(AdminIds[0], AdminIds[0]).PatchAsync(
+        await (await (await this.factory.CreateAdminClient(AdminIds[0], AdminIds[0])).PatchAsync(
                 $"/Administrator/Authors/{authorId}/approve/",
                 null,
                 TestContext.Current.CancellationToken))
@@ -102,12 +102,12 @@ public sealed class AuthorApprovalWorkflowIntegration : IAsyncLifetime
     {
         const string Name = "Rejected Authorworkflow";
 
-        var creator = this.factory.CreateUserClient(CreatorId, CreatorName);
+        var creator = await this.factory.CreateUserClient(CreatorId, CreatorName);
 
         var created = await (await creator.PostAsync("/Authors", Forms.Author(Name), TestContext.Current.CancellationToken))
             .ShouldHaveBody<AuthorDetailsServiceModel>(HttpStatusCode.Created);
 
-        await (await this.factory.CreateAdminClient(AdminIds[1], AdminIds[1]).PatchAsync(
+        await (await (await this.factory.CreateAdminClient(AdminIds[1], AdminIds[1])).PatchAsync(
                 $"/Administrator/Authors/{created.Id}/reject/",
                 null,
                 TestContext.Current.CancellationToken))
@@ -121,7 +121,7 @@ public sealed class AuthorApprovalWorkflowIntegration : IAsyncLifetime
         [
             creator,
             this.factory.CreateAnonymousClient(),
-            this.factory.CreateAdminClient(AdminIds[0], AdminIds[0]),
+            await this.factory.CreateAdminClient(AdminIds[0], AdminIds[0]),
         ];
 
         foreach (var client in everyone)

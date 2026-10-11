@@ -18,7 +18,7 @@ public sealed class ReadingListPrivacyWorkflowIntegration : IAsyncLifetime
     private const string OtherUserId = "other-id";
     private const string AdminId = "admin-id";
 
-    private readonly WorkflowFactory factory = new();
+    private readonly BookHubWebApplicationFactory factory = new();
 
     private Guid bookId;
 
@@ -47,9 +47,9 @@ public sealed class ReadingListPrivacyWorkflowIntegration : IAsyncLifetime
     [Fact]
     public async Task PrivateProfile_HidesTheReadingListsFromOthers_UntilTheOwnerMakesItPublic()
     {
-        var owner = this.factory.CreateUserClient(OwnerId, "owner");
-        var other = this.factory.CreateUserClient(OtherUserId, "other");
-        var admin = this.factory.CreateAdminClient(AdminId, "admin");
+        var owner = await this.factory.CreateUserClient(OwnerId, "owner");
+        var other = await this.factory.CreateUserClient(OtherUserId, "other");
+        var admin = await this.factory.CreateAdminClient(AdminId, "admin");
 
         await (await owner.PostAsJsonAsync(
                 "/ReadingLists",

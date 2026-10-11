@@ -16,7 +16,6 @@ using Shared.Seed;
 using Shared.Utils;
 
 using static Features.Authors.Shared.Constants.Paths;
-using static Shared.Utils.Constants;
 
 public sealed class AuthorsIntegration : IAsyncLifetime
 {
@@ -29,7 +28,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             .ResetDatabase();
 
         await this.SeedUser("test-user", "user");
-        await this.SeedUser("test-admin-id", "admin");
+        await this.httpClientFactory.WithData(data => data.SeedAdmin("test-admin-id", "admin"));
     }
 
     public ValueTask DisposeAsync()
@@ -47,7 +46,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             // Someone else's unapproved author is hidden by the approval filter.
             await data.SeedAuthor("Hidden author", isApproved: false, creatorId: "test-admin-id")));
 
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var names = await httpClient.GetFromJsonAsync<List<AuthorNamesServiceModel>>("/Authors/names/", cancellationToken: TestContext.Current.CancellationToken);
 
@@ -80,7 +79,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     [Fact]
     public async Task Details_ShouldReturnNotFoundProblem_WhenAuthorDoesNotExist()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var response = await httpClient.GetAsync($"/Authors/{Guid.NewGuid()}/", TestContext.Current.CancellationToken);
 
@@ -90,8 +89,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     [Fact]
     public async Task Create_ShouldPersistNonDefaultImage_WhenImageProvided_AndAlso_ShouldUseImageWriter()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient();
-        var imageWriterMock = this.httpClientFactory.GetImageWriterMock();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var formData = BuildAuthorFormWithImage(
             authorName: "A valid author name",
@@ -111,11 +109,10 @@ public sealed class AuthorsIntegration : IAsyncLifetime
 
         createdAuthor.Should().NotBeNull();
         createdAuthor.ImagePath.Should().NotBe(DefaultImagePath);
-        createdAuthor.ImagePath.Should().StartWith("/images/authors/test-");
+        createdAuthor.ImagePath.Should().MatchRegex(@"^/images/authors/[0-9a-f-]{36}\.jpg$");
 
-        imageWriterMock.WriteCalls.Should().Be(1);
-        imageWriterMock.LastWrittenPath.Should().NotBeNull();
-        imageWriterMock.LastWrittenPath!.Should().StartWith("/images/authors/test-");
+        // The uploaded file is on disk, and it's the only one.
+        this.httpClientFactory.ImageFiles(ImagePathPrefix).Should().Equal(createdAuthor.ImagePath);
 
         using var scope = this
             .httpClientFactory
@@ -137,7 +134,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     [Fact]
     public async Task Create_ShouldReturnCreatedAtRoute_AndAlso_ShouldPersistTheAuthorInTheDb_AndAlso_ShouldSetDefaultImage_WhenNoImageProvided()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var formData = BuildAuthorForm(
             authorName: "A valid author name",
@@ -191,7 +188,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     [Fact]
     public async Task Create_ShouldReturnCreatedAtRoute_AndAlso_ShouldAutoApprove_WhenAdminCreates()
     {
-        var httpClient = this.httpClientFactory.CreateAdminClient();
+        var httpClient = await this.httpClientFactory.CreateAdminClient();
 
         var formData = BuildAuthorForm(
             authorName: "Admin created author",
@@ -233,7 +230,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     [Fact]
     public async Task Create_ShouldReturnBadRequest_WhenInvalidModelProvided()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var formData = BuildAuthorForm(
             authorName: "a",
@@ -263,8 +260,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             isApproved: true,
             imagePath: "/images/authors/seed.jpg");
 
-        var httpClient = this.httpClientFactory.CreateUserClient();
-        var imageWriterMock = this.httpClientFactory.GetImageWriterMock();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var formData = BuildAuthorForm(
             authorName: "Edited author name",
@@ -305,7 +301,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
         pending.RequestedById.Should().Be("test-user");
 
         // No image was uploaded, so the pending edit reuses the author's image.
-        imageWriterMock.WriteCalls.Should().Be(0);
+        this.httpClientFactory.ImageFiles(PendingImagePathPrefix).Should().BeEmpty();
 
         var notificationReceivers = await data
             .Notifications
@@ -323,7 +319,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             isApproved: true,
             imagePath: "/images/authors/seed.jpg");
 
-        var httpClient = this.httpClientFactory.CreateAdminClient();
+        var httpClient = await this.httpClientFactory.CreateAdminClient();
 
         var formData = BuildAuthorForm(
             authorName: "Edited author name",
@@ -372,7 +368,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     [Fact]
     public async Task Edit_ShouldReturnNotFoundProblem_WhenAuthorDoesNotExist()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
         var nonExistingId = Guid.NewGuid();
 
         var formData = BuildAuthorForm(
@@ -390,7 +386,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             HttpStatusCode.NotFound,
             "The author was not found.");
 
-        this.httpClientFactory.GetImageWriterMock().WriteCalls.Should().Be(0);
+        this.httpClientFactory.ImageFiles(ImagePathPrefix).Should().BeEmpty();
     }
 
     [Fact]
@@ -398,7 +394,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     {
         var authorId = await this.SeedAuthor(isApproved: true);
 
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var formData = BuildAuthorForm(
             authorName: "a",
@@ -424,12 +420,12 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     [Fact]
     public async Task Edit_ShouldWritePendingImage_AndAlso_ShouldKeepAuthorImage_WhenNonAdminProvidesNewImage()
     {
+        var oldImagePath = this.httpClientFactory.SeedImageFile(ImagePathPrefix, "old.jpg");
         var authorId = await this.SeedAuthor(
             isApproved: true,
-            imagePath: "/images/authors/old.jpg");
+            imagePath: oldImagePath);
 
-        var httpClient = this.httpClientFactory.CreateUserClient();
-        var imageWriterMock = this.httpClientFactory.GetImageWriterMock();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var formData = BuildAuthorFormWithImage(
             authorName: "Edited author name",
@@ -444,9 +440,6 @@ public sealed class AuthorsIntegration : IAsyncLifetime
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-        imageWriterMock.WriteCalls.Should().Be(1);
-        imageWriterMock.DeleteCalls.Should().Be(0);
-        imageWriterMock.LastWrittenPath.Should().StartWith($"/images/{PendingImagePathPrefix}/test-");
 
         using var scope = this
             .httpClientFactory
@@ -462,24 +455,27 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             .IgnoreQueryFilters()
             .SingleAsync(a => a.Id == authorId, cancellationToken: TestContext.Current.CancellationToken);
 
-        dbModel.ImagePath.Should().Be("/images/authors/old.jpg");
+        dbModel.ImagePath.Should().Be(oldImagePath);
 
         var pending = await data
             .AuthorEdits
             .SingleAsync(e => e.AuthorId == authorId, cancellationToken: TestContext.Current.CancellationToken);
 
-        pending.ImagePath.Should().Be(imageWriterMock.LastWrittenPath);
+        // The pending image is its own file, and the live photo is untouched until approval.
+        pending.ImagePath.Should().StartWith($"/images/{PendingImagePathPrefix}/");
+        this.httpClientFactory.ImageFiles(PendingImagePathPrefix).Should().Equal(pending.ImagePath);
+        this.httpClientFactory.ImageExists(oldImagePath).Should().BeTrue();
     }
 
     [Fact]
     public async Task Edit_ShouldUpdateImage_AndAlso_ShouldDeleteOldImage_WhenAdminProvidesNewImage()
     {
+        var oldImagePath = this.httpClientFactory.SeedImageFile(ImagePathPrefix, "old.jpg");
         var authorId = await this.SeedAuthor(
             isApproved: true,
-            imagePath: "/images/authors/old.jpg");
+            imagePath: oldImagePath);
 
-        var httpClient = this.httpClientFactory.CreateAdminClient();
-        var imageWriterMock = this.httpClientFactory.GetImageWriterMock();
+        var httpClient = await this.httpClientFactory.CreateAdminClient();
 
         var formData = BuildAuthorFormWithImage(
             authorName: "Edited author name",
@@ -494,11 +490,6 @@ public sealed class AuthorsIntegration : IAsyncLifetime
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-        imageWriterMock.WriteCalls.Should().Be(1);
-        imageWriterMock.DeleteCalls.Should().Be(1);
-        imageWriterMock.LastDeletedPath.Should().Be("/images/authors/old.jpg");
-        imageWriterMock.LastWrittenPath.Should().NotBeNull();
-        imageWriterMock.LastWrittenPath!.Should().StartWith("/images/authors/test-");
 
         using var scope = this
             .httpClientFactory
@@ -514,9 +505,12 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             .IgnoreQueryFilters()
             .SingleAsync(a => a.Id == authorId, cancellationToken: TestContext.Current.CancellationToken);
 
-        dbModel.ImagePath.Should().NotBe("/images/authors/old.jpg");
-        dbModel.ImagePath.Should().StartWith("/images/authors/test-");
+        dbModel.ImagePath.Should().NotBe(oldImagePath);
         dbModel.ModifiedOn.Should().NotBeNull();
+
+        // The new photo replaced the old file on disk.
+        this.httpClientFactory.ImageFiles(ImagePathPrefix).Should().Equal(dbModel.ImagePath);
+        this.httpClientFactory.ImageExists(oldImagePath).Should().BeFalse();
     }
 
     [Fact]
@@ -525,7 +519,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
         var authorId = await this.SeedAuthor(
             isApproved: true);
 
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var response = await httpClient.DeleteAsync($"/Authors/{authorId}/", TestContext.Current.CancellationToken);
 
@@ -558,7 +552,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     [Fact]
     public async Task Delete_ShouldReturnNotFoundProblem_WhenAuthorDoesNotExist()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
         var nonExistingId = Guid.NewGuid();
 
         var response = await httpClient.DeleteAsync($"/Authors/{nonExistingId}/", TestContext.Current.CancellationToken);
@@ -575,7 +569,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             "Someone else's author",
             creatorId: "test-admin-id"));
 
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var formData = BuildAuthorForm(
             authorName: "Hijacked author name",
@@ -617,7 +611,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     [Fact]
     public async Task Create_ShouldReturnValidationProblem_WhenTheGenderIsInvalid()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var formData = BuildAuthorForm(
             authorName: "Author with a bad gender",
@@ -641,7 +635,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     {
         var authorId = await this.SeedAuthor(isApproved: false);
 
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var response = await httpClient.PatchAsync($"/Administrator/Authors/{authorId}/approve/", content: null, cancellationToken: TestContext.Current.CancellationToken);
 
@@ -654,7 +648,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
         var authorId = await this.SeedAuthor(
             isApproved: false);
 
-        var httpClient = this.httpClientFactory.CreateAdminClient();
+        var httpClient = await this.httpClientFactory.CreateAdminClient();
 
         var response = await httpClient.PatchAsync($"/Administrator/Authors/{authorId}/approve/", content: null, cancellationToken: TestContext.Current.CancellationToken);
 
@@ -680,7 +674,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     [Fact]
     public async Task Approve_ShouldReturnNotFoundProblem_WhenAuthorDoesNotExist()
     {
-        var httpClient = this.httpClientFactory.CreateAdminClient();
+        var httpClient = await this.httpClientFactory.CreateAdminClient();
         var nonExistingId = Guid.NewGuid();
 
         var response = await httpClient.PatchAsync($"/Administrator/Authors/{nonExistingId}/approve/", content: null, cancellationToken: TestContext.Current.CancellationToken);
@@ -696,7 +690,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
         var authorId = await this.SeedAuthor(
             isApproved: false);
 
-        var httpClient = this.httpClientFactory.CreateAdminClient();
+        var httpClient = await this.httpClientFactory.CreateAdminClient();
 
         var response = await httpClient.PatchAsync($"/Administrator/Authors/{authorId}/reject/", content: null, cancellationToken: TestContext.Current.CancellationToken);
 
@@ -731,7 +725,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     {
         var authorId = await this.SeedAuthor(isApproved: false);
 
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var response = await httpClient.PatchAsync($"/Administrator/Authors/{authorId}/reject/", content: null, cancellationToken: TestContext.Current.CancellationToken);
 
@@ -741,7 +735,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     [Fact]
     public async Task Reject_ShouldReturnNotFoundProblem_WhenAuthorDoesNotExist()
     {
-        var httpClient = this.httpClientFactory.CreateAdminClient();
+        var httpClient = await this.httpClientFactory.CreateAdminClient();
         var nonExistingId = Guid.NewGuid();
 
         var response = await httpClient.PatchAsync($"/Administrator/Authors/{nonExistingId}/reject/", content: null, cancellationToken: TestContext.Current.CancellationToken);
@@ -813,15 +807,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             bornAt,
             diedAt);
 
-        var bytes = Convert.FromBase64String(MockImageBytes);
-        var fileContent = new ByteArrayContent(bytes);
-
-        fileContent
-            .Headers
-            .ContentType = new MediaTypeHeaderValue("image/jpeg");
-
-        form.Add(fileContent, "Image", "test.jpg");
-        return form;
+        return form.WithImage();
     }
 
     private async Task<Guid> SeedAuthor(

@@ -4,11 +4,10 @@ using System.Net;
 using System.Net.Http.Headers;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using Shared.Identity;
 using Shared.Utils;
 
-// Runs the app's real JwtBearer pipeline (RealJwtFactory, not the test scheme): the tokens are
-// signed by /Identity/register, so OnTokenValidated's deleted-user check is what's under test (S-06).
+// The tokens here are signed by /Identity/register, and OnTokenValidated's deleted-user check is
+// what's under test (S-06).
 public sealed class DeletedUserTokenIntegration : IAsyncLifetime
 {
     private const string Username = "jwtreader";
@@ -16,7 +15,7 @@ public sealed class DeletedUserTokenIntegration : IAsyncLifetime
     // Must require a user: on a public endpoint a rejected token is served as anonymous (200).
     private const string ProtectedUrl = "/Profile/mine/";
 
-    private readonly RealJwtFactory httpClientFactory = new();
+    private readonly BookHubWebApplicationFactory httpClientFactory = new();
 
     public async ValueTask InitializeAsync()
         => await this.httpClientFactory.ResetDatabase();

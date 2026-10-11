@@ -10,17 +10,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using Models;
 using Shared;
-using System.IdentityModel.Tokens.Jwt;
-using System.Runtime;
-using System.Security.Claims;
 using System.Text;
-using System.Text.Encodings.Web;
 using static Common.Constants.Names;
 using static Shared.Constants.ErrorMessages;
-using static Shared.Constants.TokenExpiration;
 
 public class IdentityService(
     BookHubDbContext data,
@@ -29,7 +23,7 @@ public class IdentityService(
     IWelcomeEmailQueue welcomeEmailQueue,
     IProfileService profileService,
     ILogger<IdentityService> logger,
-    IOptions<JwtSettings> jwtSettings,
+    IJwtTokenGenerator jwtTokenGenerator,
     IOptions<AppUrlsSettings> appUrlsSettings) : IIdentityService
 {
     public async Task<ResultWith<string>> Register(
@@ -91,8 +85,7 @@ public class IdentityService(
 
         if (identityResult.Succeeded)
         {
-            var jwt = this.GenerateJwtToken(
-                jwtSettings.Value.Secret,
+            var jwt = jwtTokenGenerator.Generate(
                 user.Id,
                 serviceModel.Username,
                 serviceModel.Email);
@@ -158,8 +151,7 @@ public class IdentityService(
             await userManager.ResetAccessFailedCountAsync(user);
 
             var isAdmin = await userManager.IsInRoleAsync(user, AdminRoleName);
-            var jwt = this.GenerateJwtToken(
-                jwtSettings.Value.Secret,
+            var jwt = jwtTokenGenerator.Generate(
                 user.Id,
                 user.UserName!,
                 user.Email!,
@@ -319,47 +311,4 @@ public class IdentityService(
             .Value
             .ClientBaseUrl
             .TrimEnd('/');
-
-    private string GenerateJwtToken(
-        string appSettingsSecret,
-        string userId,
-        string username,
-        string email,
-        bool rememberMe = false,
-        bool isAdmin = false)
-    {
-        var tokenHandler = new JwtSecurityTokenHandler();
-        tokenHandler.OutboundClaimTypeMap.Clear();
-
-        var key = Encoding.UTF8.GetBytes(appSettingsSecret);
-
-        var claimList = new List<Claim>
-        {
-            new(ClaimTypes.NameIdentifier, userId),
-            new(ClaimTypes.Name, username),
-            new(ClaimTypes.Email, email)
-        };
-
-        if (isAdmin)
-        {
-            claimList.Add(new(ClaimTypes.Role, AdminRoleName));
-        }
-
-        var tokenDescriptor = new SecurityTokenDescriptor
-        {
-            Subject = new ClaimsIdentity(claimList),
-            Expires = rememberMe
-                ? DateTime.UtcNow.AddDays(ExtendedTokenExpirationTime)
-                : DateTime.UtcNow.AddDays(DefaultTokenExpirationTime),
-            Issuer = jwtSettings.Value.Issuer,
-            Audience = jwtSettings.Value.Audience,
-            SigningCredentials = new SigningCredentials(
-                new SymmetricSecurityKey(key),
-                SecurityAlgorithms.HmacSha256Signature)
-        };
-
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-
-        return tokenHandler.WriteToken(token);
-    }
 }

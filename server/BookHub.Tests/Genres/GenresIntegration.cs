@@ -11,6 +11,7 @@ using Features.Identity.Data.Models;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Shared.Seed;
 
 public sealed class GenresIntegration : IAsyncLifetime
 {
@@ -23,7 +24,7 @@ public sealed class GenresIntegration : IAsyncLifetime
             .ResetDatabase();
 
         await this.SeedUser("test-user", "user");
-        await this.SeedUser("test-admin-id", "admin");
+        await this.httpClientFactory.WithData(data => data.SeedAdmin("test-admin-id", "admin"));
     }
 
     public ValueTask DisposeAsync()
@@ -73,7 +74,7 @@ public sealed class GenresIntegration : IAsyncLifetime
 
         await this.SoftDeleteGenre(deletedGenreId);
 
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var response = await httpClient.GetAsync("/Genres/", TestContext.Current.CancellationToken);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -95,7 +96,7 @@ public sealed class GenresIntegration : IAsyncLifetime
     [Fact]
     public async Task Details_ShouldReturnNotFound_WhenNoGenreWithSuchIdInDb()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
         var nonExistingId = Guid.NewGuid();
 
         var response = await httpClient.GetAsync($"/Genres/{nonExistingId}/", TestContext.Current.CancellationToken);
@@ -112,7 +113,7 @@ public sealed class GenresIntegration : IAsyncLifetime
 
         await this.SoftDeleteGenre(genreId);
 
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var response = await httpClient.GetAsync($"/Genres/{genreId}/", TestContext.Current.CancellationToken);
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -146,7 +147,7 @@ public sealed class GenresIntegration : IAsyncLifetime
             averageRating: 2.1,
             title: "B4");
 
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var response = await httpClient.GetAsync($"/Genres/{genreId}/", TestContext.Current.CancellationToken);
         response.StatusCode.Should().Be(HttpStatusCode.OK);

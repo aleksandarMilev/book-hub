@@ -18,7 +18,7 @@ public sealed class ReadingProgressWorkflowIntegration : IAsyncLifetime
 {
     private const string ReaderId = "reader-id";
 
-    private readonly WorkflowFactory factory = new();
+    private readonly BookHubWebApplicationFactory factory = new();
 
     private Guid bookId;
 
@@ -44,7 +44,7 @@ public sealed class ReadingProgressWorkflowIntegration : IAsyncLifetime
     [Fact]
     public async Task Goal_CurrentlyReading_Read_CheckIn_ShouldMoveTheProgressCountersAndStreak()
     {
-        var reader = this.factory.CreateUserClient(ReaderId, "reader");
+        var reader = await this.factory.CreateUserClient(ReaderId, "reader");
         var year = DateTime.UtcNow.Year;
 
         // 1. A yearly goal of two books.

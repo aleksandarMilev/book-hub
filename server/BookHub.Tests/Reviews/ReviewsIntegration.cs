@@ -39,7 +39,7 @@ public sealed class ReviewsIntegration : IAsyncLifetime
     public async Task Create_ShouldReturnConflictProblem_WhenTheUserAlreadyReviewedTheBook()
     {
         await this.httpClientFactory.WithData(data => data.SeedReview(this.bookId, OtherUserId));
-        var httpClient = this.httpClientFactory.CreateUserClient(OtherUserId);
+        var httpClient = await this.httpClientFactory.CreateUserClient(OtherUserId);
 
         var response = await httpClient.PostAsJsonAsync("/Reviews", ReviewRequest(this.bookId), cancellationToken: TestContext.Current.CancellationToken);
 
@@ -57,7 +57,7 @@ public sealed class ReviewsIntegration : IAsyncLifetime
     [Fact]
     public async Task Create_ShouldReturnBadRequestProblem_WhenTheBookDoesNotExist()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient(OtherUserId);
+        var httpClient = await this.httpClientFactory.CreateUserClient(OtherUserId);
 
         var response = await httpClient.PostAsJsonAsync("/Reviews", ReviewRequest(Guid.NewGuid()), cancellationToken: TestContext.Current.CancellationToken);
 
@@ -72,7 +72,7 @@ public sealed class ReviewsIntegration : IAsyncLifetime
         var review = await this.httpClientFactory.WithData(
             data => data.SeedReview(this.bookId, AuthorOfReviewId));
 
-        var httpClient = this.httpClientFactory.CreateUserClient(OtherUserId);
+        var httpClient = await this.httpClientFactory.CreateUserClient(OtherUserId);
 
         var response = await httpClient.PutAsJsonAsync($"/Reviews/{review.Id}/", ReviewRequest(this.bookId, content: "Hijacked review content"), cancellationToken: TestContext.Current.CancellationToken);
 
@@ -96,7 +96,7 @@ public sealed class ReviewsIntegration : IAsyncLifetime
     [Fact]
     public async Task Edit_ShouldReturnNotFoundProblem_WhenTheReviewDoesNotExist()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient(OtherUserId);
+        var httpClient = await this.httpClientFactory.CreateUserClient(OtherUserId);
 
         var response = await httpClient.PutAsJsonAsync($"/Reviews/{Guid.NewGuid()}/", ReviewRequest(this.bookId), cancellationToken: TestContext.Current.CancellationToken);
 
@@ -111,7 +111,7 @@ public sealed class ReviewsIntegration : IAsyncLifetime
         var review = await this.httpClientFactory.WithData(
             data => data.SeedReview(this.bookId, AuthorOfReviewId));
 
-        var httpClient = this.httpClientFactory.CreateUserClient(OtherUserId);
+        var httpClient = await this.httpClientFactory.CreateUserClient(OtherUserId);
 
         var response = await httpClient.DeleteAsync($"/Reviews/{review.Id}/", TestContext.Current.CancellationToken);
 
@@ -129,7 +129,7 @@ public sealed class ReviewsIntegration : IAsyncLifetime
     [Fact]
     public async Task Vote_ShouldReturnNotFoundProblem_WhenTheReviewDoesNotExist()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient(OtherUserId);
+        var httpClient = await this.httpClientFactory.CreateUserClient(OtherUserId);
 
         var response = await httpClient.PostAsJsonAsync("/Votes", new { reviewId = Guid.NewGuid(), isUpvote = true }, cancellationToken: TestContext.Current.CancellationToken);
 
@@ -147,7 +147,7 @@ public sealed class ReviewsIntegration : IAsyncLifetime
         var review = await this.httpClientFactory.WithData(
             data => data.SeedReview(this.bookId, AuthorOfReviewId));
 
-        var httpClient = this.httpClientFactory.CreateUserClient(OtherUserId);
+        var httpClient = await this.httpClientFactory.CreateUserClient(OtherUserId);
 
         var response = await httpClient.PostAsJsonAsync("/Votes", new { reviewId = review.Id, isUpvote = true }, cancellationToken: TestContext.Current.CancellationToken);
 
@@ -159,7 +159,7 @@ public sealed class ReviewsIntegration : IAsyncLifetime
     public async Task Create_ShouldSucceed_AfterTheUserDeletedTheirPreviousReviewOfTheBook()
     {
         // The unique index on (CreatorId, BookId) ignores soft-deleted reviews (B-20).
-        var httpClient = this.httpClientFactory.CreateUserClient(OtherUserId);
+        var httpClient = await this.httpClientFactory.CreateUserClient(OtherUserId);
 
         var first = await httpClient.PostAsJsonAsync("/Reviews", ReviewRequest(this.bookId), cancellationToken: TestContext.Current.CancellationToken);
         first.StatusCode.Should().Be(HttpStatusCode.Created);
@@ -171,6 +171,43 @@ public sealed class ReviewsIntegration : IAsyncLifetime
 
         var second = await httpClient.PostAsJsonAsync("/Reviews", ReviewRequest(this.bookId), cancellationToken: TestContext.Current.CancellationToken);
         second.StatusCode.Should().Be(HttpStatusCode.Created);
+    }
+
+    [Fact]
+    public async Task Edit_ShouldReturnBadRequestProblem_AndLeaveTheReview_WhenItWouldMoveToAnotherBook()
+    {
+        var (review, otherBookId) = await this.httpClientFactory.WithData(async data => (
+            await data.SeedReview(this.bookId, OtherUserId, rating: 2),
+            (await data.SeedBook("Another book")).Id));
+
+        var httpClient = await this.httpClientFactory.CreateUserClient(OtherUserId);
+
+        var response = await httpClient.PutAsJsonAsync(
+            $"/Reviews/{review.Id}",
+            ReviewRequest(otherBookId, "Moved to another book"),
+            TestContext.Current.CancellationToken);
+
+        await response.ShouldBeProblem(
+            HttpStatusCode.BadRequest,
+            "The book of a review cannot be changed.");
+
+        var stored = await this.httpClientFactory.WithData(data => data
+            .Reviews
+            .SingleAsync(r => r.Id == review.Id, TestContext.Current.CancellationToken));
+
+        stored.BookId.Should().Be(this.bookId);
+        stored.Content.Should().Be("A seeded review");
+        stored.Rating.Should().Be(2);
+    }
+
+    [Fact]
+    public async Task Delete_ShouldReturnNotFoundProblem_WhenTheReviewDoesNotExist()
+    {
+        var httpClient = await this.httpClientFactory.CreateUserClient(OtherUserId);
+
+        var response = await httpClient.DeleteAsync($"/Reviews/{Guid.NewGuid()}", TestContext.Current.CancellationToken);
+
+        await response.ShouldBeProblem(HttpStatusCode.NotFound, "The review was not found.");
     }
 
     private sealed record CreatedReview(Guid Id);

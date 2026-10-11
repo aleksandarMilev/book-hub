@@ -41,7 +41,9 @@ public static class AppBuilderExtensions
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
-            endpoints.MapHealthChecks("/health");
+            endpoints
+                .MapHealthChecks("/health")
+                .AllowAnonymous();
         });
 
         return app;

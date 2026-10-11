@@ -684,3 +684,90 @@ No tracked file was modified.
     - the username and email stay taken (409 on re-registration).
   - **Skipped tests:** none.
   - **Client:** unchanged. Lint and typecheck pass, `npx vitest run` passes 57/57, and the build passes.
+- **2026-10-11 (Phase 2e: no test doubles, coverage gaps filled):**
+  - **Tests:** 362 → 386, all passing.
+    - 1 unit test was converted into an HTTP test, and 25 tests were added.
+    - **Run times:** before, 59 s (xUnit duration; 65 s wall) on the same machine, with the `/health` fix below. After, five consecutive full runs took 1 m 12 s, 1 m 13 s, 1 m 20 s, 1 m 12 s and 1 m 10 s (xUnit duration; 74–84 s wall). That's about +24%, inside the +50% budget. The biggest costs are one user query per authenticated request (`OnTokenValidated` now runs in every test), the 240-request rate-limiter test, and the Mailpit start (in parallel with PostgreSQL).
+    - Both CI jobs pass on a clean copy of the working tree with the same steps and flags as `ci.yml`.
+    - `has-pending-model-changes` reports no changes.
+  - **Every test double is gone.** The suite now runs the real application:
+
+    | Was | Now |
+    |---|---|
+    | `IdentityHandler` test auth scheme (`Authorization: TestSchema user:<id>:<name>`) | The real JwtBearer scheme and `OnTokenValidated` in every test. `CreateUserClient`/`CreateAdminClient` (now `async`) seed the user if missing and mint a real token through the app's new `IJwtTokenGenerator`, from the user's row and role membership, as `/Identity/login` does. Workflows still log in through the API where that's part of the journey (`RegisterAndAuthenticate`, `LoginAndAuthenticate`). |
+    | `AdminServiceMock("test-admin-id")` | The real `AdminService` everywhere. The admin client's user is in the real Administrator role (`SeedAdmin`, now idempotent). |
+    | `ImageWriterMock` (write/delete counters, `FailWritesFor`) | The real `ImageWriter` and `ImageValidator`, with a per-factory temporary web root (`UseWebRoot`, deleted on dispose). Tests assert on the files: written on upload, replaced on edit, the old file deleted, nothing written when validation fails, and an uploaded cover served anonymously by the static-file middleware. A failed write is a real one: a file sits where the image folder must be created. |
+    | `RecordingEmailSender`, plus the NSubstitute `IEmailSender` in `WelcomeEmailBackgroundServiceUnit` | Mailpit (`axllent/mailpit:v1.31.5`) through the generic Testcontainers `ContainerBuilder` (no new package), one container per run. The app sends through its real MailKit `EmailSender`, and tests read the received mail through Mailpit's HTTP API, with a unique mail domain per factory. **No deliberately failing sender was needed:** Mailpit's `MP_SMTP_ALLOWED_RECIPIENTS` refuses one reserved domain with a real SMTP 550, so "registration succeeds when the email fails" goes through MailKit's real failure path. A second user's welcome email arriving afterwards proves the background sender survived it, which replaces the unit test. |
+    | NSubstitute `ICurrentUserService` in `PostgresServer` | The real `CurrentUserService` with no request. **NSubstitute is removed** from `BookHub.Tests.csproj`. |
+    | The factory's own `AddDbContext`, and `Program.cs` skipping CORS and the admin bootstrap in "Testing" | The app's own `AddDatabase` (now also takes a `Func<string?>` connection string), so tests run with `EnableRetryOnFailure`, and with the execution strategy around `IdentityService`'s and `BookService.MapBookAndGenres`'s transactions, as in production. CORS and `UseProductionAdminRole` run in Testing like in Production. |
+
+    `RealJwtFactory`, `WorkflowFactory`, `IdentityHandler` and `Shared/Mocks/*` are deleted; `BookHubWebApplicationFactory` is the single factory.
+
+    One test needed a new setup: `Create_ShouldNotPersistTheBook_WhenTheAdminNotificationCannotBeSaved` relied on the mock returning an admin ID with no user row, which the real role can't produce. It now makes the notification insert fail with a trigger in its own database, and still asserts that the book isn't saved (now a 500, not a 400).
+
+    `ErrorHandlingIntegration`'s test-only endpoints stay: they only add endpoints that raise real database errors through the real pipeline, and replace nothing.
+  - **Production changes** (testability only, plus the PR #116 regressions):
+    - `Features/Identity/Service/JwtTokenGenerator` (`IJwtTokenGenerator`, singleton by convention) holds the token code that was private in `IdentityService`. No behavior change.
+    - `AddDatabase(Func<string?>)` overload, used by `AddDatabase(IConfiguration)` and by the test host.
+    - `Program.cs`: CORS and `UseProductionAdminRole` no longer skip the Testing environment. Only the database registration still does, because the test host registers it itself through the same method.
+    - **Regressions from PR #116 (server: cosmetic), fixed:**
+      - `/health` had lost `.AllowAnonymous()`, so it returned 401 and the Docker healthcheck would have failed. The authorization matrix caught it: master's CI was red with 2 failures, after the build fix in PR #117;
+      - `MapOpenApi()`/`MapScalarApiReference()` were mapped behind the fallback policy, so the Development API reference needed a token. Both now have `.AllowAnonymous()`;
+      - `UseDeveloperExceptionPage()` was back in Development and replaced the ProblemDetails responses there. It's removed, and `GlobalExceptionHandler` still adds the exception text in Development.
+  - **Coverage** (Coverlet + ReportGenerator; migrations and generated code excluded; for the record, not a target):
+
+    | Area | Lines before → after | Branches before → after |
+    |---|---|---|
+    | Emails | 20.1% → 97.9% | 12.5% → 62.5% |
+    | Infrastructure | 58.7% → 79.3% | 53.7% → 71.0% |
+    | Authors | 83.1% → 93.5% | 63.3% → 83.3% |
+    | ReadingLists | 82.8% → 95.4% | 65.0% → 85.0% |
+    | UserProfile | 88.0% → 94.1% | 69.2% → 80.8% |
+    | Challenges | 89.8% → 94.9% | 72.5% → 90.0% |
+    | Identity | 91.2% → 95.0% | 64.6% → 79.2% |
+    | Books | 90.7% → 92.5% | 79.7% → 86.4% |
+    | Reviews | 96.3% → 98.2% | 87.5% → 91.7% |
+    | Program | 78.1% → 88.4% | 50.0% → 66.7% |
+    | Articles, Admin, Genres, Search, Notifications, Statistics, DataImporter, Data | unchanged (97–100%) | unchanged |
+    | **Total** | **83.6% → 92.9%** | **65.8% → 79.4%** |
+
+    What's left uncovered is mostly defensive code that HTTP can't reach (`IsAdmin()` checks behind role-gated controllers, enum checks behind model binding), Development-only startup, and `ImageWriter`'s fallback paths.
+  - **Gaps filled** (all HTTP-level; asserting status, body, database, files and mail):
+    - `AuthorEditWorkflowIntegration` (new). Author pending edits had no test at all:
+      - the overlay is shown to the creator and admins only;
+      - a second proposal replaces the first (and its photo file);
+      - approve applies it, deletes the old photo and notifies the creator;
+      - reject discards it and its photo;
+      - an admin's direct edit supersedes it;
+      - an edit made while the author awaited approval is still counted on approval (the author half of B-24);
+      - a missing author's admin details are a 404.
+    - `BookEditWorkflowIntegration`: the cover files through a replaced pending edit, an approval, a rejection and an admin's direct edit. **Mutation-checked:** without the pending-image delete in `Reject`, the test fails.
+    - `ProfileIntegration`:
+      - the avatar is written on registration, replaced on edit (old file deleted), kept on an edit without an image, and removed;
+      - the 5 rejected uploads (empty, over 2 MB, bad extension, bad content type, non-image bytes) each give a 400, with nothing written and the avatar untouched;
+      - a non-image book cover gives a 400 with nothing written.
+    - `ReadingListLifecycleWorkflowIntegration` (new):
+      - a goal changed from books to pages (one challenge row, pages progress);
+      - a book moved out of "read" (`CompletedOn` cleared, counters moved);
+      - books removed from the lists (counters decremented) and re-added (the soft-deleted row is restored and counted once);
+      - removing a book that isn't listed is a 404;
+      - multi-day streaks: the current run, the longest run, and a missed day.
+    - `IdentityIntegration`:
+      - lockout after 3 wrong passwords, after which even the right password is refused for 15 minutes;
+      - forgot-password for an unknown email gets the same answer and sends nothing;
+      - forgot-password whose email is refused by SMTP gets the same answer;
+      - reset with a malformed token, or for an unknown email, is a 400 and keeps the password.
+    - `IdentityWorkflowIntegration`: the welcome email really arrives, and the reset link is followed out of the received HTML.
+    - `ReviewsIntegration`: an edit that would move a review to another book is a 400 and changes nothing; deleting a missing review is a 404.
+    - `HostingIntegration` (new):
+      - the production admin bootstrap (B-01) creates the admin at startup. That admin logs in, gets a token carrying the role, is notified of a reader's new book, and approves it;
+      - a restart on the same database is idempotent;
+      - nothing is created when the bootstrap is disabled;
+      - CORS allows the configured origin only (preflight and simple request);
+      - the 241st request in a minute gets a 429 ProblemDetails with `Retry-After`.
+  - **Bugs found by the new tests:** none in the application beyond the PR #116 regressions above. The real JWT pipeline, real `AdminService`, real files and real SMTP behaved as the doubles had assumed.
+  - **New findings:**
+    - **B-28 (new, Low, open):** approving a pending edit moves the entity's live image path into the pending folder (`images/books/pending/…`, `images/authors/pending/…`), and it stays there. Deletes compare full paths, so nothing breaks (the workflow tests check every step), but live and pending files mix in one folder. That makes a "delete orphaned pending images" job unsafe. Move the file on approval, or write pending images to the live folder.
+    - **DOC-13 (new, Low, open):** the README still describes the Swagger UI at the API root (`README.md:30,59,122,191`). Since PR #116 it's Scalar at `/scalar` with the document at `/openapi/v1.json`. CLAUDE.md is updated.
+    - **S-08** is unchanged by PR #116's restructuring: `UseCustomForwardedHeaders()` still runs after `UseHsts()`/`UseHttpsRedirection()`.
+  - **Skipped tests:** none.

@@ -42,8 +42,7 @@ public sealed class StatisticsIntegration : IAsyncLifetime
         // filters would include unapproved rows) must produce the same counts.
         await this.factory.WithData(SeedVisibleAndHiddenRows);
 
-        var admin = await this.factory
-            .CreateAdminClient()
+        var admin = await (await this.factory.CreateAdminClient())
             .GetFromJsonAsync<StatisticsServiceModel>("/Statistics", cancellationToken: TestContext.Current.CancellationToken);
 
         var anonymous = await this.factory

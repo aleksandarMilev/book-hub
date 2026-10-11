@@ -5,12 +5,11 @@ using Features.Identity.Data.Models;
 using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging.Abstractions;
 
 using static Common.Constants.Names;
 
-// The factory replaces IAdminService with a mock, so these tests build the real AdminService
-// on top of the factory's Identity stack (PostgreSQL).
+// IAdminService as the app resolves it, over the real Identity stack (PostgreSQL). The workflows
+// cover the same rule end to end (every admin notified, none when there are no admins).
 public sealed class AdminServiceIntegration : IAsyncLifetime
 {
     private readonly BookHubWebApplicationFactory httpClientFactory = new();
@@ -32,9 +31,9 @@ public sealed class AdminServiceIntegration : IAsyncLifetime
 
         await CreateUser(services, "regular-user", isAdmin: false);
 
-        var adminService = NewAdminService(services);
-
-        var adminIds = await adminService.GetIds(TestContext.Current.CancellationToken);
+        var adminIds = await services
+            .GetRequiredService<IAdminService>()
+            .GetIds(TestContext.Current.CancellationToken);
 
         adminIds.Should().BeEmpty();
     }
@@ -49,17 +48,12 @@ public sealed class AdminServiceIntegration : IAsyncLifetime
         var secondAdminId = await CreateUser(services, "second-admin", isAdmin: true);
         await CreateUser(services, "regular-user", isAdmin: false);
 
-        var adminService = NewAdminService(services);
-
-        var adminIds = await adminService.GetIds(TestContext.Current.CancellationToken);
+        var adminIds = await services
+            .GetRequiredService<IAdminService>()
+            .GetIds(TestContext.Current.CancellationToken);
 
         adminIds.Should().BeEquivalentTo([firstAdminId, secondAdminId]);
     }
-
-    private static AdminService NewAdminService(IServiceProvider services)
-        => new(
-            services.GetRequiredService<UserManager<UserDbModel>>(),
-            NullLogger<AdminService>.Instance);
 
     private static async Task<string> CreateUser(
         IServiceProvider services,

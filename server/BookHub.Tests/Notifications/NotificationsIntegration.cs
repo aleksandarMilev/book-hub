@@ -33,7 +33,7 @@ public sealed class NotificationsIntegration : IAsyncLifetime
         var notification = await this.httpClientFactory.WithData(
             data => data.SeedNotification(ReceiverId));
 
-        var httpClient = this.httpClientFactory.CreateUserClient(OtherUserId);
+        var httpClient = await this.httpClientFactory.CreateUserClient(OtherUserId);
 
         var response = await httpClient.DeleteAsync($"/Notifications/{notification.Id}/", TestContext.Current.CancellationToken);
 
@@ -54,7 +54,7 @@ public sealed class NotificationsIntegration : IAsyncLifetime
         var notification = await this.httpClientFactory.WithData(
             data => data.SeedNotification(ReceiverId));
 
-        var httpClient = this.httpClientFactory.CreateUserClient(OtherUserId);
+        var httpClient = await this.httpClientFactory.CreateUserClient(OtherUserId);
 
         var othersResponse = await httpClient.DeleteAsync($"/Notifications/{notification.Id}/", TestContext.Current.CancellationToken);
         var missingResponse = await httpClient.DeleteAsync($"/Notifications/{Guid.NewGuid()}/", TestContext.Current.CancellationToken);
@@ -71,7 +71,7 @@ public sealed class NotificationsIntegration : IAsyncLifetime
         var notification = await this.httpClientFactory.WithData(
             data => data.SeedNotification(ReceiverId));
 
-        var httpClient = this.httpClientFactory.CreateUserClient(OtherUserId);
+        var httpClient = await this.httpClientFactory.CreateUserClient(OtherUserId);
 
         var response = await httpClient.PatchAsync($"/Notifications/{notification.Id}/read/", content: null, cancellationToken: TestContext.Current.CancellationToken);
 
@@ -94,7 +94,7 @@ public sealed class NotificationsIntegration : IAsyncLifetime
         var notification = await this.httpClientFactory.WithData(
             data => data.SeedNotification(ReceiverId));
 
-        var httpClient = this.httpClientFactory.CreateUserClient(ReceiverId);
+        var httpClient = await this.httpClientFactory.CreateUserClient(ReceiverId);
 
         var response = await httpClient.DeleteAsync($"/Notifications/{notification.Id}/", TestContext.Current.CancellationToken);
 

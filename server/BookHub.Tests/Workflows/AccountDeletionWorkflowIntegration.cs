@@ -9,7 +9,6 @@ using Features.Reviews.Service.Models;
 using Features.UserProfile.Service.Models;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using Shared.Identity;
 using Shared.Seed;
 using Shared.Utils;
 
@@ -20,7 +19,7 @@ public sealed class AccountDeletionWorkflowIntegration : IAsyncLifetime
 {
     private const string Username = "leaver";
 
-    private readonly RealJwtFactory factory = new();
+    private readonly BookHubWebApplicationFactory factory = new();
 
     private Guid bookId;
 
@@ -72,7 +71,7 @@ public sealed class AccountDeletionWorkflowIntegration : IAsyncLifetime
 
         var login = await this.factory.CreateClient().PostAsJsonAsync(
             "/Identity/login/",
-            new { credentials = Username, password = RealJwtFactory.DefaultPassword, rememberMe = false },
+            new { credentials = Username, password = BookHubWebApplicationFactory.DefaultPassword, rememberMe = false },
             TestContext.Current.CancellationToken);
 
         await login.ShouldBeProblem(HttpStatusCode.BadRequest, "Invalid log in attempt!");
@@ -115,7 +114,7 @@ public sealed class AccountDeletionWorkflowIntegration : IAsyncLifetime
         //    soft-deleted.
         var reRegister = await this.factory.CreateClient().PostAsync(
             "/Identity/register/",
-            RealJwtFactory.RegisterForm(Username),
+            BookHubWebApplicationFactory.RegisterForm(Username),
             TestContext.Current.CancellationToken);
 
         await reRegister.ShouldBeProblem(
