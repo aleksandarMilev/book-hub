@@ -49,10 +49,10 @@ public sealed class PublicCatalogIntegration : IAsyncLifetime
     {
         var (book, _) = await this.SeedReviewedBook();
 
-        var response = await this.anonymous.GetAsync($"/Books/{book.Id}/");
+        var response = await this.anonymous.GetAsync($"/Books/{book.Id}/", TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var details = await response.Content.ReadFromJsonAsync<BookDetailsServiceModel>();
+        var details = await response.Content.ReadFromJsonAsync<BookDetailsServiceModel>(cancellationToken: TestContext.Current.CancellationToken);
         details!.Title.Should().Be("Public book");
         details.Author!.Name.Should().Be("Public author");
         details.Reviews.Select(r => r.CreatorId).Should().BeEquivalentTo([CreatorId, ReaderId]);
@@ -65,7 +65,7 @@ public sealed class PublicCatalogIntegration : IAsyncLifetime
         var (book, _) = await this.SeedReviewedBook();
         var reader = this.factory.CreateUserClient(ReaderId, "reader");
 
-        var details = await reader.GetFromJsonAsync<BookDetailsServiceModel>($"/Books/{book.Id}/");
+        var details = await reader.GetFromJsonAsync<BookDetailsServiceModel>($"/Books/{book.Id}/", cancellationToken: TestContext.Current.CancellationToken);
 
         details!.Reviews.Should().HaveCount(2);
         details.ReadingStatus.Should().Be((int)ReadingListStatus.CurrentlyReading);
@@ -85,8 +85,8 @@ public sealed class PublicCatalogIntegration : IAsyncLifetime
             return (genre.Id, author.Id, approved.Id);
         });
 
-        var byGenre = await this.anonymous.GetFromJsonAsync<PaginatedModel<BookServiceModel>>($"/Books/genre/{genreId}/");
-        var byAuthor = await this.anonymous.GetFromJsonAsync<PaginatedModel<BookServiceModel>>($"/Books/author/{authorId}/");
+        var byGenre = await this.anonymous.GetFromJsonAsync<PaginatedModel<BookServiceModel>>($"/Books/genre/{genreId}/", cancellationToken: TestContext.Current.CancellationToken);
+        var byAuthor = await this.anonymous.GetFromJsonAsync<PaginatedModel<BookServiceModel>>($"/Books/author/{authorId}/", cancellationToken: TestContext.Current.CancellationToken);
 
         byGenre!.Items.Select(b => b.Id).Should().Equal(approvedId);
         byGenre.TotalItems.Should().Be(1);
@@ -107,10 +107,10 @@ public sealed class PublicCatalogIntegration : IAsyncLifetime
             return (author.Id, approved.Id);
         });
 
-        var response = await this.anonymous.GetAsync($"/Authors/{authorId}/");
+        var response = await this.anonymous.GetAsync($"/Authors/{authorId}/", TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var details = await response.Content.ReadFromJsonAsync<AuthorDetailsServiceModel>();
+        var details = await response.Content.ReadFromJsonAsync<AuthorDetailsServiceModel>(cancellationToken: TestContext.Current.CancellationToken);
         details!.Name.Should().Be("Public author");
         details.TopBooks.Select(b => b.Id).Should().Equal(approvedId);
     }
@@ -128,8 +128,8 @@ public sealed class PublicCatalogIntegration : IAsyncLifetime
             return (genre.Id, approved.Id);
         });
 
-        var names = await this.anonymous.GetFromJsonAsync<GenreNameServiceModel[]>("/Genres/");
-        var details = await this.anonymous.GetFromJsonAsync<GenreDetailsServiceModel>($"/Genres/{genreId}/");
+        var names = await this.anonymous.GetFromJsonAsync<GenreNameServiceModel[]>("/Genres/", cancellationToken: TestContext.Current.CancellationToken);
+        var details = await this.anonymous.GetFromJsonAsync<GenreDetailsServiceModel>($"/Genres/{genreId}/", cancellationToken: TestContext.Current.CancellationToken);
 
         names!.Select(g => g.Id).Should().Contain([genreId, TestSeeder.OtherGenreId]);
         details!.Name.Should().Be("Public genre");
@@ -141,8 +141,8 @@ public sealed class PublicCatalogIntegration : IAsyncLifetime
     {
         var (book, review) = await this.SeedReviewedBook();
 
-        var page = await this.anonymous.GetFromJsonAsync<PaginatedModel<ReviewServiceModel>>($"/Reviews/book/{book.Id}/");
-        var single = await this.anonymous.GetFromJsonAsync<ReviewServiceModel>($"/Reviews/{review.Id}/");
+        var page = await this.anonymous.GetFromJsonAsync<PaginatedModel<ReviewServiceModel>>($"/Reviews/book/{book.Id}/", cancellationToken: TestContext.Current.CancellationToken);
+        var single = await this.anonymous.GetFromJsonAsync<ReviewServiceModel>($"/Reviews/{review.Id}/", cancellationToken: TestContext.Current.CancellationToken);
 
         page!.Items.Select(r => r.CreatorId).Should().BeEquivalentTo([CreatorId, ReaderId]);
         page.TotalItems.Should().Be(2);
@@ -169,9 +169,9 @@ public sealed class PublicCatalogIntegration : IAsyncLifetime
             return (book.Id, author.Id, genre.Id);
         });
 
-        var books = await this.anonymous.GetFromJsonAsync<PaginatedModel<SearchBookServiceModel>>("/Search/books/?searchTerm=zephyr");
-        var authors = await this.anonymous.GetFromJsonAsync<PaginatedModel<SearchAuthorServiceModel>>("/Search/authors/?searchTerm=zephyr");
-        var genres = await this.anonymous.GetFromJsonAsync<PaginatedModel<SearchGenreServiceModel>>("/Search/genres/?searchTerm=zephyr");
+        var books = await this.anonymous.GetFromJsonAsync<PaginatedModel<SearchBookServiceModel>>("/Search/books/?searchTerm=zephyr", cancellationToken: TestContext.Current.CancellationToken);
+        var authors = await this.anonymous.GetFromJsonAsync<PaginatedModel<SearchAuthorServiceModel>>("/Search/authors/?searchTerm=zephyr", cancellationToken: TestContext.Current.CancellationToken);
+        var genres = await this.anonymous.GetFromJsonAsync<PaginatedModel<SearchGenreServiceModel>>("/Search/genres/?searchTerm=zephyr", cancellationToken: TestContext.Current.CancellationToken);
 
         books!.Items.Select(b => b.Id).Should().Equal(bookId);
         authors!.Items.Select(a => a.Id).Should().Equal(authorId);
@@ -189,8 +189,8 @@ public sealed class PublicCatalogIntegration : IAsyncLifetime
             return (book.Id, author.Id);
         });
 
-        await (await this.anonymous.GetAsync($"/Books/{bookId}/")).ShouldBeProblem(HttpStatusCode.NotFound);
-        await (await this.anonymous.GetAsync($"/Authors/{authorId}/")).ShouldBeProblem(HttpStatusCode.NotFound);
+        await (await this.anonymous.GetAsync($"/Books/{bookId}/", TestContext.Current.CancellationToken)).ShouldBeProblem(HttpStatusCode.NotFound);
+        await (await this.anonymous.GetAsync($"/Authors/{authorId}/", TestContext.Current.CancellationToken)).ShouldBeProblem(HttpStatusCode.NotFound);
     }
 
     [Fact]
@@ -210,13 +210,13 @@ public sealed class PublicCatalogIntegration : IAsyncLifetime
             return (deletedBook.Id, deletedAuthor.Id, deletedGenre.Id);
         });
 
-        await (await this.anonymous.GetAsync($"/Books/{deletedBookId}/")).ShouldBeProblem(HttpStatusCode.NotFound);
-        await (await this.anonymous.GetAsync($"/Authors/{deletedAuthorId}/")).ShouldBeProblem(HttpStatusCode.NotFound);
-        await (await this.anonymous.GetAsync($"/Genres/{deletedGenreId}/")).ShouldBeProblem(HttpStatusCode.NotFound);
-        await (await this.anonymous.GetAsync($"/Reviews/{review.Id}/")).ShouldBeProblem(HttpStatusCode.NotFound);
+        await (await this.anonymous.GetAsync($"/Books/{deletedBookId}/", TestContext.Current.CancellationToken)).ShouldBeProblem(HttpStatusCode.NotFound);
+        await (await this.anonymous.GetAsync($"/Authors/{deletedAuthorId}/", TestContext.Current.CancellationToken)).ShouldBeProblem(HttpStatusCode.NotFound);
+        await (await this.anonymous.GetAsync($"/Genres/{deletedGenreId}/", TestContext.Current.CancellationToken)).ShouldBeProblem(HttpStatusCode.NotFound);
+        await (await this.anonymous.GetAsync($"/Reviews/{review.Id}/", TestContext.Current.CancellationToken)).ShouldBeProblem(HttpStatusCode.NotFound);
 
-        var genres = await this.anonymous.GetFromJsonAsync<GenreNameServiceModel[]>("/Genres/");
-        var reviews = await this.anonymous.GetFromJsonAsync<PaginatedModel<ReviewServiceModel>>($"/Reviews/book/{book.Id}/");
+        var genres = await this.anonymous.GetFromJsonAsync<GenreNameServiceModel[]>("/Genres/", cancellationToken: TestContext.Current.CancellationToken);
+        var reviews = await this.anonymous.GetFromJsonAsync<PaginatedModel<ReviewServiceModel>>($"/Reviews/book/{book.Id}/", cancellationToken: TestContext.Current.CancellationToken);
 
         genres!.Select(g => g.Id).Should().NotContain(deletedGenreId);
         reviews!.Items.Select(r => r.Id).Should().NotContain(review.Id).And.HaveCount(1);
@@ -230,8 +230,8 @@ public sealed class PublicCatalogIntegration : IAsyncLifetime
 
         foreach (var client in new[] { this.anonymous, nonCreator })
         {
-            await (await client.GetAsync($"/Reviews/book/{bookId}/")).ShouldBeProblem(HttpStatusCode.NotFound);
-            await (await client.GetAsync($"/Reviews/{reviewId}/")).ShouldBeProblem(HttpStatusCode.NotFound);
+            await (await client.GetAsync($"/Reviews/book/{bookId}/", TestContext.Current.CancellationToken)).ShouldBeProblem(HttpStatusCode.NotFound);
+            await (await client.GetAsync($"/Reviews/{reviewId}/", TestContext.Current.CancellationToken)).ShouldBeProblem(HttpStatusCode.NotFound);
         }
     }
 
@@ -244,8 +244,8 @@ public sealed class PublicCatalogIntegration : IAsyncLifetime
 
         foreach (var client in new[] { creator, admin })
         {
-            var page = await client.GetFromJsonAsync<PaginatedModel<ReviewServiceModel>>($"/Reviews/book/{bookId}/");
-            var single = await client.GetFromJsonAsync<ReviewServiceModel>($"/Reviews/{reviewId}/");
+            var page = await client.GetFromJsonAsync<PaginatedModel<ReviewServiceModel>>($"/Reviews/book/{bookId}/", cancellationToken: TestContext.Current.CancellationToken);
+            var single = await client.GetFromJsonAsync<ReviewServiceModel>($"/Reviews/{reviewId}/", cancellationToken: TestContext.Current.CancellationToken);
 
             page!.Items.Select(r => r.Id).Should().Equal(reviewId);
             single!.Id.Should().Be(reviewId);
@@ -255,7 +255,7 @@ public sealed class PublicCatalogIntegration : IAsyncLifetime
     [Fact]
     public async Task ReviewsOfAMissingBook_ShouldBeNotFound()
     {
-        var response = await this.anonymous.GetAsync($"/Reviews/book/{Guid.NewGuid()}/");
+        var response = await this.anonymous.GetAsync($"/Reviews/book/{Guid.NewGuid()}/", TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(HttpStatusCode.NotFound);
     }
@@ -284,14 +284,14 @@ public sealed class PublicCatalogIntegration : IAsyncLifetime
             return book.Id;
         });
 
-        var details = await this.anonymous.GetFromJsonAsync<BookDetailsServiceModel>($"/Books/{bookId}/");
+        var details = await this.anonymous.GetFromJsonAsync<BookDetailsServiceModel>($"/Books/{bookId}/", cancellationToken: TestContext.Current.CancellationToken);
 
         details!.Title.Should().Be("Original title");
 
         if (creatorId is not null)
         {
             var creator = this.factory.CreateUserClient(CreatorId, "creator");
-            var creatorView = await creator.GetFromJsonAsync<BookDetailsServiceModel>($"/Books/{bookId}/");
+            var creatorView = await creator.GetFromJsonAsync<BookDetailsServiceModel>($"/Books/{bookId}/", cancellationToken: TestContext.Current.CancellationToken);
 
             creatorView!.Title.Should().Be("Pending title");
         }
@@ -321,14 +321,14 @@ public sealed class PublicCatalogIntegration : IAsyncLifetime
             return author.Id;
         });
 
-        var details = await this.anonymous.GetFromJsonAsync<AuthorDetailsServiceModel>($"/Authors/{authorId}/");
+        var details = await this.anonymous.GetFromJsonAsync<AuthorDetailsServiceModel>($"/Authors/{authorId}/", cancellationToken: TestContext.Current.CancellationToken);
 
         details!.Name.Should().Be("Original name");
 
         if (creatorId is not null)
         {
             var creator = this.factory.CreateUserClient(CreatorId, "creator");
-            var creatorView = await creator.GetFromJsonAsync<AuthorDetailsServiceModel>($"/Authors/{authorId}/");
+            var creatorView = await creator.GetFromJsonAsync<AuthorDetailsServiceModel>($"/Authors/{authorId}/", cancellationToken: TestContext.Current.CancellationToken);
 
             creatorView!.Name.Should().Be("Pending name");
         }
@@ -341,7 +341,7 @@ public sealed class PublicCatalogIntegration : IAsyncLifetime
     [InlineData("/Authors/names/")]
     public async Task ProfilesAndAuthorNames_ShouldStillRequireLogin(string url)
     {
-        var response = await this.anonymous.GetAsync(url);
+        var response = await this.anonymous.GetAsync(url, TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(HttpStatusCode.Unauthorized);
     }

@@ -31,7 +31,7 @@ public sealed class ReadingChallengesIntegration : IAsyncLifetime
     {
         var httpClient = this.httpClientFactory.CreateUserClient(UserId);
 
-        var response = await httpClient.GetAsync(url);
+        var response = await httpClient.GetAsync(url, TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(
             HttpStatusCode.BadRequest,
@@ -43,8 +43,8 @@ public sealed class ReadingChallengesIntegration : IAsyncLifetime
     {
         var httpClient = this.httpClientFactory.CreateUserClient(UserId);
 
-        var first = await httpClient.PostAsync("/ReadingChallenges/check-in/", content: null);
-        var second = await httpClient.PostAsync("/ReadingChallenges/check-in/", content: null);
+        var first = await httpClient.PostAsync("/ReadingChallenges/check-in/", content: null, cancellationToken: TestContext.Current.CancellationToken);
+        var second = await httpClient.PostAsync("/ReadingChallenges/check-in/", content: null, cancellationToken: TestContext.Current.CancellationToken);
 
         first.StatusCode.Should().Be(HttpStatusCode.NoContent);
 

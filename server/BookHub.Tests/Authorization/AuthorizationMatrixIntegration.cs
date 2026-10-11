@@ -51,7 +51,7 @@ public sealed class AuthorizationMatrixIntegration(AuthorizationMatrixFixture fi
         var httpClient = this.httpClientFactory.CreateAnonymousClient();
 
         using var request = ProtectedByKey(endpoint).ToRequest(this.seed);
-        var response = await httpClient.SendAsync(request);
+        var response = await httpClient.SendAsync(request, TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(HttpStatusCode.Unauthorized);
     }
@@ -63,7 +63,7 @@ public sealed class AuthorizationMatrixIntegration(AuthorizationMatrixFixture fi
         var httpClient = this.httpClientFactory.CreateUserClient(OwnerId);
 
         using var request = ProtectedByKey(endpoint).ToRequest(this.seed);
-        var response = await httpClient.SendAsync(request);
+        var response = await httpClient.SendAsync(request, TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(HttpStatusCode.Forbidden);
     }
@@ -76,7 +76,7 @@ public sealed class AuthorizationMatrixIntegration(AuthorizationMatrixFixture fi
         var httpClient = this.httpClientFactory.CreateUserClient(OtherUserId);
 
         using var request = protectedEndpoint.ToRequest(this.seed);
-        var response = await httpClient.SendAsync(request);
+        var response = await httpClient.SendAsync(request, TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(protectedEndpoint.WrongUserStatus!.Value);
     }
@@ -95,7 +95,7 @@ public sealed class AuthorizationMatrixIntegration(AuthorizationMatrixFixture fi
         };
 
         using var request = protectedEndpoint.ToRequest(this.seed);
-        var response = await httpClient.SendAsync(request);
+        var response = await httpClient.SendAsync(request, TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().NotBe(HttpStatusCode.Unauthorized);
         response.StatusCode.Should().NotBe(HttpStatusCode.Forbidden);
@@ -116,7 +116,7 @@ public sealed class AuthorizationMatrixIntegration(AuthorizationMatrixFixture fi
 
         var method = publicEndpoint.Method == "*" ? HttpMethod.Get : new HttpMethod(publicEndpoint.Method);
         using var request = new HttpRequestMessage(method, publicEndpoint.Url(this.seed));
-        var response = await httpClient.SendAsync(request);
+        var response = await httpClient.SendAsync(request, TestContext.Current.CancellationToken);
 
         if (publicEndpoint.RequiresBody)
         {
@@ -137,7 +137,7 @@ public sealed class AuthorizationMatrixIntegration(AuthorizationMatrixFixture fi
         var httpClient = this.httpClientFactory.CreateAnonymousClient();
 
         // A tracked seed image under wwwroot: static files are served before authorization.
-        var response = await httpClient.GetAsync("/images/books/1984.jpg");
+        var response = await httpClient.GetAsync("/images/books/1984.jpg", TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         response.Content.Headers.ContentType?.MediaType.Should().Be("image/jpeg");
@@ -149,7 +149,7 @@ public sealed class AuthorizationMatrixIntegration(AuthorizationMatrixFixture fi
         // With the fallback policy, a request that matches no endpoint still needs a user.
         var httpClient = this.httpClientFactory.CreateAnonymousClient();
 
-        var response = await httpClient.GetAsync("/no-such-route/");
+        var response = await httpClient.GetAsync("/no-such-route/", TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(HttpStatusCode.Unauthorized);
     }

@@ -48,6 +48,12 @@ Git tag `chat-before-removal`. The `RemoveChat` migration dropped the `Chats`, `
 
 The welcome email is sent in the background through an in-memory, bounded queue (`Features/Emails/WelcomeEmailQueue`). The in-memory email queue loses pending emails on restart. Consider an outbox table after the Postgres migration, so queued emails survive restarts and failed sends can be retried.
 
+## Atomic registration (B-02 remainder)
+
+**Status:** done in Phase 2d (2026-10-11).
+
+When profile creation failed during registration, the new user was rolled back with `userManager.DeleteAsync`, which is a soft delete. The uniqueness checks include soft-deleted users, so that username and email stayed taken for good. Registration now creates the user and the profile in one database transaction (inside the execution strategy), so a failure leaves no user row and the same username and email can register again. `IdentityIntegration.Register_ShouldLeaveNoUser_AndAllowTheSameUsernameAndEmail_WhenProfileCreationFails` covers it. A profile image written before the failure stays on disk as an orphan, as before.
+
 ## Seed the "Other" genre (Postgres migration)
 
 **Status:** done in Phase 1.5 (2026-10).
@@ -68,7 +74,7 @@ The major upgrades in `server/BookHub.Tests/BookHub.Tests.csproj`:
 
 None of them has an open advisory.
 
-**Follow-up:** the new analyzer rule xUnit1051 ("pass `TestContext.Current.CancellationToken`") has about 300 hits and is suppressed in the csproj. Adopt it while the tests are restructured in Phase 2b/2c, then remove the `NoWarn`.
+**Follow-up (T-06):** done in Phase 2d (2026-10-11). The analyzer rule xUnit1051 ("pass `TestContext.Current.CancellationToken`") had 263 hits after the old unit tests were retired. They were fixed with the analyzer's own code fix (`dotnet format analyzers … --diagnostics xUnit1051`), and the `NoWarn` is gone, so the rule is enforced by the `-warnaserror` build.
 
 ## Account enumeration through registration
 

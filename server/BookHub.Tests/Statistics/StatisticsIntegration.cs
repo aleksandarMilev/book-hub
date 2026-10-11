@@ -27,11 +27,11 @@ public sealed class StatisticsIntegration : IAsyncLifetime
 
         var response = await this.factory
             .CreateAnonymousClient()
-            .GetAsync("/Statistics");
+            .GetAsync("/Statistics", TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var statistics = await response.Content.ReadFromJsonAsync<StatisticsServiceModel>();
+        var statistics = await response.Content.ReadFromJsonAsync<StatisticsServiceModel>(cancellationToken: TestContext.Current.CancellationToken);
         AssertVisibleCounts(statistics!);
     }
 
@@ -44,11 +44,11 @@ public sealed class StatisticsIntegration : IAsyncLifetime
 
         var admin = await this.factory
             .CreateAdminClient()
-            .GetFromJsonAsync<StatisticsServiceModel>("/Statistics");
+            .GetFromJsonAsync<StatisticsServiceModel>("/Statistics", cancellationToken: TestContext.Current.CancellationToken);
 
         var anonymous = await this.factory
             .CreateAnonymousClient()
-            .GetFromJsonAsync<StatisticsServiceModel>("/Statistics");
+            .GetFromJsonAsync<StatisticsServiceModel>("/Statistics", cancellationToken: TestContext.Current.CancellationToken);
 
         AssertVisibleCounts(admin!);
         AssertVisibleCounts(anonymous!);

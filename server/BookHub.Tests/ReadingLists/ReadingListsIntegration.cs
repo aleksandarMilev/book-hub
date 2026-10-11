@@ -47,8 +47,8 @@ public sealed class ReadingListsIntegration : IAsyncLifetime
 
         var httpClient = this.httpClientFactory.CreateUserClient(OtherUserId, "user");
 
-        var allResponse = await httpClient.GetAsync(AllUrl(OwnerId));
-        var lastResponse = await httpClient.GetAsync(LastCurrentlyReadingUrl(OwnerId));
+        var allResponse = await httpClient.GetAsync(AllUrl(OwnerId), TestContext.Current.CancellationToken);
+        var lastResponse = await httpClient.GetAsync(LastCurrentlyReadingUrl(OwnerId), TestContext.Current.CancellationToken);
 
         allResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
         lastResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -59,8 +59,8 @@ public sealed class ReadingListsIntegration : IAsyncLifetime
     {
         var httpClient = this.httpClientFactory.CreateUserClient(OtherUserId, "user");
 
-        var allResponse = await httpClient.GetAsync(AllUrl(OwnerId));
-        var lastResponse = await httpClient.GetAsync(LastCurrentlyReadingUrl(OwnerId));
+        var allResponse = await httpClient.GetAsync(AllUrl(OwnerId), TestContext.Current.CancellationToken);
+        var lastResponse = await httpClient.GetAsync(LastCurrentlyReadingUrl(OwnerId), TestContext.Current.CancellationToken);
 
         allResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
         lastResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -103,7 +103,7 @@ public sealed class ReadingListsIntegration : IAsyncLifetime
 
         var httpClient = this.httpClientFactory.CreateUserClient(OtherUserId, "user");
 
-        var response = await httpClient.GetAsync(AllUrl(OwnerId));
+        var response = await httpClient.GetAsync(AllUrl(OwnerId), TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(
             HttpStatusCode.NotFound,
@@ -115,12 +115,12 @@ public sealed class ReadingListsIntegration : IAsyncLifetime
     {
         var httpClient = this.httpClientFactory.CreateUserClient(OwnerId, "owner");
 
-        var response = await httpClient.GetAsync($"/ReadingLists?userId={OwnerId}&status=99");
+        var response = await httpClient.GetAsync($"/ReadingLists?userId={OwnerId}&status=99", TestContext.Current.CancellationToken);
 
         // Model binding rejects undefined enum values before the service runs.
         await response.ShouldBeProblem(HttpStatusCode.BadRequest);
 
-        (await response.Content.ReadAsStringAsync()).Should().Contain("status");
+        (await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken)).Should().Contain("status");
     }
 
     [Fact]
@@ -128,9 +128,7 @@ public sealed class ReadingListsIntegration : IAsyncLifetime
     {
         var httpClient = this.httpClientFactory.CreateUserClient(OwnerId, "owner");
 
-        var response = await httpClient.PostAsJsonAsync(
-            "/ReadingLists",
-            new { bookId = this.bookId, status = ReadingListStatus.CurrentlyReading });
+        var response = await httpClient.PostAsJsonAsync("/ReadingLists", new { bookId = this.bookId, status = ReadingListStatus.CurrentlyReading }, cancellationToken: TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(
             HttpStatusCode.Conflict,
@@ -142,9 +140,7 @@ public sealed class ReadingListsIntegration : IAsyncLifetime
     {
         var httpClient = this.httpClientFactory.CreateUserClient(OwnerId, "owner");
 
-        var response = await httpClient.PostAsJsonAsync(
-            "/ReadingLists",
-            new { bookId = Guid.NewGuid(), status = ReadingListStatus.ToRead });
+        var response = await httpClient.PostAsJsonAsync("/ReadingLists", new { bookId = Guid.NewGuid(), status = ReadingListStatus.ToRead }, cancellationToken: TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(
             HttpStatusCode.BadRequest,
@@ -165,7 +161,7 @@ public sealed class ReadingListsIntegration : IAsyncLifetime
             }),
         };
 
-        var response = await httpClient.SendAsync(request);
+        var response = await httpClient.SendAsync(request, TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(
             HttpStatusCode.NotFound,

@@ -38,7 +38,7 @@ public sealed class GenresIntegration : IAsyncLifetime
         // The catalog is public (Phase 2c).
         var httpClient = this.httpClientFactory.CreateClient();
 
-        var response = await httpClient.GetAsync("/Genres/");
+        var response = await httpClient.GetAsync("/Genres/", TestContext.Current.CancellationToken);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
@@ -49,7 +49,7 @@ public sealed class GenresIntegration : IAsyncLifetime
         var httpClient = this.httpClientFactory.CreateClient();
         var id = Guid.NewGuid();
 
-        var response = await httpClient.GetAsync($"/Genres/{id}/");
+        var response = await httpClient.GetAsync($"/Genres/{id}/", TestContext.Current.CancellationToken);
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
@@ -75,12 +75,12 @@ public sealed class GenresIntegration : IAsyncLifetime
 
         var httpClient = this.httpClientFactory.CreateUserClient();
 
-        var response = await httpClient.GetAsync("/Genres/");
+        var response = await httpClient.GetAsync("/Genres/", TestContext.Current.CancellationToken);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var body = await response
             .Content
-            .ReadFromJsonAsync<IEnumerable<GenreNameServiceModel>>();
+            .ReadFromJsonAsync<IEnumerable<GenreNameServiceModel>>(cancellationToken: TestContext.Current.CancellationToken);
 
         body.Should().NotBeNull();
 
@@ -98,7 +98,7 @@ public sealed class GenresIntegration : IAsyncLifetime
         var httpClient = this.httpClientFactory.CreateUserClient();
         var nonExistingId = Guid.NewGuid();
 
-        var response = await httpClient.GetAsync($"/Genres/{nonExistingId}/");
+        var response = await httpClient.GetAsync($"/Genres/{nonExistingId}/", TestContext.Current.CancellationToken);
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
@@ -114,7 +114,7 @@ public sealed class GenresIntegration : IAsyncLifetime
 
         var httpClient = this.httpClientFactory.CreateUserClient();
 
-        var response = await httpClient.GetAsync($"/Genres/{genreId}/");
+        var response = await httpClient.GetAsync($"/Genres/{genreId}/", TestContext.Current.CancellationToken);
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
@@ -148,12 +148,12 @@ public sealed class GenresIntegration : IAsyncLifetime
 
         var httpClient = this.httpClientFactory.CreateUserClient();
 
-        var response = await httpClient.GetAsync($"/Genres/{genreId}/");
+        var response = await httpClient.GetAsync($"/Genres/{genreId}/", TestContext.Current.CancellationToken);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var body = await response
             .Content
-            .ReadFromJsonAsync<GenreDetailsServiceModel>();
+            .ReadFromJsonAsync<GenreDetailsServiceModel>(cancellationToken: TestContext.Current.CancellationToken);
 
         body.Should().NotBeNull();
         body.Id.Should().Be(genreId);
@@ -173,6 +173,10 @@ public sealed class GenresIntegration : IAsyncLifetime
         topBooks[0].AverageRating.Should().Be(5.0);
         topBooks[1].AverageRating.Should().Be(4.6);
         topBooks[2].AverageRating.Should().Be(3.8);
+
+        topBooks
+            .Should()
+            .OnlyContain(b => b.Genres.Any(g => g.Id == genreId));
     }
 
     private async Task<Guid> SeedGenre(

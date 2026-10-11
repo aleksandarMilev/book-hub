@@ -36,23 +36,23 @@ public sealed class ArticlesIntegration : IAsyncLifetime
 
         var url = $"/Articles/{articleId}/";
 
-        var firstResponse = await httpClient.GetAsync(url);
+        var firstResponse = await httpClient.GetAsync(url, TestContext.Current.CancellationToken);
         firstResponse.IsSuccessStatusCode.Should().BeTrue();
 
         var firstResponseBody = await firstResponse
             .Content
-            .ReadFromJsonAsync<ArticleDetailsServiceModel>();
+            .ReadFromJsonAsync<ArticleDetailsServiceModel>(cancellationToken: TestContext.Current.CancellationToken);
 
         firstResponseBody.Should().NotBeNull();
         firstResponseBody!.Id.Should().Be(articleId);
         firstResponseBody.Views.Should().Be(1);
 
-        var secondResponse = await httpClient.GetAsync(url);
+        var secondResponse = await httpClient.GetAsync(url, TestContext.Current.CancellationToken);
         secondResponse.IsSuccessStatusCode.Should().BeTrue();
 
         var secondResponseBody = await secondResponse
             .Content
-            .ReadFromJsonAsync<ArticleDetailsServiceModel>();
+            .ReadFromJsonAsync<ArticleDetailsServiceModel>(cancellationToken: TestContext.Current.CancellationToken);
 
         secondResponseBody!.Views.Should().Be(2);
 
@@ -67,7 +67,7 @@ public sealed class ArticlesIntegration : IAsyncLifetime
         var articleDbModel = await data
             .Articles
             .IgnoreQueryFilters()
-            .SingleAsync(a => a.Id == articleId);
+            .SingleAsync(a => a.Id == articleId, cancellationToken: TestContext.Current.CancellationToken);
 
         articleDbModel.Views.Should().Be(2);
     }
@@ -78,7 +78,7 @@ public sealed class ArticlesIntegration : IAsyncLifetime
         var httpClient = this.httpClientFactory.CreateClient();
         var nonExistingId = Guid.NewGuid();
 
-        var response = await httpClient.GetAsync($"/Articles/{nonExistingId}/");
+        var response = await httpClient.GetAsync($"/Articles/{nonExistingId}/", TestContext.Current.CancellationToken);
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
@@ -92,7 +92,7 @@ public sealed class ArticlesIntegration : IAsyncLifetime
             intro: "A sufficiently long valid introduction",
             content: new string('c', 200));
 
-        var response = await httpClient.PostAsync("/Administrator/Articles", formData);
+        var response = await httpClient.PostAsync("/Administrator/Articles", formData, TestContext.Current.CancellationToken);
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
 
@@ -102,8 +102,7 @@ public sealed class ArticlesIntegration : IAsyncLifetime
         var articleId = await this.SeedArticle();
         var httpClient = this.httpClientFactory.CreateUserClient();
 
-        var response = await httpClient.DeleteAsync(
-            $"/Administrator/Articles/{articleId}/");
+        var response = await httpClient.DeleteAsync($"/Administrator/Articles/{articleId}/", TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
@@ -115,12 +114,12 @@ public sealed class ArticlesIntegration : IAsyncLifetime
         var artcileId = await this.SeedArticle(views: 5);
         var httpClient = this.httpClientFactory.CreateAdminClient();
 
-        var response = await httpClient.GetAsync($"/Administrator/Articles/{artcileId}/");
+        var response = await httpClient.GetAsync($"/Administrator/Articles/{artcileId}/", TestContext.Current.CancellationToken);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var body = await response
             .Content
-            .ReadFromJsonAsync<ArticleDetailsServiceModel>();
+            .ReadFromJsonAsync<ArticleDetailsServiceModel>(cancellationToken: TestContext.Current.CancellationToken);
 
         body.Should().NotBeNull();
         body!.Views.Should().Be(5);
@@ -137,7 +136,7 @@ public sealed class ArticlesIntegration : IAsyncLifetime
         var articleDbModel = await data
             .Articles
             .IgnoreQueryFilters()
-            .SingleAsync(a => a.Id == artcileId);
+            .SingleAsync(a => a.Id == artcileId, cancellationToken: TestContext.Current.CancellationToken);
 
         articleDbModel.Views.Should().Be(5);
     }
@@ -151,13 +150,13 @@ public sealed class ArticlesIntegration : IAsyncLifetime
             intro: "A sufficiently long valid introduction",
             content: new string('c', 200));
 
-        var response = await httpClient.PostAsync("/Administrator/Articles", formData);
+        var response = await httpClient.PostAsync("/Administrator/Articles", formData, TestContext.Current.CancellationToken);
         response.StatusCode.Should().Be(HttpStatusCode.Created);
         response.Headers.Location.Should().NotBeNull();
 
         var createdArticle = await response
             .Content
-            .ReadFromJsonAsync<ArticleDetailsServiceModel>();
+            .ReadFromJsonAsync<ArticleDetailsServiceModel>(cancellationToken: TestContext.Current.CancellationToken);
 
         createdArticle.Should().NotBeNull();
         createdArticle.Id.Should().NotBeEmpty();
@@ -182,9 +181,10 @@ public sealed class ArticlesIntegration : IAsyncLifetime
         var articleDbModel = await data
             .Articles
             .IgnoreQueryFilters()
-            .SingleAsync(a => a.Id == createdArticle.Id);
+            .SingleAsync(a => a.Id == createdArticle.Id, cancellationToken: TestContext.Current.CancellationToken);
 
         articleDbModel.ImagePath.Should().Be(DefaultImagePath);
+        articleDbModel.CreatedOn.Should().NotBe(default);
     }
 
     [Fact]
@@ -199,12 +199,12 @@ public sealed class ArticlesIntegration : IAsyncLifetime
             intro: "A sufficiently long valid introduction",
             content: new string('c', 200));
 
-        var response = await httpClient.PostAsync("/Administrator/Articles", formData);
+        var response = await httpClient.PostAsync("/Administrator/Articles", formData, TestContext.Current.CancellationToken);
         response.StatusCode.Should().Be(HttpStatusCode.Created);
 
         var createdArticle = await response
             .Content
-            .ReadFromJsonAsync<ArticleDetailsServiceModel>();
+            .ReadFromJsonAsync<ArticleDetailsServiceModel>(cancellationToken: TestContext.Current.CancellationToken);
 
         createdArticle.Should().NotBeNull();
         createdArticle.ImagePath.Should().NotBe(DefaultImagePath);
@@ -227,7 +227,7 @@ public sealed class ArticlesIntegration : IAsyncLifetime
         var articleDbModel = await data
             .Articles
             .IgnoreQueryFilters()
-            .SingleAsync(a => a.Id == createdArticle.Id);
+            .SingleAsync(a => a.Id == createdArticle.Id, cancellationToken: TestContext.Current.CancellationToken);
 
         articleDbModel.ImagePath.Should().Be(createdArticle.ImagePath);
     }
@@ -242,9 +242,7 @@ public sealed class ArticlesIntegration : IAsyncLifetime
             intro: "short",
             content: "too short");
 
-        var response = await httpClient.PostAsync(
-            "/Administrator/Articles",
-            formData);
+        var response = await httpClient.PostAsync("/Administrator/Articles", formData, TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         response
@@ -262,14 +260,14 @@ public sealed class ArticlesIntegration : IAsyncLifetime
         var articleId = await this.SeedArticle();
 
         var httpClient = this.httpClientFactory.CreateAdminClient();
+        var imageWriterMock = this.httpClientFactory.GetImageWriterMock();
+
         var formData = BuildArticleForm(
             title: "Edited valid title long enough",
             intro: "Edited valid introduction long enough",
             content: new string('z', 250));
 
-        var response = await httpClient.PutAsync(
-            $"/Administrator/Articles/{articleId}/",
-            formData);
+        var response = await httpClient.PutAsync($"/Administrator/Articles/{articleId}/", formData, TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
@@ -285,11 +283,14 @@ public sealed class ArticlesIntegration : IAsyncLifetime
         var articleDbModel = await data
             .Articles
             .IgnoreQueryFilters()
-            .SingleAsync(a => a.Id == articleId);
+            .SingleAsync(a => a.Id == articleId, cancellationToken: TestContext.Current.CancellationToken);
 
         articleDbModel.Title.Should().Be("Edited valid title long enough");
         articleDbModel.ImagePath.Should().Be("/images/articles/seed.jpg");
         articleDbModel.ModifiedOn.Should().NotBeNull();
+
+        // No new image, so the current one is kept and not deleted.
+        imageWriterMock.DeleteCalls.Should().Be(0);
     }
 
     [Fact]
@@ -303,13 +304,13 @@ public sealed class ArticlesIntegration : IAsyncLifetime
             intro: "Edited valid introduction long enough",
             content: new string('z', 250));
 
-        var response = await httpClient.PutAsync(
-            $"/Administrator/Articles/{nonExistingId}/",
-            formData);
+        var response = await httpClient.PutAsync($"/Administrator/Articles/{nonExistingId}/", formData, TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(
             HttpStatusCode.NotFound,
             "The article was not found.");
+
+        this.httpClientFactory.GetImageWriterMock().WriteCalls.Should().Be(0);
     }
 
     [Fact]
@@ -325,9 +326,7 @@ public sealed class ArticlesIntegration : IAsyncLifetime
             intro: "Edited valid introduction long enough",
             content: new string('z', 250));
 
-        var response = await httpClient.PutAsync(
-            $"/Administrator/Articles/{articleId}/",
-            formData);
+        var response = await httpClient.PutAsync($"/Administrator/Articles/{articleId}/", formData, TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
@@ -349,7 +348,7 @@ public sealed class ArticlesIntegration : IAsyncLifetime
         var articleDbModel = await data
             .Articles
             .IgnoreQueryFilters()
-            .SingleAsync(a => a.Id == articleId);
+            .SingleAsync(a => a.Id == articleId, cancellationToken: TestContext.Current.CancellationToken);
 
         articleDbModel.ImagePath.Should().NotBe("/images/articles/old.jpg");
         articleDbModel.ImagePath.Should().StartWith("/images/articles/test-");
@@ -367,9 +366,7 @@ public sealed class ArticlesIntegration : IAsyncLifetime
             intro: "short",
             content: "too short");
 
-        var response = await httpClient.PutAsync(
-            $"/Administrator/Articles/{articleId}/",
-            formData);
+        var response = await httpClient.PutAsync($"/Administrator/Articles/{articleId}/", formData, TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         response
@@ -387,8 +384,7 @@ public sealed class ArticlesIntegration : IAsyncLifetime
         var articleId = await this.SeedArticle();
         var httpClient = this.httpClientFactory.CreateAdminClient();
 
-        var response = await httpClient.DeleteAsync(
-            $"/Administrator/Articles/{articleId}/");
+        var response = await httpClient.DeleteAsync($"/Administrator/Articles/{articleId}/", TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
@@ -403,14 +399,14 @@ public sealed class ArticlesIntegration : IAsyncLifetime
 
         var articlesCount = await data
             .Articles
-            .CountAsync(a => a.Id == articleId);
+            .CountAsync(a => a.Id == articleId, cancellationToken: TestContext.Current.CancellationToken);
 
         articlesCount.Should().Be(0);
 
         var deletedArticle = await data
             .Articles
             .IgnoreQueryFilters()
-            .SingleAsync(a => a.Id == articleId);
+            .SingleAsync(a => a.Id == articleId, cancellationToken: TestContext.Current.CancellationToken);
 
         deletedArticle.IsDeleted.Should().BeTrue();
         deletedArticle.DeletedOn.Should().NotBeNull();
@@ -422,8 +418,7 @@ public sealed class ArticlesIntegration : IAsyncLifetime
         var httpClient = this.httpClientFactory.CreateAdminClient();
         var nonExistingId = Guid.NewGuid();
 
-        var response = await httpClient.DeleteAsync(
-            $"/Administrator/Articles/{nonExistingId}/");
+        var response = await httpClient.DeleteAsync($"/Administrator/Articles/{nonExistingId}/", TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(
             HttpStatusCode.NotFound,

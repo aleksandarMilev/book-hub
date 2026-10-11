@@ -14,9 +14,12 @@ public sealed class BookEditConfiguration : IEntityTypeConfiguration<BookEditDbM
         builder
             .HasKey(e => e.Id);
 
+        // One live pending edit per book. Approved and rejected edits are soft-deleted,
+        // so they must not count, or the next edit would get a 409 (B-26).
         builder
             .HasIndex(e => e.BookId)
-            .IsUnique();
+            .IsUnique()
+            .HasFilter("NOT \"IsDeleted\"");
 
         builder
             .Property(e => e.Title)

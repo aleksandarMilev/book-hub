@@ -446,6 +446,10 @@ public class BookService(
                 b => b.BookId == bookId,
                 cancellationToken);
 
+        // Read before either branch: a creator can edit their book while it still awaits
+        // approval, and approving it then goes through the pending-edit branch (B-24).
+        var wasPreviouslyUnapproved = !dbModel.IsApproved;
+
         if (pending is not null)
         {
             var oldBookImagePath = dbModel.ImagePath;
@@ -498,10 +502,15 @@ public class BookService(
                 receiverId: dbModel.CreatorId!,
                 cancellationToken);
 
+            if (wasPreviouslyUnapproved)
+            {
+                await profileService.IncrementCreatedBooksCount(
+                    dbModel.CreatorId!,
+                    cancellationToken);
+            }
+
             return true;
         }
-
-        var wasPreviouslyUnapproved = !dbModel.IsApproved;
 
         dbModel.IsApproved = true;
         await data.SaveChangesAsync(cancellationToken);
@@ -658,8 +667,21 @@ public class BookService(
             defaultImagePath: null,
             cancellationToken);
 
-        // MapBookAndGenres saves inside its transaction, so the tracked book changes
-        // and the new genre mapping commit together.
+        // The admin's edit supersedes a pending edit (B-25). Left in place, the creator would
+        // keep seeing it, and approving it later would overwrite the admin's changes.
+        var pending = await data
+            .BookEdits
+            .FirstOrDefaultAsync(
+                e => e.BookId == dbModel.Id,
+                cancellationToken);
+
+        if (pending is not null)
+        {
+            data.BookEdits.Remove(pending);
+        }
+
+        // MapBookAndGenres saves inside its transaction, so the tracked book changes, the
+        // removed pending edit and the new genre mapping commit together.
         await this.MapBookAndGenres(
             dbModel.Id,
             genreIds,
@@ -680,6 +702,26 @@ public class BookService(
             imageWriter.Delete(
                 resourceName: ImagePathPrefix,
                 imagePath: oldImagePath,
+                DefaultImagePath);
+        }
+
+        // A pending image is its own file unless the pending edit reused the book's image.
+        var shouldDeletePendingImage =
+            pending is not null &&
+            !string.Equals(
+                pending.ImagePath,
+                oldImagePath,
+                StringComparison.OrdinalIgnoreCase) &&
+            !string.Equals(
+                pending.ImagePath,
+                DefaultImagePath,
+                StringComparison.OrdinalIgnoreCase);
+
+        if (shouldDeletePendingImage)
+        {
+            imageWriter.Delete(
+                resourceName: PendingImagePathPrefix,
+                imagePath: pending!.ImagePath,
                 DefaultImagePath);
         }
 

@@ -260,7 +260,8 @@ namespace BookHub.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("NOT \"IsDeleted\"");
 
                     b.ToTable("AuthorEdits");
                 });
@@ -427,7 +428,8 @@ namespace BookHub.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BookId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("NOT \"IsDeleted\"");
 
                     b.ToTable("BookEdits");
                 });

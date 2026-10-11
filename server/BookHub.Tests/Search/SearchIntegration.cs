@@ -197,11 +197,11 @@ public sealed class SearchIntegration : IAsyncLifetime
 
         foreach (var term in new[] { "&|!():*", "' \\ <-> !!", ":*" })
         {
-            var response = await this.client.GetAsync(Url(endpoint, term));
+            var response = await this.client.GetAsync(Url(endpoint, term), TestContext.Current.CancellationToken);
 
             response.StatusCode.Should().Be(HttpStatusCode.OK, $"term {term}");
 
-            var page = await response.Content.ReadFromJsonAsync<Page<object>>();
+            var page = await response.Content.ReadFromJsonAsync<Page<object>>(cancellationToken: TestContext.Current.CancellationToken);
             page!.Items.Should().BeEmpty($"term {term}");
             page.TotalItems.Should().Be(0, $"term {term}");
         }
@@ -217,11 +217,9 @@ public sealed class SearchIntegration : IAsyncLifetime
     {
         await this.SeedOneOfEach();
 
-        var withoutTerm = await this.client.GetFromJsonAsync<Page<object>>(
-            $"/Search/{endpoint}/");
+        var withoutTerm = await this.client.GetFromJsonAsync<Page<object>>($"/Search/{endpoint}/", cancellationToken: TestContext.Current.CancellationToken);
 
-        var blankTerm = await this.client.GetFromJsonAsync<Page<object>>(
-            Url(endpoint, "   "));
+        var blankTerm = await this.client.GetFromJsonAsync<Page<object>>(Url(endpoint, "   "), cancellationToken: TestContext.Current.CancellationToken);
 
         withoutTerm!.TotalItems.Should().BeGreaterThan(0);
         blankTerm!.TotalItems.Should().Be(withoutTerm.TotalItems);

@@ -27,11 +27,11 @@ public sealed class DataImporterIntegration : IAsyncLifetime
     {
         var response = await this.factory
             .CreateAdminClient()
-            .PostAsync("/Administrator/DataImporter/genres/", content: null);
+            .PostAsync("/Administrator/DataImporter/genres/", content: null, cancellationToken: TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var result = await response.Content.ReadFromJsonAsync<DataImportPartResult>();
+        var result = await response.Content.ReadFromJsonAsync<DataImportPartResult>(cancellationToken: TestContext.Current.CancellationToken);
         result!.SkippedExisting.Should().Be(1);
         result.Inserted.Should().Be(result.TotalInFile - 1);
 
@@ -47,11 +47,11 @@ public sealed class DataImporterIntegration : IAsyncLifetime
     {
         var admin = this.factory.CreateAdminClient();
 
-        var response = await admin.PostAsync("/Administrator/DataImporter/all/", content: null);
+        var response = await admin.PostAsync("/Administrator/DataImporter/all/", content: null, cancellationToken: TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var result = await response.Content.ReadFromJsonAsync<DataImportResult>();
+        var result = await response.Content.ReadFromJsonAsync<DataImportResult>(cancellationToken: TestContext.Current.CancellationToken);
         result!.Books.Inserted.Should().BeGreaterThan(0);
         result.Authors.Inserted.Should().BeGreaterThan(0);
         result.Articles.Inserted.Should().BeGreaterThan(0);
@@ -59,8 +59,7 @@ public sealed class DataImporterIntegration : IAsyncLifetime
         result.Genres.SkippedExisting.Should().Be(1);
 
         // authors.json has the pen name "Щастливеца" (Aleko Konstantinov).
-        var search = await admin.GetFromJsonAsync<SearchPage>(
-            $"/Search/authors/?searchTerm={Uri.EscapeDataString("щаст")}");
+        var search = await admin.GetFromJsonAsync<SearchPage>($"/Search/authors/?searchTerm={Uri.EscapeDataString("щаст")}", cancellationToken: TestContext.Current.CancellationToken);
 
         search!.Items.Should().ContainSingle(a => a.PenName == "Щастливеца");
     }

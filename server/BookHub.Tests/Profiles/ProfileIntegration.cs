@@ -30,7 +30,7 @@ public sealed class ProfileIntegration : IAsyncLifetime
     {
         var httpClient = this.httpClientFactory.CreateAdminClient(AdminId);
 
-        var response = await httpClient.DeleteAsync("/Administrator/Profile/no-such-user/");
+        var response = await httpClient.DeleteAsync("/Administrator/Profile/no-such-user/", TestContext.Current.CancellationToken);
 
         var problem = await response.ShouldBeProblem(
             HttpStatusCode.NotFound,
@@ -46,7 +46,7 @@ public sealed class ProfileIntegration : IAsyncLifetime
         await this.httpClientFactory.WithData(data => data.SeedProfile(UserId));
         var httpClient = this.httpClientFactory.CreateAdminClient(AdminId);
 
-        var response = await httpClient.DeleteAsync($"/Administrator/Profile/{UserId}/");
+        var response = await httpClient.DeleteAsync($"/Administrator/Profile/{UserId}/", TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
@@ -74,7 +74,7 @@ public sealed class ProfileIntegration : IAsyncLifetime
             { new StringContent("false"), "IsPrivate" },
         };
 
-        var response = await httpClient.PutAsync("/Profile", form);
+        var response = await httpClient.PutAsync("/Profile", form, TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(
             HttpStatusCode.NotFound,
