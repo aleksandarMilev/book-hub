@@ -13,7 +13,7 @@ public class AdminService(
         CancellationToken cancellationToken = default)
     {
         var admins = await userManager.GetUsersInRoleAsync(AdminRoleName);
-        if (admins.Count == 0)
+        if (!admins.Any())
         {
             logger.LogWarning(
                 "No users in role {Role}; admin notifications will be skipped.",
@@ -22,8 +22,7 @@ public class AdminService(
             return [];
         }
 
-        return admins
-            .Select(a => a.Id)
-            .ToList();
+        return [..admins
+            .Select(a => a.Id)];
     }
 }

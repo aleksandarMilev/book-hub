@@ -3,8 +3,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Services.Result;
 
-// Maps service Results to responses. Every failure is a ProblemDetails (RFC 9457) body
-// with the error message in `detail` and the status code taken from the Result's ErrorKind.
 public static class ControllerExtensions
 {
     public static ActionResult NoContentOrProblem(
@@ -56,7 +54,8 @@ public static class ControllerExtensions
             result.ErrorKind);
     }
 
-    public static int ToStatusCode(this ErrorKind errorKind)
+    public static int ToStatusCode(
+        this ErrorKind errorKind)
         => errorKind switch
         {
             ErrorKind.NotFound => StatusCodes.Status404NotFound,

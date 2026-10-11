@@ -5,9 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NpgsqlTypes;
 
-// PostgreSQL full-text search: a generated, stored tsvector column with a GIN index on each
-// searchable table, queried with prefix terms. The 'simple' config lowercases but doesn't stem
-// or drop stopwords, because the content mixes English and Bulgarian.
 public static class FullTextSearchExtensions
 {
     public const string SearchVectorProperty = "SearchVector";
@@ -32,8 +29,6 @@ public static class FullTextSearchExtensions
         return builder;
     }
 
-    // Blank input leaves the query unchanged (no filter). Input with no searchable
-    // characters (only operators or punctuation) matches nothing.
     public static IQueryable<T> ApplyFullTextSearch<T>(
         this IQueryable<T> query,
         string? searchTerm)
@@ -50,16 +45,11 @@ public static class FullTextSearchExtensions
             return query.Where(_ => false);
         }
 
-        // tsQuery is sent as a parameter, never concatenated into the SQL.
         return query.Where(e => EF
             .Property<NpgsqlTsVector>(e, SearchVectorProperty)
             .Matches(EF.Functions.ToTsQuery(TextSearchConfig, tsQuery)));
     }
 
-    // Turns user input into a safe prefix tsquery: "Harry  pot" -> "harry:* & pot:*".
-    // Any character that isn't a letter or digit separates terms, so tsquery operators
-    // (& | ! ( ) : * < > ' \) can't reach to_tsquery, and "o'brien" or "sci-fi" split the
-    // way the tsvector parser splits the document. Returns null when no term is left.
     public static string? ToPrefixTsQuery(string? input)
     {
         if (string.IsNullOrWhiteSpace(input))
