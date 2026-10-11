@@ -102,6 +102,11 @@ public class BookHubWebApplicationFactory : WebApplicationFactory<Program>
     // helpers only work with the test scheme.
     protected virtual bool UseTestAuthentication => true;
 
+    // True keeps the app's real AdminService, so the admins are the users in the Administrator
+    // role (seed them with TestSeeder.SeedAdmin). False replaces it with one fixed admin ID,
+    // "test-admin-id", which the test must seed as a user (notifications reference it).
+    protected virtual bool UseRealAdminService => false;
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
         => ConfigureTestSettings(builder)
             .UseEnvironment("Testing")
@@ -116,9 +121,14 @@ public class BookHubWebApplicationFactory : WebApplicationFactory<Program>
                                 $"Call {nameof(ResetDatabase)}() before using the database.")))
                     .AddHttpContextAccessor()
                     .RemoveAll<IImageWriter>()
-                    .AddSingleton<IImageWriter, ImageWriterMock>()
-                    .RemoveAll<IAdminService>()
-                    .AddScoped<IAdminService>(_ => new AdminServiceMock("test-admin-id"));
+                    .AddSingleton<IImageWriter, ImageWriterMock>();
+
+                if (!this.UseRealAdminService)
+                {
+                    services
+                        .RemoveAll<IAdminService>()
+                        .AddScoped<IAdminService>(_ => new AdminServiceMock("test-admin-id"));
+                }
 
                 if (!this.UseTestAuthentication)
                 {

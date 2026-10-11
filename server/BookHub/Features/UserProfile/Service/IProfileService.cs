@@ -41,6 +41,10 @@ public interface IProfileService : ITransientService
         string userId,
         CancellationToken cancellationToken = default);
 
+    Task<Result> DecrementWrittenReviewsCount(
+        string userId,
+        CancellationToken cancellationToken = default);
+
     Task<Result> IncrementCurrentlyReadingBooksCount(
         string userId,
         CancellationToken cancellationToken = default);

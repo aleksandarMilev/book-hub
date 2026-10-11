@@ -34,7 +34,7 @@ public sealed class AdminServiceIntegration : IAsyncLifetime
 
         var adminService = NewAdminService(services);
 
-        var adminIds = await adminService.GetIds();
+        var adminIds = await adminService.GetIds(TestContext.Current.CancellationToken);
 
         adminIds.Should().BeEmpty();
     }
@@ -51,7 +51,7 @@ public sealed class AdminServiceIntegration : IAsyncLifetime
 
         var adminService = NewAdminService(services);
 
-        var adminIds = await adminService.GetIds();
+        var adminIds = await adminService.GetIds(TestContext.Current.CancellationToken);
 
         adminIds.Should().BeEquivalentTo([firstAdminId, secondAdminId]);
     }

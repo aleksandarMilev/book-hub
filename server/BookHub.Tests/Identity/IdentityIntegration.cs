@@ -5,22 +5,23 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using Data;
-using Features.Emails;
 using FluentAssertions;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using Shared.Identity;
 using Shared.Seed;
 using Shared.Utils;
 
 public sealed class IdentityIntegration : IAsyncLifetime
 {
-    private readonly ThrowingEmailSenderFactory httpClientFactory = new();
+    private readonly RealJwtFactory httpClientFactory = new();
 
     public async ValueTask InitializeAsync()
-        => await this.httpClientFactory.ResetDatabase();
+    {
+        await this.httpClientFactory.ResetDatabase();
+
+        this.httpClientFactory.EmailSender.FailWelcomeEmails = true;
+    }
 
     public ValueTask DisposeAsync()
     {
@@ -44,11 +45,11 @@ public sealed class IdentityIntegration : IAsyncLifetime
             { new StringContent("false"), "IsPrivate" }
         };
 
-        var response = await httpClient.PostAsync("/Identity/register/", form);
+        var response = await httpClient.PostAsync("/Identity/register/", form, TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        using var json = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+        using var json = JsonDocument.Parse(await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken));
         json.RootElement.GetProperty("token").GetString().Should().NotBeNullOrWhiteSpace();
 
         // The background sender is invoked (and throws) after the response was already returned.
@@ -56,7 +57,7 @@ public sealed class IdentityIntegration : IAsyncLifetime
             .httpClientFactory
             .EmailSender
             .WelcomeAttempted
-            .WaitAsync(TimeSpan.FromSeconds(10));
+            .WaitAsync(TimeSpan.FromSeconds(10), TestContext.Current.CancellationToken);
 
         attemptedEmail.Should().Be("newreader@test.local");
 
@@ -66,13 +67,13 @@ public sealed class IdentityIntegration : IAsyncLifetime
         var user = await data
             .Users
             .IgnoreQueryFilters()
-            .SingleAsync(u => u.UserName == "newreader");
+            .SingleAsync(u => u.UserName == "newreader", cancellationToken: TestContext.Current.CancellationToken);
 
         user.IsDeleted.Should().BeFalse();
 
         var profileExists = await data
             .Profiles
-            .AnyAsync(p => p.UserId == user.Id);
+            .AnyAsync(p => p.UserId == user.Id, cancellationToken: TestContext.Current.CancellationToken);
 
         profileExists.Should().BeTrue();
     }
@@ -84,9 +85,7 @@ public sealed class IdentityIntegration : IAsyncLifetime
 
         var httpClient = this.httpClientFactory.CreateClient();
 
-        var response = await httpClient.PostAsync(
-            "/Identity/register/",
-            RegisterForm("takenname", "someone-new@test.local"));
+        var response = await httpClient.PostAsync("/Identity/register/", RealJwtFactory.RegisterForm("takenname", "someone-new@test.local"), TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(
             HttpStatusCode.Conflict,
@@ -100,64 +99,51 @@ public sealed class IdentityIntegration : IAsyncLifetime
 
         var httpClient = this.httpClientFactory.CreateClient();
 
-        var response = await httpClient.PostAsJsonAsync(
-            "/Identity/login/",
-            new { credentials = "reader", password = "WrongPassw0rd", rememberMe = false });
+        var response = await httpClient.PostAsJsonAsync("/Identity/login/", new { credentials = "reader", password = "WrongPassw0rd", rememberMe = false }, cancellationToken: TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(
             HttpStatusCode.BadRequest,
             "Invalid log in attempt!");
     }
 
-    private static MultipartFormDataContent RegisterForm(
-        string username,
-        string email)
-        => new()
-        {
-            { new StringContent(username), "Username" },
-            { new StringContent(email), "Email" },
-            { new StringContent("Passw0rd123"), "Password" },
-            { new StringContent("New"), "FirstName" },
-            { new StringContent("Reader"), "LastName" },
-            { new StringContent(new DateTime(1995, 1, 1).ToString("O", CultureInfo.InvariantCulture)), "DateOfBirth" },
-            { new StringContent("false"), "IsPrivate" }
-        };
-
-    private sealed class ThrowingEmailSenderFactory : BookHubWebApplicationFactory
+    [Fact]
+    public async Task Register_ShouldLeaveNoUser_AndAllowTheSameUsernameAndEmail_WhenProfileCreationFails()
     {
-        public ThrowingEmailSender EmailSender { get; } = new();
+        // B-02: the user and the profile are created in one transaction, so a failed profile
+        // creation leaves nothing behind (before, the user was soft-deleted and its username
+        // and email stayed taken for good).
+        var imageWriter = this.httpClientFactory.GetImageWriterMock();
+        imageWriter.FailWritesFor = "profiles";
 
-        protected override void ConfigureWebHost(IWebHostBuilder builder)
-        {
-            base.ConfigureWebHost(builder);
+        var httpClient = this.httpClientFactory.CreateClient();
 
-            builder.ConfigureTestServices(services => services
-                .RemoveAll<IEmailSender>()
-                .AddSingleton<IEmailSender>(this.EmailSender));
-        }
-    }
+        var failed = await httpClient.PostAsync("/Identity/register/", RealJwtFactory.RegisterForm("unlucky", "unlucky@test.local"), TestContext.Current.CancellationToken);
 
-    private sealed class ThrowingEmailSender : IEmailSender
-    {
-        private readonly TaskCompletionSource<string> welcomeAttempted =
-            new(TaskCreationOptions.RunContinuationsAsynchronously);
+        await failed.ShouldBeProblem(
+            HttpStatusCode.BadRequest,
+            "Invalid register attempt!");
 
-        public Task<string> WelcomeAttempted => this.welcomeAttempted.Task;
+        var userRows = await this.httpClientFactory.WithData(data => data
+            .Users
+            .IgnoreQueryFilters()
+            .CountAsync(u => u.NormalizedUserName == "UNLUCKY" || u.NormalizedEmail == "UNLUCKY@TEST.LOCAL"));
 
-        public Task SendWelcome(
-            string email,
-            string username,
-            string baseUrl,
-            CancellationToken cancellationToken = default)
-        {
-            this.welcomeAttempted.TrySetResult(email);
-            throw new InvalidOperationException("SMTP server is down.");
-        }
+        userRows.Should().Be(0);
 
-        public Task SendPasswordReset(
-            string email,
-            string resetUrl,
-            CancellationToken cancellationToken = default)
-            => throw new InvalidOperationException("SMTP server is down.");
+        imageWriter.FailWritesFor = null;
+
+        var retried = await httpClient.PostAsync("/Identity/register/", RealJwtFactory.RegisterForm("unlucky", "unlucky@test.local"), TestContext.Current.CancellationToken);
+
+        retried.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var login = await httpClient.PostAsJsonAsync("/Identity/login/", new { credentials = "unlucky", password = RealJwtFactory.DefaultPassword, rememberMe = false }, cancellationToken: TestContext.Current.CancellationToken);
+
+        login.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var profileExists = await this.httpClientFactory.WithData(data => data
+            .Profiles
+            .AnyAsync(p => p.User.UserName == "unlucky"));
+
+        profileExists.Should().BeTrue();
     }
 }

@@ -58,12 +58,12 @@ public sealed class BooksIntegration : IAsyncLifetime
 
         var httpClient = this.httpClientFactory.CreateClient();
 
-        var response = await httpClient.GetAsync("/Books/top/");
+        var response = await httpClient.GetAsync("/Books/top/", TestContext.Current.CancellationToken);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var body = await response
             .Content
-            .ReadFromJsonAsync<IEnumerable<BookServiceModel>>();
+            .ReadFromJsonAsync<IEnumerable<BookServiceModel>>(cancellationToken: TestContext.Current.CancellationToken);
 
         body.Should().NotBeNull();
 
@@ -94,12 +94,12 @@ public sealed class BooksIntegration : IAsyncLifetime
 
         var httpClient = this.httpClientFactory.CreateUserClient();
 
-        var response = await httpClient.GetAsync($"/Books/genre/{fantasyId}?page=1&pageSize=10");
+        var response = await httpClient.GetAsync($"/Books/genre/{fantasyId}?page=1&pageSize=10", TestContext.Current.CancellationToken);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var body = await response
             .Content
-            .ReadFromJsonAsync<PaginatedModel<BookServiceModel>>();
+            .ReadFromJsonAsync<PaginatedModel<BookServiceModel>>(cancellationToken: TestContext.Current.CancellationToken);
 
         body.Should().NotBeNull();
         body.TotalItems.Should().Be(2);
@@ -118,8 +118,7 @@ public sealed class BooksIntegration : IAsyncLifetime
 
         var httpClient = this.httpClientFactory.CreateClient();
 
-        var response = await httpClient.GetAsync(
-            $"/Books/genre/{fantasyId}?page=1&pageSize=10");
+        var response = await httpClient.GetAsync($"/Books/genre/{fantasyId}?page=1&pageSize=10", TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
@@ -143,12 +142,12 @@ public sealed class BooksIntegration : IAsyncLifetime
 
         var httpClient = this.httpClientFactory.CreateUserClient();
 
-        var response = await httpClient.GetAsync($"/Books/author/{authorId}?page=1&pageSize=10");
+        var response = await httpClient.GetAsync($"/Books/author/{authorId}?page=1&pageSize=10", TestContext.Current.CancellationToken);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var body = await response
             .Content
-            .ReadFromJsonAsync<PaginatedModel<BookServiceModel>>();
+            .ReadFromJsonAsync<PaginatedModel<BookServiceModel>>(cancellationToken: TestContext.Current.CancellationToken);
 
         body.Should().NotBeNull();
         body.TotalItems.Should().Be(2);
@@ -167,8 +166,7 @@ public sealed class BooksIntegration : IAsyncLifetime
 
         var httpClient = this.httpClientFactory.CreateClient();
 
-        var response = await httpClient.GetAsync(
-            $"/Books/author/{authorId}?page=1&pageSize=10");
+        var response = await httpClient.GetAsync($"/Books/author/{authorId}?page=1&pageSize=10", TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
@@ -179,7 +177,7 @@ public sealed class BooksIntegration : IAsyncLifetime
         var httpClient = this.httpClientFactory.CreateUserClient();
         var nonExistingId = Guid.NewGuid();
 
-        var response = await httpClient.GetAsync($"/Books/{nonExistingId}/");
+        var response = await httpClient.GetAsync($"/Books/{nonExistingId}/", TestContext.Current.CancellationToken);
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
@@ -196,14 +194,14 @@ public sealed class BooksIntegration : IAsyncLifetime
             publishedDate: new DateTime(2000, 1, 1),
             genreIds: []);
 
-        var response = await httpClient.PostAsync("/Books", formData);
+        var response = await httpClient.PostAsync("/Books", formData, TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
         response.Headers.Location.Should().NotBeNull();
 
         var createdBook = await response
             .Content
-            .ReadFromJsonAsync<BookDetailsServiceModel>();
+            .ReadFromJsonAsync<BookDetailsServiceModel>(cancellationToken: TestContext.Current.CancellationToken);
 
         createdBook.Should().NotBeNull();
         createdBook.Id.Should().NotBeEmpty();
@@ -228,16 +226,18 @@ public sealed class BooksIntegration : IAsyncLifetime
         var dbModel = await data
             .Books
             .IgnoreQueryFilters()
-            .SingleAsync(b => b.Id == createdBook.Id);
+            .SingleAsync(b => b.Id == createdBook.Id, cancellationToken: TestContext.Current.CancellationToken);
 
         dbModel.ImagePath.Should().Be(DefaultImagePath);
         dbModel.IsApproved.Should().BeFalse();
+        dbModel.CreatorId.Should().Be("test-user");
+        dbModel.CreatedOn.Should().NotBe(default);
 
         var mapEntities = await data
             .BooksGenres
             .AsNoTracking()
             .Where(bg => bg.BookId == createdBook.Id)
-            .ToListAsync();
+            .ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         mapEntities.Should().HaveCount(1);
         mapEntities[0].GenreId.Should().Be(OtherGenreId);
@@ -258,13 +258,13 @@ public sealed class BooksIntegration : IAsyncLifetime
             publishedDate: new DateTime(2000, 1, 1),
             genreIds: []);
 
-        var response = await httpClient.PostAsync("/Books", formData);
+        var response = await httpClient.PostAsync("/Books", formData, TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
 
         var createdBook = await response
             .Content
-            .ReadFromJsonAsync<BookDetailsServiceModel>();
+            .ReadFromJsonAsync<BookDetailsServiceModel>(cancellationToken: TestContext.Current.CancellationToken);
 
         createdBook.Should().NotBeNull();
         createdBook!.ImagePath.Should().NotBe(DefaultImagePath);
@@ -286,7 +286,7 @@ public sealed class BooksIntegration : IAsyncLifetime
         var dbModel = await data
             .Books
             .IgnoreQueryFilters()
-            .SingleAsync(b => b.Id == createdBook.Id);
+            .SingleAsync(b => b.Id == createdBook.Id, cancellationToken: TestContext.Current.CancellationToken);
 
         dbModel.ImagePath.Should().Be(createdBook.ImagePath);
     }
@@ -304,13 +304,13 @@ public sealed class BooksIntegration : IAsyncLifetime
             publishedDate: null,
             genreIds: [Guid.Parse("11111111-1111-1111-1111-111111111111")]);
 
-        var response = await httpClient.PostAsync("/Books", formData);
+        var response = await httpClient.PostAsync("/Books", formData, TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
 
         var createdBook = await response
             .Content
-            .ReadFromJsonAsync<BookDetailsServiceModel>();
+            .ReadFromJsonAsync<BookDetailsServiceModel>(cancellationToken: TestContext.Current.CancellationToken);
 
         createdBook.Should().NotBeNull();
         createdBook.Id.Should().NotBeEmpty();
@@ -327,9 +327,16 @@ public sealed class BooksIntegration : IAsyncLifetime
         var dbModel = await data
             .Books
             .IgnoreQueryFilters()
-            .SingleAsync(b => b.Id == createdBook.Id);
+            .SingleAsync(b => b.Id == createdBook.Id, cancellationToken: TestContext.Current.CancellationToken);
 
         dbModel.IsApproved.Should().BeTrue();
+
+        // An admin's book needs no approval, so no admin is notified.
+        var hasNotifications = await data
+            .Notifications
+            .AnyAsync(n => n.ResourceId == createdBook.Id, cancellationToken: TestContext.Current.CancellationToken);
+
+        hasNotifications.Should().BeFalse();
     }
 
     [Fact]
@@ -345,7 +352,7 @@ public sealed class BooksIntegration : IAsyncLifetime
             publishedDate: null,
             genreIds: []);
 
-        var response = await httpClient.PostAsync("/Books", formData);
+        var response = await httpClient.PostAsync("/Books", formData, TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         response
@@ -371,7 +378,7 @@ public sealed class BooksIntegration : IAsyncLifetime
             publishedDate: null,
             genreIds: [unknownGenreId]);
 
-        var response = await httpClient.PostAsync("/Books", formData);
+        var response = await httpClient.PostAsync("/Books", formData, TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(
             HttpStatusCode.BadRequest,
@@ -389,9 +396,11 @@ public sealed class BooksIntegration : IAsyncLifetime
         var bookExists = await data
             .Books
             .IgnoreQueryFilters()
-            .AnyAsync(b => b.Title == "Book with unknown genre");
+            .AnyAsync(b => b.Title == "Book with unknown genre", cancellationToken: TestContext.Current.CancellationToken);
 
         bookExists.Should().BeFalse();
+
+        this.httpClientFactory.GetImageWriterMock().WriteCalls.Should().Be(0);
     }
 
     [Fact]
@@ -413,9 +422,7 @@ public sealed class BooksIntegration : IAsyncLifetime
             publishedDate: new DateTime(2010, 2, 2),
             genreIds: [Guid.Parse("11111111-1111-1111-1111-111111111111")]);
 
-        var response = await httpClient.PutAsync(
-            $"/Books/{bookId}/",
-            formData);
+        var response = await httpClient.PutAsync($"/Books/{bookId}/", formData, TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
@@ -435,13 +442,13 @@ public sealed class BooksIntegration : IAsyncLifetime
         var dbModel = await data
             .Books
             .IgnoreQueryFilters()
-            .SingleAsync(b => b.Id == bookId);
+            .SingleAsync(b => b.Id == bookId, cancellationToken: TestContext.Current.CancellationToken);
 
         dbModel.ImagePath.Should().Be("/images/books/old.jpg");
 
         var pending = await data
             .BookEdits
-            .SingleAsync(e => e.BookId == bookId);
+            .SingleAsync(e => e.BookId == bookId, cancellationToken: TestContext.Current.CancellationToken);
 
         pending.ImagePath.Should().Be(imageWriterMock.LastWrittenPath);
     }
@@ -465,9 +472,7 @@ public sealed class BooksIntegration : IAsyncLifetime
             publishedDate: new DateTime(2010, 2, 2),
             genreIds: [Guid.Parse("11111111-1111-1111-1111-111111111111")]);
 
-        var response = await httpClient.PutAsync(
-            $"/Books/{bookId}/",
-            formData);
+        var response = await httpClient.PutAsync($"/Books/{bookId}/", formData, TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
@@ -489,7 +494,7 @@ public sealed class BooksIntegration : IAsyncLifetime
         var dbModel = await data
             .Books
             .IgnoreQueryFilters()
-            .SingleAsync(b => b.Id == bookId);
+            .SingleAsync(b => b.Id == bookId, cancellationToken: TestContext.Current.CancellationToken);
 
         dbModel.ImagePath.Should().NotBe("/images/books/old.jpg");
         dbModel.ImagePath.Should().StartWith("/images/books/test-");
@@ -514,9 +519,7 @@ public sealed class BooksIntegration : IAsyncLifetime
             publishedDate: new DateTime(2010, 2, 2),
             genreIds: [Guid.Parse("11111111-1111-1111-1111-111111111111")]);
 
-        var response = await httpClient.PutAsync(
-            $"/Books/{bookId}/",
-            formData);
+        var response = await httpClient.PutAsync($"/Books/{bookId}/", formData, TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
@@ -532,23 +535,36 @@ public sealed class BooksIntegration : IAsyncLifetime
         var dbModel = await data
             .Books
             .IgnoreQueryFilters()
-            .SingleAsync(b => b.Id == bookId);
+            .SingleAsync(b => b.Id == bookId, cancellationToken: TestContext.Current.CancellationToken);
 
         dbModel.Title.Should().NotBe("Edited valid title long enough");
 
         var pending = await data
             .BookEdits
-            .SingleAsync(e => e.BookId == bookId);
+            .SingleAsync(e => e.BookId == bookId, cancellationToken: TestContext.Current.CancellationToken);
 
         pending.Title.Should().Be("Edited valid title long enough");
         pending.ImagePath.Should().Be("/images/books/seed.jpg");
         pending.RequestedById.Should().Be("test-user");
 
+        // The author and genres wait in the pending row too; the book keeps its own.
+        pending.AuthorId.Should().Be(Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"));
+        pending.GenresJson.Should().Contain("11111111-1111-1111-1111-111111111111");
+        dbModel.AuthorId.Should().BeNull();
+
+        var bookGenreIds = await data
+            .BooksGenres
+            .Where(bg => bg.BookId == bookId)
+            .Select(bg => bg.GenreId)
+            .ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
+
+        bookGenreIds.Should().Equal(OtherGenreId);
+
         var notificationReceivers = await data
             .Notifications
             .Where(n => n.ResourceId == bookId)
             .Select(n => n.ReceiverId)
-            .ToListAsync();
+            .ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         notificationReceivers.Should().Equal("test-admin-id");
     }
@@ -571,9 +587,7 @@ public sealed class BooksIntegration : IAsyncLifetime
             publishedDate: new DateTime(2010, 2, 2),
             genreIds: [Guid.Parse("11111111-1111-1111-1111-111111111111")]);
 
-        var response = await httpClient.PutAsync(
-            $"/Books/{bookId}/",
-            formData);
+        var response = await httpClient.PutAsync($"/Books/{bookId}/", formData, TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
@@ -589,9 +603,10 @@ public sealed class BooksIntegration : IAsyncLifetime
         var dbModel = await data
             .Books
             .IgnoreQueryFilters()
-            .SingleAsync(b => b.Id == bookId);
+            .SingleAsync(b => b.Id == bookId, cancellationToken: TestContext.Current.CancellationToken);
 
         dbModel.Title.Should().Be("Edited valid title long enough");
+        dbModel.AuthorId.Should().Be(Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"));
         dbModel.ImagePath.Should().Be("/images/books/seed.jpg");
         dbModel.ModifiedOn.Should().NotBeNull();
 
@@ -599,19 +614,19 @@ public sealed class BooksIntegration : IAsyncLifetime
             .BooksGenres
             .Where(bg => bg.BookId == bookId)
             .Select(bg => bg.GenreId)
-            .ToListAsync();
+            .ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         genreIds.Should().Equal(Guid.Parse("11111111-1111-1111-1111-111111111111"));
 
         var hasPendingEdit = await data
             .BookEdits
-            .AnyAsync(e => e.BookId == bookId);
+            .AnyAsync(e => e.BookId == bookId, cancellationToken: TestContext.Current.CancellationToken);
 
         hasPendingEdit.Should().BeFalse();
 
         var hasNotifications = await data
             .Notifications
-            .AnyAsync(n => n.ResourceId == bookId);
+            .AnyAsync(n => n.ResourceId == bookId, cancellationToken: TestContext.Current.CancellationToken);
 
         hasNotifications.Should().BeFalse();
     }
@@ -630,9 +645,7 @@ public sealed class BooksIntegration : IAsyncLifetime
             publishedDate: null,
             genreIds: []);
 
-        var response = await httpClient.PutAsync(
-            $"/Books/{nonExistingId}/",
-            formData);
+        var response = await httpClient.PutAsync($"/Books/{nonExistingId}/", formData, TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(
             HttpStatusCode.NotFound,
@@ -648,8 +661,7 @@ public sealed class BooksIntegration : IAsyncLifetime
 
         var httpClient = this.httpClientFactory.CreateUserClient();
 
-        var response = await httpClient.DeleteAsync(
-            $"/Books/{bookId}/");
+        var response = await httpClient.DeleteAsync($"/Books/{bookId}/", TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
@@ -662,13 +674,13 @@ public sealed class BooksIntegration : IAsyncLifetime
             .ServiceProvider
             .GetRequiredService<BookHubDbContext>();
 
-        var count = await data.Books.CountAsync(b => b.Id == bookId);
+        var count = await data.Books.CountAsync(b => b.Id == bookId, cancellationToken: TestContext.Current.CancellationToken);
         count.Should().Be(0);
 
         var deleted = await data
             .Books
             .IgnoreQueryFilters()
-            .SingleAsync(b => b.Id == bookId);
+            .SingleAsync(b => b.Id == bookId, cancellationToken: TestContext.Current.CancellationToken);
 
         deleted.IsDeleted.Should().BeTrue();
         deleted.DeletedOn.Should().NotBeNull();
@@ -680,8 +692,7 @@ public sealed class BooksIntegration : IAsyncLifetime
         var httpClient = this.httpClientFactory.CreateUserClient();
         var nonExistingId = Guid.NewGuid();
 
-        var response = await httpClient.DeleteAsync(
-            $"/Books/{nonExistingId}/");
+        var response = await httpClient.DeleteAsync($"/Books/{nonExistingId}/", TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(
             HttpStatusCode.NotFound,
@@ -705,8 +716,8 @@ public sealed class BooksIntegration : IAsyncLifetime
             publishedDate: null,
             genreIds: []);
 
-        var editResponse = await httpClient.PutAsync($"/Books/{bookId}/", formData);
-        var deleteResponse = await httpClient.DeleteAsync($"/Books/{bookId}/");
+        var editResponse = await httpClient.PutAsync($"/Books/{bookId}/", formData, TestContext.Current.CancellationToken);
+        var deleteResponse = await httpClient.DeleteAsync($"/Books/{bookId}/", TestContext.Current.CancellationToken);
 
         var editProblem = await editResponse.ShouldBeProblem(
             HttpStatusCode.Forbidden,
@@ -757,11 +768,173 @@ public sealed class BooksIntegration : IAsyncLifetime
             publishedDate: null,
             genreIds: []);
 
-        var response = await httpClient.PutAsync($"/Books/{bookId}/", formData);
+        var response = await httpClient.PutAsync($"/Books/{bookId}/", formData, TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(
             HttpStatusCode.NotFound,
             "The book was not found.");
+    }
+
+    [Fact]
+    public async Task Create_ShouldStoreNoAuthor_WhenTheAuthorDoesNotExist()
+    {
+        var httpClient = this.httpClientFactory.CreateUserClient();
+
+        var formData = BuildBookForm(
+            title: "Book with an unknown author",
+            shortDescription: "A valid short description",
+            longDescription: new string('l', 200),
+            authorId: Guid.NewGuid(),
+            publishedDate: null,
+            genreIds: []);
+
+        var response = await httpClient.PostAsync("/Books", formData, TestContext.Current.CancellationToken);
+
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
+
+        var created = await response.Content.ReadFromJsonAsync<BookDetailsServiceModel>(cancellationToken: TestContext.Current.CancellationToken);
+
+        var authorId = await this.httpClientFactory.WithData(data => data
+            .Books
+            .IgnoreQueryFilters()
+            .Where(b => b.Id == created!.Id)
+            .Select(b => b.AuthorId)
+            .SingleAsync());
+
+        authorId.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task Create_ShouldPersistTheBookWithoutGenres_WhenTheOtherGenreDoesNotExist()
+    {
+        // The initial migration seeds "Other", so remove it to set up this case.
+        await this.httpClientFactory.WithData(data => data
+            .Genres
+            .IgnoreQueryFilters()
+            .Where(g => g.Id == OtherGenreId)
+            .ExecuteDeleteAsync());
+
+        var httpClient = this.httpClientFactory.CreateUserClient();
+
+        var formData = BuildBookForm(
+            title: "Book without any genre",
+            shortDescription: "A valid short description",
+            longDescription: new string('l', 200),
+            authorId: null,
+            publishedDate: null,
+            genreIds: []);
+
+        var response = await httpClient.PostAsync("/Books", formData, TestContext.Current.CancellationToken);
+
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
+
+        var created = await response.Content.ReadFromJsonAsync<BookDetailsServiceModel>(cancellationToken: TestContext.Current.CancellationToken);
+
+        var hasGenres = await this.httpClientFactory.WithData(data => data
+            .BooksGenres
+            .AnyAsync(bg => bg.BookId == created!.Id));
+
+        hasGenres.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task Create_ShouldNotPersistTheBook_WhenTheAdminNotificationCannotBeSaved()
+    {
+        // The book and the admin notifications are saved together. Without the admin's user
+        // row, the notification's foreign key fails, and the book must not be saved either.
+        await this.httpClientFactory.WithData(data => data
+            .Users
+            .IgnoreQueryFilters()
+            .Where(u => u.Id == "test-admin-id")
+            .ExecuteDeleteAsync());
+
+        var httpClient = this.httpClientFactory.CreateUserClient();
+
+        var formData = BuildBookForm(
+            title: "Book whose notification fails",
+            shortDescription: "A valid short description",
+            longDescription: new string('l', 200),
+            authorId: null,
+            publishedDate: null,
+            genreIds: []);
+
+        var response = await httpClient.PostAsync("/Books", formData, TestContext.Current.CancellationToken);
+
+        await response.ShouldBeProblem(
+            HttpStatusCode.BadRequest,
+            "The request references a resource that does not exist.");
+
+        var bookExists = await this.httpClientFactory.WithData(data => data
+            .Books
+            .IgnoreQueryFilters()
+            .AnyAsync(b => b.Title == "Book whose notification fails"));
+
+        bookExists.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task Edit_ShouldReturnBadRequestProblem_AndAlso_ShouldNotCreatePendingEdit_WhenGenreDoesNotExist()
+    {
+        var bookId = await this.SeedBook(
+            creatorId: "test-user",
+            isApproved: true);
+
+        var unknownGenreId = Guid.NewGuid();
+        var httpClient = this.httpClientFactory.CreateUserClient();
+
+        var formData = BuildBookForm(
+            title: "Edited valid title long enough",
+            shortDescription: "Edited valid short description",
+            longDescription: new string('z', 250),
+            authorId: null,
+            publishedDate: null,
+            genreIds: [unknownGenreId]);
+
+        var response = await httpClient.PutAsync($"/Books/{bookId}/", formData, TestContext.Current.CancellationToken);
+
+        await response.ShouldBeProblem(
+            HttpStatusCode.BadRequest,
+            $"Genres with Id(s): {unknownGenreId} were not found!");
+
+        var hasPendingEdit = await this.httpClientFactory.WithData(data => data
+            .BookEdits
+            .AnyAsync(e => e.BookId == bookId));
+
+        hasPendingEdit.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task Delete_ShouldSoftDelete_WhenAnAdminDeletesSomeoneElsesBook()
+    {
+        var bookId = await this.SeedBook(
+            creatorId: "test-user",
+            isApproved: true);
+
+        var httpClient = this.httpClientFactory.CreateAdminClient();
+
+        var response = await httpClient.DeleteAsync($"/Books/{bookId}/", TestContext.Current.CancellationToken);
+
+        response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+
+        var (isDeleted, deletedOn) = await this.httpClientFactory.WithData(async data =>
+        {
+            var book = await data
+                .Books
+                .IgnoreQueryFilters()
+                .SingleAsync(b => b.Id == bookId);
+
+            return (book.IsDeleted, book.DeletedOn);
+        });
+
+        isDeleted.Should().BeTrue();
+        deletedOn.Should().NotBeNull();
+
+        var anonymousResponse = await this
+            .httpClientFactory
+            .CreateAnonymousClient()
+            .GetAsync($"/Books/{bookId}/", TestContext.Current.CancellationToken);
+
+        anonymousResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
     [Fact]
@@ -773,9 +946,7 @@ public sealed class BooksIntegration : IAsyncLifetime
 
         var httpClient = this.httpClientFactory.CreateAdminClient();
 
-        var response = await httpClient.PatchAsync(
-            $"/Administrator/Books/{bookId}/approve/",
-            content: null);
+        var response = await httpClient.PatchAsync($"/Administrator/Books/{bookId}/approve/", content: null, cancellationToken: TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
@@ -791,7 +962,7 @@ public sealed class BooksIntegration : IAsyncLifetime
         var dbModel = await data
             .Books
             .IgnoreQueryFilters()
-            .SingleAsync(b => b.Id == bookId);
+            .SingleAsync(b => b.Id == bookId, cancellationToken: TestContext.Current.CancellationToken);
 
         dbModel.IsApproved.Should().BeTrue();
     }
@@ -802,9 +973,7 @@ public sealed class BooksIntegration : IAsyncLifetime
         var httpClient = this.httpClientFactory.CreateAdminClient();
         var nonExistingId = Guid.NewGuid();
 
-        var response = await httpClient.PatchAsync(
-            $"/Administrator/Books/{nonExistingId}/approve/",
-            content: null);
+        var response = await httpClient.PatchAsync($"/Administrator/Books/{nonExistingId}/approve/", content: null, cancellationToken: TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(
             HttpStatusCode.NotFound,
@@ -820,9 +989,7 @@ public sealed class BooksIntegration : IAsyncLifetime
 
         var httpClient = this.httpClientFactory.CreateUserClient();
 
-        var response = await httpClient.PatchAsync(
-            $"/Administrator/Books/{bookId}/approve/",
-            content: null);
+        var response = await httpClient.PatchAsync($"/Administrator/Books/{bookId}/approve/", content: null, cancellationToken: TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
@@ -836,9 +1003,7 @@ public sealed class BooksIntegration : IAsyncLifetime
 
         var httpClient = this.httpClientFactory.CreateAdminClient();
 
-        var response = await httpClient.PatchAsync(
-            $"/Administrator/Books/{bookId}/reject/",
-            content: null);
+        var response = await httpClient.PatchAsync($"/Administrator/Books/{bookId}/reject/", content: null, cancellationToken: TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
@@ -851,13 +1016,13 @@ public sealed class BooksIntegration : IAsyncLifetime
             .ServiceProvider
             .GetRequiredService<BookHubDbContext>();
 
-        var count = await data.Books.CountAsync(b => b.Id == bookId);
+        var count = await data.Books.CountAsync(b => b.Id == bookId, cancellationToken: TestContext.Current.CancellationToken);
         count.Should().Be(0);
 
         var deleted = await data
             .Books
             .IgnoreQueryFilters()
-            .SingleAsync(b => b.Id == bookId);
+            .SingleAsync(b => b.Id == bookId, cancellationToken: TestContext.Current.CancellationToken);
 
         deleted.IsDeleted.Should().BeTrue();
         deleted.DeletedOn.Should().NotBeNull();
@@ -869,9 +1034,7 @@ public sealed class BooksIntegration : IAsyncLifetime
         var httpClient = this.httpClientFactory.CreateAdminClient();
         var nonExistingId = Guid.NewGuid();
 
-        var response = await httpClient.PatchAsync(
-            $"/Administrator/Books/{nonExistingId}/reject/",
-            content: null);
+        var response = await httpClient.PatchAsync($"/Administrator/Books/{nonExistingId}/reject/", content: null, cancellationToken: TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(
             HttpStatusCode.NotFound,
@@ -887,9 +1050,7 @@ public sealed class BooksIntegration : IAsyncLifetime
 
         var httpClient = this.httpClientFactory.CreateUserClient();
 
-        var response = await httpClient.PatchAsync(
-            $"/Administrator/Books/{bookId}/reject/",
-            content: null);
+        var response = await httpClient.PatchAsync($"/Administrator/Books/{bookId}/reject/", content: null, cancellationToken: TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }

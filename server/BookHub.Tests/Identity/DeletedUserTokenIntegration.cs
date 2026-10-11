@@ -1,21 +1,14 @@
 namespace BookHub.Tests.Identity;
 
-using System.Globalization;
 using System.Net;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using Features.Emails;
 using FluentAssertions;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Shared.Seed;
+using Shared.Identity;
 using Shared.Utils;
 
-// Runs the app's real JwtBearer pipeline (not the test scheme): the tokens are signed by
-// /Identity/register, so OnTokenValidated's deleted-user check is what's under test (S-06).
+// Runs the app's real JwtBearer pipeline (RealJwtFactory, not the test scheme): the tokens are
+// signed by /Identity/register, so OnTokenValidated's deleted-user check is what's under test (S-06).
 public sealed class DeletedUserTokenIntegration : IAsyncLifetime
 {
     private const string Username = "jwtreader";
@@ -39,14 +32,14 @@ public sealed class DeletedUserTokenIntegration : IAsyncLifetime
     {
         var httpClient = await this.RegisterAndAuthenticate();
 
-        var before = await httpClient.GetAsync(ProtectedUrl);
+        var before = await httpClient.GetAsync(ProtectedUrl, TestContext.Current.CancellationToken);
         before.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var delete = await httpClient.DeleteAsync("/Profile");
+        var delete = await httpClient.DeleteAsync("/Profile", TestContext.Current.CancellationToken);
         delete.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         // The same signed, unexpired token.
-        var after = await httpClient.GetAsync(ProtectedUrl);
+        var after = await httpClient.GetAsync(ProtectedUrl, TestContext.Current.CancellationToken);
 
         await after.ShouldBeProblem(HttpStatusCode.Unauthorized);
     }
@@ -65,7 +58,7 @@ public sealed class DeletedUserTokenIntegration : IAsyncLifetime
             await data.SaveChangesAsync();
         });
 
-        var response = await httpClient.GetAsync("/Profile/mine/");
+        var response = await httpClient.GetAsync("/Profile/mine/", TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(HttpStatusCode.Unauthorized);
     }
@@ -75,7 +68,7 @@ public sealed class DeletedUserTokenIntegration : IAsyncLifetime
     {
         var httpClient = await this.RegisterAndAuthenticate();
 
-        var response = await httpClient.GetAsync("/Profile/mine/");
+        var response = await httpClient.GetAsync("/Profile/mine/", TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
@@ -88,7 +81,7 @@ public sealed class DeletedUserTokenIntegration : IAsyncLifetime
             "Bearer",
             "not-a-jwt");
 
-        var response = await httpClient.GetAsync(ProtectedUrl);
+        var response = await httpClient.GetAsync(ProtectedUrl, TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(HttpStatusCode.Unauthorized);
     }
@@ -103,7 +96,7 @@ public sealed class DeletedUserTokenIntegration : IAsyncLifetime
             "Bearer",
             "not-a-jwt");
 
-        var response = await httpClient.GetAsync("/Genres/");
+        var response = await httpClient.GetAsync("/Genres/", TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
@@ -116,9 +109,6 @@ public sealed class DeletedUserTokenIntegration : IAsyncLifetime
         // unapproved book through the approval filter, which only lets its creator see it.
         var httpClient = await this.RegisterAndAuthenticate();
 
-        // The create notifies the factory's (mocked) admin, so the admin user must exist (FK).
-        await this.httpClientFactory.WithData(data => data.SeedUser("test-admin-id", "admin"));
-
         var form = new MultipartFormDataContent
         {
             { new StringContent("A book awaiting approval"), "Title" },
@@ -126,75 +116,17 @@ public sealed class DeletedUserTokenIntegration : IAsyncLifetime
             { new StringContent(new string('l', 250)), "LongDescription" },
         };
 
-        var created = await httpClient.PostAsync("/Books", form);
+        var created = await httpClient.PostAsync("/Books", form, TestContext.Current.CancellationToken);
         created.StatusCode.Should().Be(HttpStatusCode.Created);
 
         var bookUrl = created.Headers.Location!.PathAndQuery;
-        var asCreator = await httpClient.GetAsync(bookUrl);
-        var asAnonymous = await this.httpClientFactory.CreateClient().GetAsync(bookUrl);
+        var asCreator = await httpClient.GetAsync(bookUrl, TestContext.Current.CancellationToken);
+        var asAnonymous = await this.httpClientFactory.CreateClient().GetAsync(bookUrl, TestContext.Current.CancellationToken);
 
         asCreator.StatusCode.Should().Be(HttpStatusCode.OK);
         await asAnonymous.ShouldBeProblem(HttpStatusCode.NotFound);
     }
 
-    private async Task<HttpClient> RegisterAndAuthenticate()
-    {
-        var httpClient = this.httpClientFactory.CreateClient();
-
-        var form = new MultipartFormDataContent
-        {
-            { new StringContent(Username), "Username" },
-            { new StringContent($"{Username}@test.local"), "Email" },
-            { new StringContent("Passw0rd123"), "Password" },
-            { new StringContent("Jwt"), "FirstName" },
-            { new StringContent("Reader"), "LastName" },
-            { new StringContent(new DateTime(1995, 1, 1).ToString("O", CultureInfo.InvariantCulture)), "DateOfBirth" },
-            { new StringContent("false"), "IsPrivate" },
-        };
-
-        var response = await httpClient.PostAsync("/Identity/register/", form);
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-
-        var body = await response.Content.ReadFromJsonAsync<TokenResponse>();
-        body!.Token.Should().NotBeNullOrWhiteSpace();
-
-        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
-            "Bearer",
-            body.Token);
-
-        return httpClient;
-    }
-
-    private sealed record TokenResponse(string Token);
-
-    private sealed class RealJwtFactory : BookHubWebApplicationFactory
-    {
-        protected override bool UseTestAuthentication => false;
-
-        protected override void ConfigureWebHost(IWebHostBuilder builder)
-        {
-            base.ConfigureWebHost(builder);
-
-            // Email is a true external boundary: registration queues a welcome email.
-            builder.ConfigureTestServices(services => services
-                .RemoveAll<IEmailSender>()
-                .AddSingleton<IEmailSender, NoOpEmailSender>());
-        }
-    }
-
-    private sealed class NoOpEmailSender : IEmailSender
-    {
-        public Task SendWelcome(
-            string email,
-            string username,
-            string baseUrl,
-            CancellationToken cancellationToken = default)
-            => Task.CompletedTask;
-
-        public Task SendPasswordReset(
-            string email,
-            string resetUrl,
-            CancellationToken cancellationToken = default)
-            => Task.CompletedTask;
-    }
+    private Task<HttpClient> RegisterAndAuthenticate()
+        => this.httpClientFactory.RegisterAndAuthenticate(Username);
 }

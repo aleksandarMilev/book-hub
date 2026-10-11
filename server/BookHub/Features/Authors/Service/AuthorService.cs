@@ -360,6 +360,10 @@ public class AuthorService(
                 a => a.AuthorId == authorId,
                 cancellationToken);
 
+        // Read before either branch: a creator can edit their author while it still awaits
+        // approval, and approving it then goes through the pending-edit branch (B-24).
+        var wasPreviouslyUnapproved = !dbModel.IsApproved;
+
         if (pendingDbModel is not null)
         {
             var oldAuthorImagePath = dbModel.ImagePath;
@@ -400,10 +404,16 @@ public class AuthorService(
                 receiverId: dbModel.CreatorId!,
                 cancellationToken);
 
+            if (wasPreviouslyUnapproved)
+            {
+                await profileService.IncrementCreatedAuthorsCount(
+                    userId: dbModel.CreatorId!,
+                    cancellationToken);
+            }
+
             return true;
         }
 
-        var wasPreviouslyUnapproved = !dbModel.IsApproved;
         dbModel.IsApproved = true;
 
         await data.SaveChangesAsync(cancellationToken);
@@ -553,6 +563,19 @@ public class AuthorService(
             defaultImagePath: null,
             cancellationToken);
 
+        // The admin's edit supersedes a pending edit (B-25). Left in place, the creator would
+        // keep seeing it, and approving it later would overwrite the admin's changes.
+        var pending = await data
+            .AuthorEdits
+            .FirstOrDefaultAsync(
+                e => e.AuthorId == dbModel.Id,
+                cancellationToken);
+
+        if (pending is not null)
+        {
+            data.AuthorEdits.Remove(pending);
+        }
+
         await data.SaveChangesAsync(cancellationToken);
 
         var shouldDeleteOldImage =
@@ -570,6 +593,26 @@ public class AuthorService(
             imageWriter.Delete(
                 resourceName: ImagePathPrefix,
                 imagePath: oldImagePath,
+                defaultImagePath: DefaultImagePath);
+        }
+
+        // A pending image is its own file unless the pending edit reused the author's image.
+        var shouldDeletePendingImage =
+            pending is not null &&
+            !string.Equals(
+                pending.ImagePath,
+                oldImagePath,
+                StringComparison.OrdinalIgnoreCase) &&
+            !string.Equals(
+                pending.ImagePath,
+                DefaultImagePath,
+                StringComparison.OrdinalIgnoreCase);
+
+        if (shouldDeletePendingImage)
+        {
+            imageWriter.Delete(
+                resourceName: PendingImagePathPrefix,
+                imagePath: pending!.ImagePath,
                 defaultImagePath: DefaultImagePath);
         }
 

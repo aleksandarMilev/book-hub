@@ -39,6 +39,55 @@ public sealed class AuthorsIntegration : IAsyncLifetime
     }
 
     [Fact]
+    public async Task Names_ShouldReturnTheAuthorsIdsAndNames()
+    {
+        var (first, second, hidden) = await this.httpClientFactory.WithData(async data => (
+            await data.SeedAuthor("First author", creatorId: "test-user"),
+            await data.SeedAuthor("Second author", creatorId: "test-admin-id"),
+            // Someone else's unapproved author is hidden by the approval filter.
+            await data.SeedAuthor("Hidden author", isApproved: false, creatorId: "test-admin-id")));
+
+        var httpClient = this.httpClientFactory.CreateUserClient();
+
+        var names = await httpClient.GetFromJsonAsync<List<AuthorNamesServiceModel>>("/Authors/names/", cancellationToken: TestContext.Current.CancellationToken);
+
+        names.Should().NotBeNull();
+        names!.Should().ContainEquivalentOf(new { first.Id, Name = "First author" });
+        names.Should().ContainEquivalentOf(new { second.Id, Name = "Second author" });
+        names.Select(a => a.Id).Should().NotContain(hidden.Id);
+    }
+
+    [Fact]
+    public async Task TopThree_ShouldReturnThreeAuthorsOrderedByAverageRatingDesc()
+    {
+        var ids = await this.httpClientFactory.WithData(async data => new[]
+        {
+            (await data.SeedAuthor("A1", averageRating: 1.1)).Id,
+            (await data.SeedAuthor("A2", averageRating: 4.6)).Id,
+            (await data.SeedAuthor("A3", averageRating: 3.8)).Id,
+            (await data.SeedAuthor("A4", averageRating: 5.0)).Id,
+        });
+
+        var top = await this
+            .httpClientFactory
+            .CreateAnonymousClient()
+            .GetFromJsonAsync<List<AuthorServiceModel>>("/Authors/top/", cancellationToken: TestContext.Current.CancellationToken);
+
+        top.Should().NotBeNull();
+        top!.Select(a => a.Id).Should().Equal(ids[3], ids[1], ids[2]);
+    }
+
+    [Fact]
+    public async Task Details_ShouldReturnNotFoundProblem_WhenAuthorDoesNotExist()
+    {
+        var httpClient = this.httpClientFactory.CreateUserClient();
+
+        var response = await httpClient.GetAsync($"/Authors/{Guid.NewGuid()}/", TestContext.Current.CancellationToken);
+
+        await response.ShouldBeProblem(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
     public async Task Create_ShouldPersistNonDefaultImage_WhenImageProvided_AndAlso_ShouldUseImageWriter()
     {
         var httpClient = this.httpClientFactory.CreateUserClient();
@@ -53,12 +102,12 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             bornAt: new DateTime(1950, 1, 1),
             diedAt: null);
 
-        var response = await httpClient.PostAsync("/Authors", formData);
+        var response = await httpClient.PostAsync("/Authors", formData, TestContext.Current.CancellationToken);
         response.StatusCode.Should().Be(HttpStatusCode.Created);
 
         var createdAuthor = await response
             .Content
-            .ReadFromJsonAsync<AuthorDetailsServiceModel>();
+            .ReadFromJsonAsync<AuthorDetailsServiceModel>(cancellationToken: TestContext.Current.CancellationToken);
 
         createdAuthor.Should().NotBeNull();
         createdAuthor.ImagePath.Should().NotBe(DefaultImagePath);
@@ -80,7 +129,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
         var dbModel = await data
             .Authors
             .IgnoreQueryFilters()
-            .SingleAsync(a => a.Id == createdAuthor.Id);
+            .SingleAsync(a => a.Id == createdAuthor.Id, cancellationToken: TestContext.Current.CancellationToken);
 
         dbModel.ImagePath.Should().Be(createdAuthor.ImagePath);
     }
@@ -99,14 +148,14 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             bornAt: new DateTime(1950, 1, 1),
             diedAt: null);
 
-        var response = await httpClient.PostAsync("/Authors", formData);
+        var response = await httpClient.PostAsync("/Authors", formData, TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
         response.Headers.Location.Should().NotBeNull();
 
         var createdAuthor = await response
             .Content
-            .ReadFromJsonAsync<AuthorDetailsServiceModel>();
+            .ReadFromJsonAsync<AuthorDetailsServiceModel>(cancellationToken: TestContext.Current.CancellationToken);
 
         createdAuthor.Should().NotBeNull();
         createdAuthor.Id.Should().NotBeEmpty();
@@ -131,10 +180,12 @@ public sealed class AuthorsIntegration : IAsyncLifetime
         var dbModel = await data
             .Authors
             .IgnoreQueryFilters()
-            .SingleAsync(a => a.Id == createdAuthor.Id);
+            .SingleAsync(a => a.Id == createdAuthor.Id, cancellationToken: TestContext.Current.CancellationToken);
 
         dbModel.ImagePath.Should().Be(DefaultImagePath);
         dbModel.IsApproved.Should().BeFalse();
+        dbModel.CreatorId.Should().Be("test-user");
+        dbModel.CreatedOn.Should().NotBe(default);
     }
 
     [Fact]
@@ -151,13 +202,13 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             bornAt: null,
             diedAt: null);
 
-        var response = await httpClient.PostAsync("/Authors", formData);
+        var response = await httpClient.PostAsync("/Authors", formData, TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
 
         var createdAuthor = await response
             .Content
-            .ReadFromJsonAsync<AuthorDetailsServiceModel>();
+            .ReadFromJsonAsync<AuthorDetailsServiceModel>(cancellationToken: TestContext.Current.CancellationToken);
 
         createdAuthor.Should().NotBeNull();
         createdAuthor!.Id.Should().NotBeEmpty();
@@ -174,7 +225,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
         var dbModel = await data
             .Authors
             .IgnoreQueryFilters()
-            .SingleAsync(a => a.Id == createdAuthor.Id);
+            .SingleAsync(a => a.Id == createdAuthor.Id, cancellationToken: TestContext.Current.CancellationToken);
 
         dbModel.IsApproved.Should().BeTrue();
     }
@@ -193,7 +244,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             bornAt: null,
             diedAt: null);
 
-        var response = await httpClient.PostAsync("/Authors", formData);
+        var response = await httpClient.PostAsync("/Authors", formData, TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         response
@@ -213,6 +264,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             imagePath: "/images/authors/seed.jpg");
 
         var httpClient = this.httpClientFactory.CreateUserClient();
+        var imageWriterMock = this.httpClientFactory.GetImageWriterMock();
 
         var formData = BuildAuthorForm(
             authorName: "Edited author name",
@@ -223,9 +275,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             bornAt: new DateTime(1940, 2, 2),
             diedAt: new DateTime(2020, 3, 3));
 
-        var response = await httpClient.PutAsync(
-            $"/Authors/{authorId}/",
-            formData);
+        var response = await httpClient.PutAsync($"/Authors/{authorId}/", formData, TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
@@ -241,24 +291,27 @@ public sealed class AuthorsIntegration : IAsyncLifetime
         var dbModel = await data
             .Authors
             .IgnoreQueryFilters()
-            .SingleAsync(a => a.Id == authorId);
+            .SingleAsync(a => a.Id == authorId, cancellationToken: TestContext.Current.CancellationToken);
 
         dbModel.Name.Should().NotBe("Edited author name");
         dbModel.ImagePath.Should().Be("/images/authors/seed.jpg");
 
         var pending = await data
             .AuthorEdits
-            .SingleAsync(e => e.AuthorId == authorId);
+            .SingleAsync(e => e.AuthorId == authorId, cancellationToken: TestContext.Current.CancellationToken);
 
         pending.Name.Should().Be("Edited author name");
         pending.ImagePath.Should().Be("/images/authors/seed.jpg");
         pending.RequestedById.Should().Be("test-user");
 
+        // No image was uploaded, so the pending edit reuses the author's image.
+        imageWriterMock.WriteCalls.Should().Be(0);
+
         var notificationReceivers = await data
             .Notifications
             .Where(n => n.ResourceId == authorId)
             .Select(n => n.ReceiverId)
-            .ToListAsync();
+            .ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         notificationReceivers.Should().Equal("test-admin-id");
     }
@@ -281,9 +334,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             bornAt: new DateTime(1940, 2, 2),
             diedAt: new DateTime(2020, 3, 3));
 
-        var response = await httpClient.PutAsync(
-            $"/Authors/{authorId}/",
-            formData);
+        var response = await httpClient.PutAsync($"/Authors/{authorId}/", formData, TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
@@ -299,7 +350,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
         var dbModel = await data
             .Authors
             .IgnoreQueryFilters()
-            .SingleAsync(a => a.Id == authorId);
+            .SingleAsync(a => a.Id == authorId, cancellationToken: TestContext.Current.CancellationToken);
 
         dbModel.Name.Should().Be("Edited author name");
         dbModel.ImagePath.Should().Be("/images/authors/seed.jpg");
@@ -307,13 +358,13 @@ public sealed class AuthorsIntegration : IAsyncLifetime
 
         var hasPendingEdit = await data
             .AuthorEdits
-            .AnyAsync(e => e.AuthorId == authorId);
+            .AnyAsync(e => e.AuthorId == authorId, cancellationToken: TestContext.Current.CancellationToken);
 
         hasPendingEdit.Should().BeFalse();
 
         var hasNotifications = await data
             .Notifications
-            .AnyAsync(n => n.ResourceId == authorId);
+            .AnyAsync(n => n.ResourceId == authorId, cancellationToken: TestContext.Current.CancellationToken);
 
         hasNotifications.Should().BeFalse();
     }
@@ -333,13 +384,13 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             bornAt: null,
             diedAt: null);
 
-        var response = await httpClient.PutAsync(
-            $"/Authors/{nonExistingId}/",
-            formData);
+        var response = await httpClient.PutAsync($"/Authors/{nonExistingId}/", formData, TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(
             HttpStatusCode.NotFound,
             "The author was not found.");
+
+        this.httpClientFactory.GetImageWriterMock().WriteCalls.Should().Be(0);
     }
 
     [Fact]
@@ -358,9 +409,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             bornAt: null,
             diedAt: null);
 
-        var response = await httpClient.PutAsync(
-            $"/Authors/{authorId}/",
-            formData);
+        var response = await httpClient.PutAsync($"/Authors/{authorId}/", formData, TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         response
@@ -391,9 +440,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             bornAt: new DateTime(1940, 2, 2),
             diedAt: new DateTime(2020, 3, 3));
 
-        var response = await httpClient.PutAsync(
-            $"/Authors/{authorId}/",
-            formData);
+        var response = await httpClient.PutAsync($"/Authors/{authorId}/", formData, TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
@@ -413,13 +460,13 @@ public sealed class AuthorsIntegration : IAsyncLifetime
         var dbModel = await data
             .Authors
             .IgnoreQueryFilters()
-            .SingleAsync(a => a.Id == authorId);
+            .SingleAsync(a => a.Id == authorId, cancellationToken: TestContext.Current.CancellationToken);
 
         dbModel.ImagePath.Should().Be("/images/authors/old.jpg");
 
         var pending = await data
             .AuthorEdits
-            .SingleAsync(e => e.AuthorId == authorId);
+            .SingleAsync(e => e.AuthorId == authorId, cancellationToken: TestContext.Current.CancellationToken);
 
         pending.ImagePath.Should().Be(imageWriterMock.LastWrittenPath);
     }
@@ -443,9 +490,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             bornAt: new DateTime(1940, 2, 2),
             diedAt: new DateTime(2020, 3, 3));
 
-        var response = await httpClient.PutAsync(
-            $"/Authors/{authorId}/",
-            formData);
+        var response = await httpClient.PutAsync($"/Authors/{authorId}/", formData, TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
@@ -467,7 +512,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
         var dbModel = await data
             .Authors
             .IgnoreQueryFilters()
-            .SingleAsync(a => a.Id == authorId);
+            .SingleAsync(a => a.Id == authorId, cancellationToken: TestContext.Current.CancellationToken);
 
         dbModel.ImagePath.Should().NotBe("/images/authors/old.jpg");
         dbModel.ImagePath.Should().StartWith("/images/authors/test-");
@@ -482,8 +527,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
 
         var httpClient = this.httpClientFactory.CreateUserClient();
 
-        var response = await httpClient.DeleteAsync(
-            $"/Authors/{authorId}/");
+        var response = await httpClient.DeleteAsync($"/Authors/{authorId}/", TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
@@ -498,14 +542,14 @@ public sealed class AuthorsIntegration : IAsyncLifetime
 
         var authorsCount = await data
             .Authors
-            .CountAsync(a => a.Id == authorId);
+            .CountAsync(a => a.Id == authorId, cancellationToken: TestContext.Current.CancellationToken);
 
         authorsCount.Should().Be(0);
 
         var deletedAuthor = await data
             .Authors
             .IgnoreQueryFilters()
-            .SingleAsync(a => a.Id == authorId);
+            .SingleAsync(a => a.Id == authorId, cancellationToken: TestContext.Current.CancellationToken);
 
         deletedAuthor.IsDeleted.Should().BeTrue();
         deletedAuthor.DeletedOn.Should().NotBeNull();
@@ -517,8 +561,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
         var httpClient = this.httpClientFactory.CreateUserClient();
         var nonExistingId = Guid.NewGuid();
 
-        var response = await httpClient.DeleteAsync(
-            $"/Authors/{nonExistingId}/");
+        var response = await httpClient.DeleteAsync($"/Authors/{nonExistingId}/", TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(
             HttpStatusCode.NotFound,
@@ -543,8 +586,8 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             bornAt: null,
             diedAt: null);
 
-        var editResponse = await httpClient.PutAsync($"/Authors/{author.Id}/", formData);
-        var deleteResponse = await httpClient.DeleteAsync($"/Authors/{author.Id}/");
+        var editResponse = await httpClient.PutAsync($"/Authors/{author.Id}/", formData, TestContext.Current.CancellationToken);
+        var deleteResponse = await httpClient.DeleteAsync($"/Authors/{author.Id}/", TestContext.Current.CancellationToken);
 
         await editResponse.ShouldBeProblem(
             HttpStatusCode.Forbidden,
@@ -585,12 +628,12 @@ public sealed class AuthorsIntegration : IAsyncLifetime
             bornAt: null,
             diedAt: null);
 
-        var response = await httpClient.PostAsync("/Authors", formData);
+        var response = await httpClient.PostAsync("/Authors", formData, TestContext.Current.CancellationToken);
 
         // Model binding rejects undefined enum values before the service runs.
         await response.ShouldBeProblem(HttpStatusCode.BadRequest);
 
-        (await response.Content.ReadAsStringAsync()).Should().Contain("Gender");
+        (await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken)).Should().Contain("Gender");
     }
 
     [Fact]
@@ -600,9 +643,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
 
         var httpClient = this.httpClientFactory.CreateUserClient();
 
-        var response = await httpClient.PatchAsync(
-            $"/Administrator/Authors/{authorId}/approve/",
-            content: null);
+        var response = await httpClient.PatchAsync($"/Administrator/Authors/{authorId}/approve/", content: null, cancellationToken: TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
@@ -615,9 +656,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
 
         var httpClient = this.httpClientFactory.CreateAdminClient();
 
-        var response = await httpClient.PatchAsync(
-            $"/Administrator/Authors/{authorId}/approve/",
-            content: null);
+        var response = await httpClient.PatchAsync($"/Administrator/Authors/{authorId}/approve/", content: null, cancellationToken: TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
@@ -633,7 +672,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
         var dbModel = await data
             .Authors
             .IgnoreQueryFilters()
-            .SingleAsync(a => a.Id == authorId);
+            .SingleAsync(a => a.Id == authorId, cancellationToken: TestContext.Current.CancellationToken);
 
         dbModel.IsApproved.Should().BeTrue();
     }
@@ -644,9 +683,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
         var httpClient = this.httpClientFactory.CreateAdminClient();
         var nonExistingId = Guid.NewGuid();
 
-        var response = await httpClient.PatchAsync(
-            $"/Administrator/Authors/{nonExistingId}/approve/",
-            content: null);
+        var response = await httpClient.PatchAsync($"/Administrator/Authors/{nonExistingId}/approve/", content: null, cancellationToken: TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(
             HttpStatusCode.NotFound,
@@ -661,9 +698,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
 
         var httpClient = this.httpClientFactory.CreateAdminClient();
 
-        var response = await httpClient.PatchAsync(
-            $"/Administrator/Authors/{authorId}/reject/",
-            content: null);
+        var response = await httpClient.PatchAsync($"/Administrator/Authors/{authorId}/reject/", content: null, cancellationToken: TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
@@ -678,14 +713,14 @@ public sealed class AuthorsIntegration : IAsyncLifetime
 
         var authorsCount = await data
             .Authors
-            .CountAsync(a => a.Id == authorId);
+            .CountAsync(a => a.Id == authorId, cancellationToken: TestContext.Current.CancellationToken);
 
         authorsCount.Should().Be(0);
 
         var deletedAuthor = await data
             .Authors
             .IgnoreQueryFilters()
-            .SingleAsync(a => a.Id == authorId);
+            .SingleAsync(a => a.Id == authorId, cancellationToken: TestContext.Current.CancellationToken);
 
         deletedAuthor.IsDeleted.Should().BeTrue();
         deletedAuthor.DeletedOn.Should().NotBeNull();
@@ -698,9 +733,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
 
         var httpClient = this.httpClientFactory.CreateUserClient();
 
-        var response = await httpClient.PatchAsync(
-            $"/Administrator/Authors/{authorId}/reject/",
-            content: null);
+        var response = await httpClient.PatchAsync($"/Administrator/Authors/{authorId}/reject/", content: null, cancellationToken: TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
@@ -711,9 +744,7 @@ public sealed class AuthorsIntegration : IAsyncLifetime
         var httpClient = this.httpClientFactory.CreateAdminClient();
         var nonExistingId = Guid.NewGuid();
 
-        var response = await httpClient.PatchAsync(
-            $"/Administrator/Authors/{nonExistingId}/reject/",
-            content: null);
+        var response = await httpClient.PatchAsync($"/Administrator/Authors/{nonExistingId}/reject/", content: null, cancellationToken: TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(
             HttpStatusCode.NotFound,

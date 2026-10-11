@@ -12,11 +12,14 @@ using Features.Notifications.Data.Models;
 using Features.Notifications.Shared;
 using Features.Reviews.Data.Models;
 using Features.UserProfile.Data.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+
+using static Common.Constants.Names;
 
 // Seed helpers for integration tests. Each one writes through the DbContext (so the audit
 // fields and soft-delete behavior apply), saves, and returns the entity. Pass the context
-// from BookHubWebApplicationFactory.WithData or from a TestDatabase.
+// from BookHubWebApplicationFactory.WithData.
 public static class TestSeeder
 {
     // The "Other" genre is seeded by the initial migration, so every test database has it.
@@ -52,6 +55,40 @@ public static class TestSeeder
         };
 
         data.Users.Add(user);
+        await data.SaveChangesAsync();
+
+        return user;
+    }
+
+    // A user in the Administrator role, as the real AdminService finds admins
+    // (see BookHubWebApplicationFactory.UseRealAdminService).
+    public static async Task<UserDbModel> SeedAdmin(
+        this BookHubDbContext data,
+        string id,
+        string username)
+    {
+        var user = await data.SeedUser(id, username);
+
+        var role = await data
+            .Roles
+            .FirstOrDefaultAsync(r => r.Name == AdminRoleName);
+
+        if (role is null)
+        {
+            role = new IdentityRole(AdminRoleName)
+            {
+                NormalizedName = AdminRoleName.ToUpperInvariant(),
+            };
+
+            data.Roles.Add(role);
+        }
+
+        data.UserRoles.Add(new IdentityUserRole<string>
+        {
+            UserId = user.Id,
+            RoleId = role.Id,
+        });
+
         await data.SaveChangesAsync();
 
         return user;

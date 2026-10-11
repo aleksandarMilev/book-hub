@@ -13,6 +13,9 @@ public sealed class ImageWriterMock : IImageWriter
 
     public string? LastWrittenPath { get; private set; }
 
+    // When set, writes for this resource (e.g. "profiles") throw, as a full disk would.
+    public string? FailWritesFor { get; set; }
+
     public Task Write(
         string resourceName,
         IImageDdModel dbModel,
@@ -21,6 +24,11 @@ public sealed class ImageWriterMock : IImageWriter
         CancellationToken cancellationToken = default)
     {
         this.WriteCalls++;
+
+        if (string.Equals(resourceName, this.FailWritesFor, StringComparison.Ordinal))
+        {
+            throw new IOException($"Simulated failure writing a {resourceName} image.");
+        }
 
         if (serviceModel.Image is null)
         {

@@ -1,5 +1,6 @@
 ﻿namespace BookHub.Features.Identity.Service;
 
+using BookHub.Data;
 using Data.Models;
 using Emails;
 using Features.UserProfile.Service;
@@ -22,6 +23,7 @@ using static Shared.Constants.ErrorMessages;
 using static Shared.Constants.TokenExpiration;
 
 public class IdentityService(
+    BookHubDbContext data,
     UserManager<UserDbModel> userManager,
     IEmailSender emailSender,
     IWelcomeEmailQueue welcomeEmailQueue,
@@ -69,37 +71,31 @@ public class IdentityService(
             LockoutEnabled = true
         };
 
-        var identityResult = await userManager.CreateAsync(
-            user,
-            serviceModel.Password);
+        IdentityResult identityResult;
+
+        try
+        {
+            identityResult = await this.CreateUserAndProfile(
+                user,
+                serviceModel,
+                cancellationToken);
+        }
+        catch (Exception exception) when (exception is not OperationCanceledException)
+        {
+            logger.LogError(exception,
+                "Failed to complete registration. UserId={UserId}",
+                user.Id);
+
+            return ResultWith<string>.Failure(InvalidRegisterAttempt);
+        }
 
         if (identityResult.Succeeded)
         {
-            string jwt;
-
-            try
-            {
-                jwt = this.GenerateJwtToken(
-                    jwtSettings.Value.Secret,
-                    user.Id,
-                    serviceModel.Username,
-                    serviceModel.Email);
-
-                await profileService.Create(
-                    serviceModel.ToCreateProfileServiceModel(),
-                    user.Id,
-                    cancellationToken);
-            }
-            catch (Exception exception)
-            {
-                logger.LogError(exception,
-                    "Failed to complete registration. UserId={UserId}",
-                    user.Id);
-
-                await userManager.DeleteAsync(user);
-
-                return ResultWith<string>.Failure(InvalidRegisterAttempt);
-            }
+            var jwt = this.GenerateJwtToken(
+                jwtSettings.Value.Secret,
+                user.Id,
+                serviceModel.Username,
+                serviceModel.Email);
 
             logger.LogInformation("User successfully registered. UserId={UserId}", user.Id);
 
@@ -265,6 +261,56 @@ public class IdentityService(
         }
 
         return ResultWith<string>.Success("Password successfully reset.");
+    }
+
+    // The user and the profile commit together or not at all (B-02). A user left behind by a
+    // failed profile creation would keep its username and email taken, because the uniqueness
+    // checks include soft-deleted users. UserManager saves through the same scoped DbContext,
+    // so the transaction covers both. Retry-on-failure is configured, so the transaction runs
+    // inside the execution strategy.
+    private async Task<IdentityResult> CreateUserAndProfile(
+        UserDbModel user,
+        RegisterServiceModel serviceModel,
+        CancellationToken cancellationToken = default)
+    {
+        var strategy = data.Database.CreateExecutionStrategy();
+
+        try
+        {
+            return await strategy.ExecuteAsync(async () =>
+            {
+                // A retried attempt starts from a clean tracker (the rolled-back rows are gone).
+                data.ChangeTracker.Clear();
+
+                await using var transaction = await data
+                    .Database
+                    .BeginTransactionAsync(cancellationToken);
+
+                var identityResult = await userManager.CreateAsync(
+                    user,
+                    serviceModel.Password);
+
+                if (!identityResult.Succeeded)
+                {
+                    return identityResult;
+                }
+
+                await profileService.Create(
+                    serviceModel.ToCreateProfileServiceModel(),
+                    user.Id,
+                    cancellationToken);
+
+                await transaction.CommitAsync(cancellationToken);
+
+                return identityResult;
+            });
+        }
+        catch
+        {
+            // The transaction was rolled back, so nothing tracked here exists any more.
+            data.ChangeTracker.Clear();
+            throw;
+        }
     }
 
     // Required and validated as a URL on startup. Trimmed so "http://x/" doesn't produce "//identity/...".

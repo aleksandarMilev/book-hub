@@ -231,6 +231,11 @@ public class ReviewService(
             true,
             cancellationToken);
 
+        // The review's author, not the caller: an admin can delete someone else's review.
+        await profileService.DecrementWrittenReviewsCount(
+            dbModel.CreatorId,
+            cancellationToken);
+
         return true;
     }
 

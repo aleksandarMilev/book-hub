@@ -41,7 +41,7 @@ public sealed class WelcomeEmailBackgroundServiceUnit
 
         await backgroundService.StartAsync(CancellationToken.None);
 
-        await secondSent.Task.WaitAsync(TimeSpan.FromSeconds(10));
+        await secondSent.Task.WaitAsync(TimeSpan.FromSeconds(10), TestContext.Current.CancellationToken);
 
         await backgroundService.StopAsync(CancellationToken.None);
 

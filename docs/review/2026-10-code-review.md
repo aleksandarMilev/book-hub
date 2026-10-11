@@ -630,3 +630,57 @@ No tracked file was modified.
     - the client serves `/`, `/books`, `/authors`, `/genres` and a book page.
 
     The browser UI wasn't driven (no browser tool in this session); the manual checklist is in the PR notes.
+- **2026-10-11 (Phase 2d: workflow tests, the old unit tests retired, B-02, T-06):**
+  - **Tests:** 398 → 362, all passing. 60 old unit test cases were retired and 24 tests were added.
+    - Five consecutive full runs took 1 m 10 s, 1 m 5 s, 1 m 5 s, 1 m 9 s and 1 m 11 s (xUnit duration; 73–79 s wall).
+    - Both CI jobs pass on a clean copy of the working tree with the same steps and flags as `ci.yml`.
+    - `has-pending-model-changes` reports no changes.
+  - **The old unit tests are gone.** `ArticlesUnit`, `AuthorsUnit`, `BooksUnit` and `GenresUnit` built the services directly and substituted our own services (`IProfileService`, `INotificationService`, `IAdminService`, `ICurrentUserService`). They hid at least one real bug (B-23 below). Their 60 cases were handled as follows:
+    - **43 deleted.** Each one names a covering integration test. 13 of those covering tests gained an assertion so nothing was lost, for example `CreatorId`/`CreatedOn`, no image write on a 404, the pending edit's author and genres, and no notifications for an admin's create.
+    - **17 converted.** 10 became standalone HTTP tests, and 7 were folded into the workflow tests. Each one was written and passing before its original was deleted. The 10 standalone tests:
+      - author names, top three, and a missing author's 404;
+      - a book with an unknown author;
+      - a book with no genres when "Other" is gone;
+      - the book and its admin notification failing together;
+      - a pending edit with an unknown genre;
+      - an admin deleting someone else's book;
+      - no admins to notify;
+      - a pending edit whose genre was deleted.
+    - The 4 "image path doesn't change" tests only asserted calls on an `IImageWriter` substitute, in a branch the real writer can't reach. They were deleted with no replacement.
+    - The full table is in the PR notes.
+    - `TestDatabase.CreateContext`, which only those classes used, is removed.
+    - Kept, as pure logic or with only a true boundary mocked: `WelcomeEmailBackgroundServiceUnit` (`IEmailSender`), `FullTextSearchUnit`, `ExpectedFailuresUnit`, `JwtSettingsUnit`.
+  - **T-03:** resolved. Every remaining feature has HTTP-level integration tests, and the main user journeys are covered end to end by 8 workflow classes in `server/BookHub.Tests/Workflows/` (15 tests; listed in CLAUDE.md):
+    - book approval and rejection, book edits, author approval and rejection;
+    - identity (register with SMTP down → login → forgot password → reset from the emailed link);
+    - reviews and votes;
+    - reading lists, challenge progress and check-in streaks;
+    - reading-list privacy;
+    - account deletion.
+
+    The workflows use the app's real `AdminService` (admins are seeded in the Administrator role) and real notifications. Only `IEmailSender` (`RecordingEmailSender`) and `IImageWriter` are replaced. The new shared helpers are `RealJwtFactory`, `WorkflowFactory`, `TestSeeder.SeedAdmin`, `Forms` and `ShouldHaveStatus`/`ShouldHaveBody`.
+  - **T-06:** fixed. The `NoWarn` for xUnit1051 is removed. Its 263 hits were fixed with the analyzer's own code fix (`dotnet format analyzers … --diagnostics xUnit1051`), so every token-taking call in a test gets `TestContext.Current.CancellationToken`. The `-warnaserror` build now enforces it.
+  - **B-02:** fully fixed.
+    - **The bug:** a failed profile creation during registration soft-deleted the new user, so the username and email stayed taken.
+    - **The fix:** the user and the profile are now created in one transaction, run inside the execution strategy. `IdentityService` takes `BookHubDbContext`, the same scoped instance Identity's `UserStore` saves through. A failure rolls both back and returns the usual 400.
+    - **Why a transaction rather than a hard delete:** there is no moment when a user exists without a profile, and there is no cleanup step that can itself fail.
+    - **Test:** profile image writes are forced to fail, so the registration returns 400 and leaves no user row. Registering again with the same username and email then returns 200, and login works.
+    - **Leftover:** a profile image written before such a failure stays on disk, as before.
+  - **New findings, all fixed except B-27.** Each fix is mutation-checked: reverting it makes its workflow test fail.
+    - **B-23 (new, Medium): approving a book or author never counted it for its creator.** `ProfileService.Increment*`/`Decrement*` returned 403 unless the caller owned the profile. Approval runs as the admin, and the services ignored the result, so `CreatedBooksCount`/`CreatedAuthorsCount` stayed at 0. The old unit tests only checked that a mocked `IProfileService` was called. The caller checks are removed from these internal counter methods: no endpoint exposes them, and every caller passes an ID from the database or the claims.
+    - **B-24 (new, Low): a pending book or author with a pending edit wasn't counted when approved.** If the creator edited the entity while it awaited approval, Approve took the pending-edit branch, which skipped the count. `wasPreviouslyUnapproved` is now read before either branch.
+    - **B-25 (new, Medium): an admin's direct edit left the pending edit in place.** The creator kept seeing the stale overlay, and a later Approve would have overwritten the admin's changes with it. `EditDirectly` (books and authors) now removes the pending edit in the same save, and deletes its pending image when that image is its own file.
+    - **B-26 (new, Medium): after an edit was approved or rejected, every later edit of that book or author returned a 409.** Approve and Reject soft-delete the pending row, but the unique indexes on `BookEdits.BookId` and `AuthorEdits.AuthorId` weren't filtered, so the old row still counted.
+      - **Fix:** a new migration, `FilterPendingEditUniqueIndexes`, adds `WHERE NOT "IsDeleted"` to both indexes, like B-20.
+      - **Safety:** the change only relaxes the constraints, so it can't fail on existing data.
+      - **How it was found:** the edit workflow got the 409 before the fix.
+    - **B-09 (partial):** deleting a review now decrements its author's `ReviewsCount` (never below 0) through the new `IProfileService.DecrementWrittenReviewsCount`. This is the review's creator, not the caller, because an admin can delete someone else's review. Still open: the rating averages are read-modify-write with no concurrency control, and deleting a book or author doesn't adjust any counters.
+    - **B-27 (new, Low, open, decision needed): an admin's own books and authors never count.** Create auto-approves them without incrementing `CreatedBooksCount`/`CreatedAuthorsCount`, because the count only happens on Approve. Decide whether admin-created content should count.
+  - **Account deletion, current behavior** (open question 10). It's now pinned by `AccountDeletionWorkflowIntegration`:
+    - the token gets a 401, and the password no longer logs in;
+    - the profile and the reading lists are a 404 for other users;
+    - the user's review stays public under the old username and still counts in the book's rating;
+    - a book of theirs awaiting approval is kept;
+    - the username and email stay taken (409 on re-registration).
+  - **Skipped tests:** none.
+  - **Client:** unchanged. Lint and typecheck pass, `npx vitest run` passes 57/57, and the build passes.

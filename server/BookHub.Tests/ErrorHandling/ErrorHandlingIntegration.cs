@@ -42,7 +42,7 @@ public sealed class ErrorHandlingIntegration : IAsyncLifetime
     {
         var httpClient = this.httpClientFactory.CreateUserClient(UserId);
 
-        var response = await httpClient.GetAsync(ErrorEndpointsStartupFilter.Unhandled);
+        var response = await httpClient.GetAsync(ErrorEndpointsStartupFilter.Unhandled, TestContext.Current.CancellationToken);
 
         var problem = await response.ShouldBeProblem(
             HttpStatusCode.InternalServerError,
@@ -50,7 +50,7 @@ public sealed class ErrorHandlingIntegration : IAsyncLifetime
 
         problem.Extensions.Should().NotContainKey("exception");
 
-        var body = await response.Content.ReadAsStringAsync();
+        var body = await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
         body.Should().NotContain(ErrorEndpointsStartupFilter.SecretMessage);
         body.Should().NotContain(nameof(InvalidOperationException));
     }
@@ -60,9 +60,7 @@ public sealed class ErrorHandlingIntegration : IAsyncLifetime
     {
         var httpClient = this.httpClientFactory.CreateUserClient(UserId);
 
-        var response = await httpClient.PostAsync(
-            ErrorEndpointsStartupFilter.DuplicateCheckIn,
-            content: null);
+        var response = await httpClient.PostAsync(ErrorEndpointsStartupFilter.DuplicateCheckIn, content: null, cancellationToken: TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(
             HttpStatusCode.Conflict,
@@ -75,9 +73,7 @@ public sealed class ErrorHandlingIntegration : IAsyncLifetime
         var book = await this.httpClientFactory.WithData(data => data.SeedBook("Raced book"));
         var httpClient = this.httpClientFactory.CreateUserClient(UserId);
 
-        var response = await httpClient.PostAsync(
-            $"{ErrorEndpointsStartupFilter.DuplicateReview}?bookId={book.Id}",
-            content: null);
+        var response = await httpClient.PostAsync($"{ErrorEndpointsStartupFilter.DuplicateReview}?bookId={book.Id}", content: null, cancellationToken: TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(
             HttpStatusCode.Conflict,
@@ -95,9 +91,7 @@ public sealed class ErrorHandlingIntegration : IAsyncLifetime
     {
         var httpClient = this.httpClientFactory.CreateUserClient(UserId);
 
-        var response = await httpClient.PostAsync(
-            ErrorEndpointsStartupFilter.MissingReference,
-            content: null);
+        var response = await httpClient.PostAsync(ErrorEndpointsStartupFilter.MissingReference, content: null, cancellationToken: TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(
             HttpStatusCode.BadRequest,
@@ -109,7 +103,7 @@ public sealed class ErrorHandlingIntegration : IAsyncLifetime
     {
         var httpClient = this.httpClientFactory.CreateUserClient(UserId);
 
-        var response = await httpClient.GetAsync(ErrorEndpointsStartupFilter.InvalidImage);
+        var response = await httpClient.GetAsync(ErrorEndpointsStartupFilter.InvalidImage, TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(
             HttpStatusCode.BadRequest,
@@ -122,7 +116,7 @@ public sealed class ErrorHandlingIntegration : IAsyncLifetime
         var httpClient = this.httpClientFactory.CreateAnonymousClient();
 
         // A protected endpoint: the catalog (e.g. /Genres) is public since Phase 2c.
-        var response = await httpClient.GetAsync("/Profile/mine/");
+        var response = await httpClient.GetAsync("/Profile/mine/", TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(HttpStatusCode.Unauthorized);
     }
@@ -132,7 +126,7 @@ public sealed class ErrorHandlingIntegration : IAsyncLifetime
     {
         var httpClient = this.httpClientFactory.CreateUserClient(UserId);
 
-        var response = await httpClient.DeleteAsync($"/Administrator/Articles/{Guid.NewGuid()}/");
+        var response = await httpClient.DeleteAsync($"/Administrator/Articles/{Guid.NewGuid()}/", TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(HttpStatusCode.Forbidden);
     }
@@ -142,7 +136,7 @@ public sealed class ErrorHandlingIntegration : IAsyncLifetime
     {
         var httpClient = this.httpClientFactory.CreateUserClient(UserId);
 
-        var response = await httpClient.GetAsync("/no-such-route/");
+        var response = await httpClient.GetAsync("/no-such-route/", TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(HttpStatusCode.NotFound);
     }
@@ -152,11 +146,11 @@ public sealed class ErrorHandlingIntegration : IAsyncLifetime
     {
         var httpClient = this.httpClientFactory.CreateUserClient(UserId);
 
-        var response = await httpClient.PostAsync("/Books", new MultipartFormDataContent());
+        var response = await httpClient.PostAsync("/Books", new MultipartFormDataContent(), TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(HttpStatusCode.BadRequest);
 
-        var body = await response.Content.ReadAsStringAsync();
+        var body = await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
         body.Should().Contain("\"errors\"");
     }
 

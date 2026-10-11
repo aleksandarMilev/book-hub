@@ -225,20 +225,14 @@ public class ProfileService(
         return true;
     }
 
+    // The counters below are internal: no endpoint exposes them, and the calling services pass
+    // the ID of the user whose profile changes (from the claims, or from the database when an
+    // admin approves someone else's book or author). They don't check the caller, because an
+    // approval runs as the admin (B-23).
     public async Task<Result> IncrementCreatedBooksCount(
         string userId,
         CancellationToken cancellationToken = default)
     {
-        var currentUserId = userService.GetId()!;
-        var isNotCurrentUser = currentUserId != userId;
-
-        if (isNotCurrentUser)
-        {
-            return LogAndReturnForbidden(
-                currentUserId,
-                userId);
-        }
-
         var rowsAffected = await data
             .Profiles
             .Where(p => p.UserId == userId)
@@ -255,16 +249,6 @@ public class ProfileService(
         string userId,
         CancellationToken cancellationToken = default)
     {
-        var currentUserId = userService.GetId()!;
-        var isNotCurrentUser = currentUserId != userId;
-
-        if (isNotCurrentUser)
-        {
-            return LogAndReturnForbidden(
-                currentUserId,
-                userId);
-        }
-
         var rowsAffected = await data
             .Profiles
             .Where(p => p.UserId == userId)
@@ -281,16 +265,6 @@ public class ProfileService(
         string userId,
         CancellationToken cancellationToken = default)
     {
-        var currentUserId = userService.GetId()!;
-        var isNotCurrentUser = currentUserId != userId;
-
-        if (isNotCurrentUser)
-        {
-            return LogAndReturnForbidden(
-                currentUserId,
-                userId);
-        }
-
         var rowsAffected = await data
             .Profiles
             .Where(p => p.UserId == userId)
@@ -303,20 +277,27 @@ public class ProfileService(
         return rowsAffected > 0;
     }
 
+    // Never below zero.
+    public async Task<Result> DecrementWrittenReviewsCount(
+        string userId,
+        CancellationToken cancellationToken = default)
+    {
+        var rowsAffected = await data
+            .Profiles
+            .Where(p => p.UserId == userId && p.ReviewsCount > 0)
+            .ExecuteUpdateAsync(
+                setters => setters.SetProperty(
+                    profile => profile.ReviewsCount,
+                    profile => profile.ReviewsCount - 1),
+                cancellationToken);
+
+        return rowsAffected > 0;
+    }
+
     public async Task<Result> IncrementCurrentlyReadingBooksCount(
         string userId,
         CancellationToken cancellationToken = default)
     {
-        var currentUserId = userService.GetId()!;
-        var isNotCurrentUser = currentUserId != userId;
-
-        if (isNotCurrentUser)
-        {
-            return LogAndReturnForbidden(
-                currentUserId,
-                userId);
-        }
-
         var rowsAffected = await data
             .Profiles
             .Where(p => p.UserId == userId)
@@ -333,16 +314,6 @@ public class ProfileService(
         string userId,
         CancellationToken cancellationToken = default)
     {
-        var currentUserId = userService.GetId()!;
-        var isNotCurrentUser = currentUserId != userId;
-
-        if (isNotCurrentUser)
-        {
-            return LogAndReturnForbidden(
-                currentUserId,
-                userId);
-        }
-
         var rowsAffected = await data
             .Profiles
             .Where(p => p.UserId == userId)
@@ -359,16 +330,6 @@ public class ProfileService(
         string userId,
         CancellationToken cancellationToken = default)
     {
-        var currentUserId = userService.GetId()!;
-        var isNotCurrentUser = currentUserId != userId;
-
-        if (isNotCurrentUser)
-        {
-            return LogAndReturnForbidden(
-                currentUserId,
-                userId);
-        }
-
         var rowsAffected = await data
             .Profiles
             .Where(p => p.UserId == userId)
@@ -382,19 +343,9 @@ public class ProfileService(
     }
 
     public async Task<Result> DecrementCurrentlyReadingBooksCount(
-    string userId,
-    CancellationToken cancellationToken = default)
+        string userId,
+        CancellationToken cancellationToken = default)
     {
-        var currentUserId = userService.GetId()!;
-        var isNotCurrentUser = currentUserId != userId;
-
-        if (isNotCurrentUser)
-        {
-            return LogAndReturnForbidden(
-                currentUserId,
-                userId);
-        }
-
         var rowsAffected = await data
             .Profiles
             .Where(p => p.UserId == userId)
@@ -411,16 +362,6 @@ public class ProfileService(
         string userId,
         CancellationToken cancellationToken = default)
     {
-        var currentUserId = userService.GetId()!;
-        var isNotCurrentUser = currentUserId != userId;
-
-        if (isNotCurrentUser)
-        {
-            return LogAndReturnForbidden(
-                currentUserId,
-                userId);
-        }
-
         var rowsAffected = await data
             .Profiles
             .Where(p => p.UserId == userId)
@@ -437,16 +378,6 @@ public class ProfileService(
         string userId,
         CancellationToken cancellationToken = default)
     {
-        var currentUserId = userService.GetId()!;
-        var isNotCurrentUser = currentUserId != userId;
-
-        if (isNotCurrentUser)
-        {
-            return LogAndReturnForbidden(
-                currentUserId,
-                userId);
-        }
-
         var rowsAffected = await data
             .Profiles
             .Where(p => p.UserId == userId)

@@ -35,7 +35,7 @@ public sealed class NotificationsIntegration : IAsyncLifetime
 
         var httpClient = this.httpClientFactory.CreateUserClient(OtherUserId);
 
-        var response = await httpClient.DeleteAsync($"/Notifications/{notification.Id}/");
+        var response = await httpClient.DeleteAsync($"/Notifications/{notification.Id}/", TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(
             HttpStatusCode.NotFound,
@@ -56,8 +56,8 @@ public sealed class NotificationsIntegration : IAsyncLifetime
 
         var httpClient = this.httpClientFactory.CreateUserClient(OtherUserId);
 
-        var othersResponse = await httpClient.DeleteAsync($"/Notifications/{notification.Id}/");
-        var missingResponse = await httpClient.DeleteAsync($"/Notifications/{Guid.NewGuid()}/");
+        var othersResponse = await httpClient.DeleteAsync($"/Notifications/{notification.Id}/", TestContext.Current.CancellationToken);
+        var missingResponse = await httpClient.DeleteAsync($"/Notifications/{Guid.NewGuid()}/", TestContext.Current.CancellationToken);
 
         var othersProblem = await othersResponse.ShouldBeProblem(HttpStatusCode.NotFound);
         var missingProblem = await missingResponse.ShouldBeProblem(HttpStatusCode.NotFound);
@@ -73,9 +73,7 @@ public sealed class NotificationsIntegration : IAsyncLifetime
 
         var httpClient = this.httpClientFactory.CreateUserClient(OtherUserId);
 
-        var response = await httpClient.PatchAsync(
-            $"/Notifications/{notification.Id}/read/",
-            content: null);
+        var response = await httpClient.PatchAsync($"/Notifications/{notification.Id}/read/", content: null, cancellationToken: TestContext.Current.CancellationToken);
 
         await response.ShouldBeProblem(
             HttpStatusCode.NotFound,
@@ -98,7 +96,7 @@ public sealed class NotificationsIntegration : IAsyncLifetime
 
         var httpClient = this.httpClientFactory.CreateUserClient(ReceiverId);
 
-        var response = await httpClient.DeleteAsync($"/Notifications/{notification.Id}/");
+        var response = await httpClient.DeleteAsync($"/Notifications/{notification.Id}/", TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
