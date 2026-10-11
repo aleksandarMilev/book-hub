@@ -103,17 +103,19 @@ export const router = createBrowserRouter([
         element: withSuspense(<AuthenticatedRoute element={<EditProfile />} />),
       },
 
+      // The catalog (books, authors, genres and reviews) is public. Account-only actions on
+      // these pages are replaced with "Log in to …" links for anonymous visitors.
       {
         path: routes.book,
-        element: withSuspense(<AuthenticatedRoute element={<BookList />} />),
+        element: withSuspense(<BookList />),
       },
       {
         path: `${routes.book}/:id`,
-        element: withSuspense(<AuthenticatedRoute element={<BookDetails />} />),
+        element: withSuspense(<BookDetails />),
       },
       {
         path: `${routes.book}/:id/:slug`,
-        element: withSuspense(<AuthenticatedRoute element={<BookDetails />} />),
+        element: withSuspense(<BookDetails />),
       },
       {
         path: routes.createBook,
@@ -130,29 +132,29 @@ export const router = createBrowserRouter([
       },
       {
         path: `${routes.review}/:bookId`,
-        element: withSuspense(<AuthenticatedRoute element={<ReviewList />} />),
+        element: withSuspense(<ReviewList />),
       },
 
       {
         path: `${routes.genres}/:id/:slug`,
-        element: withSuspense(<AuthenticatedRoute element={<GenreDetails />} />),
+        element: withSuspense(<GenreDetails />),
       },
       {
         path: routes.genres,
-        element: withSuspense(<AuthenticatedRoute element={<GenreList />} />),
+        element: withSuspense(<GenreList />),
       },
 
       {
         path: routes.author,
-        element: withSuspense(<AuthenticatedRoute element={<AuthorList />} />),
+        element: withSuspense(<AuthorList />),
       },
       {
         path: `${routes.author}/:id`,
-        element: withSuspense(<AuthenticatedRoute element={<AuthorDetails />} />),
+        element: withSuspense(<AuthorDetails />),
       },
       {
         path: `${routes.author}/:id/:slug`,
-        element: withSuspense(<AuthenticatedRoute element={<AuthorDetails />} />),
+        element: withSuspense(<AuthorDetails />),
       },
       {
         path: routes.createAuthor,

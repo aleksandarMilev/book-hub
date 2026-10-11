@@ -19,7 +19,8 @@
     "titleFallback": "Ревюта"
   },
   "item": {
-    "delete": "Изтрий"
+    "delete": "Изтрий",
+    "loginToVote": "Влез, за да гласуваш"
   },
   "validation": {
     "fields": {

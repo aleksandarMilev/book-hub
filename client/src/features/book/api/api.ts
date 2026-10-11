@@ -1,4 +1,11 @@
-﻿import { getAuthConfig, getPublicConfig, http, httpAdmin, processError } from '@/shared/api/http';
+﻿import {
+  getAuthConfig,
+  getConfig,
+  getPublicConfig,
+  http,
+  httpAdmin,
+  processError,
+} from '@/shared/api/http';
 import { routes } from '@/shared/lib/constants/api';
 import { pagination } from '@/shared/lib/constants/defaultValues';
 import { baseErrors, errors } from '@/shared/lib/constants/errorMessages';
@@ -26,7 +33,7 @@ export const byGenre = async (
 ) => {
   try {
     const url = `${routes.booksByGenre}/${encodeURIComponent(String(genreId))}?page=${page}&pageSize=${pageSize}`;
-    const response = await http.get<PaginatedResult<Book>>(url, getAuthConfig(token, signal));
+    const response = await http.get<PaginatedResult<Book>>(url, getConfig(token, signal));
 
     return response.data;
   } catch (error) {
@@ -43,7 +50,7 @@ export const byAuthor = async (
 ) => {
   try {
     const url = `${routes.booksByAuthor}/${encodeURIComponent(String(authorId))}?page=${page}&pageSize=${pageSize}`;
-    const response = await http.get<PaginatedResult<Book>>(url, getAuthConfig(token, signal));
+    const response = await http.get<PaginatedResult<Book>>(url, getConfig(token, signal));
 
     return response.data;
   } catch (error) {
@@ -60,7 +67,7 @@ export const details = async (
   try {
     const url = `${routes.book}/${id}`;
     const httpClient = isAdmin ? httpAdmin : http;
-    const response = await httpClient.get<BookDetails>(url, getAuthConfig(token, signal));
+    const response = await httpClient.get<BookDetails>(url, getConfig(token, signal));
 
     return response.data;
   } catch (error) {

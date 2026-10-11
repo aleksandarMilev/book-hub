@@ -111,8 +111,9 @@ public sealed class BooksIntegration : IAsyncLifetime
     }
 
     [Fact]
-    public async Task ByGenre_ShouldReturnUnauthorized_WhenNotAuthenticated()
+    public async Task ByGenre_ShouldReturnOk_WhenNotAuthenticated()
     {
+        // The catalog is public (Phase 2c).
         var fantasyId = Guid.Parse("11111111-1111-1111-1111-111111111111");
 
         var httpClient = this.httpClientFactory.CreateClient();
@@ -120,7 +121,7 @@ public sealed class BooksIntegration : IAsyncLifetime
         var response = await httpClient.GetAsync(
             $"/Books/genre/{fantasyId}?page=1&pageSize=10");
 
-        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
     [Fact]
@@ -159,8 +160,9 @@ public sealed class BooksIntegration : IAsyncLifetime
     }
 
     [Fact]
-    public async Task ByAuthor_ShouldReturnUnauthorized_WhenNotAuthenticated()
+    public async Task ByAuthor_ShouldReturnOk_WhenNotAuthenticated()
     {
+        // The catalog is public (Phase 2c).
         var authorId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
 
         var httpClient = this.httpClientFactory.CreateClient();
@@ -168,7 +170,7 @@ public sealed class BooksIntegration : IAsyncLifetime
         var response = await httpClient.GetAsync(
             $"/Books/author/{authorId}?page=1&pageSize=10");
 
-        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
     [Fact]

@@ -22,9 +22,13 @@ public class BookHubDbContext(
     DbContextOptions<BookHubDbContext> options,
     ICurrentUserService userService) : IdentityDbContext<UserDbModel>(options)
 {
-    public string? CurrentUserId { get; } = userService.GetId();
+    // Read on every query (the query filters use them), never captured at construction: the
+    // scoped context can be created before the user is known. OnTokenValidated's deleted-user
+    // check resolves it while HttpContext.User is still unset, and a captured value would make
+    // every request filter as anonymous.
+    public string? CurrentUserId => userService.GetId();
 
-    public bool IsAdmin { get; } = userService.IsAdmin();
+    public bool IsAdmin => userService.IsAdmin();
 
     public DbSet<BookDbModel> Books { get; init; }
 

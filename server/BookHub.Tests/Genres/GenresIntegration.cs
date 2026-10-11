@@ -33,22 +33,24 @@ public sealed class GenresIntegration : IAsyncLifetime
     }
 
     [Fact]
-    public async Task Names_ShouldReturnUnauthorized_WhenNotAuthenticated()
+    public async Task Names_ShouldReturnOk_WhenNotAuthenticated()
     {
+        // The catalog is public (Phase 2c).
         var httpClient = this.httpClientFactory.CreateClient();
 
         var response = await httpClient.GetAsync("/Genres/");
-        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
     [Fact]
-    public async Task Details_ShouldReturnUnauthorized_WhenNotAuthenticated()
+    public async Task Details_ShouldReturnNotFound_NotUnauthorized_WhenNotAuthenticated()
     {
+        // The catalog is public (Phase 2c): a missing genre is a 404 for everyone.
         var httpClient = this.httpClientFactory.CreateClient();
         var id = Guid.NewGuid();
 
         var response = await httpClient.GetAsync($"/Genres/{id}/");
-        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
     [Fact]

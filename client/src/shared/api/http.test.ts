@@ -10,6 +10,7 @@ import {
 
 import {
   getAuthConfig,
+  getConfig,
   getProblemMessage,
   getPublicConfig,
   http,
@@ -93,6 +94,34 @@ describe('getPublicConfig', () => {
     const config = getPublicConfig();
 
     expect(config.headers).toBeUndefined();
+  });
+});
+
+describe('getConfig', () => {
+  it('sends the bearer token when there is one', () => {
+    expect(getConfig('token-value').headers).toEqual({ Authorization: 'Bearer token-value' });
+  });
+
+  it.each(['', '   ', null, undefined])(
+    'sends no Authorization header for an anonymous visitor (token %j)',
+    (token) => {
+      expect(getConfig(token)).toEqual({});
+    },
+  );
+
+  it('passes the abort signal through either way', () => {
+    const controller = new AbortController();
+
+    expect(getConfig('token-value', controller.signal).signal).toBe(controller.signal);
+    expect(getConfig('', controller.signal).signal).toBe(controller.signal);
+  });
+
+  it('sends no "Bearer" header through axios when anonymous', async () => {
+    const { adapter, requests } = recordingAdapter();
+
+    await http.get('/books/1', { ...getConfig(''), adapter });
+
+    expect(requests[0]?.headers.get('Authorization')).toBeUndefined();
   });
 });
 

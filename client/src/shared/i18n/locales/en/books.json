@@ -78,7 +78,8 @@
     "noReviews": "No reviews yet.",
     "allReviews": "All Reviews",
     "createReviewTitle": "Create Review",
-    "createProfile": "Create Profile",
+    "loginToReview": "Log in to write a review",
+    "loginToAddToList": "Log in to add this book to your lists",
     "publishedLabel": "Published:",
     "breadcrumb": {
       "home": "Home",

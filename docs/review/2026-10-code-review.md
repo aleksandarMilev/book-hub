@@ -589,3 +589,44 @@ No tracked file was modified.
     - after a self-delete, the same token gets a 401.
   - **B-21 (new, Low):** `appsettings.json` has empty `JwtSettings:Issuer`/`Audience`, and outside Development both are validated. With `ISSUER`/`AUDIENCE` unset in the environment, tokens carry no issuer or audience, and every authenticated request would get a 401. Compose and `.env.example` set them, and the test factory now does too. Fix by making both `[Required]` in `JwtSettings`, so startup fails fast.
   - **Still open from Phase 2:** T-06 (xUnit1051 is still suppressed), and branch protection requiring the `server` and `client` checks (a GitHub setting).
+- **2026-10-03 (Phase 2c: public catalog, B-21, parallel tests):**
+  - Tests: 379 → 398, all passing. Test classes now run in parallel (4 at a time): five consecutive full runs took 58 s, 57 s, 56 s, 56 s and 55 s (xUnit duration; 59–62 s wall), against 1 m 33 s run sequentially on the same 398-test code (Phase 2b baseline: 379 tests, about 1 m 30 s). With the dev stack running alongside, the runs take about 1 m 15 s. Both CI jobs pass on a clean copy of the working tree with the same steps and flags as `ci.yml`. `has-pending-model-changes` reports no changes.
+  - **Public catalog (decision: readable without an account, like Goodreads).** 11 read-only endpoints get `[AllowAnonymous]`:
+    - `Books/{id}`, `Books/genre/{id}`, `Books/author/{id}`;
+    - `Authors/{id}`, `Genres` and `Genres/{id}`;
+    - `Reviews/book/{id}` and `Reviews/{id}`;
+    - `Search/books`, `Search/authors` and `Search/genres`.
+
+    Profiles (`Profile/{id}`, `Profile/mine`), `Search/profiles`, `Authors/names` and every write stay behind login. `Profile/top` and the other Phase 2b public endpoints are unchanged. The matrix moves the 11 rows to `Public` (now 22 public, 46 protected), and the completeness guard passes.
+  - **Anonymous safety, per code path.** The query filters already gave an anonymous caller approved, non-deleted rows only, because the creator clause checks `CurrentUserId != null`. Book details' user-specific fields are empty for anonymous callers: `ReadingStatus` is `null`, and the "my review" ordering (B-10, still a no-op) compares with `""`. Three changes:
+    - **Pending-edit overlay (new, Low, fixed):** `BookService.Details` and `AuthorService.Details` treated the caller as the creator when `string.Equals(CreatorId, GetId())`. For an anonymous caller and a row with a null `CreatorId` (imported data), that is `null == null` → `true`, so a pending edit would have been shown. `isCreator` now requires a non-null user ID. No pending edit on a null-creator row could exist yet, so it wasn't reachable.
+    - **Reviews of an invisible book (new, Low, fixed):** `Reviews/book/{id}` and `Reviews/{id}` didn't check the book. Anyone with the ID could read the reviews of an unapproved or deleted book (a creator can review their own pending book). Both now go through the filtered `Books` set. An invisible book gives the same 404 as a missing one. **API note:** `Reviews/book/{id}` for a missing book is now a 404 (it was a 200 with an empty page).
+    - `GET` details of a missing genre is a 404 for everyone (it was a 401 when anonymous).
+  - **Behavior note:** on an `[AllowAnonymous]` endpoint an invalid or rejected token (expired, deleted user) isn't a 401: the request is served anonymously. The deleted-user tests now probe `Profile/mine` instead of `Genres`, and a test pins the public-endpoint behavior.
+  - **B-22 (new, High, fixed): query filters ignored the caller for every real JWT request since Phase 2b.** `BookHubDbContext` captured `CurrentUserId`/`IsAdmin` in its constructor. The Phase 2b `OnTokenValidated` deleted-user check resolves the scoped context during authentication, before `HttpContext.User` is set, so every authenticated request filtered as anonymous:
+    - a non-admin's book or author create saved the row and then returned a **500**, because the reload through the approval filter couldn't see it (found on the dev stack; the saved row stays);
+    - a creator got a 404 for their own pending book or author;
+    - an admin's filters acted like a non-admin's on the user endpoints (the admin endpoints use `IgnoreQueryFilters`).
+
+    The test auth scheme skips `OnTokenValidated`, so no test caught it. Fix: both properties are getters, read per query (EF evaluates context properties in filters per query). Regression test: `DeletedUserTokenIntegration.QueryFilters_ShouldSeeTheCaller_AfterTheDeletedUserCheckUsedTheDbContext` (real JWT; it returned a 500 before the fix).
+  - **Client:**
+    - The 7 catalog pages have no route guard any more: book list/search (including the by-genre and by-author modes), book details, author list and details, genre list and details, and a book's reviews.
+    - Account-only actions show a "Log in to …" link to the login page (en and bg), replacing the "Create Profile" links: the reading-list buttons, the create-review area, and per review read-only vote counts plus "Log in to vote". Edit/delete and approve/reject were already owner- and admin-only.
+    - `getConfig(token, signal)` in `shared/api/http.ts` sends the bearer token when there is one and no `Authorization` header otherwise. The catalog calls and search use it, and the `!token` early returns in the catalog hooks are gone. Vitest: 50 → 57 tests (7 new for `getConfig`).
+    - The header already showed the catalog links to logged-out visitors.
+  - **B-21:** fixed. `JwtSettings.Issuer` and `Audience` are `[Required]` (empty or whitespace fails), validated on start like `Secret`, with messages naming the setting and the Compose variable. The `"BookHub"`/`"BookHubClient"` code defaults are gone (`appsettings.json`'s `""` overrode them anyway). Development appsettings, the test factory and `.env.example` set both. Both Compose files use `${ISSUER:?ISSUER is required}` and `${AUDIENCE:?AUDIENCE is required}`, so `docker compose config` fails without them (verified). The other `${VAR:?}` guards stay in Phase 3 (D-08). `JwtSettingsUnit` runs the startup validator (8 cases).
+  - **Parallel test runs:** `[assembly: Parallelization(Mode = ParallelMode.Collections, MaxThreads = 4)]`. Test classes run in parallel, and the tests inside a class run sequentially. Inventory and fixes:
+    - Concurrent `CREATE DATABASE … TEMPLATE` from one template: serialized with a static `CloneLock` in `PostgresServer`.
+    - `PostgresServer.container` was read outside the start lock: now `volatile`.
+    - Connections: one Npgsql pool per test database, plus the CREATE/DROP connections. The container runs with `max_connections=300`.
+    - Shared static mutable state: none in test code besides `PostgresServer`. The mocks are per host, and no test sets environment variables (settings go through `UseSetting`). In the app, the statistics cache, welcome-email queue and rate limiter are per host. `StatisticsService`'s static `SemaphoreSlim` is only a lock.
+    - No class needed a non-parallel collection.
+    - The critical path is `AuthorizationMatrixIntegration` (about 33 s on its shared host). Splitting it is the next lever if the suite needs to get faster.
+  - **Old tests updated to the new decision:** 5 tests asserted a 401 on now-public endpoints (Genres names/details, Books by genre/author, the ErrorHandling 401 probe). They now assert the anonymous result, or probe `Profile/mine`.
+  - **Verified on the dev stack** (`docker compose … --env-file .env.example`, DataImporter data):
+    - anonymous: top books → book details (author, genres, reviews, `readingStatus: null`) → author → books by author → genres → genre → books by genre → book, author and genre search → a book's reviews all return 200; `Profile/mine`, `Search/profiles`, `Authors/names` and reading lists return 401;
+    - a new user: reading-list add 204, review 201, and book details then show `readingStatus` 2;
+    - after the B-22 fix: a non-admin book create 201; the pending book and its reviews return 200 to the creator and the admin, and 404 anonymously; search hides it from anonymous callers;
+    - the client serves `/`, `/books`, `/authors`, `/genres` and a book page.
+
+    The browser UI wasn't driven (no browser tool in this session); the manual checklist is in the PR notes.

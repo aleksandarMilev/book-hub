@@ -139,8 +139,8 @@ const BookFullInfo: FC<Props> = ({
                   showMessage={showMessage}
                 />
               ) : (
-                <Link to={routes.profile} className="book-create-profile-link">
-                  {t('details.createProfile')}
+                <Link to={routes.login} className="book-create-profile-link">
+                  {t('details.loginToAddToList')}
                 </Link>
               )}
             </div>

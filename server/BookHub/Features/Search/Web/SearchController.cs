@@ -11,6 +11,7 @@ using static Common.Constants.DefaultValues;
 [Authorize]
 public class SearchController(ISearchService service) : ApiController
 {
+    [AllowAnonymous]
     [HttpGet(ApiRoutes.Books)]
     public async Task<ActionResult<PaginatedModel<SearchBookServiceModel>>> Books(
         string? searchTerm,
@@ -23,6 +24,7 @@ public class SearchController(ISearchService service) : ApiController
             pageSize,
             cancellationToken));
 
+    [AllowAnonymous]
     [HttpGet(ApiRoutes.Genres)]
     public async Task<ActionResult<PaginatedModel<SearchBookServiceModel>>> Genres(
         string? searchTerm,
@@ -48,6 +50,7 @@ public class SearchController(ISearchService service) : ApiController
             pageSize,
             cancellationToken));
 
+    [AllowAnonymous]
     [HttpGet(ApiRoutes.Authors)]
     public async Task<ActionResult<PaginatedModel<SearchAuthorServiceModel>>> Authors(
        string? searchTerm,

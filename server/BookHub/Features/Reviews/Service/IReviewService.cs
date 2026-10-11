@@ -7,7 +7,8 @@ using Models;
 
 public interface IReviewService : ITransientService
 {
-    Task<PaginatedModel<ReviewServiceModel>> AllForBook(
+    // Null when the book doesn't exist or isn't visible to the caller (unapproved or deleted).
+    Task<PaginatedModel<ReviewServiceModel>?> AllForBook(
         Guid bookId,
         int pageIndex,
         int pageSize,

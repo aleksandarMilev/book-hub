@@ -7,7 +7,7 @@ BookHub is a full-stack book community platform for discovering and sharing book
 ## Highlights
 
 - JWT-based auth with welcome emails and forgot-password reset flow
-- Book and author catalogs with approval workflow and top lists
+- Book and author catalogs with approval workflow and top lists, browsable without an account
 - Genres, statistics dashboard, and full-text search
 - Reading lists (To Read, Currently Reading, Read)
 - Reading challenges with progress tracking
@@ -90,8 +90,8 @@ These are the primary env vars used by the Docker stacks. For local runs you can
 | `POSTGRES_USER`        | Database user. The API connects as this user for now; a least-privilege role is planned (S-09) |
 | `POSTGRES_PASSWORD`    | Password for `POSTGRES_USER`                                  |
 | `APP_SECRET`           | JWT signing key (at least 32 bytes; startup fails otherwise) |
-| `ISSUER`               | JWT issuer                                                    |
-| `AUDIENCE`             | JWT audience                                                  |
+| `ISSUER`               | JWT issuer (required; Compose and startup fail when it's missing or blank) |
+| `AUDIENCE`             | JWT audience (required; Compose and startup fail when it's missing or blank) |
 | `SMTP_HOST`            | SMTP host used for welcome emails                             |
 | `SMTP_PORT`            | SMTP port                                                     |
 | `SMTP_USER`            | SMTP username                                                 |
@@ -123,11 +123,12 @@ Optional, mainly for local runs:
 - **Endpoints require authentication by default** (a JWT bearer token from `/Identity/login` or `/Identity/register`). Only these are public:
   - the home page data: `Books/top`, `Authors/top`, `Profile/top` and `Statistics`;
   - `Articles/{id}` and `Search/articles`;
+  - **the catalog, read-only**: book, author and genre details, the genre list, books by genre and by author, a book's reviews and a single review, and the book/author/genre searches. Anonymous visitors see what a logged-in user who didn't create the entry sees: approved, non-deleted entries only, with no user-specific data (such as their reading status). In the client they can browse books, authors, genres and reviews; writing a review, voting and reading lists show a "Log in to …" link;
   - the `Identity` endpoints (register, login, forgot/reset password);
   - `/health`;
   - uploaded images under `/images`.
 
-  An anonymous request to anything else, including an unknown URL, gets a 401.
+  An anonymous request to anything else, including an unknown URL, gets a 401. Profiles, profile search and everything that writes data need an account.
 - Admin endpoints are under `Administrator/*` and require the `Administrator` role.
 - A token stops working (401) as soon as its user is deleted, even before it expires.
 - **Errors** are always [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) ProblemDetails (`application/problem+json`) with a `traceId` to quote when reporting a problem. The message is in `detail`, and validation errors list per-field messages in `errors`.
@@ -180,7 +181,7 @@ Server scripts:
 
 ## Running Tests
 
-- **Server:** start Docker first (the tests run against a real PostgreSQL container through Testcontainers), then run `dotnet test server/BookHub.sln` from the repo root.
+- **Server:** start Docker first (the tests run against a real PostgreSQL container through Testcontainers), then run `dotnet test server/BookHub.sln` from the repo root. Test classes run in parallel (4 at a time).
 - **Client:** run `npx vitest run` from `client/`.
 
 CI (`.github/workflows/ci.yml`) runs both on every pull request to `master`/`develop` and on pushes to them: the server build (warnings are errors) and tests, and the client's lint, typecheck, tests and build.

@@ -29,7 +29,7 @@ export const useAll = () => {
 
   const fetchData = useCallback(
     async (pageNumber: number, signal?: AbortSignal) => {
-      if (!token || !bookId) {
+      if (!bookId) {
         return;
       }
 
@@ -183,5 +183,3 @@ export const useRemove = (id: string, refresh?: () => void | Promise<void>) => {
 
   return { showModal, toggleModal, deleteHandler };
 };
-
-

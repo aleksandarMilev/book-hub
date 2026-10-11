@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Shared.Seed;
 using Shared.Utils;
 
 // Runs the app's real JwtBearer pipeline (not the test scheme): the tokens are signed by
@@ -18,6 +19,9 @@ using Shared.Utils;
 public sealed class DeletedUserTokenIntegration : IAsyncLifetime
 {
     private const string Username = "jwtreader";
+
+    // Must require a user: on a public endpoint a rejected token is served as anonymous (200).
+    private const string ProtectedUrl = "/Profile/mine/";
 
     private readonly RealJwtFactory httpClientFactory = new();
 
@@ -35,14 +39,14 @@ public sealed class DeletedUserTokenIntegration : IAsyncLifetime
     {
         var httpClient = await this.RegisterAndAuthenticate();
 
-        var before = await httpClient.GetAsync("/Genres/");
+        var before = await httpClient.GetAsync(ProtectedUrl);
         before.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var delete = await httpClient.DeleteAsync("/Profile");
         delete.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         // The same signed, unexpired token.
-        var after = await httpClient.GetAsync("/Genres/");
+        var after = await httpClient.GetAsync(ProtectedUrl);
 
         await after.ShouldBeProblem(HttpStatusCode.Unauthorized);
     }
@@ -84,9 +88,53 @@ public sealed class DeletedUserTokenIntegration : IAsyncLifetime
             "Bearer",
             "not-a-jwt");
 
-        var response = await httpClient.GetAsync("/Genres/");
+        var response = await httpClient.GetAsync(ProtectedUrl);
 
         await response.ShouldBeProblem(HttpStatusCode.Unauthorized);
+    }
+
+    [Fact]
+    public async Task PublicEndpoint_ShouldServeTheRequestAnonymously_WhenTheTokenIsNotValid()
+    {
+        // [AllowAnonymous] skips the challenge, so the catalog still loads with a stale token
+        // (the client's 401 interceptor fires on the next protected call instead).
+        var httpClient = this.httpClientFactory.CreateClient();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+            "Bearer",
+            "not-a-jwt");
+
+        var response = await httpClient.GetAsync("/Genres/");
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+    }
+
+    [Fact]
+    public async Task QueryFilters_ShouldSeeTheCaller_AfterTheDeletedUserCheckUsedTheDbContext()
+    {
+        // OnTokenValidated resolves the request's DbContext before HttpContext.User is set, so the
+        // context must read the current user per query: a non-admin's create reloads the new,
+        // unapproved book through the approval filter, which only lets its creator see it.
+        var httpClient = await this.RegisterAndAuthenticate();
+
+        // The create notifies the factory's (mocked) admin, so the admin user must exist (FK).
+        await this.httpClientFactory.WithData(data => data.SeedUser("test-admin-id", "admin"));
+
+        var form = new MultipartFormDataContent
+        {
+            { new StringContent("A book awaiting approval"), "Title" },
+            { new StringContent("A valid short description"), "ShortDescription" },
+            { new StringContent(new string('l', 250)), "LongDescription" },
+        };
+
+        var created = await httpClient.PostAsync("/Books", form);
+        created.StatusCode.Should().Be(HttpStatusCode.Created);
+
+        var bookUrl = created.Headers.Location!.PathAndQuery;
+        var asCreator = await httpClient.GetAsync(bookUrl);
+        var asAnonymous = await this.httpClientFactory.CreateClient().GetAsync(bookUrl);
+
+        asCreator.StatusCode.Should().Be(HttpStatusCode.OK);
+        await asAnonymous.ShouldBeProblem(HttpStatusCode.NotFound);
     }
 
     private async Task<HttpClient> RegisterAndAuthenticate()

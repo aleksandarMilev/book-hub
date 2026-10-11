@@ -14,7 +14,8 @@ public static class AuthorizationMatrix
     public const string OtherUserId = "other-id";
     public const string AdminId = "test-admin-id";
 
-    // Anonymous by design ([AllowAnonymous] or .AllowAnonymous()), per the Phase 2b table.
+    // Anonymous by design ([AllowAnonymous] or .AllowAnonymous()): the Phase 2b table plus the
+    // read-only catalog (Phase 2c). Their write counterparts stay in Protected.
     public static readonly IReadOnlyList<PublicEndpoint> Public =
     [
         new("GET", "Articles/{id}", s => $"/Articles/{s.ArticleId}/"),
@@ -23,6 +24,20 @@ public static class AuthorizationMatrix
         new("GET", "Profile/top", _ => "/Profile/top/"),
         new("GET", "Statistics", _ => "/Statistics"),
         new("GET", "Search/articles", _ => "/Search/articles/?searchTerm=seeded"),
+
+        // The public catalog: books, authors, genres, reviews and their searches.
+        new("GET", "Books/{id}", s => $"/Books/{s.BookId}/"),
+        new("GET", "Books/genre/{id}", _ => $"/Books/genre/{Shared.Seed.TestSeeder.OtherGenreId}/"),
+        new("GET", "Books/author/{id}", s => $"/Books/author/{s.AuthorId}/"),
+        new("GET", "Authors/{id}", s => $"/Authors/{s.AuthorId}/"),
+        new("GET", "Genres", _ => "/Genres/"),
+        new("GET", "Genres/{id}", _ => $"/Genres/{Shared.Seed.TestSeeder.OtherGenreId}/"),
+        new("GET", "Reviews/book/{id}", s => $"/Reviews/book/{s.BookId}/"),
+        new("GET", "Reviews/{id}", s => $"/Reviews/{s.ReviewId}/"),
+        new("GET", "Search/books", _ => "/Search/books/?searchTerm=seeded"),
+        new("GET", "Search/authors", _ => "/Search/authors/?searchTerm=seeded"),
+        new("GET", "Search/genres", _ => "/Search/genres/?searchTerm=other"),
+
         new("*", "/health", _ => "/health"),
         new("POST", "Identity/register", _ => "/Identity/register/", RequiresBody: true),
         new("POST", "Identity/login", _ => "/Identity/login/", RequiresBody: true),
@@ -46,7 +61,6 @@ public static class AuthorizationMatrix
 
         // Authors
         new("GET", "Authors/names", Access.User, _ => "/Authors/names/"),
-        new("GET", "Authors/{id}", Access.User, s => $"/Authors/{s.AuthorId}/"),
         new("POST", "Authors", Access.User, _ => "/Authors"),
         new("PUT", "Authors/{id}", Access.Owner, s => $"/Authors/{s.AuthorId}/", AuthorForm, HttpStatusCode.Forbidden),
         new("DELETE", "Authors/{id}", Access.Owner, s => $"/Authors/{s.AuthorId}/", WrongUserStatus: HttpStatusCode.Forbidden),
@@ -55,9 +69,6 @@ public static class AuthorizationMatrix
         new("PATCH", "Administrator/Authors/{id}/reject", Access.Admin, s => $"/Administrator/Authors/{s.AuthorId}/reject/"),
 
         // Books
-        new("GET", "Books/genre/{id}", Access.User, _ => $"/Books/genre/{Shared.Seed.TestSeeder.OtherGenreId}/"),
-        new("GET", "Books/author/{id}", Access.User, s => $"/Books/author/{s.AuthorId}/"),
-        new("GET", "Books/{id}", Access.User, s => $"/Books/{s.BookId}/"),
         new("POST", "Books", Access.User, _ => "/Books"),
         new("PUT", "Books/{id}", Access.Owner, s => $"/Books/{s.BookId}/", BookForm, HttpStatusCode.Forbidden),
         new("DELETE", "Books/{id}", Access.Owner, s => $"/Books/{s.BookId}/", WrongUserStatus: HttpStatusCode.Forbidden),
@@ -80,10 +91,6 @@ public static class AuthorizationMatrix
         new("POST", "Administrator/DataImporter/genres", Access.Admin, _ => "/Administrator/DataImporter/genres/"),
         new("POST", "Administrator/DataImporter/books-genres", Access.Admin, _ => "/Administrator/DataImporter/books-genres/"),
 
-        // Genres
-        new("GET", "Genres", Access.User, _ => "/Genres/"),
-        new("GET", "Genres/{id}", Access.User, _ => $"/Genres/{Shared.Seed.TestSeeder.OtherGenreId}/"),
-
         // Notifications (private: someone else's is a 404)
         new("GET", "Notifications/last", Access.User, _ => "/Notifications/last/"),
         new("GET", "Notifications", Access.User, _ => "/Notifications/"),
@@ -97,17 +104,12 @@ public static class AuthorizationMatrix
         new("DELETE", "ReadingLists", Access.User, _ => "/ReadingLists"),
 
         // Reviews and votes
-        new("GET", "Reviews/book/{id}", Access.User, s => $"/Reviews/book/{s.BookId}/"),
-        new("GET", "Reviews/{id}", Access.User, s => $"/Reviews/{s.ReviewId}/"),
         new("POST", "Reviews", Access.User, _ => "/Reviews"),
         new("PUT", "Reviews/{id}", Access.Owner, s => $"/Reviews/{s.ReviewId}/", ReviewBody, HttpStatusCode.Forbidden),
         new("DELETE", "Reviews/{id}", Access.Owner, s => $"/Reviews/{s.ReviewId}/", WrongUserStatus: HttpStatusCode.Forbidden),
         new("POST", "Votes", Access.User, _ => "/Votes"),
 
-        // Search (Search/articles is public)
-        new("GET", "Search/books", Access.User, _ => "/Search/books/?searchTerm=seeded"),
-        new("GET", "Search/genres", Access.User, _ => "/Search/genres/?searchTerm=other"),
-        new("GET", "Search/authors", Access.User, _ => "/Search/authors/?searchTerm=seeded"),
+        // Search (the catalog searches and Search/articles are public)
         new("GET", "Search/profiles", Access.User, _ => "/Search/profiles/?searchTerm=first"),
 
         // Profiles (Profile/top is public)

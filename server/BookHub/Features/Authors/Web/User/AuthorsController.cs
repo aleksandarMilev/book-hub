@@ -26,6 +26,7 @@ public class AuthorsController(IAuthorService service) : ApiController
         CancellationToken cancellationToken = default)
         => this.Ok(await service.Names(cancellationToken));
 
+    [AllowAnonymous]
     [HttpGet(Id, Name = DetailsRouteName)]
     public async Task<ActionResult<AuthorDetailsServiceModel>> Details(
         Guid id,

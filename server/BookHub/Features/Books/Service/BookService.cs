@@ -126,7 +126,9 @@ public class BookService(
 
         var isAdmin = userService.IsAdmin();
         var currentUserId = userService.GetId();
-        var isCreator = string.Equals(
+
+        // An anonymous caller (null ID) is never the creator, not even of a book with no CreatorId.
+        var isCreator = currentUserId is not null && string.Equals(
             dbModel.CreatorId,
             currentUserId,
             StringComparison.OrdinalIgnoreCase);

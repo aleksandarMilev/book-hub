@@ -5,7 +5,7 @@
   GenresSearchResult,
   ProfilesSearchResult,
 } from '@/features/search/types/search';
-import { getAuthConfig, getPublicConfig, http, processError } from '@/shared/api/http';
+import { getConfig, http, processError } from '@/shared/api/http';
 import { routes } from '@/shared/lib/constants/api';
 import { pagination } from '@/shared/lib/constants/defaultValues';
 import { errors } from '@/shared/lib/constants/errorMessages';
@@ -23,7 +23,7 @@ async function search<T>(
     // Through `http`, so the 401 interceptor and the shared base URL apply (F-16).
     const params = { searchTerm, page, pageSize };
     const options = {
-      ...(token ? getAuthConfig(token, signal) : getPublicConfig(signal)),
+      ...getConfig(token, signal),
       params,
     };
 

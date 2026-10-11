@@ -75,6 +75,7 @@ Authorization and error responses follow the rules in **API conventions** below.
 **`BookHubDbContext` behaviour** (it depends on `ICurrentUserService`, so it is per-request):
 
 - **Soft delete:** removing an `IDeletableEntity` is rewritten to `IsDeleted = true`. Created/Modified audit fields are filled in `SaveChanges` for every `IEntity`, and Deleted fields for `IDeletableEntity`.
+- **The current user is read per query, never at construction.** `CurrentUserId` and `IsAdmin` (used by the query filters) are getters over `ICurrentUserService`. The scoped context can be created before the user is known (`OnTokenValidated` resolves it during authentication), so don't cache user state in the context's constructor or fields.
 
 **PostgreSQL conventions:**
 
@@ -110,7 +111,20 @@ Authorization and error responses follow the rules in **API conventions** below.
 ### Authorization
 
 - **Every endpoint requires an authenticated user by default.** The fallback authorization policy (`RequireAuthenticatedUser`, in `ServiceCollectionExtensions.AddJwtAuthentication`) applies to any endpoint without its own `[Authorize]`/`[AllowAnonymous]`, and to requests that match no endpoint: an anonymous request to an unknown URL gets a 401, not a 404.
-- **Public endpoints opt out explicitly:** `[AllowAnonymous]` on the action or controller, or `.AllowAnonymous()` on a minimal endpoint (as `/health` does). The public set is the catalog tops (`Books/top`, `Authors/top`, `Profile/top`), `Statistics`, `Articles/{id}`, `Search/articles`, the four `Identity` endpoints and `/health`. Everything else, including book/author/genre details and the other searches, needs a user.
+- **Public endpoints opt out explicitly:** `[AllowAnonymous]` on the action or controller, or `.AllowAnonymous()` on a minimal endpoint (as `/health` does). The public set is:
+  - the home page: `Books/top`, `Authors/top`, `Profile/top` and `Statistics`;
+  - `Articles/{id}` and `Search/articles`;
+  - **the read-only catalog** (Phase 2c, like Goodreads): `Books/{id}`, `Books/genre/{id}`, `Books/author/{id}`, `Authors/{id}`, `Genres`, `Genres/{id}`, `Reviews/book/{id}`, `Reviews/{id}`, `Search/books`, `Search/authors` and `Search/genres`;
+  - the four `Identity` endpoints and `/health`.
+
+  Everything else needs a user: profiles (`Profile/{id}`, `Profile/mine`), `Search/profiles`, `Authors/names` (the create-book form), and every endpoint that writes data.
+- **Public endpoints must work with no user.** `ICurrentUserService.GetId()` is `null` and `IsAdmin()` is `false` for an anonymous caller:
+  - never write `GetId()!` on a public code path;
+  - a creator/owner comparison must require a non-null ID (`string.Equals(null, null)` is `true`, so an anonymous caller would "own" every row with a null `CreatorId`);
+  - user-specific fields stay in the response with an empty value (`ReadingStatus` is `null`), so the shape doesn't change;
+  - the query filters already give an anonymous caller approved, non-deleted rows only (the creator clause checks `CurrentUserId != null`). Children of an approvable entity go through the filtered parent: a review of an unapproved or deleted book is a 404, like a missing one (`ReviewService` checks `data.Books`).
+
+  On an `[AllowAnonymous]` endpoint an invalid or rejected token (expired, a deleted user) isn't a 401: the request is served anonymously. Tests that need a 401 for a bad token must call a protected endpoint.
 - **Static files** (`wwwroot/images`: covers, author photos, avatars) are public: `UseStaticFiles` short-circuits before `UseAuthorization`. Keep it before authentication in `Program.cs`. The Swagger UI (Development) also runs before authentication.
 - **Owner checks** live in the services (`CreatorId == caller || admin`) and return `Result.Forbidden` (403) for public resources or `Result.NotFound` (404) for private content. Always take the acting user from the claims (`ICurrentUserService`), never from the route or body.
 - **Deleted users:** `OnTokenValidated` rejects the token (401) when the user no longer exists or is soft-deleted. It's one primary-key query per authenticated request. There is no role re-validation or refresh token yet (the rest of S-06 is Phase 4).
@@ -124,7 +138,7 @@ Error responses are always RFC 9457 ProblemDetails (`application/problem+json`) 
   - 400: validation errors and invalid input;
   - 401: not authenticated (or a deleted user's token);
   - 403: authenticated, but modifying a public resource you don't own (or a role-gated endpoint);
-  - 404: not found, **or private content whose existence must not leak** (someone else's notification, a private profile's reading lists, someone else's unapproved book/author);
+  - 404: not found, **or private content whose existence must not leak** (someone else's notification, a private profile's reading lists, someone else's unapproved book/author, and the reviews of a book you can't see);
   - 409: duplicates and conflicts.
 - **Messages returned to clients** never contain internal type names (`…DbModel`) or IDs (S-11). Use `Common.Constants.ErrorMessages.ResourceNotFound` / `ResourceForbidden` with a friendly resource name ("book", "review"), and keep the type name and IDs in the log template.
 - **Exceptions** go through `Infrastructure/ExceptionHandling/GlobalExceptionHandler` (`UseExceptionHandler()` in every environment):
@@ -137,7 +151,7 @@ Error responses are always RFC 9457 ProblemDetails (`application/problem+json`) 
 
 ## Server tests (`server/BookHub.Tests`)
 
-xUnit v3 + FluentAssertions + NSubstitute + Testcontainers. The project references `xunit.v3.mtp-off` and runs through VSTest (`xunit.runner.visualstudio` + `Microsoft.NET.Test.Sdk`), so plain `dotnet test` works. Don't switch to the default `xunit.v3` package without also opting into Microsoft Testing Platform in `global.json`: MTP v2 fails `dotnet test` in VSTest mode on the .NET 10 SDK. The test project is an executable (`OutputType Exe`). `IAsyncLifetime` members return `ValueTask`. Test parallelization is disabled assembly-wide (`[assembly: Parallelization(Mode = ParallelMode.None)]` in `AssemblyInfo.cs`). The analyzer rule xUnit1051 (pass `TestContext.Current.CancellationToken`) is suppressed in the csproj for now. Test classes are named `<Feature>Unit.cs` / `<Feature>Integration.cs` (not every feature has both yet).
+xUnit v3 + FluentAssertions + NSubstitute + Testcontainers. The project references `xunit.v3.mtp-off` and runs through VSTest (`xunit.runner.visualstudio` + `Microsoft.NET.Test.Sdk`), so plain `dotnet test` works. Don't switch to the default `xunit.v3` package without also opting into Microsoft Testing Platform in `global.json`: MTP v2 fails `dotnet test` in VSTest mode on the .NET 10 SDK. The test project is an executable (`OutputType Exe`). `IAsyncLifetime` members return `ValueTask`. Test classes run in parallel, at most 4 at a time, and the tests inside a class run one after another (`[assembly: Parallelization(Mode = ParallelMode.Collections, MaxThreads = 4)]` in `AssemblyInfo.cs`; see the rules under **Testing approach**). The analyzer rule xUnit1051 (pass `TestContext.Current.CancellationToken`) is suppressed in the csproj for now. Test classes are named `<Feature>Unit.cs` / `<Feature>Integration.cs` (not every feature has both yet).
 
 **Docker must be running for `dotnet test`.** Every test uses a real PostgreSQL database:
 
@@ -160,17 +174,24 @@ These rules apply to all new and changed server tests:
 - **Unit tests are only for pure logic with no I/O** (for example `FullTextSearchExtensions.ToPrefixTsQuery`, validators, mapping helpers).
 - **Mock only true external boundaries:** email sending (`IEmailSender`), and the file system (`IImageWriter`) where writing real files is impractical. Never mock our own services or the DbContext.
 - Make new integration tests cheap to write by extending `TestSeeder` and the factory's client helpers rather than adding per-class copies.
+- **Tests run in parallel across classes**, so a class must not share mutable state with another one:
+  - no `static` mutable fields in test code (counters, caches, lists, mocks): keep state on the class instance, the factory, or a class fixture. `PostgresServer` is the only exception, and its shared state is guarded by locks;
+  - no `Environment.SetEnvironmentVariable`: pass settings to the host with `UseSetting` (as `ConfigureTestSettings` does);
+  - in-memory app state (the 30 s statistics cache, the welcome-email queue, the rate limiter) is per host, so it's safe as long as each class owns its factory;
+  - every test gets its own database. `PostgresServer` serializes the clone step (`CloneLock` around `CREATE DATABASE … TEMPLATE`, because concurrent clones of one template fail); it takes about 0.1 s. The test container runs with `max_connections=300` for the parallel hosts' connection pools;
+  - a class that really can't run alongside others goes into a non-parallel collection (`[CollectionDefinition(DisableParallelization = true)]`) with a comment saying why. Don't turn parallelization off globally;
+  - the per-host rate limiter allows 240 requests a minute, so a class that shares one host across many tests (`AuthorizationMatrixIntegration`, about 150 requests) has to stay below it.
 
 ## Client architecture
 
 - **Feature folders** in `client/src/features/<feature>/` hold `api/api.ts`, `hooks/`, `components/` and `types/`. Shared code is in `src/shared/`, and the app shell, router and route guards (`AuthenticatedRoute`, `AdminRoute`) are in `src/app/`.
 - **Imports:** always use the `@/` alias (it maps to `src/`), never relative paths across features. Imports are auto-sorted by `simple-import-sort`. Type-only imports must use `import type` (`verbatimModuleSyntax`).
 - **API layer** (`shared/api/http.ts`): the axios instances are `http` (base `VITE_REACT_APP_SERVER_URL`, default `http://localhost:8080`) and `httpAdmin` (`/administrator`). Every API function:
-  - takes the JWT `token` and an optional `AbortSignal` explicitly, and builds its config with `getAuthConfig(token, signal)` / `getPublicConfig(signal)`
+  - takes the JWT `token` and an optional `AbortSignal` explicitly, and builds its config with `getAuthConfig(token, signal)` / `getPublicConfig(signal)`, or `getConfig(token, signal)` for public catalog endpoints that anonymous visitors also call (it sends no `Authorization` header when the token is empty)
   - wraps its call in `try { … } catch (e) { return processError(e, fallbackMessage) }`. `processError` rethrows cancellations. For a 4xx it otherwise throws an `Error` carrying the ProblemDetails `detail`, or the first validation message from `errors`. In every other case (a 5xx, a generic title only, a network error) the `Error` carries the fallback message.
 - **Paths:** all API paths are in `shared/lib/constants/api.ts` (`routes`), and fallback error strings are in `shared/lib/constants/errorMessages.ts`.
 - **Auth state:** a Zustand store persisted to `localStorage` (`shared/stores/auth`), read through `useAuth()` for `token`, `userId`, `isAdmin` and `isAuthenticated`.
-- **Pages** are lazy-loaded in `src/app/routes.tsx`.
+- **Pages** are lazy-loaded in `src/app/routes.tsx`. The catalog pages (book, author and genre lists and details, and a book's reviews) have no route guard; on them, account-only actions show a "Log in to …" link to the login page for anonymous visitors. Everything else stays behind `AuthenticatedRoute`/`AdminRoute`.
 - **i18n:** i18next with `en` and `bg` namespaces in `shared/i18n/locales/<lang>/<namespace>.json`. Add new keys to both languages. A new namespace also has to be imported and registered in `shared/i18n/i18n.ts`.
 - **TypeScript is very strict:** `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes` and `verbatimModuleSyntax` are all on. For example, an optional property can't be assigned `undefined` unless its type includes it.
 - **Libraries:** forms use Formik + Yup, and the UI uses Bootstrap / react-bootstrap / MDB.
