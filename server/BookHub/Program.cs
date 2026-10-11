@@ -28,19 +28,20 @@ builder
     .AddRateLimiting(builder.Environment)
     .AddBackgroundServices();
 
+builder
+    .Services
+    .AddCorsPolicy(
+        builder.Configuration,
+        builder.Environment);
+
+// The test host registers the same DbContext through AddDatabase(Func<string?>), pointed at
+// its own test database.
 if (builderEnvIsNotTesting)
 {
     builder
         .Services
-        .AddCorsPolicy(
-            builder.Configuration,
-            builder.Environment);
-
-    builder
-        .Services
         .AddDatabase(builder.Configuration);
 }
-
 
 var app = builder.Build();
 
@@ -54,7 +55,6 @@ app
     .Validate();
 
 var envIsDev = app.Environment.IsDevelopment();
-var envIsNotTesting = !app.Environment.IsEnvironment("Testing");
 
 app
     .UseExceptionHandler(new ExceptionHandlerOptions
@@ -63,11 +63,7 @@ app
     })
     .UseStatusCodePages();
 
-if (envIsDev)
-{
-    app.UseDeveloperExceptionPage();
-}
-else
+if (!envIsDev)
 {
     app
         .UseHsts()
@@ -81,10 +77,7 @@ app
     .UseRouting()
     .UseStaticFiles();
 
-if (envIsNotTesting)
-{
-    app.UseAllowedCors();
-}
+app.UseAllowedCors();
 
 app
     .UseAuthentication()
@@ -94,14 +87,15 @@ app
 
 if (envIsDev)
 {
-    app.MapOpenApi();
-    app.MapScalarApiReference();
+    // Public like the Swagger UI was: the fallback policy would otherwise require a token.
+    app.MapOpenApi().AllowAnonymous();
+    app.MapScalarApiReference().AllowAnonymous();
 
     await app.UseMigrations(cancellationToken);
     await app.UseBuiltInUser();
     await app.UseDevAdminRole();
 }
-else if (envIsNotTesting)
+else
 {
     await app.UseProductionAdminRole();
 }

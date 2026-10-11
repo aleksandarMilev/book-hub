@@ -15,7 +15,7 @@ cp .env.example .env
 docker compose -f docker-compose.dev.yml --env-file .env up --build
 ```
 
-Client: `http://localhost:5173`. API + Swagger UI (Development only, served at the root): `http://localhost:8080`. Health: `/health`.
+Client: `http://localhost:5173`. API: `http://localhost:8080`, with the Scalar API reference at `/scalar` and the OpenAPI document at `/openapi/v1.json` (Development only). Health: `/health`.
 
 ### Server (from repo root)
 
@@ -125,7 +125,7 @@ Authorization and error responses follow the rules in **API conventions** below.
   - the query filters already give an anonymous caller approved, non-deleted rows only (the creator clause checks `CurrentUserId != null`). Children of an approvable entity go through the filtered parent: a review of an unapproved or deleted book is a 404, like a missing one (`ReviewService` checks `data.Books`).
 
   On an `[AllowAnonymous]` endpoint an invalid or rejected token (expired, a deleted user) isn't a 401: the request is served anonymously. Tests that need a 401 for a bad token must call a protected endpoint.
-- **Static files** (`wwwroot/images`: covers, author photos, avatars) are public: `UseStaticFiles` short-circuits before `UseAuthorization`. Keep it before authentication in `Program.cs`. The Swagger UI (Development) also runs before authentication.
+- **Static files** (`wwwroot/images`: covers, author photos, avatars) are public: `UseStaticFiles` short-circuits before `UseAuthorization`. Keep it before authentication in `Program.cs`. The Development-only `MapOpenApi()` and `MapScalarApiReference()` endpoints opt out with `.AllowAnonymous()`, like `/health`.
 - **Owner checks** live in the services (`CreatorId == caller || admin`) and return `Result.Forbidden` (403) for public resources or `Result.NotFound` (404) for private content. Always take the acting user from the claims (`ICurrentUserService`), never from the route or body.
 - **Deleted users:** `OnTokenValidated` rejects the token (401) when the user no longer exists or is soft-deleted. It's one primary-key query per authenticated request. There is no role re-validation or refresh token yet (the rest of S-06 is Phase 4).
 - **Every new endpoint must be added to `server/BookHub.Tests/Authorization/AuthorizationMatrix.cs`**, either to `Protected` (with its access: `User`, `Owner` with the wrong-user status, or `Admin`) or to `Public`. `AuthorizationMatrixIntegration.EveryEndpoint_ShouldBeInTheMatrixOrThePublicList` enumerates the routed endpoints at runtime and fails otherwise. It also fails if the `[AllowAnonymous]` endpoints and the `Public` list disagree.
@@ -151,47 +151,82 @@ Error responses are always RFC 9457 ProblemDetails (`application/problem+json`) 
 
 ## Server tests (`server/BookHub.Tests`)
 
-xUnit v3 + FluentAssertions + NSubstitute + Testcontainers. The project references `xunit.v3.mtp-off` and runs through VSTest (`xunit.runner.visualstudio` + `Microsoft.NET.Test.Sdk`), so plain `dotnet test` works. Don't switch to the default `xunit.v3` package without also opting into Microsoft Testing Platform in `global.json`: MTP v2 fails `dotnet test` in VSTest mode on the .NET 10 SDK. The test project is an executable (`OutputType Exe`). `IAsyncLifetime` members return `ValueTask`. Test classes run in parallel, at most 4 at a time, and the tests inside a class run one after another (`[assembly: Parallelization(Mode = ParallelMode.Collections, MaxThreads = 4)]` in `AssemblyInfo.cs`; see the rules under **Testing approach**). The analyzer rule xUnit1051 is enforced: a call inside a test that takes a `CancellationToken` must get `TestContext.Current.CancellationToken`, or the `-warnaserror` build fails (`dotnet format analyzers server/BookHub.Tests/BookHub.Tests.csproj --diagnostics xUnit1051 --severity warn` applies the fix). Test classes are named `<Feature>Integration.cs`, `<Workflow>WorkflowIntegration.cs` (in `Workflows/`) or, for pure logic only, `<Subject>Unit.cs`.
+xUnit v3 + FluentAssertions + Testcontainers. The project references `xunit.v3.mtp-off` and runs through VSTest (`xunit.runner.visualstudio` + `Microsoft.NET.Test.Sdk`), so plain `dotnet test` works. Don't switch to the default `xunit.v3` package without also opting into Microsoft Testing Platform in `global.json`: MTP v2 fails `dotnet test` in VSTest mode on the .NET 10 SDK. The test project is an executable (`OutputType Exe`). `IAsyncLifetime` members return `ValueTask`. Test classes run in parallel, at most 4 at a time, and the tests inside a class run one after another (`[assembly: Parallelization(Mode = ParallelMode.Collections, MaxThreads = 4)]` in `AssemblyInfo.cs`; see the rules under **Testing approach**). The analyzer rule xUnit1051 is enforced: a call inside a test that takes a `CancellationToken` must get `TestContext.Current.CancellationToken`, or the `-warnaserror` build fails (`dotnet format analyzers server/BookHub.Tests/BookHub.Tests.csproj --diagnostics xUnit1051 --severity warn` applies the fix). Test classes are named `<Feature>Integration.cs`, `<Workflow>WorkflowIntegration.cs` (in `Workflows/`) or, for pure logic only, `<Subject>Unit.cs`.
 
-**Docker must be running for `dotnet test`.** Every test uses a real PostgreSQL database:
+**Docker must be running for `dotnet test`.** Every test runs against two containers. Each is started once per test run (a lazy static), and Testcontainers' Ryuk removes them at exit:
 
-- `Shared/Database/PostgresServer` starts **one** `postgres:18-alpine` container per test run (a lazy static; Testcontainers' Ryuk removes it at exit). It uses the same ICU initdb arguments as Compose. Keep its image on the same major as the Compose files. On first use it applies the **real migrations** (`MigrateAsync`) to a `bookhub_template` database.
+- `Shared/Database/PostgresServer` starts `postgres:18-alpine` with the same ICU initdb arguments as Compose. Keep its image on the same major as the Compose files. On first use it applies the **real migrations** (`MigrateAsync`) to a `bookhub_template` database.
 - Each test gets its own database cloned from that template (`CREATE DATABASE … TEMPLATE`, roughly 0.1 s), so every test starts from the migrated schema plus the HasData seed ("Other" genre). Disposing the `TestDatabase` drops it.
-- **Integration tests** use `BookHubWebApplicationFactory`:
-  - It runs `Program` in the `"Testing"` environment, where `Program.cs` skips CORS and the database registration. The factory registers Npgsql against its own cloned database, swaps in `ImageWriterMock` and `AdminServiceMock("test-admin-id")`, and replaces JWT with a test auth scheme. The `Create*Client` helpers need the test scheme.
-  - Two virtual switches change that:
-    - `UseRealAdminService => true` keeps the app's real `AdminService`, so the admins are the users seeded with `TestSeeder.SeedAdmin` (`Workflows/WorkflowFactory` does this);
-    - `UseTestAuthentication => false` keeps the real JwtBearer scheme with signed tokens from `/Identity/register|login`. `Shared/Identity/RealJwtFactory` does this (with the real `AdminService`), and also has `RegisterAndAuthenticate(username)`, `RegisterForm(...)` and an `EmailSender` (`Shared/Mocks/RecordingEmailSender`: records welcome and reset emails, `FailWelcomeEmails` simulates an SMTP outage).
-  - `ImageWriterMock.FailWritesFor = "profiles"` makes image writes for one resource throw (used to fail profile creation).
+- `Shared/Email/MailpitServer` starts Mailpit (`axllent/mailpit`, pinned), a real SMTP server with an HTTP API. It refuses any recipient outside `.test`/`.local` with a real SMTP 550, so an address at `MailpitServer.UndeliverableDomain` makes an email fail without a fake sender.
+- **Integration tests** use `BookHubWebApplicationFactory`. It runs `Program` in the `"Testing"` environment as the real app, with nothing replaced:
+  - **the host:** the same pipeline as Production, including CORS, the rate limiter and the admin bootstrap when it's enabled. The database is registered through the app's own `AddDatabase(Func<string?>)`, against the test's database;
+  - **auth:** the real JwtBearer scheme, including `OnTokenValidated`'s deleted-user check:
+    - `await CreateUserClient(userId, username?)` seeds the user if it's missing (as `user-{id}`). It sends a real token minted by the app's `IJwtTokenGenerator` from the user's row and role membership, as `/Identity/login` does;
+    - `await CreateAdminClient(...)` does the same for a user in the real Administrator role (`TestSeeder.SeedAdmin`);
+    - the other helpers are `CreateAnonymousClient()`, `CreateBearerClient(token)`, `TokenFor(userId)`, `RegisterAndAuthenticate(username)` (through `/Identity/register`), `LoginAndAuthenticate(credentials, password)` and `RegisterForm(...)`;
+  - **admins:** the real `AdminService`, so the admins who get notifications are the users seeded with `SeedAdmin` (or created through `CreateAdminClient`);
+  - **images:** the real `ImageWriter` and `ImageValidator`:
+    - each factory has its own temporary web root (`WebRoot`, deleted on dispose), and static files are served from it;
+    - assert on files with `ImageFiles(folder)` (the files directly in `images/{folder}`, as stored paths), `ImageExists(path)` and `ImageFile(path)`. Seed a real file for a seeded entity with `SeedImageFile(folder)`;
+    - `Shared/Utils/Images` has tiny real PNG/JPEG bytes, `form.WithImage()`/`WithFile(...)`, and `Images.Invalid` (each upload the validator rejects);
+    - to make a write fail for real, put a file where an image folder must be created;
+  - **email:** the real MailKit `EmailSender`, delivering to Mailpit. Each factory has its own mail domain. Build addresses with `factory.Email("alice")`, and read mail with `factory.Mailbox`: `WaitForMessage(to, subject)`, `Messages(to)`, and `message.Links` for the HTML-decoded hrefs.
   - Call `ResetDatabase()` in `InitializeAsync` (it clones a fresh database) and dispose the factory in `DisposeAsync`.
-  - Clients: `CreateUserClient(userId, username)`, `CreateAdminClient(...)` and `CreateAnonymousClient()`. The authenticated ones send `Authorization: <scheme> user|admin:<id>:<username>`.
   - Authorization coverage lives in `Authorization/AuthorizationMatrixIntegration` (table-driven over `AuthorizationMatrix`, one shared host per class through `AuthorizationMatrixFixture`, a fresh database per test). Add every new endpoint there.
   - Seed and assert through `factory.WithData(data => …)` with the `Shared/Seed/TestSeeder` extensions (`SeedUser`, `SeedAdmin`, `SeedProfile`, `SeedGenre`, `SeedAuthor`, `SeedBook`, `SeedArticle`, `SeedReview`, `SeedNotification`). Seed a `UserDbModel` for any user ID the request uses, because PostgreSQL enforces the foreign keys.
   - Assert error responses with `await response.ShouldBeProblem(HttpStatusCode.X, "detail")` (`Shared/Utils/ProblemDetailsAssertions`). It checks the status, the `application/problem+json` content type, the `traceId` and, optionally, `detail`.
   - In workflows, `ShouldHaveStatus(...)` and `ShouldHaveBody<T>(...)` (`Shared/Utils/ResponseAssertions`) print the response body when the status is wrong. `Shared/Utils/Forms` builds valid book, author and profile multipart bodies.
+  - `ErrorHandlingIntegration` adds test-only endpoints (an `IStartupFilter`) that raise real database errors and an unhandled exception through the real pipeline. It only adds endpoints and replaces nothing.
+  - `HostingIntegration` subclasses the factory to add `BootstrapAdmin:*` settings.
 
 ## Testing approach
 
 These rules apply to all new and changed server tests:
 
-- **Prefer integration tests over unit tests:** real PostgreSQL through Testcontainers, real HTTP through `WebApplicationFactory`, real DI. Each test validates a **workflow** and its observable outcome (HTTP status, response body, database state), not that a mock was called.
-- **Unit tests are only for pure logic with no I/O** (for example `FullTextSearchExtensions.ToPrefixTsQuery`, validators, mapping helpers).
-- **Mock only true external boundaries:** email sending (`IEmailSender`), and the file system (`IImageWriter`) where writing real files is impractical. Never mock our own services or the DbContext.
-- Make new integration tests cheap to write by extending `TestSeeder` and the factory's client helpers rather than adding per-class copies.
-- **Workflow tests** (`server/BookHub.Tests/Workflows/`) drive a whole user journey through the API and assert every step (status, body, database state, notifications):
+- **Prefer integration tests over unit tests:** real PostgreSQL through Testcontainers, real HTTP through `WebApplicationFactory`, real DI. Each test validates a **workflow** and its observable outcome (HTTP status, response body, database state, files on disk, emails received), not that a mock was called.
+- **Unit tests are only for pure logic with no I/O** (for example `FullTextSearchExtensions.ToPrefixTsQuery`, `ExpectedFailures`, settings validators).
+- **No test doubles.** The suite runs the real application end to end: real JWTs, real roles, real files in a temporary web root, real SMTP through Mailpit.
+  - Don't replace services in the factory, and don't add NSubstitute (or another mocking library) back.
+  - To make a dependency fail, make the real thing fail: an undeliverable address, a file where a folder must go, a trigger in the test's database.
+- Make new integration tests cheap to write by extending `TestSeeder` and the factory's helpers rather than adding per-class copies.
+- **Workflow tests** (`server/BookHub.Tests/Workflows/`) drive a whole user journey through the API and assert every step (status, body, database state, notifications, files, emails):
   - `BookApprovalWorkflowIntegration`: a non-admin's book → every admin notified → hidden from anonymous visitors, lists and search → approved → creator notified and counted → public; rejection; no admins;
-  - `BookEditWorkflowIntegration`: pending edit → approved; a second pending edit superseded by an admin's direct edit; editing again after a rejection; a deleted pending genre falls back to "Other"; an edit made while the book awaited approval;
+  - `BookEditWorkflowIntegration`:
+    - pending edit → approved;
+    - a second pending edit superseded by an admin's direct edit;
+    - editing again after a rejection;
+    - a deleted pending genre falls back to "Other";
+    - an edit made while the book awaited approval;
+    - the cover files through a replaced pending edit, an approval, a rejection and an admin's edit;
   - `AuthorApprovalWorkflowIntegration`: the approval lifecycle and rejection for authors;
-  - `IdentityWorkflowIntegration`: register with SMTP down → login → forgot password → reset from the emailed link → only the new password works;
+  - `AuthorEditWorkflowIntegration`:
+    - a pending edit shown only to the creator and admins → replaced → approved;
+    - rejected → a new one superseded by an admin's direct edit;
+    - an edit made while the author awaited approval;
+    - the photo files at every step;
+  - `IdentityWorkflowIntegration`: register → the welcome email arrives → login → forgot password → follow the link in the reset email → only the new password works;
   - `ReviewWorkflowIntegration`: create/edit/delete reviews keep the book's and author's ratings and the profile's review count in step; vote toggling;
   - `ReadingProgressWorkflowIntegration`: yearly goal → currently reading → read → challenge progress and profile counters → check-in streak → a second check-in is a 409;
+  - `ReadingListLifecycleWorkflowIntegration`:
+    - a goal changed from books to pages;
+    - books moved out of "read", removed and re-added keep the counters and the progress right;
+    - multi-day streaks;
   - `ReadingListPrivacyWorkflowIntegration`: a private profile's lists are hidden from others but not from the owner or an admin, until it becomes public;
   - `AccountDeletionWorkflowIntegration`: a deleted account loses access (401, no login, profile and lists 404); its review stays public and its username stays taken (current behavior).
+- **Adding a workflow test:**
+  1. Add a class in `Workflows/` named `<Journey>WorkflowIntegration`, with its own `BookHubWebApplicationFactory`. Call `ResetDatabase()` in `InitializeAsync` and dispose the factory in `DisposeAsync`.
+  2. Seed only what the journey doesn't create itself: users, admins (`SeedAdmin`), genres.
+  3. Get clients from the factory's helpers.
+  4. Walk the journey through the API. Assert each step with `ShouldHaveStatus`, `ShouldHaveBody` or `ShouldBeProblem`, and check the database (`WithData`), the files (`ImageFiles`) and the mail (`Mailbox`).
+  5. Add the journey to the list above.
 - **Tests run in parallel across classes**, so a class must not share mutable state with another one:
-  - no `static` mutable fields in test code (counters, caches, lists, mocks): keep state on the class instance, the factory, or a class fixture. `PostgresServer` is the only exception, and its shared state is guarded by locks;
-  - no `Environment.SetEnvironmentVariable`: pass settings to the host with `UseSetting` (as `ConfigureTestSettings` does);
+  - no `static` mutable fields in test code (counters, caches, lists): keep state on the class instance, the factory, or a class fixture. `PostgresServer` and `MailpitServer` are the only exceptions, and their shared state is guarded by locks;
+  - no `Environment.SetEnvironmentVariable`: pass settings to the host with `UseSetting` (as the factory's `ConfigureTestSettings` does);
   - in-memory app state (the 30 s statistics cache, the welcome-email queue, the rate limiter) is per host, so it's safe as long as each class owns its factory;
-  - every test gets its own database. `PostgresServer` serializes the clone step (`CloneLock` around `CREATE DATABASE … TEMPLATE`, because concurrent clones of one template fail); it takes about 0.1 s. The test container runs with `max_connections=300` for the parallel hosts' connection pools;
+  - every test gets its own database, web root and mail domain:
+    - `PostgresServer` serializes the clone step (`CloneLock` around `CREATE DATABASE … TEMPLATE`, because concurrent clones of one template fail); it takes about 0.1 s;
+    - the test container runs with `max_connections=300` for the parallel hosts' connection pools;
+    - read mail only through `factory.Email(...)` addresses, never a shared one;
   - a class that really can't run alongside others goes into a non-parallel collection (`[CollectionDefinition(DisableParallelization = true)]`) with a comment saying why. Don't turn parallelization off globally;
   - the per-host rate limiter allows 240 requests a minute, so a class that shares one host across many tests (`AuthorizationMatrixIntegration`, about 150 requests) has to stay below it.
 

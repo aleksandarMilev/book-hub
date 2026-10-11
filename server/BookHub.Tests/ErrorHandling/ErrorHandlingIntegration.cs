@@ -18,7 +18,8 @@ using Shared.Utils;
 
 // The global error handling: every failure is a ProblemDetails with a traceId, expected
 // failures map to 4xx, and nothing internal leaks from a 500. The failures are triggered by
-// test-only endpoints (ErrorEndpointsStartupFilter) running the real pipeline and database.
+// test-only endpoints (ErrorEndpointsStartupFilter) running the real pipeline and database. They
+// only add endpoints, because no real endpoint fails on demand; nothing in the app is replaced.
 public sealed class ErrorHandlingIntegration : IAsyncLifetime
 {
     private const string UserId = "test-user";
@@ -40,7 +41,7 @@ public sealed class ErrorHandlingIntegration : IAsyncLifetime
     [Fact]
     public async Task UnhandledException_ShouldReturnInternalServerErrorProblem_WithoutExceptionDetails()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient(UserId);
+        var httpClient = await this.httpClientFactory.CreateUserClient(UserId);
 
         var response = await httpClient.GetAsync(ErrorEndpointsStartupFilter.Unhandled, TestContext.Current.CancellationToken);
 
@@ -58,7 +59,7 @@ public sealed class ErrorHandlingIntegration : IAsyncLifetime
     [Fact]
     public async Task UniqueViolation_ShouldReturnConflictProblem()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient(UserId);
+        var httpClient = await this.httpClientFactory.CreateUserClient(UserId);
 
         var response = await httpClient.PostAsync(ErrorEndpointsStartupFilter.DuplicateCheckIn, content: null, cancellationToken: TestContext.Current.CancellationToken);
 
@@ -71,7 +72,7 @@ public sealed class ErrorHandlingIntegration : IAsyncLifetime
     public async Task DuplicateReview_InsertedPastTheServiceCheck_ShouldReturnConflictProblem_AndAlso_ShouldKeepOneReview()
     {
         var book = await this.httpClientFactory.WithData(data => data.SeedBook("Raced book"));
-        var httpClient = this.httpClientFactory.CreateUserClient(UserId);
+        var httpClient = await this.httpClientFactory.CreateUserClient(UserId);
 
         var response = await httpClient.PostAsync($"{ErrorEndpointsStartupFilter.DuplicateReview}?bookId={book.Id}", content: null, cancellationToken: TestContext.Current.CancellationToken);
 
@@ -89,7 +90,7 @@ public sealed class ErrorHandlingIntegration : IAsyncLifetime
     [Fact]
     public async Task ForeignKeyViolation_OnInsert_ShouldReturnBadRequestProblem()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient(UserId);
+        var httpClient = await this.httpClientFactory.CreateUserClient(UserId);
 
         var response = await httpClient.PostAsync(ErrorEndpointsStartupFilter.MissingReference, content: null, cancellationToken: TestContext.Current.CancellationToken);
 
@@ -101,7 +102,7 @@ public sealed class ErrorHandlingIntegration : IAsyncLifetime
     [Fact]
     public async Task ImageValidationException_ShouldReturnBadRequestProblem_WithTheValidationMessage()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient(UserId);
+        var httpClient = await this.httpClientFactory.CreateUserClient(UserId);
 
         var response = await httpClient.GetAsync(ErrorEndpointsStartupFilter.InvalidImage, TestContext.Current.CancellationToken);
 
@@ -124,7 +125,7 @@ public sealed class ErrorHandlingIntegration : IAsyncLifetime
     [Fact]
     public async Task NonAdmin_OnAdminEndpoint_ShouldReturnForbiddenProblem()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient(UserId);
+        var httpClient = await this.httpClientFactory.CreateUserClient(UserId);
 
         var response = await httpClient.DeleteAsync($"/Administrator/Articles/{Guid.NewGuid()}/", TestContext.Current.CancellationToken);
 
@@ -134,7 +135,7 @@ public sealed class ErrorHandlingIntegration : IAsyncLifetime
     [Fact]
     public async Task UnknownRoute_ShouldReturnNotFoundProblem()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient(UserId);
+        var httpClient = await this.httpClientFactory.CreateUserClient(UserId);
 
         var response = await httpClient.GetAsync("/no-such-route/", TestContext.Current.CancellationToken);
 
@@ -144,7 +145,7 @@ public sealed class ErrorHandlingIntegration : IAsyncLifetime
     [Fact]
     public async Task ModelValidationError_ShouldReturnValidationProblem_WithTheFieldErrors()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient(UserId);
+        var httpClient = await this.httpClientFactory.CreateUserClient(UserId);
 
         var response = await httpClient.PostAsync("/Books", new MultipartFormDataContent(), TestContext.Current.CancellationToken);
 

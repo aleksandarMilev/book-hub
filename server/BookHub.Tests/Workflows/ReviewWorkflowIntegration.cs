@@ -17,7 +17,7 @@ public sealed class ReviewWorkflowIntegration : IAsyncLifetime
     private const string FirstReviewerId = "first-reviewer";
     private const string SecondReviewerId = "second-reviewer";
 
-    private readonly WorkflowFactory factory = new();
+    private readonly BookHubWebApplicationFactory factory = new();
 
     private Guid authorId;
     private Guid bookId;
@@ -47,8 +47,8 @@ public sealed class ReviewWorkflowIntegration : IAsyncLifetime
     [Fact]
     public async Task CreateEditDelete_ShouldKeepTheRatingsAndTheReviewCountsInStep()
     {
-        var first = this.factory.CreateUserClient(FirstReviewerId, "first");
-        var second = this.factory.CreateUserClient(SecondReviewerId, "second");
+        var first = await this.factory.CreateUserClient(FirstReviewerId, "first");
+        var second = await this.factory.CreateUserClient(SecondReviewerId, "second");
 
         // 1. The first review sets the book's and the author's rating.
         var review = await (await first.PostAsJsonAsync(
@@ -120,7 +120,7 @@ public sealed class ReviewWorkflowIntegration : IAsyncLifetime
     public async Task Votes_ShouldToggle_WhenAnotherUserVotesTheSameWayTwice_OrSwitches()
     {
         var review = await this.factory.WithData(data => data.SeedReview(this.bookId, FirstReviewerId));
-        var voter = this.factory.CreateUserClient(SecondReviewerId, "second");
+        var voter = await this.factory.CreateUserClient(SecondReviewerId, "second");
 
         (await this.Vote(voter, review.Id, isUpvote: true)).Should().Be((1, 0));
 

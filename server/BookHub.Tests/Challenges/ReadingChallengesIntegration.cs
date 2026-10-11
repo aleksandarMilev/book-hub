@@ -29,7 +29,7 @@ public sealed class ReadingChallengesIntegration : IAsyncLifetime
     [InlineData("/ReadingChallenges/2101/progress/")]
     public async Task Get_And_Progress_ShouldReturnBadRequestProblem_WhenTheYearIsOutOfRange(string url)
     {
-        var httpClient = this.httpClientFactory.CreateUserClient(UserId);
+        var httpClient = await this.httpClientFactory.CreateUserClient(UserId);
 
         var response = await httpClient.GetAsync(url, TestContext.Current.CancellationToken);
 
@@ -41,7 +41,7 @@ public sealed class ReadingChallengesIntegration : IAsyncLifetime
     [Fact]
     public async Task CheckIn_ShouldReturnConflictProblem_AndAlso_ShouldKeepOneCheckIn_WhenAlreadyCheckedInToday()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient(UserId);
+        var httpClient = await this.httpClientFactory.CreateUserClient(UserId);
 
         var first = await httpClient.PostAsync("/ReadingChallenges/check-in/", content: null, cancellationToken: TestContext.Current.CancellationToken);
         var second = await httpClient.PostAsync("/ReadingChallenges/check-in/", content: null, cancellationToken: TestContext.Current.CancellationToken);

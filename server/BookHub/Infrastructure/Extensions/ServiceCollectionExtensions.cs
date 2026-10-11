@@ -174,11 +174,20 @@ public static class ServiceCollectionExtensions
             .GetEnvironmentVariable(DefaultConnectionSection)
             ?? configuration.GetConnectionString(DefaultConnection);
 
+        return services.AddDatabase(() => connectionString);
+    }
+
+    // The connection string is read whenever a DbContext is created (the options are scoped).
+    // The test host passes its current test database here, so it gets the same registration.
+    public static IServiceCollection AddDatabase(
+        this IServiceCollection services,
+        Func<string?> connectionString)
+    {
         return services
             .AddDbContext<BookHubDbContext>(options =>
             {
                 options
-                 .UseNpgsql(connectionString, npgsqlOptions =>
+                 .UseNpgsql(connectionString(), npgsqlOptions =>
                  {
                      npgsqlOptions.MigrationsAssembly(
                          typeof(BookHubDbContext).Assembly.FullName);

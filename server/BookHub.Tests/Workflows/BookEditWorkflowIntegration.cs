@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using Shared.Seed;
 using Shared.Utils;
 
+using static Features.Books.Shared.Constants.Paths;
+
 // A non-admin's edit of a book goes to a pending row that an admin approves; an admin's own edit
 // applies directly and supersedes whatever is pending.
 public sealed class BookEditWorkflowIntegration : IAsyncLifetime
@@ -19,7 +21,7 @@ public sealed class BookEditWorkflowIntegration : IAsyncLifetime
 
     private static readonly string[] AdminIds = ["admin-1", "admin-2"];
 
-    private readonly WorkflowFactory factory = new();
+    private readonly BookHubWebApplicationFactory factory = new();
 
     private Guid fantasyId;
     private Guid sciFiId;
@@ -58,8 +60,8 @@ public sealed class BookEditWorkflowIntegration : IAsyncLifetime
             "Original title",
             creatorId: CreatorId));
 
-        var creator = this.factory.CreateUserClient(CreatorId, CreatorName);
-        var admin = this.factory.CreateAdminClient(AdminIds[0], AdminIds[0]);
+        var creator = await this.factory.CreateUserClient(CreatorId, CreatorName);
+        var admin = await this.factory.CreateAdminClient(AdminIds[0], AdminIds[0]);
         var anonymous = this.factory.CreateAnonymousClient();
 
         // 1. The creator edits: the edit waits in a pending row, the book is unchanged.
@@ -75,7 +77,7 @@ public sealed class BookEditWorkflowIntegration : IAsyncLifetime
 
         foreach (var adminId in AdminIds)
         {
-            (await this.NotificationsOf(this.factory.CreateAdminClient(adminId, adminId)))
+            (await this.NotificationsOf(await this.factory.CreateAdminClient(adminId, adminId)))
                 .Should()
                 .ContainSingle(n => n.ResourceId == book.Id && n.Message == $"{CreatorName} has edited 'Original title'");
         }
@@ -136,7 +138,7 @@ public sealed class BookEditWorkflowIntegration : IAsyncLifetime
             "A book edited twice",
             creatorId: CreatorId));
 
-        var creator = this.factory.CreateUserClient(CreatorId, CreatorName);
+        var creator = await this.factory.CreateUserClient(CreatorId, CreatorName);
 
         await (await creator.PutAsync(
                 $"/Books/{book.Id}/",
@@ -144,7 +146,7 @@ public sealed class BookEditWorkflowIntegration : IAsyncLifetime
                 TestContext.Current.CancellationToken))
             .ShouldHaveStatus(HttpStatusCode.NoContent);
 
-        await (await this.factory.CreateAdminClient(AdminIds[0], AdminIds[0]).PatchAsync(
+        await (await (await this.factory.CreateAdminClient(AdminIds[0], AdminIds[0])).PatchAsync(
                 $"/Administrator/Books/{book.Id}/reject/",
                 null,
                 TestContext.Current.CancellationToken))
@@ -170,7 +172,7 @@ public sealed class BookEditWorkflowIntegration : IAsyncLifetime
             "A book losing its genre",
             creatorId: CreatorId));
 
-        var creator = this.factory.CreateUserClient(CreatorId, CreatorName);
+        var creator = await this.factory.CreateUserClient(CreatorId, CreatorName);
 
         await (await creator.PutAsync(
                 $"/Books/{book.Id}/",
@@ -187,7 +189,7 @@ public sealed class BookEditWorkflowIntegration : IAsyncLifetime
             await data.SaveChangesAsync(TestContext.Current.CancellationToken);
         });
 
-        await (await this.factory.CreateAdminClient(AdminIds[0], AdminIds[0]).PatchAsync(
+        await (await (await this.factory.CreateAdminClient(AdminIds[0], AdminIds[0])).PatchAsync(
                 $"/Administrator/Books/{book.Id}/approve/",
                 null,
                 TestContext.Current.CancellationToken))
@@ -205,7 +207,7 @@ public sealed class BookEditWorkflowIntegration : IAsyncLifetime
     [Fact]
     public async Task Approve_ShouldApplyTheEdit_AndCountTheBook_WhenTheCreatorEditedItWhilePending()
     {
-        var creator = this.factory.CreateUserClient(CreatorId, CreatorName);
+        var creator = await this.factory.CreateUserClient(CreatorId, CreatorName);
 
         var created = await (await creator.PostAsync(
                 "/Books",
@@ -219,7 +221,7 @@ public sealed class BookEditWorkflowIntegration : IAsyncLifetime
                 TestContext.Current.CancellationToken))
             .ShouldHaveStatus(HttpStatusCode.NoContent);
 
-        await (await this.factory.CreateAdminClient(AdminIds[0], AdminIds[0]).PatchAsync(
+        await (await (await this.factory.CreateAdminClient(AdminIds[0], AdminIds[0])).PatchAsync(
                 $"/Administrator/Books/{created.Id}/approve/",
                 null,
                 TestContext.Current.CancellationToken))
@@ -236,6 +238,89 @@ public sealed class BookEditWorkflowIntegration : IAsyncLifetime
 
         profile.CreatedBooksCount.Should().Be(1);
     }
+
+    [Fact]
+    public async Task Covers_ThroughPendingEdits_AnApproval_ARejection_AndAnAdminsEdit_OnlyTheLiveCoverStaysOnDisk()
+    {
+        var cover = this.factory.SeedImageFile(ImagePathPrefix, "cover.jpg");
+        var book = await this.factory.WithData(data => data.SeedBook(
+            "A book with a cover",
+            creatorId: CreatorId,
+            imagePath: cover));
+
+        var creator = await this.factory.CreateUserClient(CreatorId, CreatorName);
+        var admin = await this.factory.CreateAdminClient(AdminIds[0], AdminIds[0]);
+
+        // 1. A pending edit with a new cover: the file waits in the pending folder.
+        await this.EditWithCover(creator, book.Id, "First proposal");
+
+        var firstPending = await this.PendingImageOf(book.Id);
+
+        this.factory.ImageFiles(PendingImagePathPrefix).Should().Equal(firstPending);
+        this.factory.ImageFiles(ImagePathPrefix).Should().Equal(cover);
+
+        // 2. The creator changes their mind: the second cover replaces the first pending file.
+        await this.EditWithCover(creator, book.Id, "Second proposal");
+
+        var secondPending = await this.PendingImageOf(book.Id);
+
+        secondPending.Should().NotBe(firstPending);
+        this.factory.ImageFiles(PendingImagePathPrefix).Should().Equal(secondPending);
+
+        // 3. Approved: the pending cover goes live, and the old cover's file is deleted.
+        await (await admin.PatchAsync($"/Administrator/Books/{book.Id}/approve/", null, TestContext.Current.CancellationToken))
+            .ShouldHaveStatus(HttpStatusCode.NoContent);
+
+        (await this.Details(this.factory.CreateAnonymousClient(), book.Id)).ImagePath.Should().Be(secondPending);
+        this.factory.ImageFiles(ImagePathPrefix).Should().BeEmpty();
+        this.factory.ImageFiles(PendingImagePathPrefix).Should().Equal(secondPending);
+
+        // 4. Another pending cover, rejected: its file is deleted, the live cover stays.
+        await this.EditWithCover(creator, book.Id, "Rejected proposal");
+
+        var rejected = await this.PendingImageOf(book.Id);
+
+        await (await admin.PatchAsync($"/Administrator/Books/{book.Id}/reject/", null, TestContext.Current.CancellationToken))
+            .ShouldHaveStatus(HttpStatusCode.NoContent);
+
+        this.factory.ImageExists(rejected).Should().BeFalse();
+        this.factory.ImageFiles(PendingImagePathPrefix).Should().Equal(secondPending);
+
+        // 5. A pending cover superseded by an admin's own new cover: the pending file and the
+        //    previous live cover are both deleted, and only the admin's cover is left.
+        await this.EditWithCover(creator, book.Id, "Superseded proposal");
+
+        var superseded = await this.PendingImageOf(book.Id);
+
+        await (await admin.PutAsync(
+                $"/Books/{book.Id}/",
+                Forms.Book("The admin's version").WithImage(),
+                TestContext.Current.CancellationToken))
+            .ShouldHaveStatus(HttpStatusCode.NoContent);
+
+        var live = (await this.Details(this.factory.CreateAnonymousClient(), book.Id)).ImagePath;
+
+        this.factory.ImageExists(superseded).Should().BeFalse();
+        this.factory.ImageFiles(PendingImagePathPrefix).Should().BeEmpty();
+        this.factory.ImageFiles(ImagePathPrefix).Should().Equal(live);
+    }
+
+    private async Task EditWithCover(
+        HttpClient client,
+        Guid bookId,
+        string title)
+        => await (await client.PutAsync(
+                $"/Books/{bookId}/",
+                Forms.Book(title).WithImage(),
+                TestContext.Current.CancellationToken))
+            .ShouldHaveStatus(HttpStatusCode.NoContent);
+
+    private Task<string> PendingImageOf(Guid bookId)
+        => this.factory.WithData(data => data
+            .BookEdits
+            .Where(e => e.BookId == bookId)
+            .Select(e => e.ImagePath)
+            .SingleAsync(TestContext.Current.CancellationToken));
 
     private async Task<BookDetailsServiceModel> Details(
         HttpClient client,

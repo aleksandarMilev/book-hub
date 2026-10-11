@@ -60,8 +60,8 @@ public static class TestSeeder
         return user;
     }
 
-    // A user in the Administrator role, as the real AdminService finds admins
-    // (see BookHubWebApplicationFactory.UseRealAdminService).
+    // A user in the real Administrator role, as AdminService (notifications) and the token's role
+    // claim (BookHubWebApplicationFactory.CreateAdminClient) find admins. Safe to call twice.
     public static async Task<UserDbModel> SeedAdmin(
         this BookHubDbContext data,
         string id,
@@ -83,11 +83,18 @@ public static class TestSeeder
             data.Roles.Add(role);
         }
 
-        data.UserRoles.Add(new IdentityUserRole<string>
+        var isInRole = await data
+            .UserRoles
+            .AnyAsync(ur => ur.UserId == user.Id && ur.RoleId == role.Id);
+
+        if (!isInRole)
         {
-            UserId = user.Id,
-            RoleId = role.Id,
-        });
+            data.UserRoles.Add(new IdentityUserRole<string>
+            {
+                UserId = user.Id,
+                RoleId = role.Id,
+            });
+        }
 
         await data.SaveChangesAsync();
 
@@ -144,7 +151,8 @@ public static class TestSeeder
         string? penName = null,
         bool isApproved = true,
         string? creatorId = null,
-        double averageRating = 0)
+        double averageRating = 0,
+        string imagePath = "/images/authors/test.jpg")
     {
         var author = new AuthorDbModel
         {
@@ -154,7 +162,7 @@ public static class TestSeeder
             Biography = new string('b', 120),
             Gender = Gender.Other,
             Nationality = Nationality.Bulgaria,
-            ImagePath = "/images/authors/test.jpg",
+            ImagePath = imagePath,
             IsApproved = isApproved,
             CreatorId = creatorId,
             AverageRating = averageRating,
@@ -174,6 +182,7 @@ public static class TestSeeder
         string? creatorId = null,
         Guid? authorId = null,
         double averageRating = 0,
+        string imagePath = "/images/books/test.jpg",
         params Guid[] genreIds)
     {
         var book = new BookDbModel
@@ -182,7 +191,7 @@ public static class TestSeeder
             Title = title,
             ShortDescription = shortDescription,
             LongDescription = new string('l', 200),
-            ImagePath = "/images/books/test.jpg",
+            ImagePath = imagePath,
             AverageRating = averageRating,
             IsApproved = isApproved,
             CreatorId = creatorId,

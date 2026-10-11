@@ -1,6 +1,7 @@
 namespace BookHub.Tests.Authorization;
 
 using System.Net;
+using Features.Books.Service.Models;
 using Features.ReadingLists.Data.Models;
 using Features.ReadingLists.Shared;
 using FluentAssertions;
@@ -60,7 +61,7 @@ public sealed class AuthorizationMatrixIntegration(AuthorizationMatrixFixture fi
     [MemberData(nameof(AdminEndpoints))]
     public async Task NonAdmin_ShouldGetForbiddenProblem(string endpoint)
     {
-        var httpClient = this.httpClientFactory.CreateUserClient(OwnerId);
+        var httpClient = await this.httpClientFactory.CreateUserClient(OwnerId);
 
         using var request = ProtectedByKey(endpoint).ToRequest(this.seed);
         var response = await httpClient.SendAsync(request, TestContext.Current.CancellationToken);
@@ -73,7 +74,7 @@ public sealed class AuthorizationMatrixIntegration(AuthorizationMatrixFixture fi
     public async Task WrongUser_ShouldGetForbiddenOrNotFoundProblem(string endpoint)
     {
         var protectedEndpoint = ProtectedByKey(endpoint);
-        var httpClient = this.httpClientFactory.CreateUserClient(OtherUserId);
+        var httpClient = await this.httpClientFactory.CreateUserClient(OtherUserId);
 
         using var request = protectedEndpoint.ToRequest(this.seed);
         var response = await httpClient.SendAsync(request, TestContext.Current.CancellationToken);
@@ -89,9 +90,9 @@ public sealed class AuthorizationMatrixIntegration(AuthorizationMatrixFixture fi
 
         var httpClient = protectedEndpoint.Access switch
         {
-            Access.Admin => this.httpClientFactory.CreateAdminClient(AdminId),
-            Access.Owner => this.httpClientFactory.CreateUserClient(OwnerId),
-            _ => this.httpClientFactory.CreateUserClient(OtherUserId),
+            Access.Admin => await this.httpClientFactory.CreateAdminClient(AdminId),
+            Access.Owner => await this.httpClientFactory.CreateUserClient(OwnerId),
+            _ => await this.httpClientFactory.CreateUserClient(OtherUserId),
         };
 
         using var request = protectedEndpoint.ToRequest(this.seed);
@@ -134,13 +135,23 @@ public sealed class AuthorizationMatrixIntegration(AuthorizationMatrixFixture fi
     [Fact]
     public async Task UploadedImages_ShouldBePubliclyReadable()
     {
-        var httpClient = this.httpClientFactory.CreateAnonymousClient();
+        // A cover uploaded through the API (written by the real ImageWriter), then read without a
+        // token: static files are served before authorization.
+        var uploader = await this.httpClientFactory.CreateUserClient(OwnerId);
+        var book = await (await uploader.PostAsync(
+                "/Books",
+                Forms.Book("A book with a cover").WithImage(),
+                TestContext.Current.CancellationToken))
+            .ShouldHaveBody<BookDetailsServiceModel>(HttpStatusCode.Created);
 
-        // A tracked seed image under wwwroot: static files are served before authorization.
-        var response = await httpClient.GetAsync("/images/books/1984.jpg", TestContext.Current.CancellationToken);
+        var httpClient = this.httpClientFactory.CreateAnonymousClient();
+        var response = await httpClient.GetAsync(book.ImagePath, TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         response.Content.Headers.ContentType?.MediaType.Should().Be("image/jpeg");
+
+        var bytes = await response.Content.ReadAsByteArrayAsync(TestContext.Current.CancellationToken);
+        bytes.Should().Equal(Images.Jpeg);
     }
 
     [Fact]

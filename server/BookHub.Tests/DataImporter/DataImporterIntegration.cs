@@ -25,8 +25,7 @@ public sealed class DataImporterIntegration : IAsyncLifetime
     [Fact]
     public async Task Genres_ShouldSkipTheMigrationSeededOtherGenre_InsteadOfFailing()
     {
-        var response = await this.factory
-            .CreateAdminClient()
+        var response = await (await this.factory.CreateAdminClient())
             .PostAsync("/Administrator/DataImporter/genres/", content: null, cancellationToken: TestContext.Current.CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -45,7 +44,7 @@ public sealed class DataImporterIntegration : IAsyncLifetime
     [Fact]
     public async Task All_ShouldImportEverything_AndAlso_ShouldMakeTheAuthorsSearchableInBulgarian()
     {
-        var admin = this.factory.CreateAdminClient();
+        var admin = await this.factory.CreateAdminClient();
 
         var response = await admin.PostAsync("/Administrator/DataImporter/all/", content: null, cancellationToken: TestContext.Current.CancellationToken);
 

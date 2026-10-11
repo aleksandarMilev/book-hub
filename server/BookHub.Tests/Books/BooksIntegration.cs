@@ -20,7 +20,6 @@ using Shared.Seed;
 using Shared.Utils;
 
 using static Features.Books.Shared.Constants.Paths;
-using static Shared.Utils.Constants;
 
 public sealed class BooksIntegration : IAsyncLifetime
 {
@@ -33,7 +32,7 @@ public sealed class BooksIntegration : IAsyncLifetime
         await this.httpClientFactory.ResetDatabase();
 
         await this.SeedUser("test-user", "user");
-        await this.SeedUser("test-admin-id", "admin");
+        await this.httpClientFactory.WithData(data => data.SeedAdmin("test-admin-id", "admin"));
 
         await this.SeedGenre(OtherGenreId, "Other");
         await this.SeedGenre(
@@ -92,7 +91,7 @@ public sealed class BooksIntegration : IAsyncLifetime
             averageRating: 3.0,
             genreIds: [OtherGenreId]);
 
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var response = await httpClient.GetAsync($"/Books/genre/{fantasyId}?page=1&pageSize=10", TestContext.Current.CancellationToken);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -140,7 +139,7 @@ public sealed class BooksIntegration : IAsyncLifetime
             averageRating: 5.0,
             authorId: null);
 
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var response = await httpClient.GetAsync($"/Books/author/{authorId}?page=1&pageSize=10", TestContext.Current.CancellationToken);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -174,7 +173,7 @@ public sealed class BooksIntegration : IAsyncLifetime
     [Fact]
     public async Task Details_ShouldReturnNotFound_WhenNoBookWithSuchIdInDb()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
         var nonExistingId = Guid.NewGuid();
 
         var response = await httpClient.GetAsync($"/Books/{nonExistingId}/", TestContext.Current.CancellationToken);
@@ -184,7 +183,7 @@ public sealed class BooksIntegration : IAsyncLifetime
     [Fact]
     public async Task Create_ShouldReturnCreatedAtRoute_AndAlso_ShouldPersistTheBookInTheDb_AndAlso_ShouldSetDefaultImage_WhenNoImageProvided()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var formData = BuildBookForm(
             title: "A valid book title long enough",
@@ -246,9 +245,7 @@ public sealed class BooksIntegration : IAsyncLifetime
     [Fact]
     public async Task Create_ShouldPersistNonDefaultImage_WhenImageProvided_AndAlso_ShouldUseImageWriter()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient();
-
-        var imageWriterMock = this.httpClientFactory.GetImageWriterMock();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var formData = BuildBookFormWithImage(
             title: "A valid book title long enough",
@@ -268,11 +265,10 @@ public sealed class BooksIntegration : IAsyncLifetime
 
         createdBook.Should().NotBeNull();
         createdBook!.ImagePath.Should().NotBe(DefaultImagePath);
-        createdBook.ImagePath.Should().StartWith("/images/books/test-");
+        createdBook.ImagePath.Should().MatchRegex(@"^/images/books/[0-9a-f-]{36}\.jpg$");
 
-        imageWriterMock.WriteCalls.Should().Be(1);
-        imageWriterMock.LastWrittenPath.Should().NotBeNull();
-        imageWriterMock.LastWrittenPath!.Should().StartWith("/images/books/test-");
+        // The uploaded file is on disk, and it's the only one.
+        this.httpClientFactory.ImageFiles(ImagePathPrefix).Should().Equal(createdBook.ImagePath);
 
         using var scope = this
             .httpClientFactory
@@ -294,7 +290,7 @@ public sealed class BooksIntegration : IAsyncLifetime
     [Fact]
     public async Task Create_ShouldReturnCreatedAtRoute_AndAlso_ShouldAutoApprove_WhenAdminCreates()
     {
-        var httpClient = this.httpClientFactory.CreateAdminClient();
+        var httpClient = await this.httpClientFactory.CreateAdminClient();
 
         var formData = BuildBookForm(
             title: "Admin created book title",
@@ -342,7 +338,7 @@ public sealed class BooksIntegration : IAsyncLifetime
     [Fact]
     public async Task Create_ShouldReturnBadRequest_WhenInvalidModelProvided()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var formData = BuildBookForm(
             title: "a",
@@ -367,7 +363,7 @@ public sealed class BooksIntegration : IAsyncLifetime
     [Fact]
     public async Task Create_ShouldReturnBadRequestProblem_AndAlso_ShouldNotPersistBook_WhenGenreDoesNotExist()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
         var unknownGenreId = Guid.NewGuid();
 
         var formData = BuildBookForm(
@@ -400,19 +396,19 @@ public sealed class BooksIntegration : IAsyncLifetime
 
         bookExists.Should().BeFalse();
 
-        this.httpClientFactory.GetImageWriterMock().WriteCalls.Should().Be(0);
+        this.httpClientFactory.ImageFiles(ImagePathPrefix).Should().BeEmpty();
     }
 
     [Fact]
     public async Task Edit_ShouldWritePendingImage_AndAlso_ShouldKeepBookImage_WhenNonAdminProvidesNewImage()
     {
+        var oldImagePath = this.httpClientFactory.SeedImageFile(ImagePathPrefix, "old.jpg");
         var bookId = await this.SeedBook(
-            imagePath: "/images/books/old.jpg",
+            imagePath: oldImagePath,
             creatorId: "test-user",
             isApproved: true);
 
-        var httpClient = this.httpClientFactory.CreateUserClient();
-        var imageWriterMock = this.httpClientFactory.GetImageWriterMock();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var formData = BuildBookFormWithImage(
             title: "Edited valid title long enough",
@@ -426,9 +422,6 @@ public sealed class BooksIntegration : IAsyncLifetime
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-        imageWriterMock.WriteCalls.Should().Be(1);
-        imageWriterMock.DeleteCalls.Should().Be(0);
-        imageWriterMock.LastWrittenPath.Should().StartWith($"/images/{PendingImagePathPrefix}/test-");
 
         using var scope = this
             .httpClientFactory
@@ -444,25 +437,28 @@ public sealed class BooksIntegration : IAsyncLifetime
             .IgnoreQueryFilters()
             .SingleAsync(b => b.Id == bookId, cancellationToken: TestContext.Current.CancellationToken);
 
-        dbModel.ImagePath.Should().Be("/images/books/old.jpg");
+        dbModel.ImagePath.Should().Be(oldImagePath);
 
         var pending = await data
             .BookEdits
             .SingleAsync(e => e.BookId == bookId, cancellationToken: TestContext.Current.CancellationToken);
 
-        pending.ImagePath.Should().Be(imageWriterMock.LastWrittenPath);
+        // The pending image is its own file, and the live cover is untouched until approval.
+        pending.ImagePath.Should().StartWith($"/images/{PendingImagePathPrefix}/");
+        this.httpClientFactory.ImageFiles(PendingImagePathPrefix).Should().Equal(pending.ImagePath);
+        this.httpClientFactory.ImageExists(oldImagePath).Should().BeTrue();
     }
 
     [Fact]
     public async Task Edit_ShouldUpdateImage_AndAlso_ShouldDeleteOldImage_WhenAdminProvidesNewImage()
     {
+        var oldImagePath = this.httpClientFactory.SeedImageFile(ImagePathPrefix, "old.jpg");
         var bookId = await this.SeedBook(
-            imagePath: "/images/books/old.jpg",
+            imagePath: oldImagePath,
             creatorId: "test-user",
             isApproved: true);
 
-        var httpClient = this.httpClientFactory.CreateAdminClient();
-        var imageWriterMock = this.httpClientFactory.GetImageWriterMock();
+        var httpClient = await this.httpClientFactory.CreateAdminClient();
 
         var formData = BuildBookFormWithImage(
             title: "Edited valid title long enough",
@@ -476,11 +472,6 @@ public sealed class BooksIntegration : IAsyncLifetime
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-        imageWriterMock.WriteCalls.Should().Be(1);
-        imageWriterMock.DeleteCalls.Should().Be(1);
-        imageWriterMock.LastDeletedPath.Should().Be("/images/books/old.jpg");
-        imageWriterMock.LastWrittenPath.Should().NotBeNull();
-        imageWriterMock.LastWrittenPath!.Should().StartWith("/images/books/test-");
 
         using var scope = this
             .httpClientFactory
@@ -496,9 +487,12 @@ public sealed class BooksIntegration : IAsyncLifetime
             .IgnoreQueryFilters()
             .SingleAsync(b => b.Id == bookId, cancellationToken: TestContext.Current.CancellationToken);
 
-        dbModel.ImagePath.Should().NotBe("/images/books/old.jpg");
-        dbModel.ImagePath.Should().StartWith("/images/books/test-");
+        dbModel.ImagePath.Should().NotBe(oldImagePath);
         dbModel.ModifiedOn.Should().NotBeNull();
+
+        // The new cover replaced the old file on disk.
+        this.httpClientFactory.ImageFiles(ImagePathPrefix).Should().Equal(dbModel.ImagePath);
+        this.httpClientFactory.ImageExists(oldImagePath).Should().BeFalse();
     }
 
     [Fact]
@@ -509,7 +503,7 @@ public sealed class BooksIntegration : IAsyncLifetime
             creatorId: "test-user",
             isApproved: true);
 
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var formData = BuildBookForm(
             title: "Edited valid title long enough",
@@ -577,7 +571,7 @@ public sealed class BooksIntegration : IAsyncLifetime
             creatorId: "test-user",
             isApproved: true);
 
-        var httpClient = this.httpClientFactory.CreateAdminClient();
+        var httpClient = await this.httpClientFactory.CreateAdminClient();
 
         var formData = BuildBookForm(
             title: "Edited valid title long enough",
@@ -635,7 +629,7 @@ public sealed class BooksIntegration : IAsyncLifetime
     public async Task Edit_ShouldReturnNotFoundProblem_WhenBookDoesNotExist()
     {
         var nonExistingId = Guid.NewGuid();
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var formData = BuildBookForm(
             title: "Edited valid title long enough",
@@ -659,7 +653,7 @@ public sealed class BooksIntegration : IAsyncLifetime
             creatorId: "test-user",
             isApproved: true);
 
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var response = await httpClient.DeleteAsync($"/Books/{bookId}/", TestContext.Current.CancellationToken);
 
@@ -689,7 +683,7 @@ public sealed class BooksIntegration : IAsyncLifetime
     [Fact]
     public async Task Delete_ShouldReturnNotFoundProblem_WhenBookDoesNotExist()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
         var nonExistingId = Guid.NewGuid();
 
         var response = await httpClient.DeleteAsync($"/Books/{nonExistingId}/", TestContext.Current.CancellationToken);
@@ -706,7 +700,7 @@ public sealed class BooksIntegration : IAsyncLifetime
             creatorId: "test-admin-id",
             isApproved: true);
 
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var formData = BuildBookForm(
             title: "Hijacked title long enough",
@@ -758,7 +752,7 @@ public sealed class BooksIntegration : IAsyncLifetime
             creatorId: "test-admin-id",
             isApproved: false);
 
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var formData = BuildBookForm(
             title: "Hijacked title long enough",
@@ -778,7 +772,7 @@ public sealed class BooksIntegration : IAsyncLifetime
     [Fact]
     public async Task Create_ShouldStoreNoAuthor_WhenTheAuthorDoesNotExist()
     {
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var formData = BuildBookForm(
             title: "Book with an unknown author",
@@ -814,7 +808,7 @@ public sealed class BooksIntegration : IAsyncLifetime
             .Where(g => g.Id == OtherGenreId)
             .ExecuteDeleteAsync());
 
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var formData = BuildBookForm(
             title: "Book without any genre",
@@ -840,15 +834,22 @@ public sealed class BooksIntegration : IAsyncLifetime
     [Fact]
     public async Task Create_ShouldNotPersistTheBook_WhenTheAdminNotificationCannotBeSaved()
     {
-        // The book and the admin notifications are saved together. Without the admin's user
-        // row, the notification's foreign key fails, and the book must not be saved either.
-        await this.httpClientFactory.WithData(data => data
-            .Users
-            .IgnoreQueryFilters()
-            .Where(u => u.Id == "test-admin-id")
-            .ExecuteDeleteAsync());
+        // The book and the admin notifications are saved together, so when the notification
+        // insert fails, the book must not be saved either. The failure is the database's own:
+        // a trigger in this test's database rejects every notification row (the real model has
+        // no input that makes the insert fail, because the admin IDs come from the role).
+        await this.httpClientFactory.WithData(data => data.Database.ExecuteSqlRawAsync("""
+            CREATE FUNCTION reject_notifications() RETURNS trigger AS $$
+            BEGIN
+                RAISE EXCEPTION 'notifications are unavailable';
+            END
+            $$ LANGUAGE plpgsql;
 
-        var httpClient = this.httpClientFactory.CreateUserClient();
+            CREATE TRIGGER reject_notifications BEFORE INSERT ON "Notifications"
+            FOR EACH ROW EXECUTE FUNCTION reject_notifications();
+            """));
+
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var formData = BuildBookForm(
             title: "Book whose notification fails",
@@ -860,9 +861,7 @@ public sealed class BooksIntegration : IAsyncLifetime
 
         var response = await httpClient.PostAsync("/Books", formData, TestContext.Current.CancellationToken);
 
-        await response.ShouldBeProblem(
-            HttpStatusCode.BadRequest,
-            "The request references a resource that does not exist.");
+        await response.ShouldBeProblem(HttpStatusCode.InternalServerError);
 
         var bookExists = await this.httpClientFactory.WithData(data => data
             .Books
@@ -880,7 +879,7 @@ public sealed class BooksIntegration : IAsyncLifetime
             isApproved: true);
 
         var unknownGenreId = Guid.NewGuid();
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var formData = BuildBookForm(
             title: "Edited valid title long enough",
@@ -910,7 +909,7 @@ public sealed class BooksIntegration : IAsyncLifetime
             creatorId: "test-user",
             isApproved: true);
 
-        var httpClient = this.httpClientFactory.CreateAdminClient();
+        var httpClient = await this.httpClientFactory.CreateAdminClient();
 
         var response = await httpClient.DeleteAsync($"/Books/{bookId}/", TestContext.Current.CancellationToken);
 
@@ -944,7 +943,7 @@ public sealed class BooksIntegration : IAsyncLifetime
             creatorId: "test-user",
             isApproved: false);
 
-        var httpClient = this.httpClientFactory.CreateAdminClient();
+        var httpClient = await this.httpClientFactory.CreateAdminClient();
 
         var response = await httpClient.PatchAsync($"/Administrator/Books/{bookId}/approve/", content: null, cancellationToken: TestContext.Current.CancellationToken);
 
@@ -970,7 +969,7 @@ public sealed class BooksIntegration : IAsyncLifetime
     [Fact]
     public async Task Approve_ShouldReturnNotFoundProblem_WhenBookDoesNotExist()
     {
-        var httpClient = this.httpClientFactory.CreateAdminClient();
+        var httpClient = await this.httpClientFactory.CreateAdminClient();
         var nonExistingId = Guid.NewGuid();
 
         var response = await httpClient.PatchAsync($"/Administrator/Books/{nonExistingId}/approve/", content: null, cancellationToken: TestContext.Current.CancellationToken);
@@ -987,7 +986,7 @@ public sealed class BooksIntegration : IAsyncLifetime
             creatorId: "test-user",
             isApproved: false);
 
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var response = await httpClient.PatchAsync($"/Administrator/Books/{bookId}/approve/", content: null, cancellationToken: TestContext.Current.CancellationToken);
 
@@ -1001,7 +1000,7 @@ public sealed class BooksIntegration : IAsyncLifetime
             creatorId: "test-user",
             isApproved: false);
 
-        var httpClient = this.httpClientFactory.CreateAdminClient();
+        var httpClient = await this.httpClientFactory.CreateAdminClient();
 
         var response = await httpClient.PatchAsync($"/Administrator/Books/{bookId}/reject/", content: null, cancellationToken: TestContext.Current.CancellationToken);
 
@@ -1031,7 +1030,7 @@ public sealed class BooksIntegration : IAsyncLifetime
     [Fact]
     public async Task Reject_ShouldReturnNotFoundProblem_WhenBookDoesNotExist()
     {
-        var httpClient = this.httpClientFactory.CreateAdminClient();
+        var httpClient = await this.httpClientFactory.CreateAdminClient();
         var nonExistingId = Guid.NewGuid();
 
         var response = await httpClient.PatchAsync($"/Administrator/Books/{nonExistingId}/reject/", content: null, cancellationToken: TestContext.Current.CancellationToken);
@@ -1048,7 +1047,7 @@ public sealed class BooksIntegration : IAsyncLifetime
             creatorId: "test-user",
             isApproved: false);
 
-        var httpClient = this.httpClientFactory.CreateUserClient();
+        var httpClient = await this.httpClientFactory.CreateUserClient();
 
         var response = await httpClient.PatchAsync($"/Administrator/Books/{bookId}/reject/", content: null, cancellationToken: TestContext.Current.CancellationToken);
 
@@ -1113,17 +1112,7 @@ public sealed class BooksIntegration : IAsyncLifetime
             publishedDate,
             genreIds);
 
-        var bytes = Convert.FromBase64String(MockImageBytes);
-        var fileContent = new ByteArrayContent(bytes);
-
-        fileContent
-            .Headers
-            .ContentType =
-            new MediaTypeHeaderValue("image/jpeg");
-
-        form.Add(fileContent, "Image", "test.jpg");
-
-        return form;
+        return form.WithImage();
     }
 
     private async Task<Guid> SeedBook(

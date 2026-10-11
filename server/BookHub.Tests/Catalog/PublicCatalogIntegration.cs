@@ -63,7 +63,7 @@ public sealed class PublicCatalogIntegration : IAsyncLifetime
     public async Task BookDetails_ShouldStillReturnTheCallersReadingStatus_WhenLoggedIn()
     {
         var (book, _) = await this.SeedReviewedBook();
-        var reader = this.factory.CreateUserClient(ReaderId, "reader");
+        var reader = await this.factory.CreateUserClient(ReaderId, "reader");
 
         var details = await reader.GetFromJsonAsync<BookDetailsServiceModel>($"/Books/{book.Id}/", cancellationToken: TestContext.Current.CancellationToken);
 
@@ -226,7 +226,7 @@ public sealed class PublicCatalogIntegration : IAsyncLifetime
     public async Task ReviewsOfAnUnapprovedBook_ShouldBeNotFound_ForAnonymousAndNonCreators()
     {
         var (bookId, reviewId) = await this.SeedReviewedUnapprovedBook();
-        var nonCreator = this.factory.CreateUserClient(ReaderId, "reader");
+        var nonCreator = await this.factory.CreateUserClient(ReaderId, "reader");
 
         foreach (var client in new[] { this.anonymous, nonCreator })
         {
@@ -239,8 +239,8 @@ public sealed class PublicCatalogIntegration : IAsyncLifetime
     public async Task ReviewsOfAnUnapprovedBook_ShouldBeVisible_ToTheCreatorAndAdmins()
     {
         var (bookId, reviewId) = await this.SeedReviewedUnapprovedBook();
-        var creator = this.factory.CreateUserClient(CreatorId, "creator");
-        var admin = this.factory.CreateAdminClient(AdminId);
+        var creator = await this.factory.CreateUserClient(CreatorId, "creator");
+        var admin = await this.factory.CreateAdminClient(AdminId);
 
         foreach (var client in new[] { creator, admin })
         {
@@ -290,7 +290,7 @@ public sealed class PublicCatalogIntegration : IAsyncLifetime
 
         if (creatorId is not null)
         {
-            var creator = this.factory.CreateUserClient(CreatorId, "creator");
+            var creator = await this.factory.CreateUserClient(CreatorId, "creator");
             var creatorView = await creator.GetFromJsonAsync<BookDetailsServiceModel>($"/Books/{bookId}/", cancellationToken: TestContext.Current.CancellationToken);
 
             creatorView!.Title.Should().Be("Pending title");
@@ -327,7 +327,7 @@ public sealed class PublicCatalogIntegration : IAsyncLifetime
 
         if (creatorId is not null)
         {
-            var creator = this.factory.CreateUserClient(CreatorId, "creator");
+            var creator = await this.factory.CreateUserClient(CreatorId, "creator");
             var creatorView = await creator.GetFromJsonAsync<AuthorDetailsServiceModel>($"/Authors/{authorId}/", cancellationToken: TestContext.Current.CancellationToken);
 
             creatorView!.Name.Should().Be("Pending name");

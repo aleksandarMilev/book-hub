@@ -2,9 +2,9 @@ namespace BookHub.Tests.Shared.Database;
 
 using BookHub.Data;
 using Infrastructure.Services.CurrentUser;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
-using NSubstitute;
 using Testcontainers.PostgreSql;
 
 // One PostgreSQL container for the whole test run, as a lazily started static. (An xunit.v3
@@ -122,7 +122,10 @@ internal static class PostgresServer
             .UseNpgsql(templateConnectionString)
             .Options;
 
-        await using (var data = new BookHubDbContext(options, Substitute.For<ICurrentUserService>()))
+        // The real CurrentUserService with no request: no user, as at application startup.
+        var noUser = new CurrentUserService(new HttpContextAccessor());
+
+        await using (var data = new BookHubDbContext(options, noUser))
         {
             await data.Database.MigrateAsync();
         }
