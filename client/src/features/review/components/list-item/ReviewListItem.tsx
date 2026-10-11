@@ -4,12 +4,14 @@ import { MDBIcon } from 'mdb-react-ui-kit';
 import { type FC, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 import { useRemove } from '@/features/review/hooks/useCrud';
 import { useVoteHandlers } from '@/features/review/hooks/useVote';
 import type { Review } from '@/features/review/types/review';
 import DeleteModal from '@/shared/components/delete-modal/DeleteModal';
 import { RenderStars } from '@/shared/components/render-stars/RenderStars';
+import { routes } from '@/shared/lib/constants/api';
 import { useAuth } from '@/shared/stores/auth/auth';
 
 type Props = {
@@ -60,7 +62,7 @@ const ReviewListItem: FC<Props> = ({ review, onVote }) => {
       <p className="review-content">{content}</p>
 
       <footer className="review-footer">
-        {isAuthenticated && (
+        {isAuthenticated ? (
           <div className="review-votes" aria-label="Votes">
             <button
               type="button"
@@ -85,6 +87,20 @@ const ReviewListItem: FC<Props> = ({ review, onVote }) => {
             <span className="vote-count" aria-label="Downvotes">
               {downvoteCount}
             </span>
+          </div>
+        ) : (
+          <div className="review-votes" aria-label="Votes">
+            <MDBIcon icon="arrow-up" className="vote-icon" />
+            <span className="vote-count" aria-label="Upvotes">
+              {upvoteCount}
+            </span>
+            <MDBIcon icon="arrow-down" className="vote-icon" />
+            <span className="vote-count" aria-label="Downvotes">
+              {downvoteCount}
+            </span>
+            <Link to={routes.login} className="review-login-link">
+              {t('item.loginToVote')}
+            </Link>
           </div>
         )}
 
@@ -111,5 +127,3 @@ const ReviewListItem: FC<Props> = ({ review, onVote }) => {
 };
 
 export default ReviewListItem;
-
-

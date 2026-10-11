@@ -61,7 +61,7 @@ export function useByGenre(
   const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
-    if (!token || !genreId || !enabled) {
+    if (!genreId || !enabled) {
       return;
     }
 
@@ -105,7 +105,7 @@ export function useByAuthor(
   const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
-    if (!token || !authorId || !enabled) {
+    if (!authorId || !enabled) {
       return;
     }
 
@@ -270,5 +270,3 @@ export const useRemove = (id?: string, title?: string) => {
 
   return { showModal, toggleModal, deleteHandler };
 };
-
-

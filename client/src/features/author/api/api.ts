@@ -6,7 +6,14 @@
   CreateAuthor,
 } from '@/features/author/types/author';
 import { genderFromServer, GenderToServer } from '@/features/author/types/author';
-import { getAuthConfig, getPublicConfig, http, httpAdmin, processError } from '@/shared/api/http';
+import {
+  getAuthConfig,
+  getConfig,
+  getPublicConfig,
+  http,
+  httpAdmin,
+  processError,
+} from '@/shared/api/http';
 import { routes } from '@/shared/lib/constants/api';
 import { baseErrors, errors } from '@/shared/lib/constants/errorMessages';
 
@@ -41,7 +48,7 @@ export const details = async (
   try {
     const url = `${routes.author}/${id}`;
     const httpClient = isAdmin ? httpAdmin : http;
-    const { data } = await httpClient.get<AuthorDetailsDto>(url, getAuthConfig(token, signal));
+    const { data } = await httpClient.get<AuthorDetailsDto>(url, getConfig(token, signal));
 
     return mapAuthorDetailsDto(data);
   } catch (error) {

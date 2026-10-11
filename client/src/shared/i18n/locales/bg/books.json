@@ -78,7 +78,8 @@
     "noReviews": "Все още няма отзиви.",
     "allReviews": "Всички отзиви",
     "createReviewTitle": "Създай отзив",
-    "createProfile": "Създай профил",
+    "loginToReview": "Влез, за да напишеш отзив",
+    "loginToAddToList": "Влез, за да добавиш книгата в списъците си",
     "publishedLabel": "Публикувана:",
     "breadcrumb": {
       "home": "Начало",

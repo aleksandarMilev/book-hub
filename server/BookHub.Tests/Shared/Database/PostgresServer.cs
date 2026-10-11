@@ -13,6 +13,9 @@ using Testcontainers.PostgreSql;
 // and each test gets its own database cloned from that template: same isolation as a fresh
 // database per test, without re-running the migrations. Testcontainers' Ryuk removes the
 // container at exit.
+//
+// Test classes run in parallel, so this class is the only shared state between them: the start
+// is guarded by StartLock, and the clone step by CloneLock.
 internal static class PostgresServer
 {
     // Keep the image and the initdb arguments in sync with docker-compose.*.yml.
@@ -20,9 +23,18 @@ internal static class PostgresServer
     private const string InitDbArgs = "--encoding=UTF8 --locale-provider=icu --icu-locale=und";
     private const string TemplateDatabase = "bookhub_template";
 
+    // Every parallel test host has its own Npgsql pool (one database each), plus the
+    // CREATE/DROP connections; the default of 100 is too tight for 4 parallel classes.
+    private const string MaxConnections = "300";
+
     private static readonly SemaphoreSlim StartLock = new(1, 1);
 
-    private static PostgreSqlContainer? container;
+    // CREATE DATABASE ... TEMPLATE fails ("source database is being accessed by other users")
+    // when two clones of the same template run at once. A clone takes about 0.1 s.
+    private static readonly SemaphoreSlim CloneLock = new(1, 1);
+
+    // Read outside the lock by the double-checked start in EnsureStarted.
+    private static volatile PostgreSqlContainer? container;
 
     public static async Task<TestDatabase> CreateDatabase()
     {
@@ -30,7 +42,17 @@ internal static class PostgresServer
 
         // Generated, never user input: DDL can't take parameters.
         var name = $"test_{Guid.NewGuid():N}";
-        await ExecuteOnServer($"CREATE DATABASE \"{name}\" TEMPLATE \"{TemplateDatabase}\"");
+
+        await CloneLock.WaitAsync();
+
+        try
+        {
+            await ExecuteOnServer($"CREATE DATABASE \"{name}\" TEMPLATE \"{TemplateDatabase}\"");
+        }
+        finally
+        {
+            CloneLock.Release();
+        }
 
         return new TestDatabase(name, ConnectionStringFor(name));
     }
@@ -63,7 +85,8 @@ internal static class PostgresServer
                 .WithCommand(
                     "-c", "fsync=off",
                     "-c", "synchronous_commit=off",
-                    "-c", "full_page_writes=off")
+                    "-c", "full_page_writes=off",
+                    "-c", $"max_connections={MaxConnections}")
                 .Build();
 
             await newContainer.StartAsync();

@@ -23,12 +23,26 @@ public class ReviewService(
 {
     private const string ResourceName = "review";
 
-    public async Task<PaginatedModel<ReviewServiceModel>> AllForBook(
+    public async Task<PaginatedModel<ReviewServiceModel>?> AllForBook(
         Guid bookId,
         int pageIndex,
         int pageSize,
         CancellationToken cancellationToken = default)
     {
+        // Books goes through the query filters, so an unapproved book's reviews stay hidden
+        // (a 404, like a missing book) from everyone but its creator and admins.
+        var bookIsVisible = await data
+            .Books
+            .AsNoTracking()
+            .AnyAsync(
+                b => b.Id == bookId,
+                cancellationToken);
+
+        if (!bookIsVisible)
+        {
+            return null;
+        }
+
         pageClamper.ClampPageSizeAndIndex(
             ref pageIndex,
             ref pageSize);
@@ -59,6 +73,8 @@ public class ReviewService(
         => await data
             .Reviews
             .AsNoTracking()
+            // Only reviews of a book the caller can see (see AllForBook).
+            .Where(r => data.Books.Any(b => b.Id == r.BookId))
             .ToServiceModels()
             .FirstOrDefaultAsync(
                 r => r.Id == id,

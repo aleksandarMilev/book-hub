@@ -1,12 +1,12 @@
 ﻿import type { GenreDetails, GenreName } from '@/features/genre/types/genre';
-import { getAuthConfig, http, processError } from '@/shared/api/http';
+import { getConfig, http, processError } from '@/shared/api/http';
 import { routes } from '@/shared/lib/constants/api';
 import { errors } from '@/shared/lib/constants/errorMessages';
 
 export const all = async (token: string, signal?: AbortSignal) => {
   try {
     const url = `${routes.genres}`;
-    const { data } = await http.get<GenreName[]>(url, getAuthConfig(token, signal));
+    const { data } = await http.get<GenreName[]>(url, getConfig(token, signal));
 
     return data;
   } catch (error) {
@@ -17,7 +17,7 @@ export const all = async (token: string, signal?: AbortSignal) => {
 export const details = async (id: string, token: string, signal?: AbortSignal) => {
   try {
     const url = `${routes.genres}/${id}`;
-    const { data } = await http.get<GenreDetails>(url, getAuthConfig(token, signal));
+    const { data } = await http.get<GenreDetails>(url, getConfig(token, signal));
 
     return data;
   } catch (error) {

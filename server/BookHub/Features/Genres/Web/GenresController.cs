@@ -11,11 +11,13 @@ using static Common.Constants.ApiRoutes;
 [Authorize]
 public class GenresController(IGenreService service) : ApiController
 {
+    [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<GenreNameServiceModel>>> Names(
         CancellationToken cancellationToken = default)
         => this.Ok(await service.Names(cancellationToken));
 
+    [AllowAnonymous]
     [HttpGet(Id)]
     public async Task<ActionResult<IEnumerable<GenreNameServiceModel>>> Details(
         Guid id,

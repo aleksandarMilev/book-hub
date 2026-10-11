@@ -66,7 +66,9 @@ public class AuthorService(
         }
 
         var currentUserId = userService.GetId();
-        var isCreator = string.Equals(
+
+        // An anonymous caller (null ID) is never the creator, not even of an author with no CreatorId.
+        var isCreator = currentUserId is not null && string.Equals(
             authorDetails.CreatorId,
             currentUserId,
             StringComparison.OrdinalIgnoreCase);

@@ -121,7 +121,8 @@ public sealed class ErrorHandlingIntegration : IAsyncLifetime
     {
         var httpClient = this.httpClientFactory.CreateAnonymousClient();
 
-        var response = await httpClient.GetAsync("/Genres/");
+        // A protected endpoint: the catalog (e.g. /Genres) is public since Phase 2c.
+        var response = await httpClient.GetAsync("/Profile/mine/");
 
         await response.ShouldBeProblem(HttpStatusCode.Unauthorized);
     }

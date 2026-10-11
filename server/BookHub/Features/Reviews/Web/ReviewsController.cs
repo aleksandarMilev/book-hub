@@ -18,6 +18,7 @@ using static Shared.Constants.RouteNames;
 [Authorize]
 public class ReviewsController(IReviewService service) : ApiController
 {
+    [AllowAnonymous]
     [HttpGet(ByBook + Id)]
     public async Task<ActionResult<PaginatedModel<ReviewServiceModel>>> AllForBook(
         Guid id,
@@ -30,6 +31,7 @@ public class ReviewsController(IReviewService service) : ApiController
             pageSize,
             cancellationToken));
 
+    [AllowAnonymous]
     [HttpGet(Id, Name = DetailsRouteName)]
     public async Task<ActionResult<ReviewServiceModel>> Details(
         Guid id,

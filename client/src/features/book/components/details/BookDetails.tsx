@@ -89,8 +89,8 @@ const BookDetails: FC = () => {
                   <>
                     <h3 className="create-review-heading">{t('details.createReviewTitle')}</h3>
                     <div className="create-profile-container">
-                      <Link className="create-profile-link" to={routes.profile}>
-                        {t('details.createProfile')}
+                      <Link className="create-profile-link" to={routes.login}>
+                        {t('details.loginToReview')}
                       </Link>
                     </div>
                   </>
@@ -131,5 +131,3 @@ const BookDetails: FC = () => {
 };
 
 export default BookDetails;
-
-

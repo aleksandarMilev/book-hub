@@ -76,6 +76,11 @@ export const getPublicConfig = (signal?: AbortSignal): AxiosRequestConfig => {
   return config;
 };
 
+// For endpoints that are public but return more to a logged-in caller (the catalog): sends the
+// bearer token when there is one, and no Authorization header at all for anonymous visitors.
+export const getConfig = (token: string | null | undefined, signal?: AbortSignal) =>
+  token && token.trim() !== '' ? getAuthConfig(token, signal) : getPublicConfig(signal);
+
 const isNonBlankString = (value: unknown): value is string =>
   typeof value === 'string' && value.trim() !== '';
 

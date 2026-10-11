@@ -40,8 +40,8 @@ services:
       # Production doesn't apply migrations yet (D-04, Phase 3).
       - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
       - JwtSettings__Secret=${APP_SECRET}
-      - JwtSettings__Issuer=${ISSUER}
-      - JwtSettings__Audience=${AUDIENCE}
+      - JwtSettings__Issuer=${ISSUER:?ISSUER is required}
+      - JwtSettings__Audience=${AUDIENCE:?AUDIENCE is required}
       - EmailSettings__Host=${SMTP_HOST}
       - EmailSettings__Port=${SMTP_PORT}
       - EmailSettings__UserName=${SMTP_USER}

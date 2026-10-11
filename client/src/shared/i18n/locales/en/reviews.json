@@ -19,7 +19,8 @@
     "titleFallback": "Reviews"
   },
   "item": {
-    "delete": "Delete"
+    "delete": "Delete",
+    "loginToVote": "Log in to vote"
   },
   "validation": {
     "fields": {

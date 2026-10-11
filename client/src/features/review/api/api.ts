@@ -1,5 +1,5 @@
 ﻿import type { CreateReview, Review, VoteRequest } from '@/features/review/types/review';
-import { getAuthConfig, http, processError } from '@/shared/api/http';
+import { getAuthConfig, getConfig, http, processError } from '@/shared/api/http';
 import { routes } from '@/shared/lib/constants/api';
 import { errors } from '@/shared/lib/constants/errorMessages';
 import type { PaginatedResult } from '@/shared/types/paginatedResult';
@@ -13,7 +13,7 @@ export async function all(
 ) {
   try {
     const url = `${routes.review}/book/${bookId}?pageIndex=${pageIndex}&pageSize=${pageSize}`;
-    const { data } = await http.get<PaginatedResult<Review>>(url, getAuthConfig(token, signal));
+    const { data } = await http.get<PaginatedResult<Review>>(url, getConfig(token, signal));
 
     return data;
   } catch (error) {

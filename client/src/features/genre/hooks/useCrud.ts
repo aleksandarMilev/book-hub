@@ -19,10 +19,6 @@ export const useAll = () => {
 
   const fetchData = useCallback(
     async (signal?: AbortSignal) => {
-      if (!token) {
-        return;
-      }
-
       try {
         setIsFetching(true);
         const data = await api.all(token, signal);
@@ -122,5 +118,3 @@ export const useSearch = (genres: GenreName[], selectedGenres: GenreName[]) => {
 
   return { searchTerm, filteredGenres, updateSearchTerm };
 };
-
-

@@ -23,6 +23,7 @@ public class BooksController(IBookService service) : ApiController
         CancellationToken cancellationToken = default)
         => this.Ok(await service.TopThree(cancellationToken));
 
+    [AllowAnonymous]
     [HttpGet(ApiRoutes.ByGenre + Id)]
     public async Task<ActionResult<PaginatedModel<BookServiceModel>>> ByGenre(
         Guid id,
@@ -35,6 +36,7 @@ public class BooksController(IBookService service) : ApiController
             pageSize,
             cancellationToken));
 
+    [AllowAnonymous]
     [HttpGet(ApiRoutes.ByAuthor + Id)]
     public async Task<ActionResult<PaginatedModel<BookServiceModel>>> ByAuthor(
        Guid id,
@@ -47,6 +49,7 @@ public class BooksController(IBookService service) : ApiController
            pageSize,
            cancellationToken));
 
+    [AllowAnonymous]
     [HttpGet(Id, Name = DetailsRouteName)]
     public async Task<ActionResult<BookDetailsServiceModel>> Details(
         Guid id,
