@@ -1,9 +1,15 @@
 using BookHub.Infrastructure.Extensions;
 using Microsoft.Extensions.Options;
+using Scalar.AspNetCore;
+using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication
+    .CreateBuilder(args)
+    .UseSerilog();
 
-var builderEnvIsNotTesting = !builder.Environment.IsEnvironment("Testing");
+var builderEnvIsNotTesting = !builder
+    .Environment
+    .IsEnvironment("Testing");
 
 builder
     .Services
@@ -16,7 +22,7 @@ builder
         builder.Environment)
     .AddApiControllers()
     .AddServices()
-    .AddSwagger()
+    .AddOpenApi()
     .AddHealthcheck()
     .AddMemoryCache()
     .AddRateLimiting(builder.Environment)
@@ -38,8 +44,10 @@ if (builderEnvIsNotTesting)
 
 var app = builder.Build();
 
-// Fail fast on invalid settings before anything touches the database.
-// ValidateOnStart alone would only run in RunAsync, after the startup tasks below.
+var cancellationToken = app
+    .Lifetime
+    .ApplicationStopping;
+
 app
     .Services
     .GetRequiredService<IStartupValidator>()
@@ -48,9 +56,6 @@ app
 var envIsDev = app.Environment.IsDevelopment();
 var envIsNotTesting = !app.Environment.IsEnvironment("Testing");
 
-// In every environment: exceptions become ProblemDetails (GlobalExceptionHandler, which logs
-// them itself, so the middleware's own error log is suppressed), and empty-body error
-// responses such as 401/403 get a ProblemDetails body.
 app
     .UseExceptionHandler(new ExceptionHandlerOptions
     {
@@ -58,24 +63,20 @@ app
     })
     .UseStatusCodePages();
 
-if (!envIsDev)
+if (envIsDev)
+{
+    app.UseDeveloperExceptionPage();
+}
+else
 {
     app
         .UseHsts()
-        .UseHttpsRedirection();
-
-    await app.UseCustomForwardedHeaders();
+        .UseHttpsRedirection()
+        .UseCustomForwardedHeaders();
 }
 
-// Before authentication/authorization, so the Swagger UI and document stay reachable
-// without a token.
-if (envIsDev)
-{
-    app.UseSwaggerUI();
-}
+app.UseSerilogRequestLogging();
 
-// UseStaticFiles serves wwwroot (book covers, author photos, avatars) and short-circuits
-// before UseAuthorization, so uploaded images stay public under the fallback policy.
 app
     .UseRouting()
     .UseStaticFiles();
@@ -93,14 +94,16 @@ app
 
 if (envIsDev)
 {
-    await app.UseMigrations();
+    app.MapOpenApi();
+    app.MapScalarApiReference();
+
+    await app.UseMigrations(cancellationToken);
     await app.UseBuiltInUser();
     await app.UseDevAdminRole();
 }
 else if (envIsNotTesting)
 {
-    // No-op unless BootstrapAdmin:Enabled is true.
     await app.UseProductionAdminRole();
 }
 
-await app.RunAsync();
+await app.RunAsync(cancellationToken);

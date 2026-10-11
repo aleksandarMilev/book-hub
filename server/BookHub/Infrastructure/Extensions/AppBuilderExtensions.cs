@@ -15,31 +15,22 @@ using static Common.Constants.Names;
 
 public static class AppBuilderExtensions
 {
-    public static async Task<IApplicationBuilder> UseCustomForwardedHeaders(
+    public static IApplicationBuilder UseCustomForwardedHeaders(
         this IApplicationBuilder app)
     {
-        var forwardedHeadersOptions = new ForwardedHeadersOptions
-        {
-            ForwardedHeaders =
-                ForwardedHeaders.XForwardedFor |
-                ForwardedHeaders.XForwardedProto,
-            ForwardLimit = 1,
-        };
-
-        forwardedHeadersOptions.KnownProxies.Clear();
-
-        app.UseForwardedHeaders(forwardedHeadersOptions);
+        app.UseForwardedHeaders(CreateForwardedHeadersOptions());
 
         return app;
     }
 
     public static async Task<IApplicationBuilder> UseMigrations(
-        this IApplicationBuilder app)
+        this IApplicationBuilder app,
+        CancellationToken cancellationToken = default)
     {
         using var services = app.ApplicationServices.CreateScope();
         var data = services.ServiceProvider.GetRequiredService<BookHubDbContext>();
 
-        await data.Database.MigrateAsync();
+        await data.Database.MigrateAsync(cancellationToken);
 
         return app;
     }
@@ -50,26 +41,11 @@ public static class AppBuilderExtensions
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
-            endpoints
-                .MapHealthChecks("/health")
-                .AllowAnonymous();
+            endpoints.MapHealthChecks("/health");
         });
 
         return app;
     }
-
-    public static IApplicationBuilder UseSwaggerUI(
-        this IApplicationBuilder app) 
-        => app
-            .UseSwagger()
-            .UseSwaggerUI(opt =>
-            {
-                const string Url = "/swagger/v1/swagger.json";
-                const string Name = "BookHub API";
-
-                opt.SwaggerEndpoint(Url, Name);
-                opt.RoutePrefix = string.Empty;
-            });
 
     public static IApplicationBuilder UseAllowedCors(
         this IApplicationBuilder app)
@@ -147,8 +123,6 @@ public static class AppBuilderExtensions
         return app;
     }
 
-    // We need this method to create administrator if we drop the production db for some reason.
-    // Don't delete it!
     public static async Task<IApplicationBuilder> UseProductionAdminRole(
         this IApplicationBuilder app)
     {
@@ -254,5 +228,37 @@ public static class AppBuilderExtensions
         }
 
         return app;
+    }
+
+    private static ForwardedHeadersOptions CreateForwardedHeadersOptions()
+    {
+        var options = new ForwardedHeadersOptions
+        {
+            ForwardedHeaders =
+                ForwardedHeaders.XForwardedFor |
+                ForwardedHeaders.XForwardedProto,
+            ForwardLimit = 1,
+        };
+
+        options.KnownProxies.Clear();
+        options.KnownIPNetworks.Clear();
+
+        var trustedNetworks = new string[]
+        {
+            "127.0.0.0/8",
+            "::1/128",
+            "10.0.0.0/8",
+            "172.16.0.0/12",
+            "192.168.0.0/16",
+        };
+
+        foreach (var network in trustedNetworks)
+        {
+            options
+                .KnownIPNetworks
+                .Add(System.Net.IPNetwork.Parse(network));
+        }
+
+        return options;
     }
 }
