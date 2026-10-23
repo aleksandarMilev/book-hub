@@ -7,6 +7,7 @@ using Features.Authors.Shared;
 using Features.Books.Data.Models;
 using Features.Books.Service;
 using Features.Books.Service.Models;
+using Features.Books.Shared;
 using Features.Genres.Data.Models;
 using Features.Identity.Data.Models;
 using Features.Notifications.Service;
@@ -15,6 +16,7 @@ using FluentAssertions;
 using Infrastructure.Services.CurrentUser;
 using Infrastructure.Services.ImageWriter;
 using Infrastructure.Services.ImageWriter.Models;
+using Infrastructure.Services.PageClamper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -213,12 +215,13 @@ public sealed class BooksUnit
 
         var service = new BookService(
             data,
-            currentUserService,
-            adminService,
-            notificationService,
             imageWriter,
-            logger,
-            profileService);
+            adminService,
+            currentUserService,
+            notificationService,
+            profileService,
+            new PageClamper(),
+            logger);
 
         var serviceModel = new CreateBookServiceModel
         {
@@ -306,12 +309,13 @@ public sealed class BooksUnit
 
         var service = new BookService(
             data,
-            currentUserService,
-            adminService,
-            notificationService,
             imageWriter,
-            logger,
-            profileService);
+            adminService,
+            currentUserService,
+            notificationService,
+            profileService,
+            new PageClamper(),
+            logger);
 
         var nonExistingAuthorId = Guid.NewGuid();
 
@@ -368,12 +372,13 @@ public sealed class BooksUnit
 
         var service = new BookService(
             data,
-            currentUserService,
-            adminService,
-            notificationService,
             imageWriter,
-            logger,
-            profileService);
+            adminService,
+            currentUserService,
+            notificationService,
+            profileService,
+            new PageClamper(),
+            logger);
 
         var dummyFile = new FormFile(
             baseStream: new MemoryStream([1, 2, 3]),
@@ -444,12 +449,13 @@ public sealed class BooksUnit
 
         var service = new BookService(
             data,
-            currentUserService,
-            adminService,
-            notificationService,
             imageWriter,
-            logger,
-            profileService);
+            adminService,
+            currentUserService,
+            notificationService,
+            profileService,
+            new PageClamper(),
+            logger);
 
         var serviceModel = new CreateBookServiceModel
         {
@@ -515,12 +521,12 @@ public sealed class BooksUnit
         var result = await service.Edit(book.Id, serviceModel);
         result.Succeeded.Should().BeTrue();
 
-        var dbModel = await data
-            .Books
+        var pending = await data
+            .BookEdits
             .IgnoreQueryFilters()
-            .SingleAsync(b => b.Id == book.Id);
+            .SingleAsync(b => b.BookId == book.Id);
 
-        dbModel.AuthorId.Should().Be(authorId);
+        pending.AuthorId.Should().Be(authorId);
     }
 
     [Fact]
@@ -633,12 +639,13 @@ public sealed class BooksUnit
 
         var service = new BookService(
             data,
-            currentUserService,
-            adminService,
-            notificationService,
             imageWriter,
-            logger,
-            profileService);
+            adminService,
+            currentUserService,
+            notificationService,
+            profileService,
+            new PageClamper(),
+            logger);
 
         var book = NewBookDbModel(
             creatorId: "user-1",
@@ -670,30 +677,37 @@ public sealed class BooksUnit
 
         result.Succeeded.Should().BeTrue();
 
+        var pending = await data
+            .BookEdits
+            .IgnoreQueryFilters()
+            .SingleAsync(b => b.BookId == book.Id);
+
+        pending.Title.Should().Be(serviceModel.Title);
+        pending.ImagePath.Should().Be("/images/books/new.jpg");
+        pending.GetPendingGenres().Should().Equal(fantasyId);
+
         var dbModel = await data
             .Books
             .IgnoreQueryFilters()
             .SingleAsync(b => b.Id == book.Id);
 
-        dbModel.Title.Should().Be(serviceModel.Title);
-        dbModel.ImagePath.Should().Be("/images/books/new.jpg");
-        dbModel.ModifiedOn.Should().NotBeNull();
+        dbModel.ImagePath.Should().Be("/images/books/old.jpg");
+
+        await imageWriter
+            .Received(1)
+            .Write(
+                resourceName: PendingImagePathPrefix,
+                dbModel: Arg.Any<IImageDdModel>(),
+                serviceModel: Arg.Any<IImageServiceModel>(),
+                defaultImagePath: null,
+                cancellationToken: Arg.Any<CancellationToken>());
 
         imageWriter
-            .Received(1)
+            .DidNotReceive()
             .Delete(
-                ImagePathPrefix,
-                "/images/books/old.jpg",
-                DefaultImagePath);
-
-        var mapEntities = await data
-            .BooksGenres
-            .AsNoTracking()
-            .Where(bg => bg.BookId == book.Id)
-            .ToListAsync();
-
-        mapEntities.Should().HaveCount(1);
-        mapEntities[0].GenreId.Should().Be(fantasyId);
+                resourceName: Arg.Any<string>(),
+                imagePath: Arg.Any<string?>(),
+                defaultImagePath: Arg.Any<string?>());
     }
 
     [Fact]
@@ -712,81 +726,13 @@ public sealed class BooksUnit
 
         var service = new BookService(
             data,
-            currentUserService,
-            adminService,
-            notificationService,
             imageWriter,
-            logger,
-            profileService);
-
-        var book = NewBookDbModel(
-            creatorId: "user-1",
-            imagePath: "/images/books/old.jpg",
-            isApproved: true);
-
-        data.Books.Add(book);
-        await data.SaveChangesAsync();
-
-        var serviceModel = new CreateBookServiceModel
-        {
-            Title = "Updated title is valid",
-            AuthorId = null,
-            Image = null,
-            ShortDescription = "Updated short description",
-            LongDescription = new string('u', 200),
-            PublishedDate = null,
-            Genres = []
-        };
-
-        var result = await service.Edit(book.Id, serviceModel);
-
-        result.Succeeded.Should().BeTrue();
-
-        await imageWriter
-           .Received(1)
-           .Write(
-               resourceName: ImagePathPrefix,
-               dbModel: Arg.Any<IImageDdModel>(),
-               serviceModel: Arg.Any<IImageServiceModel>(),
-               defaultImagePath: null,
-               cancellationToken: Arg.Any<CancellationToken>());
-    }
-
-    [Fact]
-    public async Task Edit_ShouldNotDeleteOldImage_WhenNewImageProvided_ButImagePathDoesNotChange()
-    {
-        var (data, currentUserService, connection) = await CreateSqliteDb();
-        await using var _ = connection;
-
-        await SeedGenre(data, OtherGenreId, "Other");
-
-        var imageWriter = Substitute.For<IImageWriter>();
-        imageWriter
-             .When(writer => writer.Write(
-                resourceName: Arg.Any<string>(),
-                dbModel: Arg.Any<IImageDdModel>(),
-                serviceModel: Arg.Any<IImageServiceModel>(),
-                defaultImagePath: Arg.Any<string?>(),
-                cancellationToken: Arg.Any<CancellationToken>()))
-            .Do(callInfo =>
-            {
-                var dbModel = (IImageDdModel)callInfo[1];
-                dbModel.ImagePath = "/images/books/old.jpg";
-            });
-
-        var adminService = Substitute.For<IAdminService>();
-        var notificationService = Substitute.For<INotificationService>();
-        var profileService = Substitute.For<IProfileService>();
-        var logger = Substitute.For<ILogger<BookService>>();
-
-        var service = new BookService(
-            data,
-            currentUserService,
             adminService,
+            currentUserService,
             notificationService,
-            imageWriter,
-            logger,
-            profileService);
+            profileService,
+            new PageClamper(),
+            logger);
 
         var book = NewBookDbModel(
             creatorId: "user-1",
@@ -815,14 +761,17 @@ public sealed class BooksUnit
         };
 
         var result = await service.Edit(book.Id, serviceModel);
+
         result.Succeeded.Should().BeTrue();
 
-        imageWriter
-            .DidNotReceive()
-            .Delete(
-                resourceName: Arg.Any<string>(),
-                imagePath: Arg.Any<string?>(),
-                defaultImagePath: Arg.Any<string?>());
+        await imageWriter
+           .Received(1)
+           .Write(
+               resourceName: PendingImagePathPrefix,
+               dbModel: Arg.Any<IImageDdModel>(),
+               serviceModel: Arg.Any<IImageServiceModel>(),
+               defaultImagePath: null,
+               cancellationToken: Arg.Any<CancellationToken>());
     }
 
     [Fact]
@@ -906,12 +855,13 @@ public sealed class BooksUnit
 
         var service = new BookService(
             data,
-            currentUserService,
-            adminService,
-            notificationService,
             imageWriter,
-            logger,
-            profileService);
+            adminService,
+            currentUserService,
+            notificationService,
+            profileService,
+            new PageClamper(),
+            logger);
 
         var result = await service.Approve(book.Id);
         result.Succeeded.Should().BeTrue();
@@ -961,12 +911,13 @@ public sealed class BooksUnit
 
         var service = new BookService(
             data,
-            currentUserService,
-            adminService,
-            notificationService,
             imageWriter,
-            logger,
-            profileService);
+            adminService,
+            currentUserService,
+            notificationService,
+            profileService,
+            new PageClamper(),
+            logger);
 
         var result = await service.Reject(book.Id);
         result.Succeeded.Should().BeTrue();
@@ -1032,12 +983,13 @@ public sealed class BooksUnit
 
         return new BookService(
             data,
-            currentUserService,
-            adminService,
-            notificationService,
             imageWriter,
-            logger,
-            profileService);
+            adminService,
+            currentUserService,
+            notificationService,
+            profileService,
+            new PageClamper(),
+            logger);
     }
 
     private static BookDbModel NewBookDbModel(

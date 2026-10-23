@@ -339,7 +339,7 @@ public sealed class AuthorsUnit
     }
 
     [Fact]
-    public async Task Edit_ShouldNotDeleteOldImage_WhenNewImageProvided_ButImagePathDoesNotChange()
+    public async Task Edit_ShouldCallImageWriterWithNullDefaultImagePath()
     {
         var (data, currentUserService, connection) = await CreateSqliteDb(
             userId: "admin-1",
@@ -351,21 +351,7 @@ public sealed class AuthorsUnit
         var adminService = Substitute.For<IAdminService>();
         var profileService = Substitute.For<IProfileService>();
         var notificationService = Substitute.For<INotificationService>();
-
         var imageWriter = Substitute.For<IImageWriter>();
-        imageWriter
-            .When(writer => writer.Write(
-                Arg.Any<string>(),
-                Arg.Any<IImageDdModel>(),
-                Arg.Any<IImageServiceModel>(),
-                Arg.Any<string?>(),
-                Arg.Any<CancellationToken>()))
-            .Do(callInfo =>
-            {
-                var dbModel = (IImageDdModel)callInfo[1];
-                dbModel.ImagePath = "/images/authors/old.jpg";
-            });
-
         var logger = Substitute.For<ILogger<AuthorService>>();
 
         var service = new AuthorService(
@@ -410,69 +396,10 @@ public sealed class AuthorsUnit
 
         result.Succeeded.Should().BeTrue();
 
-        imageWriter
-            .DidNotReceive()
-            .Delete(
-                resourceName: Arg.Any<string>(),
-                imagePath: Arg.Any<string?>(),
-                defaultImagePath: Arg.Any<string?>());
-    }
-
-    [Fact]
-    public async Task Edit_ShouldCallImageWriterWithNullDefaultImagePath()
-    {
-        var (data, currentUserService, connection) = await CreateSqliteDb(
-            userId: "admin-1",
-            username: "admin",
-            isAdmin: true);
-
-        await using var _ = connection;
-
-        var adminService = Substitute.For<IAdminService>();
-        var profileService = Substitute.For<IProfileService>();
-        var notificationService = Substitute.For<INotificationService>();
-        var imageWriter = Substitute.For<IImageWriter>();
-        var logger = Substitute.For<ILogger<AuthorService>>();
-
-        var service = new AuthorService(
-            data,
-            currentUserService,
-            adminService,
-            profileService,
-            notificationService,
-            imageWriter,
-            logger);
-
-        var author = NewAuthor(
-            creatorId: "admin-1",
-            imagePath: "/images/authors/old.jpg",
-            isApproved: true);
-
-        data.Authors.Add(author);
-        await data.SaveChangesAsync();
-
-        var serviceModel = new CreateAuthorServiceModel
-        {
-            Name = "Updated name",
-            Biography = new string('b', 180),
-            PenName = "Updated pen",
-            Nationality = Nationality.Bulgaria,
-            Gender = Gender.Male,
-            BornAt = null,
-            DiedAt = null,
-            Image = null
-        };
-
-        var result = await service.Edit(
-            author.Id,
-            serviceModel);
-
-        result.Succeeded.Should().BeTrue();
-
         await imageWriter
             .Received(1)
             .Write(
-                resourceName: ImagePathPrefix,
+                resourceName: PendingImagePathPrefix,
                 dbModel: Arg.Any<IImageDdModel>(),
                 serviceModel: Arg.Any<IImageServiceModel>(),
                 defaultImagePath: null,
@@ -616,21 +543,36 @@ public sealed class AuthorsUnit
 
         result.Succeeded.Should().BeTrue();
 
+        var pending = await data
+            .AuthorEdits
+            .IgnoreQueryFilters()
+            .SingleAsync(a => a.AuthorId == author.Id);
+
+        pending.Name.Should().Be(serviceModel.Name);
+        pending.ImagePath.Should().Be("/images/authors/new.jpg");
+
         var dbModel = await data
             .Authors
             .IgnoreQueryFilters()
             .SingleAsync(a => a.Id == author.Id);
 
-        dbModel.Name.Should().Be(serviceModel.Name);
-        dbModel.ImagePath.Should().Be("/images/authors/new.jpg");
-        dbModel.ModifiedOn.Should().NotBeNull();
+        dbModel.ImagePath.Should().Be("/images/authors/old.jpg");
+
+        await imageWriter
+            .Received(1)
+            .Write(
+                resourceName: PendingImagePathPrefix,
+                dbModel: Arg.Any<IImageDdModel>(),
+                serviceModel: Arg.Any<IImageServiceModel>(),
+                defaultImagePath: null,
+                cancellationToken: Arg.Any<CancellationToken>());
 
         imageWriter
-            .Received(1)
+            .DidNotReceive()
             .Delete(
-                nameof(AuthorDbModel),
-                "/images/authors/old.jpg",
-                DefaultImagePath);
+                resourceName: Arg.Any<string>(),
+                imagePath: Arg.Any<string?>(),
+                defaultImagePath: Arg.Any<string?>());
     }
 
     [Fact]
